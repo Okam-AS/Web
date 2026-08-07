@@ -1,0 +1,2410 @@
+{
+ "F-MIG-CHAIN-STACKED": [
+  {
+   "q": "--diff-filter=A",
+   "where": null
+  },
+  {
+   "q": "GrowthAuditWriter.cs",
+   "where": null
+  }
+ ],
+ "F-WF-TWO-ADMINS-TWO-ENGAGEMENTS": [],
+ "F-WF-NOCORRECTION": [],
+ "F-AZURE-FUNCKEY": [],
+ "F-FIXTURE-NO-GATES": [],
+ "F-MEALS-LEVER-INERT": [
+  {
+   "q": "meals.module",
+   "where": "utils/meals/statement-client.js:33"
+  }
+ ],
+ "F-EV-ACCEPT-UNGATED": [],
+ "F-EV-INQUIRY-UNGATED": [],
+ "F-FLAGS-FALSE-GUARANTEE": [
+  {
+   "q": "TrainingFeatureFlags.cs:118-119",
+   "where": null
+  }
+ ],
+ "F-UTLKVIT-SALE-ROW": [],
+ "F-XZ-CREDIT-UNSPEC": [
+  {
+   "q": "meals.xz.credit",
+   "where": null
+  }
+ ],
+ "F-EV-NO-GUEST-ORIGIN": [],
+ "F-GR-UNCONFIRMED-EMAIL": [],
+ "F-GR-DISPATCH-UNATTRIBUTED": [],
+ "F-MEALS-EIGHTH-READ": [],
+ "F-MEALS-NO-SQL-ON-REQUOTE": [],
+ "F-CONFIRM-BRUTEFORCE": [],
+ "F-JOURNEY-GUARD-DECORATIVE": [],
+ "F-MEMCACHE-IN-TRYCATCH": [],
+ "F-FIXTURE-BEHIND-BACKEND": [
+  {
+   "q": "lanes/L-BLOCKER-RESTATE/verdicts.md:197-200",
+   "where": null
+  },
+  {
+   "q": "package.json",
+   "where": "nuxt.config.js:51"
+  },
+  {
+   "q": "test/e2e/scripts/fixture-divergence.js",
+   "where": "package.json:20"
+  },
+  {
+   "q": "GrowthNewsletterService.cs:649",
+   "where": null
+  },
+  {
+   "q": "409 growth.test_address_suppressed",
+   "where": null
+  },
+  {
+   "q": "growth-newsletter.js",
+   "where": null
+  },
+  {
+   "q": "compare()",
+   "where": null
+  },
+  {
+   "q": "test/fixture-refusal-divergence.test.js",
+   "where": null
+  },
+  {
+   "q": "os.path.exists",
+   "where": null
+  },
+  {
+   "q": "(not a git checkout)",
+   "where": null
+  }
+ ],
+ "F-ACCEPTANCE-IS-THE-CHOKE": [],
+ "F-MRG-STATEMENT-UNATTRIBUTED": [],
+ "F-ARTIFACT-STORE-OVERWRITES": [],
+ "F-INVOICE-RETRY-ANONYMOUS": [
+  {
+   "q": "[Authorize(Roles = ClaimConstants.PowerUserRole)]",
+   "where": "Controllers/GrowthDeliveryHealthController.cs:67"
+  }
+ ],
+ "F-ACCT-DUP": [],
+ "F-EV-CALLBACK": [],
+ "F-GR-FALSE-EVIDENCE": [],
+ "F-WF-NO-INVITE": [],
+ "F-AI-REQUEST-BODY": [
+  {
+   "q": "appsettings.json",
+   "where": "Program.cs:224"
+  }
+ ],
+ "F-WF-CLOCK-UNLINKED": [],
+ "F-GR-HEALTH-DEAF": [],
+ "F-VIPPS-REDACT-OPEN": [],
+ "F-WF-PUSH-SILENT": [],
+ "F-PERSONALLISTE-PRINT": [
+  {
+   "q": "document.body",
+   "where": "utils/body-scroll-lock.js:7"
+  }
+ ],
+ "F-DETACHED-MIGRATIONS": [],
+ "F-WF-BLIND-BIND": [],
+ "F-GR-NEWSLETTER-CROSS": [
+  {
+   "q": "if (!await AuthorizeStoreAsync(storeId)) return GrowthError(NotFound())",
+   "where": null
+  }
+ ],
+ "F-PROBE-ROOT-WRONG-WORLD": [
+  {
+   "q": "Services/Growth/GrowthPrivacyObligation.cs",
+   "where": null
+  },
+  {
+   "q": "GrowthPrivacyRequestService.cs",
+   "where": null
+  }
+ ],
+ "F-INVOICE-ROUTES-ANONYMOUS": [
+  {
+   "q": "{orderId}",
+   "where": "translations/de.ts:637"
+  }
+ ],
+ "F-CONFIRM-MERGE-RECEIPT-TRAP": [
+  {
+   "q": "artifacts/tests/base-8704ff63-fast-tier.trx",
+   "where": null
+  },
+  {
+   "q": "evidence.md",
+   "where": null
+  }
+ ],
+ "F-UTLKVIT-PREDICATE-COLLISION": [],
+ "F-PROD-CORS-WILDCARD": [
+  {
+   "q": "api.okam.no",
+   "where": "appsettings.json:106"
+  },
+  {
+   "q": "okam.no/preferences/communications",
+   "where": "pages/preferences/communications.vue:306"
+  }
+ ],
+ "F-POS-CLOCK-NO-CLIENT": [
+  {
+   "q": "setMode('clock')",
+   "where": null
+  }
+ ],
+ "F-EV-GUESTLINK-FORK": [
+  {
+   "q": "Helpers/Events/EventsGuestLink.cs",
+   "where": null
+  },
+  {
+   "q": "EventsGuestLinks.cs",
+   "where": null
+  },
+  {
+   "q": "EventsNotificationOutbox.LastError",
+   "where": "Services/Events/Interfaces/IEventsNotificationDelivery.cs:33"
+  },
+  {
+   "q": "new Uri(origin + path, UriKind.Absolute)",
+   "where": null
+  },
+  {
+   "q": "new Uri(rel, Absolute)",
+   "where": null
+  },
+  {
+   "q": "Fail(...)",
+   "where": "utils/workforce/delivery-failures.js:83"
+  }
+ ],
+ "F-GR-PROVIDER-ACCOUNT-UNGATED": [],
+ "F-ROLLBACK-LEAVES-TRACKED-STATE": [],
+ "F-POS-TENDER-WIRE-REINTRODUCES-TWO": [
+  {
+   "q": "Services/Kassa/KassaCreditSale.cs:25",
+   "where": null
+  },
+  {
+   "q": "PosSettlementService.cs:380",
+   "where": null
+  },
+  {
+   "q": "MasterData.cs:112",
+   "where": null
+  },
+  {
+   "q": "BuildDeliveryEntry(entry, operatorId, operatorName)",
+   "where": "Services/Kassa/FinalizeService.cs:238"
+  },
+  {
+   "q": "entry != null",
+   "where": "Services/Margin/MarginSalesEligibility.cs:57"
+  }
+ ],
+ "F-EXIT-PREFIX-IS-A-STAMP": [
+  {
+   "q": "fact:ev.dietary",
+   "where": null
+  }
+ ],
+ "F-BACKEND-FACTS-OFF-BRANCH": [],
+ "F-INTEGRATION-BRANCHES-UNCOMPOSED": [],
+ "F-MEALS-FUNDING-AUTHORITY-COLLISION": [],
+ "F-PLAN-NOT-IN-GIT": [
+  {
+   "q": "docs/plan/plan.md",
+   "where": "scripts/drift-demo/demo.sh:89"
+  }
+ ],
+ "F-MEALS-SUPERSEDE-BYPASSES-AUTHORITY": [],
+ "F-MRG-WASTE-PANEL-CALLS-NOTHING": [],
+ "F-EV-CONCURRENCY-GUARD-UNTESTED": [],
+ "F-JOURNAL-FINALIZE-INDEX-DROPPED": [],
+ "F-TRAIN-EVIDENCE-SERVICE-UNCENSUSED": [
+  {
+   "q": "Services/Training/TrainingEvidenceService.cs:274",
+   "where": null
+  },
+  {
+   "q": "Services/Meals/MealsFundingAuthority.cs:251",
+   "where": null
+  }
+ ],
+ "F-GR-NO-EXIT-FROM-A-LIST": [
+  {
+   "q": "pages/preferences/unsubscribe.vue:102-108",
+   "where": null
+  },
+  {
+   "q": "GrowthDispatchService.cs:465",
+   "where": null
+  },
+  {
+   "q": "AllowAnyOrigin()",
+   "where": "Program.cs:100"
+  },
+  {
+   "q": "Program.cs:97-102",
+   "where": null
+  },
+  {
+   "q": "nuxt.config.js:45",
+   "where": null
+  },
+  {
+   "q": "communications.vue:315-322",
+   "where": null
+  },
+  {
+   "q": "okamapi.azurewebsites.net",
+   "where": "nuxt.config.js:54"
+  },
+  {
+   "q": "Program.cs:963-967",
+   "where": null
+  },
+  {
+   "q": "appsettings.json:176-177",
+   "where": null
+  }
+ ],
+ "F-CORE-PIN-ON-NO-REMOTE": [
+  {
+   "q": "github.com/Okam-AS/Core.git",
+   "where": ".gitmodules:3"
+  },
+  {
+   "q": "git -c protocol.file.allow=always submodule update --init core",
+   "where": null
+  }
+ ],
+ "F-CLOCKOUT-ANSWERS-OPEN": [
+  {
+   "q": "utils/workforce/pos-clock-state.js",
+   "where": "components/admin/pos/ClockScreen.vue:16"
+  }
+ ],
+ "F-GROWTH-PUBLISH-LIES-ABOUT-WHY-IT-FAILED": [
+  {
+   "q": "GrowthConsentTextService.PublishAsync",
+   "where": "Helpers/ApplicationDbContext.cs:1700"
+  }
+ ],
+ "F-FLAG-PROBES-CANNOT-COMPARE-A-VALUE": [
+  {
+   "q": "status == ok",
+   "where": null
+  },
+  {
+   "q": "=<literal>",
+   "where": null
+  },
+  {
+   "q": "acct.uidx",
+   "where": null
+  },
+  {
+   "q": "be.world",
+   "where": null
+  },
+  {
+   "q": "ClockScreen.vue",
+   "where": "components/admin/pos/PosShell.vue:158"
+  }
+ ],
+ "F-RF1313-CREDIT-SALE-CLAIM-UNBACKED": [
+  {
+   "q": "docs/okam-kassa/compliance/RF-1313-systembeskrivelse.md:155",
+   "where": null
+  },
+  {
+   "q": "docs/plans/pos-open-decisions.md:33",
+   "where": null
+  }
+ ],
+ "F-MIG22-CLAIMED-TWICE": [],
+ "F-NEGATIVE-SALE-REFUNDS-THE-LISTED-PRICE": [
+  {
+   "q": "SellScreen.onNegativeSale",
+   "where": "components/admin/pos/CheckPanel.vue:270"
+  },
+  {
+   "q": "SellScreen.vue:569",
+   "where": null
+  },
+  {
+   "q": "isDeductionInPlay(g.discountAmount)",
+   "where": "components/admin/pos/SellScreen.vue:595"
+  },
+  {
+   "q": "test/check-lineamount-sum.test.js",
+   "where": null
+  },
+  {
+   "q": "test/receipt-discount-row.test.js",
+   "where": null
+  }
+ ],
+ "F-JOURNEY-RECEIPT-DOES-NOT-NAME-ITS-FIXTURE": [
+  {
+   "q": "playwright.config.js",
+   "where": "playwright.consumer.config.js:3"
+  },
+  {
+   "q": "reuseExistingServer: !process.env.CI",
+   "where": "playwright.config.js:89"
+  },
+  {
+   "q": "test/e2e/fixture/api-server.js",
+   "where": "playwright.config.js:31"
+  },
+  {
+   "q": "test/e2e/journeys/meals-statement-month.spec.js",
+   "where": null
+  },
+  {
+   "q": "127.0.0.1:4010",
+   "where": "playwright.config.js:31"
+  },
+  {
+   "q": "journey.js",
+   "where": "playwright.config.js:23"
+  },
+  {
+   "q": "artifacts/journeys/*.playwright.json",
+   "where": null
+  },
+  {
+   "q": "require('./world-stamp')",
+   "where": null
+  }
+ ],
+ "F-MIG17-WIDTH-HALF-THE-SPEC": [
+  {
+   "q": "nvarchar(64)",
+   "where": "Migrations/20260729091423_Events_NotificationOutbox.Designer.cs:1401"
+  },
+  {
+   "q": "nvarchar(128)",
+   "where": "pages/admin/workforce-roles.vue:206"
+  }
+ ],
+ "F-THROW-50018-ALREADY-SPENT": [],
+ "F-INT-LEDGER-CEILING-SIX-LOW": [],
+ "F-JOURNEY-GUARD-WAS-DEAD": [
+  {
+   "q": "test/e2e/scripts/guard-proof.js",
+   "where": "package.json:19"
+  },
+  {
+   "q": "world-stamp.js",
+   "where": null
+  },
+  {
+   "q": "harness-copy.js",
+   "where": null
+  },
+  {
+   "q": "artifact-store.js:138",
+   "where": null
+  },
+  {
+   "q": "guard-proof.js:216-217",
+   "where": null
+  },
+  {
+   "q": ".gitignore:111",
+   "where": null
+  },
+  {
+   "q": "guard-proof.js",
+   "where": "package.json:19"
+  },
+  {
+   "q": "build-provenance-proof.js",
+   "where": null
+  },
+  {
+   "q": "journey.js",
+   "where": "playwright.config.js:23"
+  },
+  {
+   "q": "api-server.js",
+   "where": "playwright.config.js:31"
+  }
+ ],
+ "F-WORKTREE-WITHOUT-MODULES-FAILS-SILENTLY": [
+  {
+   "q": "package.json",
+   "where": "nuxt.config.js:51"
+  },
+  {
+   "q": "package-lock.json",
+   "where": null
+  },
+  {
+   "q": "jest.config.js",
+   "where": null
+  }
+ ],
+ "F-TRANSLATION-MERGE-DUPLICATES-A-KEY-SILENTLY": [],
+ "F-ARTIFACTS-FROM-A-HARNESS-THE-BRANCH-LACKS": [
+  {
+   "q": "artifact-store.js",
+   "where": null
+  }
+ ],
+ "F-FIXTURE-PRINTS-WORDS-THE-PRODUCT-CANNOT-SAY": [
+  {
+   "q": "EventsJourney.vue:136",
+   "where": null
+  },
+  {
+   "q": "deposit.paymentType",
+   "where": "components/admin/events/EventsJourney.vue:136"
+  },
+  {
+   "q": "growth-newsletter.vue:561",
+   "where": null
+  },
+  {
+   "q": "events.js",
+   "where": "nuxt.config.js:159"
+  },
+  {
+   "q": "world.js",
+   "where": null
+  },
+  {
+   "q": "approval.state: 'Superseded'",
+   "where": null
+  }
+ ],
+ "F-SV-NUMBER-PASSES-THE-FODSELSNUMMER-GUARD": [
+  {
+   "q": "MealsEmployeeReference.Normalize",
+   "where": ".lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md:117"
+  }
+ ],
+ "F-CLOCKSCREEN-FOUR-BRANCHES-NO-KEYS": [
+  {
+   "q": "ClockScreen.vue",
+   "where": "components/admin/pos/PosShell.vue:158"
+  }
+ ],
+ "F-CH-BUILD-COPY-HAS-NO-DOM-GUARD": [
+  {
+   "q": "nuxt.config.js",
+   "where": "env.ts:2"
+  }
+ ],
+ "F-FINISHED-WORK-ON-NO-REF": [
+  {
+   "q": "utils/workforce/pos-clock-state.js",
+   "where": "components/admin/pos/ClockScreen.vue:16"
+  },
+  {
+   "q": "(path, blob)",
+   "where": null
+  },
+  {
+   "q": "test/e2e/fixture/world.js",
+   "where": null
+  },
+  {
+   "q": "api-server.js",
+   "where": "playwright.config.js:31"
+  },
+  {
+   "q": "support/journey.js",
+   "where": "playwright.config.js:23"
+  },
+  {
+   "q": "utils/cross-currency.js",
+   "where": null
+  },
+  {
+   "q": "workforce-timesheets.js",
+   "where": null
+  }
+ ],
+ "F-MIXIN-LABELS-CANNOT-TRANSLATE": [
+  {
+   "q": "plugins/global-mixin.js",
+   "where": "utils/price.js:14"
+  }
+ ],
+ "F-EVERY-LANE-DEPENDENCY-ENDS-AT-SVEN": [
+  {
+   "q": "satisfied()",
+   "where": null
+  }
+ ],
+ "F-SYMLINKED-MODULES-COMPILE-THE-OTHER-TREE": [],
+ "F-A-RERUN-TAKES-THE-CANONICAL-SLOT": [],
+ "F-NOTHING-RUNS-A-SUITE-IN-CI": [],
+ "F-NPM-INSTALL-CANNOT-SUCCEED": [],
+ "F-A-VERIFIED-LANE-RESTS-ON-A-FAILED-RUN": [],
+ "F-THE-BRANCH-EXISTS-ON-NO-REMOTE": [],
+ "F-GROWTH-NO-LIVE-CONFIRM-LINK": [],
+ "F-GROWTH-MODULE-LEVER-CANNOT-TURN-ON": [],
+ "F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE": [],
+ "F-MEALS-MONEY-FLAGS-HAVE-NO-LEVER": [],
+ "F-TRAIN-INVISIBLE-ON-A-FRESH-STORE": [],
+ "F-LIVE-WORLD-ONE-HUMAN": [
+  {
+   "q": "live-world.sh",
+   "where": "nuxt.config.js:37"
+  }
+ ],
+ "F-PROD-STORES-APIKEY-HARDCODED": [
+  {
+   "q": "StoresController.cs:1207",
+   "where": null
+  },
+  {
+   "q": "Program.cs:210",
+   "where": null
+  }
+ ],
+ "F-PROD-BEARER-IS-SCRIPT-READABLE": [
+  {
+   "q": "plan.md:10232",
+   "where": null
+  },
+  {
+   "q": "AllowAnyHeader()",
+   "where": "Program.cs:102"
+  },
+  {
+   "q": "StoresController.cs:1199",
+   "where": null
+  },
+  {
+   "q": "ExternalMenuController.cs:34",
+   "where": null
+  },
+  {
+   "q": "SameSite=Lax",
+   "where": null
+  },
+  {
+   "q": "Program.cs:71-77",
+   "where": null
+  },
+  {
+   "q": "Program.cs:96-103",
+   "where": null
+  },
+  {
+   "q": "AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()",
+   "where": null
+  },
+  {
+   "q": "UseCors()",
+   "where": "Program.cs:291"
+  },
+  {
+   "q": "Helpers/ServiceCollectionExtensions.cs:73-78",
+   "where": null
+  }
+ ],
+ "F-LOGIN-CENTURY-TOKEN": [
+  {
+   "q": "AddDays(36500)",
+   "where": null
+  },
+  {
+   "q": "UserService.cs:547",
+   "where": null
+  },
+  {
+   "q": "Helpers/ServiceCollectionExtensions.cs:195-204",
+   "where": null
+  },
+  {
+   "q": "Controllers/UserController.cs:161-181",
+   "where": null
+  },
+  {
+   "q": "Services/UserService.cs:499-509",
+   "where": null
+  },
+  {
+   "q": "Helpers/ServiceCollectionExtensions.cs:59",
+   "where": null
+  },
+  {
+   "q": "UseRateLimiter()",
+   "where": "Program.cs:292"
+  },
+  {
+   "q": "Program.cs:134-141",
+   "where": null
+  },
+  {
+   "q": "UserService.cs:161",
+   "where": null
+  }
+ ],
+ "F-PROBE-DIR-IS-A-FOREIGN-LANE-BRANCH": [],
+ "F-TRAINWIRE-TIER-ABORTS": [
+  {
+   "q": "JsonElement.ToString",
+   "where": null
+  },
+  {
+   "q": "Xunit.Sdk.AllException.get_Message",
+   "where": null
+  },
+  {
+   "q": "Assert.All",
+   "where": null
+  },
+  {
+   "q": "evidence.read",
+   "where": "utils/training/disclosure.js:17"
+  },
+  {
+   "q": "TrainingWireTests.cs",
+   "where": null
+  }
+ ],
+ "F-POWERUSER-CODE-IS-COMMITTED": [
+  {
+   "q": "appsettings.json:20",
+   "where": null
+  },
+  {
+   "q": "appsettings.Development.json",
+   "where": null
+  },
+  {
+   "q": "Program.cs:52",
+   "where": null
+  },
+  {
+   "q": "AddEnvironmentVariables()",
+   "where": null
+  },
+  {
+   "q": "Program.cs:44",
+   "where": null
+  },
+  {
+   "q": "Controllers/UserController.cs:179",
+   "where": null
+  },
+  {
+   "q": "Controllers/OAuthLoginController.cs:119",
+   "where": null
+  },
+  {
+   "q": "Services/OfferProposalService.cs:436",
+   "where": null
+  },
+  {
+   "q": "Authorization/StoreAdminAuthorizationHandler.cs:17",
+   "where": null
+  },
+  {
+   "q": "[Authorize(Roles = PowerUserRole)]",
+   "where": "Services/PowerUserRoleSeed.cs:73"
+  }
+ ],
+ "F-NEWSLETTER-DISPATCH-DEAD-ON-CHAIN": [
+  {
+   "q": "catch (DbUpdateException)",
+   "where": "Services/Growth/GrowthSegmentService.cs:168"
+  },
+  {
+   "q": "GrowthConsentTextService.PublishAsync:247",
+   "where": null
+  },
+  {
+   "q": "409 growth.consent_text_version_race",
+   "where": null
+  }
+ ],
+ "F-JWT-SIGNING-KEY-COMMITTED": [
+  {
+   "q": "appsettings.json:12",
+   "where": null
+  },
+  {
+   "q": "Program.cs:139",
+   "where": null
+  },
+  {
+   "q": "Helpers/ServiceCollectionExtensions.cs:192-194",
+   "where": null
+  },
+  {
+   "q": "Services/UserService.cs:591",
+   "where": null
+  },
+  {
+   "q": "StoreAdminAuthorizationHandler.cs:17",
+   "where": null
+  },
+  {
+   "q": "UserService.cs:621",
+   "where": null
+  },
+  {
+   "q": "Program.cs:75-81",
+   "where": null
+  },
+  {
+   "q": "KassaSettings.UseKeyVault",
+   "where": "Program.cs:81"
+  }
+ ],
+ "F-PLAN-SNAPSHOT-CARRIES-A-CREDENTIAL": [
+  {
+   "q": "docs/plan/returns/L-LIVE-WORLD-SEED-1.md",
+   "where": null
+  },
+  {
+   "q": "L-WF-ONBOARD-DEMO-RUN-1.md",
+   "where": null
+  },
+  {
+   "q": "playwright.config.js",
+   "where": "playwright.consumer.config.js:3"
+  },
+  {
+   "q": "lanes/L-PLAN-LIVES-IN-GIT/fresh-clone/.git",
+   "where": null
+  },
+  {
+   "q": "owner-step.md",
+   "where": null
+  },
+  {
+   "q": "appsettings.json",
+   "where": "Program.cs:224"
+  },
+  {
+   "q": "Scripts/demo/demo-common.sh:25",
+   "where": null
+  },
+  {
+   "q": "Scripts/demo/seed-workforce-demo.sh:32",
+   "where": null
+  }
+ ],
+ "F-MEALS-ENROLMENT-HAS-NO-CALLER": [
+  {
+   "q": "POST /v1/meals/programs/{programId}/members",
+   "where": "Controllers/Meals/MealsProgramController.cs:112"
+  },
+  {
+   "q": "MealsQuoteService.cs:164-170",
+   "where": null
+  }
+ ],
+ "F-MARGIN-WASTE-PANEL-CALLS-NOTHING": [
+  {
+   "q": "utils/margin/waste-client.js:62-89",
+   "where": null
+  }
+ ],
+ "F-SHIPPED-BRANCH-IS-NOT-WHAT-THE-CHECKOUT-SHOWS": [],
+ "F-ONGOING-HIDES-A-LIVE-STATUS": [
+  {
+   "q": "ongoing.vue:259-267",
+   "where": null
+  },
+  {
+   "q": "plugins/global-mixin.js:140",
+   "where": null
+  },
+  {
+   "q": "orders.vue:420",
+   "where": null
+  },
+  {
+   "q": "this.orders",
+   "where": "utils/admin/ongoing-columns.js:10"
+  }
+ ],
+ "F-KITCHEN-CLOCK-FREEZES-AFTER-LOGIN": [
+  {
+   "q": "kitchen.vue:135-145",
+   "where": null
+  },
+  {
+   "q": "this.clockInterval",
+   "where": "pages/admin/kitchen.vue:197"
+  },
+  {
+   "q": "this.now",
+   "where": "components/admin/reservations/ReservationTimeline.vue:119"
+  },
+  {
+   "q": "KitchenTicket.vue:113-138",
+   "where": null
+  },
+  {
+   "q": "ongoing.vue:285-290",
+   "where": null
+  },
+  {
+   "q": "startAutoRefresh()",
+   "where": "pages/admin/ongoing.vue:309"
+  },
+  {
+   "q": "AdminPage.vue:99-101",
+   "where": null
+  },
+  {
+   "q": "?redirect=",
+   "where": "components/atoms/Modal.vue:46"
+  }
+ ],
+ "F-DELIVERY-TOGGLES-FAIL-SILENTLY": [
+  {
+   "q": "Promise.all",
+   "where": "components/admin/pos-settings/CashPointsTab.vue:151"
+  },
+  {
+   "q": "checked=false",
+   "where": null
+  },
+  {
+   "q": "selfPickUp=true",
+   "where": null
+  },
+  {
+   "q": "delivery.vue",
+   "where": "plugins/global-mixin.js:279"
+  }
+ ],
+ "F-TRAIN-DISCLOSURE-EVIDENCE-IS-AN-ABORT": [
+  {
+   "q": "after.trx",
+   "where": null
+  },
+  {
+   "q": "ResultSummary outcome=\"Failed\"",
+   "where": null
+  },
+  {
+   "q": "Counters failed=\"0\"",
+   "where": null
+  },
+  {
+   "q": "Xunit.Sdk.AllException.get_Message",
+   "where": null
+  },
+  {
+   "q": "Assert.All",
+   "where": null
+  }
+ ],
+ "F-DEV-BUILD-POINTS-AT-PRODUCTION": [
+  {
+   "q": "nuxt.config.js:45",
+   "where": null
+  },
+  {
+   "q": "dintero.vue",
+   "where": "nuxt.config.js:29"
+  },
+  {
+   "q": "surfboard.vue",
+   "where": null
+  }
+ ],
+ "F-DINTERO-SAVE-WIPES-PAYMENT-CONFIG": [
+  {
+   "q": "pages/admin/dintero.vue",
+   "where": "nuxt.config.js:29"
+  },
+  {
+   "q": "dintero.vue:560-591",
+   "where": null
+  },
+  {
+   "q": "JSON.stringify",
+   "where": "plugins/global-mixin.js:190"
+  },
+  {
+   "q": ".catch(() => ({}))",
+   "where": "pages/admin/surfboard.vue:544"
+  },
+  {
+   "q": "dintero.vue",
+   "where": "nuxt.config.js:29"
+  },
+  {
+   "q": "console.log(config)",
+   "where": "pages/admin/dintero.vue:679"
+  }
+ ],
+ "F-SURFBOARD-SAVE-CLEARS-TIPS": [
+  {
+   "q": "surfboard.vue",
+   "where": null
+  },
+  {
+   "q": "StoreService.cs:1399",
+   "where": null
+  }
+ ],
+ "F-WORLD-FACTS-ARE-GREEN-IN-THE-WRONG-DIRECTION": [
+  {
+   "q": "fe.world = True",
+   "where": null
+  },
+  {
+   "q": "fe.world.branch = feature/restaurant-modules",
+   "where": null
+  },
+  {
+   "q": "fe.world",
+   "where": null
+  },
+  {
+   "q": "be.world",
+   "where": null
+  },
+  {
+   "q": "artifacts/world/WORLD.json",
+   "where": "scripts/worldstamp:4"
+  },
+  {
+   "q": "<dir>/.git",
+   "where": null
+  },
+  {
+   "q": "<repo>/.git/worktrees/<name>/HEAD",
+   "where": null
+  },
+  {
+   "q": "be.dir.ref",
+   "where": null
+  },
+  {
+   "q": "fe.dir.ref",
+   "where": null
+  }
+ ],
+ "F-TRIPLETEX-CLAIM-EXPIRES-MID-CALL": [],
+ "F-ADMIN-LOGOUT-LANDS-ON-A-BLANK-PAGE": [
+  {
+   "q": "AdminPageHeader.vue:697-700",
+   "where": null
+  },
+  {
+   "q": "Logout()",
+   "where": "components/molecules/LoginModal.vue:280"
+  },
+  {
+   "q": "window.location.href = '/'",
+   "where": "components/organisms/AdminPage.vue:90"
+  },
+  {
+   "q": "pages/index.vue",
+   "where": null
+  },
+  {
+   "q": "window.location.href",
+   "where": "components/atoms/MyUserDropdown.vue:52"
+  }
+ ],
+ "F-IN-PAGE-SIGN-IN-IS-DEAD-END-TO-END": [
+  {
+   "q": "AdminPage.closeLoginModal",
+   "where": null
+  },
+  {
+   "q": "$router.replace",
+   "where": "components/organisms/AdminPage.vue:35"
+  },
+  {
+   "q": "AdminPage.vue",
+   "where": "Claude.md:383"
+  },
+  {
+   "q": "$route.path",
+   "where": "components/organisms/AdminPage.vue:82"
+  },
+  {
+   "q": "$route.fullPath",
+   "where": "components/organisms/AdminPage.vue:155"
+  },
+  {
+   "q": "/admin?redirect=\u2026",
+   "where": "components/organisms/AdminPage.vue:34"
+  },
+  {
+   "q": "AdminPage.initAuth",
+   "where": "utils/admin/nav-access.js:11"
+  },
+  {
+   "q": "ongoing.vue",
+   "where": "utils/body-scroll-lock.js:15"
+  }
+ ],
+ "F-AGENT-KILLED-THE-OWNERS-DEV-SERVER": [],
+ "F-EF-NEVER-DECLARES-A-TRIGGER": [
+  {
+   "q": "POST \u2026/versions/{no}/publish",
+   "where": null
+  },
+  {
+   "q": "entity.ToTable(tb => tb.HasTrigger(\"TR_\u2026\"))",
+   "where": null
+  },
+  {
+   "q": "MealsStatementService.cs:168",
+   "where": null
+  },
+  {
+   "q": "Database.IsSqlServer()",
+   "where": "Helpers/ApplicationDbContext.cs:3664"
+  },
+  {
+   "q": "HasPendingModelChanges()",
+   "where": "Migrations/20260730150953_Growth_ConsentTextVersionAppendOnly.cs:22"
+  },
+  {
+   "q": "sys.triggers",
+   "where": "Scripts/demo/demo-up.sh:102"
+  },
+  {
+   "q": "patch(1)",
+   "where": null
+  }
+ ],
+ "F-DEV-EXCEPTION-PAGE-ECHOES-THE-BEARER": [],
+ "F-WF-OPEN-SHIFTS-IGNORE-SUPERSESSION": [
+  {
+   "q": "State == Published",
+   "where": "Services/Workforce/WorkforceScheduleSupport.cs:294"
+  }
+ ],
+ "F-MARGIN-SETUP-DAY-RECONCILES-TO-ZERO": [
+  {
+   "q": "fact.BusinessDate",
+   "where": "Services/Margin/MarginDayRevenueRead.cs:122"
+  },
+  {
+   "q": "EffectiveFrom <= instant",
+   "where": ".lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md:48"
+  },
+  {
+   "q": "BusinessDate.AddDays(1)",
+   "where": "Services/Workforce/WorkforceActualMinutes.cs:145"
+  },
+  {
+   "q": "MarginStatementSupport.cs:126",
+   "where": ".lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md:54"
+  },
+  {
+   "q": "MarginStatementService.cs:423",
+   "where": null
+  }
+ ],
+ "F-OWNERS-CHECKOUT-HOLDS-UNOWNED-WORK": [
+  {
+   "q": "MarginCoveragePanel.vue",
+   "where": "pages/admin/margin-statements.vue:230"
+  },
+  {
+   "q": "margin-recipes.vue",
+   "where": null
+  },
+  {
+   "q": "utils/margin/money.js",
+   "where": "utils/workforce-rates/attendance-view.js:98"
+  }
+ ],
+ "F-COMPANY-REFUND-BOOKS-A-CASH-PAYOUT": [
+  {
+   "q": "POST /pos/payment/cash/{journalEntryId}/refund",
+   "where": null
+  },
+  {
+   "q": "PaymentType.Cash",
+   "where": "Controllers/PosController.cs:119"
+  },
+  {
+   "q": "20-company-meals-spec.md:107",
+   "where": null
+  },
+  {
+   "q": "ReceiptType == Return",
+   "where": null
+  },
+  {
+   "q": "; drawer",
+   "where": "Services/Kassa/CashDrawerService.cs:14"
+  },
+  {
+   "q": "POST /pos/payment/company-account/{journalEntryId}/refund",
+   "where": null
+  },
+  {
+   "q": "pos-service.ts",
+   "where": null
+  }
+ ],
+ "F-ISPOWERUSER-IS-A-COLUMN-NOTHING-WRITES": [
+  {
+   "q": "currentUser.isPowerUser",
+   "where": "components/molecules/EmployeeManager.vue:130"
+  },
+  {
+   "q": "reservations.vue:307",
+   "where": null
+  },
+  {
+   "q": "tables.vue:35",
+   "where": null
+  },
+  {
+   "q": "AspNetUsers.IsPowerUser",
+   "where": "Helpers/AutoMapperProfile.cs:175"
+  }
+ ],
+ "F-GROWTHAUDIT-TABLE-MISSING-FROM-THE-GROWTH-MIGRATION": [
+  {
+   "q": "SELECT COUNT(*) FROM sys.tables WHERE name='GrowthAuditEvents'",
+   "where": null
+  },
+  {
+   "q": "_audit.Append(...)",
+   "where": null
+  }
+ ],
+ "F-CONSUMER-MENU-EMPTY-WITHOUT-CATEGORY-IMAGES": [
+  {
+   "q": "CategoryModelBuilder.cs:49",
+   "where": null
+  }
+ ],
+ "F-REPUBLISH-DOUBLES-PLANNED-MINUTES": [
+  {
+   "q": "WorkforceActualMinutes.ReadAsync:151",
+   "where": null
+  },
+  {
+   "q": "WorkforceLabourBandService.ReadPublishedAssignmentsAsync:456",
+   "where": null
+  },
+  {
+   "q": "WorkforceAttendanceService.GetAttendanceAsync:86",
+   "where": null
+  },
+  {
+   "q": "WorkforceRequestsService.FirstAffectedPublishedRevisionAsync:424",
+   "where": null
+  }
+ ],
+ "F-CONSUMER-READS-CATEGORY-IMAGE-UNGUARDED": [
+  {
+   "q": "ConsumerWeb/pages/categories.vue:302",
+   "where": null
+  },
+  {
+   "q": "ConsumerApp/.../CategoriesPage.vue:405",
+   "where": null
+  },
+  {
+   "q": "category.image.imageUrl",
+   "where": "pages/admin/category-editor.vue:93"
+  },
+  {
+   "q": "modul/apps/admin-web/.../CategoryManager.tsx:484",
+   "where": null
+  }
+ ],
+ "F-PROD-BEARER-COMMITTED-IN-BRUNO": [
+  {
+   "q": "Bruno/Okam API/environments/OKAM - prod.bru",
+   "where": null
+  }
+ ],
+ "F-DEPLOY-NEEDS-FOUR-APP-SETTINGS-FIRST": [
+  {
+   "q": "appsettings.Development.json",
+   "where": null
+  }
+ ],
+ "F-GROWTHAUDIT-MISSING-AT-THE-MERGE-TIP": [
+  {
+   "q": "HasPendingModelChanges()",
+   "where": "Migrations/20260730150953_Growth_ConsentTextVersionAppendOnly.cs:22"
+  },
+  {
+   "q": "ApplicationDbContext.cs:219",
+   "where": null
+  },
+  {
+   "q": "GrowthAuditWriter.cs:89",
+   "where": null
+  }
+ ],
+ "F-ADMINAPP-KEYSTORE-PASSWORD-IN-A-COMMITTED-SCRIPT": [],
+ "F-BACKEND-SQL-TIER-IS-HALF-UNMEASURED-AT-THE-TRUNK": [],
+ "F-ASPNETCORE-ENVIRONMENT-IS-UNKNOWN-OUTSIDE-GIT": [],
+ "F-LOGIN-OTP-IS-BRUTE-FORCEABLE": [],
+ "F-EVENTS-DISPATCH-HAS-NO-SCREEN": [],
+ "F-THE-FRONTEND-COVERAGE-NUMBER-IS-AN-ARTIFACT": [],
+ "F-WORKFORCE-ROLE-UPSERT-KEYS-ON-NOTHING": [],
+ "F-TIERS-NEVER-RAN-AT-THE-NEW-TIPS": [],
+ "F-THE-EVIDENCE-PAGE-PROMISES-A-RECORD-IT-CANNOT-HAND-OVER": [],
+ "F-A-BACKEND-TIER-COMMAND-IN-CIRCULATION-MEASURES-NOTHING": [],
+ "F-THE-ACKNOWLEDGE-BUTTON-CAN-CONFIRM-THE-NEXT-WEEK": [],
+ "F-A-CRASHED-TIER-CAN-PRINT-A-PASSED-LINE-AFTER-ABORTING": [],
+ "F-NO-LEVER-LANDED-TODAY-CAN-BE-WALKED-AGAINST-THE-LIVE-BUILD": [],
+ "F-EVENTS-DELIVERY-CANNOT-BE-PROVEN-ON-ANY-WORLD-HERE": [],
+ "F-LANDING-THE-BACKEND-HALF-FIRST-BREAKS-A-7-3-PROMISE-ON-EVERY-SEND": [],
+ "F-EVERY-MAIL-DIES-AT-A-REVOCATION-CHECK-THIS-HOST-CANNOT-COMPLETE": [],
+ "F-A-NOTICE-ROW-NEVER-NAMES-THE-WEEK-IT-CONFIRMS": [],
+ "F-NO-LANE-CAN-BE-DISPATCHED-UNTIL-THE-AGENT-CEILING-IS-RAISED": [],
+ "F-EVERY-LOAD-FAILURE-TELLS-THE-GUEST-THE-OFFER-EXPIRED": [],
+ "F-ACCEPTING-AN-OFFER-CAN-BLANK-THE-PAGE-AFTER-THE-ORDER-IS-PLACED": [],
+ "F-LANES-ARE-BEING-AUTHORED-FROM-FLAG-BODIES-THAT-THE-TRUNK-HAS-OVERTAKEN": [],
+ "F-A-MUTATION-RUNNER-IN-A-LANE-DIRECTORY-DELETES-THE-LANES-OWN-EDITS": [],
+ "F-THE-TRUNK-DEPENDS-ON-A-CORE-COMMIT-THAT-EXISTS-ONLY-ON-THIS-MACHINE": [],
+ "F-THE-PRESCRIBED-WORKTREE-TEARDOWN-DESTROYS-SUBMODULE-COMMITS": [
+  {
+   "q": "Okam-AS/Core.git",
+   "where": ".gitmodules:3"
+  }
+ ],
+ "F-EXCHANGE-GATE-MERGE": [
+  {
+   "q": "workforce.exchange",
+   "where": "utils/workforce/requests-inbox.js:304"
+  },
+  {
+   "q": "workforce.publication",
+   "where": "playwright.config.js:60"
+  },
+  {
+   "q": "EVIDENCE.md",
+   "where": null
+  }
+ ],
+ "F-SHARED-REF-CLOBBER": [],
+ "F-MERGE-BREAKS-BUILD": [
+  {
+   "q": "WebApi.Tests/Meals/MealsPoisonedModuleGraph.cs",
+   "where": null
+  }
+ ],
+ "F-CORS-ORIGINS-BY-INDEX": [],
+ "F-CORS-EXPOSURE-REVERT": [
+  {
+   "q": "WithExposedHeaders(\"ETag\")",
+   "where": null
+  },
+  {
+   "q": "BrowserReadableHeaders.All",
+   "where": "Program.cs:102"
+  },
+  {
+   "q": "Program.cs",
+   "where": "utils/platform/feature-flags-client.js:95"
+  }
+ ],
+ "F-ZSH-WORD-SPLIT": [
+  {
+   "q": "NONE(tip)",
+   "where": null
+  }
+ ],
+ "F-BRIEF-QUOTES-UNMERGED-STATE": [
+  {
+   "q": "MealsIdempotencyRefusalTests.cs",
+   "where": null
+  },
+  {
+   "q": "8e2b57de:WebApi.Tests/Meals/MealsAgreementWriterTests.cs:173",
+   "where": null
+  }
+ ],
+ "F-JOURNEY-LEAVES-LEVERS-ON": [],
+ "F-OVERBROAD-TEST-FILTER": [
+  {
+   "q": "dotnet test --filter \"Database!=SqlServer\"",
+   "where": ".lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md:88"
+  }
+ ],
+ "F-CLERK-EXITS-NAME-NO-INSTRUMENT": [],
+ "F-XZ-CREDIT-DOUBLE-LAND": [
+  {
+   "q": "KassaCreditSale.IsCreditSale",
+   "where": "Services/Kassa/SaftCashRegisterExportService.MasterData.cs:112"
+  }
+ ],
+ "F-DOCSYNC-WROTE-A-STALE-TRUTH": [
+  {
+   "q": "utils/meals/admin-client.js",
+   "where": "utils/meals/claim-client.js:6"
+  }
+ ],
+ "F-SPLICE-RESIDUE-IN-BRIEFS": [],
+ "F-OUTBOX-FLAKE-FIXED-TWICE": [
+  {
+   "q": "EventsOutboxDeliveryTests.cs:411-412",
+   "where": null
+  }
+ ],
+ "F-TWO-FINALIZE-CONTROLS": [
+  {
+   "q": "(store, company)",
+   "where": null
+  }
+ ],
+ "F-COERCION-MAKES-A-ZERO": [
+  {
+   "q": "Number(null)",
+   "where": "plugins/global-mixin.js:264"
+  },
+  {
+   "q": "Intl.NumberFormat().format(null)",
+   "where": "components/admin/margin/MarginCoveragePanel.vue:184"
+  },
+  {
+   "q": "=== null",
+   "where": "env.ts:21"
+  }
+ ],
+ "F-LAND-OUTBOX-FLAKE-NOT-GUID": [],
+ "F-TRANSLATIONS-ARE-A-CHOKE": [
+  {
+   "q": "translations/{no,en,de}.ts",
+   "where": null
+  }
+ ],
+ "F-MRG-YIELD-NOWHERE": [],
+ "F-DUP-DISPATCH": [],
+ "F-EF-UNNAMED-INDEX-REPLACES": [],
+ "F-FILTER-NOT-CONTAINERFREE": [],
+ "F-GR-SWEEP-ACTORLESS": [],
+ "F-WT-THREE-LANES": [],
+ "F-MEALS-ACTOR-WORKLIST-STALE": [],
+ "F-GUARD-PROOF-NOT-IN-CI": [],
+ "F-GIT-ADD-SWALLOW": [],
+ "F-FIXTURE-BACKUP-STALE": [],
+ "F-CAP-COUNTS-LANES": [],
+ "F-GR-CONFIRM-AGELESS": [],
+ "F-CREDITNOTE-BEFORE-RENDER": [],
+ "F-DEV-SERVERS-SHARE-BUILD": [],
+ "F-MRG-EPOCH-CAVEAT": [
+  {
+   "q": "Services/Margin/MarginMenuMarginService.cs",
+   "where": "utils/margin/menu-margin.js:10"
+  }
+ ],
+ "F-WF-NOREG": [
+  {
+   "q": "fact:wf.idreg",
+   "where": null
+  }
+ ],
+ "F-WF-CATEGORY": [
+  {
+   "q": "WorkforcePersonnelListProjection.cs:207",
+   "where": null
+  }
+ ],
+ "F-WF-NODEPARTURE": [],
+ "F-PREF-UNREACHABLE": [],
+ "F-WOLT-DEAD": [],
+ "F-EV-FAKE-DRIFT": [],
+ "F-TRAIN-NO-EVIDENCE": [],
+ "F-MRG-FINALIZE-LAG": [],
+ "F-MEALS-LEVER-OPAQUE": [
+  {
+   "q": "meals.module",
+   "where": "utils/meals/statement-client.js:33"
+  }
+ ],
+ "F-STALE-SECURITY-ARTIFACT": [
+  {
+   "q": "artifacts/security/L-VIPPS-LOG-mutation.md",
+   "where": null
+  }
+ ],
+ "F-WF-ACK-DUP": [],
+ "F-WF-EXCHANGE-STALE-GRID": [],
+ "F-WF-PAYROLL-REKEY": [],
+ "F-MRG-ONBOARD-16": [],
+ "F-EV-HEALTHDATA": [],
+ "F-WF-CLOCK-LIES": [],
+ "F-TRAIN-PERSONREF-LEAK": [],
+ "F-BE-TESTS-AMBIGUOUS": [
+  {
+   "q": "fact:be.tests",
+   "where": null
+  },
+  {
+   "q": "artifacts/tests/*.trx",
+   "where": null
+  }
+ ],
+ "F-EV-ACCEPT-UNNAMED": [],
+ "F-DISK-PRESSURE": [],
+ "F-SCHED-DEAD-CLASS": [],
+ "F-LIMITERS-PER-PROCESS": [],
+ "F-SQL-HEADROOM": [],
+ "F-EVIDENCE-GITIGNORED": [
+  {
+   "q": "lanes/L-FE-JOURNEYS-MERGE/*.log",
+   "where": null
+  }
+ ],
+ "F-SCROLLLOCK-FLAKE": [],
+ "F-WIRE-TIER-DIRTIES-ARTIFACTS": [],
+ "F-ARTIFACT-STORE-TEST-CHECKOUT-BOUND": [],
+ "F-POS-403-UNREACHABLE": [],
+ "F-MEALS-CORS-DOUBLE-LAND": [],
+ "F-ACTORKIND-CONVERGENCE-NOT-FORK": [],
+ "F-CENSUS-FLOORS-SILENTLY-INVALIDATED": [],
+ "F-ORE-PADDING-IN-TWO-CLIENTS": [],
+ "F-CH-COOKIE-WITHHELD": [],
+ "F-REGISTRABLE-DOMAIN-TWICE": [],
+ "F-401-UNREACHABLE-OVER-HTTP": [],
+ "F-GR-PROVIDER-GATE-PIN-VACUOUS": [],
+ "F-GR-SEND-GATE-JOURNEY-RED": [],
+ "F-GR-NEWSLETTER-SELF-APPROVE": [],
+ "F-CENSUS-IS-A-THREE-WAY": [],
+ "F-EVENTS-OUTBOX-FOURTH-ANSWER": [],
+ "F-EV-REFUND-LINE-UNREACHABLE": [],
+ "F-FAILSPEC-DOES-NOT-HOLD-ITS-LANE": [],
+ "F-COMMIT-CITES-WHAT-IT-LACKS": [
+  {
+   "q": "lanes/L-DI-COLLECTION-SILENT/census.md:101",
+   "where": null
+  }
+ ],
+ "F-MRG-INGREDIENT-FACTOR-ZERO": [
+  {
+   "q": "components/admin/margin/MarginIngredientPanel.vue:146",
+   "where": null
+  },
+  {
+   "q": "conversion.factorToBase",
+   "where": "components/admin/margin/MarginIngredientPanel.vue:146"
+  },
+  {
+   "q": "Intl.NumberFormat().format(null)",
+   "where": "components/admin/margin/MarginCoveragePanel.vue:184"
+  },
+  {
+   "q": "detail.conversions",
+   "where": "components/admin/margin/MarginIngredientPanel.vue:252"
+  }
+ ],
+ "F-CONDITIONS-HAVE-NO-RETURN-PATH": [],
+ "F-MEALS-REFUSAL-NAMES-THE-INVITEE": [
+  {
+   "q": "MealsInvitationIntendedContactTests.The_refusal_does_not_tell_the_holder_which_address_to_go_and_acquire",
+   "where": ".lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md:75"
+  },
+  {
+   "q": "\"intendedContact\":\"marit@example.test\"",
+   "where": null
+  }
+ ],
+ "F-GUARD-PROOF-COULD-NOT-EXECUTE": [
+  {
+   "q": "guard-proof.js",
+   "where": "package.json:19"
+  },
+  {
+   "q": "artifact-store.js",
+   "where": null
+  },
+  {
+   "q": "build-provenance-proof.js",
+   "where": null
+  },
+  {
+   "q": "world-stamp.js",
+   "where": null
+  }
+ ],
+ "F-BACKEND-CHECKOUT-IS-A-LANE-BRANCH": [],
+ "F-EMPTY-GREP-READS-AS-ABSENCE": [],
+ "F-CROSS-REPO-EVIDENCE-UNVERIFIABLE": [
+  {
+   "q": "lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md",
+   "where": null
+  },
+  {
+   "q": "../OkamAPI-hostedfloor/lanes/.../mutation-log.md",
+   "where": null
+  }
+ ],
+ "F-COMMIT-TREE-LEAVES-NO-REF": [
+  {
+   "q": "lanes/X/{a,b}.txt",
+   "where": null
+  }
+ ],
+ "F-SUITE-PINS-THE-CHECKOUT-NAME": [
+  {
+   "q": "test/journey-artifact-store.test.js:295",
+   "where": null
+  },
+  {
+   "q": "test/journey-artifact-store.test.js",
+   "where": null
+  },
+  {
+   "q": "core-checkout.js:74-76",
+   "where": null
+  }
+ ],
+ "F-WF-ACKNOWLEDGE-SHOWS-NOTHING": [
+  {
+   "q": "acknowledge()",
+   "where": null
+  },
+  {
+   "q": "{items:[]}",
+   "where": null
+  }
+ ],
+ "F-INVOICE-PRICELABEL-STILL-SHADOWS": [
+  {
+   "q": "pages/admin/kravia-invoice.vue:591",
+   "where": null
+  }
+ ],
+ "F-SURVIVING-FIXTURE-SERVES-STALE-CODE": [
+  {
+   "q": "apiBaseUrl: http://127.0.0.1:4077",
+   "where": null
+  }
+ ],
+ "F-OFFER-MIXED-CANNOT-SAY-NOT-APPLICABLE": [],
+ "F-HOST-VM-EATS-THE-CEILING": [
+  {
+   "q": "Virtualization.framework",
+   "where": null
+  },
+  {
+   "q": "Exited (0)",
+   "where": null
+  },
+  {
+   "q": "cpu 10.0/10.5",
+   "where": null
+  },
+  {
+   "q": "CAP-WAIT(3)",
+   "where": null
+  }
+ ],
+ "F-FLAG-PAGE-PROMISED-ONE-BEHAVIOUR-FOR-SIX": [
+  {
+   "q": "training.setup",
+   "where": "utils/training/training-client.js:131"
+  }
+ ],
+ "F-TRAIN-DISCLOSURE-UNREADABLE": [
+  {
+   "q": "GET /training/stores/{storeId}/evidence/disclosures",
+   "where": null
+  },
+  {
+   "q": "pages/admin/training-courses.vue:526",
+   "where": null
+  },
+  {
+   "q": "pages/admin/workforce-me.vue:364",
+   "where": null
+  },
+  {
+   "q": "utils/training/training-client.js:395",
+   "where": null
+  },
+  {
+   "q": "evidence.read",
+   "where": "utils/training/disclosure.js:17"
+  }
+ ],
+ "F-THE-CONFLICT-IS-A-DECOY": [
+  {
+   "q": "Program.cs",
+   "where": "utils/platform/feature-flags-client.js:95"
+  },
+  {
+   "q": "Helpers/ServiceCollectionExtensions.cs",
+   "where": "utils/margin/cost-preview.js:41"
+  },
+  {
+   "q": "WithExposedHeaders(\"ETag\")",
+   "where": null
+  },
+  {
+   "q": "BrowserReadableHeaders.All",
+   "where": "Program.cs:102"
+  }
+ ],
+ "F-DEAD-WORLD-ANSWERS-HEALTHY": [],
+ "F-LIVE-WORLD-5961-DIRTY": [
+  {
+   "q": "workforce.publication",
+   "where": "playwright.config.js:60"
+  },
+  {
+   "q": "live-world-reset.sh restore",
+   "where": "playwright.config.js:73"
+  },
+  {
+   "q": "state=None",
+   "where": null
+  }
+ ],
+ "F-NEEDS-PLACEHOLDER-REFUSES-A-GOOD-RETURN": [
+  {
+   "q": "needs: (none)",
+   "where": null
+  },
+  {
+   "q": "scripts/drift-demo/demo.sh",
+   "where": "scripts/drift-demo/demo.sh:38"
+  },
+  {
+   "q": "lanes/L-GUARD-DEMO/demo-run.txt",
+   "where": null
+  }
+ ],
+ "F-LANE-COMMITS-CARRY-SIBLING-HUNKS": [
+  {
+   "q": "AdminPageHeader.vue",
+   "where": "components/organisms/AdminPage.vue:29"
+  },
+  {
+   "q": "admin-nav-access.test.js",
+   "where": "Scripts/demo/RUNBOOK.md:240"
+  },
+  {
+   "q": "api-server.js",
+   "where": "playwright.config.js:31"
+  },
+  {
+   "q": "schedule-client.js",
+   "where": "utils/workforce/requests-client.js:3"
+  }
+ ],
+ "F-CORE-DISCOVERY-PREFERS-THE-SHARED-CHECKOUT": [
+  {
+   "q": "test/e2e/support/core-checkout.js:74-75",
+   "where": null
+  }
+ ],
+ "F-PRIVATE-INDEX-COMMIT-CAN-BUILD-AN-UNRUN-TREE": [],
+ "F-ARCHIVED-TEST-INFLATES-THE-GREEN": [
+  {
+   "q": "lanes/L-MRG-PAGE-TEST-VACUOUS/margin-recipes-page.OLD.test.js",
+   "where": null
+  },
+  {
+   "q": ".spec.js",
+   "where": "jest.config.js:7"
+  }
+ ],
+ "F-RETREC-GUARD-IS-DEAD": [],
+ "F-FLAG-CONDITIONS-ARE-NOT-TESTABLE": [],
+ "F-REVIEWS-CANNOT-BE-JOINED-TO-LANES": [],
+ "F-EXISTENCE-CHECKS-REPORT-PRESENT-FILES-ABSENT": [
+  {
+   "q": "~/.claude/skills/plan-hub/bin/plan",
+   "where": null
+  },
+  {
+   "q": "os.path.exists",
+   "where": null
+  },
+  {
+   "q": "lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md",
+   "where": null
+  },
+  {
+   "q": "(commit 2a3a881 on feature/restaurant-modules, local)",
+   "where": null
+  }
+ ],
+ "F-BARE-PATHSPEC-PROVES-A-FALSE-ZERO": [
+  {
+   "q": "Program.cs",
+   "where": "utils/platform/feature-flags-client.js:95"
+  },
+  {
+   "q": "MealsQuoteService.cs",
+   "where": null
+  },
+  {
+   "q": "-- '*.cs'",
+   "where": null
+  },
+  {
+   "q": "lanes/L-BLOCKER-RESTATE/verdicts.md:423-424",
+   "where": null
+  },
+  {
+   "q": "-- Services/Meals/MealsQuoteService.cs Services/CartService.cs",
+   "where": null
+  },
+  {
+   "q": "Program.cs:788",
+   "where": null
+  },
+  {
+   "q": "MealsAgreementService.cs:52",
+   "where": null
+  },
+  {
+   "q": "MealsCompanyService.cs:47",
+   "where": null
+  },
+  {
+   "q": "MealsReconciliationService.cs:45",
+   "where": null
+  }
+ ],
+ "F-MIG-LEDGER-THROW-NUMBER-WRONG": [
+  {
+   "q": "docs/plans/PENDING-MIGRATIONS-LEDGER.md:504",
+   "where": null
+  }
+ ],
+ "F-WRONG-CLOCK-DEMOTES-A-TRUE-FINDING": [
+  {
+   "q": "docs/plan/returns/L-DOWNLOAD-HEADERS-1.md:7",
+   "where": null
+  },
+  {
+   "q": "os.path.exists",
+   "where": null
+  }
+ ],
+ "F-GROWTH-SQL-TIER-RED-BY-CONSTRUCTION": [
+  {
+   "q": "EnsureCreated()",
+   "where": null
+  }
+ ],
+ "F-CONSENT-SUMMARY-REASONS-NOT-IN-THE-ENUM": [
+  {
+   "q": "GrowthSuppression.Reason",
+   "where": null
+  },
+  {
+   "q": "GrowthConsentStanding.vue:54",
+   "where": null
+  },
+  {
+   "q": "{{ entry.reason }}",
+   "where": "components/admin/growth/GrowthAudiencePanel.vue:51"
+  }
+ ],
+ "F-SHARED-CHECKOUT-DIRT-IS-UNRECORDED-WORK": [
+  {
+   "q": "utils/price.js",
+   "where": "utils/cross-currency.js:31"
+  },
+  {
+   "q": "translations/*.ts",
+   "where": null
+  },
+  {
+   "q": "translations/no.ts",
+   "where": "pages/admin/account-email.vue:43"
+  },
+  {
+   "q": "--untracked=normal",
+   "where": null
+  }
+ ],
+ "F-EVIDENCE-IN-THE-TREE-DIRTIES-ITS-OWN-BUILD-ID": [
+  {
+   "q": "ignored=1221, changed=135, dirty=true",
+   "where": null
+  },
+  {
+   "q": "journey.js",
+   "where": "playwright.config.js:23"
+  },
+  {
+   "q": "world-stamp.js",
+   "where": null
+  }
+ ],
+ "F-NORWEGIAN-ONLY-KEYS-RENDER-NORWEGIAN-TO-EVERYONE": [],
+ "F-LINT-IS-ENABLED-AND-WIRED-INTO-NOTHING": [
+  {
+   "q": "package.json",
+   "where": "nuxt.config.js:51"
+  },
+  {
+   "q": ".git/hooks",
+   "where": null
+  },
+  {
+   "q": ".eslintrc.js",
+   "where": null
+  },
+  {
+   "q": "hookIsDefined()",
+   "where": null
+  },
+  {
+   "q": "/Users/svendaneel/okam/Web/.git/hooks",
+   "where": null
+  }
+ ],
+ "F-TRANSLATION-STALE-BUT-PRESENT": [
+  {
+   "q": "GoodsGroupsTab.vue:10",
+   "where": null
+  },
+  {
+   "q": "'USt-IdNr. {vat} MwSt'",
+   "where": "translations/de.ts:1258"
+  }
+ ],
+ "F-FRONTEND-ENUM-MIRROR-SHORT-A-MEMBER": [
+  {
+   "q": "core/enums/payment-type.ts",
+   "where": null
+  },
+  {
+   "q": "core/pinia/checkout.ts",
+   "where": null
+  }
+ ],
+ "F-FOCUSTRAP-TEARDOWN-NEVER-RUNS": [
+  {
+   "q": "FocusTrap.vue",
+   "where": null
+  },
+  {
+   "q": "unmounted()",
+   "where": null
+  }
+ ],
+ "F-RECEIPT-BLANK-PAYER-LINE": [
+  {
+   "q": "Services/Kassa/ReceiptService.cs",
+   "where": null
+  },
+  {
+   "q": "PosReceiptService.cs",
+   "where": null
+  },
+  {
+   "q": "Services/ReceiptService.cs:152",
+   "where": null
+  },
+  {
+   "q": "lanes/L-PAYMENT-LABEL-UKJENT/mutation-log.md:173",
+   "where": null
+  },
+  {
+   "q": "NotSet(0)",
+   "where": null
+  },
+  {
+   "q": "Giftcard(75)",
+   "where": null
+  },
+  {
+   "q": "PayInStore(100)",
+   "where": null
+  },
+  {
+   "q": "Cash(110)",
+   "where": null
+  },
+  {
+   "q": "DinteroTerminal(450)",
+   "where": null
+  },
+  {
+   "q": "WoltMarketplace(500)",
+   "where": null
+  }
+ ],
+ "F-FISCAL-RECEIPT-PRINTS-AN-ENGLISH-ENUM": [
+  {
+   "q": "Services/Kassa/EscPosReceiptBuilder.cs:315",
+   "where": null
+  }
+ ],
+ "F-A-SUITE-RUN-REWRITES-COMMITTED-ARTIFACTS": [],
+ "F-FRONTEND-DECLARES-STATES-THE-SERVER-CANNOT-SEND": [
+  {
+   "q": "OpenCheck = 10",
+   "where": "Enums/OrderStatus.cs:7"
+  }
+ ],
+ "F-APPEND-ONLY-RECEIPTS-HAVE-NO-READER": [],
+ "F-BOTH-PROBES-GATING-THE-PREF-FLAG-ARE-MISAIMED": [],
+ "F-STASH-IS-SHARED-ACROSS-WORKTREES": [],
+ "F-MARGIN-MODEL-DRIFTS-FROM-ITS-CHAIN": [],
+ "F-SQL-CONTAINERS-FROM-EARLIER-SESSIONS-STILL-HOLD-THE-HOST": [],
+ "F-THE-DEFAULT-TEST-FILTER-CLAIMS-A-CONTAINER-SLOT": [],
+ "F-REVIEWERS-LOSE-THE-RUNS-THEY-WAIT-ON": [],
+ "F-MY-LIVENESS-CHECK-NEVER-MEASURED-ANYTHING": [],
+ "F-THE-SUITE-IS-RED-ON-A-FAITHFUL-CLONE": [],
+ "F-MEALS-BOARD-SAYS-OFF-OVER-A-LIVE-MODULE": [],
+ "F-LOGINMODAL-MOUNTED-TWICE": [
+  {
+   "q": ".login-modal",
+   "where": "components/molecules/LoginModal.vue:289"
+  },
+  {
+   "q": "lang.vue",
+   "where": null
+  },
+  {
+   "q": "AdminPage.initAuth",
+   "where": "utils/admin/nav-access.js:11"
+  },
+  {
+   "q": "_userService.Reload()",
+   "where": "components/organisms/AdminPage.vue:172"
+  },
+  {
+   "q": "AdminPage.vue:103",
+   "where": null
+  },
+  {
+   "q": "AdminPage.openLogin()",
+   "where": null
+  }
+ ],
+ "F-LOGINMODAL-SUCCESS-SHOWS-A-BLOB": [
+  {
+   "q": "LoginModal.vue:203",
+   "where": null
+  },
+  {
+   "q": "JSON.stringify(response)",
+   "where": null
+  },
+  {
+   "q": "AdminUserService.Login",
+   "where": null
+  },
+  {
+   "q": "plugins/admin-core-services.js:50-54",
+   "where": null
+  },
+  {
+   "q": "UserService.Login",
+   "where": "components/molecules/LoginModal.vue:236"
+  }
+ ],
+ "F-JEST-COLLECTS-LANE-FILES": [
+  {
+   "q": "jest.config.js",
+   "where": null
+  },
+  {
+   "q": "count.arm.spec.js",
+   "where": null
+  }
+ ],
+ "F-PUBLISH-DOUBLE-OUTBOX": [
+  {
+   "q": "Database=SqlServer",
+   "where": null
+  }
+ ],
+ "F-ADMINPAGE-IGNORES-ITS-RELOAD": [
+  {
+   "q": "AdminPage.initAuth",
+   "where": "utils/admin/nav-access.js:11"
+  },
+  {
+   "q": "AdminPage.vue:103",
+   "where": null
+  },
+  {
+   "q": "_userService.Reload()",
+   "where": "components/organisms/AdminPage.vue:172"
+  },
+  {
+   "q": "AdminPage.openLogin()",
+   "where": null
+  }
+ ],
+ "F-DEV-SERVER-REUSE-PASSES-A-MUTANT": [],
+ "F-INVITATION-CLAIM-IGNORES-THE-MODULE": [
+  {
+   "q": "WorkforceInvitationService.ClaimAsync",
+   "where": null
+  },
+  {
+   "q": ") carries **only a blank-",
+   "where": null
+  },
+  {
+   "q": "workforce.module",
+   "where": "utils/platform/flag-board.js:134"
+  },
+  {
+   "q": "WorkforceInvitationService.cs:83",
+   "where": null
+  },
+  {
+   "q": "WorkforceStaffController.cs:156",
+   "where": null
+  }
+ ],
+ "F-MEALS-STATEMENT-CLIENT-CLAIMS-A-PAGE-THAT-IS-NOT-HERE": [
+  {
+   "q": "utils/\u2026/statement-client.js",
+   "where": null
+  },
+  {
+   "q": "MealsMonthClose.vue",
+   "where": "utils/meals/statement-client.js:17"
+  }
+ ],
+ "F-RUNBOOK-CANNOT-START-A-COLD-MACHINE": [
+  {
+   "q": "Scripts/demo/demo-up.sh",
+   "where": "Scripts/demo/seed-workforce-demo.sh:162"
+  },
+  {
+   "q": "Scripts/demo/RUNBOOK.md",
+   "where": null
+  },
+  {
+   "q": "Program.cs:868",
+   "where": null
+  }
+ ],
+ "F-RESERVATION-CONFLICT-IGNORES-EXTRA-TABLES": [
+  {
+   "q": "ReservationService.cs:701-735",
+   "where": null
+  },
+  {
+   "q": "r.Tables",
+   "where": "Helpers/ApplicationDbContext.cs:1426"
+  },
+  {
+   "q": "rt.TableId",
+   "where": "Helpers/ApplicationDbContext.cs:1438"
+  },
+  {
+   "q": "reservations.vue:458-466",
+   "where": null
+  },
+  {
+   "q": "r.tableId",
+   "where": "components/admin/reservations/ReservationTimeline.vue:165"
+  }
+ ],
+ "F-CORE-ADMIN-DEAD-SURFACES": [
+  {
+   "q": "_orderService.Refund",
+   "where": "Controllers/OrdersController.cs:262"
+  },
+  {
+   "q": "order-service.ts:94",
+   "where": null
+  },
+  {
+   "q": "orders.vue:222-234",
+   "where": null
+  },
+  {
+   "q": "orders.vue:751-756",
+   "where": null
+  },
+  {
+   "q": "dinehome.vue:388-401",
+   "where": null
+  }
+ ],
+ "F-SQL-SLOT-GATE-IS-ONLY-A-START-CONDITION": [],
+ "F-TRIPLETEX-REFUSAL-READS-AS-FAILURE": [
+  {
+   "q": "tripletex.vue:205-207",
+   "where": null
+  },
+  {
+   "q": "success=false",
+   "where": "Controllers/WoltAuthController.cs:211"
+  },
+  {
+   "q": "Success=false, Skipped=true",
+   "where": null
+  },
+  {
+   "q": "Success=true, Skipped=true",
+   "where": null
+  }
+ ],
+ "F-KRAVIA-MESSAGE-NULLED-BY-EVERY-DINTERO-SAVE": [
+  {
+   "q": "dintero.vue",
+   "where": "nuxt.config.js:29"
+  },
+  {
+   "q": "StoreService.cs:1266",
+   "where": null
+  }
+ ],
+ "F-NATIVE-ADMIN-CARRIES-THE-SAME-ORE-FLOOR": [
+  {
+   "q": "AdminApp/app/views/pages/DeliveryMethods.vue",
+   "where": null
+  },
+  {
+   "q": "StoresController.cs:563-570",
+   "where": null
+  }
+ ],
+ "F-PENDING-MODEL-CHECK-HAS-A-BLIND-SPOT": [
+  {
+   "q": "HasPendingModelChanges()",
+   "where": "Migrations/20260730150953_Growth_ConsentTextVersionAppendOnly.cs:22"
+  }
+ ],
+ "F-EVENTS-SPACE-CANNOT-BE-ATTACHED": [],
+ "F-EVENTS-VIPPS-REFUSAL-IS-UNTYPED": [
+  {
+   "q": "EventsDepositPaymentPortAdapter.cs:131-154",
+   "where": null
+  },
+  {
+   "q": "EventsDepositService.cs:170-180",
+   "where": null
+  },
+  {
+   "q": "EventsDepositsController.cs:119-126",
+   "where": null
+  }
+ ],
+ "F-WF-WORKER-CANNOT-SEE-HER-OWN-REQUESTS": [
+  {
+   "q": "GET /me/staff-memberships/{id}/availability",
+   "where": null
+  },
+  {
+   "q": "utils/workforce-me/me-client.js:52-56",
+   "where": null
+  }
+ ],
+ "F-MARGIN-CSV-TIMESTAMP-IS-TWO-HOURS-EARLY": [],
+ "F-JOURNEY-FILTER-DISCARDS-A-404": [],
+ "F-WASTE-PANEL-REPORTED-A-FAILURE-IT-NEVER-ATTEMPTED": [
+  {
+   "q": "longOrNull(x) || 0",
+   "where": "utils/margin/statement-view.js:327"
+  }
+ ],
+ "F-COMPANYACCOUNT-BLOCKED-BY-THE-APPROVAL-GATE": [
+  {
+   "q": "PaymentType.CompanyAccount",
+   "where": "Controllers/PosController.cs:810"
+  },
+  {
+   "q": "!Store.Approved",
+   "where": null
+  }
+ ],
+ "F-REWARDS-STATS-DIVIDES-BY-ZERO": [
+  {
+   "q": "RewardsController.cs:133",
+   "where": null
+  }
+ ],
+ "F-EXCHANGE-AWARD-BLOCKED-BY-A-STALE-ROW": [
+  {
+   "q": "WorkforceShiftExchangeService.RevalidateAwardAsync:641",
+   "where": null
+  },
+  {
+   "q": "State != Cancelled",
+   "where": null
+  },
+  {
+   "q": "workforce.exchange-not-awardable",
+   "where": "utils/workforce/requests-inbox.js:304"
+  }
+ ],
+ "F-FIRST-AFFECTED-REVISION-CAN-BE-SUPERSEDED": [
+  {
+   "q": "WorkforceRequestsService.FirstAffectedPublishedRevisionAsync:424",
+   "where": null
+  }
+ ],
+ "F-TRIPLETEX-CALL-BUDGET-UNDERCOUNTS-THE-WORST": [],
+ "F-TRIPLETEX-STALE-RECOVERY-IS-LONGER-THAN-ITS-STATED-TEN": [],
+ "F-TRIPLETEX-CALL-BUDGET-UNDERCOUNTS-THE-WORST-CASE": [],
+ "F-TRIPLETEX-STALE-RECOVERY-IS-LONGER-THAN-ITS-STATED-TEN-MINUTES": [],
+ "F-BY-SIDE-CONFLICT-RESOLUTION-HAS-NOW-COST-FOUR-TIMES": [],
+ "F-STALE-HUSKY-HOOK-BLOCKS-EVERY-COMMIT": [],
+ "F-PARTNER-FEED-DROPS-IMAGELESS-CATEGORIES": [
+  {
+   "q": "ExternalMenuService.cs:137-140",
+   "where": null
+  }
+ ],
+ "F-PARTNER-FEED-DROPS-IMAGELESS-CATEGORIES-TOO": [],
+ "F-EVENTS-ACCEPTOR-CODE-IS-A-PINNED-PUBLIC-CONTRACT": [],
+ "F-DEMO-ACT5-CLAIM-NO-LONGER-REPRODUCES": [],
+ "F-TWO-BACKEND-COMMITS-LEFT-OFF-THE-TRUNK-BY-NAME": [],
+ "F-ASSERT-NOT-PROD-IS-UNWIRED": [],
+ "F-SIGN-IN-IGNORES-THE-REDIRECT-ITS-OWN-GUARD-WROTE": [
+  {
+   "q": "push('/admin')",
+   "where": "pages/admin/pos-reports.vue:285"
+  }
+ ],
+ "F-SEND-KODE-BEFORE-HYDRATION-SENDS-NOTHING": [],
+ "F-TRAINING-COMPLETIONS-NEVER-NAME-THE-COURSE": [],
+ "F-ASSIGNMENT-FORM-DENIES-VERSIONS-THAT-EXIST": [],
+ "F-THREE-BRANCHES-CARRY-ONE-GROWTH-CATCH-FIX": [],
+ "F-OVERVIEW-STILL-READS-THE-COLUMN-NOT-THE": [
+  {
+   "q": "StoresOverviewResponseModel.IsPowerUser",
+   "where": null
+  },
+  {
+   "q": "DinteroController.GetBalance",
+   "where": null
+  }
+ ],
+ "F-OVERVIEW-STILL-READS-THE-COLUMN-NOT-THE-ROLE": [],
+ "F-AWARD-TARGET-HAS-NO-LINEAGE-FILTER": [],
+ "F-CLOCKOUT-FIXTURE-IS-A-STALE-DOUBLE": [],
+ "F-NODE-LANES-RUN-SUITE-SIZED-WORK": [],
+ "F-EXPIRY-RENDERS-EMPTY-PAGES-NOT-A-SIGN-IN": [],
+ "F-PKILL-USED-AGAINST-A-STANDING-PROHIBITION": [],
+ "F-PGREP-WAIT-LOOP-MATCHES-ITSELF": [],
+ "F-CLAIMED-RUNS-WERE-NEVER-ARCHIVED": [],
+ "F-FOUR-PAGES-STILL-DO-NOT-RESTART-AFTER-IN-PAGE-SIGN-IN": [],
+ "F-WORKFORCE-BLAMES-THE-PERSON-FOR-A-MODULE-BEING-OFF": [],
+ "F-MARGIN-PRODUCT-LINKS-DEMAND-AN-UNDOCUMENTED-IF-MATCH": [],
+ "F-PERSONNEL-LIST-FLAG-IS-NOT-IN-THE-CATALOG": [],
+ "F-NEWSLETTER-CONTENT-IS-NEVER-PARSED": [],
+ "F-THE-FIXTURE-MODELS-THE-OLD-ROLE-UPSERT": [],
+ "F-CORE-SUBMODULE-CANNOT-BE-INITIALISED-NORMALLY": [],
+ "F-RETRACTED-LANE-WORKTREES-BLOCK-THE-TRUNK": [],
+ "F-CI-PINS-NODE-16-AGAINST-AN-ENGINES-FIELD-OF-22": [],
+ "F-ONE-MUTATION-LEDGER-CANNOT-BE-REPRODUCED-VERBATIM": [],
+ "F-A-SERVER-SIGNED-EVIDENCE-EXPORT-IS-STILL-OWED": [],
+ "F-SUBMODULE-DEINIT-IN-A-WORKTREE-DEREGISTERS-CORE-FOR-EVERYONE": [],
+ "F-THE-BRIEF-BOILERPLATE-TEACHES-THE-NO-OP-COMMAND": [],
+ "F-A-SOURCE-SCAN-GOES-QUIET-WHEN-THE-SHAPE-IT-READS-MOVES": [],
+ "F-A-REVIEW-BRIEF-CAN-APPROVE-WITHOUT-A-FALSIFIABILITY-CHECK": [],
+ "F-THE-ACKNOWLEDGEMENT-RECEIPT-IS-ONLY-PAGE-STATE": [],
+ "F-THE-ADMIN-SCREEN-RENDERS-BOTH-NEW-CODES-AS-SOMETHING-WENT-WRONG": [],
+ "F-MARGIN-TELLS-CALLERS-TO-READ-AN-ETAG-IT-DOES-NOT-EMIT": [],
+ "F-AN-UNFILTERED-BACKEND-TIER-STARTS-A-CONTAINER-PER-FIXTURE": [],
+ "F-A-SUCCESSFUL-SEND-PRINTS-NOTHING-IN-THIS-WORLD": [],
+ "F-THE-WEEK-RUN-JOURNEY-STILL-PUBLISHES-ONE-WEEK": [],
+ "F-A-CONFIRMED-ROW-SITS-UNDER-A-LEDE-SAYING-UNOPENED": [],
+ "F-A-CONFIRMED-ROW-A-RE-READ-OMITS-IS-APPENDED-OUT-OF-ORDER": [],
+ "F-NO-E2E-PIN-EXISTS-FOR-TWO-PUBLICATIONS-TO-ONE-WORKER": [],
+ "F-THE-OFFER-PAGE-BUILDS-ERROR-COPY-IT-NEVER-RENDERS": [],
+ "F-A-FAILED-SMS-SHOWS-THE-GUEST-A-RAW-ENGLISH-EXCEPTION": [],
+ "F-A-MISSING-PHONE-NUMBER-SHOWS-THE-GUEST-A-TYPEERROR": [],
+ "F-A-COMMENT-THAT-OUTLIVED-ITS-CODE-DISPATCHED-A-LANE-AT-A-GHOST": [],
+ "F-THE-COVERAGE-CENSUS-AND-THE-PER-FILE-INSTRUMENT-DISAGREE-BY-ABOUT-DOUBLE": [],
+ "F-ONE-MUTATION-RUNNER-WOULD-FAIL-SILENTLY-RATHER-THAN-HALT": [],
+ "F-C5-NOT-WALKABLE": [],
+ "F-CAPABILITY-URL-BLINDSPOT": [
+  {
+   "q": "{telefonnummer}",
+   "where": null
+  },
+  {
+   "q": "Controllers/EventsDepositsController.cs:77",
+   "where": null
+  },
+  {
+   "q": "[AllowAnonymous] [HttpGet(\"deposits/{token:guid}\")]",
+   "where": null
+  },
+  {
+   "q": "{vippsOrderId}",
+   "where": "Controllers/VippsController.cs:93"
+  }
+ ],
+ "F-IDENTICAL-EXPRESSION-DIVERGENT-MEANING": [],
+ "F-PROOF-HARNESS-NOT-THE-GUARD": [
+  {
+   "q": "arm-N.sh",
+   "where": null
+  }
+ ],
+ "F-THE-FIX-REPRODUCED-THE-DEFECT": [],
+ "F-TRAIN-IK": [],
+ "F-FE-CI-UNGATED": [],
+ "F-TRAIN-TRUNCATE": [],
+ "F-I18N-FALLBACK-MASKS-A-MISSING-KEY": [
+  {
+   "q": "utils/i18n.js",
+   "where": null
+  }
+ ],
+ "F-C2-EXAMPLE-NO-LONGER-REPRODUCES": [
+  {
+   "q": "Orders.TableId",
+   "where": null
+  },
+  {
+   "q": "20260709231226_POSv1.cs",
+   "where": null
+  }
+ ],
+ "F-SHELL-FALLBACK-MASQUERADES-AS-THE-FIRST-BRANCH": [
+  {
+   "q": "os.path.exists",
+   "where": null
+  }
+ ],
+ "F-TRIPLETEX-PROMISES-IDEMPOTENCE-IT-LACKS": [
+  {
+   "q": "TripletexVoucherPoster.PostAsync",
+   "where": null
+  },
+  {
+   "q": "20260714014129_AddTripletexIntegration.cs:84-89",
+   "where": null
+  },
+  {
+   "q": "TripletexAdminController.cs:82-94",
+   "where": null
+  }
+ ],
+ "F-THE-EVIDENCE-SPLIT-POLICY-HAS-FLIPPED": [],
+ "F-A-SPEEDUP-WAS-ASSERTED-NOT-EXPLAINED": [],
+ "F-A-TEST-TITLE-CLAIMS-A-GUARANTEE-IT-NO-LONGER-PINS": [],
+ "F-THE-GATE-SENTENCE-PRINTS-BLANK-FROM-THE-BROWSER-MENU": [],
+ "F-CERTIFICATE-DELTAS-LACK-THE-TRAILING-Z": [],
+ "F-A-SECTION-LEDE-CLAIMS-UNOPENED-ABOVE-A-ROW-JUST-CONFIRMED": []
+}
