@@ -2811,6 +2811,7 @@ export default {
   // Published schedule: read marker and acknowledgement receipt
   wfme_pub_title_one: 'New schedule published',
   wfme_pub_title_many: '{count} new schedules published',
+  wfme_pub_title_confirmed: 'Schedule confirmed',
   wfme_pub_lede: 'You have not opened this yet. Your manager can see who has read it.',
   wfme_pub_published: 'Arrived {time}',
   wfme_pub_mark_read: 'Mark as read',

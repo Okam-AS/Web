@@ -73,24 +73,31 @@
 // flag key, and the worker's `Kunne ikke bekrefte mottak.` toast. Switch either flag off and the run
 // fails on the step after its probe; delete either probe and the flip that follows it is unmotivated.
 //
-// ---- ONE DEFECT THIS WALK ROUTES AROUND, ON PURPOSE -------------------------------------------
+// ---- ONE DEFECT THIS WALK FOUND, AND NOW PINS THE OTHER WAY ROUND -----------------------------
 //
-// `F-WF-ACKNOWLEDGE-SHOWS-NOTHING`: when the worker presses `Bekreft mottatt` they are shown NOTHING.
-// The write lands; `acknowledge()` stores the receipt and then reloads the inbox, acknowledging implies
-// seen, the item leaves the unread list, and `WorkforcePublicationNotice`'s `v-if` takes the whole
-// section away — receipt included. The receipt renderer needs an item that is both unread and
-// acknowledged and no such item can exist.
+// `F-WF-ACKNOWLEDGE-SHOWS-NOTHING`: when the worker pressed `Bekreft mottatt` they were shown NOTHING.
+// The write landed; `acknowledge()` stored the receipt and then reloaded the inbox, acknowledging
+// implies seen, the item left the unread list, and `WorkforcePublicationNotice`'s `v-if` took the whole
+// section away — receipt included. The receipt renderer needed an item that was both unread and
+// acknowledged, and no such item can exist. So no template change could have fixed it: the repair is in
+// what the page FEEDS the notice (`publicationsForNotice`, `utils/workforce-me/inbox-filter.js`), which
+// keeps a row this session acknowledged and the receipt rendered on it.
 //
-// So the proof of the acknowledgement is taken from the MANAGER'S publications page (step 15), not
-// from the button's own feedback. Step 13 asserts the defect AS IT STANDS ON THIS BRANCH.
+// The step that presses `Bekreft mottatt` asserted that absence deliberately, so that repairing it
+// would red this walk and somebody would have to change the claim on purpose. THIS IS THAT CHANGE —
+// the step is inverted rather than deleted, and it keeps the mechanism it used to pin. A journey that
+// quietly stopped mentioning a defect would lose the record of what was once wrong. The replay that
+// used to be unreachable — the notice removed the button that calls it — is now walked as its own step.
 //
-// AND IT IS ALREADY FIXED SOMEWHERE ELSE, which a reader of this file must know before believing its
-// step 13. `L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE` (8539b3f) and `L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX`
-// (ce6892a) carry the fix — an `acknowledgedAtUtc` on the inbox projection and a notice that keeps a
-// row the server reports acknowledged — on `lane/wf-acknowledge-receipt-visible` and
-// `lane/ack-receipt-survives-reload`. NEITHER is an ancestor of this tree, so the defect is live here
-// and step 13 is a true observation of THIS branch, not a stale one. The moment either lands, INVERT
-// step 13 — assert the receipt line and the "Allerede bekreftet" re-read — rather than deleting it.
+// The manager's own proof ("THE PROOF", near the end) is kept as well, and it is not a duplicate: the
+// worker's screen is what the WORKER was shown, the publications roster is what an inspector would be
+// shown, and the two are written by different halves of the module. Losing either leaves a claim
+// unproven.
+//
+// WHAT IS STILL NOT PROVEN HERE, and is a different lane's exit: the receipt is page state. Nothing
+// gives it back — `GET /workforce/me/inbox` carries `isRead` and no acknowledgement field, and #44 has
+// no GET sibling — so a worker who reloads has no way to re-read what they confirmed. Step 13 records
+// that as a gap rather than asserting it away.
 
 const { test, journeyDetails, expect } = require('../support/journey');
 const { signIn, signedInUserId } = require('../support/admin');
@@ -416,7 +423,7 @@ test.describe('workforce week-run', () => {
         return 'workforce.selfservice = På, flipped by ' + managerUserId;
       });
 
-      await journey.step('the worker confirms, and is shown NOTHING (F-WF-ACKNOWLEDGE-SHOWS-NOTHING)', async () => {
+      await journey.step('the worker confirms, and the receipt is on her own screen', async () => {
         await signOut(page);
         await page.goto('/admin/workforce-me');
         await page.waitForURL(/\/admin\?redirect=/, { timeout: 30000 });
@@ -425,39 +432,94 @@ test.describe('workforce week-run', () => {
 
         const notice = page.locator('.wfme-pub');
         await expect(notice).toBeVisible({ timeout: 30000 });
+        // Before the press this row is NEW and carries no receipt. Asserted so that the four claims
+        // below are a change this step caused, rather than a state the page happened to be in — the
+        // shape of vacuous assertion this estate has shipped more than once.
+        await expect(notice.locator('.wfme-pub__title')).toHaveText('Ny vaktplan publisert');
+        await expect(notice.locator('.wfme-pub__receipt')).toHaveCount(0);
+
         await notice.getByRole('button', { name: 'Bekreft mottatt' }).click();
 
-        // ---- THE DEFECT, ASSERTED RATHER THAN NARRATED -------------------------------------------
+        // ---- THE DEFECT, NOW ASSERTED THE OTHER WAY ROUND ----------------------------------------
         //
-        // `acknowledge()` stores the receipt and then reloads the inbox. Acknowledging implies SEEN, so
-        // the item leaves the unread list and `WorkforcePublicationNotice`'s `v-if="items.length"`
-        // takes the whole section away — taking the receipt element with it. The receipt renderer needs
-        // an item that is both unread and acknowledged, and no such item can exist.
+        // WHAT THIS STEP USED TO PIN. On the run that recorded this journey the worker pressed
+        // `Bekreft mottatt` and the whole notice — heading, row, and the receipt line computed from the
+        // response one tick earlier — DISAPPEARED, with no toast and nothing else anywhere on the page.
+        // This step asserted `.wfme-pub` and `.wfme-pub__receipt` were both absent, on purpose, so that
+        // repairing it would red the walk.
         //
-        // No component test could see this: the receipt is stored, the inbox reloads, and the unread
-        // filter is correct. The defect lives only in the sequence a person performs.
+        // THE MECHANISM, kept because it is the part worth remembering. `acknowledge()` stored the
+        // receipt and then reloaded the inbox; acknowledging implies SEEN, so the row came back
+        // `isRead: true`, `unreadPublications()` dropped it, and the section was `v-if`'d away. The
+        // receipt renderer needed a row that was BOTH unread and acknowledged — a state the product
+        // cannot produce. The repair is in what the page feeds the notice, not in the template.
         //
-        // WHEN IT IS FIXED, INVERT THIS STEP — do not delete it. The receipt line should appear and
-        // this journey should assert it, which is what `clears_when` on the flag asks for. The fix
-        // exists on `lane/wf-acknowledge-receipt-visible` (8539b3f) and is not on this branch; see the
-        // header. Landing it must red exactly here, which is the point of asserting rather than
-        // narrating.
-        await expect(page.locator('.wfme-pub')).toHaveCount(0, { timeout: 20000 });
-        await expect(page.locator('.wfme-pub__receipt')).toHaveCount(0);
-        await expect(page.locator('.wfme__toast')).toHaveCount(0);
+        // No component test could see either half of this. A component test hands `items` and
+        // `receipts` in as props and controls both, so it mounts the one combination the running
+        // product never produces, and its notice never leaves the DOM. The defect and its fix live only
+        // in the sequence a person performs, which is why the pin is here.
+        await expect(notice).toBeVisible({ timeout: 20000 });
+
+        const receipt = notice.locator('.wfme-pub__receipt');
+        await expect(receipt).toHaveCount(1);
+        await expect(receipt).toBeVisible();
+        // The FIRST acknowledgement's wording, not the replay's, and carrying a clock — a receipt that
+        // did not say WHEN would not be a receipt.
+        await expect(receipt).toContainText('Bekreftet mottatt');
+        const receiptText = (await receipt.textContent()).replace(/\s+/g, ' ').trim();
+        expect(receiptText).toMatch(/\d{2}:\d{2}/);
+
+        // The row survives and stops calling itself new: nothing here is unread any more, so the
+        // heading names what happened, and the unread dot and the "you have not opened this yet" lede
+        // go with the unread state they were claims about.
+        await expect(notice.locator('.wfme-pub__item')).toHaveCount(1);
+        await expect(notice.locator('.wfme-pub__title')).toHaveText('Vaktplanen er bekreftet');
+        await expect(notice.locator('.wfme-pub__lede')).toHaveCount(0);
+        await expect(notice.locator('.wfme-pub__dot')).toHaveCount(0);
+        // Still not called approval of the roster — the disclaimer is on screen WITH the receipt, which
+        // is the only moment at which it matters. The backend is explicit that #44 is informational.
+        await expect(notice.locator('.wfme-pub__disclaimer')).toBeVisible();
+        // The success path is silent by design: the receipt IS the feedback. What must not be here is
+        // the failure toast, which is what the selfservice-down probe produced two steps earlier.
+        await expect(page.locator('.wfme__toast--error')).toHaveCount(0);
 
         journey.finding(
-          'defect',
-          'a worker who confirms a published week is shown no receipt at all',
-          'F-WF-ACKNOWLEDGE-SHOWS-NOTHING. Pressing `Bekreft mottatt` succeeded — step 12 reads the ' +
-          'receipt back off the manager\'s publication roster — but the worker\'s own screen showed ' +
-          'neither the receipt nor a toast: `acknowledge()` reloads the inbox, the item stops being ' +
-          'unread, and WorkforcePublicationNotice\'s v-if removes the section that renders the receipt. ' +
-          'The whole feedback path is unreachable by construction.');
-        return 'the notice vanished; no receipt line, no toast — nothing on screen said it worked';
+          'gap',
+          'an acknowledgement cannot be re-read after a reload',
+          'The receipt the worker is shown is page state (`ackReceipts` / `ackItems`, ' +
+          'pages/admin/workforce-me.vue) because nothing gives it back: `GET /workforce/me/inbox` ' +
+          'carries `isRead` and no acknowledgement field, and #44 has no GET sibling. A worker who ' +
+          'reloads therefore has no way to re-read what she confirmed or when, while the manager can ' +
+          'read it off the publications roster all week. Closing it needs a worker-side read of the ' +
+          'acknowledgement, which is a backend change and not this surface\'s to invent.');
+        return 'receipt on the worker\'s own screen: ' + receiptText;
       });
 
-      await journey.shot('after confirming: the worker sees nothing');
+      await journey.shot('after confirming: the worker is shown the receipt');
+
+      await journey.step('the idempotent replay is reachable, and says it is a replay', async () => {
+        // #44 answers `alreadyAcknowledged: true` with the ORIGINAL instant, so a worker who presses
+        // again on a flaky connection is told "allerede bekreftet 09:14" rather than handed a fresh
+        // receipt for an act she performed once. `receiptLabel` has a string for it —
+        // `wfme_pub_receipt_already` — and while the notice vanished on the first press, neither the
+        // second press nor that string had any caller a browser could reach.
+        const acknowledge = page.locator('.wfme-pub__item .wfme-pub__btn:not(.wfme-pub__btn--ghost)');
+        await expect(acknowledge).toHaveCount(1);
+
+        const [response] = await Promise.all([
+          page.waitForResponse(r =>
+            /\/workforce\/me\/publications\/[^/]+\/acknowledgements$/.test(r.url()) &&
+            r.request().method() === 'POST', { timeout: 20000 }),
+          acknowledge.first().click()
+        ]);
+        expect(response.status()).toBe(200);
+        // The SERVER's word that this was the replay and not a second act — a second row in the
+        // append-only receipt table is exactly what C1 forbids and what #44 is built not to write.
+        const replay = await response.json();
+        expect(replay.alreadyAcknowledged).toBe(true);
+        await expect(page.locator('.wfme-pub__receipt')).toContainText('Allerede bekreftet');
+        return 'replay reached #44 with alreadyAcknowledged=true and the notice said so';
+      });
 
       // ---- and the loop closes on the manager's side ---------------------------------------------
 

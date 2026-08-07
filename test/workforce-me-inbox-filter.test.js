@@ -5,6 +5,7 @@ import {
   filterInboxItems,
   isInboxFilterError,
   publicationCount,
+  publicationsForNotice,
   resolveKind,
   resolveState,
   unreadPublications
@@ -125,6 +126,73 @@ describe('inbox filter — filtering', () => {
 
   test('unreadPublications returns the unread publication items', () => {
     expect(unreadPublications(items).map(i => i.inboxItemId)).toEqual(['a', 'c'])
+  })
+})
+
+describe('inbox filter — an acknowledged publication stays on screen with its receipt', () => {
+  // THE DEFECT THIS EXISTS FOR. Acknowledging implies seen, so the act that produces the receipt is
+  // the same act that makes the row read. Built from `unreadPublications` alone, the notice lost the
+  // row one tick after the receipt arrived and the worker was shown nothing at all. These cases pin
+  // the resolved condition; the walk that proves a person sees it is workforce-week-run.
+  const ack = item => ({ [item.schedulePublicationId]: item })
+
+  test('an acknowledged row is kept even though acknowledging marked it read', () => {
+    const pressed = publication('a', false)
+    // The server's answer AFTER the press: the same publication, now read.
+    const afterReload = [Object.assign({}, pressed, { isRead: true })]
+    expect(publicationsForNotice(afterReload, ack(pressed)).map(i => i.inboxItemId)).toEqual(['a'])
+  })
+
+  test('a read row nobody acknowledged is still dropped', () => {
+    const items = [publication('a', true), publication('b', false)]
+    expect(publicationsForNotice(items, {}).map(i => i.inboxItemId)).toEqual(['b'])
+  })
+
+  test('with nothing acknowledged it is exactly the unread list', () => {
+    const items = [publication('a', false), publication('b', true), publication('c', false)]
+    expect(publicationsForNotice(items, {}).map(i => i.inboxItemId))
+      .toEqual(unreadPublications(items).map(i => i.inboxItemId))
+  })
+
+  test('the receipt survives an inbox re-read that failed', () => {
+    // `loadInbox()` catches and leaves the list null. The confirmation must not depend on that
+    // second request succeeding — the worker performed the act either way.
+    const pressed = publication('a', false)
+    expect(publicationsForNotice(null, ack(pressed)).map(i => i.inboxItemId)).toEqual(['a'])
+  })
+
+  test('an acknowledged row the server stops reporting is not lost', () => {
+    const pressed = publication('a', false)
+    expect(publicationsForNotice([], ack(pressed)).map(i => i.inboxItemId)).toEqual(['a'])
+  })
+
+  test('the kept row is appended once, after what is still unread', () => {
+    // Not duplicated, and not ahead of a plan the worker has yet to look at.
+    const pressed = publication('a', false)
+    const afterReload = [Object.assign({}, pressed, { isRead: true }), publication('b', false)]
+    expect(publicationsForNotice(afterReload, ack(pressed)).map(i => i.inboxItemId)).toEqual(['b', 'a'])
+  })
+
+  test('a row the server has NOT marked read is kept once, in its unread position', () => {
+    // The press is remembered whatever the server then says; if the row comes back still unread it
+    // is already in the list and must not be added twice.
+    const pressed = publication('a', false)
+    const items = [pressed, publication('b', false)]
+    expect(publicationsForNotice(items, ack(pressed)).map(i => i.inboxItemId)).toEqual(['a', 'b'])
+  })
+
+  test('the row carried forward is the SERVER\'s, so it reports itself as read', () => {
+    // Which matters on screen: the heading, the unread dot and the mark-as-read button are all
+    // claims about an unread row, and this one is not one any more.
+    const pressed = publication('a', false)
+    const afterReload = [Object.assign({}, pressed, { isRead: true })]
+    expect(publicationsForNotice(afterReload, ack(pressed))[0].isRead).toBe(true)
+  })
+
+  test('not loaded with nothing acknowledged is still null, never an empty inbox', () => {
+    expect(publicationsForNotice(null, {})).toBeNull()
+    expect(publicationsForNotice(null, null)).toBeNull()
+    expect(publicationsForNotice(undefined, undefined)).toBeNull()
   })
 })
 

@@ -39,7 +39,7 @@
 
       <template v-else>
         <WorkforcePublicationNotice
-          :items="unreadPublicationItems"
+          :items="noticePublicationItems"
           :receipts="ackReceipts"
           :busy-id="busyKey"
           :locale="locale"
@@ -285,7 +285,7 @@ import { WorkforceMeService } from '~/utils/workforce-me/me-client';
 import {
   classifyClaimFailure, isNormalOutcome, outcomeMessageKey, requiresRefresh
 } from '~/utils/workforce-me/claim-outcome';
-import { publicationCount, unreadPublications } from '~/utils/workforce-me/inbox-filter';
+import { publicationCount, publicationsForNotice } from '~/utils/workforce-me/inbox-filter';
 import { roleSummary, selfServiceMemberships } from '~/utils/workforce-me/memberships';
 import {
   SELF_ALREADY_DECIDED, classifySelfFailure, selfFailureMessageKey
@@ -345,7 +345,14 @@ export default {
       // APPENDS a row to the very log it returns, so a page that fetched it automatically would
       // grow this worker's own access log every time they opened the page for anything else.
       disclosuresByStore: {},
+      // publicationId -> the #44 receipt, and publicationId -> the inbox row it was earned on.
+      // BOTH, because acknowledging marks that row read and the next inbox read therefore stops
+      // reporting it as unread — and the receipt is rendered on the row. Keeping only the receipt is
+      // what made the confirmation vanish the instant it was earned. Session-scoped by design: the
+      // inbox row carries `isRead` and no acknowledgement field, so there is nothing to restore this
+      // from after a reload and the page must not pretend otherwise.
       ackReceipts: {},
+      ackItems: {},
       toast: { show: false, message: '', type: 'success' },
       toastTimer: null
     };
@@ -434,8 +441,13 @@ export default {
     },
 
     // --- inbox -------------------------------------------------------------------------------
-    unreadPublicationItems () {
-      return unreadPublications(this.inbox ? this.inbox.items : null);
+    /**
+     * What the notice shows: the unread publications, plus any publication acknowledged in this
+     * session. See `publicationsForNotice` — acknowledging is what makes a row read, so a notice fed
+     * unread rows alone erases the receipt at the moment the worker earns it.
+     */
+    noticePublicationItems () {
+      return publicationsForNotice(this.inbox ? this.inbox.items : null, this.ackItems);
     },
 
     // --- open shifts -------------------------------------------------------------------------
@@ -754,6 +766,11 @@ export default {
         const receipt = await this._workforceMeService.AcknowledgePublication(item.schedulePublicationId);
         if (receipt) {
           this.ackReceipts = Object.assign({}, this.ackReceipts, { [item.schedulePublicationId]: receipt });
+          // The ROW is kept alongside the receipt, and this is the whole repair. The reload below
+          // returns this item `isRead: true` — acknowledging implies seen — so the unread filter
+          // would drop it, and the receipt line is rendered on the row. Without this the worker
+          // pressed the button and the entire notice, receipt included, left the screen.
+          this.ackItems = Object.assign({}, this.ackItems, { [item.schedulePublicationId]: item });
         }
         // Acknowledging implies seen, so the inbox read state moves with it.
         await this.loadInbox();

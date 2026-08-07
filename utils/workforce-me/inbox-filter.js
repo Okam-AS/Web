@@ -117,6 +117,50 @@ export function unreadPublications (items) {
 }
 
 /**
+ * The publications the notice must put on screen: everything still unread, PLUS everything this
+ * session holds an acknowledgement receipt for.
+ *
+ * WHY THE SECOND HALF EXISTS, AND WHY IT IS NOT A RENDERING DETAIL. Acknowledging IMPLIES seen, so
+ * the act that produces a receipt is the same act that makes the row read. A notice fed
+ * `unreadPublications` alone therefore loses the row one tick after the receipt for it arrives —
+ * and the receipt line lives ON that row, so it goes with it. The worker pressed "Bekreft mottatt"
+ * and was shown nothing at all. The renderer needed an item that was both unread and acknowledged,
+ * and no such item can exist; this is where that contradiction is resolved, because no change to the
+ * template can resolve it.
+ *
+ * `acknowledged` is keyed by `schedulePublicationId` and holds the inbox item AS IT STOOD when the
+ * worker pressed. Kept from the press rather than looked up afterwards, so the confirmation does not
+ * depend on a second request succeeding: an inbox re-read that failed leaves the receipt on screen.
+ *
+ * Null still means NOT LOADED, exactly as `unreadPublications` does — null in, with nothing
+ * acknowledged, gives null out. Receipts alone are enough to render, because they are this page's
+ * own first-hand record of an act it performed, not an inference about server state.
+ */
+export function publicationsForNotice (items, acknowledged) {
+  const kept = acknowledged || {};
+  const ids = Object.keys(kept).filter(id => kept[id]);
+  const unread = unreadPublications(items);
+  if (unread === null && !ids.length) { return null; }
+
+  // Unread first, then what was just confirmed. What still needs the worker's attention outranks
+  // what no longer does.
+  const shown = (unread || []).slice();
+  const reported = filterInboxItems(items, { kind: 'publication', state: 'all' }) || [];
+  ids.forEach((id) => {
+    const pressed = kept[id];
+    // Already there, because the server has not marked it read. Nothing to add.
+    if (shown.some(item => item.inboxItemId === pressed.inboxItemId)) { return; }
+    // The SERVER's copy where the inbox still reports it, because that copy is the one carrying
+    // `isRead: true` — which is what the surface reads to stop calling this row new. Falling back to
+    // the row as it was pressed is what keeps the receipt on screen when the re-read failed or no
+    // longer carries it: a confirmation must not depend on a second request succeeding.
+    const current = reported.find(item => item.inboxItemId === pressed.inboxItemId);
+    shown.push(current || pressed);
+  });
+  return shown;
+}
+
+/**
  * How many publications have ever reached this worker, or `null` when the inbox is not loaded.
  *
  * This is the only worker-visible evidence that a schedule was ever published to them, and it is what
