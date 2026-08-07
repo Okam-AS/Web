@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true">
+  <AdminPage :full-width="true" @login-success="startOffersPage">
     <div class="overview">
       <div class="overview__content">
         <!-- Offer Proposals Section -->
@@ -381,7 +381,15 @@
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
             <h1 style="margin-bottom: 1em">{{ $i('offers_confirmDeleteTitle') }}</h1>
             <p>
-              {{ $i('offers_confirmDeletePrefix') }} <strong>{{ proposalToDelete?.clientName }}</strong
+              <!-- `(x || {}).y` and not `x?.y`. Identical rendering in both worlds — an absent
+                   proposal yields `undefined` either way, which Vue interpolates as the empty
+                   string — but `vue-jest` transpiles render functions through
+                   `vue-template-es2015-compiler` (buble), and buble cannot parse optional chaining.
+                   These two interpolations were the whole reason `pages/admin/offers.vue` could not
+                   be imported by this repository's test toolchain at all: the SyntaxError is thrown
+                   at transform time, before any assertion can run, so the page had no test and
+                   could not be given one. -->
+              {{ $i('offers_confirmDeletePrefix') }} <strong>{{ (proposalToDelete || {}).clientName }}</strong
               >{{ $i('offers_confirmDeleteSuffix') }}
             </p>
             <div class="modal-buttons">
@@ -410,7 +418,9 @@
           <div style="width: 500px; max-width: 90vw; margin: 0 auto; text-align: center">
             <h1 style="margin-bottom: 1em">{{ $i('offers_confirmCancelTitle') }}</h1>
             <p>
-              {{ $i('offers_confirmCancelPrefix') }} <strong>{{ proposalToCancel?.clientName }}</strong
+              <!-- Same as the delete dialog above: `(x || {}).y` renders exactly what `x?.y` did,
+                   and unlike `x?.y` it can be parsed by the buble pass behind `vue-jest`. -->
+              {{ $i('offers_confirmCancelPrefix') }} <strong>{{ (proposalToCancel || {}).clientName }}</strong
               >{{ $i('offers_confirmCancelSuffix') }}
             </p>
             <div class="modal-buttons">
@@ -485,21 +495,7 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-
-    // Restrict to Key Account Managers (Power Users also allowed)
-    const user = this.$store.state.currentUser;
-    if (!user?.isKeyAccountManager && !user?.isPowerUser) {
-      this.$router.push("/admin");
-      return;
-    }
-
-    this.fetchOfferProposals();
-    this.fetchOfferItems(); // Add back fetchOfferItems method
-
-    // Set up interval to refresh data every 10 seconds without setting isLoading
-    this.refreshInterval = setInterval(() => {
-      this.fetchDataInBackground();
-    }, 10000);
+    this.startOffersPage();
   },
 
   beforeDestroy() {
@@ -510,6 +506,38 @@ export default {
   },
 
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:153) — the URL the post-login return path
+    // itself leaves behind — and its refused-navigation fallback raises the door in place.
+    //
+    // One list rather than two, because on the four pages this class was already fixed on the
+    // second copy had been written short and gone stale every time. And the PRIVILEGE bounce is
+    // part of it: `mounted` asks only "who are you", so if "are you a Key Account Manager" stayed
+    // there it would be asked once, before anyone had answered the first question, and never again.
+    startOffersPage() {
+      // Restrict to Key Account Managers (Power Users also allowed)
+      const user = this.$store.state.currentUser;
+      if (!user?.isKeyAccountManager && !user?.isPowerUser) {
+        this.$router.push("/admin");
+        return;
+      }
+
+      this.fetchOfferProposals();
+      this.fetchOfferItems(); // Add back fetchOfferItems method
+
+      // Set up interval to refresh data every 10 seconds without setting isLoading.
+      // Cleared before it is set: `beforeDestroy` holds ONE handle, so a second poll started over
+      // the top of the first is one this page could never stop.
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
+      this.refreshInterval = setInterval(() => {
+        this.fetchDataInBackground();
+      }, 10000);
+    },
+
     fetchOfferProposals() {
       this.isLoading = true;
       this._offerProposalService

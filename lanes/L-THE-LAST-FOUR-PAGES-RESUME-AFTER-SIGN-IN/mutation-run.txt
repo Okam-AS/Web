@@ -1,0 +1,32 @@
+BASELINE (the fix as committed)               ALL 28 PASSED
+pages/admin/overview.vue UNBOUND              4 failed / 28
+pages/admin/overview.vue SHORT (loadOverview) 3 failed / 28
+pages/admin/offers.vue UNBOUND                3 failed / 28
+pages/admin/offers.vue SHORT (fetchOfferProposals)2 failed / 28
+pages/admin/kam.vue UNBOUND                   3 failed / 28
+pages/admin/kam.vue SHORT (fetchData)         1 failed / 28
+pages/admin/goods.vue UNBOUND                 3 failed / 28
+pages/admin/goods.vue SHORT (fetchOfferItems) 1 failed / 28
+RESTORED                                      ALL 28 PASSED
+
+--- summary ---
+BASELINE (the fix as committed)               ALL 28 PASSED
+pages/admin/overview.vue UNBOUND              4 failed / 28
+pages/admin/overview.vue SHORT (loadOverview) 3 failed / 28
+pages/admin/offers.vue UNBOUND                3 failed / 28
+pages/admin/offers.vue SHORT (fetchOfferProposals)2 failed / 28
+pages/admin/kam.vue UNBOUND                   3 failed / 28
+pages/admin/kam.vue SHORT (fetchData)         1 failed / 28
+pages/admin/goods.vue UNBOUND                 3 failed / 28
+pages/admin/goods.vue SHORT (fetchOfferItems) 1 failed / 28
+RESTORED                                      ALL 28 PASSED
+
+--- a ninth mutation, run by hand against the WIDENED source scan ---
+test/sign-in-door-is-on-the-page-that-keeps-it.test.js, goods.vue delegation guard deleted
+  (`if (!this.$store.getters.userIsLoggedIn) { return; }` removed from `mounted`)
+  widened scan  -> 1 failed / 9, offender list gains "goods.vue"
+  restored      -> 9 passed / 9
+The same mutation measured against the PRE-WIDENING extraction (the mounted hook text only):
+  the hook no longer contains `$router.push('/admin')` at all, because the one-starter shape moved
+  the bounce into `startGoodsPage`, so the old scan would have called the mutated page clean.
+  That is why the extraction follows one level of `this.method()` from `mounted`.

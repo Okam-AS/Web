@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true">
+  <AdminPage :full-width="true" @login-success="startOverviewPage">
     <div class="overview">
       <div class="overview__content">
         <div class="overview__filters">
@@ -579,28 +579,7 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-
-    // Restrict to Key Account Managers (Power Users also allowed)
-    const user = this.$store.state.currentUser;
-    if (!user?.isKeyAccountManager && !user?.isPowerUser) {
-      this.$router.push("/admin");
-      return;
-    }
-
-    // Load saved filters from localStorage
-    this.loadFiltersFromLocalStorage();
-
-    // If no date range is set, default to today
-    if (!this.dateRange.from || !this.dateRange.to) {
-      this.setToday();
-    } else {
-      // If we loaded date range from localStorage, apply it
-      this.applyDateRange();
-    }
-
-    this.setupTableScrollIndicators();
-    document.addEventListener("click", this.closeKamFilterDropdown);
-    document.addEventListener("click", this.closeKamStatusFilterDropdown);
+    this.startOverviewPage();
   },
 
   beforeDestroy() {
@@ -610,6 +589,54 @@ export default {
   },
 
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:153), which is exactly the URL the
+    // post-login return path leaves behind — and the refused-navigation fallback below it raises
+    // the door in place on any route the shell turns out not to be leaving.
+    //
+    // It is ONE list and not a second short copy beside `mounted`. The same class was fixed twice
+    // before on four other pages, and both times the second copy had been written short and gone
+    // stale — `login-success` bound to `fetchOrders()` alone, to `loadStatistics` alone, to
+    // `loadOrders()` alone — which left the page reading as an operator with nothing rather than as
+    // a page that failed to start.
+    //
+    // THE PRIVILEGE BOUNCE IS PART OF THE STARTER, not of `mounted`. Splitting "who are you" from
+    // "are you privileged" is what let a signed-out visitor stand on this page at all; leaving the
+    // second question in `mounted` would mean it is asked exactly once, before anybody has answered
+    // the first, and never again — so somebody who signed in here as neither a Key Account Manager
+    // nor a Power User would be left reading a KAM screen until they reloaded.
+    startOverviewPage() {
+      // Restrict to Key Account Managers (Power Users also allowed)
+      const user = this.$store.state.currentUser;
+      if (!user?.isKeyAccountManager && !user?.isPowerUser) {
+        this.$router.push("/admin");
+        return;
+      }
+
+      // Load saved filters from localStorage. Inside the starter rather than above the guard —
+      // unlike orders, which reads its saved filters before the guard because they were already
+      // read by the time a sign-in arrives. Here nothing has been read yet: a signed-out visitor
+      // reaches this line for the first time on `login-success`, and a fresh mount would have run
+      // it, so the sign-in path has to run it too.
+      this.loadFiltersFromLocalStorage();
+
+      // If no date range is set, default to today
+      if (!this.dateRange.from || !this.dateRange.to) {
+        this.setToday();
+      } else {
+        // If we loaded date range from localStorage, apply it
+        this.applyDateRange();
+      }
+
+      this.setupTableScrollIndicators();
+      // Idempotent by the DOM's own rule: adding a listener that is already registered with the
+      // same type, callback and capture flag is a no-op, and these are bound method references.
+      document.addEventListener("click", this.closeKamFilterDropdown);
+      document.addEventListener("click", this.closeKamStatusFilterDropdown);
+    },
+
     setupTableScrollIndicators() {
       this.$nextTick(() => {
         const tableContainer = document.querySelector(".overview__table-container");

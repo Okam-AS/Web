@@ -135,28 +135,69 @@ describe('no admin page answers "who are you" with "you are not privileged"', ()
     }, [])
   }
 
-  // The `mounted` hook only — that is the hook that races the shell. A bounce inside a click
-  // handler or a data loader runs long after the shell has settled and is not this defect.
-  function mountedHook (source) {
-    const start = source.search(/^\s{2}(async\s+)?mounted\s*\(/m)
+  // WHAT COUNTS AS MOUNT TIME. The bounce that races the shell is the one reachable when the page
+  // mounts — a bounce inside a click handler or a data loader runs long after the shell has settled
+  // and is not this defect. That used to be read as "the text of the `mounted` hook", and the
+  // reading has to be one level wider, because the ONE-STARTER shape moves the privilege bounce out
+  // of `mounted` and into a method `mounted` calls (`pages/admin/pos.vue` was already written that
+  // way; `overview`, `offers`, `kam` and `goods` joined it so their bounce could also be reached
+  // from the shell's `login-success`). Read narrowly, those five pages carry no `push` in `mounted`
+  // at all and this scan passes over them saying nothing — which is a scan that has stopped
+  // watching the pages it was written for.
+  //
+  // So: `mounted` plus the bodies of the methods `mounted` calls directly. One level, deliberately
+  // — it is enough for the starter shape, it terminates, and it needs no call graph.
+  function bodyOf (source, name) {
+    const start = source.search(new RegExp('^\\s{2,4}(async\\s+)?' + name + '\\s*\\(', 'm'))
     if (start === -1) { return null }
     const rest = source.slice(start)
-    // To the next top-level option key at the same indentation.
-    const end = rest.slice(1).search(/^\s{2}[A-Za-z$_][\w$]*\s*[(:]/m)
+    const indent = /^\s*/.exec(rest)[0].length
+    // To the next key at the same indentation — a sibling option, or a sibling method.
+    const end = rest.slice(1).search(new RegExp('^\\s{' + indent + '}[A-Za-z$_][\\w$]*\\s*[(:]', 'm'))
     return end === -1 ? rest : rest.slice(0, end + 1)
   }
 
-  const offenders = adminPages(pagesDir).filter((file) => {
+  function mountTimeBody (source) {
+    const hook = bodyOf(source, 'mounted')
+    if (!hook) { return null }
+    const called = new Set([...hook.matchAll(/this\.([A-Za-z_$][\w$]*)\s*\(/g)].map(m => m[1]))
+    let body = hook
+    called.forEach((name) => {
+      const method = bodyOf(source, name)
+      if (method) { body += '\n' + method }
+    })
+    return body
+  }
+
+  // The line eleven pages already opened with, and the five the front-door lane added it to. Its
+  // presence means the anonymous case returns before any privilege bounce can fire. Both spellings
+  // are accepted because both are the same read: `poweruser-growth.vue` goes through its own
+  // `userIsLoggedIn` computed, whose whole body is `return this.$store.getters.userIsLoggedIn`.
+  const DELEGATES = /if\s*\(\s*!\s*this\.(\$store\.getters\.)?userIsLoggedIn\s*\)\s*\{?\s*\n?\s*return/
+
+  const bouncers = adminPages(pagesDir).filter((file) => {
     const source = fs.readFileSync(file, 'utf8')
     // No shell, no delegation. See the note above.
     if (!/<AdminPage/.test(source)) { return false }
-    const hook = mountedHook(source)
-    if (!hook) { return false }
-    if (!/\$router\.push\(\s*['"]\/admin['"]\s*\)/.test(hook)) { return false }
-    // The line eleven pages already open with, and the five this lane added it to. Its presence
-    // means the anonymous case returns before any privilege bounce can fire.
-    return !/if\s*\(\s*!\s*this\.\$store\.getters\.userIsLoggedIn\s*\)\s*\{\s*\n?\s*return/.test(hook)
+    const body = mountTimeBody(source)
+    return !!body && /\$router\.push\(\s*['"]\/admin['"]\s*\)/.test(body)
   }).map(file => path.relative(pagesDir, file)).sort()
+
+  const offenders = bouncers.filter((rel) => {
+    const source = fs.readFileSync(path.join(pagesDir, rel), 'utf8')
+    return !DELEGATES.test(mountTimeBody(source))
+  })
+
+  // The scan above can only report what it looked at, and the reading it does is textual. Named
+  // here so a change that silently stops reaching the bounce — a starter renamed out of the one
+  // level this follows, an indentation the extractor no longer recognises — reds instead of
+  // reporting an empty offender list from an empty haystack.
+  test('the scan still reaches the pages it was written for', () => {
+    expect(bouncers).toEqual(expect.arrayContaining([
+      'goods.vue', 'kam.vue', 'offers.vue', 'overview.vue', 'pos.vue'
+    ]))
+    expect(bouncers.length).toBeGreaterThan(10)
+  })
 
   test('every page that bounces to /admin on mount lets the shell answer authentication first', () => {
     expect(offenders).toEqual([])

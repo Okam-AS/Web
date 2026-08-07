@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true">
+  <AdminPage :full-width="true" @login-success="startKamPage">
     <div class="overview">
       <div class="overview__content">
         <div class="overview__table-container">
@@ -221,18 +221,7 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-
-    if (!this.isPowerUser) {
-      this.$router.push("/admin");
-      return;
-    }
-
-    this.fetchData();
-
-    // Set up auto-refresh every 30 seconds
-    this.refreshInterval = setInterval(() => {
-      this.fetchDataInBackground();
-    }, 30000);
+    this.startKamPage();
   },
 
   beforeDestroy() {
@@ -243,6 +232,36 @@ export default {
   },
 
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:153) — the URL the post-login return path
+    // itself leaves behind — and its refused-navigation fallback raises the door in place.
+    //
+    // One list rather than two, because on the four pages this class was already fixed on the
+    // second copy had been written short and gone stale every time. And the PRIVILEGE bounce is
+    // part of it: `isPowerUser` reads `currentUser?.isPowerUser`, which is `undefined` for a
+    // visitor nobody has met yet, so asking it in `mounted` means answering "you are not a Power
+    // User" to somebody who has not signed in — and never asking again once they have.
+    startKamPage() {
+      if (!this.isPowerUser) {
+        this.$router.push("/admin");
+        return;
+      }
+
+      this.fetchData();
+
+      // Set up auto-refresh every 30 seconds. Cleared before it is set: `beforeDestroy` holds ONE
+      // handle, so a second poll started over the top of the first is one this page could never
+      // stop.
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
+      this.refreshInterval = setInterval(() => {
+        this.fetchDataInBackground();
+      }, 30000);
+    },
+
     async fetchData() {
       this.isLoading = true;
       try {
