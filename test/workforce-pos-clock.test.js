@@ -48,11 +48,11 @@ describe('what the register may believe after a punch', () => {
     accepted: true
   }
 
-  // The exact body the backend answers for a clock-OUT with nothing open:
-  // WorkforceClockProjection.StageClockOutAsync returns MissingPunchException with no session, and
-  // PosClockEventResponse.From maps `SessionState = ClosedUtc.HasValue ? Closed : Open` — so the
-  // field literally named for the session state reads "Open" on a clock-out that closed nothing.
-  const nothingOpenResponse = {
+  // A clock-OUT with nothing open, as a server from BEFORE 2026-08-05 answers it: SessionStateOf was
+  // `ClosedUtc.HasValue ? Closed : Open`, so the field literally named for the session state read
+  // "Open" on a punch that closed nothing. This client and the API deploy independently, so this body
+  // is still reachable from a till and the no-id guard is what keeps it honest.
+  const staleNothingOpenResponse = {
     clockSessionId: null,
     sessionState: 'Open',
     openedUtc: null,
@@ -61,24 +61,87 @@ describe('what the register may believe after a punch', () => {
     accepted: true
   }
 
-  test('a clock-out that closed nothing is NOT read as clocked in, though sessionState says Open', () => {
-    expect(nothingOpenResponse.sessionState).toBe('Open')
-    expect(stateFromClockEvent(nothingOpenResponse)).toBe(SESSION_EXCEPTION)
-    expect(stateFromClockEvent(nothingOpenResponse)).not.toBe(SESSION_OPEN)
+  // The same punch against the CURRENT backend (`4d103ca8a`): the fold's own outcome, MissingPunchException,
+  // reaches the wire as the third state.
+  const nothingOpenResponse = {
+    clockSessionId: null,
+    sessionState: 'AttendanceException',
+    openedUtc: null,
+    closedUtc: null,
+    serverReceivedUtc: '2026-07-01T17:00:00Z',
+    accepted: true
+  }
+
+  // THE BODY THIS LANE EXISTS FOR. A worker with two legal employers clocks in on engagement B while
+  // engagement A is open (§3.7). The backend answers AttendanceException — nothing folded for THIS
+  // engagement — while carrying the OTHER employer's OPEN session id, because the adjustment
+  // references it. Pinned server-side by
+  // PosClockOutStateWireTests.A_cross_engagement_clock_in_carries_a_session_id_and_still_does_not_report_this_engagement_open,
+  // which asserts clockSessionId is a String and sessionState is "AttendanceException".
+  const crossEngagementResponse = {
+    clockSessionId: 'b2000000-0000-0000-0000-000000000099',
+    sessionState: 'AttendanceException',
+    openedUtc: '2026-07-01T09:00:05Z',
+    closedUtc: null,
+    serverReceivedUtc: '2026-07-01T17:00:00Z',
+    accepted: true
+  }
+
+  test('a cross-engagement clock-in carries a session id and is still NOT read as clocked in', () => {
+    // Every id-shaped test passes on this body: there IS an id and there is no closedUtc. It is the
+    // other employer's session, and reading it as "this engagement is open" tells a worker she is on
+    // the clock somewhere she has nothing open.
+    expect(crossEngagementResponse.clockSessionId).toBeTruthy()
+    expect(crossEngagementResponse.closedUtc).toBeNull()
+
+    expect(stateFromClockEvent(crossEngagementResponse)).toBe(SESSION_EXCEPTION)
+    expect(stateFromClockEvent(crossEngagementResponse)).not.toBe(SESSION_OPEN)
   })
 
-  test('the session id, not sessionState, decides open vs closed', () => {
+  test('a clock-out that closed nothing is NOT read as clocked in, on either side of the backend fix', () => {
+    expect(nothingOpenResponse.sessionState).toBe('AttendanceException')
+    expect(stateFromClockEvent(nothingOpenResponse)).toBe(SESSION_EXCEPTION)
+
+    // And against a server that still answers the old body, which the no-id guard is kept for.
+    expect(staleNothingOpenResponse.sessionState).toBe('Open')
+    expect(stateFromClockEvent(staleNothingOpenResponse)).toBe(SESSION_EXCEPTION)
+    expect(stateFromClockEvent(staleNothingOpenResponse)).not.toBe(SESSION_OPEN)
+  })
+
+  test('a definite state needs a folded session AND the outcome that says which way', () => {
     expect(stateFromClockEvent(openResponse)).toBe(SESSION_OPEN)
     expect(stateFromClockEvent(closedResponse)).toBe(SESSION_CLOSED)
     expect(stateFromClockEvent(null)).toBe(SESSION_UNKNOWN)
+  })
+
+  test('a state this client does not know is not guessed into a clocked one', () => {
+    // A fourth state added server-side must land as unknown — both buttons live, the server deciding
+    // on the next press — rather than inheriting whichever branch it happens to fall through to. That
+    // fallthrough is precisely how the original defect was written.
+    const future = { ...openResponse, sessionState: 'SomethingNobodyHasWrittenYet' }
+    expect(stateFromClockEvent(future)).toBe(SESSION_UNKNOWN)
+    expect(canClockIn(stateFromClockEvent(future))).toBe(true)
+    expect(canClockOut(stateFromClockEvent(future))).toBe(true)
+
+    // An absent field is the same question with no answer at all.
+    expect(stateFromClockEvent({ clockSessionId: openResponse.clockSessionId })).toBe(SESSION_UNKNOWN)
   })
 
   test('an exception does not overwrite a state the register already knew', () => {
     // Someone else's stray clock-out folding nothing must not clock this person out on screen.
     expect(nextState(SESSION_OPEN, nothingOpenResponse)).toBe(SESSION_OPEN)
     expect(nextState(SESSION_UNKNOWN, nothingOpenResponse)).toBe(SESSION_EXCEPTION)
+    expect(nextState(SESSION_UNKNOWN, crossEngagementResponse)).toBe(SESSION_EXCEPTION)
     expect(nextState(SESSION_UNKNOWN, openResponse)).toBe(SESSION_OPEN)
     expect(nextState(SESSION_OPEN, closedResponse)).toBe(SESSION_CLOSED)
+  })
+
+  test('an unreadable answer is not evidence of a fold either', () => {
+    // It says nothing about whether a session moved, so it may not overwrite what was established.
+    const future = { ...openResponse, sessionState: 'SomethingNobodyHasWrittenYet' }
+    expect(nextState(SESSION_CLOSED, future)).toBe(SESSION_CLOSED)
+    expect(nextState(SESSION_OPEN, null)).toBe(SESSION_OPEN)
+    expect(nextState(SESSION_UNKNOWN, future)).toBe(SESSION_UNKNOWN)
   })
 
   test('both halves of the pair stay reachable while the state is unknown', () => {
@@ -285,6 +348,36 @@ describe('the clock screen', () => {
 
     expect(wrapper.find('.posclk__state').text()).not.toBe('Stemplet inn')
     expect(wrapper.find('.posclk__notice').text()).toContain('ingen åpen økt')
+    // Recorded, so not an error — the punch is on the append-only record either way.
+    expect(wrapper.find('.posclk__error').exists()).toBe(false)
+    wrapper.destroy()
+  })
+
+  // The defect this lane exists for, at the screen a worker with two employers is standing in front of.
+  test('a cross-engagement clock-in does not tell her she is on the clock here', async () => {
+    server({
+      // AttendanceException carrying the OTHER employer's OPEN session id — an id, and no closedUtc.
+      punch: { status: 200, body: { clockSessionId: 'other-employer-session', sessionState: 'AttendanceException', openedUtc: '2026-07-01T07:00:00Z', closedUtc: null, accepted: true } },
+      list: emptyList
+    })
+    const { wrapper } = build()
+    await flush()
+    wrapper.find('.posclk__btn--in').trigger('click')
+    await flush()
+    await wrapper.vm.$nextTick()
+
+    // The badge. Not "Stemplet inn", and not left to whichever branch an id-shaped test falls into.
+    expect(wrapper.find('.posclk__state').text()).not.toBe('Stemplet inn')
+    expect(wrapper.find('.posclk__state').text()).toBe('Til gjennomgang')
+
+    // The sentence. It must not print a start time she never started — the id carries an openedUtc.
+    expect(wrapper.find('.posclk__notice').text()).toContain('åpnet ingen økt')
+    expect(wrapper.find('.posclk__notice').text()).not.toContain('Stemplet inn')
+
+    // And the consequence she can actually act on: *Stemple inn* stays pressable, because nothing of
+    // hers is open here. Reading the id as OPEN greys it out and strands her.
+    expect(wrapper.find('.posclk__btn--in').attributes('disabled')).toBeFalsy()
+
     // Recorded, so not an error — the punch is on the append-only record either way.
     expect(wrapper.find('.posclk__error').exists()).toBe(false)
     wrapper.destroy()

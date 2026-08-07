@@ -2,38 +2,50 @@
 //
 // ---- THE ONE RULE THIS FILE EXISTS TO STATE ---------------------------------------------------
 //
-// `POST /workforce/pos/clock-events` answers a `sessionState` field. DO NOT BIND THE BUTTON TO IT.
+// NEITHER FIELD ON `POST /workforce/pos/clock-events` IS TRUSTWORTHY ALONE. A definite state needs
+// both of them to agree, and anything else is the honest third answer.
 //
-// The wire shape is `PosClockEventResponse.From` (backend `Models/Workforce/WorkforcePosModels.cs`):
+// Each half has been the whole rule at some point, and each was wrong on its own:
 //
-//     SessionState = result.ClosedUtc.HasValue ? Closed : Open
+//   • `sessionState` alone. The backend derived it from `ClosedUtc` alone, and a fold that moved
+//     nothing sets no `ClosedUtc` either — so clocking OUT with nothing open answered
+//     `{ "clockSessionId": null, "sessionState": "Open", "closedUtc": null }` and a register bound to
+//     that field flipped to CLOCKED IN at the moment the worker pressed *Stemple ut*. FIXED backend
+//     side on 2026-08-05 (`4d103ca8a`): `PosClockEventResponse.SessionStateOf` now switches on the
+//     fold's own outcome and answers the third state, `AttendanceException`.
 //
-// so `sessionState` is derived from `closedUtc` ALONE, and a punch that folded no session at all has
-// no `closedUtc` either. `WorkforceClockProjection.StageClockOutAsync` returns
-// `Outcome = MissingPunchException` — with `ClockSessionId`, `OpenedUtc` and `ClosedUtc` all null —
-// when a clock-OUT arrives and no session is open. The raw punch is still retained as truth (spec
-// §3.4: raw truth is accepted, never rounded or rejected), so the response is `200` with
-// `accepted: true`.
+//   • `clockSessionId` alone — the rule this file used to hold, written while the wire was still
+//     lying, and wrong in the same direction as what it was avoiding. A CROSS-ENGAGEMENT clock-in
+//     (a worker with two legal employers, §3.7) answers `AttendanceException` while carrying the
+//     OTHER employer's OPEN session id, because the adjustment references it. So the id is present
+//     and `closedUtc` is null, and "id present, not closed" read that as OPEN: the register told her
+//     she was clocked in on the engagement that folded nothing.
 //
-// Put together, clocking OUT with nothing open answers:
+// The backend states the trap directly, and its test is this module's specification:
+// `PosClockOutStateWireTests.A_cross_engagement_clock_in_carries_a_session_id_and_still_does_not_report_this_engagement_open`
+// — "a fix that only mapped 'null id' to the third state would answer Open here and be wrong in the
+// same direction."
 //
-//     { "clockSessionId": null, "sessionState": "Open", "closedUtc": null, "accepted": true }
+// So the rule is corroboration, and it is deliberately hard to satisfy:
 //
-// A register that read `sessionState` would flip to "clocked in" at the exact moment a worker pressed
-// *Stemple ut*. The worker walks away believing they clocked out; the personalliste carries no end
-// time; and § 8-5-6's end time — the one the whole register exists to record — is the thing missing.
-// That is the failure this module refuses to let the screen make.
+//   • no session folded at all (no id)                      -> EXCEPTION, whatever the label claims
+//   • the server declares AttendanceException               -> EXCEPTION
+//   • a session folded AND the server declares Open/Closed  -> OPEN / CLOSED
+//   • anything else, including a state this client does not
+//     know and a response that never arrived                -> UNKNOWN
 //
-// `clockSessionId` IS the authoritative signal, because it is the only field that reports whether the
-// canonical fold actually moved anything:
+// The no-id guard is kept even though the wire no longer needs it: this client and the API deploy
+// independently, so a till can meet a server from before 2026-08-05, and that is the exact body it
+// answers. Losing that guard costs a § 8-5-6 end time; keeping it costs one branch.
 //
-//   • id present, closedUtc absent   -> OPEN     (clocked in; the session is running)
-//   • id present, closedUtc present  -> CLOSED   (clocked out; the window is complete)
-//   • id absent                      -> EXCEPTION(the punch is recorded, no session moved)
+// UNKNOWN is not a failure state. Both buttons stay live and the SERVER decides on the next press
+// (see `canClockIn`/`canClockOut` below), so a fourth state added server-side lands here rather than
+// being guessed into OPEN — which is how the original defect was written.
 //
 // The exception branch is NOT an error and must never be rendered as one — the punch IS on the
-// append-only record and an adjustment path exists for a manager. It is a distinct, honest third
-// state, and the screen says so rather than guessing.
+// append-only record (spec §3.4: raw truth is accepted, never rounded or rejected, hence
+// `accepted: true` and `200`) and an adjustment path exists for a manager. It is a distinct, honest
+// third state, and the screen says so rather than guessing.
 //
 // It is a module rather than a computed on the component because a screen cannot be asked to hold a
 // rule whose whole point is that the obvious reading of the payload is wrong.
@@ -50,15 +62,31 @@ export const SESSION_UNKNOWN = 'unknown';
 /**
  * The state a clock-event RESPONSE puts the register in.
  *
- * Reads `clockSessionId` and `closedUtc` only. `sessionState` is deliberately ignored — see the
- * header; passing it through would reintroduce the exact bug this file documents.
+ * Both halves must agree before the register claims a definite state — see the header. Neither
+ * `clockSessionId` nor `sessionState` decides this on its own, because each of them has already been
+ * the whole rule and each was wrong in the same direction: towards telling a worker she is on the
+ * clock when nothing of hers is open.
  */
 export function stateFromClockEvent (response) {
   if (!response) { return SESSION_UNKNOWN; }
-  // A null/absent id means the fold produced no session: a clock-out with nothing open, or a
-  // cross-engagement second open punch. Both are attendance exceptions, never a clocked state.
+
+  // The server's own classification of what the fold did. `AttendanceException` is the answer for BOTH
+  // shapes that move nothing — a clock-out with no open session (no id at all) and a cross-engagement
+  // clock-in (which carries another employer's id) — so it is read before anything is inferred from
+  // the id.
+  if (response.sessionState === 'AttendanceException') { return SESSION_EXCEPTION; }
+
+  // No session folded, whatever the label claims. This catches a server older than 2026-08-05, whose
+  // `sessionState` reads "Open" on a clock-out that closed nothing.
   if (!response.clockSessionId) { return SESSION_EXCEPTION; }
-  return response.closedUtc ? SESSION_CLOSED : SESSION_OPEN;
+
+  // A session moved AND the server said which way. `closedUtc` is not consulted: the state is what the
+  // fold did, and a timestamp is the thing that could not tell "absent" from "running".
+  if (response.sessionState === 'Closed') { return SESSION_CLOSED; }
+  if (response.sessionState === 'Open') { return SESSION_OPEN; }
+
+  // A state this client does not know. Say so rather than guess — a guess here is the defect.
+  return SESSION_UNKNOWN;
 }
 
 /**
@@ -106,11 +134,14 @@ export function stateFromRefusal (code) {
  * An exception outcome must not overwrite a known state: if the person was open and a stray clock-out
  * for a *different* engagement folded nothing, they are still open. Only a fold that moved a session
  * changes what the register believes.
+ *
+ * An unreadable answer is held to the same rule, and for the same reason: it is not evidence that
+ * anything folded, so it may not overwrite something the register had established either.
  */
 export function nextState (previous, response) {
   const observed = stateFromClockEvent(response);
-  if (observed === SESSION_EXCEPTION) {
-    return previous === SESSION_UNKNOWN ? SESSION_EXCEPTION : previous;
+  if (observed === SESSION_EXCEPTION || observed === SESSION_UNKNOWN) {
+    return previous === SESSION_UNKNOWN ? observed : previous;
   }
   return observed;
 }

@@ -113,6 +113,7 @@ import {
   SESSION_UNKNOWN,
   canClockIn,
   canClockOut,
+  stateFromClockEvent,
   stateFromRefusal,
   nextState
 } from '~/utils/workforce/pos-clock-state';
@@ -255,11 +256,19 @@ export default {
     },
 
     applyResponse (eventType, response) {
+      // What THIS punch did, which is not always what the register now believes: an exception leaves a
+      // known state standing (see `nextState`), while the sentence below reports the punch itself.
+      const observed = stateFromClockEvent(response);
       this.state = nextState(this.state, response);
-      if (!response || !response.clockSessionId) {
-        // The null-session outcome. The punch IS recorded (accepted: true on an append-only row);
-        // what did not happen is the fold. Saying "clocked out" here would be the exact lie this
-        // screen was built to stop, and saying "failed" would be a different one.
+
+      // Anything that did not move a session for THIS engagement. The punch IS recorded (accepted:
+      // true on an append-only row); what did not happen is the fold. Saying "clocked in" here would
+      // be the exact lie this screen was built to stop, and saying "failed" would be a different one.
+      //
+      // Read off the state module rather than off `clockSessionId`, because a cross-engagement
+      // clock-in carries the OTHER employer's open session id — an id-shaped test calls that a
+      // successful clock-in and prints the time she supposedly started.
+      if (observed !== SESSION_OPEN && observed !== SESSION_CLOSED) {
         this.noticeKind = 'warn';
         this.notice = eventType === 'ClockOut'
           ? this.$i('posclk_note_nothing_open')
@@ -267,7 +276,7 @@ export default {
         return;
       }
       this.noticeKind = 'ok';
-      if (response.closedUtc) {
+      if (observed === SESSION_CLOSED) {
         this.notice = this.$i('posclk_note_out', { time: this.venueTime(response.closedUtc) });
       } else {
         this.notice = this.$i('posclk_note_in', { time: this.venueTime(response.openedUtc) });
