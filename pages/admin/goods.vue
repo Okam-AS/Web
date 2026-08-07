@@ -1,5 +1,5 @@
 <template>
-  <AdminPage :full-width="true">
+  <AdminPage :full-width="true" @login-success="startGoodsPage">
     <div class="overview">
       <div class="overview__content">
         <div class="overview__table-container">
@@ -354,18 +354,7 @@ export default {
     if (!this.$store.getters.userIsLoggedIn) {
       return;
     }
-
-    if (!this.$store.state.currentUser?.isPowerUser) {
-      this.$router.push("/admin");
-      return;
-    }
-
-    this.fetchOfferItems();
-
-    // Set up auto-refresh every 30 seconds
-    this.refreshInterval = setInterval(() => {
-      this.fetchDataInBackground();
-    }, 30000);
+    this.startGoodsPage();
   },
 
   beforeDestroy() {
@@ -376,6 +365,36 @@ export default {
   },
 
   methods: {
+    // THE ONE STARTER LIST for this screen, run by `mounted` for an operator who arrives already
+    // signed in and by the shell's `login-success` for one who signs in on the page. A signed-out
+    // visitor does reach this page: `AdminPage.initAuth` skips its bounce to /admin when a
+    // `redirect` query is already present (AdminPage.vue:153) — the URL the post-login return path
+    // itself leaves behind — and its refused-navigation fallback raises the door in place.
+    //
+    // One list rather than two, because on the four pages this class was already fixed on the
+    // second copy had been written short and gone stale every time. And the PRIVILEGE bounce is
+    // part of it: the two conditions used to be ORed into one bounce here, `mounted` now asks only
+    // "who are you", and a privilege question left behind in `mounted` would be asked once —
+    // before anyone had answered the first — and never again.
+    startGoodsPage() {
+      if (!this.$store.state.currentUser?.isPowerUser) {
+        this.$router.push("/admin");
+        return;
+      }
+
+      this.fetchOfferItems();
+
+      // Set up auto-refresh every 30 seconds. Cleared before it is set: `beforeDestroy` holds ONE
+      // handle, so a second poll started over the top of the first is one this page could never
+      // stop.
+      if (this.refreshInterval) {
+        clearInterval(this.refreshInterval);
+      }
+      this.refreshInterval = setInterval(() => {
+        this.fetchDataInBackground();
+      }, 30000);
+    },
+
     fetchOfferItems() {
       this.isLoading = true;
       this._offerService
