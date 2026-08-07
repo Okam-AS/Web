@@ -1,0 +1,225 @@
+# Mutation receipt — test/growth-poweruser-page.test.js
+
+Produced by `lanes/L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED/mutate.py`, which applies one
+mutation at a time to `pages/admin/poweruser-growth.vue`, runs the test file, records which
+arms went red, and RESTORES the page. A mutation whose search string is not found aborts the
+run: a no-op mutation is indistinguishable from a test that cannot fail, and would be read as
+the opposite of what it is.
+
+- arms green on the untouched page: **38**
+- arms red under at least one applied-and-restored mutation: **38**
+- arms no mutation could break (deleted if any): **0**
+- distinct mutations applied that killed at least one arm: **44**
+- arms red on the untouched page (the recorded defect): **3**
+
+## Equivalent mutant, recorded rather than hidden
+
+`getPointValue`'s `??` -> `||` was applied and killed nothing. It is an EQUIVALENT MUTANT, not
+a hole: the fallback chain terminates in `0`, so for every payload a backend actually sends
+(one casing, not both) `a ?? b ?? 0` and `a || b || 0` return the same value and a genuine zero
+survives either way. It is left out of the list with that reasoning attached.
+
+## Arms red on the untouched page — the recorded defect
+
+- a crashed report engine reaches the operator as the reason the backend gave
+- a refusal reaches the operator as the reason the backend gave
+- an expired session reaches the operator as the reason the backend gave
+
+## Every arm, and the mutations that killed it
+
+### "show all" gives the whole history back after a zoom
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+- zoom: show-all no longer clears the range
+- zoom: the selected span loses its last month
+
+### a PascalCase payload puts the same numbers on screen as a camelCase one
+- load: the spinner is never taken down
+- money: kroner formatting stops dividing by a hundred
+- wire: the PascalCase value fallback is dropped
+- wire: the PascalCase date fallback is dropped
+- wire: the PascalCase points fallback is dropped
+- summary: the headline reads the first month instead of the last
+- metric: the orders curve plots turnover
+
+### a click that never became a drag leaves the whole history on screen
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+
+### a deliberate forty-pixel drag on the same chart does zoom
+- load: the spinner is never taken down
+- zoom: the drag threshold swallows deliberate drags too
+
+### a failed read is said out loud instead of leaving an empty page
+- error: the cause is replaced by a generic line
+- load: the spinner is never taken down
+
+### a failure that carries no message at all still says something
+- error: a message-less failure falls through to nothing
+- load: the spinner is never taken down
+
+### a hand that slips twenty pixels while clicking does not zoom the chart
+- load: the spinner is never taken down
+- zoom: a bare click now zooms
+
+### a month with more openings than fit lists the first seven and counts the rest
+- markers: openings in one month stop being grouped
+- markers: only the first opening of a month is named
+- markers: the overflow count is dropped
+
+### a month with three openings lists all three and counts nothing extra
+- load: the spinner is never taken down
+- markers: openings in one month stop being grouped
+- markers: only the first opening of a month is named
+- markers: hovering no longer places the popover
+- markers: nothing is ever hoverable
+
+### a platform that has genuinely sold nothing shows nothing sold, not a blank
+- summary: the headline reads the first month instead of the last
+
+### a poweruser is shown the platform total orders, turnover and latest month
+- gate: the signed-out check is dropped
+- load: the in-flight guard is dropped
+- load: the already-loaded guard is dropped
+- money: kroner formatting stops dividing by a hundred
+- summary: the headline reads the first month instead of the last
+
+### a signed-out visitor is not bounced, and nothing is fetched on their behalf
+- gate: the signed-out check is dropped
+
+### a tooltip on the kroner curve is in kroner, not a hundred times off in either direction
+- load: the spinner is never taken down
+- money: kroner formatting stops dividing by a hundred
+- metric: choosing a metric does nothing
+- tooltip: the month row repeats the running total
+- tooltip: the kroner total is read as ore
+
+### a tooltip on the orders curve gives the month and the running total
+- load: the spinner is never taken down
+- tooltip: the month row repeats the running total
+
+### an operator who signs in while standing here gets the numbers without reloading
+- money: kroner formatting stops dividing by a hundred
+- summary: the headline reads the first month instead of the last
+
+### an ordinary admin is sent back to /admin and the platform numbers are never fetched
+- gate: an ordinary admin is no longer redirected
+
+### choosing kroner and going back leaves the orders curve as it was
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+
+### choosing kroner relabels the curve as well as replotting it
+- load: the spinner is never taken down
+- metric: choosing a metric does nothing
+- metric: the chart is not redrawn when the metric changes
+- metric: the curve keeps the orders label under kroner
+
+### clicking a marker pins its popover, and clicking it again lets go
+- load: the spinner is never taken down
+- markers: openings in one month stop being grouped
+- markers: clicking no longer pins
+- markers: nothing is ever hoverable
+
+### dragging across three months narrows the chart to those months and names the span
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+- zoom: the selected span loses its last month
+- zoom: the span is no longer named
+
+### switching between orders and kroner drops a pinned popover rather than leaving it stale
+- load: the spinner is never taken down
+- metric: choosing a metric does nothing
+- metric: a pinned popover survives the metric change
+- markers: openings in one month stop being grouped
+- markers: nothing is ever hoverable
+
+### the curve tooltip stands down while a milestone popover is open
+- load: the spinner is never taken down
+- tooltip: the curve tooltip no longer stands down for a popover
+- markers: openings in one month stop being grouped
+- markers: nothing is ever hoverable
+
+### the headline turnover is the øre total divided by a hundred
+- money: kroner formatting stops dividing by a hundred
+- summary: the headline reads the first month instead of the last
+
+### the kroner axis says kroner, so a turnover axis is not read as an order count
+- load: the spinner is never taken down
+- metric: choosing a metric does nothing
+- axis: the kroner axis stops saying kroner
+
+### the kroner curve plots kroner, so the axis is not a hundred times too high
+- load: the spinner is never taken down
+- money: the kroner curve is plotted in ore
+- metric: choosing a metric does nothing
+- metric: the chart is not redrawn when the metric changes
+
+### the orders axis is written in compact numbers
+- load: the spinner is never taken down
+- axis: the orders axis stops being compact
+
+### the orders curve is what is drawn first
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+
+### the period the report covers is named at the top of the page
+- wire: the reported period stops being read
+
+### the platform read is made once, not once per reason to re-check it
+- load: the in-flight guard is dropped
+- load: the already-loaded guard is dropped
+
+### the popover reports that month's own orders next to the running total
+- load: the spinner is never taken down
+- markers: openings in one month stop being grouped
+- markers: hovering no longer places the popover
+- markers: the month figures beside the marker are dropped
+- markers: the month figures report the running total twice
+- markers: nothing is ever hoverable
+
+### the spinner is taken down whether the read succeeded or failed
+- load: the spinner is never taken down
+
+### the tooltip title names the month the point belongs to
+- load: the spinner is never taken down
+- tooltip: the title is the raw timestamp
+
+### the year is what marks the axis in January, and the quarters in between
+- load: the spinner is never taken down
+- axis: the quarter marks are dropped
+
+### three stores opened in one month are one marker that names all three
+- load: the spinner is never taken down
+- markers: openings in one month stop being grouped
+- markers: only the first opening of a month is named
+- markers: hovering no longer places the popover
+- markers: nothing is ever hoverable
+
+### turning a kind off closes a popover that was open for that kind, and gives the curve back
+- load: the spinner is never taken down
+- legend: turning a kind off leaves its popover open
+- markers: openings in one month stop being grouped
+- markers: hovering no longer places the popover
+- markers: nothing is ever hoverable
+
+### turning off new stores in the legend takes the store markers off the curve
+- load: the spinner is never taken down
+- legend: toggling a kind changes nothing
+- legend: hidden kinds are still drawn
+- markers: nothing is ever hoverable
+
+### turning the other kind off leaves an open store popover alone
+- load: the spinner is never taken down
+- legend: turning any kind off closes whatever popover is open
+- markers: openings in one month stop being grouped
+- markers: hovering no longer places the popover
+- markers: nothing is ever hoverable
+
+### zooming a second time narrows within the span already shown, not back at the start
+- load: the spinner is never taken down
+- metric: the orders curve plots turnover
+- zoom: a second zoom is measured from the start of history
+- zoom: the selected span loses its last month
+- zoom: the span is no longer named
+
