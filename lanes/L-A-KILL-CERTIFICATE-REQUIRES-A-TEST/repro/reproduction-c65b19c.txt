@@ -1,0 +1,14 @@
+--- c65b19c with MUTATE_TEST_COMMAND=false (executes no test)
+RED   (0) second mutation
+
+2/2 mutations reddened the suite
+--- c65b19c with MUTATE_TEST_COMMAND=true (executes no test)
+
+0/2 mutations reddened the suite
+SURVIVED: first mutation [STILL-GREEN]; second mutation [STILL-GREEN]
+PER-TEST COVERAGE
+  anything — 0/0 green tests reddened by some mutation; 0 never reddened
+--- HEAD with MUTATE_TEST_COMMAND=true (executes no test)
+
+PER-TEST COVERAGE
+  anything — 0/0 green tests reddened by some mutation; 0 never reddened

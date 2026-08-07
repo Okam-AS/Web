@@ -152,18 +152,80 @@ function balances (src) {
   return stack.length === 0
 }
 
-// One jest run, read from jest's own JSON rather than from its human output.
-// Returns { ok, total, failedNames } — `ok:false` means nothing usable came back, which is the
-// INVALID case and never a kill.
+// ---- HOW MANY TESTS ACTUALLY RAN --------------------------------------------------------------
+//
+// THE EXIT STATUS OF A TEST COMMAND SAYS NOTHING ABOUT WHETHER A TEST RAN. `false` exits 1 having
+// executed nothing and used to be certified as a kill; `true` exits 0 having executed nothing and
+// was certified as a survivor. Both were demonstrated live on this runner. So the count is parsed,
+// and a run that cannot show one is not judged at all.
+//
+// It also has to work for a suite that is not jest. The old red-name counter read `✕` markers only,
+// so every xunit run reported `RED (0)` — indistinguishable from a void run, which is why this
+// runner could not judge a .NET suite either. ONE PARSER CLOSES BOTH: the same missing fact — an
+// executed-test count — was behind the false kill and behind the unjudgeable suite.
+//
+// Three dialects, most explicit first:
+//   1. `MUTATE_TESTS_RUN=<n>` (and optionally `MUTATE_TESTS_FAILED=<n>`) — the contract any harness
+//      can meet on purpose, and the one the self-tests use.
+//   2. jest's human summary — `Tests: 1 failed, 28 passed, 29 total`.
+//   3. `dotnet test` — `Total tests: N` or the `Passed!  - Failed: F, Passed: P, ... Total: T` line.
+// Names are collected where the dialect offers them (`✓`/`✕` for jest, `Passed X`/`Failed X` for
+// vstest). A dialect that yields counts but no names still supports a RED/GREEN verdict; it just
+// cannot contribute to the per-test kill map, and says so by returning no names.
+function readRun (output) {
+  const explicit = /MUTATE_TESTS_RUN\s*=\s*(\d+)/.exec(output)
+  if (explicit) {
+    const failedCount = /MUTATE_TESTS_FAILED\s*=\s*(\d+)/.exec(output)
+    const named = (output.match(/MUTATE_FAILED_NAME\s*=\s*(.+)/g) || [])
+      .map(s => s.replace(/.*MUTATE_FAILED_NAME\s*=\s*/, '').trim())
+    return {
+      total: Number(explicit[1]),
+      failedNames: named,
+      failedCount: failedCount ? Number(failedCount[1]) : named.length,
+      allNames: []
+    }
+  }
+
+  const jest = /Tests:.*?(\d+)\s+total/.exec(output)
+  if (jest) {
+    const names = (output.match(/[✕×]\s+.*/g) || []).map(s => s.replace(/^[✕×]\s+/, '').trim())
+    const failed = /Tests:.*?(\d+)\s+failed/.exec(output)
+    return {
+      total: Number(jest[1]),
+      failedNames: names,
+      failedCount: failed ? Number(failed[1]) : names.length,
+      allNames: (output.match(/[✓√]\s+.*/g) || []).map(s => s.replace(/^[✓√]\s+/, '').trim()).concat(names)
+    }
+  }
+
+  const vstest = /Total tests:\s*(\d+)/.exec(output) || /Total:\s*(\d+)/.exec(output)
+  if (vstest) {
+    const names = (output.match(/^\s*Failed\s+\S.*$/gm) || []).map(s => s.trim().replace(/^Failed\s+/, '').replace(/\s*\[[^\]]*\]\s*$/, ''))
+    const failed = /Failed:\s*(\d+)/.exec(output)
+    return {
+      total: Number(vstest[1]),
+      failedNames: names,
+      failedCount: failed ? Number(failed[1]) : names.length,
+      allNames: []
+    }
+  }
+
+  return null
+}
+
+// One run of the suite. Returns { ok, total, failedNames, allNames, reason } — `ok:false` means no
+// measurement was obtained, which is INVALID-RUN and is never a kill and never a survivor.
 function runSuite (testPath) {
   if (!USING_REAL_JEST) {
-    // The self-test harness drives this runner with a stub command and judges by exit status. A
-    // command that could not be SPAWNED (shell exit 127, or no status at all) is not a failing
-    // suite — it is no suite — so it reports as unmeasured, which is what makes the crash case
-    // INVALID rather than a kill.
     const r = spawnSync(TEST_COMMAND + ' ' + JSON.stringify(testPath), { cwd: ROOT, encoding: 'utf8', shell: true })
-    if (r.error || r.status === null || r.status === 127) { return { ok: false, total: 0, failedNames: [], allNames: [] } }
-    return { ok: true, total: 1, failedNames: r.status === 0 ? [] : ['stub-failure'], allNames: ['stub-test'], stub: true }
+    if (r.error || r.status === null) {
+      return { ok: false, reason: 'the suite command could not be spawned', total: 0, failedNames: [], allNames: [] }
+    }
+    const read = readRun((r.stdout || '') + (r.stderr || ''))
+    if (!read) {
+      return { ok: false, reason: 'the suite command reported no executed-test count', total: 0, failedNames: [], allNames: [] }
+    }
+    return { ok: read.total > 0, reason: read.total > 0 ? null : 'the suite executed no tests', ...read }
   }
   const out = path.join(
     fs.mkdtempSync(path.join(require('os').tmpdir(), 'mutate-')), 'jest.json')
@@ -172,7 +234,11 @@ function runSuite (testPath) {
       ' --coverage=false --json --outputFile=' + JSON.stringify(out),
     { cwd: ROOT, encoding: 'utf8', shell: true })
   let report
-  try { report = JSON.parse(fs.readFileSync(out, 'utf8')) } catch (e) { return { ok: false, total: 0, failedNames: [] } }
+  try {
+    report = JSON.parse(fs.readFileSync(out, 'utf8'))
+  } catch (e) {
+    return { ok: false, reason: 'jest produced no parseable report', total: 0, failedNames: [], allNames: [] }
+  }
   const failedNames = []
   const allNames = []
   for (const suite of report.testResults || []) {
@@ -183,25 +249,35 @@ function runSuite (testPath) {
   }
   // A jest that could not even build the suite reports zero tests. That is not a kill; it is the
   // absence of a measurement.
-  return { ok: (report.numTotalTests || 0) > 0, total: report.numTotalTests || 0, failedNames, allNames }
+  const total = report.numTotalTests || 0
+  return {
+    ok: total > 0,
+    reason: total > 0 ? null : 'the suite executed no tests',
+    total,
+    failedNames,
+    failedCount: typeof report.numFailedTests === 'number' ? report.numFailedTests : failedNames.length,
+    allNames
+  }
 }
 
 // ---- BASELINE, BEFORE ANYTHING IS TOUCHED -----------------------------------------------------
 const testPaths = [...new Set(spec.map(m => m.test))]
 const baseline = {}
+// NO BYPASS FOR THE STUB PATH. It used to skip the baseline entirely "because the harness has no
+// suite", and that exemption WAS the hole: with no baseline there was no count to compare against,
+// so `MUTATE_TEST_COMMAND=false` (exit 1, nothing executed) certified 2/2 kills and `=true` (exit 0,
+// nothing executed) certified survivors. An escape hatch cut for testability is still a hatch.
+//
+// This runs BEFORE a single byte is written. `process.exit` does not run a `finally`, and neither
+// does a throw that escapes one — aborting after a mutation had been applied would leave the mutant
+// on disk, so the abort has to live where nothing is mutated yet.
 for (const t of testPaths) {
-  if (!USING_REAL_JEST) {
-    // The self-test harness has no suite to baseline; it exercises the restore machinery with a
-    // stub command. The gate below is about real runs, where a zero-test baseline is the failure
-    // that certifies everything.
-    baseline[t] = { ok: true, total: 0, failedNames: [], allNames: [], stub: true }
-    continue
-  }
   const b = runSuite(t)
-  if (!b.ok || b.total === 0) {
+  if (!b.ok) {
     throw new Error(
-      'ZERO-TEST BASELINE for ' + t + ' — refusing to run. Every mutation would "pass" against a ' +
-      'suite that executes nothing, and the run would certify the whole spec on no evidence.')
+      'UNUSABLE BASELINE for ' + t + ' — ' + (b.reason || 'no measurement') + '. Refusing to run: ' +
+      'every mutation would be judged against a run that proves nothing, and the whole spec would ' +
+      'be certified on no evidence. Nothing has been mutated.')
   }
   baseline[t] = b
   process.stdout.write('BASE  ' + t + ' — ' + b.total + ' tests, ' + b.failedNames.length + ' red\n')
@@ -253,10 +329,13 @@ for (const m of spec) {
 
   const base = baseline[m.test]
 
-  // A run that produced nothing usable is the ABSENCE of a measurement, not a kill.
+  // THE ABSENCE OF A MEASUREMENT IS NOT A VERDICT — in EITHER exit direction. A command that could
+  // not spawn, one that printed no executed-test count, and one that ran zero tests are all the same
+  // thing: nothing was tested. Scoring any of them as RED manufactures a kill certificate, and
+  // scoring any of them as STILL-GREEN manufactures a survivor. Both were shipped.
   if (!run.ok) {
-    results.push({ name: m.name, outcome: 'INVALID', detail: 'no parseable jest results' })
-    process.stdout.write('INVAL (no results) ' + m.name + '\n')
+    results.push({ name: m.name, outcome: 'INVALID-RUN', detail: run.reason || 'no measurement', reddened: 0, newlyRed: [] })
+    process.stdout.write('INVAL (' + (run.reason || 'no measurement') + ') ' + m.name + '\n')
     continue
   }
   // Fewer tests than the baseline means part of the suite never ran — the shape that lets a
@@ -270,9 +349,16 @@ for (const m of spec) {
   // NEWLY red: failing now and not failing at baseline. A suite carrying a standing red cannot
   // launder it into a kill, and this is what makes the per-test map trustworthy.
   const newlyRed = run.failedNames.filter(n => !base.failedNames.includes(n))
-  const outcome = newlyRed.length ? 'RED' : 'STILL-GREEN'
-  results.push({ name: m.name, outcome, reddened: newlyRed.length, newlyRed, first: newlyRed.slice(0, 3) })
-  process.stdout.write((newlyRed.length ? 'RED   ' : 'GREEN ') + '(' + newlyRed.length + ') ' + m.name + '\n')
+  // A dialect that reports counts but no names — `dotnet test` without a detailed logger — can
+  // still be JUDGED, it just cannot contribute to the per-test map. Falling back to the count is
+  // what lets this runner give a verdict on a suite whose test names it cannot see; without it,
+  // every xunit run scored STILL-GREEN however many assertions the mutation broke.
+  const failedNow = typeof run.failedCount === 'number' ? run.failedCount : run.failedNames.length
+  const failedBefore = typeof base.failedCount === 'number' ? base.failedCount : base.failedNames.length
+  const red = newlyRed.length > 0 || failedNow > failedBefore
+  const outcome = red ? 'RED' : 'STILL-GREEN'
+  results.push({ name: m.name, outcome, reddened: newlyRed.length, newlyRed, first: newlyRed.slice(0, 3), failedNow, failedBefore })
+  process.stdout.write((red ? 'RED   ' : 'GREEN ') + '(' + newlyRed.length + ') ' + m.name + '\n')
 }
 
 // ---- THE PER-TEST KILL MAP --------------------------------------------------------------------
@@ -292,6 +378,7 @@ for (const t of testPaths) {
   const greenAtBaseline = (b.allNames || []).filter(n => !b.failedNames.includes(n))
   perTest[t] = {
     total: b.total,
+    namesAvailable: (b.allNames || []).length > 0,
     baselineRed: b.failedNames,
     neverReddened: greenAtBaseline.filter(n => !killedBy[n])
   }
@@ -310,6 +397,14 @@ if (survived.length) {
 process.stdout.write('\nPER-TEST COVERAGE\n')
 for (const t of testPaths) {
   const p = perTest[t]
+  // A dialect that reports counts but no test names supports a verdict and not a map. Saying so is
+  // the point: printing "3/3 reddened" off an empty name list would be the same species of claim
+  // this whole file exists to stop — a number with no measurement under it.
+  if (!p.namesAvailable) {
+    process.stdout.write('  ' + t + ' — ' + p.total + ' tests ran; the suite reported no test NAMES, ' +
+      'so mutations here are judged but not mapped per test\n')
+    continue
+  }
   const never = p.neverReddened.length
   process.stdout.write('  ' + t + ' — ' + (p.total - p.baselineRed.length - never) + '/' +
     (p.total - p.baselineRed.length) + ' green tests reddened by some mutation; ' +

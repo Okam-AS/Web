@@ -81,18 +81,34 @@ function installRunner (world, source, relDir) {
   return at
 }
 
+// The runner appends the spec's `test` value to whatever `MUTATE_TEST_COMMAND` holds, so an inline
+// `if ... fi` would receive a trailing argument and be a syntax error. A script file takes it as
+// `$1` and ignores it, which is also closer to how a real project points this at its own suite.
+function installStubSuite (world, name, body) {
+  const at = path.join(world, name)
+  fs.writeFileSync(at, '#!/bin/sh\n' + body + '\n', { mode: 0o755 })
+  return at
+}
+
 function writeSpec (world, entries) {
   const at = path.join(world, 'spec.json')
   fs.writeFileSync(at, JSON.stringify(entries, null, 2))
   return at
 }
 
+// A stub suite that RAN. It reports an executed-test count on the contract the runner parses, which
+// is now the difference between a suite and a command: `true` also exits 0, but it executed nothing,
+// and a runner that cannot tell those apart certifies kills for runs that never happened. These pins
+// are about the restore, so the stub reports a passing suite and spawning a real jest per case would
+// make them too slow to keep.
+const STUB_SUITE_RAN = 'printf \'MUTATE_TESTS_RUN=1\\n\'; true'
+// The same, failing: one test ran and one failed.
+const STUB_SUITE_FAILED = 'printf \'MUTATE_TESTS_RUN=1\\nMUTATE_TESTS_FAILED=1\\nMUTATE_FAILED_NAME=the stub test\\n\'; exit 1'
+
 function runRunner (runnerPath, specPath, env) {
   return spawnSync(process.execPath, [runnerPath, specPath], {
     encoding: 'utf8',
-    // `true` exits 0 immediately: this pin is about the restore, not about any suite's verdict, and
-    // spawning a real jest per case would make it too slow to keep.
-    env: Object.assign({}, process.env, { MUTATE_TEST_COMMAND: 'true' }, env || {})
+    env: Object.assign({}, process.env, { MUTATE_TEST_COMMAND: STUB_SUITE_RAN }, env || {})
   })
 }
 
@@ -189,19 +205,90 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
   // A runner that dies holding a mutated file has corrupted the lane just as surely as one that
   // reverts it wrongly, so the restore sits in a `finally`.
   //
-  // This arm used to assert the outcome was RED. That was the defect, not the contract: a command
-  // that cannot be spawned has produced NO MEASUREMENT, and scoring it as a kill is how the old
-  // instrument certified tests nobody had shown could fail. A crash is INVALID now. The restore
-  // assertions either side of it are the part this arm was always about, and they are unchanged.
-  it('puts the file back even when the suite command cannot be run at all', () => {
+  // RE-AIMED TWICE, AND THE HISTORY IS THE POINT. It first asserted the outcome was `RED` — a
+  // command that could not be spawned scored as a kill. That was the defect asserted AS THE
+  // CONTRACT, which is why it survived a hardening pass aimed at exactly this class of bug. It then
+  // asserted `INVALID`. Both versions used a command that fails from the very first call, and a
+  // runner that measures its baseline before mutating anything now refuses that spec outright —
+  // which is correct, but it stops exercising the thing this arm is for.
+  //
+  // So the command here WORKS for the baseline and dies afterwards: the suite is real, the run
+  // starts, and the death happens inside the mutated window. That is the only shape in which
+  // "restores even when the run dies" means anything.
+  it('puts the file back even when the suite command dies after the baseline', () => {
     const runner = installRunner(dir, CANONICAL)
-    const run = runRunner(runner, writeSpec(dir, ONE_MUTATION), {
-      MUTATE_TEST_COMMAND: '/nonexistent/command/that/cannot/spawn'
-    })
+    const flag = path.join(dir, '.baseline-taken')
+    const stub = installStubSuite(dir, 'suite-that-dies.sh',
+      'if [ -f "' + flag + '" ]; then exec /nonexistent/command/that/cannot/spawn; fi\n' +
+      'touch "' + flag + '"\n' +
+      'printf \'MUTATE_TESTS_RUN=1\\n\'')
+    const run = runRunner(runner, writeSpec(dir, ONE_MUTATION), { MUTATE_TEST_COMMAND: stub })
     expect(readTarget(dir)).toBe(UNCOMMITTED)
     expect(run.status).toBe(0)
+    // Not a kill and not a survivor: no measurement was obtained.
     expect(run.stdout).toContain('INVAL')
+    expect(run.stdout).not.toContain('RED   ')
+    const results = JSON.parse(fs.readFileSync(path.join(dir, 'spec.results.json'), 'utf8'))
+    expect(results.mutations[0].outcome).toBe('INVALID-RUN')
+  })
+
+  // ---- THE VOID DIRECTIONS ---------------------------------------------------------------------
+  //
+  // Demonstrated live on `lane/mutation-runner-cannot-delete-work` @ `c65b19c`:
+  //
+  //     MUTATE_TEST_COMMAND=false  ->  2/2 mutations reddened the suite     (a certified kill)
+  //     MUTATE_TEST_COMMAND=true   ->  0/2, both SURVIVED                   (a certified survivor)
+  //
+  // Neither command executed a test. THE EXIT STATUS OF A TEST COMMAND SAYS NOTHING ABOUT WHETHER A
+  // TEST RAN, and the runner had no other input, so it certified whatever the exit code implied.
+  // Both directions matter: one manufactures kills, the other manufactures survivors, and a
+  // hardening pass that fixes only the failing direction leaves the suite able to certify that every
+  // mutation was caught by a suite that never ran.
+  //
+  // The reproduction against the real historical file is committed under
+  // `lanes/L-A-KILL-CERTIFICATE-REQUIRES-A-TEST/repro/`; these two arms are the standing pin.
+  it.each([
+    ['a command that exits 0 having run nothing', 'true'],
+    ['a command that exits 1 having run nothing', 'false']
+  ])('refuses to certify anything from %s', (_name, command) => {
+    const runner = installRunner(dir, CANONICAL)
+    const spec = writeSpec(dir, ONE_MUTATION)
+    const run = runRunner(runner, spec, { MUTATE_TEST_COMMAND: command })
+
+    // It stops at the baseline, so nothing is mutated and nothing is certified.
+    expect(run.status).not.toBe(0)
+    expect(run.stderr).toContain('UNUSABLE BASELINE')
+    expect(readTarget(dir)).toBe(UNCOMMITTED)
+    expect(fs.existsSync(path.join(dir, 'spec.results.json'))).toBe(false)
     expect(run.stdout).not.toContain('RED')
+    expect(run.stdout).not.toContain('reddened the suite')
+  })
+
+  // The second half of the same hole. The old red-name counter read jest's `✕` markers only, so a
+  // .NET run reported `RED (0)` — a verdict indistinguishable from a void run, which is why this
+  // runner could not judge an xunit suite at all. One parser closes both, and this is the half a
+  // jest-only fixture would never notice.
+  it('judges a suite that is not jest, from the counts it reports', () => {
+    const runner = installRunner(dir, CANONICAL)
+    const spec = writeSpec(dir, ONE_MUTATION)
+    // A baseline with no failures, and a mutation whose run fails two: that is a kill, and the old
+    // counter scored it GREEN because it found no `✕` anywhere in vstest's output.
+    const flag = path.join(dir, '.vstest-baseline')
+    const stub = installStubSuite(dir, 'vstest.sh',
+      'if [ -f "' + flag + '" ]; then\n' +
+      '  printf \'Total tests: 12\\nPassed: 10\\nFailed: 2\\n\'\n' +
+      '  exit 1\n' +
+      'fi\n' +
+      'touch "' + flag + '"\n' +
+      'printf \'Total tests: 12\\nPassed: 12\\nFailed: 0\\n\'')
+    const run = runRunner(runner, spec, { MUTATE_TEST_COMMAND: stub })
+
+    expect(run.status).toBe(0)
+    expect(run.stdout).toContain('BASE')
+    const results = JSON.parse(fs.readFileSync(path.join(dir, 'spec.results.json'), 'utf8'))
+    expect(results.mutations[0].outcome).toBe('RED')
+    // Judged, but honestly: vstest gave counts and no names, so it maps no individual test.
+    expect(run.stdout).toContain('no test NAMES')
   })
 
   it('never writes a file the spec did not name', () => {

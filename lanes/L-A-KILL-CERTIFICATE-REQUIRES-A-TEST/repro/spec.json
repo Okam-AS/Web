@@ -1,0 +1,4 @@
+[
+ { "name": "first mutation",  "file": "src/target.js", "test": "anything", "from": "const answer = 1", "to": "const answer = 2" },
+ { "name": "second mutation", "file": "src/target.js", "test": "anything", "from": "THE LANE'S UNCOMMITTED WORK", "to": "REPLACED" }
+]
