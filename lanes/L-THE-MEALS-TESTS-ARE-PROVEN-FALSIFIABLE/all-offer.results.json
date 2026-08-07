@@ -1,0 +1,586 @@
+{
+  "baseline": {
+    "test/offer-code-guest-page.test.js": {
+      "total": 37,
+      "baselineRed": [],
+      "neverReddened": []
+    }
+  },
+  "killedBy": {
+    "an offer the guest cannot open a link with no order number on it asks nothing of the server": [
+      "a link with no order number is still sent to the server"
+    ],
+    "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer": [
+      "a link with no order number is still sent to the server",
+      "a Swiss guest is shown Norwegian",
+      "a link with no order number records no diagnosis at all",
+      "an offer that will not load shows nothing at all"
+    ],
+    "a guest opening the link in their offer opening the link records that the offer was read, once": [
+      "opening the link no longer records the offer as read"
+    ],
+    "a guest opening the link in their offer an offer with no id on it is not reported as read": [
+      "an offer with no id is reported as read anyway"
+    ],
+    "the SMS code a double tap sends one SMS, not two": [
+      "a double tap sends two SMS"
+    ],
+    "confirming the order a double tap on confirm places one order, not two": [
+      "a double tap on confirm places two orders",
+      "the code step never replaces the terms step"
+    ],
+    "the SMS code the guest cannot submit until they have typed a code": [
+      "the confirm button is live before a code is typed",
+      "the code step never replaces the terms step"
+    ],
+    "the terms a guest is asked to confirm they have read pressing confirm without ticking the box refuses, and sends no SMS": [
+      "an unticked guest is pushed at the send instead of being told to tick",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "the terms a guest is asked to confirm they have read ticking the box takes the warning away again": [
+      "an unticked guest is pushed at the send instead of being told to tick",
+      "ticking the box leaves the warning up"
+    ],
+    "a guest on the Swiss market a Swiss guest is refused in German too": [
+      "an unticked guest is pushed at the send instead of being told to tick",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "the SMS code confirming sends the code to the number printed on the offer": [
+      "the number is sent with the spacing it is printed with"
+    ],
+    "the SMS code the number is sent without the spacing it is printed with": [
+      "the number is sent with the spacing it is printed with"
+    ],
+    "THE DEFECTS THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError": [
+      "the number is sent with the spacing it is printed with",
+      "a failed send is reported as a success"
+    ],
+    "confirming the order the code the guest typed is submitted with their number": [
+      "the code the guest typed is not submitted",
+      "the code step never replaces the terms step"
+    ],
+    "the SMS code a code the server declined to send leaves the guest able to try again": [
+      "a send the server declined still advances the guest to the code field",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "confirming the order a correct code confirms the order and says so": [
+      "the confirmed order is never put on screen",
+      "an already-accepted offer is offered for acceptance again",
+      "the code step never replaces the terms step",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "confirming the order a corrected code goes through and clears the earlier refusal": [
+      "the confirmed order is never put on screen",
+      "a wrong code is swallowed and nothing is said",
+      "an already-accepted offer is offered for acceptance again",
+      "the code step never replaces the terms step"
+    ],
+    "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed": [
+      "the confirmed order is never put on screen",
+      "THE FIX for the blank page: the acceptance response is guarded before it replaces the offer",
+      "the spinner never comes down",
+      "the code step never replaces the terms step"
+    ],
+    "confirming the order a wrong code is refused in place, and the guest can correct it": [
+      "a wrong code is swallowed and nothing is said",
+      "a wrong code is blamed on the SMS instead",
+      "the code step never replaces the terms step",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "confirming the order the refusal comes down the moment the guest retries, not when the retry answers": [
+      "a wrong code is swallowed and nothing is said",
+      "a corrected code leaves the earlier refusal on screen",
+      "the code step never replaces the terms step"
+    ],
+    "the SMS code the guest is carried down to the field they now have to fill in": [
+      "the guest is not carried down to the code field"
+    ],
+    "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on": [
+      "the spinner never comes down",
+      "a Swiss guest is shown Norwegian",
+      "an offer that will not load shows nothing at all"
+    ],
+    "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong": [
+      "the spinner never comes down",
+      "a Swiss guest is shown Norwegian",
+      "the load diagnosis is discarded before it is even assigned",
+      "an offer that will not load shows nothing at all"
+    ],
+    "a guest on the Swiss market a Swiss guest whose offer will not load is told so in German": [
+      "the spinner never comes down",
+      "a Swiss guest is shown Norwegian",
+      "an offer that will not load shows nothing at all"
+    ],
+    "a guest opening the link in their offer an offer already accepted shows the confirmation and offers no second acceptance": [
+      "an already-accepted offer is offered for acceptance again",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "a guest on the Swiss market a Swiss guest who confirms reaches a German confirmation": [
+      "an already-accepted offer is offered for acceptance again",
+      "a Swiss guest is shown Norwegian"
+    ],
+    "the SMS code the guest is then shown which number the code went to": [
+      "the code step never replaces the terms step",
+      "the guest is not told which number the code went to"
+    ],
+    "the SMS code a guest who did not get the SMS can ask for it again without starting over": [
+      "the code step never replaces the terms step"
+    ],
+    "the SMS code a send that failed outright also leaves the guest on the first step": [
+      "a Swiss guest is shown Norwegian",
+      "a failed send is reported as a success"
+    ],
+    "a guest on the Swiss market the whole acceptance step is in German": [
+      "a Swiss guest is shown Norwegian"
+    ],
+    "the terms a guest is asked to confirm they have read the terms link opens the terms and does not tick the box for the guest": [
+      "the terms link opens nothing",
+      "the terms modal ignores whether it was asked to open"
+    ],
+    "the terms a guest is asked to confirm they have read closing the terms leaves the guest where they were": [
+      "closing the terms does not close them"
+    ],
+    "a guest opening the link in their offer the order they were sent is on screen, and no acceptance has been claimed for them": [
+      "the offer is never handed to the document that renders it"
+    ],
+    "THE DEFECTS THE DEFECT: a failed send shows the guest the raw English exception text": [
+      "a failed send is reported as a success"
+    ],
+    "a guest opening the link in their offer the guest waits on a spinner rather than an empty page while the offer is fetched": [
+      "offer: the page starts already loaded, so a guest sees blank space while it fetches"
+    ],
+    "a guest opening the link in their offer an offer that loaded is still readable when the read receipt fails": [
+      "offer: a failed read receipt takes the offer away from the guest it was sent to"
+    ],
+    "code on this page that nothing can reach the document is rendered by OfferDocument, not by figures this page derives": [
+      "offer: the page derives an expiry judgement into its own template"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "a link with no order number is still sent to the server",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "an offer the guest cannot open a link with no order number on it asks nothing of the server",
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer"
+      ],
+      "first": [
+        "an offer the guest cannot open a link with no order number on it asks nothing of the server",
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer"
+      ]
+    },
+    {
+      "name": "opening the link no longer records the offer as read",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a guest opening the link in their offer opening the link records that the offer was read, once"
+      ],
+      "first": [
+        "a guest opening the link in their offer opening the link records that the offer was read, once"
+      ]
+    },
+    {
+      "name": "an offer with no id is reported as read anyway",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a guest opening the link in their offer an offer with no id on it is not reported as read"
+      ],
+      "first": [
+        "a guest opening the link in their offer an offer with no id on it is not reported as read"
+      ]
+    },
+    {
+      "name": "a double tap sends two SMS",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the SMS code a double tap sends one SMS, not two"
+      ],
+      "first": [
+        "the SMS code a double tap sends one SMS, not two"
+      ]
+    },
+    {
+      "name": "a double tap on confirm places two orders",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "confirming the order a double tap on confirm places one order, not two"
+      ],
+      "first": [
+        "confirming the order a double tap on confirm places one order, not two"
+      ]
+    },
+    {
+      "name": "the confirm button is live before a code is typed",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the SMS code the guest cannot submit until they have typed a code"
+      ],
+      "first": [
+        "the SMS code the guest cannot submit until they have typed a code"
+      ]
+    },
+    {
+      "name": "an unticked guest is pushed at the send instead of being told to tick",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "the terms a guest is asked to confirm they have read pressing confirm without ticking the box refuses, and sends no SMS",
+        "the terms a guest is asked to confirm they have read ticking the box takes the warning away again",
+        "a guest on the Swiss market a Swiss guest is refused in German too"
+      ],
+      "first": [
+        "the terms a guest is asked to confirm they have read pressing confirm without ticking the box refuses, and sends no SMS",
+        "the terms a guest is asked to confirm they have read ticking the box takes the warning away again",
+        "a guest on the Swiss market a Swiss guest is refused in German too"
+      ]
+    },
+    {
+      "name": "ticking the box leaves the warning up",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the terms a guest is asked to confirm they have read ticking the box takes the warning away again"
+      ],
+      "first": [
+        "the terms a guest is asked to confirm they have read ticking the box takes the warning away again"
+      ]
+    },
+    {
+      "name": "the number is sent with the spacing it is printed with",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "the SMS code confirming sends the code to the number printed on the offer",
+        "the SMS code the number is sent without the spacing it is printed with",
+        "THE DEFECTS THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError"
+      ],
+      "first": [
+        "the SMS code confirming sends the code to the number printed on the offer",
+        "the SMS code the number is sent without the spacing it is printed with",
+        "THE DEFECTS THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError"
+      ]
+    },
+    {
+      "name": "the code the guest typed is not submitted",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "confirming the order the code the guest typed is submitted with their number"
+      ],
+      "first": [
+        "confirming the order the code the guest typed is submitted with their number"
+      ]
+    },
+    {
+      "name": "a send the server declined still advances the guest to the code field",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the SMS code a code the server declined to send leaves the guest able to try again"
+      ],
+      "first": [
+        "the SMS code a code the server declined to send leaves the guest able to try again"
+      ]
+    },
+    {
+      "name": "the confirmed order is never put on screen",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ],
+      "first": [
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ]
+    },
+    {
+      "name": "THE FIX for the blank page: the acceptance response is guarded before it replaces the offer",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ],
+      "first": [
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ]
+    },
+    {
+      "name": "a wrong code is swallowed and nothing is said",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "confirming the order a wrong code is refused in place, and the guest can correct it",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "confirming the order the refusal comes down the moment the guest retries, not when the retry answers"
+      ],
+      "first": [
+        "confirming the order a wrong code is refused in place, and the guest can correct it",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "confirming the order the refusal comes down the moment the guest retries, not when the retry answers"
+      ]
+    },
+    {
+      "name": "a wrong code is blamed on the SMS instead",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "confirming the order a wrong code is refused in place, and the guest can correct it"
+      ],
+      "first": [
+        "confirming the order a wrong code is refused in place, and the guest can correct it"
+      ]
+    },
+    {
+      "name": "a corrected code leaves the earlier refusal on screen",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "confirming the order the refusal comes down the moment the guest retries, not when the retry answers"
+      ],
+      "first": [
+        "confirming the order the refusal comes down the moment the guest retries, not when the retry answers"
+      ]
+    },
+    {
+      "name": "the guest is not carried down to the code field",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the SMS code the guest is carried down to the field they now have to fill in"
+      ],
+      "first": [
+        "the SMS code the guest is carried down to the field they now have to fill in"
+      ]
+    },
+    {
+      "name": "the spinner never comes down",
+      "outcome": "RED",
+      "reddened": 4,
+      "newlyRed": [
+        "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on",
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong",
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed",
+        "a guest on the Swiss market a Swiss guest whose offer will not load is told so in German"
+      ],
+      "first": [
+        "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on",
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong",
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ]
+    },
+    {
+      "name": "an already-accepted offer is offered for acceptance again",
+      "outcome": "RED",
+      "reddened": 4,
+      "newlyRed": [
+        "a guest opening the link in their offer an offer already accepted shows the confirmation and offers no second acceptance",
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "a guest on the Swiss market a Swiss guest who confirms reaches a German confirmation"
+      ],
+      "first": [
+        "a guest opening the link in their offer an offer already accepted shows the confirmation and offers no second acceptance",
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a corrected code goes through and clears the earlier refusal"
+      ]
+    },
+    {
+      "name": "the code step never replaces the terms step",
+      "outcome": "RED",
+      "reddened": 10,
+      "newlyRed": [
+        "the SMS code the guest is then shown which number the code went to",
+        "the SMS code the guest cannot submit until they have typed a code",
+        "the SMS code a guest who did not get the SMS can ask for it again without starting over",
+        "confirming the order the code the guest typed is submitted with their number",
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a wrong code is refused in place, and the guest can correct it",
+        "confirming the order a corrected code goes through and clears the earlier refusal",
+        "confirming the order the refusal comes down the moment the guest retries, not when the retry answers",
+        "confirming the order a double tap on confirm places one order, not two",
+        "THE DEFECTS THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed"
+      ],
+      "first": [
+        "the SMS code the guest is then shown which number the code went to",
+        "the SMS code the guest cannot submit until they have typed a code",
+        "the SMS code a guest who did not get the SMS can ask for it again without starting over"
+      ]
+    },
+    {
+      "name": "a Swiss guest is shown Norwegian",
+      "outcome": "RED",
+      "reddened": 13,
+      "newlyRed": [
+        "a guest opening the link in their offer an offer already accepted shows the confirmation and offers no second acceptance",
+        "the terms a guest is asked to confirm they have read pressing confirm without ticking the box refuses, and sends no SMS",
+        "the SMS code a code the server declined to send leaves the guest able to try again",
+        "the SMS code a send that failed outright also leaves the guest on the first step",
+        "confirming the order a correct code confirms the order and says so",
+        "confirming the order a wrong code is refused in place, and the guest can correct it",
+        "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on",
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong",
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer",
+        "a guest on the Swiss market the whole acceptance step is in German",
+        "a guest on the Swiss market a Swiss guest is refused in German too",
+        "a guest on the Swiss market a Swiss guest who confirms reaches a German confirmation",
+        "a guest on the Swiss market a Swiss guest whose offer will not load is told so in German"
+      ],
+      "first": [
+        "a guest opening the link in their offer an offer already accepted shows the confirmation and offers no second acceptance",
+        "the terms a guest is asked to confirm they have read pressing confirm without ticking the box refuses, and sends no SMS",
+        "the SMS code a code the server declined to send leaves the guest able to try again"
+      ]
+    },
+    {
+      "name": "the terms link opens nothing",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the terms a guest is asked to confirm they have read the terms link opens the terms and does not tick the box for the guest"
+      ],
+      "first": [
+        "the terms a guest is asked to confirm they have read the terms link opens the terms and does not tick the box for the guest"
+      ]
+    },
+    {
+      "name": "the terms modal ignores whether it was asked to open",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the terms a guest is asked to confirm they have read the terms link opens the terms and does not tick the box for the guest"
+      ],
+      "first": [
+        "the terms a guest is asked to confirm they have read the terms link opens the terms and does not tick the box for the guest"
+      ]
+    },
+    {
+      "name": "closing the terms does not close them",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the terms a guest is asked to confirm they have read closing the terms leaves the guest where they were"
+      ],
+      "first": [
+        "the terms a guest is asked to confirm they have read closing the terms leaves the guest where they were"
+      ]
+    },
+    {
+      "name": "the load diagnosis is discarded before it is even assigned",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong"
+      ],
+      "first": [
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong"
+      ]
+    },
+    {
+      "name": "a link with no order number records no diagnosis at all",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer"
+      ],
+      "first": [
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer"
+      ]
+    },
+    {
+      "name": "an offer that will not load shows nothing at all",
+      "outcome": "RED",
+      "reddened": 4,
+      "newlyRed": [
+        "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on",
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong",
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer",
+        "a guest on the Swiss market a Swiss guest whose offer will not load is told so in German"
+      ],
+      "first": [
+        "an offer the guest cannot open an offer the server refuses puts up a page the guest can act on",
+        "THE DEFECTS THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong",
+        "THE DEFECTS THE DEFECT: a link with no order number also reads as an expired offer"
+      ]
+    },
+    {
+      "name": "the guest is not told which number the code went to",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the SMS code the guest is then shown which number the code went to"
+      ],
+      "first": [
+        "the SMS code the guest is then shown which number the code went to"
+      ]
+    },
+    {
+      "name": "the offer is never handed to the document that renders it",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a guest opening the link in their offer the order they were sent is on screen, and no acceptance has been claimed for them"
+      ],
+      "first": [
+        "a guest opening the link in their offer the order they were sent is on screen, and no acceptance has been claimed for them"
+      ]
+    },
+    {
+      "name": "a failed send is reported as a success",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "the SMS code a send that failed outright also leaves the guest on the first step",
+        "THE DEFECTS THE DEFECT: a failed send shows the guest the raw English exception text",
+        "THE DEFECTS THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError"
+      ],
+      "first": [
+        "the SMS code a send that failed outright also leaves the guest on the first step",
+        "THE DEFECTS THE DEFECT: a failed send shows the guest the raw English exception text",
+        "THE DEFECTS THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError"
+      ]
+    },
+    {
+      "name": "offer: the page starts already loaded, so a guest sees blank space while it fetches",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a guest opening the link in their offer the guest waits on a spinner rather than an empty page while the offer is fetched"
+      ],
+      "first": [
+        "a guest opening the link in their offer the guest waits on a spinner rather than an empty page while the offer is fetched"
+      ]
+    },
+    {
+      "name": "offer: a failed read receipt takes the offer away from the guest it was sent to",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "a guest opening the link in their offer an offer that loaded is still readable when the read receipt fails"
+      ],
+      "first": [
+        "a guest opening the link in their offer an offer that loaded is still readable when the read receipt fails"
+      ]
+    },
+    {
+      "name": "offer: the page derives an expiry judgement into its own template",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "code on this page that nothing can reach the document is rendered by OfferDocument, not by figures this page derives"
+      ],
+      "first": [
+        "code on this page that nothing can reach the document is rendered by OfferDocument, not by figures this page derives"
+      ]
+    }
+  ]
+}

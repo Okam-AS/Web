@@ -1,0 +1,460 @@
+{
+  "baseline": {
+    "test/meals-statements-page.test.js": {
+      "total": 49,
+      "baselineRed": [],
+      "neverReddened": [
+        "opening a month statement by its run id the venue reads the document's totals, its signature and every line",
+        "opening a month statement by its run id the run asked for is the run fetched",
+        "opening a month statement by its run id an operator who has typed nothing cannot fire a read",
+        "opening a month statement by its run id a run id padded with spaces is sent trimmed, not rejected",
+        "opening a month statement by its run id re-reading asks for the run on screen again",
+        "opening a month statement by its run id a run that is not there is refused in words, and puts no document on screen",
+        "opening a month statement by its run id a session that has expired says so rather than reading as an empty month",
+        "opening a month statement by its run id a refusal with no code on the problem document is admitted as unknown",
+        "opening a month statement by its run id a read that succeeds clears the refusal the previous one left",
+        "the deep link the month-close screen will hand over no run on the URL opens nothing on its own",
+        "the CSV the buyer receives the file is fetched, held, and shown before it is saved",
+        "the CSV the buyer receives the server's signature on the file is shown beside it",
+        "the CSV the buyer receives a file the browser was not allowed to read a hash for shows none",
+        "the CSV the buyer receives a server-named file is not marked as named here",
+        "who the page reads for an admin with no store selected triggers no read at all",
+        "who the page reads for a session whose user has not hydrated yet reads nothing rather than throwing",
+        "what this screen deliberately cannot do every figure on screen came off the wire; the page sums nothing",
+        "what this screen deliberately cannot do a line the server sent no member reference for is never given one here"
+      ]
+    }
+  },
+  "killedBy": {
+    "the statement history, and the authority boundary across it only companies with a live agreement are asked about": [
+      "terminated corridors are listed as if a bill might exist",
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel": [
+      "the authority boundary is reported as a generic failure",
+      "the statement is opened before the history rather than after"
+    ],
+    "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list": [
+      "the authority boundary is reported as a generic failure",
+      "a run named on the URL is ignored",
+      "the statement is opened before the history rather than after"
+    ],
+    "opening a month statement by its run id a failed second read takes the first statement off the screen": [
+      "a failed read leaves the previous statement on screen"
+    ],
+    "the CSV the buyer receives opening another run drops the file held for the previous one": [
+      "opening another run keeps the CSV held for the previous one"
+    ],
+    "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period": [
+      "a client-named file is passed off as the server's name",
+      "a file with no server name is offered as null.csv"
+    ],
+    "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null": [
+      "a file with no server name is offered as null.csv",
+      "an unknown period leaks into the file name as null"
+    ],
+    "the CSV the buyer receives saving writes the text already on screen and issues no second request": [
+      "the saved file is named something other than the one shown",
+      "the download link points at nothing",
+      "the saved file is not a CSV"
+    ],
+    "the CSV the buyer receives a browser that cannot build a file link says so instead of failing silently": [
+      "a browser with no object URL saves silently instead of refusing"
+    ],
+    "the statement history, and the authority boundary across it a listed run can be opened straight from the history": [
+      "the opened run never fills the run field",
+      "history rows are rendered raw instead of read",
+      "the statement is opened before the history rather than after"
+    ],
+    "the deep link the month-close screen will hand over a run named on the URL is opened without anyone typing it": [
+      "a run named on the URL is ignored"
+    ],
+    "the CSV the buyer receives nothing is exported, and nothing is blamed, while no statement is open": [
+      "an export is attempted with no statement open"
+    ],
+    "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked": [
+      "an empty run id is still sent to the server",
+      "the statement is opened before the history rather than after"
+    ],
+    "the CSV the buyer receives a refused export says why and offers no file to save": [
+      "a refused export is swallowed"
+    ],
+    "the statement history, and the authority boundary across it a directory read that failed is unknown, never reported as no companies": [
+      "a failed directory read falls through and reports no companies",
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a payload that is not a list is read as no companies rather than crashing": [
+      "a non-array directory payload is used as-is",
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a history payload without a statements array is read as none": [
+      "a non-array directory payload is used as-is",
+      "the statement is opened before the history rather than after"
+    ],
+    "who the page reads for a signed-out visitor triggers no read at all": [
+      "a signed-out visitor is read for anyway"
+    ],
+    "who the page reads for signing in on the page loads it without a reload": [
+      "a signed-out visitor is read for anyway",
+      "signing in on the page is not heard",
+      "the statement is opened before the history rather than after"
+    ],
+    "who the page reads for an admin with no explicit selection reads for the first store they administer": [
+      "the first administered store is not used when nothing is selected",
+      "the statement is opened before the history rather than after"
+    ],
+    "who the page reads for changing store re-reads the history for the new one": [
+      "a store change does not re-read",
+      "the statement is opened before the history rather than after"
+    ],
+    "opening a month statement by its run id a finalized run is marked frozen so nobody waits for it to change": [
+      "the frozen and still-draft notes are swapped"
+    ],
+    "opening a month statement by its run id a draft says it is still a draft, so nobody bills a buyer off it": [
+      "the frozen and still-draft notes are swapped"
+    ],
+    "what this screen deliberately cannot do the screen says who owns the month close, and offers no draft or finalize control": [
+      "the month-close ownership note is dropped"
+    ],
+    "the statement history, and the authority boundary across it a company that has genuinely produced no statements says none, not refused": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it the company is named by the name a person would recognise": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a company with no display name falls back to its legal name": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a company with no name at all is headed by its id rather than by nothing": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a venue with no live corridors is told there are none": [
+      "the statement is opened before the history rather than after"
+    ],
+    "the statement history, and the authority boundary across it a directory that failed with an untyped error is still admitted as unknown": [
+      "the statement is opened before the history rather than after"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "terminated corridors are listed as if a bill might exist",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it only companies with a live agreement are asked about"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it only companies with a live agreement are asked about"
+      ]
+    },
+    {
+      "name": "the authority boundary is reported as a generic failure",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list"
+      ]
+    },
+    {
+      "name": "a failed read leaves the previous statement on screen",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "opening a month statement by its run id a failed second read takes the first statement off the screen"
+      ],
+      "first": [
+        "opening a month statement by its run id a failed second read takes the first statement off the screen"
+      ]
+    },
+    {
+      "name": "opening another run keeps the CSV held for the previous one",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives opening another run drops the file held for the previous one"
+      ],
+      "first": [
+        "the CSV the buyer receives opening another run drops the file held for the previous one"
+      ]
+    },
+    {
+      "name": "a client-named file is passed off as the server's name",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period"
+      ],
+      "first": [
+        "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period"
+      ]
+    },
+    {
+      "name": "a file with no server name is offered as null.csv",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period",
+        "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null"
+      ],
+      "first": [
+        "the CSV the buyer receives a file this client had to name itself is marked as such, and named for the period",
+        "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null"
+      ]
+    },
+    {
+      "name": "an unknown period leaks into the file name as null",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null"
+      ],
+      "first": [
+        "the CSV the buyer receives a client-named file for a run with no period says unknown rather than null"
+      ]
+    },
+    {
+      "name": "the saved file is named something other than the one shown",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ],
+      "first": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ]
+    },
+    {
+      "name": "the download link points at nothing",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ],
+      "first": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ]
+    },
+    {
+      "name": "the saved file is not a CSV",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ],
+      "first": [
+        "the CSV the buyer receives saving writes the text already on screen and issues no second request"
+      ]
+    },
+    {
+      "name": "a browser with no object URL saves silently instead of refusing",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a browser that cannot build a file link says so instead of failing silently"
+      ],
+      "first": [
+        "the CSV the buyer receives a browser that cannot build a file link says so instead of failing silently"
+      ]
+    },
+    {
+      "name": "the opened run never fills the run field",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history"
+      ]
+    },
+    {
+      "name": "history rows are rendered raw instead of read",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history"
+      ]
+    },
+    {
+      "name": "a run named on the URL is ignored",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "the deep link the month-close screen will hand over a run named on the URL is opened without anyone typing it",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list"
+      ],
+      "first": [
+        "the deep link the month-close screen will hand over a run named on the URL is opened without anyone typing it",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list"
+      ]
+    },
+    {
+      "name": "an export is attempted with no statement open",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives nothing is exported, and nothing is blamed, while no statement is open"
+      ],
+      "first": [
+        "the CSV the buyer receives nothing is exported, and nothing is blamed, while no statement is open"
+      ]
+    },
+    {
+      "name": "an empty run id is still sent to the server",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked"
+      ]
+    },
+    {
+      "name": "a refused export is swallowed",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the CSV the buyer receives a refused export says why and offers no file to save"
+      ],
+      "first": [
+        "the CSV the buyer receives a refused export says why and offers no file to save"
+      ]
+    },
+    {
+      "name": "a failed directory read falls through and reports no companies",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a directory read that failed is unknown, never reported as no companies"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a directory read that failed is unknown, never reported as no companies"
+      ]
+    },
+    {
+      "name": "a non-array directory payload is used as-is",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a payload that is not a list is read as no companies rather than crashing",
+        "the statement history, and the authority boundary across it a history payload without a statements array is read as none"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a payload that is not a list is read as no companies rather than crashing",
+        "the statement history, and the authority boundary across it a history payload without a statements array is read as none"
+      ]
+    },
+    {
+      "name": "a signed-out visitor is read for anyway",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "who the page reads for a signed-out visitor triggers no read at all",
+        "who the page reads for signing in on the page loads it without a reload"
+      ],
+      "first": [
+        "who the page reads for a signed-out visitor triggers no read at all",
+        "who the page reads for signing in on the page loads it without a reload"
+      ]
+    },
+    {
+      "name": "the first administered store is not used when nothing is selected",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "who the page reads for an admin with no explicit selection reads for the first store they administer"
+      ],
+      "first": [
+        "who the page reads for an admin with no explicit selection reads for the first store they administer"
+      ]
+    },
+    {
+      "name": "a store change does not re-read",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "who the page reads for changing store re-reads the history for the new one"
+      ],
+      "first": [
+        "who the page reads for changing store re-reads the history for the new one"
+      ]
+    },
+    {
+      "name": "signing in on the page is not heard",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "who the page reads for signing in on the page loads it without a reload"
+      ],
+      "first": [
+        "who the page reads for signing in on the page loads it without a reload"
+      ]
+    },
+    {
+      "name": "the frozen and still-draft notes are swapped",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "opening a month statement by its run id a finalized run is marked frozen so nobody waits for it to change",
+        "opening a month statement by its run id a draft says it is still a draft, so nobody bills a buyer off it"
+      ],
+      "first": [
+        "opening a month statement by its run id a finalized run is marked frozen so nobody waits for it to change",
+        "opening a month statement by its run id a draft says it is still a draft, so nobody bills a buyer off it"
+      ]
+    },
+    {
+      "name": "the month-close ownership note is dropped",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "what this screen deliberately cannot do the screen says who owns the month close, and offers no draft or finalize control"
+      ],
+      "first": [
+        "what this screen deliberately cannot do the screen says who owns the month close, and offers no draft or finalize control"
+      ]
+    },
+    {
+      "name": "the statement is opened before the history rather than after",
+      "outcome": "RED",
+      "reddened": 18,
+      "newlyRed": [
+        "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel",
+        "the statement history, and the authority boundary across it a company that has genuinely produced no statements says none, not refused",
+        "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence",
+        "the statement history, and the authority boundary across it a listed run can be opened straight from the history",
+        "the statement history, and the authority boundary across it the company is named by the name a person would recognise",
+        "the statement history, and the authority boundary across it a company with no display name falls back to its legal name",
+        "the statement history, and the authority boundary across it a company with no name at all is headed by its id rather than by nothing",
+        "the statement history, and the authority boundary across it a history row carrying no run id opens nothing when it is clicked",
+        "the statement history, and the authority boundary across it only companies with a live agreement are asked about",
+        "the statement history, and the authority boundary across it a venue with no live corridors is told there are none",
+        "the statement history, and the authority boundary across it a directory read that failed is unknown, never reported as no companies",
+        "the statement history, and the authority boundary across it a directory that failed with an untyped error is still admitted as unknown",
+        "the statement history, and the authority boundary across it a payload that is not a list is read as no companies rather than crashing",
+        "the statement history, and the authority boundary across it a history payload without a statements array is read as none",
+        "the deep link the month-close screen will hand over the deep link still opens for a venue that is refused the history list",
+        "who the page reads for an admin with no explicit selection reads for the first store they administer",
+        "who the page reads for changing store re-reads the history for the new one",
+        "who the page reads for signing in on the page loads it without a reload"
+      ],
+      "first": [
+        "the statement history, and the authority boundary across it a venue refused the buyer's history is told so, not shown an empty panel",
+        "the statement history, and the authority boundary across it a company that has genuinely produced no statements says none, not refused",
+        "the statement history, and the authority boundary across it a history read that failed for any other reason gets its own sentence"
+      ]
+    }
+  ]
+}

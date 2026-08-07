@@ -1,0 +1,121 @@
+[
+ {
+  "name": "page: the run id is sent untrimmed",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "@click=\"open(runIdInput.trim())\"",
+  "to": "@click=\"open(runIdInput)\""
+ },
+ {
+  "name": "page: the open button is live with nothing typed",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": ":disabled=\"!runIdInput.trim() || loading\"",
+  "to": ":disabled=\"loading\""
+ },
+ {
+  "name": "page: re-reading asks for a different run",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "@click=\"open(statement.statementRunId)\"",
+  "to": "@click=\"open('a-different-run')\""
+ },
+ {
+  "name": "view: a run that is not there is admitted as unknown instead of named",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (code === 'meals.not-found') {\n    return { key: 'mlst_refusal_not_found', params: {} };\n  }",
+  "to": ""
+ },
+ {
+  "name": "view: an expired session is not told apart from any other refusal",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (error.status === 401) {\n    return { key: 'mlst_refusal_unauthenticated', params: {} };\n  }",
+  "to": ""
+ },
+ {
+  "name": "view: a refusal with no code produces no sentence at all",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "  return { key: 'mlst_refusal_unknown', params: {} };\n}",
+  "to": "  return null;\n}"
+ },
+ {
+  "name": "page: a successful read leaves the previous refusal standing",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      this.loading = true;\n      this.refusal = null;",
+  "to": "      this.loading = true;"
+ },
+ {
+  "name": "page: a URL with no run opens one anyway",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (fromRoute) {",
+  "to": "if (!fromRoute) {"
+ },
+ {
+  "name": "page: the exported file is held empty",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "text: file.text,",
+  "to": "text: '',"
+ },
+ {
+  "name": "page: every export claims the server named it",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "serverNamed: !!file.fileName,",
+  "to": "serverNamed: false,"
+ },
+ {
+  "name": "page: a read is fired with no store selected",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+  "to": "if (!this.$store.getters.userIsLoggedIn) { return; }"
+ },
+ {
+  "name": "page: the store is read off a user that has not hydrated",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];",
+  "to": "const stores = this.$store.state.currentUser.adminIn || [];"
+ },
+ {
+  "name": "view: the document's totals are re-summed from its lines",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "  return Object.assign({}, summary, {",
+  "to": "  return Object.assign({}, summary, {\n    totalGross: lines.length ? { minor: lines.reduce(function (s, l) { return s + ((l.gross && l.gross.minor) || 0); }, 0), currency: summary.currency } : summary.totalGross,"
+ },
+ {
+  "name": "view: a line with no member reference is given the allocation id",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "const memberDisplayRef = text(l.memberDisplayRef);",
+  "to": "const memberDisplayRef = text(l.memberDisplayRef) || text(l.allocationId);"
+ },
+ {
+  "name": "view: the document's signature is dropped on the way to the screen",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: text(summary.contentHash),",
+  "to": "contentHash: null,"
+ },
+ {
+  "name": "page: the export shows a signature the server never sent",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: file.contentHash,",
+  "to": "contentHash: file.contentHash || 'sha256:unknown',"
+ },
+ {
+  "name": "page: the export drops the signature the server did send",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: file.contentHash,",
+  "to": "contentHash: null,"
+ }
+]

@@ -188,6 +188,11 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
 
   // A runner that dies holding a mutated file has corrupted the lane just as surely as one that
   // reverts it wrongly, so the restore sits in a `finally`.
+  //
+  // This arm used to assert the outcome was RED. That was the defect, not the contract: a command
+  // that cannot be spawned has produced NO MEASUREMENT, and scoring it as a kill is how the old
+  // instrument certified tests nobody had shown could fail. A crash is INVALID now. The restore
+  // assertions either side of it are the part this arm was always about, and they are unchanged.
   it('puts the file back even when the suite command cannot be run at all', () => {
     const runner = installRunner(dir, CANONICAL)
     const run = runRunner(runner, writeSpec(dir, ONE_MUTATION), {
@@ -195,7 +200,8 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
     })
     expect(readTarget(dir)).toBe(UNCOMMITTED)
     expect(run.status).toBe(0)
-    expect(run.stdout).toContain('RED')
+    expect(run.stdout).toContain('INVAL')
+    expect(run.stdout).not.toContain('RED')
   })
 
   it('never writes a file the spec did not name', () => {
@@ -210,8 +216,11 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
     ]))
     expect(run.stdout).toContain('SKIP')
     expect(readTarget(dir)).toBe(UNCOMMITTED)
+    // The results file carries the per-test kill map alongside the per-mutation outcomes now, so
+    // the mutation list is a named field rather than the whole document. The map is the only thing
+    // that can support a per-TEST falsifiability claim, which is what this runner gained.
     const results = JSON.parse(fs.readFileSync(path.join(dir, 'spec.results.json'), 'utf8'))
-    expect(results[0].outcome).toBe('NOT-APPLIED')
+    expect(results.mutations[0].outcome).toBe('NOT-APPLIED')
   })
 
   it('writes its results beside the spec that asked for them', () => {

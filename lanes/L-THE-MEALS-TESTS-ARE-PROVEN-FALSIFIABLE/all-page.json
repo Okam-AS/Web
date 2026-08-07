@@ -1,0 +1,303 @@
+[
+ {
+  "name": "terminated corridors are listed as if a bill might exist",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": ".filter(c => c && c.agreementStatus === 'Active');",
+  "to": ".filter(c => !!c);"
+ },
+ {
+  "name": "the authority boundary is reported as a generic failure",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (e && e.code === 'meals.forbidden') { entry.forbidden = true; }",
+  "to": "if (false) { entry.forbidden = true; }"
+ },
+ {
+  "name": "a failed read leaves the previous statement on screen",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "        this.statement = null;\n        this.refusal = statementRefusal(e);",
+  "to": "        this.refusal = statementRefusal(e);"
+ },
+ {
+  "name": "opening another run keeps the CSV held for the previous one",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      this.refusal = null;\n      this.exportResult = null;\n      try {\n        this.statement = readStatement",
+  "to": "      this.refusal = null;\n      try {\n        this.statement = readStatement"
+ },
+ {
+  "name": "a client-named file is passed off as the server's name",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "serverNamed: !!file.fileName,",
+  "to": "serverNamed: true,"
+ },
+ {
+  "name": "a file with no server name is offered as null.csv",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "fileName: file.fileName || ('meals-statement-' + (this.statement.period || 'unknown') + '.csv')",
+  "to": "fileName: file.fileName"
+ },
+ {
+  "name": "an unknown period leaks into the file name as null",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "(this.statement.period || 'unknown')",
+  "to": "(this.statement.period)"
+ },
+ {
+  "name": "the saved file is named something other than the one shown",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "link.download = result.fileName;",
+  "to": "link.download = 'statement.csv';"
+ },
+ {
+  "name": "the download link points at nothing",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "link.href = url;",
+  "to": "link.href = '';"
+ },
+ {
+  "name": "the saved file is not a CSV",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "{ type: 'text/csv;charset=utf-8' }",
+  "to": "{ type: 'application/octet-stream' }"
+ },
+ {
+  "name": "a browser with no object URL saves silently instead of refusing",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "typeof URL.createObjectURL !== 'function' ||",
+  "to": ""
+ },
+ {
+  "name": "the opened run never fills the run field",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "        this.runIdInput = statementRunId;",
+  "to": ""
+ },
+ {
+  "name": "history rows are rendered raw instead of read",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "entry.rows = rows.map(readSummary);",
+  "to": "entry.rows = rows;"
+ },
+ {
+  "name": "a run named on the URL is ignored",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      if (fromRoute) {",
+  "to": "      if (false && fromRoute) {"
+ },
+ {
+  "name": "an export is attempted with no statement open",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (!this.statement || !this.statement.statementRunId) { return; }",
+  "to": "if (false) { return; }"
+ },
+ {
+  "name": "an empty run id is still sent to the server",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      if (!statementRunId) { return; }",
+  "to": ""
+ },
+ {
+  "name": "a refused export is swallowed",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      } catch (e) {\n        this.refusal = statementRefusal(e);\n      }\n      this.exporting = false;",
+  "to": "      } catch (e) {\n      }\n      this.exporting = false;"
+ },
+ {
+  "name": "a failed directory read falls through and reports no companies",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "        this.directoryRefusal = refusalOf(e) || 'unknown';\n        return;",
+  "to": "        this.directoryRefusal = refusalOf(e) || 'unknown';"
+ },
+ {
+  "name": "a non-array directory payload is used as-is",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "this.companies = (Array.isArray(directory) ? directory : [])",
+  "to": "this.companies = (directory || [])"
+ },
+ {
+  "name": "a signed-out visitor is read for anyway",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+  "to": "if (!this.storeId) { return; }"
+ },
+ {
+  "name": "the first administered store is not used when nothing is selected",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "return stores.length ? stores[0].id : '';",
+  "to": "return '';"
+ },
+ {
+  "name": "a store change does not re-read",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "    storeId () { this.load(); }",
+  "to": "    storeId () { }"
+ },
+ {
+  "name": "signing in on the page is not heard",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "<AdminPage full-width @login-success=\"load\">",
+  "to": "<AdminPage full-width>"
+ },
+ {
+  "name": "the frozen and still-draft notes are swapped",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "<p v-if=\"statement.isFinalized\" class=\"mls-note\" data-test=\"meals-statements-frozen\">",
+  "to": "<p v-if=\"!statement.isFinalized\" class=\"mls-note\" data-test=\"meals-statements-frozen\">"
+ },
+ {
+  "name": "the month-close ownership note is dropped",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "<p class=\"mls-note mls-note--warn\" data-test=\"meals-statements-owner\">",
+  "to": "<p v-if=\"false\" class=\"mls-note mls-note--warn\" data-test=\"meals-statements-owner\">"
+ },
+ {
+  "name": "the statement is opened before the history rather than after",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      await this.loadHistory();",
+  "to": ""
+ },
+ {
+  "name": "page: the run id is sent untrimmed",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "@click=\"open(runIdInput.trim())\"",
+  "to": "@click=\"open(runIdInput)\""
+ },
+ {
+  "name": "page: the open button is live with nothing typed",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": ":disabled=\"!runIdInput.trim() || loading\"",
+  "to": ":disabled=\"loading\""
+ },
+ {
+  "name": "page: re-reading asks for a different run",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "@click=\"open(statement.statementRunId)\"",
+  "to": "@click=\"open('a-different-run')\""
+ },
+ {
+  "name": "view: a run that is not there is admitted as unknown instead of named",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (code === 'meals.not-found') {\n    return { key: 'mlst_refusal_not_found', params: {} };\n  }",
+  "to": ""
+ },
+ {
+  "name": "view: an expired session is not told apart from any other refusal",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (error.status === 401) {\n    return { key: 'mlst_refusal_unauthenticated', params: {} };\n  }",
+  "to": ""
+ },
+ {
+  "name": "view: a refusal with no code produces no sentence at all",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "  return { key: 'mlst_refusal_unknown', params: {} };\n}",
+  "to": "  return null;\n}"
+ },
+ {
+  "name": "page: a successful read leaves the previous refusal standing",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "      this.loading = true;\n      this.refusal = null;",
+  "to": "      this.loading = true;"
+ },
+ {
+  "name": "page: a URL with no run opens one anyway",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (fromRoute) {",
+  "to": "if (!fromRoute) {"
+ },
+ {
+  "name": "page: the exported file is held empty",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "text: file.text,",
+  "to": "text: '',"
+ },
+ {
+  "name": "page: every export claims the server named it",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "serverNamed: !!file.fileName,",
+  "to": "serverNamed: false,"
+ },
+ {
+  "name": "page: a read is fired with no store selected",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+  "to": "if (!this.$store.getters.userIsLoggedIn) { return; }"
+ },
+ {
+  "name": "page: the store is read off a user that has not hydrated",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];",
+  "to": "const stores = this.$store.state.currentUser.adminIn || [];"
+ },
+ {
+  "name": "view: the document's totals are re-summed from its lines",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "  return Object.assign({}, summary, {",
+  "to": "  return Object.assign({}, summary, {\n    totalGross: lines.length ? { minor: lines.reduce(function (s, l) { return s + ((l.gross && l.gross.minor) || 0); }, 0), currency: summary.currency } : summary.totalGross,"
+ },
+ {
+  "name": "view: a line with no member reference is given the allocation id",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "const memberDisplayRef = text(l.memberDisplayRef);",
+  "to": "const memberDisplayRef = text(l.memberDisplayRef) || text(l.allocationId);"
+ },
+ {
+  "name": "view: the document's signature is dropped on the way to the screen",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: text(summary.contentHash),",
+  "to": "contentHash: null,"
+ },
+ {
+  "name": "page: the export shows a signature the server never sent",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: file.contentHash,",
+  "to": "contentHash: file.contentHash || 'sha256:unknown',"
+ },
+ {
+  "name": "page: the export drops the signature the server did send",
+  "file": "pages/admin/meals-statements.vue",
+  "test": "test/meals-statements-page.test.js",
+  "from": "contentHash: file.contentHash,",
+  "to": "contentHash: null,"
+ }
+]

@@ -1,0 +1,23 @@
+[
+ {
+  "name": "offer: the page starts already loaded, so a guest sees blank space while it fetches",
+  "file": "pages/offer/_code.vue",
+  "test": "test/offer-code-guest-page.test.js",
+  "from": "      loading: true,",
+  "to": "      loading: false,"
+ },
+ {
+  "name": "offer: a failed read receipt takes the offer away from the guest it was sent to",
+  "file": "pages/offer/_code.vue",
+  "test": "test/offer-code-guest-page.test.js",
+  "from": "      this.error = error.message || this.copy.errorCouldNotLoad;",
+  "to": "      this.error = error.message || this.copy.errorCouldNotLoad;\n      this.offerProposal = null;"
+ },
+ {
+  "name": "offer: the page derives an expiry judgement into its own template",
+  "file": "pages/offer/_code.vue",
+  "test": "test/offer-code-guest-page.test.js",
+  "from": "          v-if=\"!offerProposal.accepted\"",
+  "to": "          v-if=\"!offerProposal.accepted && !isExpiryClose\""
+ }
+]

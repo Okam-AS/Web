@@ -1,0 +1,79 @@
+[
+ {
+  "name": "view: the period tag loses its zero padding",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "String(year) + '-' + (month < 10 ? '0' + month : String(month))",
+  "to": "String(year) + '-' + String(month)"
+ },
+ {
+  "name": "view: the member reference is derived from the allocation id instead of read",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "const memberDisplayRef = text(l.memberDisplayRef);",
+  "to": "const memberDisplayRef = text(l.allocationId) || text(l.memberDisplayRef);"
+ },
+ {
+  "name": "view: a long member reference is truncated on the way to the bill",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "const memberDisplayRef = text(l.memberDisplayRef);",
+  "to": "const memberDisplayRef = text(l.memberDisplayRef) && text(l.memberDisplayRef).slice(0, 8);"
+ },
+ {
+  "name": "view: an unstated minor amount becomes zero instead of nothing",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "return Number.isSafeInteger(value) ? value : null;",
+  "to": "return Number.isSafeInteger(value) ? value : 0;"
+ },
+ {
+  "name": "view: a missing receipt number is stringified rather than left unknown",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "sourceReceiptNumber: text(l.sourceReceiptNumber),",
+  "to": "sourceReceiptNumber: String(l.sourceReceiptNumber),"
+ },
+ {
+  "name": "view: the statement drops every line past the second",
+  "file": "utils/meals/statement-view.js",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "const lines = Array.isArray(source.lines) ? source.lines.map(readLine) : [];",
+  "to": "const lines = Array.isArray(source.lines) ? source.lines.slice(0, 2).map(readLine) : [];"
+ },
+ {
+  "name": "lines: a kind the client has no word for is replaced by the unknown mark",
+  "file": "components/admin/meals/MealsStatementLines.vue",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "return kind || this.unknownMark;",
+  "to": "return this.unknownMark;"
+ },
+ {
+  "name": "lines: a line with no kind renders an empty cell instead of the unknown mark",
+  "file": "components/admin/meals/MealsStatementLines.vue",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "return kind || this.unknownMark;",
+  "to": "return kind || '';"
+ },
+ {
+  "name": "lines: a status the client has no word for is replaced by the unknown mark",
+  "file": "components/admin/meals/MealsStatementLines.vue",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "return this.statement.status || this.unknownMark;",
+  "to": "return this.unknownMark;"
+ },
+ {
+  "name": "lines: a run with no status renders an empty badge instead of the unknown mark",
+  "file": "components/admin/meals/MealsStatementLines.vue",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "return this.statement.status || this.unknownMark;",
+  "to": "return this.statement.status || '';"
+ },
+ {
+  "name": "lines: a foreign currency code is appended even when the admin's own is unknown",
+  "file": "components/admin/meals/MealsStatementLines.vue",
+  "test": "test/meals-statement-lines.component.test.js",
+  "from": "if (wireCurrency && this.currency && wireCurrency !== this.currency) {",
+  "to": "if (wireCurrency && wireCurrency !== this.currency) {"
+ }
+]

@@ -11,6 +11,46 @@
 // `from` must appear EXACTLY ONCE in the file; a mutation that does not apply is reported as
 // NOT-APPLIED rather than silently counted as a pass.
 //
+// ---- WHAT A KILL MEANS HERE, AND WHY THE OLD ANSWER WAS NOT ONE -------------------------------
+//
+// This runner used to decide RED with
+//
+//     /Tests:.*\d+ failed/.test(out) || run.status !== 0
+//
+// and ran jest under `--silent`. Three things followed, all of them measured on 2026-08-07 by the
+// audit in `docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md`, and this file now
+// exists to not have any of them:
+//
+//   1. NO BASELINE. Nothing established what the suite does UNMUTATED, so a test already failing
+//      counted as killed by every mutation, and a suite that ran zero tests counted as killed by
+//      every mutation too.
+//   2. A CRASH SCORED AS A KILL. `run.status !== 0` is true for a syntax error, a missing module, a
+//      jest config error, and for "no tests found" (jest exits 1). The mutation that breaks the file
+//      hardest scores identically to the mutation the suite actually caught.
+//   3. RED TEST NAMES WERE NEVER CAPTURED. `--silent` suppresses the `✕` lines the regex looked for,
+//      so every committed result read `"reddened": 0, "first": []` — RED verdicts with no named red
+//      test anywhere. Internally inconsistent as committed, and unable to support a per-test claim.
+//
+// The instrument therefore fails in BOTH directions: zero tests + exit 0 reads as a survivor, and
+// zero tests + a parse failure reads as a kill. It is not enough to be careful about one of them.
+//
+// WHAT IS ASSERTED NOW:
+//   * a baseline run per test path, BEFORE any mutation, whose total must be non-zero — a zero-test
+//     baseline aborts the whole run rather than certifying everything in it;
+//   * results are read from jest's own `--json`, not from scraping human output, so a test name is
+//     a datum rather than a regex match;
+//   * RED requires at least one NEWLY failed test — one failing now that was not failing at
+//     baseline. A suite with a standing red no longer launders that red into a kill;
+//   * a run that produced no parseable results, or fewer tests than the baseline, is INVALID or
+//     SHORT-RUN. Neither counts as a kill;
+//   * a mutant whose delimiters do not balance while the original's do is INVALID-MUTANT and is
+//     never run — that is the specific shape that used to manufacture a false RED.
+//
+// AND THE OUTPUT IS A PER-TEST KILL MAP. `newlyRed` names on every entry, plus a closing report of
+// every baseline-green test that no mutation ever reddened. "Every mutation was killed" and "every
+// test can fail" are different claims; only the second is evidence a test is worth its line, and
+// only this map can support it.
+//
 // ---- WHY THIS FILE LIVES HERE AND NOT IN A LANE DIRECTORY -------------------------------------
 //
 // It used to live in whichever lane wrote it first, and lanes copied it from each other. On
@@ -65,6 +105,107 @@ const results = []
 // `test/mutation-runner-restore.test.js`). The command receives the spec's `test` value as its last
 // argument and is judged solely on its exit status.
 const TEST_COMMAND = process.env.MUTATE_TEST_COMMAND || 'npx jest'
+const USING_REAL_JEST = !process.env.MUTATE_TEST_COMMAND
+
+// Delimiter balance, counted outside strings, template literals, regex literals and comments. Used
+// only as a VETO before a mutant is run: if the original balances and the mutant does not, the
+// mutant cannot compile and any red it produced would be the parser's, not the suite's.
+function balances (src) {
+  const pairs = { ')': '(', ']': '[', '}': '{' }
+  const stack = []
+  let i = 0
+  let prevSignificant = ''
+  while (i < src.length) {
+    const c = src[i]
+    const two = src.slice(i, i + 2)
+    if (two === '//') { const nl = src.indexOf('\n', i); i = nl === -1 ? src.length : nl; continue }
+    if (two === '/*') { const end = src.indexOf('*/', i + 2); i = end === -1 ? src.length : end + 2; continue }
+    if (c === '"' || c === "'" || c === '`') {
+      i++
+      while (i < src.length && src[i] !== c) { i += src[i] === '\\' ? 2 : 1 }
+      i++
+      prevSignificant = 'x'
+      continue
+    }
+    // A `/` opens a regex only where a value may start; after an identifier or a closer it is
+    // division. Getting this wrong on a `.vue` file's script block is how a balance check turns
+    // into a second source of false verdicts.
+    if (c === '/' && !'x)]}'.includes(prevSignificant)) {
+      i++
+      while (i < src.length && src[i] !== '/') {
+        if (src[i] === '\\') { i += 2; continue }
+        if (src[i] === '[') { while (i < src.length && src[i] !== ']') { i += src[i] === '\\' ? 2 : 1 } }
+        if (src[i] === '\n') { break }
+        i++
+      }
+      i++
+      prevSignificant = 'x'
+      continue
+    }
+    if (c === '(' || c === '[' || c === '{') { stack.push(c); prevSignificant = c }
+    else if (pairs[c]) {
+      if (stack.pop() !== pairs[c]) { return false }
+      prevSignificant = c
+    } else if (/\S/.test(c)) { prevSignificant = /[\w$]/.test(c) ? 'x' : c }
+    i++
+  }
+  return stack.length === 0
+}
+
+// One jest run, read from jest's own JSON rather than from its human output.
+// Returns { ok, total, failedNames } — `ok:false` means nothing usable came back, which is the
+// INVALID case and never a kill.
+function runSuite (testPath) {
+  if (!USING_REAL_JEST) {
+    // The self-test harness drives this runner with a stub command and judges by exit status. A
+    // command that could not be SPAWNED (shell exit 127, or no status at all) is not a failing
+    // suite — it is no suite — so it reports as unmeasured, which is what makes the crash case
+    // INVALID rather than a kill.
+    const r = spawnSync(TEST_COMMAND + ' ' + JSON.stringify(testPath), { cwd: ROOT, encoding: 'utf8', shell: true })
+    if (r.error || r.status === null || r.status === 127) { return { ok: false, total: 0, failedNames: [], allNames: [] } }
+    return { ok: true, total: 1, failedNames: r.status === 0 ? [] : ['stub-failure'], allNames: ['stub-test'], stub: true }
+  }
+  const out = path.join(
+    fs.mkdtempSync(path.join(require('os').tmpdir(), 'mutate-')), 'jest.json')
+  spawnSync(
+    TEST_COMMAND + ' ' + JSON.stringify(testPath) +
+      ' --coverage=false --json --outputFile=' + JSON.stringify(out),
+    { cwd: ROOT, encoding: 'utf8', shell: true })
+  let report
+  try { report = JSON.parse(fs.readFileSync(out, 'utf8')) } catch (e) { return { ok: false, total: 0, failedNames: [] } }
+  const failedNames = []
+  const allNames = []
+  for (const suite of report.testResults || []) {
+    for (const a of suite.assertionResults || []) {
+      allNames.push(a.fullName)
+      if (a.status === 'failed') { failedNames.push(a.fullName) }
+    }
+  }
+  // A jest that could not even build the suite reports zero tests. That is not a kill; it is the
+  // absence of a measurement.
+  return { ok: (report.numTotalTests || 0) > 0, total: report.numTotalTests || 0, failedNames, allNames }
+}
+
+// ---- BASELINE, BEFORE ANYTHING IS TOUCHED -----------------------------------------------------
+const testPaths = [...new Set(spec.map(m => m.test))]
+const baseline = {}
+for (const t of testPaths) {
+  if (!USING_REAL_JEST) {
+    // The self-test harness has no suite to baseline; it exercises the restore machinery with a
+    // stub command. The gate below is about real runs, where a zero-test baseline is the failure
+    // that certifies everything.
+    baseline[t] = { ok: true, total: 0, failedNames: [], allNames: [], stub: true }
+    continue
+  }
+  const b = runSuite(t)
+  if (!b.ok || b.total === 0) {
+    throw new Error(
+      'ZERO-TEST BASELINE for ' + t + ' — refusing to run. Every mutation would "pass" against a ' +
+      'suite that executes nothing, and the run would certify the whole spec on no evidence.')
+  }
+  baseline[t] = b
+  process.stdout.write('BASE  ' + t + ' — ' + b.total + ' tests, ' + b.failedNames.length + ' red\n')
+}
 
 for (const m of spec) {
   const abs = path.join(ROOT, m.file)
@@ -76,13 +217,19 @@ for (const m of spec) {
     continue
   }
 
+  // The delimiter veto, BEFORE the mutant is ever run. A mutant that cannot parse reds the suite
+  // for a reason that has nothing to do with the test, and the old runner scored that as a kill.
+  const mutant = original.replace(m.from, m.to)
+  if (balances(original) && !balances(mutant)) {
+    results.push({ name: m.name, outcome: 'INVALID-MUTANT', detail: 'delimiters do not balance; not run' })
+    process.stdout.write('INVAL (unbalanced, not run) ' + m.name + '\n')
+    continue
+  }
+
   let run
   try {
-    fs.writeFileSync(abs, original.replace(m.from, m.to))
-    run = spawnSync(
-      TEST_COMMAND + ' ' + JSON.stringify(m.test) +
-        (process.env.MUTATE_TEST_COMMAND ? '' : ' --coverage=false --silent'),
-      { cwd: ROOT, encoding: 'utf8', shell: true })
+    fs.writeFileSync(abs, mutant)
+    run = runSuite(m.test)
   } finally {
     // In a `finally`, so a throw between the write and the run — or a SIGINT-driven unwind — cannot
     // leave a mutated file on disk. A runner that dies mid-mutation and leaves the source corrupted
@@ -104,28 +251,68 @@ for (const m of spec) {
       'STOP: do not run further mutations, and check that file before doing anything else.')
   }
 
-  const out = (run.stdout || '') + (run.stderr || '')
-  const failed = /Tests:.*\d+ failed/.test(out) || run.status !== 0
-  const failedNames = (out.match(/✕ .*/g) || []).map(s => s.replace(/^✕ /, '').trim())
-  results.push({
-    name: m.name,
-    outcome: failed ? 'RED' : 'STILL-GREEN',
-    reddened: failedNames.length,
-    first: failedNames.slice(0, 3)
-  })
-  process.stdout.write((failed ? 'RED   ' : 'GREEN ') + '(' + failedNames.length + ') ' + m.name + '\n')
+  const base = baseline[m.test]
+
+  // A run that produced nothing usable is the ABSENCE of a measurement, not a kill.
+  if (!run.ok) {
+    results.push({ name: m.name, outcome: 'INVALID', detail: 'no parseable jest results' })
+    process.stdout.write('INVAL (no results) ' + m.name + '\n')
+    continue
+  }
+  // Fewer tests than the baseline means part of the suite never ran — the shape that lets a
+  // vanished suite masquerade as a passing one.
+  if (run.total < base.total) {
+    results.push({ name: m.name, outcome: 'SHORT-RUN', detail: run.total + ' of ' + base.total + ' tests ran' })
+    process.stdout.write('SHORT (' + run.total + '/' + base.total + ') ' + m.name + '\n')
+    continue
+  }
+
+  // NEWLY red: failing now and not failing at baseline. A suite carrying a standing red cannot
+  // launder it into a kill, and this is what makes the per-test map trustworthy.
+  const newlyRed = run.failedNames.filter(n => !base.failedNames.includes(n))
+  const outcome = newlyRed.length ? 'RED' : 'STILL-GREEN'
+  results.push({ name: m.name, outcome, reddened: newlyRed.length, newlyRed, first: newlyRed.slice(0, 3) })
+  process.stdout.write((newlyRed.length ? 'RED   ' : 'GREEN ') + '(' + newlyRed.length + ') ' + m.name + '\n')
 }
 
-// Beside the SPEC, not beside this script: the spec lives in the lane that wrote it and so should
-// its results. (The original wrote next to itself, which was the same directory only because the
-// script was sitting in the lane too.)
+// ---- THE PER-TEST KILL MAP --------------------------------------------------------------------
+//
+// "Every mutation was killed" and "every test can fail" are different claims. A spec can kill all
+// its mutations while whole groups of tests never move, and that is exactly what happened here: 71
+// mutations, 70 killed, and 32 of 115 tests never red under any of them. Only this section can tell
+// the two apart, so it is computed rather than left to the reader.
+const killedBy = {}
+for (const r of results) {
+  for (const n of r.newlyRed || []) { (killedBy[n] = killedBy[n] || []).push(r.name) }
+}
+
+const perTest = {}
+for (const t of testPaths) {
+  const b = baseline[t]
+  const greenAtBaseline = (b.allNames || []).filter(n => !b.failedNames.includes(n))
+  perTest[t] = {
+    total: b.total,
+    baselineRed: b.failedNames,
+    neverReddened: greenAtBaseline.filter(n => !killedBy[n])
+  }
+}
+
 fs.writeFileSync(
   path.join(path.dirname(specPath), path.basename(specPath, '.json') + '.results.json'),
-  JSON.stringify(results, null, 2))
+  JSON.stringify({ baseline: perTest, killedBy, mutations: results }, null, 2))
 
 const survived = results.filter(r => r.outcome !== 'RED')
 process.stdout.write('\n' + results.filter(r => r.outcome === 'RED').length + '/' + results.length +
   ' mutations reddened the suite\n')
 if (survived.length) {
   process.stdout.write('SURVIVED: ' + survived.map(s => s.name + ' [' + s.outcome + ']').join('; ') + '\n')
+}
+process.stdout.write('\nPER-TEST COVERAGE\n')
+for (const t of testPaths) {
+  const p = perTest[t]
+  const never = p.neverReddened.length
+  process.stdout.write('  ' + t + ' — ' + (p.total - p.baselineRed.length - never) + '/' +
+    (p.total - p.baselineRed.length) + ' green tests reddened by some mutation; ' +
+    never + ' never reddened\n')
+  for (const n of p.neverReddened) { process.stdout.write('      NEVER-RED: ' + n + '\n') }
 }

@@ -1,0 +1,85 @@
+{
+  "baseline": {
+    "test/meals-statement-client.test.js": {
+      "total": 21,
+      "baselineRed": [],
+      "neverReddened": [
+        "MealsStatementService — route-for-route with the three statement READS it is the SHARED HTTP layer, not a fourth copy of it",
+        "MealsStatementService — route-for-route with the three statement READS #21 list — the COMPANY's statement history, company-scoped and not store-scoped",
+        "MealsStatementService — route-for-route with the three statement READS #23 export — the deterministic CSV, with format PINNED to csv",
+        "MealsStatementService — route-for-route with the three statement READS all three are READS: GET, bearer token, no body, and NO Idempotency-Key",
+        "MealsStatementService — route-for-route with the three statement READS an anonymous caller sends no Authorization header at all rather than an empty one",
+        "ExportCsv — the document, its name and the hash the server signed it with the CSV body is handed back verbatim, not parsed",
+        "ExportCsv — the document, its name and the hash the server signed it with the server's own filename is READ off Content-Disposition — plain and RFC 5987 forms",
+        "ExportCsv — the document, its name and the hash the server signed it with a malformed extended filename falls back to the raw token rather than throwing",
+        "ExportCsv — the document, its name and the hash the server signed it with AN UNREADABLE NAME IS NULL, NEVER A GUESS — three separate ways it can be unreadable",
+        "ExportCsv — the document, its name and the hash the server signed it with the filename comes off the SHARED parser, not a second copy of it living in this module",
+        "the refusals — a bill that was not produced is never an empty bill #21 to a store admin is the typed meals.forbidden, not an empty history",
+        "the refusals — a bill that was not produced is never an empty bill a dark module answers meals.not-found, which the client carries and does not interpret",
+        "the refusals — a bill that was not produced is never an empty bill THE EXPORT THROWS THE SAME TYPED ERROR THE JSON ROUTES DO, so the page has one input",
+        "the refusals — a bill that was not produced is never an empty bill a non-JSON failure body becomes the detail, and never a fileName",
+        "the refusals — a bill that was not produced is never an empty bill an EMPTY failure body is a routing 404 and carries no code at all",
+        "the refusals — a bill that was not produced is never an empty bill a refusal is a THROW, never a resolved value the page could render as a document"
+      ]
+    }
+  },
+  "killedBy": {
+    "MealsStatementService — route-for-route with the three statement READS #22 get — the run and its lines, at the exact path the backend binds": [
+      "client: the read fetches a different run than the one asked for"
+    ],
+    "MealsStatementService — route-for-route with the three statement READS the id is ESCAPED into the path on all three routes": [
+      "client: the read fetches a different run than the one asked for"
+    ],
+    "ExportCsv — the document, its name and the hash the server signed it with the content hash is the SERVER's, read off X-Meals-Content-Hash and never re-derived": [
+      "client: the server's signature on the export is dropped"
+    ],
+    "ExportCsv — the document, its name and the hash the server signed it with name and hash are read INDEPENDENTLY — one being unreadable does not blank the other": [
+      "client: the server's signature on the export is dropped",
+      "client: a signature the browser could not read is invented locally"
+    ],
+    "ExportCsv — the document, its name and the hash the server signed it with an unexposed or absent hash header is null — the caller must know it has no signature": [
+      "client: a signature the browser could not read is invented locally"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "client: the read fetches a different run than the one asked for",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "MealsStatementService — route-for-route with the three statement READS #22 get — the run and its lines, at the exact path the backend binds",
+        "MealsStatementService — route-for-route with the three statement READS the id is ESCAPED into the path on all three routes"
+      ],
+      "first": [
+        "MealsStatementService — route-for-route with the three statement READS #22 get — the run and its lines, at the exact path the backend binds",
+        "MealsStatementService — route-for-route with the three statement READS the id is ESCAPED into the path on all three routes"
+      ]
+    },
+    {
+      "name": "client: the server's signature on the export is dropped",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "ExportCsv — the document, its name and the hash the server signed it with the content hash is the SERVER's, read off X-Meals-Content-Hash and never re-derived",
+        "ExportCsv — the document, its name and the hash the server signed it with name and hash are read INDEPENDENTLY — one being unreadable does not blank the other"
+      ],
+      "first": [
+        "ExportCsv — the document, its name and the hash the server signed it with the content hash is the SERVER's, read off X-Meals-Content-Hash and never re-derived",
+        "ExportCsv — the document, its name and the hash the server signed it with name and hash are read INDEPENDENTLY — one being unreadable does not blank the other"
+      ]
+    },
+    {
+      "name": "client: a signature the browser could not read is invented locally",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "ExportCsv — the document, its name and the hash the server signed it with an unexposed or absent hash header is null — the caller must know it has no signature",
+        "ExportCsv — the document, its name and the hash the server signed it with name and hash are read INDEPENDENTLY — one being unreadable does not blank the other"
+      ],
+      "first": [
+        "ExportCsv — the document, its name and the hash the server signed it with an unexposed or absent hash header is null — the caller must know it has no signature",
+        "ExportCsv — the document, its name and the hash the server signed it with name and hash are read INDEPENDENTLY — one being unreadable does not blank the other"
+      ]
+    }
+  ]
+}
