@@ -1,0 +1,131 @@
+{
+ "test": "test/workforce-admin-page-shell.test.js",
+ "mutations": [
+  {
+   "id": "S01 the admin-store fallback is dropped",
+   "expect": "falls back to the first store",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      return this.$store.state.selectedAdminStore || '';\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      return this.$store.state.selectedAdminStore || '';\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      return this.$store.state.selectedAdminStore || '';\n    },"
+    }
+   ]
+  },
+  {
+   "id": "S02 the explicit selection is ignored in favour of the first admin store",
+   "expect": "reads the store that is actually selected",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : (this.$store.state.selectedAdminStore || '');\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : (this.$store.state.selectedAdminStore || '');\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : (this.$store.state.selectedAdminStore || '');\n    },"
+    }
+   ]
+  },
+  {
+   "id": "S03 an admin of no store is read against store 1",
+   "expect": "reads nothing at all for an admin who administers nothing",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : 1;\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : 1;\n    },"
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : '';\n    },",
+     "to": "    storeId () {\n      const selected = this.$store.state.selectedAdminStore;\n      if (selected) { return selected; }\n      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];\n      return stores.length ? stores[0].id : 1;\n    },"
+    }
+   ]
+  },
+  {
+   "id": "S04 the store watcher is removed, so a switch never re-reads",
+   "expect": "switching store re-reads",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "  watch: {\n    storeId () { this.init(); }\n  },\n",
+     "to": ""
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "  watch: {\n    storeId () { this.init(); }\n  },\n",
+     "to": ""
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "  watch: {\n    storeId () { this.init(); }\n  },\n",
+     "to": ""
+    }
+   ]
+  },
+  {
+   "id": "S05 the signed-in check is dropped from init",
+   "expect": "reads nothing while signed out",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "      if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+     "to": "      if (!this.storeId) { return; }"
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "      if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+     "to": "      if (!this.storeId) { return; }"
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "      if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }",
+     "to": "      if (!this.storeId) { return; }"
+    }
+   ]
+  },
+  {
+   "id": "S06 the shell's login-success is no longer bound",
+   "expect": "starts reading when the shell reports the sign-in",
+   "edits": [
+    {
+     "file": "pages/admin/workforce-timesheets.vue",
+     "from": "<AdminPage @login-success=\"init\">",
+     "to": "<AdminPage>"
+    },
+    {
+     "file": "pages/admin/workforce-publications.vue",
+     "from": "<AdminPage @login-success=\"init\">",
+     "to": "<AdminPage>"
+    },
+    {
+     "file": "pages/admin/workforce-delivery.vue",
+     "from": "<AdminPage @login-success=\"init\">",
+     "to": "<AdminPage>"
+    }
+   ]
+  }
+ ]
+}

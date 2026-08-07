@@ -1,0 +1,180 @@
+{
+  "test": "test/workforce-publication-delivery-components.test.js",
+  "mutations": [
+    {
+      "id": "C01 an unreadable range renders as a blank dash instead of saying so",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "      if (!from || !to) { return this.$i('wf_pub_range_unknown'); }",
+      "to": "      if (!from || !to) { return '–'; }",
+      "expect": "dates are unreadable says so"
+    },
+    {
+      "id": "C02 a missing published-at renders as the known-time sentence",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "      return at ? this.$i('wf_pub_published') + ' ' + at : this.$i('wf_pub_published_unknown');",
+      "to": "      return this.$i('wf_pub_published') + ' ' + at;",
+      "expect": "no published-at says the time is unknown"
+    },
+    {
+      "id": "C03 a publication with no actor is signed by a generic system",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "              {{ row.publishedBy ? $i('wf_pub_by') + ' ' + row.publishedBy : $i('wf_pub_by_nobody') }}",
+      "to": "              {{ $i('wf_pub_by') + ' ' + (row.publishedBy || 'system') }}",
+      "expect": "nobody is named for says so"
+    },
+    {
+      "id": "C04 the actor reference is dropped from the row",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "              {{ row.publishedBy ? $i('wf_pub_by') + ' ' + row.publishedBy : $i('wf_pub_by_nobody') }}",
+      "to": "              {{ $i('wf_pub_by_nobody') }}",
+      "expect": "names its actor prints the reference"
+    },
+    {
+      "id": "C05 an unknown recipient count renders as zero",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "      if (row.addressed === null) { return this.$i('wf_pub_addressed_unknown'); }",
+      "to": "      if (row.addressed === null) { return this.$i('wf_pub_addressed') + ' 0'; }",
+      "expect": "unknown recipient count is said to be unknown"
+    },
+    {
+      "id": "C06 the addressed count is relabelled as reached",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "      return this.$i('wf_pub_addressed') + ' ' + row.addressed;",
+      "to": "      return this.$i('wf_pub_published') + ' ' + row.addressed;",
+      "expect": "ADDRESSED TO, never \"reached\""
+    },
+    {
+      "id": "C07 every row reports itself as the picked one",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "          :aria-pressed=\"String(row.id === selectedId)\"",
+      "to": "          :aria-pressed=\"String(true)\"",
+      "expect": "picked row is the one marked as picked"
+    },
+    {
+      "id": "C08 the history refresh stays live during a read",
+      "file": "components/admin/workforce/WorkforcePublicationList.vue",
+      "from": "        data-testid=\"wf-publist-refresh\"\n        :disabled=\"loading\"",
+      "to": "        data-testid=\"wf-publist-refresh\"",
+      "expect": "refresh control is withheld while a read is already in flight"
+    },
+    {
+      "id": "C09 an unreadable roster range renders blank",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "      if (!from || !to) { return this.$i('wf_pub_range_unknown'); }",
+      "to": "      if (!from || !to) { return ''; }",
+      "expect": "still named, without inventing a week"
+    },
+    {
+      "id": "C10 the loading roster falls through to the empty one",
+      "file": "components/admin/workforce/WorkforcePublicationRecipients.vue",
+      "from": "      <div v-if=\"loading\" class=\"wf-pubrec__state wf-pubrec__state--idle\" data-testid=\"wf-pubrec-loading\">",
+      "to": "      <div v-if=\"false\" class=\"wf-pubrec__state wf-pubrec__state--idle\" data-testid=\"wf-pubrec-loading\">",
+      "expect": "while the roster is being read it says so"
+    },
+    {
+      "id": "C11 the unclaimed-login flag is dropped",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "          <span v-if=\"!row.claimed\" class=\"wf-recgroup__flag\" :data-testid=\"testid + '-unclaimed'\">",
+      "to": "          <span v-if=\"false\" class=\"wf-recgroup__flag\" :data-testid=\"testid + '-unclaimed'\">",
+      "expect": "never claimed a login is marked"
+    },
+    {
+      "id": "C12 every recipient is flagged as never having claimed a login",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "          <span v-if=\"!row.claimed\" class=\"wf-recgroup__flag\" :data-testid=\"testid + '-unclaimed'\">",
+      "to": "          <span v-if=\"true\" class=\"wf-recgroup__flag\" :data-testid=\"testid + '-unclaimed'\">",
+      "expect": "did claim a login carries no such excuse"
+    },
+    {
+      "id": "C13 an unnamed recipient is printed as a name",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "          {{ row.staffLabel || $i('wf_pub_rec_unnamed') }}",
+      "to": "          {{ row.staffLabel || 'Unknown' }}",
+      "expect": "said to be unnamed, never called \"Unknown\""
+    },
+    {
+      "id": "C14 an unrecognised delivery state is defaulted into a known one",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "            {{ row.deliveryStateKnown ? $i(sendKey(row.deliveryState)) : row.deliveryState }}\n            <em v-if=\"!row.deliveryStateKnown\">{{ $i('wf_pub_rec_send_unrecognised') }}</em>",
+      "to": "            {{ $i(sendKey(row.deliveryState)) }}",
+      "expect": "shown VERBATIM and marked as unrecognised"
+    },
+    {
+      "id": "C15 a known delivery state is marked unrecognised too",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "            <em v-if=\"!row.deliveryStateKnown\">{{ $i('wf_pub_rec_send_unrecognised') }}</em>",
+      "to": "            <em>{{ $i('wf_pub_rec_send_unrecognised') }}</em>",
+      "expect": "translated and NOT marked unrecognised"
+    },
+    {
+      "id": "C16 the newest stamp is shown rather than the one that made the bucket",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "      const at = row.acknowledgedAtUtc || row.seenAtUtc || row.manuallyDeliveredAtUtc;",
+      "to": "      const at = row.manuallyDeliveredAtUtc || row.seenAtUtc || row.acknowledgedAtUtc;",
+      "expect": "put the row in THIS bucket, not the newest"
+    },
+    {
+      "id": "C17 a row with no attestation is stamped with when it was created",
+      "file": "components/admin/workforce/WorkforcePublicationReceiptGroup.vue",
+      "from": "      const at = row.acknowledgedAtUtc || row.seenAtUtc || row.manuallyDeliveredAtUtc;",
+      "to": "      const at = row.acknowledgedAtUtc || row.seenAtUtc || row.manuallyDeliveredAtUtc || '2026-08-05T10:00:00Z';",
+      "expect": "carries no timestamp at all"
+    },
+    {
+      "id": "C18 a bare UTC stamp is read as the reader's own clock",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      const utc = /[Zz]|[+-]\\d{2}:?\\d{2}$/.test(text) ? text : text + 'Z';",
+      "to": "      const utc = text;",
+      "expect": "read as UTC, not as the reader's own clock"
+    },
+    {
+      "id": "C19 a stamp that already names its zone is shifted a second time",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      const utc = /[Zz]|[+-]\\d{2}:?\\d{2}$/.test(text) ? text : text + 'Z';",
+      "to": "      const utc = text.replace(/Z$/, '') + 'Z';\n      if (/Z$/.test(text)) { return new Date(text.replace(/Z$/, '')).toLocaleString(); }",
+      "expect": "already names its zone is not shifted a second time"
+    },
+    {
+      "id": "C20 an unparseable stamp renders as an invalid date",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "      if (isNaN(parsed.getTime())) { return text; }",
+      "to": "      if (false) { return text; }",
+      "expect": "shown as it arrived, rather than as an invalid date"
+    },
+    {
+      "id": "C21 a row with no reason at all says nothing",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "        : this.$i('wf_delivery_reason_unrecognised', { code: row.lastError || '—' });",
+      "to": "        : (row.lastError || '');",
+      "expect": "still says it is unexplained"
+    },
+    {
+      "id": "C22 the attempt budget is printed with half of it missing",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-if=\"row.attemptCount !== null && row.maxAttempts !== null\">",
+      "to": "          <span v-if=\"row.attemptCount !== null\">",
+      "expect": "printed only when BOTH halves of it are known"
+    },
+    {
+      "id": "C23 the channel chip is dropped",
+      "file": "components/admin/workforce/WorkforceDeliveryGroup.vue",
+      "from": "          <span v-if=\"row.channel\" class=\"wf-dgroup__chip\">{{ row.channel }}</span>",
+      "to": "          <span v-if=\"false\" class=\"wf-dgroup__chip\">{{ row.channel }}</span>",
+      "expect": "channel a send was attempted on is shown"
+    },
+    {
+      "id": "C24 the delivery refresh stays live during a read",
+      "file": "components/admin/workforce/WorkforceDeliveryPanel.vue",
+      "from": "        data-testid=\"wf-delivery-refresh\"\n        :disabled=\"loading\"",
+      "to": "        data-testid=\"wf-delivery-refresh\"",
+      "expect": "refresh control is withheld while a read is already in flight"
+    },
+    {
+      "id": "C25 the delivery refresh no longer asks the page for anything",
+      "file": "components/admin/workforce/WorkforceDeliveryPanel.vue",
+      "from": "        @click=\"$emit('reload')\"",
+      "to": "        @click=\"$emit('nothing')\"",
+      "expect": "asks the page to re-read"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "test": "test/workforce-timesheets-page.test.js",
+  "mutations": [
+    {
+      "id": "T01 the in-flight guard is dropped from Approve",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      const target = this.period;\n      if (!target || this.busy) { return; }\n      this.busy = 'approve';",
+      "to": "      const target = this.period;\n      if (!target) { return; }\n      this.busy = 'approve';",
+      "expect": "second Approve while the first is still in flight"
+    },
+    {
+      "id": "T02 the in-flight guard is dropped from Download",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "      if (!batch || this.downloading) { return; }",
+      "to": "      if (!batch) { return; }",
+      "expect": "second Download while the first is still in flight"
+    },
+    {
+      "id": "T03 an export refusal is swallowed",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        this.showRefusal(e, 'wft_export_failed');",
+      "to": "        this.notice = '';",
+      "expect": "export refused by the server is reported by its code"
+    },
+    {
+      "id": "T04 a failed detail read falls through to an empty batch list",
+      "file": "pages/admin/workforce-timesheets.vue",
+      "from": "        // Left null: the batch list renders its UNKNOWN state rather than claiming nothing was sent.\n        this.detail = null;",
+      "to": "        this.detail = { period: null, batches: [] };",
+      "expect": "detail read that failed says the batches are unread"
+    }
+  ]
+}
