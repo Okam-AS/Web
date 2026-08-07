@@ -307,22 +307,13 @@ export default {
       }
       return 0;
     },
-    dineHomeDeliveryStatusLabel(dineHomeDeliveryTypeEnum) {
-      switch (dineHomeDeliveryTypeEnum) {
-        case 'Accepted':
-          return this.$i('orderCard_dineHomeAccepted');
-        case 'PickedUp':
-          return this.$i('orderCard_dineHomePickedUp');
-        case 'ReachedDestination':
-          return this.$i('orderCard_dineHomeReachedDestination');
-        case 'Completed':
-          return this.$i('orderCard_dineHomeCompleted');
-        case 'Canceled':
-          return this.$i('orderCard_dineHomeCanceled');
-        default:
-          return this.$i('orderCard_dineHomeWaiting');
-      }
-    },
+    // `dineHomeDeliveryStatusLabel` DELIBERATELY DOES NOT LIVE HERE ANY MORE. This component carried a
+    // local copy that shadowed the global mixin's, so there were two implementations of one
+    // vocabulary: this one resolved the `orderCard_dineHome*` keys, the mixin's returned the same six
+    // words as Norwegian literals with no `$i`. Because this copy won at the only render site, the
+    // reachable half looked translated and the dead half was never noticed — the pair read as correct
+    // from either end alone. The mixin is now the single source (DINE_HOME_STATUS_LABEL_KEYS) and
+    // resolves these same keys, so nothing rendered here moves in any language.
     formatRequestedCompletionDate(dateString) {
       if (!dateString) return '';
       const date = new Date(dateString);

@@ -1,0 +1,149 @@
+[
+  {
+    "name": "THE DECISIVE ONE: woltDeliveryStatusLabel returns a Norwegian literal again",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "        : 'orderCard_woltWaiting'\n      return this.$i(key)",
+    "to": "        : 'orderCard_woltWaiting'\n      return key === 'orderCard_woltDelivered' ? 'Levert' : this.$i(key)"
+  },
+  {
+    "name": "the whole wolt switch reverts to literals with no dictionary at all",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "      const key = Object.prototype.hasOwnProperty.call(WOLT_STATUS_LABEL_KEYS, woltDeliveryStatusEnum)\n        ? WOLT_STATUS_LABEL_KEYS[woltDeliveryStatusEnum]\n        : 'orderCard_woltWaiting'\n      return this.$i(key)",
+    "to": "      return woltDeliveryStatusEnum === 'Delivered' ? 'Levert' : 'Venter på sjåfør'"
+  },
+  {
+    "name": "dineHomeDeliveryStatusLabel returns a Norwegian literal again",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "        : 'orderCard_dineHomeWaiting'\n      return this.$i(key)",
+    "to": "        : 'orderCard_dineHomeWaiting'\n      return key === 'orderCard_dineHomeCompleted' ? 'Fullført' : this.$i(key)"
+  },
+  {
+    "name": "NotSet is dropped from the wolt map",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  NotSet: 'orderCard_woltWaiting',\n  OrderReceived: 'orderCard_woltOrderReceived',",
+    "to": "  OrderReceived: 'orderCard_woltOrderReceived',"
+  },
+  {
+    "name": "the carried DropoffCompleted is silently deleted",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  DropoffCompleted: 'orderCard_woltDropoffCompleted',\n",
+    "to": ""
+  },
+  {
+    "name": "a word is invented for an event the column cannot hold",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  CustomerNoShow: 'orderCard_woltCustomerNoShow'\n}",
+    "to": "  CustomerNoShow: 'orderCard_woltCustomerNoShow',\n  LocationUpdated: 'orderCard_woltPickupStarted'\n}"
+  },
+  {
+    "name": "two wolt statuses are wired to each other's words",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  Delivered: 'orderCard_woltDelivered',\n  CustomerNoShow: 'orderCard_woltCustomerNoShow'",
+    "to": "  Delivered: 'orderCard_woltCustomerNoShow',\n  CustomerNoShow: 'orderCard_woltDelivered'"
+  },
+  {
+    "name": "the wolt lookup uses `in`, so a prototype property resolves a function",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "      const key = Object.prototype.hasOwnProperty.call(WOLT_STATUS_LABEL_KEYS, woltDeliveryStatusEnum)",
+    "to": "      const key = (woltDeliveryStatusEnum in WOLT_STATUS_LABEL_KEYS)"
+  },
+  {
+    "name": "the dineHome lookup uses `in`, so a prototype property resolves a function",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "      const key = Object.prototype.hasOwnProperty.call(DINE_HOME_STATUS_LABEL_KEYS, dineHomeDeliveryTypeEnum)",
+    "to": "      const key = (dineHomeDeliveryTypeEnum in DINE_HOME_STATUS_LABEL_KEYS)"
+  },
+  {
+    "name": "the wolt fallback resolves the dineHome sentence",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "        : 'orderCard_woltWaiting'\n      return this.$i(key)",
+    "to": "        : 'orderCard_dineHomeWaiting'\n      return this.$i(key)"
+  },
+  {
+    "name": "NotSet stops sharing the fallback sentence",
+    "file": "plugins/global-mixin.js",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  NotSet: 'orderCard_woltWaiting',",
+    "to": "  NotSet: 'orderCard_woltOrderReceived',"
+  },
+  {
+    "name": "a German value is replaced by its Norwegian one",
+    "file": "translations/de.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltDelivered: 'Geliefert',",
+    "to": "  orderCard_woltDelivered: 'Levert',"
+  },
+  {
+    "name": "a second German value is corrupted",
+    "file": "translations/de.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltPickupArrival: 'Fahrer trifft zur Abholung ein',",
+    "to": "  orderCard_woltPickupArrival: 'Sjåfør ankommer',"
+  },
+  {
+    "name": "the German fallback sentence is corrupted",
+    "file": "translations/de.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltWaiting: 'Warten auf Fahrer',",
+    "to": "  orderCard_woltWaiting: 'Venter på sjåfør',"
+  },
+  {
+    "name": "a German key is deleted entirely, so the build falls back to Norwegian",
+    "file": "translations/de.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltOrderRejected: 'Bestellung abgelehnt',\n",
+    "to": ""
+  },
+  {
+    "name": "a Norwegian word the pre-lane switch returned is reworded",
+    "file": "translations/no.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltPickedUp: 'Hentet',",
+    "to": "  orderCard_woltPickedUp: 'Plukket opp',"
+  },
+  {
+    "name": "the Norwegian fallback sentence is reworded",
+    "file": "translations/no.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltWaiting: 'Venter på sjåfør',",
+    "to": "  orderCard_woltWaiting: 'Avventer sjåfør',"
+  },
+  {
+    "name": "an English key is emptied",
+    "file": "translations/en.ts",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "  orderCard_woltDropoffStarted: 'Delivery started',",
+    "to": "  orderCard_woltDropoffStarted: '',"
+  },
+  {
+    "name": "THE ORIGINAL DEFECT RESTORED: OrderCard grows its shadowing copy back",
+    "file": "components/molecules/OrderCard.vue",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "    formatRequestedCompletionDate(dateString) {",
+    "to": "    dineHomeDeliveryStatusLabel(e) {\n      return e === 'Completed' ? this.$i('orderCard_dineHomeCompleted') : this.$i('orderCard_dineHomeWaiting');\n    },\n    formatRequestedCompletionDate(dateString) {"
+  },
+  {
+    "name": "the card renders the raw wire value instead of the label",
+    "file": "components/molecules/OrderCard.vue",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "<span>{{ woltDeliveryStatusLabel(order.woltDeliveryInfo.status) }}</span>",
+    "to": "<span>{{ order.woltDeliveryInfo.status }}</span>"
+  },
+  {
+    "name": "the two rows are wired to each other's label function",
+    "file": "components/molecules/OrderCard.vue",
+    "test": "test/wolt-and-dinehome-status-labels.test.js",
+    "from": "<span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>",
+    "to": "<span>{{ woltDeliveryStatusLabel(order.dineHomeStatus) }}</span>"
+  }
+]
