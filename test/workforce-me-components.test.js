@@ -179,7 +179,31 @@ describe('WorkforcePublicationNotice stops calling a confirmed row new', () => {
   test('the acknowledge button stays, so the idempotent replay has a caller', () => {
     const buttons = confirmed().findAll('.wfme-pub__btn:not(.wfme-pub__btn--ghost)')
     expect(buttons.length).toBe(1)
-    expect(buttons.at(0).text()).toBe('Bekreft mottatt')
+  })
+
+  test('the control on a confirmed row says it would confirm again, not confirm', () => {
+    // A worker can hold two unread publications and every row carries this button. While both read
+    // "Bekreft mottatt" the control that writes a FIRST acknowledgement of a week and the control
+    // that only replays one were the same word — so a press could not be read before it was made.
+    expect(confirmed().find('.wfme-pub__btn:not(.wfme-pub__btn--ghost)').text()).toBe('Bekreft på nytt')
+    expect(render([row(false)]).find('.wfme-pub__btn:not(.wfme-pub__btn--ghost)').text())
+      .toBe('Bekreft mottatt')
+  })
+
+  test('with one week confirmed and one not, exactly one control offers a first confirmation', () => {
+    // The two-unread world, at the component. Whichever row a finger lands on, its own button says
+    // which of the two acts it is.
+    const items = [row(true), Object.assign(row(false), { inboxItemId: 'i2', schedulePublicationId: 'p2' })]
+    const labels = render(items, { p1: { occurredAtUtc: '2026-07-20T09:00:00', alreadyAcknowledged: false } })
+      .findAll('.wfme-pub__btn:not(.wfme-pub__btn--ghost)').wrappers.map(w => w.text())
+    expect(labels).toEqual(['Bekreft på nytt', 'Bekreft mottatt'])
+  })
+
+  test('the wording follows the receipt, never the row\'s read state', () => {
+    // `isRead` does not mean acknowledged — marking read does not imply confirmed — so a read row
+    // this session holds no receipt for must still offer the FIRST confirmation.
+    expect(render([row(true)]).find('.wfme-pub__btn:not(.wfme-pub__btn--ghost)').text())
+      .toBe('Bekreft mottatt')
   })
 
   test('the count in the heading is the unread ones, not the ones on screen', () => {

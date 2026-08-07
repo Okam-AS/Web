@@ -2872,6 +2872,7 @@ export default {
   wfme_pub_published: 'Kom {time}',
   wfme_pub_mark_read: 'Marker som lest',
   wfme_pub_acknowledge: 'Bekreft mottatt',
+  wfme_pub_acknowledge_again: 'Bekreft på nytt',
   wfme_pub_receipt_new: 'Bekreftet mottatt {time}.',
   wfme_pub_receipt_already: 'Allerede bekreftet {time}.',
   wfme_pub_disclaimer: 'Bekreftelsen er en kvittering på at du har sett planen. Den er ikke en godkjenning av vaktene.',

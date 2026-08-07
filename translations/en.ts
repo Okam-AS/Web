@@ -2816,6 +2816,7 @@ export default {
   wfme_pub_published: 'Arrived {time}',
   wfme_pub_mark_read: 'Mark as read',
   wfme_pub_acknowledge: 'Confirm receipt',
+  wfme_pub_acknowledge_again: 'Confirm again',
   wfme_pub_receipt_new: 'Receipt confirmed {time}.',
   wfme_pub_receipt_already: 'Already confirmed {time}.',
   wfme_pub_disclaimer: 'The confirmation is a receipt that you have seen the schedule. It is not approval of the shifts.',
