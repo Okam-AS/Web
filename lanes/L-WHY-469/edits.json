@@ -1,0 +1,1241 @@
+[
+{
+"id": "L-GROWTH-LAND",
+"rc": 0,
+"msg": "L-GROWTH-LAND built-unverified -> verified",
+"path": "../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-STARTER-150",
+"rc": 0,
+"msg": "L-MRG-STARTER-150 built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-WASTE",
+"rc": 0,
+"msg": "L-MRG-WASTE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-PUBHIST",
+"rc": 0,
+"msg": "L-WF-PUBHIST built-unverified -> verified",
+"path": "lanes/L-WF-PUBHIST/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-DEGENERATE-TWO",
+"rc": 0,
+"msg": "L-MEALS-DEGENERATE-TWO built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-RECIPE-REVISE-UI",
+"rc": 0,
+"msg": "L-MRG-RECIPE-REVISE-UI built-unverified -> verified",
+"path": "lanes/L-MRG-RECIPE-REVISE-UI/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-COVERAGE-UNKNOWN",
+"rc": 0,
+"msg": "L-MRG-COVERAGE-UNKNOWN built-unverified -> verified",
+"path": "lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-ENROL-UI",
+"rc": 0,
+"msg": "L-MEALS-ENROL-UI built-unverified -> verified",
+"path": "lanes/L-MEALS-ENROL-UI/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-CLAIM-RECEIPT",
+"rc": 0,
+"msg": "L-MEALS-CLAIM-RECEIPT built-unverified -> verified",
+"path": "lanes/L-MEALS-CLAIM-RECEIPT/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-RECONCILE-UI",
+"rc": 0,
+"msg": "L-MEALS-RECONCILE-UI built-unverified -> verified",
+"path": "lanes/L-MEALS-RECONCILE-UI/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-REQUOTE-RELEASE",
+"rc": 0,
+"msg": "L-MEALS-REQUOTE-RELEASE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-DOCSYNC",
+"rc": 0,
+"msg": "L-MEALS-DOCSYNC built-unverified -> verified",
+"path": "lanes/L-MEALS-DOCSYNC/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PRICE-CLEANUP-TWO",
+"rc": 0,
+"msg": "L-PRICE-CLEANUP-TWO built-unverified -> verified",
+"path": "lanes/L-PRICE-CLEANUP-TWO/notes.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PDF-CREDITNOTE-NAME",
+"rc": 0,
+"msg": "L-PDF-CREDITNOTE-NAME built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EV-ONBOARD-PRINT-BLEED",
+"rc": 0,
+"msg": "L-EV-ONBOARD-PRINT-BLEED built-unverified -> verified",
+"path": "lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-WASTE-500",
+"rc": 0,
+"msg": "L-MRG-WASTE-500 built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TIER-ARTIFACTS",
+"rc": 0,
+"msg": "L-TIER-ARTIFACTS built-unverified -> verified",
+"path": "lanes/L-TIER-ARTIFACTS/DETAIL.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-TIMESHEET-WIRE",
+"rc": 0,
+"msg": "L-WF-TIMESHEET-WIRE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FLAGS-EXCUSE-BYFLAG",
+"rc": 0,
+"msg": "L-FLAGS-EXCUSE-BYFLAG built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CLIENT-TRAILING-SLASH",
+"rc": 0,
+"msg": "L-CLIENT-TRAILING-SLASH built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-PROJECTION-LAG-VISIBLE",
+"rc": 0,
+"msg": "L-MEALS-PROJECTION-LAG-VISIBLE built-unverified -> verified",
+"path": "lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GUARD-W0",
+"rc": 0,
+"msg": "L-GUARD-W0 built-unverified -> verified",
+"path": "lanes/L-GUARD-DEMO/demo-run.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CONFIRM-FAMILY-MERGE",
+"rc": 0,
+"msg": "L-CONFIRM-FAMILY-MERGE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EV-CALLBACK-SWEEP",
+"rc": 0,
+"msg": "L-EV-CALLBACK-SWEEP built-unverified -> verified",
+"path": "lanes/L-EV-CALLBACK-SWEEP/flag-correction.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-XZ-CREDIT-FIELDS",
+"rc": 0,
+"msg": "L-XZ-CREDIT-FIELDS built-unverified -> verified",
+"path": "lanes/L-XZ-CREDIT-FIELDS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-EIGHTH-READ",
+"rc": 0,
+"msg": "L-MEALS-EIGHTH-READ built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GR-NEWSLETTER-CROSS",
+"rc": 0,
+"msg": "L-GR-NEWSLETTER-CROSS built-unverified -> verified",
+"path": "lanes/L-GR-NEWSLETTER-CROSS/landing.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-JOURNEY-EVIDENCE-SWEEP",
+"rc": 0,
+"msg": "L-JOURNEY-EVIDENCE-SWEEP built-unverified -> verified",
+"path": "lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-BLOCKER-RESTATE",
+"rc": 0,
+"msg": "L-BLOCKER-RESTATE built-unverified -> verified",
+"path": "lanes/L-BLOCKER-RESTATE/verdicts.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-EXCHANGE-AWARD-UNGATED",
+"rc": 0,
+"msg": "L-WF-EXCHANGE-AWARD-UNGATED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ROLLBACK-TRACKED-SWEEP",
+"rc": 0,
+"msg": "L-ROLLBACK-TRACKED-SWEEP built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-TIMEOFF-DECIDE-GATE",
+"rc": 0,
+"msg": "L-WF-TIMEOFF-DECIDE-GATE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-OPERATOR-UNIQUE",
+"rc": 0,
+"msg": "L-WF-OPERATOR-UNIQUE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-wfopuniq/lanes/L-WF-OPERATOR-UNIQUE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CORS-FOLLOWUPS",
+"rc": 0,
+"msg": "L-CORS-FOLLOWUPS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CREDIT-NOTE-NUMBER",
+"rc": 0,
+"msg": "L-CREDIT-NOTE-NUMBER built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-IDEMPOTENCY-REFUSAL",
+"rc": 0,
+"msg": "L-MEALS-IDEMPOTENCY-REFUSAL built-unverified -> verified",
+"path": "lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRAIN-IDEMPOTENCY-REFUSAL",
+"rc": 0,
+"msg": "L-TRAIN-IDEMPOTENCY-REFUSAL built-unverified -> verified",
+"path": "lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WORLD-STAMP-WINDOWS",
+"rc": 0,
+"msg": "L-WORLD-STAMP-WINDOWS built-unverified -> verified",
+"path": "lanes/L-WORLD-STAMP-WINDOWS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-FAILURES-SURFACE",
+"rc": 0,
+"msg": "L-WF-FAILURES-SURFACE built-unverified -> verified",
+"path": "lanes/L-WF-FAILURES-SURFACE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-AGREEMENT-PIN-INVERTS",
+"rc": 0,
+"msg": "L-MEALS-AGREEMENT-PIN-INVERTS built-unverified -> verified",
+"path": "lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FIXTURE-DIVERGENCE-RECEIPT",
+"rc": 0,
+"msg": "L-FIXTURE-DIVERGENCE-RECEIPT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CONSENT-REASON-VOCABULARY",
+"rc": 0,
+"msg": "L-CONSENT-REASON-VOCABULARY built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FOCUSTRAP-TEARDOWN",
+"rc": 0,
+"msg": "L-FOCUSTRAP-TEARDOWN built-unverified -> verified",
+"path": "lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-NORWEGIAN-ONLY-KEYS-TRANSLATE",
+"rc": 0,
+"msg": "L-NORWEGIAN-ONLY-KEYS-TRANSLATE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MIXIN-LABELS-TRANSLATE",
+"rc": 0,
+"msg": "L-MIXIN-LABELS-TRANSLATE built-unverified -> verified",
+"path": "lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-VUE3-SHAPE-GUARD",
+"rc": 0,
+"msg": "L-VUE3-SHAPE-GUARD built-unverified -> verified",
+"path": "lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ESCPOS-LADDER-NAMES-THE-TENDER",
+"rc": 0,
+"msg": "L-ESCPOS-LADDER-NAMES-THE-TENDER built-unverified -> verified",
+"path": "lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-COLLAPSE-THE-TWO-HOOK-SWEEPS",
+"rc": 0,
+"msg": "L-COLLAPSE-THE-TWO-HOOK-SWEEPS built-unverified -> verified",
+"path": "lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE",
+"rc": 0,
+"msg": "L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE built-unverified -> verified",
+"path": "lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LINT-RUNS-ON-SOMETHING",
+"rc": 0,
+"msg": "L-LINT-RUNS-ON-SOMETHING built-unverified -> verified",
+"path": "lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ARTIFACT-NAMES-ITS-MODULE-TREE",
+"rc": 0,
+"msg": "L-ARTIFACT-NAMES-ITS-MODULE-TREE built-unverified -> verified",
+"path": "lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PREFCENTRE-DEPLOY-EXEC",
+"rc": 0,
+"msg": "L-PREFCENTRE-DEPLOY-EXEC built-unverified -> verified",
+"path": "lanes/L-PREFCENTRE-DEPLOY-EXEC/deploy-state-2026-08-06.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRAIN-DISCLOSURE-LAND",
+"rc": 0,
+"msg": "L-TRAIN-DISCLOSURE-LAND built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAIN-DISCLOSURE-LAND/merge.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-LEVER-TITLE-NAMES-ITS-REACH",
+"rc": 0,
+"msg": "L-WF-LEVER-TITLE-NAMES-ITS-REACH built-unverified -> verified",
+"path": "lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-RECIPE-TRANSITIONS-PINNED",
+"rc": 0,
+"msg": "L-MRG-RECIPE-TRANSITIONS-PINNED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FIXTURE-TITLES-FOLLOW-THE-FLAGS",
+"rc": 0,
+"msg": "L-FIXTURE-TITLES-FOLLOW-THE-FLAGS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CLOCKOUT-STATE-IS-NOT-OPEN",
+"rc": 0,
+"msg": "L-CLOCKOUT-STATE-IS-NOT-OPEN built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-WASTE-PANEL-SAYS-ABSENT",
+"rc": 0,
+"msg": "L-MRG-WASTE-PANEL-SAYS-ABSENT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-COVERAGE-PANEL-SAYS-ABSENT",
+"rc": 0,
+"msg": "L-MRG-COVERAGE-PANEL-SAYS-ABSENT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CLOCK-CLIENT-READS-THE-WIRE",
+"rc": 0,
+"msg": "L-CLOCK-CLIENT-READS-THE-WIRE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PLAN-LIVES-IN-GIT",
+"rc": 0,
+"msg": "L-PLAN-LIVES-IN-GIT built-unverified -> verified",
+"path": "lanes/L-PLAN-LIVES-IN-GIT/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID",
+"rc": 0,
+"msg": "L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID built-unverified -> verified",
+"path": "lanes/L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FIXTURE-VALUES-ARE-ENUM-MEMBERS",
+"rc": 0,
+"msg": "L-FIXTURE-VALUES-ARE-ENUM-MEMBERS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-fixenums/lanes/L-FIXTURE-VALUES-ARE-ENUM-MEMBERS/repair.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FINALIZE-INDEX-OR-A-REASON",
+"rc": 0,
+"msg": "L-FINALIZE-INDEX-OR-A-REASON built-unverified -> verified",
+"path": "lanes/L-FINALIZE-INDEX-OR-A-REASON/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED",
+"rc": 0,
+"msg": "L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED built-unverified -> verified",
+"path": "lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/finding.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION",
+"rc": 0,
+"msg": "L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION built-unverified -> verified",
+"path": "lanes/L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-SUPERSEDE-RELEASE-IS-ATTRIBUTED",
+"rc": 0,
+"msg": "L-SUPERSEDE-RELEASE-IS-ATTRIBUTED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-supattr/lanes/L-SUPERSEDE-RELEASE-IS-ATTRIBUTED/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MIG-STACK-MERGE",
+"rc": 0,
+"msg": "L-MIG-STACK-MERGE built-unverified -> verified",
+"path": "lanes/L-MIG-STACK-MERGE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX",
+"rc": 0,
+"msg": "L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-ackreload/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ADMIN-JOURNEY-WAIT-DIAGNOSES",
+"rc": 0,
+"msg": "L-ADMIN-JOURNEY-WAIT-DIAGNOSES built-unverified -> verified",
+"path": "lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/kill-proof.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GROWTH-EFFECTIVE-RESOLVER",
+"rc": 0,
+"msg": "L-GROWTH-EFFECTIVE-RESOLVER built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-growthres/lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LOGIN-MODAL-REPORTS-A-FAILED-SEND",
+"rc": 0,
+"msg": "L-LOGIN-MODAL-REPORTS-A-FAILED-SEND built-unverified -> verified",
+"path": "lanes/L-LOGIN-MODAL-REPORTS-A-FAILED-SEND/kill-proof.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-COMPOSE-AND-RUN-THE-STACK",
+"rc": 0,
+"msg": "L-COMPOSE-AND-RUN-THE-STACK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-composestack/lanes/L-COMPOSE-AND-RUN-THE-STACK/compose-7ac6f2b2-sql-tier.trx",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CENSUS-DERIVES-ITS-FLOOR",
+"rc": 0,
+"msg": "L-CENSUS-DERIVES-ITS-FLOOR built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-CENSUS-DERIVES-ITS-FLOOR/detail.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GUESTLINK-ONE-COMPOSER",
+"rc": 0,
+"msg": "L-GUESTLINK-ONE-COMPOSER built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GUESTLINK-ONE-COMPOSER/RUN.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TENDER-WIRE-MERGE-IS-SAFE",
+"rc": 0,
+"msg": "L-TENDER-WIRE-MERGE-IS-SAFE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TENDER-WIRE-MERGE-IS-SAFE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FLAGS-RESOLVERS-COVER-THREE",
+"rc": 0,
+"msg": "L-FLAGS-RESOLVERS-COVER-THREE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PREF-COOKIE-HALF",
+"rc": 0,
+"msg": "L-PREF-COOKIE-HALF built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PREF-COOKIE-HALF/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LOGINMODAL-MOUNTED-ONCE",
+"rc": 0,
+"msg": "L-LOGINMODAL-MOUNTED-ONCE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/kill-proof-browser.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LOGINMODAL-SUCCESS-IS-SILENT",
+"rc": 0,
+"msg": "L-LOGINMODAL-SUCCESS-IS-SILENT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-loginsuccess/lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/kill-proof.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRAINWIRE-ABORT",
+"rc": 0,
+"msg": "L-TRAINWIRE-ABORT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAINWIRE-ABORT/finding.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRX-CONTAINS-WHAT-IT-CLAIMS",
+"rc": 0,
+"msg": "L-TRX-CONTAINS-WHAT-IT-CLAIMS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRX-CONTAINS-WHAT-IT-CLAIMS/trx-contains-what-it-claims.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GROWTHAUDIT-MIGRATION",
+"rc": 0,
+"msg": "L-GROWTHAUDIT-MIGRATION built-unverified -> verified",
+"path": "docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/sys-catalog.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE",
+"rc": 0,
+"msg": "L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ABORTED-TRX-CANNOT-BE-EVIDENCE",
+"rc": 0,
+"msg": "L-ABORTED-TRX-CANNOT-BE-EVIDENCE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ABORTED-TRX-CANNOT-BE-EVIDENCE/aborted-trx-cannot-be-evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-DESTRUCTIVE-SAVES-LOAD-FIRST",
+"rc": 0,
+"msg": "L-DESTRUCTIVE-SAVES-LOAD-FIRST built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-DESTRUCTIVE-SAVES-LOAD-FIRST/receipts/live-record-before-after.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ONGOING-SHOWS-EVERY-LIVE-ORDER",
+"rc": 0,
+"msg": "L-ONGOING-SHOWS-EVERY-LIVE-ORDER built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ONGOING-SHOWS-EVERY-LIVE-ORDER/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-SETTINGS-SAVES-REPORT-FAILURE",
+"rc": 0,
+"msg": "L-SETTINGS-SAVES-REPORT-FAILURE built-unverified -> verified",
+"path": "lanes/L-SETTINGS-SAVES-REPORT-FAILURE/measurements.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-RESERVATION-CONFLICT-SEES-EVERY-TABLE",
+"rc": 0,
+"msg": "L-RESERVATION-CONFLICT-SEES-EVERY-TABLE built-unverified -> verified",
+"path": "lanes/L-RESERVATION-CONFLICT-SEES-EVERY-TABLE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-DEV-DEFAULT-FAILS-CLOSED",
+"rc": 0,
+"msg": "L-DEV-DEFAULT-FAILS-CLOSED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-DEV-DEFAULT-FAILS-CLOSED/run.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN",
+"rc": 0,
+"msg": "L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN built-unverified -> verified",
+"path": "lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/notes.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER",
+"rc": 0,
+"msg": "L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER built-unverified -> verified",
+"path": "docs/plan/lanes/L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER/NOTES.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MARGIN-WASTE-SURFACE-IS-HONEST",
+"rc": 0,
+"msg": "L-MARGIN-WASTE-SURFACE-IS-HONEST built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-a14e83ac504f04840/lanes/L-MARGIN-WASTE-SURFACE-IS-HONEST/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED",
+"rc": 0,
+"msg": "L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-modules/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PLANNED-MINUTES-HONOUR-LINEAGE",
+"rc": 0,
+"msg": "L-PLANNED-MINUTES-HONOUR-LINEAGE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-wt-plannedmin/WebApi.Tests/Workforce/RepublishedWeekPlannedReadsTests.cs",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-BACKEND-PATCHES-ARE-APPLIED",
+"rc": 0,
+"msg": "L-BACKEND-PATCHES-ARE-APPLIED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-bepatch/lanes/L-BACKEND-PATCHES-ARE-APPLIED/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LAND-THE-BACKEND-ON-THE-TRUNK",
+"rc": 0,
+"msg": "L-LAND-THE-BACKEND-ON-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-landbackend/lanes/L-LAND-THE-BACKEND-ON-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRIGGER-DECLARATIONS-REFRESHED",
+"rc": 0,
+"msg": "L-TRIGGER-DECLARATIONS-REFRESHED built-unverified -> verified",
+"path": "docs/plan/lanes/L-TRIGGER-DECLARATIONS-REFRESHED/detail.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK",
+"rc": 0,
+"msg": "L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK built-unverified -> verified",
+"path": "docs/plan/reviews/L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK",
+"rc": 0,
+"msg": "L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/reviews/L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS",
+"rc": 0,
+"msg": "L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/web-orepad/lanes/L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS/EVIDENCE.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-AN-ACCEPTANCE-NAMES-SOMEBODY",
+"rc": 0,
+"msg": "L-AN-ACCEPTANCE-NAMES-SOMEBODY built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-acceptname/WebApi.Tests/Wire/EventsAcceptanceIdentityWireTests.cs",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-ONLY-COPIES-REACH-A-REF",
+"rc": 0,
+"msg": "L-THE-ONLY-COPIES-REACH-A-REF built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-ONLY-COPIES-REACH-A-REF-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WF-INVITE-PAIR-LANDS",
+"rc": 0,
+"msg": "L-WF-INVITE-PAIR-LANDS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-WF-INVITE-PAIR-LANDS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN",
+"rc": 0,
+"msg": "L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN built-unverified -> verified",
+"path": "docs/plan/returns/L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE",
+"rc": 0,
+"msg": "L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE/run-2-fixed-script-from-a-fresh-checkout.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED",
+"rc": 0,
+"msg": "L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS",
+"rc": 0,
+"msg": "L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-refusalid/.lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-WORKER-IS-NOT-BLOCKED-BY-HER-SUPERSEDED-SELF",
+"rc": 0,
+"msg": "L-A-WORKER-IS-NOT-BLOCKED-BY-HER-SUPERSEDED-SELF built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-supersededself/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN",
+"rc": 0,
+"msg": "L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-anerrbody/lanes/L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN/finding.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY",
+"rc": 0,
+"msg": "L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-mrgsetupday/.lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-PRINTED-RECEIPT-NAMES-ITS-TENDER",
+"rc": 0,
+"msg": "L-THE-PRINTED-RECEIPT-NAMES-ITS-TENDER built-unverified -> verified",
+"path": "/Users/svendaneel/okam/wt-printedtender/WebApi.Tests/Kassa/PrintedTenderNameTests.cs",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EVERYTHING-REACHES-THE-BRANCH",
+"rc": 0,
+"msg": "L-EVERYTHING-REACHES-THE-BRANCH built-unverified -> verified",
+"path": "docs/plan/lanes/L-EVERYTHING-REACHES-THE-BRANCH/landing-evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-COVERAGE-MEASURED-PER-MODULE",
+"rc": 0,
+"msg": "L-COVERAGE-MEASURED-PER-MODULE built-unverified -> verified",
+"path": "docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED",
+"rc": 0,
+"msg": "L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED built-unverified -> verified",
+"path": "docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES",
+"rc": 0,
+"msg": "L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES built-unverified -> verified",
+"path": "/Users/svendaneel/okam/OkamAPI-roleupsert/lanes/L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-TILL-TESTS-ARE-RUN-AND-TRUE",
+"rc": 0,
+"msg": "L-THE-TILL-TESTS-ARE-RUN-AND-TRUE built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-DOCUMENTS-AND-CART-TESTS-FINISH",
+"rc": 0,
+"msg": "L-THE-DOCUMENTS-AND-CART-TESTS-FINISH built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-REVIEWED-INSTRUMENT-LANDS",
+"rc": 0,
+"msg": "L-THE-REVIEWED-INSTRUMENT-LANDS built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-REVIEWED-INSTRUMENT-LANDS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-GUARD-STOPS-CRASHING-ON-THE-CASE-IT-GUARDS",
+"rc": 0,
+"msg": "L-THE-GUARD-STOPS-CRASHING-ON-THE-CASE-IT-GUARDS built-unverified -> verified",
+"path": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/guard/Web-modules/test/guid-fallback-without-crypto.test.js",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-CRYPTO-LADDER",
+"rc": 0,
+"msg": "L-READ-THE-CRYPTO-LADDER built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-CRYPTO-LADDER.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-WHICH-BACKEND-GREENS-MEASURED-NOTHING",
+"rc": 0,
+"msg": "L-WHICH-BACKEND-GREENS-MEASURED-NOTHING built-unverified -> verified",
+"path": "docs/plan/reviews/L-WHICH-BACKEND-GREENS-MEASURED-NOTHING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-PRINT-PATH",
+"rc": 0,
+"msg": "L-READ-THE-PRINT-PATH built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-PRINT-PATH.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN",
+"rc": 0,
+"msg": "L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH",
+"rc": 0,
+"msg": "L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH built-unverified -> verified",
+"path": "docs/plan/lanes/L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH/LANDING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-FOUR-PAGES",
+"rc": 0,
+"msg": "L-READ-THE-FOUR-PAGES built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-FOUR-PAGES.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-WORKER-SEES-WHAT-SHE-CONFIRMED",
+"rc": 0,
+"msg": "L-A-WORKER-SEES-WHAT-SHE-CONFIRMED built-unverified -> verified",
+"path": "docs/plan/lanes/L-A-WORKER-SEES-WHAT-SHE-CONFIRMED/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-MANGLED-NEWSLETTER-IS-REFUSED",
+"rc": 0,
+"msg": "L-A-MANGLED-NEWSLETTER-IS-REFUSED built-unverified -> verified",
+"path": "docs/plan/lanes/L-A-MANGLED-NEWSLETTER-IS-REFUSED/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-FOUR-PAGES-LAND",
+"rc": 0,
+"msg": "L-THE-FOUR-PAGES-LAND built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-FOUR-PAGES-LAND/LANDING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS",
+"rc": 0,
+"msg": "L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-DAYS-BUILDS-REDO",
+"rc": 0,
+"msg": "L-READ-THE-DAYS-BUILDS-REDO built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-DAYS-BUILDS-REDO.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-GUEST-EXIT-IS-FINISHED",
+"rc": 0,
+"msg": "L-THE-GUEST-EXIT-IS-FINISHED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/lanes/L-THE-GUEST-EXIT-IS-FINISHED/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE",
+"rc": 0,
+"msg": "L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE built-unverified -> verified",
+"path": "docs/plan/lanes/L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE/DELIVERY-RECORD.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION",
+"rc": 0,
+"msg": "L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION built-unverified -> verified",
+"path": "docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/DECISION-RECORD.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LAND-THE-EVENING-WORK",
+"rc": 0,
+"msg": "L-LAND-THE-EVENING-WORK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-LAND-THE-EVENING-WORK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-WRONG-WEEK-FIX",
+"rc": 0,
+"msg": "L-READ-THE-WRONG-WEEK-FIX built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-WRONG-WEEK-FIX.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-WORKFORCE-SCREENS-ARE-TESTED",
+"rc": 0,
+"msg": "L-THE-WORKFORCE-SCREENS-ARE-TESTED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-WORKFORCE-SCREENS-ARE-TESTED-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS",
+"rc": 0,
+"msg": "L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/coverage-after.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED",
+"rc": 0,
+"msg": "L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED built-unverified -> verified",
+"path": "docs/plan/artifacts/pos-uncovered-twenty.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-REVOCATION-LEVER",
+"rc": 0,
+"msg": "L-READ-THE-REVOCATION-LEVER built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-REVOCATION-LEVER.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-ORPHANED-FIXES-REACH-A-BRANCH",
+"rc": 0,
+"msg": "L-THE-ORPHANED-FIXES-REACH-A-BRANCH built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID",
+"rc": 0,
+"msg": "L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID/FINDING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN",
+"rc": 0,
+"msg": "L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN built-unverified -> verified",
+"path": "docs/plan/lanes/L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/premise-check.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK",
+"rc": 0,
+"msg": "L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL",
+"rc": 0,
+"msg": "L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE",
+"rc": 0,
+"msg": "L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE built-unverified -> verified",
+"path": "docs/plan/lanes/L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE/FINDING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ",
+"rc": 0,
+"msg": "L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET",
+"rc": 0,
+"msg": "L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET built-unverified -> verified",
+"path": "docs/plan/lanes/L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG",
+"rc": 0,
+"msg": "L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG built-unverified -> verified",
+"path": "docs/plan/lanes/L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG/FINDING.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN",
+"rc": 0,
+"msg": "L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN built-unverified -> verified",
+"path": "docs/plan/artifacts/landing-order.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-THREE-SURVIVORS-ARE-KILLED",
+"rc": 0,
+"msg": "L-THE-THREE-SURVIVORS-ARE-KILLED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-THREE-SURVIVORS-ARE-KILLED-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-TRANCHE-ONE",
+"rc": 0,
+"msg": "L-READ-TRANCHE-ONE built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-TRANCHE-ONE.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES",
+"rc": 0,
+"msg": "L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRANCHE-TWO-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-TRANCHE-TWO-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-TWO-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRANCHE-THREE-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-TRANCHE-THREE-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-THREE-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-READ-THE-TWO-MONEY-FIXES",
+"rc": 0,
+"msg": "L-READ-THE-TWO-MONEY-FIXES built-unverified -> verified",
+"path": "docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE",
+"rc": 0,
+"msg": "L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRANCHE-FOUR-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-TRANCHE-FOUR-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FOUR-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRANCHE-FIVE-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-TRANCHE-FIVE-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FIVE-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY",
+"rc": 0,
+"msg": "L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY built-unverified -> verified",
+"path": "docs/plan/lanes/L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY/tier.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED",
+"rc": 0,
+"msg": "L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED built-unverified -> verified",
+"path": "docs/plan/artifacts/backend-un-upstreamed-ranked.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE",
+"rc": 0,
+"msg": "L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED",
+"rc": 0,
+"msg": "L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED built-unverified -> verified",
+"path": "docs/plan/returns/L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER",
+"rc": 0,
+"msg": "L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER built-unverified -> verified",
+"path": "docs/plan/returns/L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-XZ-SPLIT-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-XZ-SPLIT-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-XZ-SPLIT-REACHES-THE-TRUNK-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON",
+"rc": 0,
+"msg": "L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY",
+"rc": 0,
+"msg": "L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED",
+"rc": 0,
+"msg": "L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED built-unverified -> verified",
+"path": "docs/plan/artifacts/backend-unreadable-thirtyseven.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP",
+"rc": 0,
+"msg": "L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-RELEASE-RACE-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-RELEASE-RACE-REACHES-THE-TRUNK built-unverified -> verified",
+"path": "docs/plan/returns/L-THE-RELEASE-RACE-REACHES-THE-TRUNK-1.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CORS-NARROW-THE-DEFAULT",
+"rc": 0,
+"msg": "L-CORS-NARROW-THE-DEFAULT built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-NARROW-THE-DEFAULT/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-PROBE-DIR-IS-PINNED",
+"rc": 0,
+"msg": "L-PROBE-DIR-IS-PINNED built-unverified -> verified",
+"path": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PROBE-DIR-IS-PINNED/detail.md",
+"outcome": "ACCEPTED"
+}
+]

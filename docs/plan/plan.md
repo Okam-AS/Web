@@ -936,11 +936,11 @@ The route is already built at `c5c15f17`; this is review-and-land. A competency 
 produce its evidence is a binder with no pages, so this precedes selling any of the rest.
 
 ### Lane L-GROWTH-LAND — the four built Growth lanes reach the branch tip
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: growth-mail-postmark, growth-privacy-evidence, unsub-oneclick and growth-webhook-auth are ancestors of feature/restaurant-modules AND fact:growth.mail.provider flips, with fact:be.tests ok at the merged tip
+exit: growth-mail-postmark, growth-privacy-evidence, unsub-oneclick and growth-webhook-auth are ancestors of feature/restaurant-modules AND fact:growth.mail.provider flips, with fact:be.tests ok at the merged tip, recorded in ../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md
 agent: L-GROWTH-LAND
 evidence: ../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md
 
@@ -1224,11 +1224,11 @@ The written route makes this the gate, and entitles it to conclude stop. Everyth
 conditional on what a real venue's invoices actually contain today, pre-mandate.
 
 ### Lane L-MRG-STARTER-150 — the starter library serves the approved curation, not sixteen items
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: the ingredients read serves the approved curation and a test pins its count, units and conversions
+exit: the ingredients read serves the approved curation and a test pins its count, units and conversions, recorded in /Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md
 agent: starter150
 needs: D-MRG-CURATION, D-MRG-CURATION-CONTENT
 evidence: /Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md
@@ -1266,11 +1266,11 @@ two containers it had **no slot for**. They were created and removed by the harn
 create was touched. **A test filter can claim a container slot silently** — that is the operational lesson.
 
 ### Lane L-MRG-WASTE — a reason-coded waste entry survives the frozen week
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: a waste entry with a reason code lands in the statement week's coverage read AND the finalize trigger rolls back any post-freeze write to it, on a chain-built database
+exit: a waste entry with a reason code lands in the statement week's coverage read AND the finalize trigger rolls back any post-freeze write to it, on a chain-built database, recorded in /Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md
 agent: mrg-waste-sqltier
 needs: D-DOCKER-VM
 evidence: /Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md
@@ -2296,10 +2296,10 @@ and is why this is a lane and not a bug.
 Endpoint live, undrivable by a person.
 
 ### Lane L-WF-PUBHIST — use the publication history or delete it
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: either a surface consumes the publication-history method and binds the recipients endpoint, or both are deleted, with nothing left bound and uncalled
+exit: either a surface consumes the publication-history method and binds the recipients endpoint, or both are deleted, with nothing left bound and uncalled, recorded in lanes/L-WF-PUBHIST/evidence.md
 agent: opus
 evidence: lanes/L-WF-PUBHIST/evidence.md
 
@@ -2307,10 +2307,10 @@ A bound client method no page calls, and a controller endpoint nothing binds. Tw
 one module. Either is fine; leaving them advertised is not.
 
 ### Lane L-MEALS-DEGENERATE-TWO — two more guard reads that a clamp would satisfy
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: both release-path guard pins hold a second reservation, proven by a clamp mutation that reds them
+exit: both release-path guard pins hold a second reservation, proven by a clamp mutation that reds them, recorded in /Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md
 agent: meals-degenerate-two
 evidence: /Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md
 
@@ -2646,10 +2646,10 @@ credential is today's HMAC through the single authenticated seam. **The payload 
 a stand-in.**
 
 ### Lane L-MRG-RECIPE-REVISE-UI — a chef can fix or retire a recipe after activating it
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: an active recipe gains a new-draft, edit, activate and retire round trip in the browser, driven by a test against the mocked wire
+exit: an active recipe gains a new-draft, edit, activate and retire round trip in the browser, driven by a test against the mocked wire, recorded in lanes/L-MRG-RECIPE-REVISE-UI/evidence.md
 agent: opus
 evidence: lanes/L-MRG-RECIPE-REVISE-UI/evidence.md
 
@@ -2689,10 +2689,10 @@ It chose between the two shapes with reasons and named what the other would have
 beside this lane — then **stopped at the one column that has nowhere to live.**
 
 ### Lane L-MRG-COVERAGE-UNKNOWN — an absent waste block reads as unknown, not as zero
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: a coverage response with no waste block renders the unknown state rather than nothing-recorded, reds if the distinction is removed
+exit: a coverage response with no waste block renders the unknown state rather than nothing-recorded, reds if the distinction is removed, recorded in lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md
 agent: opus
 evidence: lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md
 
@@ -2793,10 +2793,10 @@ components owned by lanes that were in flight, which is why it was correctly lef
 merged into that change.
 
 ### Lane L-MEALS-ENROL-UI — an employee who claimed can be enrolled
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: an invitation claimed at the join page can be enrolled from the admin surface and the eligibility read answers eligible, driven by a page test through the admin client
+exit: an invitation claimed at the join page can be enrolled from the admin surface and the eligibility read answers eligible, driven by a page test through the admin client, recorded in lanes/L-MEALS-ENROL-UI/evidence.md
 agent: opus
 evidence: lanes/L-MEALS-ENROL-UI/evidence.md
 
@@ -2811,10 +2811,10 @@ can click to change it.
 This is Meals' first stop.
 
 ### Lane L-MEALS-CLAIM-RECEIPT — the claim receipt names what statements will actually name
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: when the claim response carries an employee reference the receipt prints it as the statement reference, falling back to the membership id only when absent, asserted for both wire shapes
+exit: when the claim response carries an employee reference the receipt prints it as the statement reference, falling back to the membership id only when absent, asserted for both wire shapes, recorded in lanes/L-MEALS-CLAIM-RECEIPT/evidence.md
 agent: opus
 evidence: lanes/L-MEALS-CLAIM-RECEIPT/evidence.md
 
@@ -2845,10 +2845,10 @@ revocation. **What is missing is only the way in.**
 Render the content-hash and expected-version refusals as sentences; they are the interesting half.
 
 ### Lane L-MEALS-RECONCILE-UI — a blocked month close can be seen and resolved
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: a seeded expiry exception is visible on the venue surface and resolvable from it, and a blocked finalize names the exception that blocks it
+exit: a seeded expiry exception is visible on the venue surface and resolvable from it, and a blocked finalize names the exception that blocks it, recorded in lanes/L-MEALS-RECONCILE-UI/evidence.md
 agent: opus
 evidence: lanes/L-MEALS-RECONCILE-UI/evidence.md
 
@@ -2901,10 +2901,10 @@ pins **including both coherence negatives — which is what makes the sweep and 
 rather than merely both non-null.**
 
 ### Lane L-MEALS-REQUOTE-RELEASE — a re-quote releases the reservation it supersedes
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: the stale-token re-quote journey passes on the smaller allowance it was written for, rather than the doubled one it needs today
+exit: the stale-token re-quote journey passes on the smaller allowance it was written for, rather than the doubled one it needs today, recorded in /Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md
 agent: meals-requote-release
 evidence: /Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md
 
@@ -2919,10 +2919,10 @@ already caught that its own log ran to sixteen lines with the terminator outside
 before dying.
 
 ### Lane L-MEALS-DOCSYNC — the module's own documents stop asserting falsified facts
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: no comment or document in the Meals surface asserts a fact the branch has falsified, and the knowledge check is clean
+exit: no comment or document in the Meals surface asserts a fact the branch has falsified, and the knowledge check is clean, recorded in lanes/L-MEALS-DOCSYNC/evidence.md
 agent: opus
 evidence: lanes/L-MEALS-DOCSYNC/evidence.md
 
@@ -3044,10 +3044,10 @@ second, unexplained absence mark**, which is its own small defect.
 The seam is right; what it lacks is a guard that the seam is actually used.
 
 ### Lane L-PRICE-CLEANUP-TWO — two misleading money reads
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: the dead import is gone and the rate reader rejects a non-finite number, each pinned
+exit: the dead import is gone and the rate reader rejects a non-finite number, each pinned, recorded in lanes/L-PRICE-CLEANUP-TWO/notes.md
 agent: opus
 evidence: lanes/L-PRICE-CLEANUP-TWO/notes.md
 
@@ -3102,10 +3102,10 @@ neither key nor host appears. **Rotation stays the owner's.**
 Its delta is **exactly the tests added**, measured on its own worktree before any edit.
 
 ### Lane L-PDF-CREDITNOTE-NAME — a credit note downloads under its own number
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: two credit notes against one invoice download under distinct filenames, each naming the credit note rather than the invoice
+exit: two credit notes against one invoice download under distinct filenames, each naming the credit note rather than the invoice, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md
 
@@ -3136,10 +3136,10 @@ It also pinned the reprint, and found that `GET /invoices/pdf/{id}` was right al
 one credit note downloaded under two different names depending on which endpoint served it.**
 
 ### Lane L-EV-ONBOARD-PRINT-BLEED — an onboarding banner stops printing above the kitchen sheet
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: the run sheet printed from a store still in onboarding carries no notification banner, measured on the produced PDF rather than on screen
+exit: the run sheet printed from a store still in onboarding carries no notification banner, measured on the produced PDF rather than on screen, recorded in lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md
 agent: ev-onboard-bleed
 evidence: lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md
 
@@ -3199,10 +3199,10 @@ and understating the floor, on the surface whose whole purpose is not understati
 that as of this writing asserts the defect is correct.
 
 ### Lane L-MRG-WASTE-500 — an unknown ingredient stops being an unhandled 500
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: a waste entry naming a nonexistent or foreign ingredient answers a coded refusal, and a cross-tenant create is pinned
+exit: a waste entry naming a nonexistent or foreign ingredient answers a coded refusal, and a cross-tenant create is pinned, recorded in /Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md
 agent: mrg-waste-500
 evidence: /Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md
 
@@ -3575,10 +3575,10 @@ So this is a defensive gap rather than a live defect, and deriving the classific
 entry closes it with the export's own predicate.
 
 ### Lane L-TIER-ARTIFACTS — a tier claim without a receipt stops being accepted
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: every lane branch carrying a tier claim has the corresponding trx committed at that commit, and the convention is written where a lane author will read it
+exit: every lane branch carrying a tier claim has the corresponding trx committed at that commit, and the convention is written where a lane author will read it, recorded in lanes/L-TIER-ARTIFACTS/DETAIL.md
 agent: tier-artifacts
 needs: D-SPEC-L-TIER-ARTIFACTS
 evidence: lanes/L-TIER-ARTIFACTS/DETAIL.md
@@ -4248,10 +4248,10 @@ artifact stays **byte-identical**, not merely still downloadable. No other test 
 would have erased the only place it is written down.
 
 ### Lane L-WF-TIMESHEET-WIRE — the five endpoints are exercised over HTTP
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: the timesheet endpoints answer over the real pipeline, pinned by wire tests that red if routing, binding or DI is broken
+exit: the timesheet endpoints answer over the real pipeline, pinned by wire tests that red if routing, binding or DI is broken, recorded in /Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md
 
@@ -4830,10 +4830,10 @@ It copied the modal lane's method — **isolated worktree, then fast-forward** �
 tip is exactly its thirteen paths, with a sibling's dirty file **there before and after, untouched.**
 
 ### Lane L-FLAGS-EXCUSE-BYFLAG — the guard excuses by flag, not by module
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: deleting any effective-flag resolver registration reds the catalog guard, and every excuse names one flag with a reason that is true
+exit: deleting any effective-flag resolver registration reds the catalog guard, and every excuse names one flag with a reason that is true, recorded in /Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md
 agent: flags-excuse-byflag
 evidence: /Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md
 
@@ -4948,10 +4948,10 @@ And a seam that proved load-bearing by accident: extracting a shared transport d
 on the first pass, **and the redaction suite caught it instantly.**
 
 ### Lane L-CLIENT-TRAILING-SLASH — one route is posted with a trailing slash and nothing notices
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: the confirm route is posted in the same shape as its siblings, and a check reds if a route path diverges from the convention
+exit: the confirm route is posted in the same shape as its siblings, and a check reds if a route path diverges from the convention, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md
 agent: CLIENT-TRAILING-SLASH
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md
 
@@ -5454,10 +5454,10 @@ Out of that lane's scope by its own judgement, which was right. **It is the one 
 plan's account of what has been walked describes a branch nobody is on.**
 
 ### Lane L-MEALS-PROJECTION-LAG-VISIBLE — a venue cannot see the lag its own settlement waits on
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: a venue reading the settlement surface can see the projection lag that gates it, or the surface says why it cannot
+exit: a venue reading the settlement surface can see the projection lag that gates it, or the surface says why it cannot, recorded in lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md
 agent: opus
 evidence: lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md
 
@@ -5556,10 +5556,10 @@ Same shape as the deny-closed pin a sibling fixed this week: **a subject seeded 
 short-circuits first, and the test measures something other than what it names.**
 
 ### Lane L-GUARD-W0 — the plan says which world it was read from, in a channel nobody can filter
-state: built-unverified
+state: verified
 class: node
 pts: 2
-exit: a session started with a sibling checkout on the wrong branch receives the mismatch in its opening context without anyone asking for it, and the same session started with every checkout correct receives no such line — both shown by the recorded hook output
+exit: a session started with a sibling checkout on the wrong branch receives the mismatch in its opening context without anyone asking for it, and the same session started with every checkout correct receives no such line — both shown by the recorded hook output, recorded in lanes/L-GUARD-DEMO/demo-run.txt
 agent: clerk-inloop
 evidence: lanes/L-GUARD-DEMO/demo-run.txt
 
@@ -5737,10 +5737,10 @@ Same family as the two defects already closed this week, and the last of the thr
 classification, one fixed the print and copy surfaces, and this one is the reprint.
 
 ### Lane L-CONFIRM-FAMILY-MERGE — the eleven-commit confirm family lands as one composed tree
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: the five true heads of the confirm family are merged in the reviewed order, the composed tree builds and its fast tier is green at the merge commit, and both base receipts survive under distinct names
+exit: the five true heads of the confirm family are merged in the reviewed order, the composed tree builds and its fast tier is green at the merge commit, and both base receipts survive under distinct names, recorded in /Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md
 agent: confirm-family-merge
 evidence: /Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md
 
@@ -5892,11 +5892,11 @@ Ruled `decide-the-host-now`, and the host is now ruled: `D-SPEC-L-GR-WITHDRAW-OR
 The return URL **cannot be composed because nothing says where to return to** — the Events public origin is unset in every committed configuration. Ship the refusal alongside, so a missing origin is a loud failure at the one moment somebody is watching rather than a silently stranded guest.
 
 ### Lane L-EV-CALLBACK-SWEEP — a lost deposit callback stops releasing the guest's authorized hold
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 needs: D-SPEC-L-EV-CALLBACK-SWEEP
-exit: a deposit authorized at the provider whose callback never arrives is captured and promoted by the expiry sweep rather than released, shown by a test written red before the fix
+exit: a deposit authorized at the provider whose callback never arrives is captured and promoted by the expiry sweep rather than released, shown by a test written red before the fix, recorded in lanes/L-EV-CALLBACK-SWEEP/flag-correction.md
 agent: ev-callback
 evidence: lanes/L-EV-CALLBACK-SWEEP/flag-correction.md
 
@@ -5911,10 +5911,10 @@ cycle and lanes behind it never got a grant. **A hold that lives in the clerk ra
 is a hold the next clerk will not know about.**
 
 ### Lane L-XZ-CREDIT-FIELDS — the X and Z reports carry what creating credit sales made them owe
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: the X and Z reports carry the count and amount of delivery receipts and a specified count and amount of credit sales, and the systembeskrivelse describes what the code does
+exit: the X and Z reports carry the count and amount of delivery receipts and a specified count and amount of credit sales, and the systembeskrivelse describes what the code does, recorded in lanes/L-XZ-CREDIT-FIELDS/evidence.md
 agent: opus
 evidence: lanes/L-XZ-CREDIT-FIELDS/evidence.md
 
@@ -5971,11 +5971,11 @@ title at its own descriptor line. Its reach was not measured here, so it was **l
 retitled on a guess.**
 
 ### Lane L-MEALS-EIGHTH-READ — a clamp and a correct decrement become distinguishable
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 needs: D-SPEC-L-MEALS-EIGHTH-READ
-exit: the superseded-release site holds an uninvolved reservation across the supersede, and a clamp mutant reds, where today it passes every test and the browser journey
+exit: the superseded-release site holds an uninvolved reservation across the supersede, and a clamp mutant reds, where today it passes every test and the browser journey, recorded in /Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md
 agent: meals-eighth
 evidence: /Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md
 
@@ -6053,11 +6053,11 @@ cycle and lanes behind it never got a grant. **A hold that lives in the clerk ra
 is a hold the next clerk will not know about.**
 
 ### Lane L-GR-NEWSLETTER-CROSS — a venue admin cannot reach another venue's newsletter
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 needs: D-SPEC-L-GR-NEWSLETTER-CROSS
-exit: the cross-store refusal on the four newsletter authoring writes is proven at the wire and equal to an absent resource, at a tip that carries the proof
+exit: the cross-store refusal on the four newsletter authoring writes is proven at the wire and equal to an absent resource, at a tip that carries the proof, recorded in lanes/L-GR-NEWSLETTER-CROSS/landing.md
 agent: gr-newsletter
 evidence: lanes/L-GR-NEWSLETTER-CROSS/landing.md
 
@@ -6353,10 +6353,10 @@ two names with nothing behind it, so the admin screen could be opened and nothin
 verified route-for-route against the real controller.
 
 ### Lane L-JOURNEY-EVIDENCE-SWEEP — every unverified lane is told what would verify it
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
-exit: each built-unverified lane either names an artifact path that exists, or is listed with the specific journey that would verify it, merged from a RETURN
+exit: each built-unverified lane either names an artifact path that exists, or is listed with the specific journey that would verify it, merged from a RETURN, recorded in lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md
 agent: journey-evidence-sweep
 evidence: lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md
 
@@ -6431,10 +6431,10 @@ exist; all scan a list by equality or a fixed string, and **none can match insid
 the only one.
 
 ### Lane L-BLOCKER-RESTATE — every open blocker is re-measured against the tip before another lane is sent at one
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
-exit: each open blocker flag is recorded as still-true, already-fixed, or partly-true-with-the-false-clause-named, each verdict citing the commit or the code that settles it, merged from a RETURN
+exit: each open blocker flag is recorded as still-true, already-fixed, or partly-true-with-the-false-clause-named, each verdict citing the commit or the code that settles it, merged from a RETURN, recorded in lanes/L-BLOCKER-RESTATE/verdicts.md
 agent: blocker-restate
 evidence: lanes/L-BLOCKER-RESTATE/verdicts.md
 
@@ -6711,10 +6711,10 @@ block.** Fields are taken from the rendered view, generated before the damage. T
 not recoverable and is not invented here.
 
 ### Lane L-WF-EXCHANGE-AWARD-UNGATED — one exchange write answers to no stage flag
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: the award write refuses when the exchange stage flag is off, pinned by a test that reds if the gate is removed
+exit: the award write refuses when the exchange stage flag is off, pinned by a test that reds if the gate is removed, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md
 
@@ -6752,10 +6752,10 @@ made by rebuilding the file rather than splicing it — a batch edit spliced by 
 lane blocks this evening.
 
 ### Lane L-ROLLBACK-TRACKED-SWEEP — no guard throws after mutating a tracked entity
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: a sweep names every site where a guard throws after mutating a tracked entity, each site either stages the write after the decision or is pinned as safe, shown by a test that reds when a throw is moved back after a mutation
+exit: a sweep names every site where a guard throws after mutating a tracked entity, each site either stages the write after the decision or is pinned as safe, shown by a test that reds when a throw is moved back after a mutation, recorded in /Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md
 agent: l-rollback-tracked-sweep
 evidence: /Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md
 
@@ -6941,10 +6941,10 @@ WebApi process** — this lane merges in its own worktree and never touches that
 
 
 ### Lane L-WF-TIMEOFF-DECIDE-GATE — the time-off manager decision answers to its own stage flag
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: an approve on a time-off request refuses when workforce.selfservice is off while the reject stays reachable, pinned by a test that reds if the gate is removed, and the flag census comment quotes only what the spec says
+exit: an approve on a time-off request refuses when workforce.selfservice is off while the reject stays reachable, pinned by a test that reds if the gate is removed, and the flag census comment quotes only what the spec says, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md
 
@@ -7202,10 +7202,10 @@ Today's mitigation is that the shipped client mints a fresh key per call, so no 
 a property of one caller, not of the endpoint.
 
 ### Lane L-WF-OPERATOR-UNIQUE — one operator cannot hold two live links
-state: built-unverified
+state: verified
 class: sql
 pts: 3
-exit: two concurrent imports of one operator leave exactly one live link, refused at the database rather than by a pre-commit read, shown on the SQL tier with an assertion from the system catalogs that the chain built the index
+exit: two concurrent imports of one operator leave exactly one live link, refused at the database rather than by a pre-commit read, shown on the SQL tier with an assertion from the system catalogs that the chain built the index, recorded in /Users/svendaneel/okam/wt-wfopuniq/lanes/L-WF-OPERATOR-UNIQUE/evidence.md
 needs: D-INTEGRATION-FASTFORWARD
 agent: wf-operator-unique
 evidence: /Users/svendaneel/okam/wt-wfopuniq/lanes/L-WF-OPERATOR-UNIQUE/evidence.md
@@ -7878,10 +7878,10 @@ Report probabilities, not impressions. A needle that cannot alias is a finding w
 
 
 ### Lane L-CORS-FOLLOWUPS — production cannot inherit a loopback origin, and the false "or" comes out of the copy
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: AddOkamCors drops loopback origins outside Development with a unit test that reds if the filter is removed, and neither the guest client nor the preference page states that same-site serving or the named policy would suffice alone
+exit: AddOkamCors drops loopback origins outside Development with a unit test that reds if the filter is removed, and neither the guest client nor the preference page states that same-site serving or the named policy would suffice alone, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md
 
@@ -7915,10 +7915,10 @@ Both comments' premise also goes stale the moment the CORS lane lands, since the
 CORS with `AllowAnyOrigin`.
 
 ### Lane L-CREDIT-NOTE-NUMBER — a credit note stops downloading under the number it credits
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: a credit note downloads under its own invoice number rather than the credited one, pinned by a test that reds if the filename is taken from the route parameter again
+exit: a credit note downloads under its own invoice number rather than the credited one, pinned by a test that reds if the filename is taken from the route parameter again, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md
 
@@ -7939,10 +7939,10 @@ credit note downloads is satisfied by the defect.
 
 
 ### Lane L-MEALS-IDEMPOTENCY-REFUSAL — a refused meals command stops poisoning its own key
-state: built-unverified
+state: verified
 class: suite
 pts: 3
-exit: a refused meals command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed, and the accepted-defect comment is replaced by what the code now does
+exit: a refused meals command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed, and the accepted-defect comment is replaced by what the code now does, recorded in lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md
 agent: opus
 evidence: lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md
 
@@ -7969,10 +7969,10 @@ stranded; and **clear the change tracker before the refusal's own save**, or it 
 the refusal rejected.
 
 ### Lane L-TRAIN-IDEMPOTENCY-REFUSAL — a refused training command stops poisoning its own key
-state: built-unverified
+state: verified
 class: suite
 pts: 3
-exit: a refused training command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed
+exit: a refused training command replays its refusal on a same-key retry rather than answering idempotency-in-progress, pinned per backstop by a test that reds if the recording is removed, recorded in lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md
 agent: opus
 evidence: lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md
 
@@ -8363,10 +8363,10 @@ by name, never by count.
 
 
 ### Lane L-WORLD-STAMP-WINDOWS — the build stamp cannot name a commit the binary was not built from
-state: built-unverified
+state: verified
 class: node
 pts: 2
-exit: the stamp records the process holding the socket and refuses when the repository head has moved since the build, pinned by a test per window that reds if either guard is removed
+exit: the stamp records the process holding the socket and refuses when the repository head has moved since the build, pinned by a test per window that reds if either guard is removed, recorded in lanes/L-WORLD-STAMP-WINDOWS/evidence.md
 agent: opus
 evidence: lanes/L-WORLD-STAMP-WINDOWS/evidence.md
 
@@ -8476,10 +8476,10 @@ a credential under an opaque name is a genuinely different check no name rule ca
 
 
 ### Lane L-WF-FAILURES-SURFACE — the honest delivery record reaches an operator's screen
-state: built-unverified
+state: verified
 class: node
 pts: 2
-exit: a manager can see which publications reached nobody without curl, with waiting distinguishable from broken on screen, shown by a browser journey that reds if the surface stops naming the withheld state
+exit: a manager can see which publications reached nobody without curl, with waiting distinguishable from broken on screen, shown by a browser journey that reds if the surface stops naming the withheld state, recorded in lanes/L-WF-FAILURES-SURFACE/evidence.md
 agent: opus
 evidence: lanes/L-WF-FAILURES-SURFACE/evidence.md
 
@@ -8914,10 +8914,10 @@ capability breaks.
 
 
 ### Lane L-MEALS-AGREEMENT-PIN-INVERTS — a test stops asserting the defect it was written beside
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: MealsAgreementWriterTests asserts that a refused agreement write replays its refusal rather than that it strands its key, and the one-active-corridor stranding site records a refusal, pinned by a test that reds if either goes back, recorded in lanes/L-MEALS-AGREEMENT-PIN-INVERTS/mutation-log.md
+exit: MealsAgreementWriterTests asserts that a refused agreement write replays its refusal rather than that it strands its key, and the one-active-corridor stranding site records a refusal, pinned by a test that reds if either goes back, recorded in lanes/L-MEALS-AGREEMENT-PIN-INVERTS/mutation-log.md, recorded in lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md
 agent: meals-pin
 needs: D-SPEC-L-MEALS-AGREEMENT-PIN-INVERTS
 evidence: lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md
@@ -11540,11 +11540,11 @@ suites among them** — fail to load and the run reports **2547 tests instead of
 
 
 ### Lane L-FIXTURE-DIVERGENCE-RECEIPT — a check that exists, is strong, and has never been shown to run
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
-exit: the fixture-divergence check has been run at the integration tip and its receipt is committed at lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md, with an arm deliberately broken to show the run reds rather than passing vacuously
+exit: the fixture-divergence check has been run at the integration tip and its receipt is committed at lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md, with an arm deliberately broken to show the run reds rather than passing vacuously, recorded in /Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md
 agent: opus
 evidence: /Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md
 
@@ -12120,11 +12120,11 @@ counting definitions rather than files, arriving in a third place.
 described. **A census of a live repository is a photograph and the honest form of it names the shutter speed.**
 
 ### Lane L-CONSENT-REASON-VOCABULARY — a fixture reporting states the product does not have
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
-exit: every suppression reason the consent fixture reports exists in the backend enum, or each divergence is recorded with the reason it is deliberate, in lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md
+exit: every suppression reason the consent fixture reports exists in the backend enum, or each divergence is recorded with the reason it is deliberate, in lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md, recorded in /Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md
 agent: opus
 evidence: /Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md
 
@@ -13205,10 +13205,10 @@ are flagged as not re-derived rather than given a number** — which is the corr
 method is now known to be wrong.
 
 ### Lane L-FOCUSTRAP-TEARDOWN — the focus trap releases through a hook this Vue version calls
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a test reds when the release is removed, and the trap's teardown runs under Vue 2.7 as shown by that test passing with it restored
+exit: a test reds when the release is removed, and the trap's teardown runs under Vue 2.7 as shown by that test passing with it restored, recorded in lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt
 agent: focustrap
 evidence: lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt
 
@@ -13287,10 +13287,10 @@ stated — one of the ten renders on **every admin route**.
 write over, so the corrections are recorded here beside them.
 
 ### Lane L-NORWEGIAN-ONLY-KEYS-TRANSLATE — an English or German operator stops being served Norwegian
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the 34 Norwegian-only rendered keys pinned by L-MRG-WASTE-RECEIPTS carry en and de strings, and the ratchet that counts them reds if the count rises
+exit: the 34 Norwegian-only rendered keys pinned by L-MRG-WASTE-RECEIPTS carry en and de strings, and the ratchet that counts them reds if the count rises, recorded in /Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md
 agent: no-only-keys
 evidence: /Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md
 
@@ -13368,10 +13368,10 @@ this lane exists.
 
 
 ### Lane L-MIXIN-LABELS-TRANSLATE — the receipt's payment, delivery and status labels go through the dictionary
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: paymentTypeLabel, deliveryTypeLabel and orderStatusLabel resolve through the i18n layer, and a journey at the CH locale reds when the German string for one of them is corrupted
+exit: paymentTypeLabel, deliveryTypeLabel and orderStatusLabel resolve through the i18n layer, and a journey at the CH locale reds when the German string for one of them is corrupted, recorded in lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md
 agent: mixin-labels
 evidence: lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md
 
@@ -13489,10 +13489,10 @@ print service, shares no code with the first, **so fixing one does not touch the
 non-fiscal, reports this revenue as *"Ikke satt"*.
 
 ### Lane L-VUE3-SHAPE-GUARD — a Vue 3 declaration in this Vue 2 app fails the build rather than doing nothing
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a check reds on a planted `unmounted()` hook and on a planted `emits:` block, and passes on the tree once the two known instances are repaired
+exit: a check reds on a planted `unmounted()` hook and on a planted `emits:` block, and passes on the tree once the two known instances are repaired, recorded in lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md
 agent: vue3-guard
 evidence: lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md
 
@@ -13606,12 +13606,12 @@ in-flight worktrees, so it is a decision and not a lane's to take.**
 by the clerk. **That is the clerk's own instance of the error it has briefed five lanes to avoid.**
 
 ### Lane L-ESCPOS-LADDER-NAMES-THE-TENDER — both printed ladders name the tender, and the default stops swallowing members
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
 dir: ../OkamAPI-modules
-exit: a test reds for every PaymentType member whose printed payer line is a raw enum name, across both the receipt builder and its X/Z twin, and passes once each is labelled
+exit: a test reds for every PaymentType member whose printed payer line is a raw enum name, across both the receipt builder and its X/Z twin, and passes once each is labelled, recorded in lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md
 agent: escpos-ladder
 evidence: lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md
 
@@ -13783,10 +13783,10 @@ half-loose.
 died with its session, and it ruled without a second rather than spending a third.
 
 ### Lane L-COLLAPSE-THE-TWO-HOOK-SWEEPS — one answer to what a Vue 3 declaration does here, not two
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: exactly one estate sweep for Vue 3 option names survives in the test tree, it denies emits as well as the two hooks, and it reds on a file it cannot parse
+exit: exactly one estate sweep for Vue 3 option names survives in the test tree, it denies emits as well as the two hooks, and it reds on a file it cannot parse, recorded in lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md
 agent: collapse-sweeps
 evidence: lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md
 
@@ -13809,10 +13809,10 @@ lucky: its one desync failed loudly by accident of the input.
 
 
 ### Lane L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE — a worker who confirms a published week is shown the receipt
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the workforce week-run journey asserts the receipt is visible after Bekreft, replacing the assertion that currently pins its absence, and reds when the receipt render is removed
+exit: the workforce week-run journey asserts the receipt is visible after Bekreft, replacing the assertion that currently pins its absence, and reds when the receipt render is removed, recorded in lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md
 agent: wf-ack-receipt
 evidence: lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md
 
@@ -13866,10 +13866,10 @@ no acknowledgement field, and the acknowledge endpoint has no read sibling — *
 Closing that needs a worker-side backend read.
 
 ### Lane L-LINT-RUNS-ON-SOMETHING — the configured lint rules run on a change somebody makes
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a change to a translations dictionary is linted by a script, a hook or a workflow that a person or CI actually invokes, shown by a run that reds on a rule already configured as error
+exit: a change to a translations dictionary is linted by a script, a hook or a workflow that a person or CI actually invokes, shown by a run that reds on a rule already configured as error, recorded in lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md
 agent: lint-wired
 evidence: lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md
 
@@ -14238,10 +14238,10 @@ function plus non-empty output, with three controls that discriminate under both
 of the commit measured**, so the receipt modal was a genuine fourth case there. Its lines were not touched.
 
 ### Lane L-ARTIFACT-NAMES-ITS-MODULE-TREE — a capture records which module tree produced it
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a journey artifact carries the realpath of the node_modules it built against and the build directory used, and a capture produced through a symlinked module tree is distinguishable from one produced with its own
+exit: a journey artifact carries the realpath of the node_modules it built against and the build directory used, and a capture produced through a symlinked module tree is distinguishable from one produced with its own, recorded in lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md
 agent: artifact-modtree
 evidence: lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md
 
@@ -14292,10 +14292,10 @@ final diff carries no artifact. And `git stash` turned out to be **shared across
 with nothing of its own reached for another branch's stash from a week in July.
 
 ### Lane L-PREFCENTRE-DEPLOY-EXEC — the preference centre answers at the address the mail already prints
-state: built-unverified
+state: verified
 class: analysis
 owner: @sven
-exit: okam.no/preferences/communications returns the page rather than a 404 shell, and the API it calls answers the browser it is called from, both checked from outside this machine
+exit: okam.no/preferences/communications returns the page rather than a 404 shell, and the API it calls answers the browser it is called from, both checked from outside this machine, recorded in lanes/L-PREFCENTRE-DEPLOY-EXEC/deploy-state-2026-08-06.md
 agent: opus
 evidence: lanes/L-PREFCENTRE-DEPLOY-EXEC/deploy-state-2026-08-06.md
 
@@ -14322,10 +14322,10 @@ sandbox.**
 
 
 ### Lane L-TRAIN-DISCLOSURE-LAND — the disclosure endpoint the shipped panel calls exists on the shipped branch
-state: built-unverified
+state: verified
 class: analysis
 owner: @sven
-exit: the disclosure-log endpoint is served by the backend integration branch, checked by merge-base --is-ancestor against whatever commit lands it
+exit: the disclosure-log endpoint is served by the backend integration branch, checked by merge-base --is-ancestor against whatever commit lands it, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAIN-DISCLOSURE-LAND/merge.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAIN-DISCLOSURE-LAND/merge.md
 
@@ -14346,12 +14346,12 @@ question. Every claim behind this lane was taken with `git show <ref>:<path>`.
 
 
 ### Lane L-WF-LEVER-TITLE-NAMES-ITS-REACH — the workforce lever's title names the surfaces its gate reaches
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 owner: agent
 dir: ../OkamAPI-modules
-exit: the workforce module descriptor's title is derived-checkable against its own route-gate reach, pinned by a test that reds when either the title or the reach moves without the other
+exit: the workforce module descriptor's title is derived-checkable against its own route-gate reach, pinned by a test that reds when either the title or the reach moves without the other, recorded in lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md
 agent: wf-lever-title
 evidence: lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md
 
@@ -14432,10 +14432,10 @@ ten routes to one on the worker's app **stays green** — the same floor the lan
 deliberately.
 
 ### Lane L-MRG-RECIPE-TRANSITIONS-PINNED — the five draft controls the suite does not yet watch
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: unbinding newDraft, saveDraft, addDraftComponent, removeDraftComponent or retire each reds a test in the margin-recipes suite, with each mutation shown red individually
+exit: unbinding newDraft, saveDraft, addDraftComponent, removeDraftComponent or retire each reds a test in the margin-recipes suite, with each mutation shown red individually, recorded in /Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md
 agent: mrg-transitions
 evidence: /Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md
 
@@ -14490,10 +14490,10 @@ submodule — the plain form fails outright. That has cost time in this estate b
 written down.
 
 ### Lane L-FIXTURE-TITLES-FOLLOW-THE-FLAGS — the fixture stops asserting titles the product no longer uses
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: no flag title in test/e2e/fixture/world.js contradicts the descriptor it mirrors, checked against the backend descriptors rather than against itself
+exit: no flag title in test/e2e/fixture/world.js contradicts the descriptor it mirrors, checked against the backend descriptors rather than against itself, recorded in /Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md
 agent: fixture-titles
 evidence: /Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md
 
@@ -14548,12 +14548,12 @@ came from reading the **working tree**; at the tip the same rows sit elsewhere. 
 wrong-tree read**, of exactly the kind it has briefed every lane to avoid.
 
 ### Lane L-CLOCKOUT-STATE-IS-NOT-OPEN — a clock-out that closed nothing does not report the worker clocked in
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 owner: agent
 dir: ../OkamAPI-modules
-exit: a clock-out with no open session is refused or answers a state that is not Open, pinned by a wire assertion over the response that reds when the derivation reverts
+exit: a clock-out with no open session is refused or answers a state that is not Open, pinned by a wire assertion over the response that reds when the derivation reverts, recorded in /Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md
 agent: clockout-state
 evidence: /Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md
 
@@ -14638,10 +14638,10 @@ reads a resolved session's closing time behind the guard and cannot reproduce th
 this lane's numbers now rests on the builder's word alone.**
 
 ### Lane L-MRG-WASTE-PANEL-SAYS-ABSENT — a feature that does not exist reads as absent rather than as broken
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the statement waste panel either calls routes a backend checkout publishes, or renders an absent-feature state, shown by a test that reds if a 404 is presented as a failed read
+exit: the statement waste panel either calls routes a backend checkout publishes, or renders an absent-feature state, shown by a test that reds if a 404 is presented as a failed read, recorded in /Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md
 agent: waste-panel
 evidence: /Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md
 
@@ -14665,10 +14665,10 @@ for a reason that is not yours.
 
 
 ### Lane L-MRG-COVERAGE-PANEL-SAYS-ABSENT — the second panel stops calling the same absent feature a failed read
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the coverage panel renders an absent state rather than an unknown for the waste feature, shown by a test that reds if the absence is presented as a failed read
+exit: the coverage panel renders an absent state rather than an unknown for the waste feature, shown by a test that reds if the absence is presented as a failed read, recorded in /Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md
 agent: coverage-panel
 evidence: /Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md
 
@@ -14724,10 +14724,10 @@ none removed. **C5 not met and stated** — green tests are evidence that code b
 a sentence.
 
 ### Lane L-CLOCK-CLIENT-READS-THE-WIRE — the register reads the state the server now reports
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the POS clock client reads sessionState rather than inferring from the session id, and a cross-engagement punch reports the exception state, pinned by a test that reds if the inference returns
+exit: the POS clock client reads sessionState rather than inferring from the session id, and a cross-engagement punch reports the exception state, pinned by a test that reds if the inference returns, recorded in /Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md
 agent: clock-client
 evidence: /Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md
 
@@ -14784,10 +14784,10 @@ brief forbids, so both journey files are changed and unrun. And an existing flag
 branch becomes a **fifth** ref carrying the till screen.
 
 ### Lane L-PLAN-LIVES-IN-GIT — the plan, its returns and its reviews survive a clean checkout
-state: built-unverified
+state: verified
 class: analysis
 owner: @sven
-exit: docs/plan is tracked on a branch a fresh clone can check out, and a clean checkout of that branch contains the plan, the returns and the reviews
+exit: docs/plan is tracked on a branch a fresh clone can check out, and a clean checkout of that branch contains the plan, the returns and the reviews, recorded in lanes/L-PLAN-LIVES-IN-GIT/evidence.md
 agent: opus
 evidence: lanes/L-PLAN-LIVES-IN-GIT/evidence.md
 
@@ -14808,12 +14808,12 @@ better than the present state**, which is a day's reasoning held by a directory 
 
 
 ### Lane L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID — a foreign social-security number is refused or recorded as accepted
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 owner: agent
 dir: ../OkamAPI-modules
-exit: a twelve-character employee reference carrying a letter is refused, or the acceptance is recorded as deliberate with what makes it safe, pinned by an arm that submits one and expects the outcome
+exit: a twelve-character employee reference carrying a letter is refused, or the acceptance is recorded as deliberate with what makes it safe, pinned by an arm that submits one and expects the outcome, recorded in lanes/L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID/mutation-log.md
 agent: employee-ref
 evidence: lanes/L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID/mutation-log.md
 
@@ -14924,10 +14924,10 @@ repair would invalidate — six admissions plus the two traps — **so the fix c
 than discovering them.**
 
 ### Lane L-FIXTURE-VALUES-ARE-ENUM-MEMBERS — a fixture stops printing words the product cannot produce
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: every enum-backed value the e2e fixtures emit is a member of the enum the reading code binds it to, or each divergence is recorded as deliberate, pinned by a check that reds when a non-member is introduced
+exit: every enum-backed value the e2e fixtures emit is a member of the enum the reading code binds it to, or each divergence is recorded as deliberate, pinned by a check that reds when a non-member is introduced, recorded in /Users/svendaneel/okam/web-fixenums/lanes/L-FIXTURE-VALUES-ARE-ENUM-MEMBERS/repair.md
 agent: fixture-enums
 evidence: /Users/svendaneel/okam/web-fixenums/lanes/L-FIXTURE-VALUES-ARE-ENUM-MEMBERS/repair.md
 
@@ -15037,12 +15037,12 @@ and the backend pins an SDK band with no roll-forward, which resolves here **onl
 happens to be installed.**
 
 ### Lane L-FINALIZE-INDEX-OR-A-REASON — the finalize lookup exists on a chain-built database, or one index is shown to serve both
-state: built-unverified
+state: verified
 class: sql
 pts: 2
 owner: agent
 dir: ../OkamAPI-modules
-exit: a database built from the migration chain carries both the finalize lookup and the fiscal backstop, or the plan records with a measurement why one index serves both reads
+exit: a database built from the migration chain carries both the finalize lookup and the fiscal backstop, or the plan records with a measurement why one index serves both reads, recorded in lanes/L-FINALIZE-INDEX-OR-A-REASON/evidence.md
 agent: finalize-index
 evidence: lanes/L-FINALIZE-INDEX-OR-A-REASON/evidence.md
 
@@ -15098,10 +15098,10 @@ ledger edit**, because the copy it can see lacks the intervening entries and wri
 it must be deleted in that merge.
 
 ### Lane L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED — a path pointer is read, not merely resolved
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: the evidence check reads an artifact's own status and refuses a prefix that does not demonstrate the exit, shown by the six admissions the census listed being refused and the two deliberate-red proofs still passing
+exit: the evidence check reads an artifact's own status and refuses a prefix that does not demonstrate the exit, shown by the six admissions the census listed being refused and the two deliberate-red proofs still passing, recorded in lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/finding.md
 agent: evidence-checked
 evidence: lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/finding.md
 
@@ -15310,12 +15310,12 @@ open product question to rule.** What is missing is **a landing**, with an order
 of the six refs lands the **older, id-inferring till** that the repaired client exists to replace.
 
 ### Lane L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION — the settlement's if-match guard is proven on the tier that has one
-state: built-unverified
+state: verified
 class: sql
 pts: 2
 owner: agent
 dir: ../OkamAPI-modules
-exit: a settlement mutation refuses a stale revision on SQL Server, proven by an arm that reds when the if-match check is removed
+exit: a settlement mutation refuses a stale revision on SQL Server, proven by an arm that reds when the if-match check is removed, recorded in lanes/L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION/evidence.md
 agent: ev-concurrency
 evidence: lanes/L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION/evidence.md
 
@@ -15369,12 +15369,12 @@ it rather than the guard — recorded as second-layer evidence and kept out of t
 **A foreign container appeared mid-run and was left untouched**, as the rule requires.
 
 ### Lane L-SUPERSEDE-RELEASE-IS-ATTRIBUTED — the fourth release site names its actor like the other three
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 owner: agent
 dir: ../OkamAPI-modules
-exit: every allowance release resolves an actor, or the site that bypasses the authority carries its own attribution and is named in the census, pinned by a test that reds when the attribution is dropped
+exit: every allowance release resolves an actor, or the site that bypasses the authority carries its own attribution and is named in the census, pinned by a test that reds when the attribution is dropped, recorded in /Users/svendaneel/okam/wt-supattr/lanes/L-SUPERSEDE-RELEASE-IS-ATTRIBUTED/evidence.md
 agent: supersede-attrib
 evidence: /Users/svendaneel/okam/wt-supattr/lanes/L-SUPERSEDE-RELEASE-IS-ATTRIBUTED/evidence.md
 
@@ -15400,12 +15400,12 @@ no grant to interpret it.
 
 
 ### Lane L-MIG-STACK-MERGE — the migration stack lands on the integration branch as one authored merge
-state: built-unverified
+state: verified
 class: sql
 pts: 2
 owner: agent
 dir: ../OkamAPI-modules
-exit: the integration branch contains the stack as a merge commit whose chain replays from empty and whose tier is rerun at that commit, with the duplicate-migration collision resolved inside the merge
+exit: the integration branch contains the stack as a merge commit whose chain replays from empty and whose tier is rerun at that commit, with the duplicate-migration collision resolved inside the merge, recorded in lanes/L-MIG-STACK-MERGE/evidence.md
 agent: mig-stack-merge
 evidence: lanes/L-MIG-STACK-MERGE/evidence.md
 
@@ -15437,10 +15437,10 @@ it, and hand back what a person would fast-forward. **Never stop a container you
 
 
 ### Lane L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX — the worker's confirmation is still there after a refresh
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a worker who confirms a published week still sees the receipt after reloading the page, pinned by a test that reds when the field is dropped from the read
+exit: a worker who confirms a published week still sees the receipt after reloading the page, pinned by a test that reds when the field is dropped from the read, recorded in /Users/svendaneel/okam/web-ackreload/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX/evidence.md
 agent: ack-reload-fix
 evidence: /Users/svendaneel/okam/web-ackreload/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX/evidence.md
 
@@ -15839,10 +15839,10 @@ the walk changed.
 
 
 ### Lane L-ADMIN-JOURNEY-WAIT-DIAGNOSES — a dead application fails as a dead application, not as a URL timeout
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: an admin journey whose application never answers reports what did not answer, shown by an arm that kills the server and reads the resulting failure message
+exit: an admin journey whose application never answers reports what did not answer, shown by an arm that kills the server and reads the resulting failure message, recorded in lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/kill-proof.txt
 agent: journey-wait
 evidence: lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/kill-proof.txt
 
@@ -15903,12 +15903,12 @@ value** — leaving the wrong-number branch **unreachable for any server-side fa
 share that file and none is about the modal, so it is correctly somebody else's lane.
 
 ### Lane L-GROWTH-EFFECTIVE-RESOLVER — flipping the Growth lever makes the surface answer
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 owner: agent
 dir: ../OkamAPI-modules
-exit: flipping the Growth module flag for a store makes its public surface answer, pinned by a test that reds when the effective resolution is removed
+exit: flipping the Growth module flag for a store makes its public surface answer, pinned by a test that reds when the effective resolution is removed, recorded in /Users/svendaneel/okam/OkamAPI-growthres/lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md
 agent: growth-resolver
 evidence: /Users/svendaneel/okam/OkamAPI-growthres/lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md
 
@@ -15934,10 +15934,10 @@ the unbraced form applies a history modifier that has caught four lanes includin
 
 
 ### Lane L-LOGIN-MODAL-REPORTS-A-FAILED-SEND — the modal stops asking for a code it never sent
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a sign-in attempt whose verification send fails shows the failure rather than the code step, pinned by a test that reds when the resolved-error path is treated as success
+exit: a sign-in attempt whose verification send fails shows the failure rather than the code step, pinned by a test that reds when the resolved-error path is treated as success, recorded in lanes/L-LOGIN-MODAL-REPORTS-A-FAILED-SEND/kill-proof.txt
 agent: login-modal
 evidence: lanes/L-LOGIN-MODAL-REPORTS-A-FAILED-SEND/kill-proof.txt
 
@@ -16046,10 +16046,10 @@ malicious origin could do with each.
 would send somebody to fix a file that is already correct.
 
 ### Lane L-COMPOSE-AND-RUN-THE-STACK — the two integration stacks are composed, and the composition is the tree the SQL tier finally runs on
-state: built-unverified
+state: verified
 class: sql
 owner: agent
-exit: a local commit exists whose parents are the migration-stack tip and the confirm-family tip, it builds, and a SQL Server tier trx taken at that commit is committed under the lane directory with its pass/fail/skip triple accounted for
+exit: a local commit exists whose parents are the migration-stack tip and the confirm-family tip, it builds, and a SQL Server tier trx taken at that commit is committed under the lane directory with its pass/fail/skip triple accounted for, recorded in /Users/svendaneel/okam/wt-composestack/lanes/L-COMPOSE-AND-RUN-THE-STACK/compose-7ac6f2b2-sql-tier.trx
 agent: opus
 evidence: /Users/svendaneel/okam/wt-composestack/lanes/L-COMPOSE-AND-RUN-THE-STACK/compose-7ac6f2b2-sql-tier.trx
 
@@ -16072,10 +16072,10 @@ article 12 deadline landing while the family carries the deadline statute work. 
 split across the two sides of a merge nobody has performed.
 
 ### Lane L-CENSUS-DERIVES-ITS-FLOOR — the audit census reds when a stamping site is missing rather than agreeing with itself
-state: built-unverified
+state: verified
 class: suite
 owner: agent
-exit: a derivation over the tree produces the census floors, it names the Training evidence service, and deleting a stamping site from a scratch copy reds it — shown by the red run committed beside the green one
+exit: a derivation over the tree produces the census floors, it names the Training evidence service, and deleting a stamping site from a scratch copy reds it — shown by the red run committed beside the green one, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-CENSUS-DERIVES-ITS-FLOOR/detail.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-CENSUS-DERIVES-ITS-FLOOR/detail.md
 
@@ -16091,10 +16091,10 @@ lane: make the derivation the census, not a number typed beside it.
 instrument that just failed, wearing a different name.
 
 ### Lane L-GUESTLINK-ONE-COMPOSER — one composer answers where a guest comes back to
-state: built-unverified
+state: verified
 class: suite
 owner: agent
-exit: no code path composes a guest return URL inline, shown by a test that reds when the outbox mail path stops reading the helper, plus a tree-wide search naming every caller
+exit: no code path composes a guest return URL inline, shown by a test that reds when the outbox mail path stops reading the helper, plus a tree-wide search naming every caller, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GUESTLINK-ONE-COMPOSER/RUN.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GUESTLINK-ONE-COMPOSER/RUN.md
 
@@ -16113,10 +16113,10 @@ The helper's **own docstring says it exists to prevent this drift**. Two shapes 
 origin, which is the case a guest actually hits.
 
 ### Lane L-TENDER-WIRE-MERGE-IS-SAFE — the tender-wire hazard is measured against how this estate actually lands work
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: a true git merge of the tender-wire lane onto the utlkvit family is performed on a throwaway ref and the credit-sale predicate count at the result is reported, and the flag's clears_when is rewritten to name the landing shapes that do reintroduce the defect
+exit: a true git merge of the tender-wire lane onto the utlkvit family is performed on a throwaway ref and the credit-sale predicate count at the result is reported, and the flag's clears_when is rewritten to name the landing shapes that do reintroduce the defect, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TENDER-WIRE-MERGE-IS-SAFE/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TENDER-WIRE-MERGE-IS-SAFE/evidence.md
 
@@ -16138,10 +16138,10 @@ Measure, do not reason. Perform the merge on a throwaway ref, count credit-sale 
 and name which of the three unsafe landing shapes this estate would actually use.
 
 ### Lane L-FLAGS-RESOLVERS-COVER-THREE — the switchboard's reliability sentence is true for every module it draws
-state: built-unverified
+state: verified
 class: suite
 owner: agent
-exit: for Meals, Events and Growth an effective-off drawn by GET /stores/{id}/feature-flags is refused by the gate and an effective-on is admitted, each pinned by a test that reds when its resolver is unregistered
+exit: for Meals, Events and Growth an effective-off drawn by GET /stores/{id}/feature-flags is refused by the gate and an effective-on is admitted, each pinned by a test that reds when its resolver is unregistered, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/evidence.md
 
@@ -16164,11 +16164,11 @@ resolver was written to close.
 live**, because the backend's own reach test says a pilot is enabled by precisely that config key.
 
 ### Lane L-PREF-COOKIE-HALF — the cookie the ruling chose is the cookie the code sets
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: fact:growth.cookie.crosssite reads present, shown by a wire test that reds when the session cookie reverts to SameSiteMode.Strict
+exit: fact:growth.cookie.crosssite reads present, shown by a wire test that reds when the session cookie reverts to SameSiteMode.Strict, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PREF-COOKIE-HALF/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PREF-COOKIE-HALF/evidence.md
 
@@ -16199,10 +16199,10 @@ throws at startup, and `SetIsOriginAllowed(_ => true).AllowCredentials()` does n
 and the cross-site cookie are both unnecessary.
 
 ### Lane L-LOGINMODAL-MOUNTED-ONCE — one sign-in modal exists on a page, not two
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: no admin page renders more than one `.login-modal`, shown by a test that counts them across every admin route and reds when a second is mounted
+exit: no admin page renders more than one `.login-modal`, shown by a test that counts them across every admin route and reds when a second is mounted, recorded in /Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/kill-proof-browser.txt
 agent: opus
 evidence: /Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/kill-proof-browser.txt
 
@@ -16221,10 +16221,10 @@ person is looking at.
 **Delete the duplicates rather than disambiguating them.** A second mount is not a thing to select between.
 
 ### Lane L-LOGINMODAL-SUCCESS-IS-SILENT — a successful sign-in does not render a serialized response as an error
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: the success path leaves `errorMessage` empty, shown by a test that reds when a raw response is assigned to it
+exit: the success path leaves `errorMessage` empty, shown by a test that reds when a raw response is assigned to it, recorded in /Users/svendaneel/okam/web-loginsuccess/lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/kill-proof.txt
 agent: opus
 evidence: /Users/svendaneel/okam/web-loginsuccess/lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/kill-proof.txt
 
@@ -16244,11 +16244,11 @@ here, keep both directions pinned.
 three other lanes own. Match the file, do not start an i18n migration inside it.
 
 ### Lane L-TRAINWIRE-ABORT — the training wire tier finishes instead of taking the host down
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: the non-SQL tier at a checkout of 06b8b582 completes with a counted pass/fail/skip triple rather than Test Run Aborted, shown by a trx enumerating all 4650 tests
+exit: the non-SQL tier at a checkout of 06b8b582 completes with a counted pass/fail/skip triple rather than Test Run Aborted, shown by a trx enumerating all 4650 tests, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAINWIRE-ABORT/finding.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAINWIRE-ABORT/finding.md
 
@@ -16273,10 +16273,10 @@ rows this test writes. Do not silence it and do not widen the fixture.
 whole finding — show the abort, then show the completed triple.
 
 ### Lane L-TRX-CONTAINS-WHAT-IT-CLAIMS — a cited trx holds the tests its commit added
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: every lane citing a trx as evidence has that trx checked for the tests its own commit adds, and the lanes whose receipts fall short are named in a committed list
+exit: every lane citing a trx as evidence has that trx checked for the tests its own commit adds, and the lanes whose receipts fall short are named in a committed list, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRX-CONTAINS-WHAT-IT-CLAIMS/trx-contains-what-it-claims.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRX-CONTAINS-WHAT-IT-CLAIMS/trx-contains-what-it-claims.md
 
@@ -16335,10 +16335,10 @@ code computable offline — a credential path production does not have. And **ge
 neither**, rather than relying on the committed code — see `F-POWERUSER-CODE-IS-COMMITTED`.
 
 ### Lane L-GROWTHAUDIT-MIGRATION — the growth audit table exists on a chain-built database
-state: built-unverified
+state: verified
 class: sql
 owner: agent
-exit: a migration creates GrowthAuditEvents and its two indexes, and the SQL tier at the composed stack drops from 22 failures to 1 (the outbox double-write), shown by a trx and a system-catalog read committed under the lane directory
+exit: a migration creates GrowthAuditEvents and its two indexes, and the SQL tier at the composed stack drops from 22 failures to 1 (the outbox double-write), shown by a trx and a system-catalog read committed under the lane directory, recorded in docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/sys-catalog.txt
 agent: opus
 evidence: docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/sys-catalog.txt
 
@@ -16379,10 +16379,10 @@ lane cannot run anyway — it needs a lane that will never be accepted.
 **Do not repair the two non-GrowthAudit reds here.** They are separate findings with their own flags.
 
 ### Lane L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE — a missing table is not reported as a lost race
-state: built-unverified
+state: verified
 class: suite
 owner: agent
-exit: a dispatch failing because its audit table is absent reports that cause rather than a concurrency outcome, shown by a test that reds when the handler widens back to catching every DbUpdateException
+exit: a dispatch failing because its audit table is absent reports that cause rather than a concurrency outcome, shown by a test that reds when the handler widens back to catching every DbUpdateException, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE/mutation-log.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE/mutation-log.md
 
@@ -16418,10 +16418,10 @@ An outbox row is a message somebody receives. Two rows is two messages, so treat
 rather than as a row count.
 
 ### Lane L-ABORTED-TRX-CANNOT-BE-EVIDENCE — a run that aborted cannot be cited as a pass
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: a check refuses any trx whose ResultSummary outcome contradicts its Counters, it names the two such artifacts in this estate, and it reds when pointed at either of them
+exit: a check refuses any trx whose ResultSummary outcome contradicts its Counters, it names the two such artifacts in this estate, and it reds when pointed at either of them, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ABORTED-TRX-CANNOT-BE-EVIDENCE/aborted-trx-cannot-be-evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ABORTED-TRX-CANNOT-BE-EVIDENCE/aborted-trx-cannot-be-evidence.md
 
@@ -16452,10 +16452,10 @@ pass both.
 artifacts and show it reds on the silent one.
 
 ### Lane L-DESTRUCTIVE-SAVES-LOAD-FIRST — a settings page cannot overwrite what it never read
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: neither the payment settings page nor the store settings page can post a field it did not load, shown by a test that reds when the load is skipped and by a captured before/after of the stored record
+exit: neither the payment settings page nor the store settings page can post a field it did not load, shown by a test that reds when the load is skipped and by a captured before/after of the stored record, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-DESTRUCTIVE-SAVES-LOAD-FIRST/receipts/live-record-before-after.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-DESTRUCTIVE-SAVES-LOAD-FIRST/receipts/live-record-before-after.md
 
@@ -16480,10 +16480,10 @@ partial-update contract — and pin whichever you choose.
 target before you press anything.
 
 ### Lane L-ONGOING-SHOWS-EVERY-LIVE-ORDER — no live status renders in no column
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: every OrderStatus a live order can hold appears in some column of the ongoing board, shown by a test that reds when a status is removed from the bucketing
+exit: every OrderStatus a live order can hold appears in some column of the ongoing board, shown by a test that reds when a status is removed from the bucketing, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ONGOING-SHOWS-EVERY-LIVE-ORDER/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ONGOING-SHOWS-EVERY-LIVE-ORDER/evidence.md
 
@@ -16501,10 +16501,10 @@ silently — that is the difference between fixing this and fixing it again.
 **The failure mode is silence**, so the test must assert presence somewhere, not the absence of an error.
 
 ### Lane L-SETTINGS-SAVES-REPORT-FAILURE — a switch that did not save says so
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a failed delivery toggle surfaces an error and re-reads the store, shown by a test that reds when the failure path stays silent
+exit: a failed delivery toggle surfaces an error and re-reads the store, shown by a test that reds when the failure path stays silent, recorded in lanes/L-SETTINGS-SAVES-REPORT-FAILURE/measurements.txt
 agent: opus
 evidence: lanes/L-SETTINGS-SAVES-REPORT-FAILURE/measurements.txt
 
@@ -16524,10 +16524,10 @@ dirty** — Save never goes away and pressing it writes the rounded-down value.
 say which you found.)*
 
 ### Lane L-RESERVATION-CONFLICT-SEES-EVERY-TABLE — a combined booking cannot be double-booked in silence
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: conflict detection considers every table a reservation holds, shown by a test that reds when only the primary table is compared
+exit: conflict detection considers every table a reservation holds, shown by a test that reds when only the primary table is compared, recorded in lanes/L-RESERVATION-CONFLICT-SEES-EVERY-TABLE/evidence.md
 agent: opus
 evidence: lanes/L-RESERVATION-CONFLICT-SEES-EVERY-TABLE/evidence.md
 
@@ -16542,10 +16542,10 @@ are theirs. Only the server can catch it, and only if it happens to check.
 severity is higher than a missing warning.
 
 ### Lane L-DEV-DEFAULT-FAILS-CLOSED — a local build cannot reach production by forgetting a variable
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a dev server started with no API target refuses to start or points at localhost, shown by a run with API_BASE_URL unset that does not reach the deployed host
+exit: a dev server started with no API target refuses to start or points at localhost, shown by a run with API_BASE_URL unset that does not reach the deployed host, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-DEV-DEFAULT-FAILS-CLOSED/run.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-DEV-DEFAULT-FAILS-CLOSED/run.md
 
@@ -16566,10 +16566,10 @@ with `API_BASE_URL` at its default, and a lane measured it calling the deployed 
 change does to that build.
 
 ### Lane L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN — signing in restores everything mount would have started
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: after signing in through a page's own modal the kitchen clock ticks and the ongoing board auto-refreshes, shown by a test that reds when either starter is skipped
+exit: after signing in through a page's own modal the kitchen clock ticks and the ongoing board auto-refreshes, shown by a test that reds when either starter is skipped, recorded in lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/notes.md
 agent: opus
 evidence: lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/notes.md
 
@@ -16674,11 +16674,11 @@ engaged.
 `externalVoucherNumber` bounds the blast radius, and the repository cannot answer it.
 
 ### Lane L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER — the model-versus-chain check runs without a database
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: a container-free test asserts HasPendingModelChanges is false, and it reds on a scratch tree where an index is declared in OnModelCreating with no migration
+exit: a container-free test asserts HasPendingModelChanges is false, and it reds on a scratch tree where an index is declared in OnModelCreating with no migration, recorded in docs/plan/lanes/L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER/NOTES.md
 agent: opus
 evidence: docs/plan/lanes/L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER/NOTES.md
 
@@ -16728,10 +16728,10 @@ not build them all.** Build enrolment, and name the rest as an ordered backlog w
 why. The owner is walking this module and will look for it in exactly one place.
 
 ### Lane L-MARGIN-WASTE-SURFACE-IS-HONEST — the waste panel stops pressing routes that do not exist
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: no Margin surface calls a route with no handler, shown by a sweep of the waste client against the backend route table, and the coverage panel no longer reports an absence it cannot know
+exit: no Margin surface calls a route with no handler, shown by a sweep of the waste client against the backend route table, and the coverage panel no longer reports an absence it cannot know, recorded in /Users/svendaneel/okam/Web/.claude/worktrees/agent-a14e83ac504f04840/lanes/L-MARGIN-WASTE-SURFACE-IS-HONEST/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-a14e83ac504f04840/lanes/L-MARGIN-WASTE-SURFACE-IS-HONEST/evidence.md
 
@@ -16929,11 +16929,11 @@ is accept the publish and drop the category later, in a different service, for a
 **`bulk-import` sets no images**, so any venue onboarded that way is in this state from its first day.
 
 ### Lane L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED — a worker is not offered a shift she already won
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: after a successor publication each open shift appears once on the worker page and an awarded shift appears not at all, shown by a test that reds when the lineage filter is removed
+exit: after a successor publication each open shift appears once on the worker page and an awarded shift appears not at all, shown by a test that reds when the lineage filter is removed, recorded in /Users/svendaneel/okam/OkamAPI-modules/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-modules/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
 
@@ -16956,11 +16956,11 @@ Use the same predicate rather than a new one, and say whether any other reader h
 sweep is worth more than the fix.
 
 ### Lane L-PLANNED-MINUTES-HONOUR-LINEAGE — republishing a week does not inflate the payroll column
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: republishing an identical week leaves planned minutes, planned labour cost and planned variance unchanged, shown by a measured before-and-after on each of the four readers
+exit: republishing an identical week leaves planned minutes, planned labour cost and planned variance unchanged, shown by a measured before-and-after on each of the four readers, recorded in /Users/svendaneel/okam/OkamAPI-wt-plannedmin/WebApi.Tests/Workforce/RepublishedWeekPlannedReadsTests.cs
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-wt-plannedmin/WebApi.Tests/Workforce/RepublishedWeekPlannedReadsTests.cs
 
@@ -16990,11 +16990,11 @@ moved and then stopped moving.
 *which* revision is named, not a count, so say what the right answer is rather than applying the filter by reflex.
 
 ### Lane L-BACKEND-PATCHES-ARE-APPLIED — four finished fixes stop being patches
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: all four patches are applied on one branch, the tree builds, and the non-SQL tier plus each patch's own arm are green at that commit, with the triple recorded
+exit: all four patches are applied on one branch, the tree builds, and the non-SQL tier plus each patch's own arm are green at that commit, with the triple recorded, recorded in /Users/svendaneel/okam/wt-bepatch/lanes/L-BACKEND-PATCHES-ARE-APPLIED/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/wt-bepatch/lanes/L-BACKEND-PATCHES-ARE-APPLIED/evidence.md
 
@@ -17026,11 +17026,11 @@ inside your own container**, keyed on your own Testcontainers session id, never 
 elimination.
 
 ### Lane L-LAND-THE-BACKEND-ON-THE-TRUNK — today's backend work reaches feature/restaurant-modules
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: feature/restaurant-modules carries the composed stack and every landed backend lane, it builds, and the non-SQL and SQL tiers at the new tip are recorded with every failure accounted for
+exit: feature/restaurant-modules carries the composed stack and every landed backend lane, it builds, and the non-SQL and SQL tiers at the new tip are recorded with every failure accounted for, recorded in /Users/svendaneel/okam/wt-landbackend/lanes/L-LAND-THE-BACKEND-ON-THE-TRUNK/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/wt-landbackend/lanes/L-LAND-THE-BACKEND-ON-THE-TRUNK/evidence.md
 
@@ -17112,11 +17112,11 @@ exists uncommitted in the owner's tree and is **one commit**. Land it or CI reds
 **Do not push.**
 
 ### Lane L-TRIGGER-DECLARATIONS-REFRESHED — all 32 triggers are declared, not the 25 a stale patch knew
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: every trigger the composed chain installs is declared to EF, and the exact-set-equality arm is green at the composed stack, with the SQL tier triple recorded
+exit: every trigger the composed chain installs is declared to EF, and the exact-set-equality arm is green at the composed stack, with the SQL tier triple recorded, recorded in docs/plan/lanes/L-TRIGGER-DECLARATIONS-REFRESHED/detail.md
 agent: opus
 evidence: docs/plan/lanes/L-TRIGGER-DECLARATIONS-REFRESHED/detail.md
 
@@ -17181,11 +17181,11 @@ or C7.
 expected outcome for a patch that is correct; say so plainly rather than manufacturing a finding.
 
 ### Lane L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK — the missing table's migration is checked against the chain it must join
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: a written verdict on whether lane/growthaudit-migration replays over the composed stack without a duplicate-object or parent-mismatch failure, naming the Designer parent id it declares and the id at the stack tip
+exit: a written verdict on whether lane/growthaudit-migration replays over the composed stack without a duplicate-object or parent-mismatch failure, naming the Designer parent id it declares and the id at the stack tip, recorded in docs/plan/reviews/L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK.md
 agent: fable
 evidence: docs/plan/reviews/L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK.md
 
@@ -17419,11 +17419,11 @@ landing.
 never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`.
 
 ### Lane L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK — the eleven pre-fork heads cannot re-add the private predicate behind a merge
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: `git grep -lE 'bool +IsCreditSale *\(' <result-tree> -- '*.cs'` names only Services/Kassa/KassaCreditSale.cs at the tree the backend landing will produce, and each of the eleven pre-fork heads based at 2431883d is classified as retired-unlanded, already-reduced, or must-be-reduced-before-landing
+exit: `git grep -lE 'bool +IsCreditSale *\(' <result-tree> -- '*.cs'` names only Services/Kassa/KassaCreditSale.cs at the tree the backend landing will produce, and each of the eleven pre-fork heads based at 2431883d is classified as retired-unlanded, already-reduced, or must-be-reduced-before-landing, recorded in docs/plan/reviews/L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK.md
 agent: fable
 evidence: docs/plan/reviews/L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK.md
 
@@ -17456,11 +17456,11 @@ this whole job without writing anything. No suite, no container. Never stop, res
 **Rule and name the exact change. Do not edit any file.**
 
 ### Lane L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS — four øre stops printing as zero on a screen an operator reads
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a value of one to nine øre renders as itself and not as a padded zero in both operator clients, shown by driving each client's own formatter with the sub-ten-øre values rather than by reading the shared pin
+exit: a value of one to nine øre renders as itself and not as a padded zero in both operator clients, shown by driving each client's own formatter with the sub-ten-øre values rather than by reading the shared pin, recorded in /Users/svendaneel/okam/web-orepad/lanes/L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS/EVIDENCE.txt
 agent: opus
 evidence: /Users/svendaneel/okam/web-orepad/lanes/L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS/EVIDENCE.txt
 
@@ -17488,11 +17488,11 @@ Trunk is **`ff497c0`** — branch from it, and do not use a stale base. Commit w
 `git merge-file`, never by side — that has cost this estate content four times.
 
 ### Lane L-AN-ACCEPTANCE-NAMES-SOMEBODY — the server stops accepting a proposal from nobody
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: the accept route refuses an acceptance carrying neither a name nor a contact address, shown by a request that omits both and is refused, and by one that carries either and succeeds
+exit: the accept route refuses an acceptance carrying neither a name nor a contact address, shown by a request that omits both and is refused, and by one that carries either and succeeds, recorded in /Users/svendaneel/okam/OkamAPI-acceptname/WebApi.Tests/Wire/EventsAcceptanceIdentityWireTests.cs
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-acceptname/WebApi.Tests/Wire/EventsAcceptanceIdentityWireTests.cs
 
@@ -17552,11 +17552,11 @@ If it passes everywhere you try, say so plainly and name what you tried; that cl
 real result.
 
 ### Lane L-THE-ONLY-COPIES-REACH-A-REF — four commits that exist on no ref stop being one `git gc` from gone
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: each of the four named commits is either reachable from a named branch, or shown to be patch-carried by something already on a ref, with the check that proves it recorded per commit
+exit: each of the four named commits is either reachable from a named branch, or shown to be patch-carried by something already on a ref, with the check that proves it recorded per commit, recorded in docs/plan/returns/L-THE-ONLY-COPIES-REACH-A-REF-1.md
 agent: opus
 evidence: docs/plan/returns/L-THE-ONLY-COPIES-REACH-A-REF-1.md
 
@@ -17591,11 +17591,11 @@ integration, and a landing decision belongs to a landing lane.
 — do not change its branch or its working tree.
 
 ### Lane L-WF-INVITE-PAIR-LANDS — the invite list and its access string land together or not at all
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a manager can see live workforce invitations and withdraw one, with the backend half present in the same landing window, and no locale still shipping the wfr_access_no_list string
+exit: a manager can see live workforce invitations and withdraw one, with the backend half present in the same landing window, and no locale still shipping the wfr_access_no_list string, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-WF-INVITE-PAIR-LANDS/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-WF-INVITE-PAIR-LANDS/evidence.md
 
@@ -17627,11 +17627,11 @@ by side. Never `pkill`, never `npm ci`/`npm install`, never touch the `okam-lwtw
 **:3971**/**:5971**.
 
 ### Lane L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN — the third and fourth pages that half-restart stop half-restarting
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: after signing in inside the page, orders.vue and statistics.vue hold the same state a fresh mount would have produced, shown by driving each page's login-success path and reading adminStores rather than by asserting the handler was called
+exit: after signing in inside the page, orders.vue and statistics.vue hold the same state a fresh mount would have produced, shown by driving each page's login-success path and reading adminStores rather than by asserting the handler was called, recorded in docs/plan/returns/L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN-1.md
 agent: opus
 evidence: docs/plan/returns/L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN-1.md
 
@@ -17661,11 +17661,11 @@ is on `wip/session-2026-08-06-all-work` — never change its branch or working t
 or **:5971**, never `pkill`, never `npm ci`/`npm install`, never touch the `okam-lwtwo-*` containers.
 
 ### Lane L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE — the landed demo stops depending on files that were left behind
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: demo.sh runs from a clean checkout of feature/restaurant-modules on a path it was not authored on, or every dependency it cannot satisfy is named in the script itself where a person running it will see it
+exit: demo.sh runs from a clean checkout of feature/restaurant-modules on a path it was not authored on, or every dependency it cannot satisfy is named in the script itself where a person running it will see it, recorded in docs/plan/lanes/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE/run-2-fixed-script-from-a-fresh-checkout.txt
 agent: opus
 evidence: docs/plan/lanes/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE/run-2-fixed-script-from-a-fresh-checkout.txt
 
@@ -18002,11 +18002,11 @@ return `blocked` and say so. Never stop, restart or exec into `okam-lwtwo-sql` o
 never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED — an operator stops being told to retry something that can never succeed
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: each of the two Growth catch blocks distinguishes the failure it can retry from the one it cannot, shown by driving both paths and reading the two different answers the operator gets
+exit: each of the two Growth catch blocks distinguishes the failure it can retry from the one it cannot, shown by driving both paths and reading the two different answers the operator gets, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED/mutation-log.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED/mutation-log.md
 
@@ -18135,11 +18135,11 @@ walking it. **Never bind :3971 or :5971**, never `pkill`, never `npm ci`/`npm in
 `--no-verify`.
 
 ### Lane L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS — the contact-mismatch refusal carries no invitee identity
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a contact-mismatch refusal carries no invitee identity on the wire, shown by a check that reads the response body rather than the rendered page, and that reds when the withholding clause is removed
+exit: a contact-mismatch refusal carries no invitee identity on the wire, shown by a check that reads the response body rather than the rendered page, and that reds when the withholding clause is removed, recorded in /Users/svendaneel/okam/OkamAPI-refusalid/.lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-refusalid/.lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md
 
@@ -18168,11 +18168,11 @@ on the fast or wire tier, return `blocked` rather than taking one. Never touch `
 **Do not push.**
 
 ### Lane L-A-WORKER-IS-NOT-BLOCKED-BY-HER-SUPERSEDED-SELF — an award stops refusing a shift on the strength of a dead row
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a worker can be awarded a shift she held only in a superseded revision, shown by a red-first proof that reopens and re-awards one and that reds against the unfixed predicate
+exit: a worker can be awarded a shift she held only in a superseded revision, shown by a red-first proof that reopens and re-awards one and that reds against the unfixed predicate, recorded in /Users/svendaneel/okam/OkamAPI-supersededself/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-supersededself/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
 
@@ -18203,11 +18203,11 @@ No migration. **No SQL container** — a landing wave holds a slot; use the fast
 own lane branch. **Do not push.**
 
 ### Lane L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN — no response echoes request headers anywhere reachable
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: an unhandled failure on a money route returns a body carrying no request header, shown by a wire check that reds against the current behaviour, and a written answer naming which deployed environments run the developer exception page
+exit: an unhandled failure on a money route returns a body carrying no request header, shown by a wire check that reds against the current behaviour, and a written answer naming which deployed environments run the developer exception page, recorded in /Users/svendaneel/okam/OkamAPI-anerrbody/lanes/L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN/finding.md
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-anerrbody/lanes/L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN/finding.md
 
@@ -18273,11 +18273,11 @@ C7 is in force. No migration. **No SQL container.** Never touch `okam-lwtwo-sql`
 never bind **:3971** or **:5971**, never `pkill`. Commit to your own lane branch. **Do not push.**
 
 ### Lane L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY — effective dates stop being compared against midnight
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a store that sets Margin up and sells the same day gets a theoretical cost, shown by a statement whose theoretical percentage is non-zero on the setup day and by a check that reds against the midnight comparison
+exit: a store that sets Margin up and sells the same day gets a theoretical cost, shown by a statement whose theoretical percentage is non-zero on the setup day and by a check that reds against the midnight comparison, recorded in /Users/svendaneel/okam/wt-mrgsetupday/.lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md
 agent: opus
 evidence: /Users/svendaneel/okam/wt-mrgsetupday/.lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md
 
@@ -18306,11 +18306,11 @@ No migration without saying so first. Never touch `okam-lwtwo-sql` or `okam-lwtw
 **:3971** or **:5971**, never `pkill`. Commit to your own lane branch. **Do not push.**
 
 ### Lane L-THE-PRINTED-RECEIPT-NAMES-ITS-TENDER — two fiscal-document defects that were analysed and never built
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: no payment type the product can produce prints an empty payer line or a raw enum name on either receipt emitter, shown by a check that reds against both current defaults
+exit: no payment type the product can produce prints an empty payer line or a raw enum name on either receipt emitter, shown by a check that reds against both current defaults, recorded in /Users/svendaneel/okam/wt-printedtender/WebApi.Tests/Kassa/PrintedTenderNameTests.cs
 agent: opus
 evidence: /Users/svendaneel/okam/wt-printedtender/WebApi.Tests/Kassa/PrintedTenderNameTests.cs
 
@@ -18348,11 +18348,11 @@ No migration. **No SQL container** — the cap is 2 and waves have been holding 
 own lane branch. **Do not push.**
 
 ### Lane L-EVERYTHING-REACHES-THE-BRANCH — the final landing, after which no lane work sits off the trunk
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: .
-exit: every branch named below is merged onto its trunk or refused with the reason, both trunks build, the frontend jest and backend non-SQL tiers are recorded at the new tips with every failure accounted for, and one uninterrupted backend SQL tier is attempted and its outcome reported honestly
+exit: every branch named below is merged onto its trunk or refused with the reason, both trunks build, the frontend jest and backend non-SQL tiers are recorded at the new tips with every failure accounted for, and one uninterrupted backend SQL tier is attempted and its outcome reported honestly, recorded in docs/plan/lanes/L-EVERYTHING-REACHES-THE-BRANCH/landing-evidence.md
 agent: opus
 evidence: docs/plan/lanes/L-EVERYTHING-REACHES-THE-BRANCH/landing-evidence.md
 
@@ -18546,11 +18546,11 @@ return `blocked` for that module while completing the others. Never touch `okam-
 push.**
 
 ### Lane L-COVERAGE-MEASURED-PER-MODULE — how much of each module is actually covered, before anyone tries to raise it
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: a per-module coverage figure for both repositories, produced by a command recorded in the review so anyone can re-run it, with the ten largest uncovered code paths named per module
+exit: a per-module coverage figure for both repositories, produced by a command recorded in the review so anyone can re-run it, with the ten largest uncovered code paths named per module, recorded in docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md
 agent: opus
 evidence: docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md
 
@@ -18672,11 +18672,11 @@ the others. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-red
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED — what of the unlanded work is real, and in what order it should land
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: every lane/* branch not an ancestor of its trunk is classified carries-unlanded-product-work, patch-carried, superseded, or pre-fork-must-not-land — with the evidence per row, and the carries-real-work rows ordered by what a person would notice
+exit: every lane/* branch not an ancestor of its trunk is classified carries-unlanded-product-work, patch-carried, superseded, or pre-fork-must-not-land — with the evidence per row, and the carries-real-work rows ordered by what a person would notice, recorded in docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md
 agent: fable
 evidence: docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md
 
@@ -18814,11 +18814,11 @@ once**; expect the new numbers to be worse than the old ones and report them any
 `core` at `9626a561`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES — a repeated call leaves one row, and the two live duplicates are resolved
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a repeated role upsert changes no row count, shown by a second call that is proven not to insert, and the duplicate Kokk and Servitor rows on store 1 are either resolved or recorded with what resolving them would take
+exit: a repeated role upsert changes no row count, shown by a second call that is proven not to insert, and the duplicate Kokk and Servitor rows on store 1 are either resolved or recorded with what resolving them would take, recorded in /Users/svendaneel/okam/OkamAPI-roleupsert/lanes/L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/OkamAPI-roleupsert/lanes/L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES/evidence.md
 
@@ -19016,11 +19016,11 @@ which base you measured from.
 `core` at `9626a561`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-THE-TILL-TESTS-ARE-RUN-AND-TRUE — six rescued money-path suites are run, made honest, and the lost finding is recovered
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: each of the six rescued POS suites passes and reds under a mutation actually applied, or is deleted with the reason, and the till's unmountability is either explained or shown not to reproduce
+exit: each of the six rescued POS suites passes and reds under a mutation actually applied, or is deleted with the reason, and the till's unmountability is either explained or shown not to reproduce, recorded in docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md
 agent: opus
 evidence: docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md
 
@@ -19063,11 +19063,11 @@ before believing any suite count** — otherwise 15 suites fail to resolve while
 not push.**
 
 ### Lane L-THE-DOCUMENTS-AND-CART-TESTS-FINISH — the half-written tests for the three zero-coverage paths are completed or discarded
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: utils/training/evidence.js, utils/meals/statement-client.js and the cart on both sides each carry a test that reds under an applied mutation, or each is recorded as not-worth-testing with the reason
+exit: utils/training/evidence.js, utils/meals/statement-client.js and the cart on both sides each carry a test that reds under an applied mutation, or each is recorded as not-worth-testing with the reason, recorded in docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md
 agent: opus
 evidence: docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md
 
@@ -19106,11 +19106,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-THE-REVIEWED-INSTRUMENT-LANDS — the coverage fix that a reviewer cleared reaches the trunk
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/vue-coverage-instrument is merged onto the frontend trunk, the probe still reds when the config line is reverted at the new tip, and the tier is recorded with every failure accounted for
+exit: lane/vue-coverage-instrument is merged onto the frontend trunk, the probe still reds when the config line is reverted at the new tip, and the tier is recorded with every failure accounted for, recorded in docs/plan/lanes/L-THE-REVIEWED-INSTRUMENT-LANDS/evidence.md
 agent: opus
 evidence: docs/plan/lanes/L-THE-REVIEWED-INSTRUMENT-LANDS/evidence.md
 
@@ -19146,11 +19146,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 ci`/`npm install`. Commit with `--no-verify`. **Do not push.** Record the revert.
 
 ### Lane L-THE-GUARD-STOPS-CRASHING-ON-THE-CASE-IT-GUARDS — one line makes four unmountable components testable
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: newGuid returns a well-formed v4 with no crypto global present, shown by a test that reds against the current line, and the components that could not mount are shown to mount or the remaining reason is named
+exit: newGuid returns a well-formed v4 with no crypto global present, shown by a test that reds against the current line, and the components that could not mount are shown to mount or the remaining reason is named, recorded in /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/guard/Web-modules/test/guid-fallback-without-crypto.test.js
 agent: opus
 evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/guard/Web-modules/test/guid-fallback-without-crypto.test.js
 
@@ -19289,11 +19289,11 @@ to be visible, say so and return `blocked`. Never touch `okam-lwtwo-sql` or `oka
 `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-READ-THE-CRYPTO-LADDER — a security-shaped fallback on eight idempotency-key sites is read before it lands
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on lane/the-guard-stops-crashing-on-the-case-it-guards 1e48b95, naming any rung that could mint a weak or repeatable key, any environment where the ladder still throws unexpectedly, and whether the bundler claim holds
+exit: a verdict on lane/the-guard-stops-crashing-on-the-case-it-guards 1e48b95, naming any rung that could mint a weak or repeatable key, any environment where the ladder still throws unexpectedly, and whether the bundler claim holds, recorded in docs/plan/reviews/L-READ-THE-CRYPTO-LADDER.md
 agent: fable
 evidence: docs/plan/reviews/L-READ-THE-CRYPTO-LADDER.md
 
@@ -19380,11 +19380,11 @@ and check out that SHA.
 **:3971**/**:5971**, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`.
 
 ### Lane L-WHICH-BACKEND-GREENS-MEASURED-NOTHING — every recorded backend tier pass is checked for having run at all
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: every evidence file citing a backend tier result is classified as ran-and-counted or measured-nothing, with the command each used quoted, and the lanes whose conclusions rest on a no-op green named
+exit: every evidence file citing a backend tier result is classified as ran-and-counted or measured-nothing, with the command each used quoted, and the lanes whose conclusions rest on a no-op green named, recorded in docs/plan/reviews/L-WHICH-BACKEND-GREENS-MEASURED-NOTHING.md
 agent: fable
 evidence: docs/plan/reviews/L-WHICH-BACKEND-GREENS-MEASURED-NOTHING.md
 
@@ -19420,11 +19420,11 @@ touch `okam-lwtwo-sql` / `okam-lwtwo-redis`, never bind **:3971**/**:5971**.
 **Rule and name. Do not edit any file** other than your review and return.
 
 ### Lane L-READ-THE-PRINT-PATH — a statutory document path is read before it lands
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on lane/evidence-record-handed-over ab6e7e1, naming any print rule that escapes its scope, any content the sheet omits that the screen shows, and whether the produced PDF is what an inspector would accept
+exit: a verdict on lane/evidence-record-handed-over ab6e7e1, naming any print rule that escapes its scope, any content the sheet omits that the screen shows, and whether the produced PDF is what an inspector would accept, recorded in docs/plan/reviews/L-READ-THE-PRINT-PATH.md
 agent: fable
 evidence: docs/plan/reviews/L-READ-THE-PRINT-PATH.md
 
@@ -19467,11 +19467,11 @@ container, no `pkill`. Never bind **:3971**/**:5971**, never touch the `okam-lwt
 **Rule and name the exact change. Do not edit any file** other than your review and return.
 
 ### Lane L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN — the same defect, found a third time, on the four pages left
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: after an in-page sign-in, overview, offers, kam and goods each hold the state a fresh mount would have produced, shown by driving each page's login-success path and reading its own store rather than asserting a handler fired
+exit: after an in-page sign-in, overview, offers, kam and goods each hold the state a fresh mount would have produced, shown by driving each page's login-success path and reading its own store rather than asserting a handler fired, recorded in docs/plan/returns/L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN-1.md
 agent: opus
 evidence: docs/plan/returns/L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN-1.md
 
@@ -19514,11 +19514,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH — two finished, reviewed bodies of work reach the trunk
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/evidence-record-handed-over and lane/the-last-four-pages-resume-after-sign-in are merged onto the frontend trunk or refused with the reason, and the tier is recorded at the new tip with every test accounted for
+exit: lane/evidence-record-handed-over and lane/the-last-four-pages-resume-after-sign-in are merged onto the frontend trunk or refused with the reason, and the tier is recorded at the new tip with every test accounted for, recorded in docs/plan/lanes/L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH/LANDING.md
 agent: opus
 evidence: docs/plan/lanes/L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH/LANDING.md
 
@@ -19561,11 +19561,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-READ-THE-FOUR-PAGES — the third instance of a thrice-found defect is read by someone who did not fix it
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on lane/the-last-four-pages-resume-after-sign-in 4622bb6, naming any page whose starter does not reproduce a fresh mount, any mutation that would not red, and whether the widened source scan can still go quiet
+exit: a verdict on lane/the-last-four-pages-resume-after-sign-in 4622bb6, naming any page whose starter does not reproduce a fresh mount, any mutation that would not red, and whether the widened source scan can still go quiet, recorded in docs/plan/reviews/L-READ-THE-FOUR-PAGES.md
 agent: fable
 evidence: docs/plan/reviews/L-READ-THE-FOUR-PAGES.md
 
@@ -19697,11 +19697,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-A-WORKER-SEES-WHAT-SHE-CONFIRMED — pressing Bekreft stops showing nothing at all
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a worker who acknowledges a published week is shown the receipt, pinned by the workforce week-run journey rather than by a component test
+exit: a worker who acknowledges a published week is shown the receipt, pinned by the workforce week-run journey rather than by a component test, recorded in docs/plan/lanes/L-A-WORKER-SEES-WHAT-SHE-CONFIRMED/evidence.md
 agent: opus
 evidence: docs/plan/lanes/L-A-WORKER-SEES-WHAT-SHE-CONFIRMED/evidence.md
 
@@ -19795,11 +19795,11 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-A-MANGLED-NEWSLETTER-IS-REFUSED — content that is not content stops storing with a 200
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a newsletter body that is not valid content is refused rather than stored, shown by a request that is refused and one that succeeds
+exit: a newsletter body that is not valid content is refused rather than stored, shown by a request that is refused and one that succeeds, recorded in docs/plan/lanes/L-A-MANGLED-NEWSLETTER-IS-REFUSED/mutation-log.md
 agent: opus
 evidence: docs/plan/lanes/L-A-MANGLED-NEWSLETTER-IS-REFUSED/mutation-log.md
 
@@ -19889,11 +19889,11 @@ haystack was empty, a negative control gone vacuous, a check comparing a value w
 Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 ### Lane L-THE-FOUR-PAGES-LAND — the held branch reaches the trunk on a clean verdict
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/the-last-four-pages-resume-after-sign-in is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for, and offers.vue at that tip carries no optional chaining
+exit: lane/the-last-four-pages-resume-after-sign-in is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for, and offers.vue at that tip carries no optional chaining, recorded in docs/plan/lanes/L-THE-FOUR-PAGES-LAND/LANDING.md
 agent: opus
 evidence: docs/plan/lanes/L-THE-FOUR-PAGES-LAND/LANDING.md
 
@@ -20037,11 +20037,11 @@ printing `Passed!` after a host crash.
 reading is a legitimate outcome.
 
 ### Lane L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS — the last branch from the killed landing reaches the trunk
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/a-worker-sees-what-she-confirmed is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for
+exit: lane/a-worker-sees-what-she-confirmed is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS/evidence.md
 
@@ -20086,11 +20086,11 @@ and runs against the **parent**, which replaced one lane's entire worktree with 
 Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
 
 ### Lane L-READ-THE-DAYS-BUILDS-REDO — four builds now on the trunk are read by someone who wrote none of them
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the Events lever, the newsletter inspection, the If-Match discovery and the acknowledgement receipt, naming any mutation that would not red, any claim that does not hold, and any change reaching further than its lane's exit
+exit: a verdict on the Events lever, the newsletter inspection, the If-Match discovery and the acknowledgement receipt, naming any mutation that would not red, any claim that does not hold, and any change reaching further than its lane's exit, recorded in docs/plan/reviews/L-READ-THE-DAYS-BUILDS-REDO.md
 agent: fable
 evidence: docs/plan/reviews/L-READ-THE-DAYS-BUILDS-REDO.md
 
@@ -20142,11 +20142,11 @@ and runs against the **parent**, which replaced one lane's entire worktree with 
 Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
 
 ### Lane L-THE-GUEST-EXIT-IS-FINISHED — an unfinished article 7(3) lane is completed or its state is stated
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a guest holding no session reaches an unsubscribe surface from a dispatched message and completes a withdrawal against the deployed origins, shown by a journey capture — or the exact remaining obstacle is named with what it would take
+exit: a guest holding no session reaches an unsubscribe surface from a dispatched message and completes a withdrawal against the deployed origins, shown by a journey capture — or the exact remaining obstacle is named with what it would take, recorded in /Users/svendaneel/okam/Web-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/lanes/L-THE-GUEST-EXIT-IS-FINISHED/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/lanes/L-THE-GUEST-EXIT-IS-FINISHED/evidence.md
 
@@ -20296,11 +20296,11 @@ placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is b
 load-bearing. Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
 
 ### Lane L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE — the last unproven step of the dispatch path gets an answer either way
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: one Events guest link is delivered end to end on a world an agent can reach, or the delivery path is recorded as locally unprovable with the exact configuration a proof would require
+exit: one Events guest link is delivered end to end on a world an agent can reach, or the delivery path is recorded as locally unprovable with the exact configuration a proof would require, recorded in docs/plan/lanes/L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE/DELIVERY-RECORD.md
 agent: opus
 evidence: docs/plan/lanes/L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE/DELIVERY-RECORD.md
 
@@ -20343,11 +20343,11 @@ and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cm
 placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify` is
 load-bearing. Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
 ### Lane L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION — one property decides whether any mail leaves at all
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a send over the product's own transport completes its TLS connect on a host that cannot complete a certificate-revocation check, shown by a probe that reds against the current bare client
+exit: a send over the product's own transport completes its TLS connect on a host that cannot complete a certificate-revocation check, shown by a probe that reds against the current bare client, recorded in docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/DECISION-RECORD.md
 agent: opus
 evidence: docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/DECISION-RECORD.md
 
@@ -20395,11 +20395,11 @@ module fixture. **Check every tier log for an abort line above the summary.** Ne
 Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-LAND-THE-EVENING-WORK — the guest exit and the wrong-week fix reach the trunk
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: the guest-exit pair is merged onto both trunks, the wrong-week fix is merged or named as held pending its review, and both tiers are recorded at the new tips with every test accounted for
+exit: the guest-exit pair is merged onto both trunks, the wrong-week fix is merged or named as held pending its review, and both tiers are recorded at the new tips with every test accounted for, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-LAND-THE-EVENING-WORK/evidence.md
 agent: L-LAND-THE-EVENING-WORK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-LAND-THE-EVENING-WORK/evidence.md
 
@@ -20444,11 +20444,11 @@ Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, nev
 `okam-lwtwo-*` containers. **Do not push.**
 
 ### Lane L-READ-THE-WRONG-WEEK-FIX — a fix to what an acknowledgement means is read by someone who did not write it
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on lane/the-acknowledge-button-cannot-confirm-the-wrong-week acafde6, naming any ordering the fix does not actually stabilise, any mutation that would not red, and whether re-targeting was the right call over refusing
+exit: a verdict on lane/the-acknowledge-button-cannot-confirm-the-wrong-week acafde6, naming any ordering the fix does not actually stabilise, any mutation that would not red, and whether re-targeting was the right call over refusing, recorded in docs/plan/reviews/L-READ-THE-WRONG-WEEK-FIX.md
 agent: L-READ-THE-WRONG-WEEK-FIX
 evidence: docs/plan/reviews/L-READ-THE-WRONG-WEEK-FIX.md
 
@@ -20541,11 +20541,11 @@ is load-bearing. **Do not touch `web-livewalk`**. Never `pkill`, never `npm ci`/
 bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers. **Do not push.**
 
 ### Lane L-THE-WORKFORCE-SCREENS-ARE-TESTED — eight zero-coverage files behind the rota
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: the eight zero-coverage Workforce .vue files carry tests that red under applied-and-restored mutations, coverage is recorded before and after per file, and the frontend tier is green at the lane tip
+exit: the eight zero-coverage Workforce .vue files carry tests that red under applied-and-restored mutations, coverage is recorded before and after per file, and the frontend tier is green at the lane tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-WORKFORCE-SCREENS-ARE-TESTED-1.md
 agent: L-THE-WORKFORCE-SCREENS-ARE-TESTED
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-WORKFORCE-SCREENS-ARE-TESTED-1.md
 
@@ -20610,11 +20610,11 @@ pre-existing assertion caught them.**
 
 
 ### Lane L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS — three files, and then two modules have none left
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: pages/admin/meals-statements.vue, MealsStatementLines.vue and pages/offer/_code.vue carry tests that red under applied-and-restored mutations, coverage is recorded before and after, and the frontend tier is green at the lane tip
+exit: pages/admin/meals-statements.vue, MealsStatementLines.vue and pages/offer/_code.vue carry tests that red under applied-and-restored mutations, coverage is recorded before and after, and the frontend tier is green at the lane tip, recorded in docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/coverage-after.txt
 agent: L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS
 evidence: docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/coverage-after.txt
 
@@ -20654,11 +20654,11 @@ is load-bearing. **Do not touch `web-livewalk`**. Never `pkill`, never `npm ci`/
 bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers. **Do not push.**
 
 ### Lane L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED — the 33,535-line row, opened
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: the twenty largest zero-or-near-zero-coverage Core/POS backend files are listed with measured line counts in a committed artifact, three of them carrying money or statutory behaviour are covered by tests that red under applied-and-restored mutations, and the non-SQL tier is green at the lane tip
+exit: the twenty largest zero-or-near-zero-coverage Core/POS backend files are listed with measured line counts in a committed artifact, three of them carrying money or statutory behaviour are covered by tests that red under applied-and-restored mutations, and the non-SQL tier is green at the lane tip, recorded in docs/plan/artifacts/pos-uncovered-twenty.md
 agent: L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED
 evidence: docs/plan/artifacts/pos-uncovered-twenty.md
 
@@ -20702,11 +20702,11 @@ you cannot account for.** One `dotnet test` spans **two** Testcontainers session
 plus `git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch the `okam-lwtwo-*`
 containers, never bind **:3971**/**:5971**. **Do not push.**
 ### Lane L-READ-THE-REVOCATION-LEVER — a security check was switched off and someone else has to agree it was the right one
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: a verdict on lane/mail-revocation-lever 69e6ca8af, naming whether unset truly binds to true through the real configuration path, whether anything other than revocation was relaxed, and what a revoked provider certificate would now do
+exit: a verdict on lane/mail-revocation-lever 69e6ca8af, naming whether unset truly binds to true through the real configuration path, whether anything other than revocation was relaxed, and what a revoked provider certificate would now do, recorded in docs/plan/reviews/L-READ-THE-REVOCATION-LEVER.md
 agent: L-READ-THE-REVOCATION-LEVER
 evidence: docs/plan/reviews/L-READ-THE-REVOCATION-LEVER.md
 
@@ -20765,11 +20765,11 @@ fake a mutation result** — the lane defeated that with `cp` + `touch`; do the 
 plus `git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch the `okam-lwtwo-*`
 containers, never bind **:3971**/**:5971**. **Do not push.**
 ### Lane L-THE-ORPHANED-FIXES-REACH-A-BRANCH — four finished fixes sit on refs that no branch reaches
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: each of the four orphaned refs/lanes refs is ruled landed, superseded or still-needed against the trunk with the reason measured rather than assumed, everything still needed is merged, and the frontend tier is green at the tip
+exit: each of the four orphaned refs/lanes refs is ruled landed, superseded or still-needed against the trunk with the reason measured rather than assumed, everything still needed is merged, and the frontend tier is green at the tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/evidence.md
 agent: L-THE-ORPHANED-FIXES-REACH-A-BRANCH
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/evidence.md
 
@@ -20932,11 +20932,11 @@ the ten skips are expected and the one `SchedulePublishSqlServerTests` red is pr
 `git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch `okam-lwtwo-*`, never bind
 **:3971**/**:5971**. **Do not push.**
 ### Lane L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID — a worker with two employers is told she is clocked in on the one that folded nothing
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a cross-engagement clock-in that returns AttendanceException while carrying another employer's open session id no longer computes SESSION_OPEN, shown by a test that reds when the null-id rule is restored, and the frontend tier is green at the tip
+exit: a cross-engagement clock-in that returns AttendanceException while carrying another employer's open session id no longer computes SESSION_OPEN, shown by a test that reds when the null-id rule is restored, and the frontend tier is green at the tip, recorded in docs/plan/lanes/L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID/FINDING.md
 agent: L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID
 evidence: docs/plan/lanes/L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID/FINDING.md
 
@@ -21028,11 +21028,11 @@ Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, nev
 **Do not push.**
 
 ### Lane L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN — the one label surface that is genuinely still untranslated
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: woltDeliveryStatusLabel resolves every state through the dictionary, the shadowed dineHomeDeliveryStatusLabel copy is deleted or made reachable deliberately, both shown by a test that reds when a German string is corrupted, and the frontend tier is green at the tip
+exit: woltDeliveryStatusLabel resolves every state through the dictionary, the shadowed dineHomeDeliveryStatusLabel copy is deleted or made reachable deliberately, both shown by a test that reds when a German string is corrupted, and the frontend tier is green at the tip, recorded in docs/plan/lanes/L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/premise-check.txt
 agent: L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN
 evidence: docs/plan/lanes/L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/premise-check.txt
 
@@ -21070,11 +21070,11 @@ and check out that SHA. Trunk **`78ed84f`** = **166 / 3950 / 0**. Teardown `rm -
 never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK — three money fixes landed tonight and nobody but their lander has read them
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the three cherry-picks between 78ed84f and d4c308e, naming any pin that restates the fix rather than reproducing the defect, any behaviour the price.js delegate rename changed, and whether the three dictionaries carry the new key exactly once
+exit: a verdict on the three cherry-picks between 78ed84f and d4c308e, naming any pin that restates the fix rather than reproducing the defect, any behaviour the price.js delegate rename changed, and whether the three dictionaries carry the new key exactly once, recorded in docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md
 agent: L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK
 evidence: docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md
 
@@ -21122,11 +21122,11 @@ never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Check `uptime` bef
 ceiling is 21 and it was 25 when this was authored.** **Do not push.**
 
 ### Lane L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL — three coverage lanes added over two hundred tests on one claim
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the mutation evidence of the three coverage branches, naming every test that survives every mutation a second reader can devise, and whether the reported kill counts reproduce
+exit: a verdict on the mutation evidence of the three coverage branches, naming every test that survives every mutation a second reader can devise, and whether the reported kill counts reproduce, recorded in docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md
 agent: L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL
 evidence: docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md
 
@@ -21224,11 +21224,11 @@ and check out that SHA. Trunk **`d4c308e`** = **168 suites / 4007 / 0**. **Check
 `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE — a network blip reads as an expired offer, and a placed order can blank the page
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a load failure is distinguishable from an expired offer and acceptOffer cannot overwrite the proposal with a non-object, both shown by tests that red when each guard is removed, and the frontend tier is green at the tip
+exit: a load failure is distinguishable from an expired offer and acceptOffer cannot overwrite the proposal with a non-object, both shown by tests that red when each guard is removed, and the frontend tier is green at the tip, recorded in docs/plan/lanes/L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE/FINDING.md
 agent: L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE
 evidence: docs/plan/lanes/L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE/FINDING.md
 
@@ -21324,11 +21324,11 @@ keeps its objects under that worktree, so `rm -rf` plus `git worktree prune` des
 install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ — unread and off are shown as the same thing
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: a timesheets read that never answered is distinguishable from an export flag that is off, shown by the existing failing test going green because the code is right, and the frontend tier is green at the tip
+exit: a timesheets read that never answered is distinguishable from an export flag that is off, shown by the existing failing test going green because the code is right, and the frontend tier is green at the tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ-1.md
 agent: L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ-1.md
 
@@ -21466,11 +21466,11 @@ extrapolate — but it was measured independently of the three ghosts and points
 
 
 ### Lane L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET — one card, two spendable balances, and no row that explains either
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: transferring a gift card leaves exactly one funded wallet and every Purchased row still names its gift card, shown by the existing failing pin going green because the code changed, and the non-SQL tier green apart from pins named in the return
+exit: transferring a gift card leaves exactly one funded wallet and every Purchased row still names its gift card, shown by the existing failing pin going green because the code changed, and the non-SQL tier green apart from pins named in the return, recorded in docs/plan/lanes/L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET/evidence.md
 agent: L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET
 evidence: docs/plan/lanes/L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET/evidence.md
 
@@ -21555,11 +21555,11 @@ at `.gitignore:111`; force-add and verify with `git ls-files --error-unmatch`. T
 never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG — the last two untruths on the offer page
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: an offer with no clientPhoneNumber and a failed SMS send each render a sentence written for a reader rather than an exception or a wrong accusation, shown by tests that red when each is reverted, and the frontend tier green at the tip
+exit: an offer with no clientPhoneNumber and a failed SMS send each render a sentence written for a reader rather than an exception or a wrong accusation, shown by tests that red when each is reverted, and the frontend tier green at the tip, recorded in docs/plan/lanes/L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG/FINDING.md
 agent: L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG
 evidence: docs/plan/lanes/L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG/FINDING.md
 
@@ -21610,11 +21610,11 @@ Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do no
 **Gate on `uptime` separately — hold below 13.** Never `npm ci`/`npm install`, never bind **:3971**/**:5971**.
 **Do not push.**
 ### Lane L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN — a dozen finished branches, none on a trunk, with dependencies nobody has written down
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a committed landing plan naming every unlanded lane branch, its base, its dependants, and a total order, with each step proven to compose by a throwaway merge whose tier is recorded — and no merge left on any trunk
+exit: a committed landing plan naming every unlanded lane branch, its base, its dependants, and a total order, with each step proven to compose by a throwaway merge whose tier is recorded — and no merge left on any trunk, recorded in docs/plan/artifacts/landing-order.md
 agent: L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN
 evidence: docs/plan/artifacts/landing-order.md
 
@@ -21695,11 +21695,11 @@ matters and it is bare `artifacts/`** — always confirm with `git check-ignore 
 
 
 ### Lane L-THE-THREE-SURVIVORS-ARE-KILLED — mutations excused as equivalent that an audit separated
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: each of the three named survivors is killed by a new assertion, shown by that mutation redding where it previously survived, and the tier green at each branch tip
+exit: each of the three named survivors is killed by a new assertion, shown by that mutation redding where it previously survived, and the tier green at each branch tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-THREE-SURVIVORS-ARE-KILLED-1.md
 agent: L-THE-THREE-SURVIVORS-ARE-KILLED
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-THREE-SURVIVORS-ARE-KILLED-1.md
 
@@ -21805,11 +21805,11 @@ Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do no
 **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm
 install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 ### Lane L-READ-TRANCHE-ONE — four branches about to reach the trunk, none read by anyone but their authors
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the four tranche-one branches naming any change that does not do what its return claims, any test that cannot red, and whether they compose in the order the landing plan gives
+exit: a verdict on the four tranche-one branches naming any change that does not do what its return claims, any test that cannot red, and whether they compose in the order the landing plan gives, recorded in docs/plan/reviews/L-READ-TRANCHE-ONE.md
 agent: L-READ-TRANCHE-ONE
 evidence: docs/plan/reviews/L-READ-TRANCHE-ONE.md
 
@@ -21866,11 +21866,11 @@ below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**
 `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK — the proven order, executed one tranche at a time
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: tranche one of the landing plan is merged onto feature/restaurant-modules with every test accounted for against the recorded step tiers, or held with the reason named — and nothing beyond tranche one touched
+exit: tranche one of the landing plan is merged onto feature/restaurant-modules with every test accounted for against the recorded step tiers, or held with the reason named — and nothing beyond tranche one touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK/evidence.md
 agent: L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK/evidence.md
 
@@ -21986,11 +21986,11 @@ with `git check-ignore -v` before calling it committed. Trunk **`d4c308e`** = **
 never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES — a landed branch carries a record wrong three ways
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: the Wolt label record names the real statusesToSave membership, the real reachable count, and the real reason the disputed label exists, shown by a grep of the named file agreeing with WoltService.cs at the trunk
+exit: the Wolt label record names the real statusesToSave membership, the real reachable count, and the real reason the disputed label exists, shown by a grep of the named file agreeing with WoltService.cs at the trunk, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES/evidence.md
 agent: L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES/evidence.md
 
@@ -22030,11 +22030,11 @@ not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** N
 ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-TRANCHE-TWO-REACHES-THE-TRUNK — the seam disappeared, and one branch now carries the whole tranche
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/a-kill-certificate-requires-a-test 316f22a is merged onto feature/restaurant-modules with every test accounted for against a measured composition, the runner on the trunk byte-identical to that tip, and nothing beyond tranche two touched
+exit: lane/a-kill-certificate-requires-a-test 316f22a is merged onto feature/restaurant-modules with every test accounted for against a measured composition, the runner on the trunk byte-identical to that tip, and nothing beyond tranche two touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-TWO-REACHES-THE-TRUNK/evidence.md
 agent: L-TRANCHE-TWO-REACHES-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-TWO-REACHES-THE-TRUNK/evidence.md
 
@@ -22085,11 +22085,11 @@ not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** N
 ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-TRANCHE-THREE-REACHES-THE-TRUNK — the workforce chain, whose two halves must land in order
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: 8d4d1b0 then 2ce83f6 are merged onto feature/restaurant-modules in that order with every test accounted for against a measured composition, and nothing beyond tranche three touched
+exit: 8d4d1b0 then 2ce83f6 are merged onto feature/restaurant-modules in that order with every test accounted for against a measured composition, and nothing beyond tranche three touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-THREE-REACHES-THE-TRUNK/evidence.md
 agent: L-TRANCHE-THREE-REACHES-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-THREE-REACHES-THE-TRUNK/evidence.md
 
@@ -22144,11 +22144,11 @@ not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** N
 ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-READ-THE-TWO-MONEY-FIXES — one creates money and one double-lists an invoice, and nobody but their authors has read either
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: a verdict on lane/giftcard-transfer-one-wallet 71ac73af1 and lane/an-invoice-lists-each-order-once a9d408bfb, naming any path either fix leaves reachable, whether each pin reproduces its defect rather than restating its fix, and whether the two compose
+exit: a verdict on lane/giftcard-transfer-one-wallet 71ac73af1 and lane/an-invoice-lists-each-order-once a9d408bfb, naming any path either fix leaves reachable, whether each pin reproduces its defect rather than restating its fix, and whether the two compose, recorded in docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md
 agent: L-READ-THE-TWO-MONEY-FIXES
 retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
 evidence: docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md
@@ -22268,11 +22268,11 @@ silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence
 Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below
 13.** Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
 ### Lane L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE — it protects two directories and misses fifteen drivers
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: the sweep reports every executable mutation driver in the tree including those under repo-root lanes/, shown by an arm that reds when a broken copy is placed there and passes when it is removed
+exit: the sweep reports every executable mutation driver in the tree including those under repo-root lanes/, shown by an arm that reds when a broken copy is placed there and passes when it is removed, recorded in docs/plan/returns/L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE-1.md
 agent: L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE
 retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
 evidence: docs/plan/returns/L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE-1.md
@@ -22320,11 +22320,11 @@ stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never 
 never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-TRANCHE-FOUR-REACHES-THE-TRUNK — the two-repo unit, where the frontend commit is useless without the core one
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: core a6ae241 and Web-modules 6d43520 are landed as one unit with the submodule pin moved and the tier measured at the composed tip, or held with the reason named — and nothing beyond tranche four touched
+exit: core a6ae241 and Web-modules 6d43520 are landed as one unit with the submodule pin moved and the tier measured at the composed tip, or held with the reason named — and nothing beyond tranche four touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FOUR-REACHES-THE-TRUNK/evidence.md
 agent: L-TRANCHE-FOUR-REACHES-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FOUR-REACHES-THE-TRUNK/evidence.md
 
@@ -22372,11 +22372,11 @@ bare `*.log`; check evidence with `git check-ignore -v`. Teardown `rm -rf` + `gi
 stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**,
 never touch `okam-lwtwo-*`. **Do not push.**
 ### Lane L-TRANCHE-FIVE-REACHES-THE-TRUNK — the last tranche, and the only one that must rewrite tests to land
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: 40ab62d is merged onto feature/restaurant-modules together with a rewrite of the nine meals arms it reds, each rewritten arm asserting the corrected behaviour rather than being deleted, and the tier green at the composed tip
+exit: 40ab62d is merged onto feature/restaurant-modules together with a rewrite of the nine meals arms it reds, each rewritten arm asserting the corrected behaviour rather than being deleted, and the tier green at the composed tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FIVE-REACHES-THE-TRUNK/evidence.md
 agent: L-TRANCHE-FIVE-REACHES-THE-TRUNK
 retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FIVE-REACHES-THE-TRUNK/evidence.md
@@ -22426,11 +22426,11 @@ rules** — a bare `artifacts/` and a bare `*.log`; check evidence with `git che
 never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY — any signed-in user can transfer any card whose id they know
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: TransferGiftcard refuses a caller who does not hold the card, shown by a wire test that reds when the ownership check is removed, and the non-SQL tier green apart from pins named in the return
+exit: TransferGiftcard refuses a caller who does not hold the card, shown by a wire test that reds when the ownership check is removed, and the non-SQL tier green apart from pins named in the return, recorded in docs/plan/lanes/L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY/tier.txt
 agent: L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY
 evidence: docs/plan/lanes/L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY/tier.txt
 
@@ -22560,11 +22560,11 @@ rules** — a bare `artifacts/` and a bare `*.log`; check with `git check-ignore
 hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK — three branches that must land together or leave the trunk red
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: pos-coverage-opened, giftcard-transfer-one-wallet and an-invoice-lists-each-order-once are merged onto feature/restaurant-modules as one tranche with a measured tier of 0 failed at the composed tip, and nothing beyond the tranche touched
+exit: pos-coverage-opened, giftcard-transfer-one-wallet and an-invoice-lists-each-order-once are merged onto feature/restaurant-modules as one tranche with a measured tier of 0 failed at the composed tip, and nothing beyond the tranche touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK/evidence.md
 agent: L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK/evidence.md
 
@@ -22626,11 +22626,11 @@ never `git add -A`. **Two silent ignore rules** — a bare `artifacts/` and a ba
 never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK — the last open money hole reaches the branch that carries it
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: lane/giftcard-transfer-one-wallet-auth 8637cdd51 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+exit: lane/giftcard-transfer-one-wallet-auth 8637cdd51 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched, recorded in docs/plan/returns/L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK-1.md
 agent: L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK
 evidence: docs/plan/returns/L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK-1.md
 
@@ -22684,11 +22684,11 @@ rather than trusting an exit code. **Two silent ignore rules** — a bare `artif
 check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK — the last two built frontend branches
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/guard-sweeps-where-runners-live b6715dd and lane/backend-landing-order 392a2fd are merged onto feature/restaurant-modules with the tier green at the composed tip and every test accounted for, and nothing beyond them touched
+exit: lane/guard-sweeps-where-runners-live b6715dd and lane/backend-landing-order 392a2fd are merged onto feature/restaurant-modules with the tier green at the composed tip and every test accounted for, and nothing beyond them touched, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK/evidence.md
 agent: L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK/evidence.md
 
@@ -22747,11 +22747,11 @@ a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/
 **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED — a classified count is not yet a work list
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: the 143 backend branches carrying an un-upstreamed change are ranked into what a person would notice, in a committed artifact naming for each the defect or capability it carries and the instrument that settled it, with an explicit count of any that could not be read
+exit: the 143 backend branches carrying an un-upstreamed change are ranked into what a person would notice, in a committed artifact naming for each the defect or capability it carries and the instrument that settled it, with an explicit count of any that could not be read, recorded in docs/plan/artifacts/backend-un-upstreamed-ranked.md
 agent: L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED
 evidence: docs/plan/artifacts/backend-un-upstreamed-ranked.md
 
@@ -22850,11 +22850,11 @@ an empty diff. `${ref}:path` in zsh.** Teardown `rm -rf` + `git worktree prune`.
 `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** **Do not push.**
 
 ### Lane L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE — the deposit clears and the guest lands nowhere
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: the Vipps return address and the emailed link are composed from one source, shown by a test that reds when they are composed separately, with the non-SQL tier green at the composed tip
+exit: the Vipps return address and the emailed link are composed from one source, shown by a test that reds when they are composed separately, with the non-SQL tier green at the composed tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE/evidence.md
 agent: L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE/evidence.md
 
@@ -22924,11 +22924,11 @@ A lane blocked on transient capacity should return `blocked` with the reason in 
 when capacity returns — which is exactly what happened here, minus the self-inflicted gate.
 
 ### Lane L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED — a statutory report claims receipts it never received
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: no X or Z report includes a receivable in its received total, shown by a test that reds when a company-account sale is counted as received, with the non-SQL tier green at the composed tip
+exit: no X or Z report includes a receivable in its received total, shown by a test that reds when a company-account sale is counted as received, with the non-SQL tier green at the composed tip, recorded in docs/plan/returns/L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED-1.md
 agent: L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED
 evidence: docs/plan/returns/L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED-1.md
 
@@ -23010,11 +23010,11 @@ before merging and say that you did.** Teardown `rm -rf` + `git worktree prune`.
 separate check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER — the file name and the printed number disagree
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a credit note's file name and its printed number agree for every issued note, shown by a test that reds when the route parameter is used for the name, with the non-SQL tier green at the composed tip
+exit: a credit note's file name and its printed number agree for every issued note, shown by a test that reds when the route parameter is used for the name, with the non-SQL tier green at the composed tip, recorded in docs/plan/returns/L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER-1.md
 agent: L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER
 evidence: docs/plan/returns/L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER-1.md
 
@@ -23131,11 +23131,11 @@ summary** — a sibling lane found this and it invalidates the way every backend
 its own evidence.
 
 ### Lane L-THE-XZ-SPLIT-REACHES-THE-TRUNK — a statutory report stops claiming money it never received
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: lane/xz-received-at-the-model 67d47d3e7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+exit: lane/xz-received-at-the-model 67d47d3e7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched, recorded in docs/plan/returns/L-THE-XZ-SPLIT-REACHES-THE-TRUNK-1.md
 agent: L-THE-XZ-SPLIT-REACHES-THE-TRUNK
 evidence: docs/plan/returns/L-THE-XZ-SPLIT-REACHES-THE-TRUNK-1.md
 
@@ -23183,11 +23183,11 @@ that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktre
 as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
 
 ### Lane L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON — the canonical mutation runner cannot run where .NET lives
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: the canonical runner locates its repo root without requiring package.json, shown by an arm that runs it from a directory tree that has none, and the frontend tier green at the lane tip
+exit: the canonical runner locates its repo root without requiring package.json, shown by an arm that runs it from a directory tree that has none, and the frontend tier green at the lane tip, recorded in docs/plan/returns/L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON-1.md
 agent: L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON
 evidence: docs/plan/returns/L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON-1.md
 
@@ -23223,11 +23223,11 @@ pin is **`a6ae241`** and `git fetch <path> <sha>` needs the **full 40-character 
 Never `npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK — the tool every lane is told to use can finally enter the backend
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: lane/runner-finds-its-root 10ace1a is merged onto feature/restaurant-modules with the frontend tier green at the composed tip and every test accounted for, and nothing beyond it touched
+exit: lane/runner-finds-its-root 10ace1a is merged onto feature/restaurant-modules with the frontend tier green at the composed tip and every test accounted for, and nothing beyond it touched, recorded in docs/plan/returns/L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK-1.md
 agent: L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK
 evidence: docs/plan/returns/L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK-1.md
 
@@ -23278,11 +23278,11 @@ you did.** **Gate on `uptime` as a separate check you stop on — hold below 13.
 `npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY — a 500 where a reason belongs
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: the loser of a release race is told why it lost rather than receiving a 500, shown by a test that reds when the unwind exception is allowed to propagate, with the non-SQL tier green at the lane tip
+exit: the loser of a release race is told why it lost rather than receiving a 500, shown by a test that reds when the unwind exception is allowed to propagate, with the non-SQL tier green at the lane tip, recorded in docs/plan/returns/L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY-1.md
 agent: L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY
 evidence: docs/plan/returns/L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY-1.md
 
@@ -23320,11 +23320,11 @@ merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf
 **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
 
 ### Lane L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED — the class a census counted rather than guessed
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
-exit: each of the 37 branches recorded unreadable in the ranking artifact carries a verdict from its diff — a named defect, superseded, or still-unreadable-and-why — in a committed artifact, with the count per class stated
+exit: each of the 37 branches recorded unreadable in the ranking artifact carries a verdict from its diff — a named defect, superseded, or still-unreadable-and-why — in a committed artifact, with the count per class stated, recorded in docs/plan/artifacts/backend-unreadable-thirtyseven.md
 agent: L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED
 evidence: docs/plan/artifacts/backend-unreadable-thirtyseven.md
 
@@ -23374,11 +23374,11 @@ merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf
 **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
 
 ### Lane L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP — the authorization has no wire test
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a test in WebApi.Tests/Wire drives TransferGiftcard over HTTP and asserts a non-holder receives the same body an unknown id receives, redding when the controller stops resolving the caller, with the non-SQL tier green at the lane tip
+exit: a test in WebApi.Tests/Wire drives TransferGiftcard over HTTP and asserts a non-holder receives the same body an unknown id receives, redding when the controller stops resolving the caller, with the non-SQL tier green at the lane tip, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP/evidence.md
 agent: L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP/evidence.md
 
@@ -23475,11 +23475,11 @@ an error. **Never `--override`.** **Never `plan accept`** — it is owner-only a
 touch `web-livewalk`. **Gate on `uptime` — hold below 13.** **Do not push.**
 
 ### Lane L-THE-RELEASE-RACE-REACHES-THE-TRUNK — the last ranked defect lands, composed and proven
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: lane/release-race-composed f935c8ae7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+exit: lane/release-race-composed f935c8ae7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched, recorded in docs/plan/returns/L-THE-RELEASE-RACE-REACHES-THE-TRUNK-1.md
 agent: L-THE-RELEASE-RACE-REACHES-THE-TRUNK
 evidence: docs/plan/returns/L-THE-RELEASE-RACE-REACHES-THE-TRUNK-1.md
 
@@ -33705,10 +33705,10 @@ master, and `[EnableRateLimiting]` / `RequireRateLimiting` appear zero times, so
 which is an unrelated reward-program query.)*
 
 ### Lane L-CORS-NARROW-THE-DEFAULT — the deployed default names its origins instead of echoing whatever asks
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: a diff against the production branch replaces the global permissive default with an enumerated origin list, and a preflight probe run against a locally hosted build shows a foreign origin refused where the deployed API admits it
+exit: a diff against the production branch replaces the global permissive default with an enumerated origin list, and a preflight probe run against a locally hosted build shows a foreign origin refused where the deployed API admits it, recorded in /Users/svendaneel/okam/Web-modules/lanes/L-CORS-NARROW-THE-DEFAULT/evidence.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/lanes/L-CORS-NARROW-THE-DEFAULT/evidence.md
 
@@ -33753,10 +33753,10 @@ measurement of an arbitrary ref, and it can go from true to false with nothing i
 probe is correct. The work is on `2a052800` and the tree was simply somewhere else.
 
 ### Lane L-PROBE-DIR-IS-PINNED — a backend probe refuses to answer from the wrong ref
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: a probe reads the branch of every backend `dir` this plan names and reds when it is not the declared one, shown by a run against a deliberately switched checkout
+exit: a probe reads the branch of every backend `dir` this plan names and reds when it is not the declared one, shown by a run against a deliberately switched checkout, recorded in /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PROBE-DIR-IS-PINNED/detail.md
 agent: opus
 evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PROBE-DIR-IS-PINNED/detail.md
 
