@@ -23527,12 +23527,13 @@ works inside this repo** — it anchors on the nearest `.git`. **In zsh write `$
 `rm -rf` + `git worktree prune`. **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
 ### Lane L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE — the proof is on disk and the exit never mentions it
-state: running
+state: built-unverified
 class: analysis
 owner: agent
 dir: .
 exit: every lane whose exit criterion does not name its own on-disk artifact has that artifact named in the exit, shown by plan verify accepting the lane against its recorded evidence, with the count accepted and the count still refused both stated
 agent: L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE
+evidence: docs/plan/artifacts/two-hundred-and-six-exits.md
 
 **This is the single cheapest half of the verification backlog and it is a wording defect, not missing
 work.** A measurement pass ran `plan verify` against all 469 built-unverified lanes and found **221 refused
@@ -23568,6 +23569,50 @@ bookkeeping; it is making a true claim checkable.
 **only** the `exit:` line of a lane block; **L3 forbids rephrasing or compressing anyone's prose**, and the
 body around it is authored text. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
 `artifacts/` and a bare `*.log`. Do not touch `web-livewalk`. **Gate on `uptime` — hold below 13.**
+**Do not push.**
+
+### Lane L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED — twenty-one proofs exist and live nowhere anyone else can read them
+state: open
+class: node
+owner: agent
+dir: .
+exit: every artifact named by a built-unverified lane and currently committed nowhere is either committed and its lane accepted by plan verify, or recorded as unrecoverable with the reason, with the count of each stated
+
+**The objective's bar is "an artifact a stranger can open", and twenty-one lanes fail it in the most
+avoidable way: the proof exists and is committed nowhere.** Measured with `git ls-files` rather than
+inferred from a path — **17 untracked inside a worktree, 4 outside any repository entirely.**
+
+**A previous pass deliberately refused to verify against them**, on the grounds that resting a true-looking
+claim on an uncommitted file is exactly the failure that destroyed 86 lanes' evidence when worktrees were
+torn down. **That refusal was right and this lane is its consequence, not its reversal.**
+
+**Read `docs/plan/artifacts/two-hundred-and-six-exits.md` and `docs/plan/artifacts/why-verification-is-refused.md`
+first** — the twenty-one are named there with their paths and their tracked-ness measured. **Do not
+re-derive that.**
+
+**Commit each artifact where it belongs and then let the tool decide.** The lane directories under
+`docs/plan/lanes/` are the estate's home for lane evidence. **Do not move an artifact that is already in a
+sensible place merely to make a path shorter** — the point is reachability, not tidiness.
+
+**Two of these will not work and you must say which rather than force them.** An artifact **outside any
+repository** may be genuinely unrecoverable — a scratch file in a temp directory that no longer exists, or
+one that cannot be committed because it carries something that must not be published. **Check every file
+you are about to commit for secrets before committing it** — this estate has a live JWT signing key in a
+tracked `appsettings.json` and two silent ignore rules that have already eaten evidence twice, so a
+force-add is not a safe default. **If a file cannot be committed, record it unrecoverable with the reason
+and leave the lane refused.**
+
+**Never `--override` and never `plan accept`.** The tool decides; you make the artifact reachable.
+
+**Say the counts plainly**: committed and accepted, committed but still refused, and unrecoverable. **A
+lane whose artifact you commit and which the tool then still refuses is a finding** — it means the exit and
+the evidence disagree on something a path could not show, and that lane belongs to the eight genuine
+disagreements rather than to this class.
+
+**Traps.** **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check each file with
+`git check-ignore -v` **before** assuming a plain `git add` worked, and verify with
+`git ls-files --error-unmatch` after. **In zsh write `${ref}:path`.** **Do not touch `web-livewalk`.** Do
+not create worktrees for this — the artifacts are already on disk. **Gate on `uptime` — hold below 13.**
 **Do not push.**
 
 ## Decisions
