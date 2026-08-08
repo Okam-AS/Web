@@ -5712,7 +5712,7 @@ export default {
 
   // ---- Okam fragen: Ablehnungen aus der Staging-Spine -------------------------------------------
   assistant_conflict_kindDisabled: 'Diese Art von Änderung ist für die Filiale gerade abgeschaltet. Der Vorschlag bleibt bestehen und kann genehmigt werden, sobald sie wieder eingeschaltet ist.',
-  assistant_conflict_unresolvable: 'Dieser Vorschlag wartet nicht mehr auf Sie. Es wurde nichts geändert.',
+  assistant_conflict_unresolvable: 'Dieser Vorschlag wartet nicht mehr auf Sie. Ihr Klick hat gerade nichts geändert — der Vorschlag kann aber bereits durchgeführt worden sein. Die Meldung des Servers unten sagt, was tatsächlich geschehen ist.',
   assistant_conflict_relist: 'Die Liste wurde neu gelesen, der angezeigte Status ist also der aktuelle.',
 
   assistant_origin_okam: 'Von Okam',

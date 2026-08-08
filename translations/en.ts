@@ -5702,7 +5702,7 @@ export default {
 
   // ---- Ask Okam: refusals from the staging spine ------------------------------------------------
   assistant_conflict_kindDisabled: 'This kind of change is switched off for the store right now. The proposal is still here, and can be approved if it is switched back on.',
-  assistant_conflict_unresolvable: 'This proposal is no longer waiting for you. Nothing was changed.',
+  assistant_conflict_unresolvable: 'This proposal is no longer waiting for you. Your click just now changed nothing — but the proposal may already have been carried out. The message from the server below says what actually happened.',
   assistant_conflict_relist: 'The list has been read again, so the status you see now is the current one.',
 
   assistant_origin_okam: 'From Okam',

@@ -5790,7 +5790,7 @@ export default {
   // at once, so it must not name any of them — it says what is certainly true (it is no longer
   // yours to decide, and nothing changed) and leaves the server's own sentence to say more.
   assistant_conflict_kindDisabled: 'Denne handlingstypen er slått av for butikken nå. Forslaget står fortsatt, og kan godkjennes hvis den slås på igjen.',
-  assistant_conflict_unresolvable: 'Dette forslaget venter ikke lenger på deg. Ingenting ble endret.',
+  assistant_conflict_unresolvable: 'Dette forslaget venter ikke lenger på deg. Klikket ditt endret ingenting nå — men forslaget kan allerede ha blitt gjennomført. Meldingen fra serveren under sier hva som faktisk skjedde.',
   assistant_conflict_relist: 'Listen er hentet på nytt, så statusen du ser nå er den ferske.',
 
   assistant_origin_okam: 'Fra Okam',
