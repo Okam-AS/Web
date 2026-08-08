@@ -1,0 +1,65 @@
+{
+  "baseline": {
+    "test/mutation-runner-restore.test.js": {
+      "total": 27,
+      "namesAvailable": true,
+      "baselineRed": [],
+      "neverReddened": [
+        "the runner is built the way this defect requires ships the buffer restore, and the historical one still swaps cleanly into it",
+        "the runner is built the way this defect requires invokes git nowhere at all",
+        "the runner is built the way this defect requires keeps the verify-after-restore assertion",
+        "a mutation run over a lane's uncommitted work gives the lane its uncommitted edits back, byte for byte",
+        "a mutation run over a lane's uncommitted work is DESTROYED by the git-checkout restore — the defect, reproduced",
+        "a mutation run over a lane's uncommitted work leaves a clean tree exactly as it found it",
+        "a mutation run over a lane's uncommitted work restores between every mutation, not only at the end",
+        "a mutation run over a lane's uncommitted work puts the file back even when the suite command dies after the baseline",
+        "a mutation run over a lane's uncommitted work refuses to certify anything from a command that exits 0 having run nothing",
+        "a mutation run over a lane's uncommitted work refuses to certify anything from a command that exits 1 having run nothing",
+        "a mutation run over a lane's uncommitted work judges a suite that is not jest, from the counts it reports",
+        "a mutation run over a lane's uncommitted work never writes a file the spec did not name",
+        "a mutation run over a lane's uncommitted work reports an anchor it cannot place instead of counting it as a pass",
+        "a mutation run over a lane's uncommitted work writes its results beside the spec that asked for them",
+        "a mutation run over a lane's uncommitted work does not read a log line beginning \"Failed\" as the name of a failed test",
+        "a mutation run over a lane's uncommitted work still reads a real vstest failure line as a test name",
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument",
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment",
+        "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment"
+      ]
+    }
+  },
+  "killedBy": {
+    "a mutation run over a lane's uncommitted work runs in a repository that has no package.json, and judges a vstest suite there": [
+      "anchor: the historical ../ count AND the containment assertion removed"
+    ],
+    "a mutation run over a lane's uncommitted work refuses to operate in a tree that is neither a repository nor a package": [
+      "anchor: the historical ../ count AND the containment assertion removed"
+    ],
+    "a mutation run over a lane's uncommitted work finds the same repository root from any depth a copier puts it at": [
+      "anchor: the historical ../ count AND the containment assertion removed"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "anchor: the historical ../ count AND the containment assertion removed",
+      "outcome": "RED",
+      "reddened": 3,
+      "newlyRed": [
+        "a mutation run over a lane's uncommitted work runs in a repository that has no package.json, and judges a vstest suite there",
+        "a mutation run over a lane's uncommitted work refuses to operate in a tree that is neither a repository nor a package",
+        "a mutation run over a lane's uncommitted work finds the same repository root from any depth a copier puts it at"
+      ],
+      "first": [
+        "a mutation run over a lane's uncommitted work runs in a repository that has no package.json, and judges a vstest suite there",
+        "a mutation run over a lane's uncommitted work refuses to operate in a tree that is neither a repository nor a package",
+        "a mutation run over a lane's uncommitted work finds the same repository root from any depth a copier puts it at"
+      ],
+      "failedNow": 3,
+      "failedBefore": 0
+    }
+  ]
+}

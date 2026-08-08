@@ -318,6 +318,127 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
   // The original counted `../../../..` from its own location, so a copy at any other depth resolved
   // every path against the wrong directory — it would have mutated, or created, files outside the
   // repository entirely.
+  // ---- THE REPO WHERE .NET LIVES HAS NO package.json -------------------------------------------
+  //
+  // The runner anchored by walking up to a `package.json`, so it THREW in the backend repository —
+  // which has none anywhere above its test projects. The vstest dialect added to it specifically to
+  // judge .NET suites was therefore unreachable in the only repository where .NET suites live, and
+  // every backend mutation pass in this program was hand-rolled for that reason.
+  //
+  // This world is a real git repository with NO `package.json`, which is the backend's exact shape,
+  // and the stub speaks vstest rather than jest — so the arm exercises the new anchor AND the
+  // dialect that had never once run through the runner itself.
+  it('runs in a repository that has no package.json, and judges a vstest suite there', () => {
+    const world = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'mutate-dotnet-'))
+    try {
+      fs.mkdirSync(path.join(world, 'src'))
+      fs.writeFileSync(path.join(world, 'src/target.js'), COMMITTED)
+      const git = args => execFileSync('git', args, { cwd: world, stdio: 'pipe' })
+      git(['init', '-q'])
+      git(['config', 'user.email', 'pin@local'])
+      git(['config', 'user.name', 'pin'])
+      git(['add', '.'])
+      git(['commit', '-q', '-m', 'the committed state'])
+      fs.writeFileSync(path.join(world, 'src/target.js'), UNCOMMITTED)
+      // The shape that used to make this impossible.
+      expect(fs.existsSync(path.join(world, 'package.json'))).toBe(false)
+      expect(fs.existsSync(path.join(world, '.git'))).toBe(true)
+
+      // `dotnet test` output: a baseline that passes twelve, and a mutant run that fails two.
+      const flag = path.join(world, '.vstest-baseline')
+      const stub = installStubSuite(world, 'vstest.sh',
+        'if [ -f "' + flag + '" ]; then\n' +
+        '  printf \'Total tests: 12\\nPassed: 10\\nFailed: 2\\n\'\n' +
+        '  exit 1\n' +
+        'fi\n' +
+        'touch "' + flag + '"\n' +
+        'printf \'Total tests: 12\\nPassed: 12\\nFailed: 0\\n\'')
+
+      const run = runRunner(installRunner(world, CANONICAL, 'tools'),
+        writeSpec(world, ONE_MUTATION), { MUTATE_TEST_COMMAND: stub })
+
+      // It ran at all — which is the whole point — and did not throw locating its root.
+      expect(run.stderr).not.toContain('cannot locate the repo root')
+      expect(run.status).toBe(0)
+      // The count the arm executed. A zero-test pass is precisely what this runner exists to
+      // refuse, so the number is asserted rather than assumed.
+      expect(run.stdout).toContain('BASE')
+      expect(run.stdout).toMatch(/BASE\s+\S+\s+—\s+12 tests, 0 red/)
+      // And the mutation was JUDGED, not written off as unmeasurable.
+      const results = JSON.parse(fs.readFileSync(path.join(world, 'spec.results.json'), 'utf8'))
+      expect(results.mutations[0].outcome).toBe('RED')
+      // The lane's uncommitted work came back, in a repository the runner could not previously enter.
+      expect(fs.readFileSync(path.join(world, 'src/target.js'), 'utf8')).toBe(UNCOMMITTED)
+    } finally {
+      fs.rmSync(world, { recursive: true, force: true })
+    }
+  })
+
+  // Found the first time the runner met a REAL .NET suite, which is the thing this lane made
+  // possible. ASP.NET logs "Failed to determine the https port for redirect." during host startup,
+  // and the vstest name pattern collected it as the name of a failed test — so a clean baseline
+  // reported one red. The counts were right and the verdict survived, but a phantom name that
+  // appears in one run and not another is exactly how a false RED or a masked kill gets made.
+  it('does not read a log line beginning "Failed" as the name of a failed test', () => {
+    const world = makeWorld()
+    try {
+      const stub = installStubSuite(world, 'vstest.sh',
+        // The real shape: a startup log line, then a clean summary.
+        'printf \'      Failed to determine the https port for redirect.\\n\'\n' +
+        'printf \'Passed!  - Failed:     0, Passed:     6, Skipped:     0, Total:     6\\n\'')
+      const run = runRunner(installRunner(world, CANONICAL), writeSpec(world, ONE_MUTATION),
+        { MUTATE_TEST_COMMAND: stub })
+
+      expect(run.status).toBe(0)
+      // Six ran, none red. The prose line is prose.
+      expect(run.stdout).toMatch(/BASE\s+\S+\s+—\s+6 tests, 0 red/)
+    } finally {
+      fs.rmSync(world, { recursive: true, force: true })
+    }
+  })
+
+  // The other side of that tightening: a genuine vstest failure line is still read as a name.
+  it('still reads a real vstest failure line as a test name', () => {
+    const world = makeWorld()
+    try {
+      const stub = installStubSuite(world, 'vstest.sh',
+        'printf \'      Failed to determine the https port for redirect.\\n\'\n' +
+        'printf \'  Failed WebApi.Tests.Wire.PdfDownloadWireTests.A_credit_note [12 ms]\\n\'\n' +
+        'printf \'Failed!  - Failed:     1, Passed:     5, Skipped:     0, Total:     6\\n\'')
+      const run = runRunner(installRunner(world, CANONICAL), writeSpec(world, ONE_MUTATION),
+        { MUTATE_TEST_COMMAND: stub })
+
+      // One red at baseline, and it is the TEST, not the log line.
+      expect(run.stdout).toMatch(/BASE\s+\S+\s+—\s+6 tests, 1 red/)
+      expect(run.stdout).not.toContain('https port')
+    } finally {
+      fs.rmSync(world, { recursive: true, force: true })
+    }
+  })
+
+  // The other half of the anchor, and the property the `../`-counting defect broke: a tree that is
+  // NEITHER a repository NOR a package is refused outright rather than operated on. Without this the
+  // widening would have replaced a throw with a silent walk to the filesystem root.
+  it('refuses to operate in a tree that is neither a repository nor a package', () => {
+    const outside = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'mutate-bare-'))
+    try {
+      fs.mkdirSync(path.join(outside, 'src'))
+      fs.writeFileSync(path.join(outside, 'src/target.js'), UNCOMMITTED)
+      expect(fs.existsSync(path.join(outside, '.git'))).toBe(false)
+      expect(fs.existsSync(path.join(outside, 'package.json'))).toBe(false)
+
+      const run = runRunner(installRunner(outside, CANONICAL, 'tools'), writeSpec(outside, ONE_MUTATION))
+
+      expect(run.status).not.toBe(0)
+      expect(run.stderr).toContain('will not operate outside a repository')
+      // Nothing was mutated on the way to refusing.
+      expect(fs.readFileSync(path.join(outside, 'src/target.js'), 'utf8')).toBe(UNCOMMITTED)
+      expect(fs.existsSync(path.join(outside, 'spec.results.json'))).toBe(false)
+    } finally {
+      fs.rmSync(outside, { recursive: true, force: true })
+    }
+  })
+
   it('finds the same repository root from any depth a copier puts it at', () => {
     for (const depth of ['tools', 'docs/plan/lanes/L-DEEP', 'a/b/c/d/e/f']) {
       const world = makeWorld()

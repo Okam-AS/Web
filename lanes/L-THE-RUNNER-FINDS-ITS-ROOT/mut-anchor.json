@@ -1,0 +1,37 @@
+[
+ {
+  "name": "anchor: .git stops counting, so only a package.json anchors",
+  "file": "test/support/mutate.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "if (fs.existsSync(path.join(dir, '.git')) || fs.existsSync(path.join(dir, 'package.json'))) {",
+  "to": "if (fs.existsSync(path.join(dir, 'package.json'))) {"
+ },
+ {
+  "name": "anchor: it stops refusing a tree that is neither repo nor package",
+  "file": "test/support/mutate.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "    const parent = path.dirname(dir)\n    if (parent === dir) {\n      throw new Error(\n        'no .git or package.json above ' + start + ' — cannot locate the repo root, and this ' +\n        'runner will not operate outside a repository')\n    }\n    dir = parent",
+  "to": "    const parent = path.dirname(dir)\n    if (parent === dir) { return start }\n    dir = parent"
+ },
+ {
+  "name": "vstest: any line beginning Failed is read as a test name again",
+  "file": "test/support/mutate.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "output.match(/^\\s*Failed\\s+(\\S+)\\s+\\[[^\\]]*\\]\\s*$/gm)",
+  "to": "output.match(/^\\s*Failed\\s+\\S.*$/gm)"
+ },
+ {
+  "name": "vstest: the Total/Failed dialect is dropped entirely",
+  "file": "test/support/mutate.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "  const vstest = /Total tests:\\s*(\\d+)/.exec(output) || /Total:\\s*(\\d+)/.exec(output)",
+  "to": "  const vstest = null"
+ },
+ {
+  "name": "anchor: the walk is replaced by the historical ../ count",
+  "file": "test/support/mutate.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "function repoRootFrom (start) {\n  let dir = path.resolve(start)",
+  "to": "function repoRootFrom (start) {\n  let dir = path.resolve(start, '../../../..')\n  if (dir) { return dir }\n  let _unused = path.resolve(start)"
+ }
+]
