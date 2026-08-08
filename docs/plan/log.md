@@ -4278,3 +4278,10 @@
 - 2026-08-08T21:28Z · agent:L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY · started L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY
 - 2026-08-08T21:30Z · tool · raised F-THE-PUSH-CREDENTIAL-IS-IN-THE-PATH-ON-TWO-CONTROLLERS (blocker): ConsumerNotificationController.cs:31 and StoreNotificationController.cs:54 both take the handle in the path, so fixing the route fixes half of it
 - 2026-08-08T21:30Z · @clerk · append-not-insert caught a security regression: phone-in-path calls the 2-arg TransferGiftcard, so a stale call site breaks the build
+- 2026-08-08T21:33Z · @clerk · an agent declined a security-guard recomposition on low context rather than leaving a half-resolved auth conflict
+- 2026-08-08T21:33Z · agent:L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH · L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH returned aborted -> open: the recomposed phone-in-path touches the gift-card ownership guard, which the brief said to stop on; and my remaining capacity would not cover a tier plus a mutation pass over a combined change to a security guard
+- 2026-08-08T21:33Z · agent:L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH · report L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH: BOTH DEFECTS REPRODUCE AT THE TRUNK d30c1c4d4, verified before trusting either branch. GiftcardController.cs:245 is [HttpPost("transfer/{giftcardId}/{newReceiverPhoneNumber}")].; ConsumerNotificationController.cs:31 and StoreNotificationController.cs:54 are both HttpGet {handle} — the push credentia
+- 2026-08-08T21:33Z · @clerk · accept-stale: the clerk wrote the measured recomposition into the lane body after the agent read its brief
+- 2026-08-08T21:48Z · tool · raised F-THE-RETURN-TEMPLATE-INVITES-PROSE-WHERE-THE-BRIEF-ID-BELONGS (warn): three agents wrote a description into the brief field because the template says copy the brief id from the first line
+- 2026-08-08T21:48Z · @clerk · EOD close LANDED at bcfe0d893: an invoiced sale no longer prints under Annet as takings; before arm reproduced first
+- 2026-08-08T21:48Z · @clerk · IsReceived now delegates rather than restates, with a test walking every PaymentType so the X/Z and the close cannot drift apart again

@@ -23816,7 +23816,7 @@ the open decisions before merging and say that you did.** **In zsh write `${ref}
 `uptime` — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH — redaction cannot reach a URL, and two of them carry a customer's identity
-state: running
+state: open
 class: node
 owner: agent
 dir: ../OkamAPI-modules
@@ -36793,6 +36793,12 @@ state: open
 severity: blocker
 owner: @sven
 clears_when: neither notification controller takes a device handle in its path, shown by tests that red when either is placed there
+### Flag F-THE-RETURN-TEMPLATE-INVITES-PROSE-WHERE-THE-BRIEF-ID-BELONGS — three agents wrote a description into the brief field because the template says copy the brief id from the first line
+state: open
+severity: warn
+owner: @sven
+clears_when: no return is refused for a malformed brief field, with the template naming the exact token rather than describing where to find it
+
 
 
 
