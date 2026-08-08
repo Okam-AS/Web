@@ -1,0 +1,65 @@
+[
+ {
+  "name": "guard: the repo-root lanes/ root is taken back out",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "    path.join(REPO, 'docs/plan/lanes'),\n    path.join(REPO, 'lanes')",
+  "to": "    path.join(REPO, 'docs/plan/lanes')"
+ },
+ {
+  "name": "guard: the mutat-in-the-filename narrowing comes back",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "      if (!/\\.(js|sh|py|zsh|bash)$/.test(entry.name)) { continue }\n      found.push(full)",
+  "to": "      if (!/\\.(js|sh|py|zsh|bash)$/.test(entry.name)) { continue }\n      if (!/mutat/i.test(entry.name)) { continue }\n      found.push(full)"
+ },
+ {
+  "name": "guard: comment stripping is dropped",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "      if (/^\\s*(#|\\/\\/)/.test(line)) { continue }\n",
+  "to": ""
+ },
+ {
+  "name": "guard: the git-checkout pattern stops being an offence",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "    ['git checkout --', /git\\s+checkout\\s+--\\s/],",
+  "to": ""
+ },
+ {
+  "name": "driver: run-browser-arm.sh goes back to restoring from git",
+  "file": "lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/run-browser-arm.sh",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "cleanup () {\n  if [ -n \"${DEV_PID:-}\" ]; then\n    kill \"${DEV_PID}\" 2>/dev/null || true\n    wait \"${DEV_PID}\" 2>/dev/null || true\n  fi\n  # The file as it stood when this script started — clean tree, dirty tree or neither.\n  if [ -f \"${ORIGINAL}\" ]; then\n    cp \"${ORIGINAL}\" \"${TARGET}\"\n    rm -f \"${ORIGINAL}\"\n  fi\n}",
+  "to": "cleanup () {\n  if [ -n \"${DEV_PID:-}\" ]; then\n    kill \"${DEV_PID}\" 2>/dev/null || true\n    wait \"${DEV_PID}\" 2>/dev/null || true\n  fi\n  git checkout -- \"${TARGET}\" 2>/dev/null || true\n}"
+ },
+ {
+  "name": "guard: a python docstring stops counting as prose",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "      const opener = TRIPLE.exec(bare)",
+  "to": "      const opener = null"
+ },
+ {
+  "name": "guard: every triple-quoted region is stripped, not just docstrings",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "  const TRIPLE = /^(\"\"\"|''')/",
+  "to": "  const TRIPLE = /(\"\"\"|''')/"
+ },
+ {
+  "name": "guard: quoted arguments are stripped like prose",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": "    return kept.join('\\n').replace(/\\/\\*[\\s\\S]*?\\*\\//g, '')",
+  "to": "    return kept.join('\\n').replace(/\\/\\*[\\s\\S]*?\\*\\//g, '').replace(/\"[^\"]*\"/g, '')"
+ },
+ {
+  "name": "guard: block comments stop counting as prose",
+  "file": "test/mutation-runner-restore.test.js",
+  "test": "test/mutation-runner-restore.test.js",
+  "from": ".replace(/\\/\\*[\\s\\S]*?\\*\\//g, '')",
+  "to": ""
+ }
+]

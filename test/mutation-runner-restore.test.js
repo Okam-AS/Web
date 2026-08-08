@@ -337,57 +337,247 @@ describe('a mutation run over a lane\'s uncommitted work', () => {
 // The report this lane was asked for names the copies that existed tonight. This arm is what stops
 // a new one appearing: lanes will keep copying a runner into their own directory, and the next
 // broken copy has to fail a test rather than wait to be noticed by whoever it bites.
-describe('no mutation runner anywhere under docs/plan/lanes/ restores from git', () => {
-  const LANES = path.join(REPO, 'docs/plan/lanes')
-  // `test/support` is tracked and therefore always present; `docs/plan/lanes` is untracked evidence
-  // and is present only on a machine where lanes have actually run. Sweeping both means this guard
-  // polices at least the canonical runner in every checkout, instead of passing vacuously in the one
-  // place a regression would be easiest to miss — CI.
-  const SWEEP_ROOTS = [path.join(REPO, 'test/support'), LANES]
+describe('no script in the tree restores a source file from git', () => {
+  // ---- WHERE THE RUNNERS ACTUALLY LIVE ---------------------------------------------------------
+  //
+  // This swept `test/support` and `docs/plan/lanes` and reported TWO scripts. The estate keeps most
+  // of its lane evidence under REPO-ROOT `lanes/`, which held fourteen more executable drivers — so
+  // the guard was policing the two directories where a runner is least likely to be copied and
+  // missing the one where copying actually happens. All three runner defects this estate has had
+  // spread by copying.
+  const SWEEP_ROOTS = [
+    path.join(REPO, 'test/support'),
+    path.join(REPO, 'docs/plan/lanes'),
+    path.join(REPO, 'lanes')
+  ]
 
+  // ---- AND THE SECOND, UNEXAMINED NARROWING ----------------------------------------------------
+  //
+  // The roots were not the only filter. It also required `mutat` IN THE FILENAME, and that hid a
+  // real offender: `lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/run-browser-arm.sh` patches
+  // `components/molecules/LoginModal.vue` to put a defect back, compiles it, drives a browser arm,
+  // and restores with `git checkout -- "${TARGET}"` — in its cleanup trap AND before each arm. It is
+  // a mutation driver in everything but its name, so widening the roots alone would have walked
+  // straight past it.
+  //
+  // So the name filter is gone. The rule enforced here — NEVER RESTORE A SOURCE FILE FROM GIT WHILE
+  // A LANE MAY HAVE UNCOMMITTED WORK — was never a rule about files called `mutate`; it is a rule
+  // about scripts that write to the tree. Sweeping every executable script is measurably safe rather
+  // than merely broader: across all 44 scripts under these roots it produced exactly one offender,
+  // the real one, and no false positive.
   function runnerScripts (root) {
     if (!fs.existsSync(root)) { return [] }
     const found = []
     for (const entry of fs.readdirSync(root, { withFileTypes: true })) {
       const full = path.join(root, entry.name)
       if (entry.isDirectory()) { found.push(...runnerScripts(full)); continue }
-      // Executable mutation drivers only. A lane's `.md`, `.txt`, `.log` and `.json` are its
-      // findings, and a finding is entitled to quote `git checkout` as prose.
+      // Executable scripts only. A lane's `.md`, `.txt`, `.log` and `.json` are its findings, and a
+      // finding is entitled to quote `git checkout` as prose.
       if (!/\.(js|sh|py|zsh|bash)$/.test(entry.name)) { continue }
-      if (!/mutat/i.test(entry.name)) { continue }
       found.push(full)
     }
     return found
   }
 
+  // The offending shapes, and the comment stripping that keeps this honest. A script is safe if it
+  // restores from a buffer AND names `git checkout` only in prose — the surviving Wolt copy and this
+  // runner's own header both pass that way, on purpose rather than by luck. Widening the sweep
+  // without keeping the stripping would trade one false negative for false positives across every
+  // file swept.
+  const OFFENDING = [
+    ['git checkout --', /git\s+checkout\s+--\s/],
+    ['git restore', /git\s+restore\b/],
+    ['git stash', /git\s+stash\b/],
+    ["execFileSync('git'...'checkout')", /execFileSync\([^)]*['"]git['"][^)]*checkout/]
+  ]
+
+  // ---- WHAT COUNTS AS PROSE, AND WHY THIS HAD TO GROW -----------------------------------------
+  //
+  // Stripping `#` and `//` lines was enough while the sweep saw only JavaScript in two directories.
+  // The moment it reached repo-root `lanes/` it met PYTHON drivers, and a Python docstring is not a
+  // `#` comment — so `lanes/L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR/mutate.py`, which restores
+  // from an in-memory buffer and names `git checkout -- <file>` in its module docstring purely to
+  // explain what it deliberately does NOT do, was accused the moment the roots widened.
+  //
+  // That is precisely the trade this change had to avoid: one false negative swapped for a false
+  // positive on an honest file. So the stripper learned docstrings and block comments.
+  //
+  // IT DELIBERATELY DOES NOT STRIP EVERY STRING. A triple-quoted block is prose only when it OPENS
+  // A LINE — a module or function docstring. `subprocess.run("""git checkout -- x""")` and
+  // `run("git checkout -- x")` are executed commands that happen to live in quotes, and a stripper
+  // that removed every quoted region would wave them straight through. Both directions are pinned.
+  const TRIPLE = /^("""|''')/
+
+  function withoutProse (source) {
+    const kept = []
+    let fence = null
+    for (const line of source.split('\n')) {
+      if (fence) {
+        if (line.includes(fence)) { fence = null }
+        continue
+      }
+      const bare = line.trim()
+      const opener = TRIPLE.exec(bare)
+      if (opener) {
+        // A docstring that opens and closes on one line is prose too.
+        if (!bare.slice(3).includes(opener[1])) { fence = opener[1] }
+        continue
+      }
+      if (/^\s*(#|\/\/)/.test(line)) { continue }
+      kept.push(line)
+    }
+    // Block comments are unambiguous prose in every dialect that has them.
+    return kept.join('\n').replace(/\/\*[\s\S]*?\*\//g, '')
+  }
+
+  function offendersIn (scripts) {
+    const offenders = []
+    for (const full of scripts) {
+      const code = withoutProse(fs.readFileSync(full, 'utf8'))
+      for (const [what, re] of OFFENDING) {
+        if (re.test(code)) { offenders.push(path.relative(REPO, full) + ' — ' + what) }
+      }
+    }
+    return offenders
+  }
+
+  const allScripts = () => SWEEP_ROOTS.reduce((all, root) => all.concat(runnerScripts(root)), [])
+
   // `docs/plan/lanes/` is untracked working-tree evidence, so it is present on the machine where the
   // copying actually happens and absent from a fresh checkout. The guard is written to be honest
   // about which of those it is looking at rather than reporting a pass for an empty sweep — a
   // vacuous green here would be the same failure the runner itself exists to catch.
-  it('sweeps every mutation script in the tree, and always has at least one to sweep', () => {
-    const scripts = SWEEP_ROOTS.reduce((all, root) => all.concat(runnerScripts(root)), [])
-    process.stdout.write('  [sweep] ' + scripts.length + ' mutation script(s): ' +
-      scripts.map(s => path.relative(REPO, s)).join(', ') + '\n')
+  it('sweeps every script in the tree, and always has at least one to sweep', () => {
+    const scripts = allScripts()
+    process.stdout.write('  [sweep] ' + scripts.length + ' script(s) swept across ' +
+      SWEEP_ROOTS.length + ' roots\n')
     // The canonical runner is tracked, so zero here means the sweep is looking in the wrong place
     // rather than that the tree is clean — the vacuous green this whole lane is about.
     expect(scripts.length).toBeGreaterThan(0)
+    // And the root that was missing is the one that must not fall out again unnoticed: a `lanes/`
+    // that stops being swept would read exactly like a clean tree.
+    expect(scripts.some(s => path.relative(REPO, s).startsWith('lanes/'))).toBe(true)
 
-    const offenders = []
-    for (const full of scripts) {
-      // Executable drivers only, and comments stripped: a lane's findings are entitled to quote
-      // `git checkout` as prose, and this runner's own header explains the defect by name.
-      const code = fs.readFileSync(full, 'utf8').split('\n')
-        .filter(line => !/^\s*(#|\/\/)/.test(line))
-        .join('\n')
-      for (const [what, re] of [
-        ['git checkout --', /git\s+checkout\s+--\s/],
-        ['git restore', /git\s+restore\b/],
-        ['git stash', /git\s+stash\b/],
-        ['execFileSync(\'git\'...\'checkout\')', /execFileSync\([^)]*['"]git['"][^)]*checkout/]
-      ]) {
-        if (re.test(code)) { offenders.push(path.relative(REPO, full) + ' — ' + what) }
-      }
+    expect(offendersIn(scripts)).toEqual([])
+  })
+
+  // ---- THE ARM THAT MAKES THE WIDENING A CLAIM RATHER THAN A HOPE ------------------------------
+  //
+  // A widened root that no test exercises is the same class of claim as a mutation nobody ran. So a
+  // deliberately broken copy is written under REPO-ROOT `lanes/` — the directory that was missing —
+  // and the sweep must name it; then it is removed and the sweep must go quiet. Both halves matter:
+  // the first says the guard can see there at all, the second says it is not reporting an offender
+  // unconditionally.
+  it('names a broken copy placed under repo-root lanes/, and goes quiet when it is removed', () => {
+    const planted = path.join(REPO, 'lanes', '.sweep-probe-' + process.pid, 'mutate.sh')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    // The defect verbatim, on an executable line so comment stripping cannot excuse it.
+    fs.writeFileSync(planted, '#!/bin/sh\n# a copy that restores the wrong way\ngit checkout -- "$1"\n')
+    try {
+      const swept = allScripts()
+      expect(swept.map(s => path.relative(REPO, s))).toContain(path.relative(REPO, planted))
+      expect(offendersIn(swept)).toContain(path.relative(REPO, planted) + ' — git checkout --')
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
     }
-    expect(offenders).toEqual([])
+    // Removed: the sweep still finds real scripts, and reports no offender at all.
+    const after = allScripts()
+    expect(after.length).toBeGreaterThan(0)
+    expect(offendersIn(after)).toEqual([])
+  })
+
+  // The narrowing that hid the real offender, pinned separately from the roots. A driver whose
+  // FILENAME says nothing about mutation is still a driver: `run-browser-arm.sh` patched a source,
+  // compiled it, measured it and restored with `git checkout --`, and the old `mutat`-in-the-name
+  // filter walked past it even where the sweep already looked. This plants exactly that shape.
+  it('names a broken driver whose filename says nothing about mutation', () => {
+    const planted = path.join(REPO, 'lanes', '.sweep-unnamed-' + process.pid, 'run-browser-arm.sh')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    fs.writeFileSync(planted, '#!/bin/sh\nTARGET="components/molecules/LoginModal.vue"\ngit checkout -- "${TARGET}"\n')
+    try {
+      expect(offendersIn(allScripts()))
+        .toContain(path.relative(REPO, planted) + ' — git checkout --')
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
+    }
+  })
+
+  // The false positive the widening created and then had to close. A Python driver that restores
+  // from a buffer, and names the wrong way only in its DOCSTRING, is honest and must stay unaccused.
+  // This is not hypothetical: it is the shape of a real driver already on the trunk.
+  it('does not accuse a python driver that names git checkout only in its docstring', () => {
+    const planted = path.join(REPO, 'lanes', '.sweep-docstring-' + process.pid, 'mutate.py')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    fs.writeFileSync(planted,
+      '#!/usr/bin/env python3\n' +
+      '"""Mutation receipt for a lane.\n\n' +
+      'Restores from an IN-MEMORY BUFFER. It never runs `git checkout -- <file>`, which would\n' +
+      "revert to HEAD and delete the lane's uncommitted work.\n" +
+      '"""\n' +
+      'path.write_text(original)\n')
+    try {
+      const swept = allScripts()
+      expect(swept.map(s => path.relative(REPO, s))).toContain(path.relative(REPO, planted))
+      expect(offendersIn(swept)).toEqual([])
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
+    }
+  })
+
+  // And the other side of that stripper, so excusing prose never becomes excusing execution. A
+  // `git checkout` inside a string the script RUNS is a restore, whatever quotes it wears.
+  it.each([
+    ['a single-quoted argument', 'import subprocess\nsubprocess.run("git checkout -- target.js", shell=True)\n'],
+    ['a triple-quoted argument', 'import subprocess\nsubprocess.run("""git checkout -- target.js""", shell=True)\n']
+  ])('still accuses an executed restore passed as %s', (_name, body) => {
+    const planted = path.join(REPO, 'lanes', '.sweep-exec-' + process.pid, 'mutate.py')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    fs.writeFileSync(planted, '#!/usr/bin/env python3\n' + body)
+    try {
+      expect(offendersIn(allScripts()))
+        .toContain(path.relative(REPO, planted) + ' — git checkout --')
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
+    }
+  })
+
+  // The third prose dialect. A JavaScript driver is entitled to explain the defect in a `/* */`
+  // header, and several in this tree do exactly that. Without this arm the block-comment half of the
+  // stripper is unexercised — code that cannot be shown to matter, which is the same unproven claim
+  // this guard exists to refuse.
+  it('does not accuse a driver that names git checkout only in a block comment', () => {
+    const planted = path.join(REPO, 'lanes', '.sweep-block-' + process.pid, 'mutate.js')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    fs.writeFileSync(planted,
+      '/*\n' +
+      ' * The original restore ran `git checkout -- <file>`, which reverts to HEAD and deletes a\n' +
+      " * lane's uncommitted work. This one restores from the buffer it read.\n" +
+      ' */\n' +
+      'fs.writeFileSync(absPath, original)\n')
+    try {
+      const swept = allScripts()
+      expect(swept.map(s => path.relative(REPO, s))).toContain(path.relative(REPO, planted))
+      expect(offendersIn(swept)).toEqual([])
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
+    }
+  })
+
+  // The false negative the widening must not trade away. A script that restores from a buffer and
+  // names `git checkout` only in prose is CLEAN, and stays clean when swept.
+  it('does not accuse a script that only names git checkout in a comment', () => {
+    const planted = path.join(REPO, 'lanes', '.sweep-prose-' + process.pid, 'mutate.js')
+    fs.mkdirSync(path.dirname(planted), { recursive: true })
+    fs.writeFileSync(planted,
+      '// The original restore was `git checkout -- <file>`, which reverts to HEAD and deletes a\n' +
+      "// lane's uncommitted work. This one restores from the buffer it read.\n" +
+      'fs.writeFileSync(absPath, original)\n')
+    try {
+      const swept = allScripts()
+      expect(swept.map(s => path.relative(REPO, s))).toContain(path.relative(REPO, planted))
+      expect(offendersIn(swept)).toEqual([])
+    } finally {
+      fs.rmSync(path.dirname(planted), { recursive: true, force: true })
+    }
   })
 })

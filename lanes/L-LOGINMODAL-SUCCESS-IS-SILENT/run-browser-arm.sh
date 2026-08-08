@@ -29,18 +29,32 @@ OUT="${LANE}/runs/arm-${ARM}-${SCENARIO}.txt"
 mkdir -p "${LANE}/runs"
 cd "${ROOT}"
 
+# RESTORE FROM THE BUFFER THIS SCRIPT READ, NEVER FROM GIT.
+#
+# This used to `git checkout -- "${TARGET}"`, in the trap and again before each arm, with a comment
+# saying it restored "only from git" as though that were the safe choice. It is the opposite: a
+# checkout reverts to HEAD, so run while this lane had uncommitted work in LoginModal.vue it would
+# not undo the arm's edit, it would DELETE the lane's own edits and call it a restore. That is the
+# defect `test/support/mutate.js` was rewritten to remove, and this script is a mutation driver in
+# everything but its name — it patches a source, compiles it, measures it, and puts it back.
+ORIGINAL="$(mktemp)"
+cp "${TARGET}" "${ORIGINAL}"
+
 cleanup () {
   if [ -n "${DEV_PID:-}" ]; then
     kill "${DEV_PID}" 2>/dev/null || true
     wait "${DEV_PID}" 2>/dev/null || true
   fi
-  # Only ever restore THIS lane's own file, and only from git.
-  git checkout -- "${TARGET}" 2>/dev/null || true
+  # The file as it stood when this script started — clean tree, dirty tree or neither.
+  if [ -f "${ORIGINAL}" ]; then
+    cp "${ORIGINAL}" "${TARGET}"
+    rm -f "${ORIGINAL}"
+  fi
 }
 trap cleanup EXIT
 
 # ---- 1. put the source in the state this arm is measuring -------------------------------------
-git checkout -- "${TARGET}"
+cp "${ORIGINAL}" "${TARGET}"
 if [ "${ARM}" = "stock" ]; then
   python3 - <<'PY'
 import io
