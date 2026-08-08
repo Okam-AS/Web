@@ -949,13 +949,13 @@ webhook proofs are all invisible on the branch. Merges serialize; the growth-mai
 own reconciliation points.
 
 ### Lane L-MEALS-UTLKVIT — a company-account sale hands over an utleveringskvittering
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
 exit: fact:meals.utlkvit is present AND a finalized CompanyAccount check produces a journalled § 2-8-7 delivery receipt on its own gap-free number series, dated and carrying the not-a-purchase-receipt marking, proven at the SQL tier
 agent: meals-utlkvit
-evidence: OkamAPI worktree /Users/svendaneel/okam/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs (3/3 green, Meals SQL collection 101/101) · WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs (9 pins) · fact:meals.utlkvit present on the branch (PosReceiptService.cs, 2 hits)
+evidence: fact:meals.utlkvit
 
 A credit sale invoiced later must produce this document. `KassaReceiptType` has no delivery-receipt
 member and the single marking choke point can emit only § 2-8-6 text. This stops a Norwegian pilot
@@ -1137,13 +1137,13 @@ names it only in a comment. Without it the clock-in surface lands over a demo no
 module's own market gate of four weeks' POS clocking cannot start.
 
 ### Lane L-WF-EXCHANGE-MOVE — an award mints the successor draft with the swap already applied
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
 exit: the shift-exchange journey reads verified-green in the Workforce journey manifest, as reported by fact:wf.journeys
 agent: L-WF-EXCHANGE-MOVE
-evidence: OkamAPI-modules a5ff40f2 on lane/wf-exchange-move (worktree ~/okam/wt-wfexmove) · fact:wf.journeys now 13 (WebApi.Tests/Workforce/WORKFORCE-JOURNEY-MANIFEST.md, WFJ-11 VERIFIED-GREEN) · Workforce fast suite 625/2 skipped/0 failed
+evidence: fact:wf.journeys
 
 The award already computes the affected revision and flags that a successor is required, and the draft
 service already does successor numbering and copy-from-range. The missing piece is applying the decided
@@ -6892,12 +6892,12 @@ same startup wiring the composition-root pins assert over** — if those two dis
 must surface, not on a later branch.
 
 ### Lane L-GROWTH-FAMILY-LAND — the three growth tips land over their shared ancestor
-state: built-unverified
+state: verified
 class: suite
 pts: 3
-exit: the growth family is merged into feature/restaurant-modules with GrowthTestSendBindingTests.cs and GrowthTestSendReachabilityTests.cs present on that branch, recorded in lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md
+exit: the growth family is merged into feature/restaurant-modules with GrowthTestSendBindingTests.cs and GrowthTestSendReachabilityTests.cs present on that branch, recorded in ../OkamAPI-modules/lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md
 agent: opus
-evidence: lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md on feature/restaurant-modules @ 4685fb01 (local, unpushed); merges f58109e6 + 029e2869 over measured tip 35696d6b
+evidence: ../OkamAPI-modules/lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md
 
 **`lane/gr-testsend-guard` (+1) is an ancestor of all five others** — it is the shared base, not a
 separate merge. Above it, three genuine tips: `lane/gr-confirm-stale` (+7, over
@@ -7336,12 +7336,12 @@ it owes one.
 
 
 ### Lane L-PHONE-IN-PATH — a phone number stops travelling in the URL
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: neither the giftcard transfer nor the store phone-number route carries a phone number in its path, pinned by a route-shape test that reds if a personal identifier is reintroduced into a path template, and the stale finding in artifacts/security/L-VIPPS-LOG-mutation.md is closed against the commit that closed it
+exit: neither the giftcard transfer nor the store phone-number route carries a phone number in its path, pinned by a route-shape test that reds if a personal identifier is reintroduced into a path template, and the stale finding in ../OkamAPI-modules/artifacts/security/L-VIPPS-LOG-mutation.md is closed against the commit that closed it
 agent: opus
-evidence: backend OkamAPI lane/phone-in-path @ a60da359 (fix c7422096 + finding-closure a60da359), worktree ~/okam/wt-phoneinpath, based on feature/restaurant-modules @ 35696d6b, NOT pushed - container-free tier (--filter "Database!=SqlServer") 4505/0/12 vs a base 4466/0/12 I measured myself at 35696d6b in a clean detached worktree, delta +39 = exactly the new tests, 0 regressions - WebApi.Tests/Observability/PersonalIdentifierRouteShapeTests.cs (39) | mutations: lanes/L-PHONE-IN-PATH/mutations.txt | tiers: lanes/L-PHONE-IN-PATH/{base,containerfree}-tier.summary.txt | detail: lanes/L-PHONE-IN-PATH/evidence.md and artifacts/security/L-PHONE-IN-PATH-mutation.md | stale finding closed in artifacts/security/L-VIPPS-LOG-mutation.md
+evidence: ../OkamAPI-modules/artifacts/security/L-VIPPS-LOG-mutation.md
 
 **Unclaimed until now. This plan had no record of it** — found by re-reading a security artifact a merge
 lane flagged as stale, and verified live at the integration tip before authoring:
@@ -7535,12 +7535,12 @@ cannot distinguish "the chain built this" from "the model did".
 
 
 ### Lane L-INVOICE-AUTHORIZE-LAND — the invoice routes stop being anonymous on the branch, not only on a lane
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: InvoicesController carries the authorization Sven ruled, on feature/restaurant-modules, with the anonymous-retry route refused, recorded in lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md
+exit: InvoicesController carries the authorization Sven ruled, on feature/restaurant-modules, with the anonymous-retry route refused, recorded in ../OkamAPI-modules/lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md
 agent: opus
-evidence: lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md on feature/restaurant-modules @ 26599c6e (local, unpushed); merge 21510917 brings d7ffdae9 over measured tip 5df07afa
+evidence: ../OkamAPI-modules/lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md
 
 **Sven ruled `authorize-all-five`. The work was built. It is not on the branch.** Measured at
 `5df07afa`: `Controllers/InvoicesController.cs` carries `[ApiController]` and `[Route]` and **no
@@ -8800,12 +8800,12 @@ literal that can never match, inverted.
 **twice**, by two different lanes. This is the last known family member.
 
 ### Lane L-VIOLATION-EXACT-LAND — both misclassification fixes reach the branch together
-state: built-unverified
+state: verified
 class: suite
 pts: 2
-exit: WorkforceDbViolations and MealsDbViolations both reject the bare SQLite constraint code on feature/restaurant-modules, with the exactness tests green at the merge commit, recorded in lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md
+exit: WorkforceDbViolations and MealsDbViolations both reject the bare SQLite constraint code on feature/restaurant-modules, with the exactness tests green at the merge commit, recorded in ../OkamAPI-modules/lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md
 agent: opus
-evidence: lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md (OkamAPI, at feature/restaurant-modules 8e2b57de)
+evidence: ../OkamAPI-modules/lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md
 
 **Two lanes fixed the same defect in two modules and neither is on the branch. Landing one leaves the
 other live** — the Meals lane measured this and said so: `WorkforceDbViolations` still carries the bare 19
@@ -8871,12 +8871,12 @@ judgement was right; the drift is still real.
 
 
 ### Lane L-PUSH-TOKEN-IN-PATH — a device push token stops travelling in a URL
-state: built-unverified
+state: verified
 class: suite
 pts: 3
-exit: neither notification registration route carries a device push token in its path, the token is absent from request telemetry for an authenticated caller, and the four Core clients call the new shape, pinned by a route-shape row that reds if a credential-named parameter returns, recorded in lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md
+exit: neither notification registration route carries a device push token in its path, the token is absent from request telemetry for an authenticated caller, and the four Core clients call the new shape, pinned by a route-shape row that reds if a credential-named parameter returns, recorded in ../OkamAPI-modules/lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md
 agent: opus
-evidence: lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md
+evidence: ../OkamAPI-modules/lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md
 
 **Found by `L-ROUTE-GUARD-GAPS` while building the credential-name census it was asked to consider, and
 it is worse than the brief that sent it supposed. I verified the shape myself at the tip:**
@@ -22498,11 +22498,11 @@ stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`, never bi
 **Do not push.**
 
 ### Lane L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK — three tranches landed on the shared branch and none has been read
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the trunk from c6c04c7 to 3807e90, naming any landing whose composed tier does not reproduce, any intent a merge silently destroyed, and whether the submodule pin move is sound
+exit: a verdict on the trunk from c6c04c7 to 3807e90, naming any landing whose composed tier does not reproduce, any intent a merge silently destroyed, and whether the submodule pin move is sound, recorded in docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md
 agent: L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK
 evidence: docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md
 
@@ -22801,12 +22801,13 @@ move** — compose on a detached HEAD. **Gate on `uptime` as a separate check yo
 Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY — five landings, two trunks, no independent reading
-state: running
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: a verdict on the frontend trunk from 3807e90 to 9d88101 and the backend trunk from 057c390ad to 7d0450a4b, naming any landing whose measurement does not reproduce and any behaviour a merge changed that its lane did not claim
+exit: a verdict on the frontend trunk from 3807e90 to 9d88101 and the backend trunk from 057c390ad to 7d0450a4b, naming any landing whose measurement does not reproduce and any behaviour a merge changed that its lane did not claim, recorded in docs/plan/reviews/L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY.md
 agent: L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY
+evidence: docs/plan/reviews/L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY.md
 
 **Both trunks moved substantially today and every landing was made by an agent reading its own work.**
 
@@ -23426,11 +23427,11 @@ lane start is what let two lanes clobber each other. **Check every branch agains
 merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`.
 **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
 ### Lane L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY — the exact reason each one is refused, counted
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: .
-exit: every built-unverified lane carries a refusal class measured by actually running plan verify against its recorded evidence, in a committed artifact stating the count per class and naming the cheapest class to discharge first
+exit: every built-unverified lane carries a refusal class measured by actually running plan verify against its recorded evidence, in a committed artifact stating the count per class and naming the cheapest class to discharge first, recorded in docs/plan/artifacts/why-verification-is-refused.md
 agent: L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY
 evidence: docs/plan/artifacts/why-verification-is-refused.md
 
@@ -23816,12 +23817,13 @@ the open decisions before merging and say that you did.** **In zsh write `${ref}
 `uptime` — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH — redaction cannot reach a URL, and two of them carry a customer's identity
-state: open
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: no route carries a phone number or a device token in its path, shown by tests that red when either is placed there, with the non-SQL tier green at the composed tip
-agent: L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH
+exit: no route carries a phone number or a device token in its path, shown by tests that red when either is placed there, with the non-SQL tier green at the composed tip, and by fact:route.gc.transfer, fact:route.push.consumer and fact:route.push.store
+agent: a400093a
+evidence: fact:route.gc.transfer
 
 **A URL is seen by every reverse proxy, load balancer and access log between the caller and the process,
 and sink-level redaction never reaches it — because no log statement is involved.** Two routes carry a
@@ -23893,6 +23895,12 @@ RESOLUTION specifically** — not only a combined mutation. The guard's three pr
 two survivors and a combined mutation showed, so **a resolution that looks right is exactly what reopens an
 id oracle quietly.**
 
+**Route shape as read from the trunk checkout, not asserted:** the gift-card transfer route is
+<!--fact route.gc.transfer 2026-08-08T22:55Z ok-->present<!--/fact-->, the consumer push route is
+<!--fact route.push.consumer 2026-08-08T22:55Z ok-->present<!--/fact--> and the store push route is
+<!--fact route.push.store 2026-08-08T22:55Z ok-->present<!--/fact-->. These probes existed with no
+span, so their facts could never be rendered or used as evidence.
+
 **Where the credential goes, settled with a reason rather than a preference: the BODY, on asymmetric
 recording rather than secrecy.** A proxy terminating TLS can read a body, so a body is **not confidential** —
 but a URL is **recorded** by every proxy, load balancer and access log as a matter of routine, with no log
@@ -23955,6 +23963,393 @@ every branch against the open decisions before merging and say that you did** �
 `D-MEALS-CREDIT-ACCOUNT` gates a Tripletex receivable **column and its migration**, not this presentation,
 so read it before assuming either way. **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.**
 Never `pkill`. **Do not push.**
+
+### Lane L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL — a second reader found the site and named the exact change
+state: open
+needs: D-SPEC-L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the expiry sweep's Withheld site reds under an applied-and-restored mutation, with the mutation named, and the non-SQL tier green at the composed tip
+agent: ad133d03
+
+**A guard nobody has tested is a guard nobody has.** `wf-withheld-bound`'s **second** `Withheld` site — the
+expiry sweep — **reds under no mutation.** Two independent readers reached that: the lane that landed the
+work flagged it against itself, and a second reader confirmed it and located the code.
+
+**The site, located rather than described**: the expiry sweep writes `WithheldWeekEnded` at
+`NotificationDispatcher.cs:236-255`. **No arm reds under its mutation.**
+
+**The named change is a third mutation-backed arm**, and the second reader specified it as exactly that —
+not a rewrite of the existing two. **The existing arms are fine; they simply do not reach this site.**
+
+**Write the arm so that it reds for the right reason.** Apply the mutation, watch it red, restore, watch it
+green — **and say which mutation, in words, in your return.** An arm added without a mutation that reds it
+is the same unproven claim this lane exists to close.
+
+**Do not widen the scope.** This is one site and one arm. If you find a third `Withheld` site while you are
+there, **name it rather than fixing it** — a second unproven site is a finding worth its own lane, and this
+lane's value is that it is small enough to be certain about.
+
+**Use the canonical runner** — it anchors on the nearest `.git` and parses vstest counts, so it works inside
+this repo now. **Assert your arm BY NAME from a `--logger trx`**: a console log names only failed and
+skipped tests, so an absent arm and a passing one print the same green line. **A sibling nearly reported
+five tests missing because its extraction filtered on a file's first class name while they lived in a second
+class in the same file** — read the trx, not a filter.
+
+**Backend trunk is `bcfe0d893`.** Reproduce the unfalsified state before you change anything: **apply the
+mutation to the current trunk and show that nothing reds.** That before-arm is the evidence the site was
+unguarded, and this program has been burned four times by premises that had moved.
+
+**If it lands, use the atomic guard** — re-read the trunk **in the same command** as the `git branch -f`.
+**Worktree with `--detach`.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0 having
+run **zero** tests. **Assert `WebApi.dll`'s mtime MOVES.** **The tier rewrites TWO tracked artifacts** —
+`run-sheet.json` and `run-sheet.md`; restore both, never `git add -A`. **Check every branch against the open
+decisions before merging and say that you did.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold
+below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-THE-FIXTURE-CANNOT-TELL-A-NAME-FROM-AN-ID — census the conflation, edit nothing
+state: verified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/artifacts/name-versus-id-census.md names every production site that reads Identity.Name or a user id where the two are not interchangeable, and every test fixture that mints them equal, each with file:line
+agent: a400093a
+evidence: docs/plan/artifacts/name-versus-id-census.md
+
+**A sibling lane found an instrument defect while testing something else, and it is bigger than the lane
+that found it.** The test fixture mints `unique_name` **equal to** `nameid`, so `Identity.Name` and the
+user id are **identical in every test** — while in production the OAuth login sets `Name` to the **phone
+number**. **A swap between the two is therefore invisible to the entire suite.**
+
+**This is the estate's most expensive failure shape, in a new place.** A green suite that cannot
+distinguish two values will report green whichever one the code reads. Four module journeys already
+stopped at a missing wire under a green suite; this is the same class — the instrument cannot see the
+difference it is being asked about.
+
+**Your job is a census, not a repair. Name sites; edit nothing.** A sibling is writing in that fixture
+right now, and two writers in one file is how a merge ended up reachable from no ref today. **If you
+change a single file this lane has failed**, however obvious the fix looks.
+
+**Produce a committed artifact** at `docs/plan/artifacts/name-versus-id-census.md` — it is the exit, and
+`docs/plan/artifacts/` needs a force-add past `.gitignore`. Two columns are the point:
+
+1. **Production sites** where `Identity.Name`, `nameid`, `sub`, `ActorClaims` or a user id is read, **and
+   the two are not interchangeable** — a money write attributed by one and authorized by the other is the
+   worst case, so **rank C4 sites first**.
+2. **Fixtures and helpers that mint them equal**, with the line that does it. **Say how many tests sit
+   downstream of each** — a fixture used by four hundred tests and one used by two are not the same
+   finding.
+
+**Distinguish "reads Name where an id is meant" from "reads Name legitimately".** A display string is not
+a defect. **The census is worthless if it lists every occurrence** — the value is in the subset where a
+swap would change behaviour, and you must say **why** for each, in a clause.
+
+**State your coverage honestly and name what you did not read.** A sibling nearly reported five tests
+missing because it filtered on a file's first class name while they lived in a second class in the same
+file. **Grep is a starting point, not a census** — read the sites you list.
+
+**Do not run a tier.** Two backend tiers are already contending for this host; you need none. **Never
+`pkill`. Do not move any trunk. Do not push.** Backend trunk is `bcfe0d893`.
+
+### Lane L-A-VOID-RUN-COHORT-IS-RE-MEASURED — findings that rest on a run nobody proved executed
+state: verified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/artifacts/void-run-cohort.md lists every recorded finding whose evidence is a mutation that redded NOTHING, each re-run at the current trunk with an executed-test count, and each marked reproduced or false
+agent: ad133d03
+evidence: docs/plan/artifacts/void-run-cohort.md
+
+**One false finding from a batch is a question about the batch.** `L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL`
+returned `fail-spec` because the site it was raised against **was never unguarded** — the canonical
+falsifying mutation reds an existing arm by name, and the test file and dispatcher are **unchanged since
+`74405b34`**, the original commit. **The premise was false at birth, not overtaken.**
+
+**The likely origin is already characterized in this plan**: *"reds NOTHING"* is the **void-run
+false-survivor signature** — zero tests executed, exit 0, read as a survivor. Tranche one demonstrated
+exactly that on the pre-fix runner. **A mutation that kills nothing and a mutation that ran nothing print
+the same line.**
+
+**Two readers propagated it before anyone re-ran it.** The lane that landed the work flagged it against
+itself; a second reader confirmed it by **citing the first measurement rather than repeating it**. The
+citation chain was two deep with **zero independent runs** until a third lane's measure-first rule forced
+one. **Treat any confirmation that did not itself execute tests as unconfirmed.**
+
+**Find the cohort, do not assume it.** Search the plan's returns and lane bodies for findings whose
+evidence is a survived or empty mutation — `reds nothing`, `no arm reds`, `survives`, `unfalsified`,
+`not pinned`. **For each, say whether the recorded evidence carries an executed-test count.** A finding
+whose evidence names a count is not in this cohort; **that distinction is the artifact's spine.**
+
+**Re-run only what lacks a count**, at the current trunk, and record for each: the mutation in words, the
+executed-test count, and the verdict **reproduced** or **false**. **A re-run that itself executes zero
+tests is not a result** — it is the same defect again, and must be reported as such rather than as a
+survival.
+
+**Write to `docs/plan/artifacts/void-run-cohort.md`** — force-add past `.gitignore`. **Do not fix
+anything you find.** A false finding is retired by the owner against this measurement, not by you, and a
+reproduced one earns its own lane.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests, which is the very defect you are auditing. **Read the trx.** **Gate on
+`uptime` — hold below 13**, and re-read it before each run rather than trusting one reading. **Restore
+`run-sheet.json` and `run-sheet.md`; never `git add -A`.** Never `pkill`. **Do not move any trunk. Do not
+push.** Backend trunk is `bcfe0d893`.
+
+### Lane L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ — the third Withheld site, named by the lane that refused to fix it
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a written finding stating whether StoresWithheld has a bound and whether any arm reds when that bound is broken, with the mutation named and an executed-test count
+agent: a400093a
+evidence: lanes/L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ/{baseline.trx,mutation-a.trx} - executed=9 in both, passed 9/0 then 4/5
+
+**A lane told to name rather than fix a third site named it**: `EventsNotificationDrainService.cs:122`
+computes `StoresWithheld`, **a store-level counter with its own unexamined bound story.** It was left
+alone deliberately, which is why it is worth a lane rather than a footnote.
+
+**Read the bound before you test it.** Say what stops the counter growing — or say that nothing does.
+**"Unbounded" is a finding; so is "bounded, and here is the line."** Do not report the absence of a test
+as the absence of a bound; they are different claims and this program has conflated them once already
+today.
+
+**Then falsify it, and carry an executed-test count.** A mutation that reds nothing is **not** evidence of
+an unguarded site — that is exactly the void-run signature that produced a false finding hours ago. **If
+your mutation reds nothing, your first hypothesis is that your run executed no tests**, and you must
+disprove that with a count from a `--logger trx` before reporting a survival.
+
+**Do not widen into the workforce dispatcher.** Its two `Withheld` sites are settled by measurement; this
+is the Events drain and nothing else.
+
+**Report, do not repair.** If the counter is unbounded, that is a defect that earns its own build lane
+with its own tier — **naming it accurately is worth more than a fix written in a hurry against a bound
+you inferred.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"`. **Assert by name from a
+trx.** **Gate on `uptime` — hold below 13.** **Restore `run-sheet.json` and `run-sheet.md`.** Never
+`pkill`. **Do not move any trunk. Do not push.** Backend trunk is `bcfe0d893`.
+
+### Lane L-THE-MCP-PRINCIPAL-REPAIR-IS-ASSERTED-AT-RUNTIME — the one site a static read could not settle
+state: open
+needs: L-THE-WIREHOST-CAN-MINT-AN-OPENIDDICT-PRINCIPAL
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a test asserts at runtime whether McpShoppingService's principal repair fires for an OpenIddict-shaped token, red under a mutation of the branch it proves, named from a trx with an executed-test count
+agent: ad133d03
+
+**A census that read 135 sites settled 134 of them and refused to settle one.** `McpShoppingService.cs:1138-1156`
+repairs the principal **only when no `ClaimTypes.Name` claim exists** — while the OpenIddict MCP token
+carries the **short-form `"name"`**. Whether the repair fires turns on OpenIddict's claim mapping, and
+`AddValidation` directs it **neither way**.
+
+**The refusal was correct and is the reason this lane exists.** Static reading cannot decide it, and a
+confident guess would be the void-run shape in a new costume — an answer that looks measured and is not.
+**Do not settle it by reading harder.** Assert it.
+
+**The stake is real, not hygienic.** The same census found the MCP token sets `Claims.Name` to
+`user.DisplayName` — **neither unique nor stable**, so a swap there can **collide two users** rather than
+merely misattribute one. That is worse than the phone-number shape everyone has been reasoning about.
+
+**Assert the branch both ways.** A test that only shows the repair firing proves nothing about the case
+where it does not; **the finding is which branch a real OpenIddict-shaped principal takes**, so construct
+one and assert the branch taken. **Then mutate the condition and watch the arm red** — an arm that cannot
+red is not evidence.
+
+**If you cannot construct an OpenIddict-shaped principal, say so and stop.** A sibling tried to build an
+OAuth-shaped one, hit a 401 at authentication before the guard was ever reached, and **removed its probe
+rather than leave a test that agrees with the defect.** That was the right call and it is available to you.
+**A lane returning "could not be constructed, here is where it fails" is worth more than a test that passes
+for the wrong reason.**
+
+**Do not repair the site.** Whether the repair should fire at all is a question the measurement answers
+first. Report what the branch does.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert by name from a `--logger trx`, and carry the executed count** — a
+mutation that reds nothing means your run executed nothing until you have disproved it. **Gate on
+`uptime` — hold below 13, and re-read it before each run**; a sibling read 21.20 at the instant its
+mutation ran, inflated by its own preceding build, and stopped rather than continue. **Restore
+`run-sheet.json` and `run-sheet.md`; never `git add -A`.** Never `pkill`. **Do not push.** Backend trunk
+is `ada218783`.
+
+### Lane L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST — the inequality that grants
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: an arm reds when OrderService's requested-by-store decision is inverted, named from a trx with an executed-test count, and the non-SQL tier stays green
+agent: a400093a
+evidence: backend feature/restaurant-modules ada218783 -> 28e60e6b8; lanes/L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST/{arms-clean.trx,arms-inverted.trx,tier.trx}
+
+**Most identity checks fail closed. This one fails open.** `OrderService.cs:788` decides *requested by
+store* by **inequality** — so where every other site in the census would refuse a genuine caller under a
+swap, this one **grants**. It was ranked the dangerous direction for that reason.
+
+**Read the consequence before you test it, and write it in one sentence.** What does a request marked
+*by the store* do that a customer's own request does not — a refund path, a fee waiver, a cancellation
+without penalty? **A test written without that sentence pins a boolean; a test written with it pins the
+money.** C4 is in force: a money-path write must name the actor that caused it.
+
+**The estate-wide coupling behind this is measured and latent, not live** — the app's JWT emits
+`unique_name = user.Id`, so `Identity.Name` and the user id are interchangeable **today**. **That is
+exactly why this needs an arm now**: the coupling is invisible to every existing test, so the day someone
+changes the claim map, this site changes from refusing to granting with nothing to catch it.
+
+**Invert the decision and watch an arm red.** If nothing reds, **your first hypothesis is that your run
+executed no tests** — disprove that with a count from the trx before reporting a survival. A false
+"reds nothing" cost a whole lane tonight.
+
+**Do not rewrite the decision to fail closed.** That is a behaviour change with a blast radius nobody has
+measured; **this lane makes the current behaviour falsifiable, and a repair earns its own lane** once the
+consequence sentence exists.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"`. **Assert by name from a
+`--logger trx`.** **Assert `WebApi.dll`'s mtime MOVES.** **Gate on `uptime` — hold below 13, re-read
+before each run.** **Restore `run-sheet.json` and `run-sheet.md`; never `git add -A`.** **Use the atomic
+guard if it lands** — re-read the trunk in the same command as the `git branch -f`. **Worktree with
+`--detach`.** Never `pkill`. **Do not push.** Backend trunk is `ada218783`.
+
+### Lane L-THE-EVENTS-OUTBOX-BACKLOG-HAS-NO-CEILING — a deliberate retention choice, measured rather than assumed
+state: open
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/artifacts/events-outbox-retention.md states what bounds the withheld backlog, what it costs at a named store count and duration, and whether any arm reds when a ceiling is broken
+
+**The counter is bounded; the backlog it counts is not.** A lane measured `StoresWithheld` as bounded by
+fleet size by construction — and found, separately, that a withheld store's rows are **left exactly as
+found**: no expiry, no max age, no cutoff anywhere in the Events outbox.
+
+**It is deliberate and stated at `EventsNotificationDrainService.cs:132-134`** — switching a store on
+should deliver the accumulated backlog rather than find it spent. **So this is a retention choice with no
+ceiling, not an oversight**, and the lane must not treat it as a bug to be fixed.
+
+**Put a number on it, because "unbounded" without a number decides nothing.** How many rows accrue for one
+withheld store per day at a plausible event volume, and what does a store switched on after a month
+deliver in one drain? **A retention choice is defensible or not depending on that number, and nobody has
+computed it.**
+
+**Say what the delivery does at that size.** Is one drain batched or does it deliver the whole backlog at
+once — and does a guest receive a month of notifications in one burst? **The operator question and the
+guest question are different, and both belong in the artifact.**
+
+**Do not copy the workforce backlog fix across.** A sibling measured that the workforce bound exists for
+different reasons; the shapes rhyme and the rationales do not. **Say what the workforce bound does and why
+it does not transfer**, so the next reader does not re-litigate it.
+
+**Ordering worth preserving in the artifact**: the store switch is resolved **before** the batch is taken,
+because filtering an already-drawn batch would let one dark store's backlog starve a switched-on neighbour.
+**That is a property worth an arm if it has none.**
+
+**Write to `docs/plan/artifacts/events-outbox-retention.md`** — force-add past `.gitignore`. **Report, do
+not repair.** **Gate on `uptime` — hold below 13.** **Do not move the trunk. Do not push.** Backend trunk
+is `ada218783`.
+
+### Lane L-THE-WIREHOST-CAN-MINT-AN-OPENIDDICT-PRINCIPAL — the harness the aborted lane costed out
+state: running
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a WireHost test drives the real OpenIddict flow to a validated principal and asserts which name-claim shape reaches the endpoint, red under a mutation of the claim mapping, named from a trx with an executed-test count
+agent: ad133d03
+
+**A lane aborted rather than fake a measurement, and priced the harness that would settle it.** No test in
+the ~5100-test suite **mints or validates an OpenIddict token at all.** The one existing test reaching
+`RequirePrincipal` **hand-builds a principal already carrying a long-URI `ClaimTypes.Name`** — so the fire
+branch never executes and the green suite agrees with a shape somebody chose.
+
+**The whole question is one runtime bit**: does this app's OpenIddict **validation** expose the token's
+name claim as short `"name"`, or map it to long-URI `ClaimTypes.Name`? The repair at
+`McpShoppingService.cs:1138-1156` fires exactly when no long-URI Name claim is present. **It is version-
+and config-dependent, so only a genuine validated principal can reveal it.**
+
+**The blocking chain is already evidenced step by step; do not re-derive it.** `Mcp.Clients` is empty so no
+client is seeded (**dynamic registration required**); only **authorization-code + PKCE** is allowed, so
+there is no non-interactive mint; login is **SMS-OTP with a demo-code bypass**; consent is an **HTML POST**.
+Read `lanes/L-THE-MCP-PRINCIPAL-REPAIR-IS-ASSERTED-AT-RUNTIME/evidence.md` first — it names each step.
+
+**Build the flow, not a shortcut around it.** A hand-built principal is the exact thing the aborted lane
+refused to ship: **it asserts the author's assumption and calls it a measurement.** If you find yourself
+constructing claims by hand, you have left the lane.
+
+**The demo-code bypass is the intended seam** — it exists so a flow can be driven without an SMS. **Use it
+and say so in your return**, including whether it changes the principal's shape relative to a real login;
+if it does, the measurement is about the bypass and must be reported that way.
+
+**Assert the shape, then mutate the mapping and watch the arm red.** An arm that cannot red proves the
+harness runs, not that the mapping is what you say.
+
+**If the flow cannot be driven, abort as your predecessor did** — name the step that refuses and stop.
+**Two honest aborts are cheaper than one test that passes for the wrong reason**, and this program has
+already retired one finding that rested on an unexecuted run.
+
+**Do not repair `McpShoppingService`.** This lane builds the instrument; the site is measured by the lane
+that needs it.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert by name from a `--logger trx` and carry the executed count.** **Assert
+`WebApi.dll`'s mtime MOVES.** **Gate on `uptime` — hold below 13, re-read before each run.** **Restore
+`run-sheet.json` and `run-sheet.md`; never `git add -A`.** **Atomic guard if it lands** — re-read the trunk
+in the same command as the `git branch -f`; **worktree `--detach`.** Never `pkill`. **Do not push.**
+Backend trunk is `ada218783`.
+
+### Lane L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED — 133 lanes hold evidence the tool cannot read
+state: running
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/exits-that-name-their-file.md states, per built-unverified lane, whether its exit was amended to name an artifact the lane body designated BEFORE the work, or was left alone with the reason, with the count of each and the count plan verify then accepted
+agent: a400093a
+
+**133 lanes sit at `built-unverified` and the measurement of why is already done — by me, not by you.** Run
+`plan verify` against each lane's recorded evidence and the refusals sort into five classes:
+
+| class | count | what it means |
+|---|---|---|
+| evidence exists on disk | **73** | the file is right there; the **exit does not name it** |
+| recoverable from a backend git ref | **16** | committed on a branch that never reached the trunk |
+| recoverable from a frontend git ref | **3** | same, other repo |
+| nowhere on disk or in any ref | **7** | genuinely destroyed |
+| the evidence line names no path at all | **34** | `fact:` or prose |
+
+**The 73 are the cheapest and the most dangerous.** Cheapest because nothing needs rebuilding. Dangerous
+because the repair is *editing an exit until the evidence fits it*, and **an exit rewritten to match the
+evidence it received proves nothing.** That is the failure this whole plan exists to prevent, available in
+one command.
+
+**So the rule is the lane, and it is not negotiable: amend an exit ONLY where the lane body designated that
+artifact BEFORE the work began.** Read the body. If the body names the path — the way a brief says *"write
+to `docs/plan/artifacts/x.md`"* — the exit was clerically incomplete and naming it is a correction. **If the
+artifact was chosen by the agent afterwards, LEAVE THE EXIT ALONE** and record it as not-amendable. A lane
+you decline to amend is a result, not a failure; **the count you decline is the number I most want to see.**
+
+**Two worked examples, both mine, both legitimate**: `L-THE-FIXTURE-CANNOT-TELL-A-NAME-FROM-AN-ID` and
+`L-A-VOID-RUN-COHORT-IS-RE-MEASURED` each had an exit that *described* its artifact — "a committed artifact
+naming every production site…" — while the body designated the exact path. Naming the path let `plan verify`
+accept work that was always admissible. **Neither exit's substance changed.** If your amendment changes what
+the lane must be true for, it is not this operation.
+
+**Do not touch the 7 destroyed ones.** They are already recorded and re-manufacturing evidence for them is
+the worst act available here.
+
+**The 16+3 recoverable are NOT yours either** — bringing a file onto a trunk is a landing, it races other
+lanes, and it earns its own lane with the atomic guard. **Name them and stop.**
+
+**A path resolves relative to the plan repo, not the lane's workdir** — that is why `lanes/X/evidence.md`
+refuses while `../OkamAPI-modules/lanes/X/evidence.md` is found. **Several exits name the unprefixed form,
+so the amendment must carry the prefix the tool can actually open**, and you must confirm by running
+`plan verify` rather than by reasoning about it.
+
+**Run `plan verify` after every amendment and record what it said.** An amendment you did not test is the
+same unproven claim in a new place. **State the count accepted and the count still refused.**
+
+**Boundaries.** You may edit `## Lanes` exit lines and your artifact — **nothing else in `plan.md`**, no
+lane bodies, no `state:` lines, no decisions, no flags. **Never `plan accept`.** **Do not move any trunk. Do
+not push.** Backend trunk is `28e60e6b8`.
 
 ## Decisions
 
@@ -25245,7 +25640,7 @@ Five, six, seven, eight — **each figure was true when written and false when r
 grows while the number sits in prose. The lesson is not that people were careless; it is that **a
 derivable number does not belong in prose at all.** It wants a probe.
 
-The chain tip the collector last measured in the checkout the probes read: <!--fact be.mig.head 2026-08-08T15:25Z ok-->20260731220005_Workforce_IdentityCodeRegisterIssues.cs<!--/fact-->. It is a fact rather than a sentence for the reason above.
+The chain tip the collector last measured in the checkout the probes read: <!--fact be.mig.head 2026-08-08T22:55Z unconf-->20260731220005_Workforce_IdentityCodeRegisterIssues.cs<!--/fact-->. It is a fact rather than a sentence for the reason above.
 
 **Merged 2026-08-03, and the numbers were wrong again in both directions.** Measured with git before
 anything was touched: **seven links, not six. Nine migrations past the integration branch, not eight. 152
@@ -25594,7 +25989,7 @@ day the settlement branch opens.
 
 **Ruled 2026-08-03 (Sven): `already-fixed-pending-merge`.**
 
-Delivery-receipt kind on the branch: <!--fact meals.utlkvit 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Credit-sale total in the Z report: <!--fact meals.xz.credit 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Both probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
+Delivery-receipt kind on the branch: <!--fact meals.utlkvit 2026-08-08T22:55Z ok-->present<!--/fact-->. Credit-sale total in the Z report: <!--fact meals.xz.credit 2026-08-08T22:55Z unconf-->pending<!--/fact-->. Both probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
 
 **LANDED 2026-08-03 on `feature/restaurant-modules` as merge `a273e013`, on Sven's instruction and on the
 lane's own request.** Merged, **not ported** — which is the distinction the whole family turned on: a port
@@ -28621,6 +29016,28 @@ printed line for the same sale says "Ukjent" — the document and the record wou
 
 **One defect for whoever lands it**: `CardSale_WithNotSet_IsStillRefused` asserts a message the trunk does
 not use. The trunk already refuses `NotSet`; only the wording differs.
+### Decision D-SPEC-L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL — the plan contradicts what L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL observed
+state: open
+owner: @sven
+blocks: L-THE-EXPIRY-SWEEP-GETS-AN-ARM-THAT-CAN-FAIL
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The brief asserts the expiry-sweep site reds under no mutation; at bcfe0d893 the canonical falsifying mutation reds the existing first arm (Failed 1 / Passed 1, both arms named in the trx).
+### Decision D-SPEC-L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED — the plan contradicts what L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED observed
+state: open
+owner: @sven
+blocks: L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The dispatch says "the census is in the brief", but docs/plan/briefs/L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED.md does not exist - so the census, the exit criteria and the constraints exist only in the dispatch message
+
+
 
 
 ## Flags
@@ -29441,11 +29858,11 @@ The design's own count said fourteen. It is twenty.
 
 **Live, re-measured on every `plan refresh`:**
 
-This repo is on <!--fact fe.world.branch 2026-08-08T15:25Z ok-->feature/restaurant-modules<!--/fact-->, conforming:
-<!--fact fe.world 2026-08-08T15:25Z ok-->True<!--/fact-->. The backend checkout that nineteen
-probes read is on <!--fact be.world.branch 2026-08-08T15:25Z ok-->lane/meals-grace-pins<!--/fact-->, conforming:
-<!--fact be.world 2026-08-08T15:25Z ok-->False<!--/fact-->, and it is missing
-<!--fact be.world.behind 2026-08-08T15:25Z ok-->4<!--/fact--> commits this branch has.
+This repo is on <!--fact fe.world.branch 2026-08-08T22:55Z ok-->feature/restaurant-modules<!--/fact-->, conforming:
+<!--fact fe.world 2026-08-08T22:55Z ok-->True<!--/fact-->. The backend checkout that nineteen
+probes read is on <!--fact be.world.branch 2026-08-08T22:55Z unconf-->lane/meals-grace-pins<!--/fact-->, conforming:
+<!--fact be.world 2026-08-08T22:55Z unconf-->False<!--/fact-->, and it is missing
+<!--fact be.world.behind 2026-08-08T22:55Z unconf-->4<!--/fact--> commits this branch has.
 `../ConsumerWeb`, which the twentieth reads, conforms:
 the world file read `unknown` on purpose,
 because **nobody has ruled which ConsumerWeb branch this plan reads from**, and filling the expected
@@ -36798,6 +37215,24 @@ state: open
 severity: warn
 owner: @sven
 clears_when: no return is refused for a malformed brief field, with the template naming the exact token rather than describing where to find it
+### Flag F-THE-SUBAGENT-CEILING-IS-REACHED — 1000 of 1000 subagents spawned; no new agent can be created this session
+state: open
+severity: blocker
+owner: @sven
+clears_when: CLAUDE_CODE_MAX_SUBAGENTS_PER_SESSION is raised by the owner, or the session is restarted
+### Flag F-THE-PROBE-CHECKOUT-DRIFTED-OFF-THE-TRUNK — the backend checkout every wire and schema probe reads was on wip/rescue-2026-08-06-open-shifts-lineage, 3 ahead and 210 behind the trunk and not an ancestor of it
+state: open
+severity: warn
+owner: @sven
+clears_when: fact:be.dir.pin reads ok, meaning ../OkamAPI-modules HEAD is feature/restaurant-modules
+### Flag F-THE-PROBE-CHECKOUT-IS-ALSO-THE-LANDING-TARGET — the checkout every probe reads is the trunk, so a landing lane cannot git branch -f and must fast-forward a live working tree instead
+state: open
+severity: warn
+owner: @sven
+clears_when: a dedicated detached checkout serves the probes, or a written ruling says fast-forwarding the probe checkout is the landing method
+
+
+
 
 
 
@@ -37053,6 +37488,9 @@ be.world.behind         meta      ../OkamAPI-modules/artifacts/world/WORLD.json 
 be.mig.head             meta      ../OkamAPI-modules/artifacts/world/WORLD.json                            json:$.migrations_head
 fe.world                meta      artifacts/world/WORLD.json                                              json:$.on_expected
 fe.world.branch         meta      artifacts/world/WORLD.json                                              json:$.branch
+route.gc.transfer       wire      ../OkamAPI-modules/Controllers/GiftcardController.cs                     contains:transfer/{giftcardId}")]
+route.push.consumer     wire      ../OkamAPI-modules/Controllers/ConsumerNotificationController.cs         contains:registrationid")]
+route.push.store        wire      ../OkamAPI-modules/Controllers/StoreNotificationController.cs            contains:registrationid")]
 ```
 
 ## Facts
@@ -37061,28 +37499,28 @@ Each line is one machine claim. The value between the markers is the tool's
 territory: `plan refresh` rewrites it and a hand edit is overwritten and logged.
 The markers are HTML comments, so a Markdown preview shows only the value.
 
-- Frontend suite, this repo, passing: <!--fact fe.tests 2026-08-08T15:25Z ok-->2127<!--/fact-->
-- Frontend suite, failing: <!--fact fe.tests.failed 2026-08-08T15:25Z ok-->0<!--/fact-->
-- Backend suite at the branch tip: <!--fact be.tests 2026-08-08T15:25Z ok-->4351 passed / 0 failed<!--/fact-->
-- Browser journey captures: <!--fact journeys.browser 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Backend Events journeys blocked on a gap: <!--fact ev.journeys 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Backend Workforce journeys verified green: <!--fact wf.journeys 2026-08-08T15:25Z ok-->12<!--/fact-->
-- Last module nav link added: <!--fact nav.modules 2026-08-08T15:25Z ok-->growth-newsletter<!--/fact-->
-- AccountingSummaries unique-index migration: <!--fact acct.uidx 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
-- Meals employee reference on the membership: <!--fact meals.empref 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Workforce identity-code register: <!--fact wf.idreg 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Training checklist entities: <!--fact train.checklists 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
-- Growth mail provider selector: <!--fact growth.mail.provider 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Preference-centre credentialed CORS: <!--fact growth.prefcentre.cors 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
-- Preference-centre cross-site cookie: <!--fact growth.cookie.crosssite 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
-- Meals feature gate bound: <!--fact meals.gate 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Wolt menu sync registered: <!--fact wolt.sync.host 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
-- Vipps deposit-token log guard: <!--fact vipps.token.guard 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Events structured dietary field: <!--fact ev.dietary 2026-08-08T15:25Z ok-->present<!--/fact-->
-- Frontend suite in CI: <!--fact fe.ci 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Frontend suite, this repo, passing: <!--fact fe.tests 2026-08-08T22:55Z ok-->2127<!--/fact-->
+- Frontend suite, failing: <!--fact fe.tests.failed 2026-08-08T22:55Z ok-->0<!--/fact-->
+- Backend suite at the branch tip: <!--fact be.tests 2026-08-08T22:55Z ok-->4638 passed / 0 failed<!--/fact-->
+- Browser journey captures: <!--fact journeys.browser 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Backend Events journeys blocked on a gap: <!--fact ev.journeys 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Backend Workforce journeys verified green: <!--fact wf.journeys 2026-08-08T22:55Z ok-->14<!--/fact-->
+- Last module nav link added: <!--fact nav.modules 2026-08-08T22:55Z ok-->growth-newsletter<!--/fact-->
+- AccountingSummaries unique-index migration: <!--fact acct.uidx 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Meals employee reference on the membership: <!--fact meals.empref 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Workforce identity-code register: <!--fact wf.idreg 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Training checklist entities: <!--fact train.checklists 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Growth mail provider selector: <!--fact growth.mail.provider 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Preference-centre credentialed CORS: <!--fact growth.prefcentre.cors 2026-08-08T22:55Z unconf-->unknown<!--/fact-->
+- Preference-centre cross-site cookie: <!--fact growth.cookie.crosssite 2026-08-08T22:55Z unconf-->unknown<!--/fact-->
+- Meals feature gate bound: <!--fact meals.gate 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Wolt menu sync registered: <!--fact wolt.sync.host 2026-08-08T22:55Z unconf-->unknown<!--/fact-->
+- Vipps deposit-token log guard: <!--fact vipps.token.guard 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Events structured dietary field: <!--fact ev.dietary 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Frontend suite in CI: <!--fact fe.ci 2026-08-08T22:55Z unconf-->unknown<!--/fact-->
 
-Events acceptance-receipt kind on the branch: <!--fact ev.accept.receipt 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Externally-recorded deposits: <!--fact ev.deposit.external 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Growth dispatch hosted service registered: <!--fact growth.dispatch.hosted 2026-08-08T15:25Z ok-->present<!--/fact-->.
+Events acceptance-receipt kind on the branch: <!--fact ev.accept.receipt 2026-08-08T22:55Z unconf-->pending<!--/fact-->. Externally-recorded deposits: <!--fact ev.deposit.external 2026-08-08T22:55Z unconf-->pending<!--/fact-->. Growth dispatch hosted service registered: <!--fact growth.dispatch.hosted 2026-08-08T22:55Z ok-->present<!--/fact-->.
 These three probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
-- Backend `dir` `../OkamAPI-modules` is worktree <!--fact be.dir.gitdir 2026-08-08T15:25Z ok-->/Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules<!--/fact-->, repo pin <!--fact be.dir.repo 2026-08-08T15:25Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact be.dir.ref 2026-08-08T15:25Z ok-->wip/rescue-2026-08-06-open-shifts-lineage<!--/fact-->, ref pin <!--fact be.dir.pin 2026-08-08T15:25Z unconf-->pending<!--/fact-->
-- Hub `dir` `.` is worktree <!--fact fe.dir.gitdir 2026-08-08T15:25Z ok-->/Users/svendaneel/okam/Web/.git/worktrees/Web-modules<!--/fact-->, repo pin <!--fact fe.dir.repo 2026-08-08T15:25Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact fe.dir.ref 2026-08-08T15:25Z ok-->wip/session-2026-08-06-all-work<!--/fact-->, ref pin <!--fact fe.dir.pin 2026-08-08T15:25Z unconf-->pending<!--/fact-->
-- Intent hash: <!--fact intent.hash 2026-08-08T15:25Z ok-->7c84435b072ff7fe<!--/fact-->
+- Backend `dir` `../OkamAPI-modules` is worktree <!--fact be.dir.gitdir 2026-08-08T22:55Z ok-->/Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules<!--/fact-->, repo pin <!--fact be.dir.repo 2026-08-08T22:55Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact be.dir.ref 2026-08-08T22:55Z ok-->feature/restaurant-modules<!--/fact-->, ref pin <!--fact be.dir.pin 2026-08-08T22:55Z ok-->present<!--/fact-->
+- Hub `dir` `.` is worktree <!--fact fe.dir.gitdir 2026-08-08T22:55Z ok-->/Users/svendaneel/okam/Web/.git/worktrees/Web-modules<!--/fact-->, repo pin <!--fact fe.dir.repo 2026-08-08T22:55Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact fe.dir.ref 2026-08-08T22:55Z ok-->wip/session-2026-08-06-all-work<!--/fact-->, ref pin <!--fact fe.dir.pin 2026-08-08T22:55Z unconf-->pending<!--/fact-->
+- Intent hash: <!--fact intent.hash 2026-08-08T22:55Z ok-->7c84435b072ff7fe<!--/fact-->
