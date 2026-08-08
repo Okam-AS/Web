@@ -1,0 +1,61 @@
+Z-RAPPORT #1
+Test Legal AS
+Org.nr. 912 345 678 MVA
+
+Kasse                      REG-1
+Dato                <normalisert>
+Sekvens                      0-3
+Forrige Z                      0
+Kvitteringer                   2
+--------------------------------
+OMSETNING
+Uten varegruppe (2)       225,00
+Salg (2)                  225,00
+  herav kontantsalg (1)   100,00
+  herav kredittsalg (1)   125,00
+Rabatt (0)                 -0,00
+Negativt salg (0)          -0,00
+Retur (0)                  -0,00
+--------------------------------
+MVA-SPESIFIKASJON
+MVA%     Grunnlag         MVA
+25%        180,00       45,00
+--------------------------------
+MOTTATT BETALING
+Kontant (1)               100,00
+Sum mottatt               100,00
+--------------------------------
+KREDITTSALG
+Kredittsalg (1)           125,00
+  Bedriftskonto (1)       125,00
+Faktureres, ikke mottatt
+--------------------------------
+KORREKSJONER
+Negativt salg (0)           0,00
+Retur (0)                   0,00
+Avbrutt salg (0)            0,00
+Linjekorreksjon (0)         0,00
+Sum korreksjoner            0,00
+Kopikvitteringer (0)        0,00
+Foreløpige (0)              0,00
+Trening (0)                 0,00
+Skuffåpninger                  0
+--------------------------------
+KONTANTOPPGJØR
+Vekslepenger                0,00
+Forventet                   0,00
+Opptalt                     0,00
+Differanse                  0,00
+--------------------------------
+PER BETJENT
+Ola (2)                   225,00
+--------------------------------
+GRAND TOTAL
+Salg                      225,00
+Retur                      -0,00
+Negativt salg              -0,00
+Feil/korreksjon            -0,00
+Netto                     225,00
+
+Signatur: <normalisert>
+Nøkkel <normalisert>
