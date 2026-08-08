@@ -5640,6 +5640,107 @@ export default {
   wfrl_toast_created: 'Die Funktion wurde hinzugefügt.',
   wfrl_toast_saved: 'Die Funktion wurde gespeichert.',
   wfrl_toast_retired: 'Die Funktion wurde ausgelaufen gesetzt.',
-  wfrl_toast_reinstated: 'Die Funktion ist wieder in Gebrauch.'
+  wfrl_toast_reinstated: 'Die Funktion ist wieder in Gebrauch.',
+
+  // ---- Okam fragen (/admin/assistant) -----------------------------------------------------------
+  // Siehe den norwegischen Block für die zwei Regeln, die dieser Text einhalten muss: nichts darf
+  // behaupten, eine Änderung sei erfolgt, solange ihre Karte noch auf dem Bildschirm steht, und die
+  // beiden Zahlen in `assistant_card_showingOf` / `assistant_card_confirmApproveCounted` sind
+  // VERSCHIEDENE Zahlen (die angezeigte Stichprobe gegenüber der vollen Menge, die das Genehmigen
+  // schreibt). Geprüft von `scripts/assistant-vocab-lint.mjs`.
+  assistant_title: 'Okam fragen',
+  assistant_subtitle: 'Stellen Sie Fragen zum Betrieb. Nichts ändert sich, bevor Sie es genehmigen.',
+  assistant_tab_ask: 'Fragen',
+  assistant_tab_inbox: 'Wartet auf Sie',
+  assistant_stores: 'Filialen',
+  assistant_selectStores: 'Filialen wählen',
+  assistant_allStores: 'Alle Filialen',
+  assistant_searchStore: 'Filiale suchen',
+  assistant_you: 'Sie',
+  assistant_okam: 'Okam',
+  assistant_thinking: 'Denkt nach …',
+  assistant_placeholder: 'Schreiben Sie Ihre Frage hier',
+  assistant_send: 'Senden',
+  assistant_sending: 'Wird gesendet …',
+  assistant_noMemory: 'Der Assistent erinnert sich noch nicht an frühere Fragen.',
+  assistant_askFailed: 'Wir haben keine Antwort erhalten. Bitte erneut versuchen.',
+  assistant_emptyTitle: 'Stellen Sie die erste Frage',
+  assistant_emptyBody: 'Der Assistent liest Ihre Zahlen und kann Änderungen vorschlagen, die Sie selbst genehmigen.',
+  assistant_example1: 'Wie viel haben wir letzte Woche verkauft?',
+  assistant_example2: 'An welchen Gerichten verdienen wir am wenigsten?',
+  assistant_example3: 'Erhöhe den Preis aller Pizzen um 10 %',
+  assistant_pickVenue: 'Um welche Filiale geht es?',
+  assistant_suggestion: 'Die Frage nennt {stores}. Dorthin wechseln?',
+  assistant_suggestion_apply: 'Ja, wechseln',
+  assistant_suggestion_dismiss: 'Nein, behalten',
+  assistant_basis_show: 'Grundlage anzeigen',
+  assistant_basis_hide: 'Grundlage ausblenden',
+  assistant_basis_assumptions: 'Annahmen',
+  assistant_basis_warnings: 'Vorbehalte',
+  assistant_basis_trace: 'So entstand die Antwort',
+  assistant_basis_tools: 'Verwendete Werkzeuge',
+  assistant_basis_period: 'Zeitraum',
+  assistant_basis_scope: 'Filialen in der Antwort',
+  assistant_basis_rounds: 'Runden',
+  assistant_basis_stopReason: 'Gestoppt weil',
+  assistant_basis_model: 'Modell',
+  assistant_composeAgainDraft: 'Neuen Vorschlag erstellen: {diff}',
+
+  // ---- Okam fragen: die Vorschlagskarte ---------------------------------------------------------
+  assistant_card_untitled: 'Vorschlag',
+  assistant_card_expiresIn: 'Läuft ab in',
+  assistant_card_expiredAlready: 'Abgelaufen',
+  assistant_card_showingOf: 'Zeigt {shown} von {total} Änderungen. Das Genehmigen schreibt alle {total}.',
+  assistant_card_col_target: 'Betrifft',
+  assistant_card_col_field: 'Feld',
+  assistant_card_col_before: 'Vorher',
+  assistant_card_col_after: 'Nachher',
+  assistant_card_storeScope: 'Filiale',
+  assistant_card_effectiveWindow: 'Gültig',
+  assistant_card_sourceReceipt: 'Grundlage',
+  assistant_card_openEnded: 'bis auf Weiteres',
+  assistant_card_approve: 'Genehmigen',
+  assistant_card_reject: 'Ablehnen',
+  assistant_card_confirmQuestion: 'Sind Sie sicher? Die Änderung erfolgt sofort.',
+  assistant_card_confirmQuestionCounted: 'Sind Sie sicher? Das ändert {count} Zeilen sofort.',
+  assistant_card_confirmApprove: 'Genehmigen — Änderung durchführen',
+  assistant_card_confirmApproveCounted: 'Genehmigen — diese {count} Preise schreiben',
+  assistant_card_approved: 'Genehmigt. Die Änderung wurde durchgeführt.',
+  assistant_card_approvedReplay: 'Dieser Vorschlag war bereits durchgeführt. Es wurde nichts doppelt gemacht.',
+  assistant_card_rejected: 'Der Vorschlag wurde abgelehnt.',
+  assistant_card_decisionFailed: 'Wir konnten das nicht abschliessen. Bitte erneut versuchen.',
+
+  // ---- Okam fragen: Ablehnungen aus der Staging-Spine -------------------------------------------
+  assistant_conflict_kindDisabled: 'Diese Art von Änderung ist für die Filiale gerade abgeschaltet. Der Vorschlag bleibt bestehen und kann genehmigt werden, sobald sie wieder eingeschaltet ist.',
+  assistant_conflict_unresolvable: 'Dieser Vorschlag wartet nicht mehr auf Sie. Es wurde nichts geändert.',
+  assistant_conflict_relist: 'Die Liste wurde neu gelesen, der angezeigte Status ist also der aktuelle.',
+
+  assistant_origin_okam: 'Von Okam',
+  assistant_origin_socialchef: 'Von SocialChef',
+  assistant_origin_chat: 'Von Okam fragen',
+  assistant_origin_mcp: 'Von einer verbundenen App',
+
+  assistant_status_staged: 'Wartet auf Sie',
+  assistant_status_executed: 'Durchgeführt',
+  assistant_status_rejected: 'Abgelehnt',
+  assistant_status_expired: 'Abgelaufen',
+  assistant_status_executing: 'Wird ausgeführt',
+  assistant_status_failed: 'Gestoppt',
+
+  // ---- Okam fragen: der Posteingang -------------------------------------------------------------
+  assistant_inbox_loading: 'Lädt …',
+  assistant_inbox_refresh: 'Aktualisieren',
+  assistant_inbox_filterAll: 'Alle',
+  assistant_inbox_noScope: 'Wählen Sie mindestens eine Filiale, um Vorschläge zu sehen.',
+  assistant_inbox_unknown: 'Wir wissen gerade nicht, was ansteht.',
+  assistant_inbox_emptyTitle: 'Es wartet nichts auf Sie',
+  assistant_inbox_emptyBody: 'Vorschläge aus Okam fragen und aus verbundenen Apps erscheinen hier.',
+  assistant_inbox_readFailed: 'Wir konnten die Liste nicht lesen.',
+  assistant_inbox_failedTitle: 'Dieser Vorschlag wurde während der Ausführung gestoppt.',
+  assistant_inbox_failedReasonUnavailable: 'Der Grund wird hier noch nicht angezeigt. Der Vorschlag kann nicht erneut gestartet werden.',
+  assistant_inbox_failedCompose: 'Neuen Vorschlag erstellen',
+
+  nav_assistant: 'Okam fragen',
+  aIQueryBox_handoff: 'Die Frage wird in Okam fragen geöffnet.'
 
 }
