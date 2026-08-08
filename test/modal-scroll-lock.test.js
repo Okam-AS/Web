@@ -159,18 +159,11 @@ describe('the declaration discipline that makes the above hold', () => {
   // state and impossible to notice the breach of, which is what a source-level guard is for.
   const ROOTS = ['layouts', 'pages', 'components']
 
-  // THE ONE FILE STILL DOING IT, AND WHY IT IS NAMED HERE RATHER THAN FIXED HERE.
-  //
-  // `pages/admin/workforce-personnel-list.vue` carries the identical defect: it adds its print-host
-  // class imperatively, so its statutory print stylesheet is inert for the same reason the scroll
-  // lock was. It is ALREADY FIXED on `lane/print-host`, which found it, printed the paper and holds
-  // the PDFs proving it — fixing it a second time here would only produce a conflict over a file
-  // this lane has no evidence for.
-  //
-  // The list is compared for EQUALITY rather than containment, so it cannot rot: the moment that
-  // lane merges, this test goes red saying the exemption is stale, and the fix is to delete the
-  // line. It is the merge prompt, not a permanent excuse.
-  const KNOWN_UNFIXED = ['pages/admin/workforce-personnel-list.vue']
+  // Empty, and compared for EQUALITY rather than containment so it stays that way: a file added here
+  // to buy time reddens this test the moment its fix lands, which is what took the last entry out.
+  // `pages/admin/workforce-personnel-list.vue` was exempted while its print-host fix sat unmerged on
+  // `lane/print-host`; that lane has landed and the page now declares the class through `head()`.
+  const KNOWN_UNFIXED = []
 
   function vueFilesUnder (dir, found) {
     found = found || []

@@ -474,6 +474,87 @@ describe('the dietary field says unanswered, never "none"', () => {
   })
 })
 
+// The finding this block exists for: four causes fold into `isStale`, and the ONE sentence the
+// kitchen sees blames the proposal version. When the real cause is an allergy recorded after the
+// paper was printed, that sentence sends a cook to reprint paperwork rather than to the allergen.
+describe('the staleness banner names a post-composition dietary statement as its own cause', () => {
+  const heldSheet = over => readRunSheet(Object.assign({
+    versionNo: 1,
+    status: 'Issued',
+    generatedFromProposalVersionNo: 2,
+    operativeProposalVersionNo: 2,
+    issuedByUserId: 'u-1',
+    createdAtUtc: '2026-08-01T09:00:00',
+    issuedAtUtc: '2026-08-01T09:05:00',
+    isStale: true,
+    items: []
+  }, over), null)
+
+  test('the dietary cause is on screen in its own words, with when it was recorded', () => {
+    const wrapper = journey({
+      detail: detail({ dietary: { statement: 'Nut allergy, table 3', statedAtUtc: '2026-08-01T11:00:00' } }),
+      runSheet: heldSheet()
+    })
+    const line = wrapper.find('[data-test="runsheet-stale-dietary"]')
+    expect(line.exists()).toBe(true)
+    expect(line.text()).toContain('allergi eller kosthold')
+    // The stamp is placed in the VENUE's zone by the same formatter as every other instant here.
+    expect(line.text()).toContain('13:00')
+    expect(wrapper.find('[data-test="runsheet-stale-note"]').exists()).toBe(false)
+  })
+
+  // The shared sentence is left exactly as it was. It is not reworded to cover four causes — a
+  // sentence that covers everything names nothing — and it is not suppressed either, because
+  // `isStale` is the server's boolean and this surface does not overrule it.
+  test('the shared version sentence is untouched and still shown beside it', () => {
+    const wrapper = journey({
+      detail: detail({ dietary: { statement: 'Nut allergy', statedAtUtc: '2026-08-01T11:00:00' } }),
+      runSheet: heldSheet()
+    })
+    expect(wrapper.find('[data-test="runsheet-stale"]').text()).toBe(translations.no.ev_runsheet_stale)
+    expect(wrapper.find('[data-test="runsheet-stale-dietary"]').exists()).toBe(true)
+  })
+
+  test('a later note gets the weaker sentence, and never the allergy one', () => {
+    const wrapper = journey({
+      detail: detail({ notes: [{ id: 1, body: 'Ringte kunden', createdAtUtc: '2026-08-01T10:00:00' }] }),
+      runSheet: heldSheet()
+    })
+    expect(wrapper.find('[data-test="runsheet-stale-dietary"]').exists()).toBe(false)
+    const note = wrapper.find('[data-test="runsheet-stale-note"]')
+    expect(note.exists()).toBe(true)
+    expect(note.text()).toContain('1 nye notater')
+  })
+
+  test('a sheet nothing has moved under carries neither extra line', () => {
+    const wrapper = journey({
+      detail: detail({ dietary: { statement: 'Nut allergy', statedAtUtc: '2026-07-31T11:00:00' } }),
+      runSheet: heldSheet({ isStale: false })
+    })
+    expect(wrapper.find('[data-test="runsheet-stale-dietary"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="runsheet-stale-note"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="runsheet-stale"]').exists()).toBe(false)
+  })
+
+  // The comparison the dietary line asserts has to be checkable by the person reading it, and the
+  // issue time already on the sheet is NOT the stamp the rule uses.
+  test('the composition time is a field of its own, distinct from the issue time', () => {
+    const text = journey({ runSheet: heldSheet() }).text()
+    expect(text).toContain(translations.no.ev_runsheet_composed)
+    expect(text).toContain('11:00') // composed 09:00Z
+    expect(text).toContain('11:05') // issued 09:05Z
+  })
+
+  test('no sheet in hand means no claim about drift in either direction', () => {
+    const wrapper = journey({
+      detail: detail({ dietary: { statement: 'Nut allergy', statedAtUtc: '2026-08-01T11:00:00' } }),
+      runSheet: readRunSheet(null, problem(404, 'EVENTS_RUNSHEET_NOT_FOUND'))
+    })
+    expect(wrapper.find('[data-test="runsheet-stale-dietary"]').exists()).toBe(false)
+    expect(wrapper.find('[data-test="runsheet-stale-note"]').exists()).toBe(false)
+  })
+})
+
 describe('the proposal link is a handover, because nothing sends it', () => {
   test('the token is shown with the reason it has to be handed over', () => {
     const text = journey({ detail: detail({ versions: [version()] }) }).text()

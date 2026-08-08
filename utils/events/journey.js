@@ -174,6 +174,82 @@ export function readRunSheet (view, error) {
   return { state: FACET_UNKNOWN, view: null, code: null, detail: null };
 }
 
+// ---- why a run sheet is stale -----------------------------------------------------------------
+//
+// `isStale` above is ONE boolean and FOUR causes. `EventsRunSheetService.Map` sets it when the sheet
+// was marked `Superseded`, when the event holds no operative accepted version, when the sheet's
+// source version is not the operative one, OR when a dietary input landed after the sheet was
+// composed — and the wire carries no field saying which.
+//
+// The single string the kitchen sees names the third one: "not generated from the operative proposal
+// version. Reissue before service." When the real cause is an allergy statement written down after
+// the sheet was printed, that sentence is not merely imprecise, it is the one explanation a cook can
+// reasonably decide is safe to ignore until after service — a version bump reads like paperwork.
+//
+// So the dietary cause gets its own reading here, and its own line on the surface. Deliberately
+// SEPARATE from `isStale` rather than folded into it: the server owns that boolean and nothing here
+// recomputes it. This reads the two stamps the server ALSO publishes — the sheet's composition time
+// and the dietary statement's — and reports what they say. It can only ever ADD a cause to what the
+// server already reported stale; it never withdraws one.
+
+/** No sheet in hand, or no composition stamp on it — nothing may be claimed about drift either way. */
+export const DIETARY_DRIFT_UNKNOWN = 'unknown';
+/** Everything the sheet's dietary section reads predates the sheet. The paper is current on this axis. */
+export const DIETARY_DRIFT_NONE = 'none';
+/** The venue's structured dietary/allergen statement was recorded AFTER the sheet was composed. */
+export const DIETARY_DRIFT_STATEMENT = 'statement';
+/** No later statement, but the note log — which the dietary section reads — was written to after it. */
+export const DIETARY_DRIFT_NOTE = 'note';
+
+/**
+ * Whether what the run sheet's dietary section reads has moved since the sheet was composed.
+ *
+ * `detail` is the `EventsEventDetailView` and `runSheetView` the HELD run sheet (null for any other
+ * state). Mirrors `EventsRunSheetService.GetAsync`, which asks the same two questions —
+ * `ev.DietaryRequirementsUpdatedAtUtc > sheet.CreatedAtUtc` and "any note created after
+ * sheet.CreatedAtUtc" — off the same fields this response carries.
+ *
+ * COMPOSITION TIME, NOT ISSUE TIME. The comparison is against `createdAtUtc`; `issuedAtUtc` is when
+ * the sheet was handed over and is the stamp the surface used to show. A statement made between
+ * composing and issuing IS on the paper, and using the later stamp would report drift that is not
+ * there.
+ *
+ * THE NOTE CASE IS REPORTED SEPARATELY AND MORE WEAKLY. A note is not a dietary statement — the
+ * composer reproduces a GUEST's note verbatim in the dietary section and only COUNTS the staff ones,
+ * so a note written afterwards may or may not concern food. Calling that "an allergy was recorded"
+ * would be the same overstatement in the other direction.
+ */
+export function readDietaryDrift (detail, runSheetView) {
+  const composedAt = runSheetView ? readInstant(runSheetView.createdAtUtc) : null;
+  const blank = { state: DIETARY_DRIFT_UNKNOWN, composedAtUtc: null, statedAtUtc: null, laterNoteCount: 0 };
+  if (!composedAt) { return blank; }
+
+  const composedMs = composedAt.getTime();
+  const dietary = (detail && detail.dietary) || null;
+  const statedAt = dietary ? readInstant(dietary.statedAtUtc) : null;
+  const notes = detail && Array.isArray(detail.notes) ? detail.notes : [];
+  const laterNoteCount = notes
+    .filter((note) => {
+      const at = readInstant(note && note.createdAtUtc);
+      return !!at && at.getTime() > composedMs;
+    })
+    .length;
+
+  const base = {
+    composedAtUtc: runSheetView.createdAtUtc,
+    statedAtUtc: dietary ? dietary.statedAtUtc : null,
+    laterNoteCount
+  };
+
+  if (statedAt && statedAt.getTime() > composedMs) {
+    return Object.assign({ state: DIETARY_DRIFT_STATEMENT }, base);
+  }
+  if (laterNoteCount > 0) {
+    return Object.assign({ state: DIETARY_DRIFT_NOTE }, base);
+  }
+  return Object.assign({ state: DIETARY_DRIFT_NONE }, base);
+}
+
 /**
  * The store's guest-notification health (`GET .../notifications/health`).
  *

@@ -69,7 +69,24 @@ export const STATUS_COMPLETED = 'completed';
 export const IDENTITY_CODE_UNREGISTERED = 'unregistered';
 
 const MS_PER_DAY = 86400000;
-const CATEGORIES = ['Employee', 'WorkingOwnerManager', 'Unpaid', 'HiredIn'];
+
+/**
+ * Every relationship to the business the «Tilknytning» column can print, and the key it prints it
+ * under. ONE list, exported, because three things have to agree about it and used to hold three
+ * copies: the sheet's label lookup, the "is this category known" check below, and the caveat printed
+ * above the column, which enumerates the values in prose.
+ *
+ * A fifth value added here is a fifth value on a statutory register, and
+ * `test/workforce-personnel-list-evidence-world.test.js` reds until the caveat names it too.
+ */
+export const CATEGORY_LABEL_KEYS = {
+  Employee: 'wfpl_cat_employee',
+  WorkingOwnerManager: 'wfpl_cat_owner',
+  Unpaid: 'wfpl_cat_unpaid',
+  HiredIn: 'wfpl_cat_hiredin'
+};
+
+const CATEGORIES = Object.keys(CATEGORY_LABEL_KEYS);
 
 /**
  * True when the platform can actually resolve clock times in this zone.

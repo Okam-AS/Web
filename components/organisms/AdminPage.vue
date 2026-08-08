@@ -270,4 +270,37 @@ export default {
     padding-top: 0;
   }
 }
+
+/* ---- THE SHELL ON PAPER ----------------------------------------------------------------------
+ *
+ * Both declarations above reserve space for chrome that `@media print` REMOVES, and neither took
+ * itself back when it went. `AdminPageHeader` hides `.admin-nav` entirely when printing — sidebar,
+ * mobile top bar and all — but the gutter the sidebar sat in and the strip the top bar sat under are
+ * declared here, and so they survived onto the paper of all 47 pages that use this shell.
+ *
+ * WHAT THAT COST, measured rather than reasoned about. Printing the § 8-5-6 personalliste to A4 on
+ * 2026-08-01 produced a document whose organisation number, time zone, correction lineage ("hvem som
+ * har foretatt rettelsen og tidspunkt") and hired-in organisation number were all cut off the right
+ * edge of the sheet, behind a leading blank page — every one of them a field the paragraph names.
+ * The allergen-matrix lane measured the same gutter as 285 of 1052 px in A4 landscape.
+ *
+ * `transition: none` is not tidiness. `margin-left` animates over 300 ms (above), and `window.print()`
+ * is synchronous — so the instant print styles apply the gutter does not collapse, it SLIDES, and the
+ * snapshot the printer takes lands somewhere between 264 px and 0. The matrix lane read 264, 259.9 and
+ * 249.98 px on three consecutive samples of one page. A printed result that depends on when the dialog
+ * opened is not a document.
+ *
+ * FIXED HERE RATHER THAN PER PAGE. Every page that ever prints inherits this shell, so a per-page
+ * override is a fix each of the 47 has to remember to repeat — and the two documents that had already
+ * shipped (`/admin/brev`, the personalliste) had not. No `!important`: the two rules that beat this on
+ * specificity (`.admin--collapsed`, `.admin--chromeless`) already set the same zero, and leaving the
+ * door open is what lets a page still claim its own print geometry.
+ */
+@media print {
+  .admin__main {
+    margin-left: 0;
+    padding-top: 0;
+    transition: none;
+  }
+}
 </style>

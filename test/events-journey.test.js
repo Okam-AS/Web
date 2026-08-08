@@ -12,6 +12,10 @@ import {
   STATUS_UNRECOGNISED,
   AUTHOR_NONE,
   AUTHOR_REFERENCE,
+  DIETARY_DRIFT_UNKNOWN,
+  DIETARY_DRIFT_NONE,
+  DIETARY_DRIFT_STATEMENT,
+  DIETARY_DRIFT_NOTE,
   PHASE_SEQUENCE,
   DEPOSIT_RAILS_WIRED,
   DEPOSIT_RAILS_UNWIRED,
@@ -27,6 +31,7 @@ import {
   readEventStatus,
   buildPhaseRail,
   readAuthor,
+  readDietaryDrift,
   readMinor,
   parseMinorUnits,
   eventDateKey,
@@ -233,6 +238,101 @@ describe('the run sheet says "there is none" with a code of its own', () => {
   test('not yet asked is unknown, not none — an absence must be established, not assumed', () => {
     expect(readRunSheet(null, null).state).toBe(FACET_UNKNOWN)
     expect(readRunSheet({ versionNo: 1 }, null).state).toBe(FACET_HELD)
+  })
+})
+
+// `isStale` is one boolean over four causes, and the only kitchen-visible sentence names the third
+// of them ("not generated from the operative proposal version"). These pin the fourth as its own
+// reading, because an allergy written down after the paper was printed is the one cause a cook could
+// reasonably decide is safe to leave until after service if it were labelled as version bookkeeping.
+describe('why a run sheet is stale — the dietary cause reads separately', () => {
+  const sheet = over => Object.assign({
+    versionNo: 1,
+    status: 'Issued',
+    generatedFromProposalVersionNo: 2,
+    createdAtUtc: '2026-08-01T09:00:00',
+    issuedAtUtc: '2026-08-01T09:05:00',
+    isStale: false
+  }, over)
+
+  test('a statement recorded after composition is its own cause', () => {
+    const drift = readDietaryDrift(
+      { dietary: { statement: 'Nut allergy, table 3', statedAtUtc: '2026-08-01T11:00:00' } }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_STATEMENT)
+    expect(drift.statedAtUtc).toBe('2026-08-01T11:00:00')
+    expect(drift.composedAtUtc).toBe('2026-08-01T09:00:00')
+  })
+
+  test('a statement made before composition is on the paper, and is not drift', () => {
+    const drift = readDietaryDrift(
+      { dietary: { statement: 'Nut allergy', statedAtUtc: '2026-08-01T08:59:00' } }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_NONE)
+  })
+
+  // THE WINDOW BETWEEN COMPOSING AND ISSUING IS DRIFT, and this is the case that fixes which stamp
+  // the comparison uses. The items were fixed at composition; a statement made afterwards is not on
+  // them however soon it arrived, so comparing against `issuedAtUtc` — the later stamp, and the one
+  // the surface already showed — would call this sheet current when the allergen is not printed on
+  // it. `EventsRunSheetService` compares against `sheet.CreatedAtUtc` for the same reason.
+  test('a statement made between composing and issuing is still drift', () => {
+    const drift = readDietaryDrift(
+      { dietary: { statement: 'Nut allergy', statedAtUtc: '2026-08-01T09:02:00' } }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_STATEMENT)
+  })
+
+  // A note is not a dietary statement: the composer reproduces a GUEST note verbatim in the dietary
+  // section and only COUNTS the staff ones, so a later note may or may not concern food. Reported,
+  // and reported as the weaker claim it is.
+  test('a later note is a separate, weaker reading', () => {
+    const drift = readDietaryDrift({
+      notes: [
+        { id: 1, createdAtUtc: '2026-08-01T08:00:00' },
+        { id: 2, createdAtUtc: '2026-08-01T10:00:00' },
+        { id: 3, createdAtUtc: '2026-08-01T10:30:00' }
+      ]
+    }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_NOTE)
+    expect(drift.laterNoteCount).toBe(2)
+  })
+
+  test('a statement outranks a note — the specific cause is the one named', () => {
+    const drift = readDietaryDrift({
+      dietary: { statement: 'Coeliac', statedAtUtc: '2026-08-01T12:00:00' },
+      notes: [{ id: 1, createdAtUtc: '2026-08-01T10:00:00' }]
+    }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_STATEMENT)
+    expect(drift.laterNoteCount).toBe(1)
+  })
+
+  test('nothing later at all is a positive answer on this axis', () => {
+    const drift = readDietaryDrift({
+      dietary: { statement: 'Coeliac', statedAtUtc: '2026-07-30T12:00:00' },
+      notes: [{ id: 1, createdAtUtc: '2026-07-31T10:00:00' }]
+    }, sheet())
+    expect(drift.state).toBe(DIETARY_DRIFT_NONE)
+    expect(drift.laterNoteCount).toBe(0)
+  })
+
+  // UNKNOWN rather than NONE. Without a sheet, or without the stamp the comparison is made against,
+  // "the paper is current" is a claim nobody made.
+  test('no sheet, or no composition stamp, claims nothing either way', () => {
+    expect(readDietaryDrift({ dietary: { statedAtUtc: '2026-08-01T11:00:00' } }, null).state)
+      .toBe(DIETARY_DRIFT_UNKNOWN)
+    expect(readDietaryDrift({ dietary: { statedAtUtc: '2026-08-01T11:00:00' } }, sheet({ createdAtUtc: null })).state)
+      .toBe(DIETARY_DRIFT_UNKNOWN)
+    expect(readDietaryDrift(null, sheet()).state).toBe(DIETARY_DRIFT_NONE)
+  })
+
+  // The stamps come off EF as `Unspecified` and serialise bare. Both sides go through the same
+  // reader as every other instant on this surface, so a `Z` on one side and none on the other cannot
+  // slide the comparison by the viewer's offset.
+  test('a bare stamp and a Z-suffixed one denote the same instant', () => {
+    expect(readDietaryDrift(
+      { dietary: { statedAtUtc: '2026-08-01T09:00:00Z' } }, sheet({ createdAtUtc: '2026-08-01T09:00:00' })).state)
+      .toBe(DIETARY_DRIFT_NONE)
+    expect(readDietaryDrift(
+      { dietary: { statedAtUtc: '2026-08-01T09:00:01Z' } }, sheet({ createdAtUtc: '2026-08-01T09:00:00' })).state)
+      .toBe(DIETARY_DRIFT_STATEMENT)
   })
 })
 

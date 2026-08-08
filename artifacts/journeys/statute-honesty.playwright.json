@@ -1,0 +1,139 @@
+{
+  "journey": "statute-honesty",
+  "title": "the personalliste prints what it cannot record, and the run sheet names the allergy as its own cause",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T17:49:38.208Z",
+  "finishedAtUtc": "2026-08-01T17:49:41.317Z",
+  "durationMs": 3109,
+  "capabilities": [
+    "workforce.personnel-list.coverage-caveat",
+    "events.run-sheet.stale-cause"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3417",
+  "apiBaseUrl": "http://127.0.0.1:4417",
+  "commit": "f01886a0864bf852000ea01e494ce5a9ad00c7eb",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.094Z",
+      "durationMs": 171,
+      "detail": "signed in as Marit",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the register answers for the venue's own day",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.265Z",
+      "durationMs": 43,
+      "detail": "businessDate 2026-08-01",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "every row on the paper is a relationship the product can actually record",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.308Z",
+      "durationMs": 15,
+      "detail": "rendered categories: Ansatt, Ansatt, Ansatt, Ansatt",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the coverage caveat is on the paper, in its own words",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.330Z",
+      "durationMs": 10,
+      "detail": "TILKNYTNING: Denne listen kan bare føre ansatte. Kolonnen «Tilknytning» har fire verdier —…",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "and it is inside the page box, not clipped off the right edge",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.340Z",
+      "durationMs": 3,
+      "detail": "caveat spans 0–1280px of a 1280px page",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "print the register to A4",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:39.351Z",
+      "durationMs": 48,
+      "detail": "A4 portrait, 180109 B",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "the pipeline lists the venue's enquiries",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:40.451Z",
+      "durationMs": 11,
+      "detail": "two enquiries",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "a version-stale sheet reads as a version-stale sheet",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:40.462Z",
+      "durationMs": 260,
+      "detail": "Denne kjøreplanen er ikke laget fra den gjeldende tilbudsversjonen. Lag den på nytt før service.",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "an allergy written down after the sheet was composed says exactly that",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:41.023Z",
+      "durationMs": 85,
+      "detail": "Det ble ført en opplysning om allergi eller kosthold på denne bestillingen 1. des. 2026, 12:20 — ett…",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the composition time is on screen beside the issue time",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T17:49:41.108Z",
+      "durationMs": 11,
+      "detail": "Satt sammen1. des. 2026, 10:00",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "the shared version sentence can still name a cause that did not fire",
+      "detail": "This enquiry's sheet was generated from the version that IS operative (both fields read 1), so \"not generated from the operative proposal version\" is false of it — and it is still printed, because `isStale` is the server's boolean and this surface will not overrule it. The kitchen is no longer misled, because the true cause is now named beside it. Closing the rest needs the WIRE to say which of the four causes fired: one nullable field on `EventsRunSheetView`, set where `EventsRunSheetService.Map` already computes all four. Suppressing the sentence from the client instead would mean deriving the version cause here from two published numbers, and a mistake in that derivation shows a stale sheet as current."
+    },
+    {
+      "severity": "defect",
+      "summary": "nothing in the product can correct a personalliste entry, so § 8-5-6's correction requirement has no path",
+      "detail": "The paragraph requires that \"dersom det foretas rettelser i personallisten, skal det fremgå hvem som har foretatt rettelsen og tidspunkt for når det er gjort\". The sheet renders both fields when an entry carries them — and no entry ever can. Both writes in `WorkforcePersonnelListProjection` (:117 open, :133 close) pass `correctionActor: null, correctedAtUtc: null`, and `WorkforcePersonnelListController` exposes one read action and no write. A venue that punches the wrong person in has no way to correct the register and no way to show that it did. Found while removing the fixture's manager correction, which was the only reason this looked solved. Unlike the category gap, the sheet prints NO caveat about it — closing it needs a correction path in the backend, not another paragraph here."
+    },
+    {
+      "severity": "note",
+      "summary": "the printed evidence is committed, unlike every other artifact here",
+      "detail": "artifacts/ is gitignored as run state. The PDF under artifacts/journeys/statute-honesty/ is force-added, because a caveat on a statutory register that exists only in a browser is the exact defect lane/print-host closed on this page."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list\" to \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list\" to \"/admin?redirect=%2Fadmin%2Fworkforce-personnel-list&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "statute-honesty/01-the-register-on-screen.png",
+    "statute-honesty/02-a-run-sheet-stale-because-the-proposal-version-m.png",
+    "statute-honesty/03-the-same-banner-with-the-allergy-named-as-the-ca.png"
+  ],
+  "error": null
+}

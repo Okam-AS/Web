@@ -317,16 +317,49 @@ describe('the print path', () => {
     expect(wrapper.vm.canPrint).toBe(true)
   })
 
-  test('the print chrome class is on the body only while this page is mounted', async () => {
+  // ---- the print-host class -------------------------------------------------------------------
+  //
+  // This block used to assert `document.body.classList.contains('wfpl-print-host')` after mount, and
+  // it PASSED while the app was broken — which is the whole reason it now reads the way it does.
+  // jsdom has no vue-meta, so an imperative `classList.add` in `mounted` survives here and nowhere
+  // else: in the running app `layouts/default.vue` declares `bodyAttrs.class`, vue-meta rewrites that
+  // attribute wholesale on every head update, and the class was measured GONE in a browser after the
+  // login redirect. A test that mounts a component in jsdom cannot see the head manager at all, so
+  // what it may honestly assert is the DECLARATION, not the resulting DOM.
+
+  test('the print chrome class is DECLARED through head(), not added to the body', async () => {
     const wrapper = mountPage()
     await settled()
-    // The page ships an UNSCOPED print stylesheet, whose rules are all guarded by this class. A
-    // page's CSS chunk outlives the page in a Nuxt build, so without the guard those rules would
-    // restyle the printing of every other admin screen.
-    expect(document.body.classList.contains('wfpl-print-host')).toBe(true)
+
+    // The regression guard. If someone reintroduces the imperative form it will "work" in jsdom and
+    // fail on paper, so the absence is what is asserted.
+    expect(document.body.classList.contains('wfpl-print-host')).toBe(false)
+
+    // The page ships an UNSCOPED print stylesheet whose rules are all guarded by this class. A page's
+    // CSS chunk outlives the page in a Nuxt build, so without the guard those rules would restyle the
+    // printing of every other admin screen.
+    const head = wrapper.vm.$options.head.call(wrapper.vm)
+    expect(head.bodyAttrs.class).toContain('wfpl-print-host')
 
     wrapper.destroy()
     expect(document.body.classList.contains('wfpl-print-host')).toBe(false)
+  })
+
+  test('the declaration is an ARRAY carrying only this page, so the market class composes', async () => {
+    // `okam-ch` themes the entire Swiss site, and this page must neither drop it nor emit it twice.
+    // Which of those two happens is decided by the TYPE of `bodyAttrs.class`: vue-meta merges the
+    // layout's declaration with the page's using deepmerge, which REPLACES a string with a string but
+    // routes arrays through `_arrayMerge` and concatenates them. So the array is what makes the market
+    // class survive, and carrying `okam-ch` by hand on top of it is what would duplicate it. The
+    // estate-wide form of this invariant is pinned in test/modal-scroll-lock-estate.test.js.
+    const wrapper = mountPage()
+    await settled()
+
+    for (const isCh of [false, true]) {
+      const head = wrapper.vm.$options.head.call({ isCh })
+      expect(Array.isArray(head.bodyAttrs.class)).toBe(true)
+      expect(head.bodyAttrs.class).toEqual(['wfpl-print-host'])
+    }
   })
 })
 

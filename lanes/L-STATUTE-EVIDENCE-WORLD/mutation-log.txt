@@ -1,0 +1,39 @@
+== M0 baseline (no mutation) ==
+Tests:       16 passed, 16 total
+== M1 fixture regains a HiredIn row ==
+Tests:       4 failed, 12 passed, 16 total
+== M2 fixture regains a manager correction ==
+Tests:       4 failed, 12 passed, 16 total
+== M3 fixture regains a hired-in organisation number ==
+Tests:       4 failed, 12 passed, 16 total
+== M4 a fifth relationship joins the column, caveat untouched ==
+Tests:       17 passed, 17 total
+== M5 the coverage caveat is removed from the sheet ==
+Tests:       5 failed, 11 passed, 16 total
+== M6 the relationship cell stops printing the category ==
+Tests:       5 failed, 11 passed, 16 total
+== M7 the relationship column is dropped from the table ==
+Tests:       5 failed, 11 passed, 16 total
+== M0 restored ==
+Tests:       16 passed, 16 total
+== M4 (redone) a fifth relationship joins the column with a label the caveat never names ==
+    ✕ the sheet can still print Apprentice when it is handed one (10 ms)
+    ✕ no: the caveat enumerates all of them
+    ✕ en: the caveat enumerates all of them (1 ms)
+    ✕ de: the caveat enumerates all of them
+Tests:       4 failed, 13 passed, 17 total
+
+== BROWSER MUT-E1: fixture regains a HiredIn row; statute-honesty must red ==
+  ✘  1 [chromium] › test/e2e/journeys/statute-honesty.spec.js:76:1 › the personalliste prints what it cannot record, and the run sheet names the allergy as its own cause @fixture (22.0s)
+    - Expected  - 1
+    + Received  + 1
+    artifacts/playwright-output/statute-honesty-the-person-a5001-he-allergy-as-its-own-cause-chromium/test-failed-1.png
+  1 failed
+== BROWSER MUT-E2: the note column is pushed past the page box; admin-print-host must red ==
+  ✘  1 [chromium] › test/e2e/journeys/admin-print-host.spec.js:69:1 › the personalliste and a second admin page print with no sidebar gutter @fixture (26.9s)
+    Error: expect(received).toBeLessThanOrEqual(expected)
+    Expected: <= 1280
+    Received:    2521
+    > 132 |       expect(edge.right).toBeLessThanOrEqual(edge.docWidth);
+    artifacts/playwright-output/admin-print-host-the-perso-a6dbf-rint-with-no-sidebar-gutter-chromium/test-failed-1.png
+  1 failed

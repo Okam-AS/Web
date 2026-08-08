@@ -175,6 +175,34 @@ function wallTime (date, time) {
   if (!parts) { return null; }
   return date + 'T' + parts[1] + ':' + parts[2] + ':00';
 }
+// ---- THE PRINT-HOST CLASS, AND WHY IT IS DECLARED RATHER THAN ADDED ---------------------------
+//
+// The print rules in this file's unscoped `<style>` reach `.admin__content`, which belongs to the
+// admin SHELL and is therefore outside anything a scoped selector can address. They are guarded by a
+// class on `document.body` that exists only while this page is showing.
+//
+// `document.body.classList.add(...)` in `mounted` is the obvious way to put it there, and it DOES NOT
+// WORK. vue-meta owns `body.class` and rebuilds the attribute wholesale on every head update, and
+// `layouts/default.vue`'s `head()` reads `this.$route`, so one fires on every navigation. An
+// imperatively added class is gone by the next one. Measured in a browser on 2026-08-01: after the
+// login redirect the body carried `class=""` while this file's stylesheet sat in the document
+// matching nothing.
+//
+// NOTHING LOOKED BROKEN. The page rendered perfectly. What came out of the printer was a statutory
+// register with the organisation number, the time zone, the correction lineage and the hired-in
+// organisation number all cut off the right edge of the paper, behind a leading blank sheet — because
+// the rule that takes the shell's content padding off (`.admin__content { padding: 0 }`) never
+// applied, so the sheet was laid out wider than the page box it was painted into. Every one of those
+// four is a field § 8-5-6 names. The only way to see it was to print it.
+//
+// Declaring it through `head()` puts the class where vue-meta already is: Nuxt merges a page's
+// `bodyAttrs` over the layout's while the page is mounted and restores the layout's value when it
+// leaves — which is also what makes the teardown in `beforeDestroy` unnecessary rather than merely
+// moved. It is declared as an ARRAY and carries ONLY this page's class: vue-meta routes array-valued
+// attributes through `_arrayMerge`, so the layout's market class and this one CONCATENATE. Carrying
+// `okam-ch` through by hand here would put it on the Swiss body twice; joining the two into a string
+// would drop it entirely. See the invariant at the top of `layouts/default.vue`.
+const PRINT_HOST_CLASS = 'wfpl-print-host';
 
 // The statutory personalliste — `bokføringsforskriften § 8-5-6`.
 //
@@ -278,13 +306,9 @@ export default {
   },
   mounted () {
     this.init();
-    // The print chrome. See this component's `<style>` block: the rules are inert without this
-    // class, so the unscoped stylesheet cannot reach a page that is not this one.
-    if (typeof document !== 'undefined' && document.body) { document.body.classList.add('wfpl-print-host'); }
   },
   beforeDestroy () {
     if (this.toastTimer) { clearTimeout(this.toastTimer); }
-    if (typeof document !== 'undefined' && document.body) { document.body.classList.remove('wfpl-print-host'); }
   },
   methods: {
     async init () {
@@ -511,6 +535,19 @@ export default {
       const detail = isWorkforceApiError(e) && e.message ? e.message : this.$i(fallbackKey);
       this.notify(detail, 'error');
     }
+  },
+
+  /**
+   * The print chrome. See this component's unscoped `<style>` block: those rules are inert without
+   * this class, so the stylesheet cannot reach a page that is not this one — and see the comment on
+   * `PRINT_HOST_CLASS` for why it is DECLARED here rather than added to `document.body` in `mounted`.
+   */
+  head () {
+    return {
+      bodyAttrs: {
+        class: [PRINT_HOST_CLASS]
+      }
+    };
   }
 };
 </script>
@@ -568,12 +605,14 @@ export default {
 </style>
 
 <style>
-/* UNSCOPED, and every rule is guarded by the `wfpl-print-host` class this page puts on `document.body`
-   while it is mounted (and removes when it is not). A page's unscoped stylesheet outlives the page in
-   a Nuxt build — the chunk's CSS is not unloaded on navigation — so an unguarded `@media print` rule
-   here would quietly restyle the printing of every other admin screen.
-   It exists because the admin shell wraps this page: the sidebar already hides itself when printing,
-   but the shell's content padding and the onboarding banner do not, and neither belongs on a
+/* UNSCOPED, and every rule is guarded by the `wfpl-print-host` class this page declares on
+   `document.body` through `head()` while it is showing — see `PRINT_HOST_CLASS` above for why it is
+   declared and not added. A page's unscoped stylesheet outlives the page in a Nuxt build — the
+   chunk's CSS is not unloaded on navigation — so an unguarded `@media print` rule here would quietly
+   restyle the printing of every other admin screen.
+   It exists because the admin shell wraps this page: the sidebar hides itself when printing and
+   AdminPage.vue now gives back the gutter and the mobile top-bar strip it left behind, but the
+   shell's content padding and the onboarding banner are still there, and neither belongs on a
    statutory register. */
 
 /* A NAMED page box, claimed by `.wfpl-sheet` in the sheet component's own print rules.
@@ -588,6 +627,9 @@ export default {
 }
 
 @media print {
+  /* The shell's 32/40 px content padding. On A4 portrait it is what pushed the sheet wider than the
+     14 mm page box above, which the browser resolves by CLIPPING — taking the organisation number,
+     the time zone and the correction lineage off the right edge of the register. */
   body.wfpl-print-host .admin__content { padding: 0 !important; max-width: none !important; }
   body.wfpl-print-host .admin__main { display: block !important; }
   body.wfpl-print-host .onboarding-notification { display: none !important; }

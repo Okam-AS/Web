@@ -1399,6 +1399,46 @@ async function route (req, res, url) {
     return send(res, 200, { items: [] });
   }
 
+  // ---- Events: the venue's own pipeline, behind the admin token --------------------------------
+  //
+  // Read-only, and only the four reads `selectEvent` issues together. The mutations are not modelled:
+  // this fixture exists so a browser can be shown what the surface SAYS about a run sheet, and a
+  // half-modelled state machine is the fastest way to make a journey assert against a world the
+  // product would never produce.
+  const eventsAdmin = /^\/events\/admin\/(\d+)(\/.*)?$/.exec(path);
+  if (eventsAdmin && req.method === 'GET') {
+    const storeId = eventsAdmin[1];
+    const rest = eventsAdmin[2] || '';
+    if (!(caller.adminIn || []).some(s => String(s.id) === String(storeId))) {
+      return problem(res, 403, 'EVENTS_FORBIDDEN', 'Not an admin of this store.');
+    }
+
+    if (rest === '/events') { return send(res, 200, world.EVENT_ROWS); }
+    if (rest === '/notifications/health') {
+      return send(res, 200, { dispatchEnabled: true, deadLettered: [], pending: 0 });
+    }
+
+    const perEvent = /^\/events\/(\d+)(\/.*)?$/.exec(rest);
+    if (perEvent) {
+      const eventId = Number(perEvent[1]);
+      const facet = perEvent[2] || '';
+      const detail = world.eventDetail(eventId);
+      if (!detail) { return problem(res, 404, 'EVENTS_NOT_FOUND', 'No such event.'); }
+
+      if (facet === '') { return send(res, 200, detail); }
+      if (facet === '/run-sheet') {
+        const sheet = world.eventRunSheet(eventId);
+        return sheet
+          ? send(res, 200, sheet)
+          : problem(res, 404, 'EVENTS_RUNSHEET_NOT_FOUND', 'No run sheet has been generated.');
+      }
+      // An ANSWERED absence in each facet's own dialect: an empty list for deposits, a null field for
+      // the settlement. Both are what the surface renders as "there is none", and neither is a 404.
+      if (facet === '/deposits') { return send(res, 200, []); }
+      if (facet === '/settlement') { return send(res, 200, { settlement: null }); }
+    }
+  }
+
   // ---- the manager's store surface -------------------------------------------------------------
   const store = WORKFORCE_STORE.exec(path);
   if (store) {
@@ -1782,6 +1822,24 @@ async function route (req, res, url) {
       return send(res, 200, catalogue.slice().sort(compareRoles).map(roleWire));
     }
 
+    // The statutory personalliste — endpoint 30. `WorkforceManager` on the engagement is the only
+    // grant that admits a caller, which the `administers` gate above already stands for here.
+    //
+    // `businessDate` is echoed back rather than only honoured: the page sends NO date on first load
+    // precisely so the SERVER resolves the venue's today, and the picker then follows the echo. A
+    // fixture that answered a day without saying which day it answered for would leave the page
+    // showing an empty date box over a populated register.
+    if (rest === '/personnel-list' && req.method === 'GET') {
+      const asked = url.searchParams.get('businessDate');
+      if (asked !== null && !/^\d{4}-\d{2}-\d{2}$/.test(asked)) {
+        return problem(res, 400, 'workforce.business-date-invalid',
+          'businessDate must be a bare yyyy-MM-dd calendar date.');
+      }
+      return send(res, 200, world.personnelList(storeId, asked));
+    }
+
+    if (rest === '/staff' && req.method === 'GET') { return send(res, 200, world.STAFF); }
+    if (rest === '/roles' && req.method === 'GET') { return send(res, 200, world.ROLES); }
     if (rest === '/requests' && req.method === 'GET') { return send(res, 200, { items: state.requests }); }
 
     if (rest === '/schedules' && req.method === 'GET') {

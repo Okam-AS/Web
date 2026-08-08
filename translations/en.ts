@@ -4463,6 +4463,9 @@ export default {
   ev_runsheet_print_note: 'The print carries what is recorded about allergies and diets. The guest links stay off the paper.',
   ev_runsheet_print_title: 'Run sheet for the kitchen',
   ev_runsheet_print_unavailable: 'Your browser offers no print command, so the sheet was not produced.',
+  ev_runsheet_composed: 'Composed',
+  ev_runsheet_stale_dietary: 'A dietary or allergen statement was recorded on this booking {at} — after this run sheet was composed. It is not on the paper at the pass. Reissue the run sheet before service.',
+  ev_runsheet_stale_note: 'The note log on this booking was written to after this run sheet was composed ({count} new notes). The sheet\'s dietary section reads that log, so the paper at the pass may be missing something. Read the log, and reissue the run sheet before service.',
   ev_action_runsheet: 'Generate the run sheet',
 
   ev_dietary_heading: 'Dietary and allergen requirement',
@@ -5137,6 +5140,7 @@ export default {
   // On the sheet, and on the printed copy. That is the point of it: the list must not look like it
   // meets a requirement it does not meet.
   wfpl_identity_gap: 'IDENTIFICATION: § 8-5-6 requires each person\'s name and fødselsnummer (Norwegian national identity number) or D-number. Those numbers may be replaced by unique codes, but only where an overview of the codes with the corresponding national identity number or D-number is kept. Okam neither collects nor stores national identity numbers, so the codes below cannot be resolved to one inside the system. The code overview for this day is downloaded from the personnel-list page — pre-filled with the codes, the names and the retention deadline, with the national-id field left open. The business fills it in and keeps the overview with the personnel list for three years and six months after the end of the accounting year. Without that completed overview this list is not full identification.',
+  wfpl_category_gap: 'RELATIONSHIP: This list can only record employees. The "Relationship" column has four values — employee, working owner or manager, unpaid, and hired in — but an entry is created only when an employee clocks in, and it is always recorded as "Employee". A working owner, an unpaid participant or a hired-in worker who was present at the workplace on this day is not on this list, and nothing on the list shows that it is incomplete. The business must record those people itself, alongside this list.',
   wfpl_business_mixed: 'This day\'s entries were recorded under {count} different accounting entities. The "Workplace" field is therefore left empty: the list cannot answer with one name and one organisation number when the rows belong to several.',
   wfpl_zone_fallback: 'This store carries no valid time zone. The times below are shown in {zone} because that is the platform default — not because anyone chose it for this workplace.',
   wfpl_zone_unusable: 'The time zone "{zone}" cannot be read by this browser, so the times cannot be placed in the workplace\'s own clock. The list is withheld rather than shown against the wrong clock.',
