@@ -23670,12 +23670,13 @@ is deliberately out of scope. **In zsh write `${ref}:path`.** **Gate on `uptime`
 **Do not push.**
 
 ### Lane L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN — a green suite is real proof of the wrong kind
-state: running
+state: built-unverified
 class: node
 owner: agent
 dir: .
 exit: each of the twenty-three lanes whose only recorded proof is a branch and a green suite either carries an artifact a stranger can open and is accepted by plan verify, or is recorded as needing work with what is missing named, with the count of each stated
 agent: L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN
+evidence: docs/plan/artifacts/twenty-three-branches.md
 
 **These twenty-three are not a recording defect and must not be treated like one.** Three passes have taken
 `verified` from 57 to 401 by fixing how proof was *recorded*. This class is different: **their proof is a
@@ -23717,6 +23718,54 @@ artifact with `git check-ignore -v` before the add and `git ls-files --error-unm
 file for secrets before committing** — a pattern's silence is not a clearance; read it. **Take a backup of
 `plan.md` first** so your diff is provable, and edit only `evidence:` and `exit:` lines. **Do not touch
 `web-livewalk`.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** **Do not push.**
+
+### Lane L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK — statutory receipt work exists and the trunk has never had it
+state: open
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: each of the six lanes whose branch exists but is not an ancestor of its trunk is either landed with the tier green at the composed tip, or recorded as unlandable with the reason, with the count of each stated
+
+**A verification pass went looking for statutory documents to render and found the code is not on the
+trunk.** `MealsDeliveryReceiptSqlServerTests`, `DeliveryReceiptComplianceTests` and `MealsXZCreditSaleTests`
+are **absent from the backend trunk entirely** — they exist on branches that are not ancestors of it.
+
+**Six lanes name a branch that exists and is not landed.** Measured per lane with
+`git merge-base --is-ancestor`, not inferred. **They are named in
+`docs/plan/artifacts/twenty-three-branches.md` — read it and do not re-derive the class.**
+
+**The pass that found this refused to produce any artifact, and that refusal is the reason this lane
+exists.** Its words: *an artifact produced from an unlanded branch would attest to a capability the trunk
+does not have — worse than no artifact, not better.* **So the missing thing is a landing, and the artifact
+follows once the capability is real.**
+
+**Land what genuinely lands, and refuse the rest out loud.** A branch may be stale, may conflict, may
+duplicate work that arrived by another route, or may reveal on reading that it should not land at all.
+**Any of those is a good outcome if you name it.** Five sibling branches in this same class no longer exist
+at all and are somebody else's problem — **do not chase them.**
+
+**Reproduce before trusting each branch.** Four lanes today were dispatched at defects already fixed, and
+one found a proposed fix that repaired one of four emitters. **A branch being unlanded is not evidence it
+should land.**
+
+**Take them one at a time and land each separately.** Two backend landings ran concurrently earlier today
+and clobbered each other; one merge ended up reachable from no ref. **You are the only landing lane on the
+backend** — keep it that way within your own work by landing serially.
+
+**Use the atomic guard**: re-read the trunk **in the same command** as the `git branch -f` and refuse unless
+it still equals your merge base. **Reading it at lane start is what failed.** Create every worktree with
+`git worktree add --detach`.
+
+**Assert tests by NAME from a `--logger trx`** — a dotnet console log names only failed and skipped tests,
+so a vanished suite and a passing one print the same green line. **These three suites are the point**, so
+name them and their counts.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **The three named suites are SQL-tier**, so say how you ran them and **cap
+yourself at two SQL container lanes**. **Assert `WebApi.dll`'s mtime MOVES.** **The tier rewrites TWO
+tracked artifacts** — `run-sheet.json` and `run-sheet.md`. **Check every branch against the open decisions
+before merging and say that you did** — `8357c8a33` is gated and must not land. **In zsh write
+`${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
 ## Decisions
 
@@ -36452,6 +36501,12 @@ it, and an unresolvable submodule pin was the worse outcome. **Nothing else in `
 
 The tool still refuses to clear this because `clears_when` names no `fact:` key, so it wants
 **`--override --by @sven`**.
+### Flag F-THREE-STATUTORY-RECEIPT-SUITES-ARE-ABSENT-FROM-THE-BACKEND-TRUNK — MealsDeliveryReceiptSqlServerTests, DeliveryReceiptComplianceTests and MealsXZCreditSaleTests exist on branches that are not ancestors of the trunk
+state: open
+severity: blocker
+owner: @sven
+clears_when: each of the three suites is present on the backend trunk and green, shown by a tier run naming them
+
 
 
 
