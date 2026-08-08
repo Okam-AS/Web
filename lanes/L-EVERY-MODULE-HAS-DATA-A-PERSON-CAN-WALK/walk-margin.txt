@@ -1,0 +1,156 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Oppskrifter og kostpris
+Legg inn en oppskrift og se hva den koster å lage.
+Hent på nytt
+Kostprisen regnes ut når siden leses. Har du lagt inn priser i et annet vindu, henter dette de nye tallene.
+Råvarer
+19 råvarer i butikken.
+Kopier fra startbiblioteket:
++ Kjøttdeig+ Kyllingfilet+ Poteter+ Hvitløk+ Tomat, hermetisk+ Olivenolje+ Salt+ Pasta, tørr+ Ris+ Revet ost
+Ny oppskrift
+NAVN
+UTBYTTE
+ENHET
+gram
+kilo
+milliliter
+liter
+stk
+PORSJONER
+LINJER
++ Legg til linje Lagre og regn ut
+Oppskrifter
+Avokadotoast
+Aktiv v1 · Koblet til 1 produkt
+Cappuccino
+Aktiv v1 · 1 utkast · Koblet til 1 produkt
+Dessertsaus (uten rett)
+Aktiv v1 · Ikke koblet til noe produkt
+Fiskekraft (grunnbase)
+Aktiv v1 · Ikke koblet til noe produkt
+Fiskesuppe (oppskrift)
+Aktiv v1 · Koblet til 1 produkt
+Grønnsakskraft (grunnbase)
+Aktiv v1 · Ikke koblet til noe produkt
+Husets isvann
+Aktiv v1 · Koblet til 1 produkt
+Husets vann (oppskrift)
+Aktiv v1 · Koblet til 1 produkt
+Kanelboller (batch)
+Aktiv v1 · Koblet til 1 produkt
+Ostesmørbrød
+Aktiv v1 · Koblet til 1 produkt
+Safranrisotto (oppskrift)
+Aktiv v1 · Koblet til 1 produkt
+Sommersuppe (utgått – demo)
+Ingen aktiv versjon · Ikke koblet til noe produkt
+test
+Ingen aktiv versjon · 1 utkast · Ikke koblet til noe produkt
+Tomatsuppe (batch)
+Aktiv v1 · Koblet til 1 produkt
+Vaniljesaus (uten rett)
+Aktiv v1 · Ikke koblet til noe produkt
+Velg en oppskrift, eller legg inn en ny, for å se kostprisen.

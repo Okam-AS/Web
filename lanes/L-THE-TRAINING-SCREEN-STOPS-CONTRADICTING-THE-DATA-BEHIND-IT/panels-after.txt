@@ -1,0 +1,23 @@
+This world holds 6 courses and 8 versions.
+
+NY TILDELING, with no course selected
+  denies a published version exists : false
+  offers a version picker            : true
+  the options it offers:
+    Alkoholservering og skjenkeregler (193639) · v1 · Published
+    HMS og brannvern · v1 · Published
+    Kassaopplæring – oppgjør og retur · v1 · Published
+    Allergener og merking · v1 · Published
+    Næringsmiddelhygiene og temperaturkontroll · v2 · Published
+    Næringsmiddelhygiene og temperaturkontroll · v1 · Published
+
+FOR EN GJENNOMFORING, with no course selected
+  denies a frozen version exists    : false
+  offers a version picker            : true
+  the options it offers:
+    Alkoholservering og skjenkeregler (193639) · v1 · Published
+    HMS og brannvern · v1 · Published
+    Kassaopplæring – oppgjør og retur · v1 · Published
+    Allergener og merking · v1 · Published
+    Næringsmiddelhygiene og temperaturkontroll · v2 · Published
+    Næringsmiddelhygiene og temperaturkontroll · v1 · Published

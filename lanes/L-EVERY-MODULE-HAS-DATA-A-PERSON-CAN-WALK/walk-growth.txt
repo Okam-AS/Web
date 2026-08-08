@@ -1,0 +1,130 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Nyhetsbrev
+Fra det gjestene har samtykket til, til en utsendelse du kan stå for. Hvert steg under kontrolleres mot samtykkeloggen — ingenting her kan gi samtykke på vegne av en gjest.
+Samtykkestatus
+Hva gjestene har sagt ja til, som tall. Dette er ikke mottakere.
+Samtykket
+5
+Trukket tilbake
+0
+Sperret
+0
+Venter på bekreftelse
+2
+Hvorfor kontakter er sperret
+Ingen sperringer registrert.
+Sperregrunnene vises slik de er registrert. Hvor langt hver av dem rekker vises ikke her, fordi det ikke er avklart ennå.
+Det finnes ingen måte å legge til en abonnent eller gi samtykke fra denne skjermen. Samtykke kommer fra gjesten, gjennom dobbel bekreftelse, eller så finnes det ikke.
+Målgruppe
+En fast, uforanderlig liste over hvem som kan motta denne utsendelsen, regnet ut fra samtykkeloggen i det øyeblikket du beregner den.
+Beregn målgruppe
+Ingen målgruppe er beregnet ennå, så det finnes ikke noe mottakertall å vise. Vi gjetter ikke på et.
+Nyhetsbrevet
+Hver lagring lager en ny, uforanderlig versjon. Å redigere et godkjent nyhetsbrev trekker godkjenningen — en gjennomgang kan aldri godkjenne innhold den ikke har sett.
+Nytt nyhetsbrev
+#2 · Draft · v2
+#1 · Approved · v1
+Beregn en målgruppe først. Et nyhetsbrev er bundet til målgruppen det skal sendes til, så det kan ikke skrives før den finnes.

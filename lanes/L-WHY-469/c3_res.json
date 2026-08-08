@@ -1,0 +1,44 @@
+[
+{
+"id": "L-MRG-WASTE-FRONTEND",
+"rc": 0,
+"msg": "L-MRG-WASTE-FRONTEND built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-ENROL-PRETICK",
+"rc": 0,
+"msg": "L-MEALS-ENROL-PRETICK built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MRG-PAGE-TEST-VACUOUS",
+"rc": 0,
+"msg": "L-MRG-PAGE-TEST-VACUOUS built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-COERCION-WRITE-PATHS",
+"rc": 0,
+"msg": "L-COERCION-WRITE-PATHS built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-XZ-RESIDUAL-SITES",
+"rc": 0,
+"msg": "L-XZ-RESIDUAL-SITES built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FIXTURE-SUPPRESSED-REFUSAL",
+"rc": 0,
+"msg": "L-FIXTURE-SUPPRESSED-REFUSAL built-unverified -> verified",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED",
+"rc": 0,
+"msg": "L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED built-unverified -> verified",
+"outcome": "ACCEPTED"
+}
+]

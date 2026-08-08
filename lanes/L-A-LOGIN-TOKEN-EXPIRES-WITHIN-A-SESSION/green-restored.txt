@@ -1,0 +1,12 @@
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_bearer_the_login_route_returns_expires_within_a_session [249 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_login_route_still_completes_and_returns_a_usable_bearer [60 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_sms_door_refuses_a_caller_that_asks_too_often [36 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_sms_refusal_names_neither_the_number_nor_the_budget [4 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_bearer_carries_the_configured_lifetime_and_not_merely_a_finite_one [7 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_shared_resolver_answers_for_a_real_application_token [7 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_application_token_carries_unique_name_and_no_nameid_or_sub [< 1 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.A_validated_principal_resolves_Name_but_NOT_NameIdentifier [< 1 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_role_claim_maps_inbound_so_authorization_is_unaffected [< 1 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_application_token_outlives_a_single_visit_and_not_a_planning_horizon [< 1 ms]
+Test Run Successful.
+     Passed: 10

@@ -1,0 +1,16 @@
+  Failed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_bearer_the_login_route_returns_expires_within_a_session [358 ms]
+   POST /user/login returned a bearer valid until 2126-07-13T21:48:15.0000000Z — 36500 days, past the 90 day ceiling. There is no revocation path behind it, so this interval is how long a leaked token stays good.
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_login_route_still_completes_and_returns_a_usable_bearer [125 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_sms_door_refuses_a_caller_that_asks_too_often [56 ms]
+  Passed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_sms_refusal_names_neither_the_number_nor_the_budget [32 ms]
+  Failed WebApi.Tests.Wire.LoginTokenAndSmsDoorWireTests.The_bearer_carries_the_configured_lifetime_and_not_merely_a_finite_one [4 ms]
+   exp - iat is 36500.00:00:00, not the configured 30.00:00:00. A drift of about an hour or two means the mint is reading Oslo wall time into a UTC field.
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_shared_resolver_answers_for_a_real_application_token [6 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_application_token_carries_unique_name_and_no_nameid_or_sub [1 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.A_validated_principal_resolves_Name_but_NOT_NameIdentifier [< 1 ms]
+  Passed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_role_claim_maps_inbound_so_authorization_is_unaffected [< 1 ms]
+  Failed WebApi.Tests.Auth.ActorClaimGroundTruthTests.The_application_token_outlives_a_single_visit_and_not_a_planning_horizon [< 1 ms]
+   Token lifetime 36499.23:59:59.8987130 exceeds the ceiling UserService.MaxTokenLifetimeHours clamps to.
+Test Run Failed.
+     Passed: 7
+     Failed: 3

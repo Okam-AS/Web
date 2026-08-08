@@ -1,0 +1,143 @@
+{
+  "steps": {
+    "lit": {
+      "origin": "http://localhost:3979",
+      "route": "/admin/workforce-roster",
+      "wire": [
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nLegg til person\nOppdater\nPERSON\tFULLMAKTER\tANSATTNR.\tSTATUS\tFRA\tTIL\nAstrid Vik\nRegistrert\nEgen vaktplan\nANS-002\tAktiv\t01. jan. 2024\t—\nIngrid Moen\nRegistrert\nEgen vaktplan\nPlanlegger\nLeder\nLønn\nANS-001\tAktiv\t01. jan. 2020\t—\nJonas Lie\nInvitert\nEgen vaktplan\nANS-003\tAktiv\t01. jan. 2024\t—\nNora Berg\nInvitert\nEgen vaktplan\nTH-104\tAktiv\t10. aug. 2026\t—\nSander Holm\nInvitert\nEgen vaktplan\nTH-105\tAktiv\t10. aug. 2026\t—\nSelma Haug\nInvitert\nEgen vaktplan\nANS-004\tAktiv\t01. jan. 2024\t—"
+    },
+    "flagOff": {
+      "badge": "Av",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: av"
+      ]
+    },
+    "darkOld": {
+      "origin": "http://localhost:3971",
+      "route": "/admin/workforce-roster",
+      "wire": [
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nDu har ikke bemanningstilgang i denne butikken."
+    },
+    "darkNew": {
+      "origin": "http://localhost:3979",
+      "route": "/admin/workforce-roster",
+      "wire": [
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nBemanningsmodulen er ikke slått på for denne butikken. Det er en bryter per butikk (workforce.module), og den står av her — det sier ingenting om hvilke tilganger du har."
+    },
+    "darkSchedule": {
+      "origin": "http://localhost:3979",
+      "route": "/admin/workforce-schedule",
+      "wire": [
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context"
+        }
+      ],
+      "text": "Vaktplan\nUken i butikken: hvem som jobber når, hva som er ledig, og hva som faktisk er publisert.\nBemanningsmodulen er ikke slått på for denne butikken. Det er en bryter per butikk (workforce.module), og den står av her — det sier ingenting om hvilke tilganger du har."
+    },
+    "flagRestored": {
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    "relit": {
+      "origin": "http://localhost:3979",
+      "route": "/admin/workforce-roster",
+      "wire": [
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nLegg til person\nOppdater\nPERSON\tFULLMAKTER\tANSATTNR.\tSTATUS\tFRA\tTIL\nAstrid Vik\nRegistrert\nEgen vaktplan\nANS-002\tAktiv\t01. jan. 2024\t—\nIngrid Moen\nRegistrert\nEgen vaktplan\nPlanlegger\nLeder\nLønn\nANS-001\tAktiv\t01. jan. 2020\t—\nJonas Lie\nInvitert\nEgen vaktplan\nANS-003\tAktiv\t01. jan. 2024\t—\nNora Berg\nInvitert\nEgen vaktplan\nTH-104\tAktiv\t10. aug. 2026\t—\nSander Holm\nInvitert\nEgen vaktplan\nTH-105\tAktiv\t10. aug. 2026\t—\nSelma Haug\nInvitert\nEgen vaktplan\nANS-004\tAktiv\t01. jan. 2024\t—"
+    }
+  }
+}

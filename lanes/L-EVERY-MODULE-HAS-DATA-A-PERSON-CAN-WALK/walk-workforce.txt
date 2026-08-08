@@ -1,0 +1,289 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Vaktplan
+Uken i butikken: hvem som jobber når, hva som er ledig, og hva som faktisk er publisert.
+‹
+Uke 32 · 2026
+›
+Denne uken
+Medarbeidere
+Funksjoner
+Måned
+Utkast
+Publisert
+Valider
+Oppdater
+Se hva publiseringen nådde fram til
+Utkast
+Revisjon 3
+Tidssone Europe/Oslo
+Hentet 07.08.26 10:11
+ANSATT	
+Man.
+3.8.
+1 vakt
+	
+Tir.
+4.8.
+1 vakt
+	
+Ons.
+5.8.
+0 vakter
+	
+Tor.
+6.8.
+1 vakt
+	
+Fre.
+7.8.
+1 vakt
+	
+Lør.
+8.8.
+1 vakt
+	
+Søn.
+9.8.
+0 vakter
+	TIMER	VAKTER	LØNN
+Ledig vakt
+Uten ansatt
+	
++
+	
++
+	
++
+	
++
+	
+12:00–20:00
+Kokk
+Ikke priset
++
+	
++
+	
++
+	7t 30m	1	Ikke priset
+Astrid Vik
+ANS-002
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	0t	0	—
+Ingrid Moen
+ANS-001
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	0t	0	—
+Jonas Lie
+ANS-003
+	
+10:00–18:00
+Kokk
+kr 2 325,00
++
+	
+10:00–18:00
+Kokk
+kr 2 325,00
++
+	
++
+	
++
+	
++
+	
+12:00–20:00
+Kokk
+kr 2 375,63
++
+	
++
+	22t 30m	3	—
+Nora Berg
+TH-104
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	0t	0	—
+Sander Holm
+TH-105
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	
++
+	0t	0	—
+Selma Haug
+ANS-004
+	
++
+	
++
+	
++
+	
+11:00–17:00
+Kokk
+Mangler sats
++
+	
++
+	
++
+	
++
+	5t 30m	1	—
+Sum uke	kr 2 325,00	kr 2 325,00	kr 0,00	Ingen sum	minst kr 0,00	kr 2 375,63	kr 0,00	35t 30m	5	Ingen sum
+Grunnsats pluss tilleggene regelpakken til butikken oppgir – kveldstillegg, nattillegg og helge-/søndagstillegg. Fortsatt uten arbeidsgiveravgift.
+Lønnsprosent, omsetning og forskjell til mål kommer når omsetning kan leses per virksomhetsdag.
+1 vakt mangler sats, så uken har ingen lønnssum. Legg inn satsen, så regnes summen ut.

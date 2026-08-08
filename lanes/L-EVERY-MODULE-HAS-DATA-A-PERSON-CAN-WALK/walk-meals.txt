@@ -1,0 +1,121 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Bedriftsavtaler
+Bedriftene som har avtale med dette utsalgsstedet, og ordrene som er finansiert på bedriftskonto.
+Hent på nytt
+Avtaler ved dette utsalgsstedet
+BEDRIFT	ORG.NR.	AVTALE	VALUTA	AKTIVE MEDLEMMER	ORDRER
+Akersgata Arkitekter
+Akersgata Arkitekter AS
+	923456789	Aktiv	NOK	2	10
+Havnekontoret
+Havnekontoret Drift AS
+	915002002	Aktiv	NOK	1	0
+Nordsjo Consulting
+Nordsjo Consulting AS
+	915001001	Aktiv	NOK	1	0
+Finansierte ordrer
+Velg en avtale over for å se ordrene som er finansiert på den.
+Beløpene er hentet fra serveren, ett per ordre. Vi summerer dem ikke: en total på kredittsalg hører hjemme på månedsoppgaven, som serveren regner ut og fryser.

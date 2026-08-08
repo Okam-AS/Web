@@ -1,0 +1,11 @@
+PROBE: POST /training/stores/1/courses/f5f58151-f13f-48aa-90f8-27146e29f76b/versions/1/publish  (Two Humans Kafe, API :5971)
+run at: 2026-08-06T17:40:21Z
+
+HTTP=500
+--- first 6 lines of body ---
+Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'TrainingCourseVersions' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)

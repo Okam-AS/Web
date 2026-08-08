@@ -1,0 +1,118 @@
+{
+  "completions": {
+    "storeId": 1,
+    "completions": [
+      {
+        "completionId": "aa1891d1-0ad9-49fb-8a10-67f5e68ef17f",
+        "personRef": "08fdc7d5-68ad-4fb6-aedb-0e93032b0856",
+        "courseId": "fbdc1086-de59-4d37-af78-1d0e3219d5cc",
+        "courseVersionId": "76b2e0e9-89b4-45b2-9cb7-b7b94e15eda2",
+        "scorePercent": 85,
+        "passed": true,
+        "versionContentHash": "sha256:db69110e600bbeeeaa1fdad2776edcec1d2c8144d06ff07920671902dfe0d9d0",
+        "source": "ManagerRecorded",
+        "completedAtUtc": "2026-08-06T20:06:44.444666"
+      },
+      {
+        "completionId": "72393f8b-c043-48fa-a958-4a90d86fdf01",
+        "personRef": "e00897ac-40ee-49d5-a067-bb3d4cd40c35",
+        "courseId": "f5f58151-f13f-48aa-90f8-27146e29f76b",
+        "courseVersionId": "2c4dc9da-5d6f-4af7-bedd-a27d9fdc7c55",
+        "scorePercent": 88,
+        "passed": true,
+        "versionContentHash": "sha256:2387e04321094aa4a24aa80018bded8cea34a4e46f57152c2e556d51122410ae",
+        "source": "ManagerRecorded",
+        "completedAtUtc": "2026-08-06T20:06:44.314981"
+      },
+      {
+        "completionId": "9f943138-d30e-415f-bb5c-8bb40599d4bd",
+        "personRef": "e00897ac-40ee-49d5-a067-bb3d4cd40c35",
+        "courseId": "f5f58151-f13f-48aa-90f8-27146e29f76b",
+        "courseVersionId": "2c4dc9da-5d6f-4af7-bedd-a27d9fdc7c55",
+        "scorePercent": 55,
+        "passed": false,
+        "versionContentHash": "sha256:2387e04321094aa4a24aa80018bded8cea34a4e46f57152c2e556d51122410ae",
+        "source": "ManagerRecorded",
+        "completedAtUtc": "2026-08-06T20:06:44.215904"
+      },
+      {
+        "completionId": "9b3875c8-e377-4f30-889b-2ff46eedb3de",
+        "personRef": "1850c97c-afe7-49f0-ae8d-e61c4440dbe7",
+        "courseId": "f5f58151-f13f-48aa-90f8-27146e29f76b",
+        "courseVersionId": "2c4dc9da-5d6f-4af7-bedd-a27d9fdc7c55",
+        "scorePercent": 92,
+        "passed": true,
+        "versionContentHash": "sha256:2387e04321094aa4a24aa80018bded8cea34a4e46f57152c2e556d51122410ae",
+        "source": "ManagerRecorded",
+        "completedAtUtc": "2026-08-06T20:06:44.049248"
+      }
+    ],
+    "asOfUtc": "2026-08-06T21:04:38.468045Z"
+  },
+  "courses": {
+    "storeId": 1,
+    "courses": [
+      {
+        "courseId": "8ff50d2e-c4fe-42ee-bf79-576ce8b32c0a",
+        "title": "Brannvern og romningsveier",
+        "category": "HMS",
+        "competencyKey": null,
+        "isActive": true,
+        "versionCount": 1,
+        "hasPublishedVersion": false,
+        "createdAtUtc": "2026-08-06T20:06:43.331678"
+      },
+      {
+        "courseId": "f5f58151-f13f-48aa-90f8-27146e29f76b",
+        "title": "Alkoholservering og skjenkeregler (193639)",
+        "category": "Alkoholservering",
+        "competencyKey": "alkoholservering",
+        "isActive": true,
+        "versionCount": 1,
+        "hasPublishedVersion": true,
+        "createdAtUtc": "2026-08-06T17:36:40.273732"
+      },
+      {
+        "courseId": "cbd4dfc8-4072-44ad-933b-a6d784f3ca19",
+        "title": "HMS og brannvern",
+        "category": "HMS",
+        "competencyKey": null,
+        "isActive": true,
+        "versionCount": 1,
+        "hasPublishedVersion": true,
+        "createdAtUtc": "2026-08-06T15:38:16.181218"
+      },
+      {
+        "courseId": "00378636-12a6-4b22-a375-c5541792991f",
+        "title": "Kassaopplæring – oppgjør og retur",
+        "category": "Drift",
+        "competencyKey": null,
+        "isActive": true,
+        "versionCount": 1,
+        "hasPublishedVersion": true,
+        "createdAtUtc": "2026-08-06T15:38:16.163176"
+      },
+      {
+        "courseId": "6199734d-2f9a-4fb9-beab-3074438ae246",
+        "title": "Allergener og merking",
+        "category": "Mattrygghet",
+        "competencyKey": "allergener",
+        "isActive": true,
+        "versionCount": 1,
+        "hasPublishedVersion": true,
+        "createdAtUtc": "2026-08-06T15:38:16.144521"
+      },
+      {
+        "courseId": "fbdc1086-de59-4d37-af78-1d0e3219d5cc",
+        "title": "Næringsmiddelhygiene og temperaturkontroll",
+        "category": "Mattrygghet",
+        "competencyKey": "naeringsmiddelhygiene",
+        "isActive": true,
+        "versionCount": 3,
+        "hasPublishedVersion": true,
+        "createdAtUtc": "2026-08-06T15:38:16.097507"
+      }
+    ],
+    "asOfUtc": "2026-08-06T21:04:38.449818Z"
+  }
+}

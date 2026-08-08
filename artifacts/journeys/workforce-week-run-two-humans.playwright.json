@@ -1,0 +1,289 @@
+{
+  "journey": "workforce-week-run-two-humans",
+  "title": "A manager publishes a week and a second human acknowledges it, in one live world",
+  "status": "passed",
+  "startedAtUtc": "2026-08-06T14:32:25.680Z",
+  "finishedAtUtc": "2026-08-06T14:32:59.244Z",
+  "durationMs": 33564,
+  "capabilities": [
+    "workforce.staff.invite",
+    "workforce.me.invitation-claim",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish",
+    "workforce.me.schedule",
+    "workforce.me.publication-acknowledge",
+    "workforce.publication.history",
+    "workforce.publication.recipients"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "8ac6f63648015d8c7a230181a7f07bf303d43268",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@8e2b57de8442a389a9b5f8025312c9750614c85e",
+    "source": "stamp:artifacts/world/live/127-0-0-1-5971.json",
+    "short": "8e2b57d",
+    "detail": "branch HEAD, stamped by test/e2e/scripts/live-world.sh at 2026-08-06T14:19:12.523Z, pid 96293 (which was serving this origin) still running"
+  },
+  "backendServed": 128,
+  "backendSubjectServed": 94,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5971/user/login -> 200",
+    "GET http://127.0.0.1:5971/user -> 200",
+    "GET http://127.0.0.1:5971/stores/1/market -> 200",
+    "GET http://127.0.0.1:5971/user -> 200",
+    "GET http://127.0.0.1:5971/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:5971/stores/1/feature-flags -> 200",
+    "GET http://127.0.0.1:5971/stores/1 -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager through the platform-admin door",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:25.684Z",
+      "durationMs": 18600,
+      "detail": "signed in on /admin/feature-flags as applicationUserId 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "both flags this week-run depends on are deny-closed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:44.284Z",
+      "durationMs": 46,
+      "detail": "workforce.publication = Av, workforce.selfservice = Av",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "PROBE: with workforce.publication down, the week cannot even be drafted",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:44.467Z",
+      "durationMs": 766,
+      "detail": "Vaktplanen er skrivebeskyttet Bryteren workforce.publication står av for denne butikken, så vaktplanen kan leses, men ikke endres eller publ",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the manager turns schedule publication on",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:45.292Z",
+      "durationMs": 718,
+      "detail": "workforce.publication = På, flipped on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the seeded colleague is on the roster with no login",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:46.010Z",
+      "durationMs": 746,
+      "detail": "Astrid Vik: Ingen innlogging er koblet til engasjementet ennå. Personen kan settes opp på vakter, men kan ikke logge inn og se dem.",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "issue the claim code, which is shown exactly once",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:46.756Z",
+      "durationMs": 112,
+      "detail": "a 43-character claim code was issued and withheld from this record",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "build the week: draft, one shift for the colleague, validated",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:46.957Z",
+      "durationMs": 1308,
+      "detail": "08:00–16:00 Barista for Astrid Vik, week validated",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "publish it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:48.265Z",
+      "durationMs": 208,
+      "detail": "Publisert til 1 mottakere.",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "a DIFFERENT person signs in and claims the code",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:48.518Z",
+      "durationMs": 1819,
+      "detail": "claimed by applicationUserId 9750cac8-acc5-4054-a16b-d18186b43016, which is NOT the publisher 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the worker sees the shift the manager published",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:50.358Z",
+      "durationMs": 655,
+      "detail": "first shift card: 08:00–16:00 Barista Betalt tid 7t 30m Åpningsvakt Fra publisering 1",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "PROBE: with workforce.selfservice down, the confirmation is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:51.013Z",
+      "durationMs": 55,
+      "detail": "refused: \"Kunne ikke bekrefte mottak.\" — the notice is still unread",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the manager turns self-service on",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:51.100Z",
+      "durationMs": 2288,
+      "detail": "workforce.selfservice = På, flipped by 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the worker confirms, and is shown NOTHING (F-WF-ACKNOWLEDGE-SHOWS-NOTHING)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:53.388Z",
+      "durationMs": 1574,
+      "detail": "the notice vanished; no receipt line, no toast — nothing on screen said it worked",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "the manager reaches the publication receipts BY CLICKING THE SIDEBAR",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:54.975Z",
+      "durationMs": 4118,
+      "detail": "arrived at /admin/workforce-publications by clicking the sidebar entry",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "THE PROOF: the roster names the OTHER account as having confirmed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:59.093Z",
+      "durationMs": 100,
+      "detail": "publish said \"Publisert til 1 mottakere.\"; the confirmed group holds 1 — Astrid Vik, acknowledged by 9750cac8-acc5-4054-a16b-d18186b43016, a different account from the publisher 6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-06T14:32:59.243Z",
+      "durationMs": 0,
+      "detail": "8 console errors recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "a worker who confirms a published week is shown no receipt at all",
+      "detail": "F-WF-ACKNOWLEDGE-SHOWS-NOTHING. Pressing `Bekreft mottatt` succeeded — step 12 reads the receipt back off the manager's publication roster — but the worker's own screen showed neither the receipt nor a toast: `acknowledge()` reloads the inbox, the item stops being unread, and WorkforcePublicationNotice's v-if removes the section that renders the receipt. The whole feedback path is unreachable by construction."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "Failed to load resource: the server responded with a status of 409 (Conflict)"
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "Failed to load resource: the server responded with a status of 409 (Conflict)"
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-publications\" to \"/admin?redirect=%2Fadmin%2Fworkforce-publications&storeId=1\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the week-run",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-publications\" to \"/admin?redirect=%2Fadmin%2Fworkforce-publications&storeId=1\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-publications\" to \"/admin?redirect=%2Fadmin%2Fworkforce-publications&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-publications\" to \"/admin?redirect=%2Fadmin%2Fworkforce-publications&storeId=1\" with a new navigation."
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/workforce/stores/1/schedules/drafts",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/workforce/me/publications/9ac6e9cd-e34a-4f9a-8b9f-313b37ed2582/acknowledgements",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-week-run-two-humans/live-5971-unidentified/01-both-flags-down-before-the-week-run.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/02-the-draft-refused-and-the-banner-names-the-lever.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/03-the-roster-code-issued-and-taken-off-screen.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/04-the-published-week-by-the-manager.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/05-the-second-human-is-in.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/06-the-worker-can-see-the-week-and-cannot-confirm-i.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/07-after-confirming-the-worker-sees-nothing.png",
+    "workforce-week-run-two-humans/live-5971-unidentified/08-the-manager-can-show-that-the-other-human-confir.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "live-5971-8e2b57d",
+    "file": "artifacts/journeys/runs/workforce-week-run-two-humans.live-5971-8e2b57d.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-5971-8e2b57d",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

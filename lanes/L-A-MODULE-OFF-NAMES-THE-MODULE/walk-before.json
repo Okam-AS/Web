@@ -1,0 +1,502 @@
+{
+  "steps": {
+    "board": {
+      "modules": [
+        {
+          "module": "Events",
+          "rows": [
+            {
+              "key": "Events.Core",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Events.Deposits",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Events.Settlement",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Growth",
+          "rows": [
+            {
+              "key": "growth.dispatch",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "growth.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Margin",
+          "rows": [
+            {
+              "key": "Margin.Module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Margin.PriceImport",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Margin.Statements",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Meals",
+          "rows": [
+            {
+              "key": "meals.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Training",
+          "rows": [
+            {
+              "key": "training.assignments",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "training.setup",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Workforce",
+          "rows": [
+            {
+              "key": "workforce.clock",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.dispatch",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.exchange",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.export",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.publication",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.selfservice",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.setup",
+              "badge": "På",
+              "facts": [
+                "Standard: på",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "put": {
+      "withheld": {
+        "flagKey": "workforce.personnel-list",
+        "status": 400,
+        "body": "{\"message\":\"Unknown feature flag: workforce.personnel-list\"}"
+      },
+      "control": {
+        "flagKey": "workforce.setup",
+        "status": 200,
+        "body": "{\"flagKey\":\"workforce.setup\",\"module\":\"Workforce\",\"title\":\"Setup\",\"defaultEnabled\":true,\"isOverridden\":true,\"overrideEnabled\":true,\"effective\":true,\"updatedByReference\":\"6ba6dd27-42b0-4ba9-807b-96930c735f2f\",\"updatedAtUtc\":\"2026-08-07T11:52:46.366646Z\",\"note\":null}"
+      }
+    },
+    "rosterLit": {
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nLegg til person\nOppdater\nPERSON\tFULLMAKTER\tANSATTNR.\tSTATUS\tFRA\tTIL\nAstrid Vik\nRegistrert\nEgen vaktplan\nANS-002\tAktiv\t01. jan. 2024\t—\nIngrid Moen\nRegistrert\nEgen vaktplan\nPlanlegger\nLeder\nLønn\nANS-001\tAktiv\t01. jan. 2020\t—\nJonas Lie\nInvitert\nEgen vaktplan\nANS-003\tAktiv\t01. jan. 2024\t—\nNora Berg\nInvitert\nEgen vaktplan\nTH-104\tAktiv\t10. aug. 2026\t—\nSander Holm\nInvitert\nEgen vaktplan\nTH-105\tAktiv\t10. aug. 2026\t—\nSelma Haug\nInvitert\nEgen vaktplan\nANS-004\tAktiv\t01. jan. 2024\t—",
+      "wire": [
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context",
+          "body": "{\"storeId\":1,\"capabilities\":[\"WorkforceSelf\",\"WorkforceScheduler\",\"WorkforceManager\",\"WorkforcePayrollApprover\"],\"timeZone\":{\"id\":\"Europe/Oslo\",\"isFallback\":false,\"currentUtcOffsetMinutes\":120.0},\"rulePack\":{\"jurisdiction\":\"NO\",\"packName\":\"NO-AML-2026-07\",\"version\":2,\"enforcementMode\":\"Shadow\",\"effectiveFromUtc\":\"2026-07-01T00:00:00\"},\"featureFlags\":{\"workforce.module\":true,\"workforce.setup\":true,\"workforce.publication\":true,\"workforce.selfservice\":true,\"workforce.exchange\":true,\"workforce.clock\":true,\"workforce.personnel-list\":false,\"workforce.export\":true,\"workforce.dispatch\":true},\"asOfUtc\""
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations",
+          "body": ""
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles",
+          "body": "[{\"roleId\":\"a864bc7a-1c29-4a5c-b357-4a6f6e7e1f76\",\"name\":\"Barista\",\"station\":\"Bar\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"d07a027b-990c-480d-9e42-8481f899f610\",\"name\":\"Kokk\",\"station\":\"Kjokken\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"37ba9732-0e5f-4e5f-b3a2-d7459617d07c\",\"name\":\"Kokk\",\"station\":\"Kjokken\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"95b66b4c-cd95-417a-8e15-598e73bb8597\",\"name\":\"Kjøkke"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/context",
+          "body": "{\"storeId\":1,\"capabilities\":[\"WorkforceSelf\",\"WorkforceScheduler\",\"WorkforceManager\",\"WorkforcePayrollApprover\"],\"timeZone\":{\"id\":\"Europe/Oslo\",\"isFallback\":false,\"currentUtcOffsetMinutes\":120.0},\"rulePack\":{\"jurisdiction\":\"NO\",\"packName\":\"NO-AML-2026-07\",\"version\":2,\"enforcementMode\":\"Shadow\",\"effectiveFromUtc\":\"2026-07-01T00:00:00\"},\"featureFlags\":{\"workforce.module\":true,\"workforce.setup\":true,\"workforce.publication\":true,\"workforce.selfservice\":true,\"workforce.exchange\":true,\"workforce.clock\":true,\"workforce.personnel-list\":false,\"workforce.export\":true,\"workforce.dispatch\":true},\"asOfUtc\""
+        },
+        {
+          "status": 404,
+          "path": "/workforce/stores/1/invitations",
+          "body": ""
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/roles",
+          "body": "[{\"roleId\":\"a864bc7a-1c29-4a5c-b357-4a6f6e7e1f76\",\"name\":\"Barista\",\"station\":\"Bar\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"d07a027b-990c-480d-9e42-8481f899f610\",\"name\":\"Kokk\",\"station\":\"Kjokken\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"37ba9732-0e5f-4e5f-b3a2-d7459617d07c\",\"name\":\"Kokk\",\"station\":\"Kjokken\",\"color\":\"#C2703D\",\"sortOrder\":1,\"effectiveFromUtc\":\"2020-01-01T00:00:00\",\"effectiveToUtc\":null},{\"roleId\":\"95b66b4c-cd95-417a-8e15-598e73bb8597\",\"name\":\"Kjøkke"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff",
+          "body": "[{\"staffMemberId\":\"3b14f26c-3a7f-4530-a1e1-e127ac6a9583\",\"workforcePersonId\":\"08fdc7d5-68ad-4fb6-aedb-0e93032b0856\",\"displayName\":\"Astrid Vik\",\"employmentNumber\":\"ANS-002\",\"capabilities\":[\"WorkforceSelf\"],\"isActive\":true,\"activeFromUtc\":\"2024-01-01T00:00:00\",\"activeToUtc\":null,\"legalEmployerId\":\"560c1843-b232-4d71-8011-ef51dbb9bb20\",\"personState\":\"Claimed\"},{\"staffMemberId\":\"ecf5f4f8-ad23-43ca-9e0a-2bf7c28cd342\",\"workforcePersonId\":\"730eeed2-1833-4600-8e82-a8dc2ce1dd34\",\"displayName\":\"Ingrid Moen\",\"employmentNumber\":\"ANS-001\",\"capabilities\":[\"WorkforceSelf\",\"WorkforceScheduler\",\"WorkforceManag"
+        },
+        {
+          "status": 200,
+          "path": "/workforce/stores/1/staff",
+          "body": "[{\"staffMemberId\":\"3b14f26c-3a7f-4530-a1e1-e127ac6a9583\",\"workforcePersonId\":\"08fdc7d5-68ad-4fb6-aedb-0e93032b0856\",\"displayName\":\"Astrid Vik\",\"employmentNumber\":\"ANS-002\",\"capabilities\":[\"WorkforceSelf\"],\"isActive\":true,\"activeFromUtc\":\"2024-01-01T00:00:00\",\"activeToUtc\":null,\"legalEmployerId\":\"560c1843-b232-4d71-8011-ef51dbb9bb20\",\"personState\":\"Claimed\"},{\"staffMemberId\":\"ecf5f4f8-ad23-43ca-9e0a-2bf7c28cd342\",\"workforcePersonId\":\"730eeed2-1833-4600-8e82-a8dc2ce1dd34\",\"displayName\":\"Ingrid Moen\",\"employmentNumber\":\"ANS-001\",\"capabilities\":[\"WorkforceSelf\",\"WorkforceScheduler\",\"WorkforceManag"
+        }
+      ]
+    },
+    "flagOff": {
+      "badge": "Av",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: av"
+      ]
+    },
+    "rosterDark": {
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nDu har ikke bemanningstilgang i denne butikken.",
+      "wire": [
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context",
+          "body": "{\"type\":\"https://okam.no/problems/workforce/module-disabled\",\"title\":\"Forbidden\",\"status\":403,\"detail\":\"The Workforce module is not enabled for this store.\",\"code\":\"workforce.module-disabled\",\"traceId\":\"0HNNJTTMJ3H8A:00000009\"}"
+        },
+        {
+          "status": 403,
+          "path": "/workforce/stores/1/context",
+          "body": "{\"type\":\"https://okam.no/problems/workforce/module-disabled\",\"title\":\"Forbidden\",\"status\":403,\"detail\":\"The Workforce module is not enabled for this store.\",\"code\":\"workforce.module-disabled\",\"traceId\":\"0HNNJTTMJ3H89:00000012\"}"
+        }
+      ]
+    },
+    "flagRestored": {
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    "boardFinal": {
+      "modules": [
+        {
+          "module": "Events",
+          "rows": [
+            {
+              "key": "Events.Core",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Events.Deposits",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Events.Settlement",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Growth",
+          "rows": [
+            {
+              "key": "growth.dispatch",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "growth.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Margin",
+          "rows": [
+            {
+              "key": "Margin.Module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Margin.PriceImport",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "Margin.Statements",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Meals",
+          "rows": [
+            {
+              "key": "meals.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Training",
+          "rows": [
+            {
+              "key": "training.assignments",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "training.setup",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        },
+        {
+          "module": "Workforce",
+          "rows": [
+            {
+              "key": "workforce.clock",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.dispatch",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.exchange",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.export",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.module",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.publication",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.selfservice",
+              "badge": "På",
+              "facts": [
+                "Standard: av",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            },
+            {
+              "key": "workforce.setup",
+              "badge": "På",
+              "facts": [
+                "Standard: på",
+                "Overstyrt for butikken",
+                "Faktisk: på"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

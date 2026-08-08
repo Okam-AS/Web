@@ -1,0 +1,72 @@
+{
+  "titleOf": {
+    "8ff50d2e-c4fe-42ee-bf79-576ce8b32c0a": "Brannvern og romningsveier",
+    "f5f58151-f13f-48aa-90f8-27146e29f76b": "Alkoholservering og skjenkeregler (193639)",
+    "cbd4dfc8-4072-44ad-933b-a6d784f3ca19": "HMS og brannvern",
+    "00378636-12a6-4b22-a375-c5541792991f": "Kassaopplæring – oppgjør og retur",
+    "6199734d-2f9a-4fb9-beab-3074438ae246": "Allergener og merking",
+    "fbdc1086-de59-4d37-af78-1d0e3219d5cc": "Næringsmiddelhygiene og temperaturkontroll"
+  },
+  "versionsOfCourse": {
+    "8ff50d2e-c4fe-42ee-bf79-576ce8b32c0a": [
+      {
+        "courseVersionId": "dbb988e1-091e-4388-954b-146cbcc1121d",
+        "versionNo": 1,
+        "state": "Draft",
+        "passThresholdPercent": 60
+      }
+    ],
+    "f5f58151-f13f-48aa-90f8-27146e29f76b": [
+      {
+        "courseVersionId": "2c4dc9da-5d6f-4af7-bedd-a27d9fdc7c55",
+        "versionNo": 1,
+        "state": "Published",
+        "passThresholdPercent": 80
+      }
+    ],
+    "cbd4dfc8-4072-44ad-933b-a6d784f3ca19": [
+      {
+        "courseVersionId": "6df01803-9627-4cf0-9432-0c2311843a8d",
+        "versionNo": 1,
+        "state": "Published",
+        "passThresholdPercent": 60
+      }
+    ],
+    "00378636-12a6-4b22-a375-c5541792991f": [
+      {
+        "courseVersionId": "897faa0e-b482-461d-9ce5-6d5af64d277d",
+        "versionNo": 1,
+        "state": "Published",
+        "passThresholdPercent": 60
+      }
+    ],
+    "6199734d-2f9a-4fb9-beab-3074438ae246": [
+      {
+        "courseVersionId": "42ab814f-ffc0-4a92-80a7-55444a3366e5",
+        "versionNo": 1,
+        "state": "Published",
+        "passThresholdPercent": 80
+      }
+    ],
+    "fbdc1086-de59-4d37-af78-1d0e3219d5cc": [
+      {
+        "courseVersionId": "76b2e0e9-89b4-45b2-9cb7-b7b94e15eda2",
+        "versionNo": 1,
+        "state": "Published",
+        "passThresholdPercent": 80
+      },
+      {
+        "courseVersionId": "7dc29e6b-04a7-4565-982e-7c14e8de6dd5",
+        "versionNo": 2,
+        "state": "Published",
+        "passThresholdPercent": 80
+      },
+      {
+        "courseVersionId": "9e470025-d094-45b0-8fcc-5bba4ea7dacb",
+        "versionNo": 3,
+        "state": "Draft",
+        "passThresholdPercent": 80
+      }
+    ]
+  }
+}

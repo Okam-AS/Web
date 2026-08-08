@@ -1,0 +1,386 @@
+diff --git a/Scripts/demo/seed-training-demo.sh b/Scripts/demo/seed-training-demo.sh
+index 3bba44839..c37a27d1e 100755
+--- a/Scripts/demo/seed-training-demo.sh
++++ b/Scripts/demo/seed-training-demo.sh
+@@ -39,8 +39,12 @@
+ # Usage:  ./seed-training-demo.sh
+ #         API_BASE=http://127.0.0.1:5091 ./seed-training-demo.sh
+ #
+-# Re-runnable: each run brings its own cohort (courses carry the run's stamp) and asserts its own rows
+-# rather than store-wide totals. Completions are append-only and are never cleaned up.
++# Re-runnable, and it CONVERGES rather than accumulating. Every course, version and assignment below is
++# looked up before it is written, and completions and certificates are matched on the row that would be
++# written. Titles are therefore stable: stamping each one with the run's clock -- which is what this
++# script used to do -- meant a second run minted a second cohort, and a screen that is meant to show a
++# venue's training filled with near-duplicates of the same three courses. A demo world is a place, not a
++# log. Completions remain append-only and are never cleaned up; a retake is still a new row.
+ #
+ set -euo pipefail
+ . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/demo-common.sh"
+@@ -55,7 +59,6 @@ d() { # d OFFSET_DAYS  (may be negative)
+     case "$off" in -*) ;; *) off="+$off" ;; esac
+     TZ=$TZ_ID date -j -v"${off}d" +%Y-%m-%d 2>/dev/null || date -d "$off day" +%Y-%m-%d
+ }
+-STAMP="$(TZ=$TZ_ID date +%H%M%S)"
+ 
+ # api_code_as drops extra curl arguments, and the two probes that matter here are about a HEADER. This
+ # is the same helper with the extras forwarded, and its own output file so a concurrent seed's response
+@@ -194,27 +197,105 @@ publish() { # publish COURSE_ID VERSIONNO -> the courseVersionId
+     echo "$out" | jq -r '.courseVersionId'
+ }
+ 
++# ADOPT BEFORE WRITING. A world reached through the product's own endpoints is not this seed's alone:
++# the four courses a live-world pass created, and anything a person has since clicked Publiser on, are
++# already on the screen this run is supposed to furnish. Creating a second near-identical set beside
++# them would be indistinguishable, to the manager reading it, from the module having duplicated its own
++# data. So every lookup below asks the API what is there first, and only writes what is missing.
++COURSES=""
++refresh_courses() { COURSES="$(api GET "$TR/courses")"; check "$COURSES" "GET /courses"; }
++refresh_courses
++course_id_by_title() { # course_id_by_title TITLE_PREFIX -> courseId, empty when this world has none
++    echo "$COURSES" | jq -r --arg p "$1" '[.courses[] | select(.title | startswith($p))] | (.[0].courseId // empty)'
++}
++course_title_of() { echo "$COURSES" | jq -r --arg i "$1" '[.courses[] | select(.courseId==$i)] | (.[0].title // "")'; }
++
++# The extra prefixes are ALTERNATIVE SPELLINGS of the same subject, not a fuzzy search: this seed's own
++# earlier runs stamped the title with a clock, and a live-world pass names the hygiene course in full
++# Norwegian. Matching them keeps one course per subject on the screen instead of three.
++ensure_course() { # ensure_course TITLE CATEGORY COMPETENCYKEY [ALSO_MATCH_PREFIX...] -> the course id
++    local title="$1" category="$2" key="$3"; shift 3
++    local prefix id
++    for prefix in "$title" "$@"; do
++        id="$(course_id_by_title "$prefix")"
++        if [ -n "$id" ]; then
++            note "adopted the course already on this screen: $(course_title_of "$id")"
++            printf '%s' "$id"
++            return 0
++        fi
++    done
++    id="$(mkcourse "$title" "$category" "$key")"
++    refresh_courses
++    printf '%s' "$id"
++}
++
++detail_of() { api GET "$TR/courses/$1"; }
++frozen_of() { # frozen_of DETAILJSON -> the courseVersionId of the LOWEST published version
++    echo "$1" | jq -r '[.versions[] | select(.state=="Published")] | sort_by(.versionNo) | (.[0].courseVersionId // empty)'
++}
++frozen_no_of() { echo "$1" | jq -r '[.versions[] | select(.state=="Published")] | sort_by(.versionNo) | (.[0].versionNo // empty)'; }
++threshold_of() { # threshold_of DETAILJSON COURSEVERSIONID -> the version's OWN pass threshold
++    echo "$1" | jq -r --arg v "$2" '[.versions[] | select(.courseVersionId==$v)] | (.[0].passThresholdPercent // empty)'
++}
++
++# The LOWEST published version, not the newest, and that is what makes the run converge: a person who
++# publishes a second version through the UI must not move the version this seed assigns and grades
++# against, or every assignment and completion below would be written afresh against the new id.
++ensure_published() { # ensure_published COURSE_ID PAGES_JSON QUIZ_JSON THRESHOLD -> the frozen courseVersionId
++    local det cv vno
++    det="$(detail_of "$1")"; check "$det" "GET /courses/$1"
++    cv="$(frozen_of "$det")"
++    if [ -n "$cv" ]; then
++        note "adopted the frozen v$(frozen_no_of "$det") already published on this course"
++        printf '%s' "$cv"
++        return 0
++    fi
++    vno="$(echo "$det" | jq -r '[.versions[] | select(.state=="Draft")] | sort_by(.versionNo) | (.[0].versionNo // empty)')"
++    [ -n "$vno" ] || vno="$(mkversion "$1" "$2" "$3" "$4")"
++    publish "$1" "$vno"
++}
++
++ensure_draft() { # ensure_draft COURSE_ID PAGES_JSON QUIZ_JSON THRESHOLD -> the draft versionNo
++    local det vno
++    det="$(detail_of "$1")"; check "$det" "GET /courses/$1"
++    vno="$(echo "$det" | jq -r '[.versions[] | select(.state=="Draft")] | sort_by(.versionNo) | (.[-1].versionNo // empty)')"
++    if [ -n "$vno" ]; then
++        note "adopted the editable draft v$vno already on this course"
++        printf '%s' "$vno"
++        return 0
++    fi
++    mkversion "$1" "$2" "$3" "$4"
++}
++
+ # (a) The competency course. A PASSING completion of this one confers the key 'alkoholservering', and
+ #     that is the ONLY way Training mints a competency key -- everything else in the vault is a
+ #     certificate. It is what makes the holdings panel show something that was EARNED here.
+-C_ALK="$(mkcourse "Alkoholservering og skjenkeregler ($STAMP)" "Alkoholservering" "alkoholservering")"
+-V_ALK="$(mkversion "$C_ALK" '[{"h":"Skjenketid og aldersgrenser"},{"h":"Overskjenking"}]' '[{"q":"Naar skal du avvise?","a":4}]' 80)"
+-CV_ALK="$(publish "$C_ALK" "$V_ALK")"
++C_ALK="$(ensure_course "Alkoholservering og skjenkeregler" "Alkoholservering" "alkoholservering")"
++CV_ALK="$(ensure_published "$C_ALK" '[{"h":"Skjenketid og aldersgrenser"},{"h":"Overskjenking"}]' '[{"q":"Naar skal du avvise?","a":4}]' 80)"
++THR_ALK="$(threshold_of "$(detail_of "$C_ALK")" "$CV_ALK")"
++[ -n "$THR_ALK" ] || die "the alcohol course's frozen version reports no pass threshold, and step 6 grades against it."
+ 
+ # (b) The food-hygiene course, PUBLISHED and then given a DRAFT successor. Content is immutable from
+ #     Published (trigger TR_TrainingCourseVersions_ImmutableAfterPublish + the EF guard): a change is a
+ #     NEW VERSION, never an edit. Having both on screen is what makes that read as a rule.
+-C_IK="$(mkcourse "Mathygiene og temperaturkontroll ($STAMP)" "Mattrygghet" "")"
+-V_IK_1="$(mkversion "$C_IK" '[{"h":"Handhygiene"},{"h":"Kjolekjede 0-4 grader"}]' '[{"q":"Maks temperatur i kjoleskap?","a":4}]' 70)"
+-CV_IK="$(publish "$C_IK" "$V_IK_1")"
+-V_IK_2="$(mkversion "$C_IK" '[{"h":"Handhygiene"},{"h":"Kjolekjede 0-4 grader"},{"h":"Nytt: mottakskontroll"}]' '[{"q":"Maks temperatur i kjoleskap?","a":4}]' 70)"
+-note "the hygiene course now carries v$V_IK_1 (Published, frozen) and v$V_IK_2 (Draft, editable)"
++C_IK="$(ensure_course "Mathygiene og temperaturkontroll" "Mattrygghet" "" "Naeringsmiddelhygiene" "Næringsmiddelhygiene")"
++CV_IK="$(ensure_published "$C_IK" '[{"h":"Handhygiene"},{"h":"Kjolekjede 0-4 grader"}]' '[{"q":"Maks temperatur i kjoleskap?","a":4}]' 70)"
++DET_IK="$(detail_of "$C_IK")"
++THR_IK="$(threshold_of "$DET_IK" "$CV_IK")"
++[ -n "$THR_IK" ] || die "the hygiene course's frozen version reports no pass threshold, and step 6 grades against it."
++V_IK_2="$(ensure_draft "$C_IK" '[{"h":"Handhygiene"},{"h":"Kjolekjede 0-4 grader"},{"h":"Nytt: mottakskontroll"}]' '[{"q":"Maks temperatur i kjoleskap?","a":4}]' "$THR_IK")"
++note "the hygiene course carries v$(frozen_no_of "$DET_IK") (Published, frozen) and v$V_IK_2 (Draft, editable)"
+ 
+ # (c) A course that has ONLY a draft. It exists to be REFUSED at step 5.
+-C_BRANN="$(mkcourse "Brannvern og romningsveier ($STAMP)" "HMS" "")"
+-V_BRANN="$(mkversion "$C_BRANN" '[{"h":"Slokkeutstyr"}]' '[]' 60)"
+-CV_BRANN="$(api GET "$TR/courses/$C_BRANN" | jq -r --argjson v "$V_BRANN" '.versions[] | select(.versionNo==$v) | .courseVersionId')"
++C_BRANN="$(ensure_course "Brannvern og romningsveier" "HMS" "")"
++V_BRANN="$(ensure_draft "$C_BRANN" '[{"h":"Slokkeutstyr"}]' '[]' 60)"
++DET_BRANN="$(detail_of "$C_BRANN")"
++CV_BRANN="$(echo "$DET_BRANN" | jq -r --argjson v "$V_BRANN" '[.versions[] | select(.versionNo==$v)] | (.[0].courseVersionId // empty)')"
+ require_guid "$CV_BRANN" "the draft version id of the fire-safety course"
++[ -z "$(frozen_of "$DET_BRANN")" ] \
++    || die "'$(course_title_of "$C_BRANN")' now carries a PUBLISHED version, so it can no longer stand for
++    the draft-only course whose assignment step 5 expects to be refused. Somebody published it through the
++    UI. Either retire that version or give this arm a course of its own."
+ 
+ # -------------------------------------------------------------------------------------------------
+ say "TRAINING 5. Assignments -- by role, by person, and one that is OVERDUE"
+@@ -231,26 +312,41 @@ if [ -z "$ROLE_REF" ]; then
+     ROLE_NAME="$(echo "$ROLES" | jq -r 'if type=="array" then (.[0].name // empty) else empty end' 2>/dev/null | head -1 || true)"
+ fi
+ 
+-assign() { # assign BODY LABEL
+-    local out; out="$(api POST "$TR/assignments" "$1")"
+-    check "$out" "POST /assignments $2"
++ASSIGNMENTS=""
++refresh_assignments() { ASSIGNMENTS="$(api GET "$TR/assignments")"; check "$ASSIGNMENTS" "GET /assignments"; }
++refresh_assignments
++
++# The identity of an assignment is (version, scope, target) -- the due date is not part of it, so a
++# re-run must not write a second row just because a day has passed and `d 14` now names a later date.
++# There is nothing to repair either: the module has no route that moves a due date, only revoke.
++ensure_assign() { # ensure_assign COURSEVERSIONID Role|Person REF DUE_UTC LABEL
++    if echo "$ASSIGNMENTS" | jq -e --arg v "$1" --arg s "$2" --arg r "$3" \
++        '[.assignments[] | select(.courseVersionId==$v and .scope==$s and ((.roleRef // .personRef // "") == $r))] | length > 0' \
++        >/dev/null; then
++        note "adopted the assignment already on this screen: $5, due $(echo "$ASSIGNMENTS" | jq -r --arg v "$1" --arg s "$2" --arg r "$3" '[.assignments[] | select(.courseVersionId==$v and .scope==$s and ((.roleRef // .personRef // "") == $r))] | (.[0].dueDateUtc // "no date")')"
++        return 0
++    fi
++    local body out
++    body="$(jq -nc --arg v "$1" --arg s "$2" --arg r "$3" --arg due "$4" \
++        '{courseVersionId:$v, scope:$s, dueDateUtc:$due} + (if $s=="Role" then {roleRef:$r} else {personRef:$r} end)')"
++    out="$(api POST "$TR/assignments" "$body")"
++    check "$out" "POST /assignments $5"
++    refresh_assignments
+ }
++
+ if [ -n "$ROLE_REF" ]; then
+-    assign "$(jq -nc --arg v "$CV_IK" --arg r "$ROLE_REF" --arg due "$(d 14)T12:00:00Z" \
+-        '{courseVersionId:$v, scope:"Role", roleRef:$r, dueDateUtc:$due}')" "role $ROLE_NAME"
+-    note "role-scoped: every $ROLE_NAME owes the hygiene course v$V_IK_1, due $(d 14)"
++    ensure_assign "$CV_IK" "Role" "$ROLE_REF" "$(d 14)T12:00:00Z" "role $ROLE_NAME"
++    note "role-scoped: every $ROLE_NAME owes the hygiene course's frozen version"
+ else
+     note "this world's roster carries no role at all -- the role-scoped assignment is skipped; person scope still runs"
+ fi
+ 
+ # Deliberately in the PAST, so the manager's overview has an overdue row. An overdue assignment is the
+ # one thing on this screen that asks somebody to do something today.
+-assign "$(jq -nc --arg v "$CV_ALK" --arg p "$P_PASS" --arg due "$(d -3)T12:00:00Z" \
+-    '{courseVersionId:$v, scope:"Person", personRef:$p, dueDateUtc:$due}')" "person $N_PASS"
++ensure_assign "$CV_ALK" "Person" "$P_PASS" "$(d -3)T12:00:00Z" "person $N_PASS"
+ note "person-scoped: $N_PASS owes the alcohol course -- due $(d -3), i.e. OVERDUE"
+ 
+-assign "$(jq -nc --arg v "$CV_ALK" --arg p "$P_RETAKE" --arg due "$(d 30)T12:00:00Z" \
+-    '{courseVersionId:$v, scope:"Person", personRef:$p, dueDateUtc:$due}')" "person $N_RETAKE"
++ensure_assign "$CV_ALK" "Person" "$P_RETAKE" "$(d 30)T12:00:00Z" "person $N_RETAKE"
+ 
+ # THE REFUSAL. A draft is not assignable: assignments reference only frozen snapshots, because a
+ # version whose content can still change cannot be the thing a completion later claims to have tested.
+@@ -267,28 +363,71 @@ record() { # record PERSON COURSEVERSION SCORE LABEL -> the completion JSON
+     check "$out" "POST /completions $4"
+     printf '%s' "$out"
+ }
+-# 92 >= 80 -> pass. The request carries NO verdict field and one must never be added back: a manager
+-# states the score, and the server compares it with the version's own threshold.
+-PASS_ROW="$(record "$P_PASS" "$CV_ALK" 92 "$N_PASS pass")"
+-[ "$(echo "$PASS_ROW" | jq -r '.passed')" = "true" ] || die "92 % against a threshold of 80 was not a pass: $PASS_ROW"
++COMPLETIONS=""
++refresh_completions() { COMPLETIONS="$(api GET "$TR/completions")"; check "$COMPLETIONS" "GET /completions"; }
++refresh_completions
++
++# Append-only means a re-run cannot tidy up after itself, so it must not make a mess: an attempt this
++# seed has already recorded -- same person, same frozen version, same score -- is read back rather than
++# written again. The retake below still proves what it always proved, because the fail and the pass are
++# two rows whichever run wrote them.
++ensure_completion() { # ensure_completion PERSON COURSEVERSIONID SCORE LABEL -> the completion JSON
++    local row
++    row="$(echo "$COMPLETIONS" | jq -c --arg p "$1" --arg v "$2" --argjson s "$3" \
++        '[.completions[] | select(.personRef==$p and .courseVersionId==$v and (.scorePercent|tonumber)==$s)] | (.[0] // empty)')"
++    if [ -n "$row" ]; then
++        note "adopted the attempt already on the record: $4"
++        printf '%s' "$row"
++        return 0
++    fi
++    row="$(record "$1" "$2" "$3" "$4")"
++    refresh_completions
++    printf '%s' "$row"
++}
++
++# THE SCORES ARE DERIVED FROM THE VERSION'S OWN THRESHOLD, not written as literals. This step's whole
++# claim is that the verdict is the server's, so the numbers have to keep their RELATION to the threshold
++# whichever version the world turned out to carry -- a hard-coded 55 is a fail against 80 and a pass
++# against 50, and the assertion below would then be measuring nothing. Against the threshold of 80 these
++# still evaluate to the 92 / 55 / 88 this script has always used.
++clamp_score() { # clamp_score VALUE -> the same value inside 0..100
++    local s="$1"
++    if [ "$s" -gt 100 ]; then s=100; fi
++    if [ "$s" -lt 0 ]; then s=0; fi
++    printf '%s' "$s"
++}
++S_PASS="$(clamp_score $(( THR_ALK + 12 )))"
++S_FAIL="$(clamp_score $(( THR_ALK - 25 )))"
++S_RETAKE="$(clamp_score $(( THR_ALK + 8 )))"
++S_HYG="$(clamp_score $(( THR_IK + 5 )))"
++[ "$S_FAIL" -lt "$THR_ALK" ] && [ "$S_PASS" -ge "$THR_ALK" ] && [ "$S_RETAKE" -ge "$THR_ALK" ] \
++    || die "the alcohol course's threshold is $THR_ALK %, and a fail and a pass cannot both be expressed
++    against it ($S_FAIL / $S_PASS). This step exists to show the SERVER deciding; it will not record
++    scores whose verdict it cannot predict."
++[ "$S_HYG" -ge "$THR_IK" ] || die "the hygiene score $S_HYG % cannot pass its threshold of $THR_IK %."
++
++# The request carries NO verdict field and one must never be added back: a manager states the score, and
++# the server compares it with the version's own threshold.
++PASS_ROW="$(ensure_completion "$P_PASS" "$CV_ALK" "$S_PASS" "$N_PASS pass")"
++[ "$(echo "$PASS_ROW" | jq -r '.passed')" = "true" ] || die "$S_PASS % against a threshold of $THR_ALK was not a pass: $PASS_ROW"
+ [ "$(echo "$PASS_ROW" | jq -r '.source')" = "ManagerRecorded" ] || die "unexpected completion source: $PASS_ROW"
+-note "$N_PASS  92 % -> passed=true    (source ManagerRecorded -- the only source that exists today)"
++note "$N_PASS  $S_PASS % -> passed=true    (source ManagerRecorded -- the only source that exists today)"
+ 
+-# 55 < 80 -> fail, and this row can never be edited afterwards.
+-FAIL_ROW="$(record "$P_RETAKE" "$CV_ALK" 55 "$N_RETAKE fail")"
+-[ "$(echo "$FAIL_ROW" | jq -r '.passed')" = "false" ] || die "55 % against a threshold of 80 recorded as a pass: $FAIL_ROW"
+-note "$N_RETAKE 55 % -> passed=false"
++# Below the threshold -> fail, and this row can never be edited afterwards.
++FAIL_ROW="$(ensure_completion "$P_RETAKE" "$CV_ALK" "$S_FAIL" "$N_RETAKE fail")"
++[ "$(echo "$FAIL_ROW" | jq -r '.passed')" = "false" ] || die "$S_FAIL % against a threshold of $THR_ALK recorded as a pass: $FAIL_ROW"
++note "$N_RETAKE $S_FAIL % -> passed=false"
+ 
+ # The retake is a NEW ROW. Nothing is updated: the failed attempt above is still on the record, which
+ # is what makes the ledger evidence rather than a status field.
+-RETAKE_ROW="$(record "$P_RETAKE" "$CV_ALK" 88 "$N_RETAKE retake")"
+-[ "$(echo "$RETAKE_ROW" | jq -r '.passed')" = "true" ] || die "the retake at 88 % did not pass: $RETAKE_ROW"
++RETAKE_ROW="$(ensure_completion "$P_RETAKE" "$CV_ALK" "$S_RETAKE" "$N_RETAKE retake")"
++[ "$(echo "$RETAKE_ROW" | jq -r '.passed')" = "true" ] || die "the retake at $S_RETAKE % did not pass: $RETAKE_ROW"
+ [ "$(echo "$RETAKE_ROW" | jq -r '.completionId')" != "$(echo "$FAIL_ROW" | jq -r '.completionId')" ] \
+     || die "the retake reused the failed attempt's row. Completions are append-only; a retake is a NEW row."
+-note "$N_RETAKE 88 % -> passed=true     (a SECOND row -- the 55 % attempt is still on the record)"
++note "$N_RETAKE $S_RETAKE % -> passed=true     (a SECOND row -- the $S_FAIL % attempt is still on the record)"
+ 
+-record "$P_CERTS" "$CV_IK" 75 "$N_CERTS hygiene" >/dev/null
+-note "$N_CERTS 75 % on the hygiene course (threshold 70) -> passed=true"
++ensure_completion "$P_CERTS" "$CV_IK" "$S_HYG" "$N_CERTS hygiene" >/dev/null
++note "$N_CERTS $S_HYG % on the hygiene course (threshold $THR_IK) -> passed=true"
+ 
+ # THE REFUSAL that keeps evidence from naming nobody.
+ GHOST="$(uuidgen | tr 'A-Z' 'a-z')"
+@@ -314,16 +453,40 @@ expect_status() { # expect_status JSON EXPECTED LABEL
+     date against the STORE's calendar date -- if that drifted, the vault is lying about validity."
+     note "$3 -> $2"
+ }
+-CERT_EXPIRING="$(cert "$P_PASS" "alkoholservering" "Bergen kommune" "$(d -340)" "$(d 20)")"
+-expect_status "$CERT_EXPIRING" "Expiring" "$N_PASS, kommunal skjenkeopplaering, expires $(d 20)"
++CERTS=""
++refresh_certs() { CERTS="$(api GET "$TR/certificates")"; check "$CERTS" "GET /certificates"; }
++refresh_certs
++
++# ADOPTION IS CONDITIONAL ON THE STATE, and that is the whole subtlety. Status is DERIVED from the
++# expiry date against today, so a certificate this seed wrote as Expiring becomes Expired on its own a
++# few weeks later. Re-using it because the person and type match would then quietly leave this screen
++# without an Expiring row -- the one state the vault exists to surface. So a stored certificate is
++# adopted only while it still stands for the state this step is placing, and a drifted one is left
++# alone (it is somebody's real record) and a fresh one written beside it.
++ensure_cert() { # ensure_cert PERSON TYPE ISSUER ISSUE_DATE EXPIRY_OR_EMPTY WANTED_STATUS -> the JSON
++    local found
++    found="$(echo "$CERTS" | jq -c --arg p "$1" --arg t "$2" --arg s "$6" \
++        '[.certificates[] | select(.personRef==$p and .type==$t and .status==$s)] | (.[0] // empty)')"
++    if [ -n "$found" ]; then
++        note "adopted the $6 '$2' already in this vault"
++        printf '%s' "$found"
++        return 0
++    fi
++    local made; made="$(cert "$1" "$2" "$3" "$4" "$5")"
++    refresh_certs
++    printf '%s' "$made"
++}
+ 
+-CERT_EXPIRED="$(cert "$P_RETAKE" "naeringsmiddelhygiene" "Mattilsynet-godkjent kurs" "$(d -740)" "$(d -10)")"
+-expect_status "$CERT_EXPIRED" "Expired" "$N_RETAKE, naeringsmiddelhygiene, expired $(d -10)"
++CERT_EXPIRING="$(ensure_cert "$P_PASS" "alkoholservering" "Bergen kommune" "$(d -340)" "$(d 20)" "Expiring")"
++expect_status "$CERT_EXPIRING" "Expiring" "$N_PASS, kommunal skjenkeopplaering"
+ 
+-CERT_VALID="$(cert "$P_CERTS" "forstehjelp" "Norsk Folkehjelp" "$(d -120)" "$(d 200)")"
+-expect_status "$CERT_VALID" "Valid" "$N_CERTS, forstehjelp, expires $(d 200)"
++CERT_EXPIRED="$(ensure_cert "$P_RETAKE" "naeringsmiddelhygiene" "Mattilsynet-godkjent kurs" "$(d -740)" "$(d -10)" "Expired")"
++expect_status "$CERT_EXPIRED" "Expired" "$N_RETAKE, naeringsmiddelhygiene"
+ 
+-CERT_NOEXP="$(cert "$P_CERTS" "fagbrev-kokk" "Vestland fylkeskommune" "$(d -1500)" "")"
++CERT_VALID="$(ensure_cert "$P_CERTS" "forstehjelp" "Norsk Folkehjelp" "$(d -120)" "$(d 200)" "Valid")"
++expect_status "$CERT_VALID" "Valid" "$N_CERTS, forstehjelp"
++
++CERT_NOEXP="$(ensure_cert "$P_CERTS" "fagbrev-kokk" "Vestland fylkeskommune" "$(d -1500)" "" "Valid")"
+ expect_status "$CERT_NOEXP" "Valid" "$N_CERTS, fagbrev (NO expiry)"
+ 
+ # The surfacing feed. 30 days catches the Expiring one AND every already-Expired one -- a manager
+@@ -357,10 +520,30 @@ GARBLED="$(api_code_h PATCH "$TR/certificates/$CERT_VALID_ID" '{"issuer":"Garbag
+ note "probe: PATCH with a garbled If-Match -> $(code_of "$GARBLED") $(why "$(body_of "$GARBLED")")"
+ [ "$(code_of "$GARBLED")" = "400" ] || die "a corrupted If-Match token was not refused."
+ 
+-FIXED="$(api PATCH "$TR/certificates/$CERT_VALID_ID" '{"issuer":"Norsk Folkehjelp Bergen"}' -H "If-Match: $REV")"
++# THE CORRECTION HAS TO CHANGE THE ROW, and on a re-run it would not. EF issues no UPDATE for a PATCH
++# that writes a column the value it already holds, so the rowversion does not advance -- and the token
++# the replay below calls "superseded" is then still the CURRENT one, the replay is accepted, and this
++# step reports the compare-and-swap unarmed when nothing whatever is wrong with it. That is a false
++# alarm on the one assertion here that would matter, so the uncorrected spelling goes back first,
++# through the same route and against the same precondition, and the correction stays a real change.
++CORRECTED="Norsk Folkehjelp Bergen"
++if [ "$(echo "$CERT_VALID" | jq -r '.issuer')" = "$CORRECTED" ]; then
++    UNDO="$(api PATCH "$TR/certificates/$CERT_VALID_ID" '{"issuer":"Norsk Folkehjelp"}' -H "If-Match: $REV")"
++    check "$UNDO" "PATCH /certificates (putting the uncorrected issuer back so the correction is a change)"
++    REV="$(echo "$UNDO" | jq -r '.revision // empty')"
++    [ -n "$REV" ] || die "restoring the uncorrected issuer returned no revision: $UNDO"
++    note "the issuer already read '$CORRECTED' from an earlier run, so the uncorrected spelling went back first; revision now $REV"
++fi
++
++FIXED="$(api PATCH "$TR/certificates/$CERT_VALID_ID" "$(jq -nc --arg i "$CORRECTED" '{issuer:$i}')" -H "If-Match: $REV")"
+ check "$FIXED" "PATCH /certificates (with the current revision)"
+-[ "$(echo "$FIXED" | jq -r '.issuer')" = "Norsk Folkehjelp Bergen" ] || die "the correction did not land: $FIXED"
+-note "corrected the issuer; new revision $(echo "$FIXED" | jq -r '.revision')"
++[ "$(echo "$FIXED" | jq -r '.issuer')" = "$CORRECTED" ] || die "the correction did not land: $FIXED"
++NEW_REV="$(echo "$FIXED" | jq -r '.revision // empty')"
++[ -n "$NEW_REV" ] && [ "$NEW_REV" != "$REV" ] \
++    || die "the correction came back carrying the revision it was GIVEN ($REV), so the row did not
++    change and the replay below cannot be a stale one. Anything this step then concluded about the
++    compare-and-swap would be a conclusion about a write that never happened."
++note "corrected the issuer; new revision $NEW_REV"
+ 
+ STALE="$(api_code_h PATCH "$TR/certificates/$CERT_VALID_ID" '{"issuer":"For sent"}' -H "If-Match: $REV")"
+ note "probe: PATCH replaying the superseded revision -> $(code_of "$STALE") $(echo "$(body_of "$STALE")" | jq -r '.code // .')"
+@@ -472,13 +655,15 @@ cat >&2 <<EOF
+ 
+    What to look at, and what "working" looks like:
+ 
+-     Courses      this run added three, and their version states differ on purpose. The hygiene course
+-                  shows a frozen Published version beside an editable Draft; the fire-safety one has
+-                  only a draft, and could not be assigned -- the seed printed that refusal above. They
+-                  carry the run stamp $STAMP, which is how you tell them from earlier runs' courses.
++     Courses      three subjects, and their version states differ on purpose. The hygiene course shows
++                  a frozen Published version beside an editable Draft; the fire-safety one has only a
++                  draft, and could not be assigned -- the seed printed that refusal above. A course
++                  this world already carried was adopted rather than duplicated, so running this again
++                  changes nothing on the screen instead of doubling it.
+      Assignments  one role-scoped, two person-scoped, and $N_PASS's is OVERDUE by three days.
+-     Completions  four rows for three people. $N_RETAKE has TWO: 55 % (failed) and 88 % (passed). The
+-                  failed one is still there, because the table is append-only and a retake is a new row.
++     Completions  four rows for three people. $N_RETAKE has TWO: $S_FAIL % (failed) and $S_RETAKE %
++                  (passed), against a threshold of $THR_ALK %. The failed one is still there, because
++                  the table is append-only and a retake is a new row.
+      Certificates Expired / Expiring / Valid / Valid-forever, all four derived from the expiry date
+                   against the store's calendar date. None of them blocks anything -- by design.
+      Holdings     ask for $N_PASS: they hold 'alkoholservering' because they PASSED the course carrying

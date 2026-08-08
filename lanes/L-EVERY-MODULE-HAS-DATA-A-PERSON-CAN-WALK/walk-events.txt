@@ -1,0 +1,143 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Selskap og arrangement
+Én forespørsel, fulgt så langt denne backend-en faktisk går. Alle beløp leses fra serveren; ingenting summeres her.
+STATUS
+Alle statuser
+Forespørsel
+Tilbud under arbeid
+Tilbud sendt
+Godtatt
+Venter på depositum
+Bekreftet
+Under avvikling
+Under oppgjør
+Oppgjort
+Tapt
+Avlyst
+FRA DATO
+TIL DATO
+Hent på nytt
+Ny forespørsel
+Gjestelenker
+Utsending er slått av, så ingen gjestelenke forlater huset. Venter: 10.
+Ingen gjestelenke er gitt opp.
+Forespørsler
+DATO	TITTEL	STATUS	GJESTER	KONTAKT	GODTATT VERSJON
+fre. 7. aug. 2026	Lørdagskveld – privat selskap	Under avvikling	16	Henrik Bråten	1
+søn. 9. aug. 2026	Barnedåp familien Vandvik	Bekreftet	20	Ida Vandvik	1
+tor. 13. aug. 2026	Fagseminar Bergen Sjømat AS	Oppgjort	24	Trine Vik	1
+fre. 14. aug. 2026	Tapasaften Sjomat AS	Oppgjort	24	Trine Vik	1
+tir. 18. aug. 2026	Firmalunsj Vestkant Eiendom	Tapt	22	Nora Lindgren	—
+man. 24. aug. 2026	Utdrikningslag for Sindre	Tapt	15	Jørgen Dahl	—
+fre. 28. aug. 2026	Fagdag for Nordsjo Consulting	Forespørsel	18	Ingrid Solberg	—
+lør. 29. aug. 2026	Bursdagsmiddag 40 ar - Kristoffer	Tilbud under arbeid	12	Kristoffer Moen	—
+man. 31. aug. 2026	Klassetreff 2006-kullet	Avlyst	30	Pål Iversen	1
+søn. 6. sep. 2026	Konfirmasjon for Mathilde	Forespørsel	30	Anette Skarsbo	—
+søn. 6. sep. 2026	Sommerfest Bryggen Sport	Tapt	45	Jonas Lie	—
+tor. 10. sep. 2026	Jubileumsmiddag Fjordkraft Regnskap AS	Godtatt	25	Marte Aasheim	1
+ons. 16. sep. 2026	Julebord Havnekontoret	Tilbud sendt	60	Marius Lund	—
+tor. 1. okt. 2026	Bryllupsmiddag Haug/Berg	Godtatt	12	Selma Haug	1
+lør. 12. des. 2026	Firmajulebord Nordane AS	Tilbud sendt	45	Elin Hovland	—

@@ -1,0 +1,176 @@
+{
+  "summary": "19 rows, 19 På, 0 not",
+  "rows": [
+    {
+      "key": "Events.Core",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "Events.Deposits",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "Events.Settlement",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "growth.dispatch",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "growth.module",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "Margin.Module",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "Margin.PriceImport",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "Margin.Statements",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "meals.module",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "training.assignments",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "training.setup",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.clock",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.dispatch",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.exchange",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.export",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.module",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.publication",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.selfservice",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    },
+    {
+      "key": "workforce.setup",
+      "badge": "På",
+      "facts": [
+        "Standard: på",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ]
+    }
+  ]
+}

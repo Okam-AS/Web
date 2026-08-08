@@ -1,0 +1,225 @@
+ADMIN
+Two Humans Kafé
+DRIFT
+Dashbord
+Pågående bestillinger
+Historikk
+Statistikk
+Modulbrytere
+NYHET
+MARGIN & RÅVARER
+Oppskrifter
+NYHET
+Leverandører
+NYHET
+Prisimport
+NYHET
+Ukesoppgjør
+NYHET
+BEMANNING & LØNN
+Vaktplan
+NYHET
+Forespørsler
+NYHET
+Bemanning
+NYHET
+Funksjoner
+NYHET
+Satser og timer
+NYHET
+Personalliste
+NYHET
+Varselutsending
+NYHET
+Publiseringskvitteringer
+NYHET
+Timelister
+NYHET
+OPPLÆRING & KOMPETANSE
+Opplæring
+NYHET
+Dokumentasjon
+NYHET
+SELSKAP & ARRANGEMENT
+Selskap
+NYHET
+VEKST & PERSONVERN
+Nyhetsbrev
+NYHET
+Personvern
+NYHET
+BEDRIFTSMAT
+Bedriftsavtaler
+NYHET
+Bedriftskontoer
+NYHET
+Månedsoppgjør bedrift
+NYHET
+MENY
+Produkter
+Kategorier
+Allergener
+Import
+LEVERING
+Levering
+Wolt
+SALG & MARKED
+Send faktura
+NYHET
+Bonus
+Rabatter
+ØKONOMI
+Betaling
+Utbetalinger
+Terminaler
+ADMINISTRASJON
+Kunder
+Ansatte
+MIN SIDE
+Mine vakter
+NYHET
+E-postadressen min
+NYHET
+KAM
+Avtaler
+Oversikt
+Onboarding
+POWER USER
+Kasse
+Kjøkken
+Bordkart
+Reservasjoner
+Kasse-innstillinger
+Kasse-rapporter
+Okam vekst
+Dintero
+Surfboard
+Tripletex-regnskap
+Wolt Drive Invoice
+Varer og tjenester
+KAM Administrasjon
++4799681931
+🇳🇴
+Norsk
+Logg ut
+Opplæring
+Ett kurs blir til dokumentasjon: lag kurset, publiser en versjon, tildel den, før gjennomføringen — og slå opp hva personen faktisk innehar.
+Les inn på nytt
+Modulstatus
+Tidssone
+Europe/Oslo
+Dine rettigheter
+manage
+Kompetansekobling mot bemanning
+Ikke koblet
+Funksjonsbrytere
+Kurs og sertifikater
+På
+Tildeling og gjennomføring
+På
+Onboarding
+Av
+Sjekklister
+Av
+Avvikslogg
+Av
+Kompetansekobling
+Av
+Påminnelser
+Av
+Bryterne er serverens svar, ikke en gjetning. Er en bryter av, svarer lesing fortsatt — men skriving avvises.
+1. Kurs
+Tittel	Kategori	Kompetansenøkkel	Versjoner	Opprettet
+Brannvern og romningsveier	HMS	—	1	06.08.2026, 22:06
+Alkoholservering og skjenkeregler (193639)	Alkoholservering	alkoholservering	1 publisert	06.08.2026, 19:36
+HMS og brannvern	HMS	—	1 publisert	06.08.2026, 17:38
+Kassaopplæring – oppgjør og retur	Drift	—	1 publisert	06.08.2026, 17:38
+Allergener og merking	Mattrygghet	allergener	1 publisert	06.08.2026, 17:38
+Næringsmiddelhygiene og temperaturkontroll	Mattrygghet	naeringsmiddelhygiene	3 publisert	06.08.2026, 17:38
+Nytt kurs
+TITTEL
+KATEGORI
+KOMPETANSENØKKEL
+Nøkkelen er det en bestått gjennomføring gir personen. La den stå tom for kurs som ikke gir kompetanse.
+Opprett kurs
+2. Versjoner
+Versjon	Tilstand	Beståttgrense	Innholdssignatur	Publisert	
+v1	Utkast	60%	sha256:6a617…	—	Publiser
+Publisering låser innholdet og lager signaturen. Hver gjennomføring som føres etterpå stemples med den, og det er den som senere viser hvilket materiale personen faktisk besto.
+Nytt utkast
+INNHOLDSSIDER (JSON)
+Her lages det ingen quiz. Ingen kunne tatt den: appen der en quiz skulle vært gjennomført, finnes ikke i denne versjonen. Og quiz-innholdet inngår i hashen som publisering låser for godt, så en form gjettet nå ville blitt låst inn i hver eneste gjennomføring ført mot denne versjonen. Versjoner laget her bærer ingen quiz.
+BESTÅTTGRENSE (%)
+Lag utkast
+5. Sertifikater
+Person	Type	Utsteder	Utstedt	Utløper	Status
+Astrid Vik	fagbrev-kokk	Vestland fylkeskommune	2019-06-20	—	Gyldig
+Jonas Lie	forstehjelp	Røde Kors Førstehjelp	2024-06-10	2026-07-01	Utløpt
+Jonas Lie	naeringsmiddelhygiene	Mattilsynet-godkjent kurs	2024-07-27	2026-07-27	Utløpt
+Nora Berg	alkoholservering	Bergen kommune	2025-08-31	2026-08-26	Utløper snart
+Astrid Vik	naeringsmiddelhygiene	Anticimex Smittevern (kursbevis)	2025-08-31	2026-08-27	Utløper snart
+Astrid Vik	forstehjelp	Norsk Folkehjelp Bergen	2026-04-08	2027-02-22	Gyldig
+Ingrid Moen	forstehjelp	Norsk Folkehjelp	2026-05-12	2027-05-12	Gyldig
+Status er regnet ut av serveren 06.08.2026, 22:11, ikke av nettleseren.
+Registrer sertifikat
+PERSON-ID
+VELG FRA ANSATTLISTEN
+Velg …
+Astrid Vik
+Ingrid Moen
+Jonas Lie
+Nora Berg
+Sander Holm
+Velg en person fra listen, eller skriv inn person-ID-en.
+Personen må allerede finnes i bemanningsmodulen — serveren avviser en ID den ikke kjenner igjen, og registrerer ingenting. Den kontrollerer at personen finnes, også en som bare er invitert, ikke at hun jobber i denne butikken.
+TYPE
+Typen er også kompetansenøkkelen sertifikatet gir.
+UTSTEDER
+UTSTEDT
+UTLØPER
+Tom utløpsdato betyr et sertifikat uten utløp, som serveren regner som varig gyldig.
+DOKUMENTREFERANSE
+Registrer
+3. Tildelinger
+Kurs	Omfang	Referanse	Frist	Opprettet	
+Alkoholservering og skjenkeregler (193639) v1	Person	Jonas Lie	2026-09-05	06.08.2026, 22:06	Trekk tilbake
+Alkoholservering og skjenkeregler (193639) v1	Person	Nora Berg	2026-08-03	06.08.2026, 22:06	Trekk tilbake
+Næringsmiddelhygiene og temperaturkontroll v1	Rolle	Barista · Bar	2026-08-20	06.08.2026, 21:30	Trekk tilbake
+Ny tildeling
+Ingen publisert versjon å tildele. Publiser en versjon først — serveren avviser tildeling av utkast og pensjonerte versjoner.
+4. Gjennomføringer
+Kurs	Person	Poeng	Resultat	Kilde	Innholdssignatur	Gjennomført
+—	Astrid Vik	85%	Bestått	Ført av leder	sha256:db691…	06.08.2026, 22:06
+—	Jonas Lie	88%	Bestått	Ført av leder	sha256:2387e…	06.08.2026, 22:06
+—	Jonas Lie	55%	Ikke bestått	Ført av leder	sha256:2387e…	06.08.2026, 22:06
+—	Nora Berg	92%	Bestått	Ført av leder	sha256:2387e…	06.08.2026, 22:06
+Før en gjennomføring
+Ingen låst versjon å føre mot. En gjennomføring må stemples mot en publisert eller pensjonert versjon.
+6. Hva personen innehar
+Dette er beviset på at de fem stegene over gjorde noe: oppslaget viser kompetansenøkler fra beståtte gjennomføringer og gyldige sertifikater for én person.
+PERSON-ID
+VELG FRA ANSATTLISTEN
+Velg …
+Astrid Vik
+Ingrid Moen
+Jonas Lie
+Nora Berg
+Sander Holm
+Velg en person fra listen, eller skriv inn person-ID-en.
+Slå opp
+Slå opp en person-ID for å se hva som er ført.
+7. Hvem har sett dette
+Hvert oppslag i en persons opplæringsdokumentasjon føres i den samme uforanderlige loggen som endringene. Dette er den loggen, for én person i denne butikken.
+PERSON-ID
+VELG FRA ANSATTLISTEN
+Velg …
+Astrid Vik
+Ingrid Moen
+Jonas Lie
+Nora Berg
+Sander Holm
+Velg en person fra listen, eller skriv inn person-ID-en.
+Vis loggen
+Slå opp en person-ID for å se hvem som har sett dokumentasjonen deres.
+Tidspunkter vises i butikkens tidssone (Europe/Oslo), slik serveren oppga den. Datoer (utstedt, utløper, frist) vises som den dagen som ble ført, uten omregning.
+Denne siden er journalen for kurs, tildelinger, gjennomføringer og sertifikater. Redigering av utkast, pensjonering av versjoner, retting av sertifikater og utløpsvarsel-listen er ikke koblet opp her.
