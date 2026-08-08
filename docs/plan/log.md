@@ -3975,3 +3975,8 @@
 - 2026-08-08T15:50Z · tool · L-EMPREF-WIDTH-OR-A-RULING built-unverified -> verified, evidence lanes/L-EMPREF-WIDTH-OR-A-RULING/finding.md
 - 2026-08-08T15:50Z · tool · L-CORS-WILDCARD-MEASURED built-unverified -> verified, evidence lanes/L-CORS-WILDCARD-MEASURED/finding.md
 - 2026-08-08T15:58Z · @clerk · PUSHED on Sven's instruction: core pin/restaurant-modules first, then frontend 914e593 and backend 7bf975572
+- 2026-08-08T16:01Z · agent:L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY · L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY returned built -> built-unverified, evidence docs/plan/artifacts/why-verification-is-refused.md
+- 2026-08-08T16:01Z · agent:L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY · report L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY: Ran plan verify against all 469 built-unverified lanes using each lane OWN recorded evidence. No override, no plan accept, nothing predicted from a path. Committed 900b9ae.; 88 VERIFIED — their evidence was admissible all along and nobody had run the verb. Durable in plan.md at HEAD: verified 57 -> 
+- 2026-08-08T16:01Z · @clerk · 206 lanes have their artifact on disk and an exit that never names it: a wording defect, half the remaining backlog
+- 2026-08-08T16:02Z · @clerk · VERIFICATION MEASURED: 88 verified by running the verb; only 24 of 381 remaining need a browser
+- 2026-08-08T16:03Z · agent:L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE · started L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE

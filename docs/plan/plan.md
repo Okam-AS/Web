@@ -23424,12 +23424,13 @@ lane start is what let two lanes clobber each other. **Check every branch agains
 merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`.
 **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
 ### Lane L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY — the exact reason each one is refused, counted
-state: running
+state: built-unverified
 class: analysis
 owner: agent
 dir: .
 exit: every built-unverified lane carries a refusal class measured by actually running plan verify against its recorded evidence, in a committed artifact stating the count per class and naming the cheapest class to discharge first
 agent: L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY
+evidence: docs/plan/artifacts/why-verification-is-refused.md
 
 **469 lanes are `built-unverified`, 57 are `verified`, and NOTHING has ever been `accepted`.** The objective
 says each capability must be *"named in an artifact a stranger can open"* — so this number **is** the
@@ -23524,6 +23525,50 @@ run **zero** tests. **Assert `WebApi.dll`'s mtime MOVES.** **Create the worktree
 every branch against the open decisions before merging and say that you did.** **The canonical runner now
 works inside this repo** — it anchors on the nearest `.git`. **In zsh write `${ref}:path`.** Teardown
 `rm -rf` + `git worktree prune`. **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE — the proof is on disk and the exit never mentions it
+state: running
+class: analysis
+owner: agent
+dir: .
+exit: every lane whose exit criterion does not name its own on-disk artifact has that artifact named in the exit, shown by plan verify accepting the lane against its recorded evidence, with the count accepted and the count still refused both stated
+agent: L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE
+
+**This is the single cheapest half of the verification backlog and it is a wording defect, not missing
+work.** A measurement pass ran `plan verify` against all 469 built-unverified lanes and found **221 refused
+as exit-not-met — of which 206 say only that the exit criterion does not name the evidence, and the artifact
+is present on disk for all 206.** The proof exists. The exit never mentions the file that discharges it.
+
+**Read `docs/plan/artifacts/why-verification-is-refused.md` first**; it carries the per-lane verdicts and
+the raw tool output under `lanes/L-WHY-469/`. **Do not re-derive the classification** — it cost a full lane
+and the tool's own words are recorded.
+
+**The act is one line per lane, and the discipline is that the exit must name the artifact that ALREADY
+proves it — never the other way round.** You are not choosing new evidence, weakening a criterion, or
+describing what a lane wishes it had shown. **If an exit and its artifact genuinely disagree, that lane is
+NOT in this class — leave it refused and count it.** The whole value of this pass is that it changes
+wording where the evidence was always sufficient.
+
+**Run `plan verify` after each edit and let the tool decide.** A lane you edit that the tool still refuses
+is a finding, not a failure — **report the count it accepts and the count it still refuses**, and name any
+lane whose refusal reason *changed* rather than clearing, because that means the edit moved the problem
+rather than solving it.
+
+**Two things you may not do.** **Never `--override`** — an override here would convert a measurable backlog
+into a claimed one, which is the exact failure this program has spent the day avoiding. **Never
+`plan accept`**; it is owner-only and the tool refuses you. **Do not touch the 86 genuinely-destroyed
+lanes** — those need work redone and are somebody else's problem.
+
+**Why this matters beyond the number.** The objective requires every capability be *"named in an artifact a
+stranger can open"*. For these 206 the artifact exists and a stranger could open it — **the plan simply
+does not say so**, which means the estate has been under-reporting its own evidence. Fixing that is not
+bookkeeping; it is making a true claim checkable.
+
+**Traps.** `plan verify` exits **6** on inadmissible evidence — that is information, not an error. Edit
+**only** the `exit:` line of a lane block; **L3 forbids rephrasing or compressing anyone's prose**, and the
+body around it is authored text. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
+`artifacts/` and a bare `*.log`. Do not touch `web-livewalk`. **Gate on `uptime` — hold below 13.**
+**Do not push.**
 
 ## Decisions
 
