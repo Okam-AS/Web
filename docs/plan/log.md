@@ -3974,3 +3974,4 @@
 - 2026-08-08T15:50Z · tool · L-LEDGER-NUMBERS-ARE-FREE built-unverified -> verified, evidence lanes/L-LEDGER-NUMBERS-ARE-FREE/finding.md
 - 2026-08-08T15:50Z · tool · L-EMPREF-WIDTH-OR-A-RULING built-unverified -> verified, evidence lanes/L-EMPREF-WIDTH-OR-A-RULING/finding.md
 - 2026-08-08T15:50Z · tool · L-CORS-WILDCARD-MEASURED built-unverified -> verified, evidence lanes/L-CORS-WILDCARD-MEASURED/finding.md
+- 2026-08-08T15:58Z · @clerk · PUSHED on Sven's instruction: core pin/restaurant-modules first, then frontend 914e593 and backend 7bf975572

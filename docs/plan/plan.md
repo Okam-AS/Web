@@ -36239,6 +36239,27 @@ severity: blocker
 owner: @sven
 clears_when: no lane stages a fix from another branch with git checkout branch -- files; a merge is used so conflicts surface instead of one side winning silently
 
+**RESOLVED IN THE WORLD 2026-08-08 — Sven instructed a push and the core went first, in the order this flag
+records.** `git ls-remote` now answers for both:
+
+- **core `a6ae241`** → `refs/heads/pin/restaurant-modules` on `Okam-AS/Core`
+- **core `9626a561`** → reachable as its parent, confirmed by fetching that branch and running
+  `merge-base --is-ancestor` against `FETCH_HEAD`
+- **frontend `914e593`** → `refs/heads/feature/restaurant-modules` on `Okam-AS/Web`
+- **backend `7bf975572`** → `refs/heads/feature/restaurant-modules` on `Okam-AS/OkamAPI`
+
+**Both trunks were new remote branches, not updates** — neither existed on origin before this. **Core was
+pushed first and verified reachable before the frontend went**, so no clone ever saw an unresolvable
+gitlink.
+
+**The core commits went to a NEW branch named `pin/restaurant-modules`, not to `main` or any existing
+branch.** `9626a561`'s own subject is *"wip: the full-replace guard and its wiring, saved before any
+composition"* — a name that says it is unfinished. It is now published because the frontend trunk depends on
+it, and an unresolvable submodule pin was the worse outcome. **Nothing else in `Okam-AS/Core` moved.**
+
+The tool still refuses to clear this because `clears_when` names no `fact:` key, so it wants
+**`--override --by @sven`**.
+
 
 
 
