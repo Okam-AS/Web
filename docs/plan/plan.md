@@ -22498,12 +22498,13 @@ stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`, never bi
 **Do not push.**
 
 ### Lane L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK — three tranches landed on the shared branch and none has been read
-state: running
+state: built-unverified
 class: analysis
 owner: agent
 dir: .
 exit: a verdict on the trunk from c6c04c7 to 3807e90, naming any landing whose composed tier does not reproduce, any intent a merge silently destroyed, and whether the submodule pin move is sound
 agent: L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK
+evidence: docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md
 
 **This is the most consequential unreviewed work in the plan, because it is already on the shared branch.**
 `feature/restaurant-modules` moved **`c6c04c7` → `ee82e40` → `bb22728` → `3807e90`** in three tranches, each
@@ -28285,6 +28286,23 @@ back out.
 **No further branch under a gate may be dispatched without checking the gate at authoring time.** See
 `F-BRIEFS-ASSERT-TEST-SURFACES-THAT-EXIST-ONLY-ON-UNLANDED-BRANCHES`, which is the same class of clerk error
 in a different dimension.
+
+**AN INDEPENDENT REVIEWER MEASURED THE CONSEQUENCE OF THE CLERK'S BREACH, and it is smaller than feared in
+one dimension and unchanged in the other. 2026-08-08.**
+
+**Engineering consequence: nil.** `8357c8a33` is **a demo seed script (+19/−3) and its test (+110), with
+zero production code**, and it is not on the backend trunk. **The contract the frontend half depends on is
+already landed backend-side** — `workforce.module-disabled` at `IWorkforceModuleGate.cs:47`, answered via
+`WorkforceSelfService.cs:507`, mapped at `context-refusal.js:29,50`. So the trunk promises nothing the
+backend does not deliver.
+
+**Governance consequence: stands.** The reviewer's own ruling, recorded verbatim because it is the honest
+statement of what the owner has left to choose:
+
+> *when the decision is ruled, **"land neither" is no longer available** and the record should say so.*
+
+**That is the whole cost of the breach**: not a broken product, but an option removed from the owner without
+the owner's involvement.
 
 
 ### Decision D-REVOCATION-POSTURE-IN-PRODUCTION — who is allowed to accept a certificate that may have been withdrawn

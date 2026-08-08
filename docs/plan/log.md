@@ -4265,3 +4265,6 @@
 - 2026-08-08T17:36Z · tool · raised F-AN-AGENT-RE-TASKED-MID-LANE-LEAVES-THE-LANE-CLAIMING-TO-RUN (warn): a completed review sat marked running for eight hours because the clerk moved its agent onto other work without closing the lane
 - 2026-08-08T21:12Z · @clerk · credential-in-URL lane granted but held: load 25.0 as two agents set up worktrees; it dispatches on the next tick below ceiling
 - 2026-08-08T21:12Z · @clerk · the tranche review was complete and APPROVED at 11:05 but sat marked running: the clerk re-tasked its agent without closing the lane
+- 2026-08-08T21:17Z · agent:L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK · L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK returned built -> built-unverified, evidence docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md
+- 2026-08-08T21:17Z · agent:L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK · report L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK: APPROVE the trunk from c6c04c7 to 3807e90. THIS VERDICT COVERS THAT RANGE ONLY — the frontend trunk has since moved 24 commits to de5e68c, which this review does not read.; T3 shared file read line by line: both intents survive in workforce-timesheets.vue — exportEnabled() null when unread, the bann
+- 2026-08-08T21:18Z · @clerk · T2-T4 APPROVED for the range c6c04c7..3807e90 only; the reviewer bounded its own verdict against a trunk 24 commits ahead
