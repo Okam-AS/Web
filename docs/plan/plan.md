@@ -3026,12 +3026,12 @@ that**, which is the stale-arm direction it built firing correctly. After a one-
 `SyntaxError: Unexpected token (2:922)` from `vue-template-es2015-compiler/buble.js`.
 
 ### Lane L-PRICE-SHADOW-GUARD — a component cannot silently opt out of the money gate
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: a component defining its own price label is caught by a check that reds, and the two existing shadows are resolved
+exit: a component defining its own price label is caught by a check that reds, and the two existing shadows are resolved, recorded in lanes/L-PRICE-SHADOW-GUARD/DETAIL.md
 agent: opus
-evidence: lanes/L-PRICE-SHADOW-GUARD/ (state-A..E.txt, plant-proof.sh) + test/price-gate-shadow.test.js
+evidence: lanes/L-PRICE-SHADOW-GUARD/DETAIL.md
 
 The gate went into the global mixin, which is the right seam — and **Vue 2 component methods beat mixin
 methods**, so any component that defines a method of the same name silently opts out of it. Nothing
@@ -5251,12 +5251,12 @@ hazard one step worse.** And **it hit the canonical-artifact blocker live**: the
 a port that was never its own.
 
 ### Lane L-LIVE-ASSERTION-FLOORS — four journey assertions that pass on broken answers
-state: built-unverified
+state: verified
 class: node
 pts: 1
-exit: each of the four named assertions reds against the wrong answer it currently accepts
+exit: each of the four named assertions reds against the wrong answer it currently accepts, recorded in lanes/L-LIVE-ASSERTION-FLOORS/guard-proof.txt
 agent: opus
-evidence: lanes/L-LIVE-ASSERTION-FLOORS/ (guard-proof.txt, jest-new-suite.txt, jest-full.txt); commit 22f2108
+evidence: lanes/L-LIVE-ASSERTION-FLOORS/guard-proof.txt
 
 Found by the harness review, all four in journeys the plan is about to be judged on.
 
@@ -23668,6 +23668,55 @@ after. **L3 protects authored prose** — edit only `evidence:` and `exit:` line
 `plan.md` first so your diff is provable**. **Do not touch `web-livewalk`** — one artifact lives there and
 is deliberately out of scope. **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.**
 **Do not push.**
+
+### Lane L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN — a green suite is real proof of the wrong kind
+state: running
+class: node
+owner: agent
+dir: .
+exit: each of the twenty-three lanes whose only recorded proof is a branch and a green suite either carries an artifact a stranger can open and is accepted by plan verify, or is recorded as needing work with what is missing named, with the count of each stated
+agent: L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN
+
+**These twenty-three are not a recording defect and must not be treated like one.** Three passes have taken
+`verified` from 57 to 401 by fixing how proof was *recorded*. This class is different: **their proof is a
+worktree, a branch and a green suite.** A sibling lane refused them rather than rounding them into its
+total, and it was right — **C5 forbids verifying on "a `.trx`, a junit file, a suite-kind fact, or a test
+name."**
+
+Their `evidence:` reads like this, and there is **no artifact path in it to extract** — the only
+file-shaped tokens are test sources:
+
+> `OkamAPI worktree /Users/…/wt-utlkvit, branch lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER WebApi.Tests/Meals/MealsDeliveryReceiptSqlServerTests.cs (3/3 green) · …`
+
+**All twenty-three are named in `docs/plan/artifacts/eighty-two-mechanical-refusals.md`. Read that first
+and do not re-derive the class.**
+
+**What is missing is an artifact, and you must produce it rather than point at something that already
+exists.** For each lane, the question is: **what could a stranger open that shows this capability is real?**
+A committed run record, a rendered document, a captured wire exchange, a schema dump — the tool admits
+**wire, schema, journey, artifact and meta**. A green suite proves the code behaves; **it does not show a
+person the thing the lane exists to enable**, which is the objective's whole bar.
+
+**Take them in order of what a person would meet.** Several are Meals and statutory surfaces — a delivery
+receipt, an X/Z credit field — where **the document IS the artifact** and producing it is both the evidence
+and the point. Start there. **Do not attempt all twenty-three if that means producing thin artifacts for
+each**; a smaller number of real ones beats twenty-three that technically pass.
+
+**Say plainly which you could not do and why.** A lane needing a browser capture is blocked on
+`D-RESTART-THE-WALK-WORLD-API` and should be named as such, not attempted. **The honest count is the
+deliverable** — this program has three passes' worth of evidence that naming what you refused is what makes
+the accepted ones worth having.
+
+**Never `--override` and never `plan accept`.** Producing an artifact that does not show the capability, to
+make the tool say yes, is the exact failure C5 exists to prevent.
+
+**Traps.** **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`. **A sibling found a lane
+that verified against a journey capture the `artifacts/` rule was keeping uncommitted** — the tool accepts
+on *existence*, so it would have passed while resting on a file no stranger could fetch. **Check every
+artifact with `git check-ignore -v` before the add and `git ls-files --error-unmatch` after.** **Scan every
+file for secrets before committing** — a pattern's silence is not a clearance; read it. **Take a backup of
+`plan.md` first** so your diff is provable, and edit only `evidence:` and `exit:` lines. **Do not touch
+`web-livewalk`.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** **Do not push.**
 
 ## Decisions
 

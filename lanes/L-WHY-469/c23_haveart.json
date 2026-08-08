@@ -1,0 +1,48 @@
+[
+{
+"id": "L-PRICE-SHADOW-GUARD",
+"dir": "lanes/L-PRICE-SHADOW-GUARD",
+"files": [
+"DETAIL.md",
+"plant-proof.sh",
+"state-A-clean.txt",
+"state-B-planted.txt",
+"state-C-removed.txt",
+"state-D-stale-pin.txt",
+"state-E-restored.txt"
+]
+},
+{
+"id": "L-LIVE-ASSERTION-FLOORS",
+"dir": "lanes/L-LIVE-ASSERTION-FLOORS",
+"files": [
+"guard-proof.txt",
+"jest-full.txt",
+"jest-new-suite.txt"
+]
+},
+{
+"id": "L-UTLKVIT-REPRINT-KIND",
+"dir": "lanes/L-UTLKVIT-REPRINT-KIND",
+"files": [
+"after-test.summary.txt",
+"base-test.summary.txt",
+"mutation-red-8.txt"
+]
+},
+{
+"id": "L-EV-JOURNEY-TIMEBOMB",
+"dir": "lanes/L-EV-JOURNEY-TIMEBOMB",
+"files": [
+"consecutive-arm-A-run1.txt",
+"consecutive-arm-A-run2-BEFORE-lever-restore.txt",
+"consecutive-arm-A-run2.txt",
+"consecutive-arm-B-run1.txt",
+"consecutive-arm-B-run2.txt",
+"consecutive-run-proof.py",
+"consecutive-run-proof.txt",
+"mutation-proof.py",
+"mutation-proof.txt"
+]
+}
+]
