@@ -11,6 +11,7 @@
     "start": "NODE_ENV=production nuxt-ts start",
     "generate": "NODE_ENV=production nuxt-ts generate",
     "test": "jest",
+    "lint:assistant-vocab": "node scripts/assistant-vocab-lint.mjs",
     "test:e2e": "playwright test",
     "test:e2e:consumer": "playwright test -c playwright.consumer.config.js",
     "test:e2e:headed": "playwright test --headed",

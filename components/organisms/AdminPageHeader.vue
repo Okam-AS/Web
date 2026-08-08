@@ -304,7 +304,12 @@ const icons = {
   // and this page is not configuration — it is the row of kill switches somebody reaches for during
   // an incident. It sat last in the single modules group while there was one; now that the modules
   // are six groups it sits last in Operations, immediately ABOVE all six, because it governs them.
-  featureFlags: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="4" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="17" cy="7.5" r="2" fill="currentColor" stroke="none" /><rect x="2" y="13" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="7" cy="16.5" r="2" fill="currentColor" stroke="none" /></svg>'
+  featureFlags: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="2" y="4" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="17" cy="7.5" r="2" fill="currentColor" stroke="none" /><rect x="2" y="13" width="20" height="7" rx="3.5" stroke-width="2" /><circle cx="7" cy="16.5" r="2" fill="currentColor" stroke="none" /></svg>',
+  // A speech bubble carrying a spark. The bubble alone is `ongoing`'s neighbour in tone and would
+  // read as messages or support chat; the spark is what says this one answers and proposes. Not a
+  // robot head and not a wand: the page's whole claim is that nothing it proposes happens until a
+  // person approves it, and a magic glyph promises the opposite.
+  assistant: '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a8 8 0 01-8 8H7l-4 3V12a8 8 0 018-8h2a8 8 0 018 8z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8.5l1 2.5 2.5 1-2.5 1-1 2.5-1-2.5L8.5 12l2.5-1z" /></svg>'
 };
 
 export default {
@@ -364,6 +369,13 @@ export default {
               { label: this.$i('nav_ongoing'), path: '/admin/ongoing', icon: icons.ongoing },
               { label: this.$i('nav_history'), path: '/admin/orders', icon: icons.orders },
               { label: this.$i('nav_statistics'), path: '/admin/statistics', icon: icons.statistics },
+              // Ask Okam. Filed in Operations rather than given a module group of its own, because
+              // it is not a module: it reads ACROSS all six and the POS, and its inbox approves
+              // changes that land in whichever module the proposal names. A group whose one link
+              // belongs to every other group is a heading that earns nothing. It sits directly
+              // after Statistics because that is the screen it answers questions about, and because
+              // the AI box on that page now hands its question to this one.
+              { label: this.$i('nav_assistant'), path: '/admin/assistant', icon: icons.assistant, isNew: true },
               // The switchboard, and the one link in this file that is NOT a module. It was last in
               // the single modules group while there was one; it is here now for the reason it was
               // last there — it governs every module link, so it cannot be filed inside any one of
