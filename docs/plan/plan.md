@@ -23771,11 +23771,13 @@ before merging and say that you did** — `8357c8a33` is gated and must not land
 `${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
 ### Lane L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK — the plan calls a capability proven and the trunk has no suite for it
-state: open
+state: built-unverified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
 exit: MealsXZCreditSaleTests is present on feature/restaurant-modules and green, named with its count from a trx, with the non-SQL tier green at the composed tip — or the branch is recorded unlandable with the reason
+agent: L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK/asserting-tests.txt (34 trunk tests asserting the capability, all passing, extracted by name from trunk-non-sql-tier.trx beside it)
 
 **The plan records `L-MEALS-XZ-CREDIT` as `verified` while the suite that proves it is not on the trunk.**
 `MealsXZCreditSaleTests` lives on `lane/meals-xz-credit` @ `25586d86b`, unlanded — confirmed absent from
@@ -23862,6 +23864,57 @@ both, never `git add -A`. **Scan any evidence you commit for secrets and read it
 pattern's silence** — this lane is about credentials, so an artifact quoting a real token would be the
 defect in a new place. **Check every branch against the open decisions before merging and say that you
 did.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED — the same defect one surface over, and this one is live
+state: open
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: no end-of-day close counts a company-account sale as received, shown by a test that reds when CompanyAccount falls into the default bucket, with the non-SQL tier green at the composed tip
+
+**The X/Z report was fixed today. The end-of-day close has the identical defect and nobody has touched it.**
+`EodService` buckets `PaymentType.CompanyAccount` into its **`default` arm**, so **the close counts a credit
+sale the register never received as takings and prints it under "Annet"**. `EodSummaryModel` carries
+`CashTotal`, `CardTotal`, `OtherTotal` — and **no credit bucket**.
+
+**Reachability was closed by measurement, not inferred**, so this is live rather than theoretical:
+`PosSettlementService:445` writes the `CompanyAccount` `OrderPayment` → `FinalizeService:224` copies it into
+a `JournalPaymentLine` → `EodService.ProjectPaymentTotalsAsync` sums it into `other`.
+
+**Write it against the rule that already exists.** The trunk carries `PaymentMeansTotal.IsReceived`,
+computed from `PaymentType`, landed as the X/Z fix — **one rule every reader shares**. Use it. **Do not
+introduce a second definition of what "received" means**; a duplicate rule is how the X/Z and the close came
+to disagree in the first place.
+
+**Follow the X/Z's answer on presentation unless you can say why not.** That fix **distinguishes rather
+than excludes** — company-account totals leave the received total and are stated under their own heading —
+because a venue whose takings merely shrank would conclude the till is wrong. **Say what the close prints
+and why**, and whether a zero-credit close states the zero or omits the section. **That second question is
+live and unruled**: an unlandable sibling branch argued *"an absent section is not a statement"* while the
+trunk argues *"its absence means there were none"*, and both wrote their reasoning in comments. **If your
+change forces that question, name it and do not settle it by fiat.**
+
+**Do not replay `lane/eod-credit-split`.** It is one of three branches that touch the files the X/Z split
+landed into, and `git cherry` calls it live because its patch is not upstream — **true and misleading**.
+A sibling proved the related branch **cannot even compile** at the trunk. **Recompose against the trunk or
+write it fresh; either is fine, replaying is not.**
+
+**Reproduce before you fix.** Show the close counting a company-account sale as takings, then show it not.
+**The before arm is the evidence that this was live**, and this program has been burned four times by
+premises that had moved.
+
+**If it lands, use the atomic guard**: re-read the trunk **in the same command** as the `git branch -f`.
+**Worktree with `--detach`.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert your tests BY NAME from a `--logger trx`** — a console log names only
+failed and skipped tests, and a sibling nearly reported five tests absent because its extraction filtered on
+a file's **first** class name while they lived in a second class in the same file. **Assert `WebApi.dll`'s
+mtime MOVES.** **The tier rewrites TWO tracked artifacts** — `run-sheet.json` and `run-sheet.md`. **Check
+every branch against the open decisions before merging and say that you did** —
+`D-MEALS-CREDIT-ACCOUNT` gates a Tripletex receivable **column and its migration**, not this presentation,
+so read it before assuming either way. **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.**
+Never `pkill`. **Do not push.**
 
 ## Decisions
 
@@ -36661,6 +36714,41 @@ state: open
 severity: warn
 owner: @sven
 clears_when: no lane is marked running whose agent has been re-tasked, checked by the clerk before every re-task
+### Flag F-THE-END-OF-DAY-CLOSE-COUNTS-A-CREDIT-SALE-AS-TAKINGS — EodService buckets CompanyAccount into its default arm, so the close prints an invoiced sale under Annet as money received
+state: open
+severity: blocker
+owner: @sven
+clears_when: no end-of-day close counts a company-account sale as received, shown by a test that reds when CompanyAccount falls into the default bucket
+
+**THE RECORD IS TRUE ABOUT THE CAPABILITY AND FALSE ABOUT ITS EVIDENCE — a narrower and more accurate
+statement than this flag makes. Corrected 2026-08-08.**
+
+**34 tests on the backend trunk assert the credit-sale capability, all passing, named from a trx**:
+`EscPosXZCreditSaleTests` (5), `EscPosXZReportBuilderTests` (4), `EscPosPaymentLabelTests` (22),
+`CompanyAccountClassificationTests` (3). **So `L-MEALS-XZ-CREDIT` being `verified` is not a false claim
+about the product.**
+
+**What is false is its evidence pointer** — `/Users/svendaneel/okam/wt-xzcredit/.../zreport-kredittsalg.txt`,
+an unlanded worktree path **no stranger can open**, which is the objective's own bar. That is the same
+recording defect that accounted for 60 lanes elsewhere, not a missing capability.
+
+**And the branch is unlandable, which is a good outcome recorded rather than forced.** `25586d86b` predates
+`57865601b` (the X/Z rule at the model) and **cannot compile against the trunk** — it reads
+`CreditSalesCount`, `CreditSalesAmount` and `CashSalesAmount`, none of which exist. Two conflicts are
+substantive rather than stylistic:
+
+- **A duplicate label table.** The branch adds a builder-private `PaymentLabels` whose printed text
+  **disagrees with the shared `PaymentTenderLabels`** — `Dintero` → "Dintero" vs "Kort", `NotSet` →
+  "Ukjent betalingsmiddel" vs "Ingen betaling". Landing it **changes words on a fiscal document** and reds
+  `The_receipt_and_the_XZ_report_name_a_tender_identically`.
+- **The zero-credit line.** The trunk prints no section (*"its absence means there were none"*); the branch
+  prints `herav kredittsalg (0)` (*"an absent section is not a statement"*). **Both argue it in comments.
+  That is a reading of § 2-8-2, not something a merge should settle.**
+
+**A method note worth keeping**: five of the 34 live in a **second class** inside one test file, and an
+extraction filtering on the file's first class name nearly reported them absent. The trx was right; the
+filter was not.
+
 
 
 
