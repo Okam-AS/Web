@@ -80,17 +80,55 @@ function restore (absPath, original) {
   fs.writeFileSync(absPath, original)
 }
 
-// The repository root, found by walking up to the nearest `package.json` rather than counting `../`
-// from this file. The original counted four levels because it sat four levels down; a copy placed at
-// any other depth silently resolved `m.file` against the WRONG directory and mutated — or created —
-// files outside the repository. Walking up is location-independent, so moving or copying this file
-// cannot repoint it.
+// ---- WHERE THE ROOT COMES FROM, AND WHY IT CANNOT WALK OUT ------------------------------------
+//
+// TWO DEFECTS SHAPED THIS, and the second was caused by the fix for the first.
+//
+//   1. It once counted `../` levels, because it happened to sit four deep. A copy placed at any
+//      other depth resolved `m.file` against the WRONG directory and mutated — or created — files
+//      OUTSIDE the repository. Counting produces a path that need not contain this script at all.
+//
+//   2. The fix was to walk up to the nearest `package.json`. That is location-independent and safe,
+//      but it made the runner JAVASCRIPT-ONLY: the backend repo has no `package.json` anywhere
+//      above its test projects, so the runner THREW there — and the vstest dialect added to it
+//      specifically to judge .NET suites was unreachable in the only repo where .NET suites live.
+//      Every backend mutation pass in this program was hand-rolled for that reason.
+//
+// SO IT ANCHORS ON THE REPOSITORY BOUNDARY: the nearest ancestor holding a `.git` entry. `.git` is a
+// DIRECTORY in an ordinary clone and a FILE in a linked worktree or a submodule, so both are
+// accepted — every worktree in this estate is the file form, and testing only for a directory would
+// reintroduce the throw it is meant to remove. `package.json` is kept as a second marker, checked
+// AFTER `.git` at each level, so a JavaScript project that is not a repository still works exactly
+// as it did.
+//
+// WHY IT CANNOT WALK OUT, which is the property defect (1) violated:
+//   * the search only ever moves UP from `start`, so every candidate is an ANCESTOR of this script
+//     by construction — it can never name a sibling or a computed path that does not contain it;
+//   * `.git` is checked before `package.json` at each level, so a repository root always wins over
+//     any `package.json` lying further up, outside it;
+//   * there is no default and no fallback: reaching the filesystem root throws, so a tree that is
+//     neither a repository nor a package is REFUSED rather than operated on.
+//
+// A containment ASSERTION was written here first — a check that the chosen `dir` really contains
+// `start`, the exact invariant `../` counting broke. It was removed after being measured: no input
+// can reach it, because the only way `dir` ever changes is `path.dirname`. Reintroducing the
+// historical `../` count reds three arms WITH the assertion and the same three WITHOUT it, so it
+// guarded nothing the tests do not already guard. The structure is the guarantee, and the arms are
+// the evidence; an assertion no input can reach is decoration, and this file's whole subject is
+// claims that cannot fail.
 function repoRootFrom (start) {
-  let dir = start
+  let dir = path.resolve(start)
   for (;;) {
-    if (fs.existsSync(path.join(dir, 'package.json'))) { return dir }
+    // `.git` first: a repository root outranks a `package.json` above it.
+    if (fs.existsSync(path.join(dir, '.git')) || fs.existsSync(path.join(dir, 'package.json'))) {
+      return dir
+    }
     const parent = path.dirname(dir)
-    if (parent === dir) { throw new Error('no package.json above ' + start + ' — cannot locate the repo root') }
+    if (parent === dir) {
+      throw new Error(
+        'no .git or package.json above ' + start + ' — cannot locate the repo root, and this ' +
+        'runner will not operate outside a repository')
+    }
     dir = parent
   }
 }
@@ -200,7 +238,17 @@ function readRun (output) {
 
   const vstest = /Total tests:\s*(\d+)/.exec(output) || /Total:\s*(\d+)/.exec(output)
   if (vstest) {
-    const names = (output.match(/^\s*Failed\s+\S.*$/gm) || []).map(s => s.trim().replace(/^Failed\s+/, '').replace(/\s*\[[^\]]*\]\s*$/, ''))
+    // A FAILED TEST LINE, NOT ANY LINE BEGINNING "Failed". This was `/^\s*Failed\s+\S.*$/`, and the
+    // first time the runner met a real .NET suite it collected ASP.NET's own log line —
+    // "      Failed to determine the https port for redirect." — as the name of a failed test. The
+    // counts were right, so the verdict survived; the NAME list did not, and a stray name that
+    // appears in one run and not another is exactly how a false RED or a masked kill is made.
+    //
+    // vstest prints a result as `Failed <FullyQualifiedName> [12 ms]`: one unbroken token, then a
+    // bracketed duration. Prose fails both halves — it has spaces before any bracket, and no bracket
+    // at the end at all.
+    const names = (output.match(/^\s*Failed\s+(\S+)\s+\[[^\]]*\]\s*$/gm) || [])
+      .map(s => s.trim().replace(/^Failed\s+/, '').replace(/\s*\[[^\]]*\]\s*$/, ''))
     const failed = /Failed:\s*(\d+)/.exec(output)
     return {
       total: Number(vstest[1]),
