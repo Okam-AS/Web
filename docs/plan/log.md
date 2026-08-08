@@ -4262,3 +4262,6 @@
 - 2026-08-08T17:29Z · tool · raised F-A-LANE-IS-VERIFIED-WHILE-ITS-SUITE-IS-NOT-ON-THE-TRUNK (blocker): lane/meals-xz-credit is unlanded while its lane records state verified, so the plan claims a capability whose suite the trunk does not carry
 - 2026-08-08T17:29Z · tool · raised F-A-CLEAN-MERGE-BROKE-THE-BUILD-BECAUSE-A-FLOOR-DID-NOT-KNOW-A-NEW-MODULE (warn): census-floors-derived merged cleanly and broke the build: GrowthAudit was added after the fork and still passed floors the branch deletes
 - 2026-08-08T17:29Z · tool · raised F-THE-EXPIRY-SWEEP-WITHHELD-SITE-IS-UNFALSIFIED (warn): wf-withheld-bound's second Withheld site reds under no mutation, so its two tests do not pin it
+- 2026-08-08T17:36Z · tool · raised F-AN-AGENT-RE-TASKED-MID-LANE-LEAVES-THE-LANE-CLAIMING-TO-RUN (warn): a completed review sat marked running for eight hours because the clerk moved its agent onto other work without closing the lane
+- 2026-08-08T21:12Z · @clerk · credential-in-URL lane granted but held: load 25.0 as two agents set up worktrees; it dispatches on the next tick below ceiling
+- 2026-08-08T21:12Z · @clerk · the tranche review was complete and APPROVED at 11:05 but sat marked running: the clerk re-tasked its agent without closing the lane

@@ -82,7 +82,20 @@ outcome. Nothing for this lane to fix.
 Run from the throwaway worktree at each trunk state, `npx jest --ci`, core re-pinned per state's
 gitlink, load-gated separately:
 
-<!-- TIERS -->
+| trunk state | claimed | measured |
+|---|---|---|
+| `c6c04c7` (T2 end, core `9626a561`) | 173 / 4200 / 0 | **173 / 4200 / 0** |
+| `bb22728` (T3 end, core `9626a561`) | 179 / 4318 / 0 | **179 / 4318 / 0** |
+| `3807e90` (T4 end, core `a6ae241`) | 182 / 4414 / 0 | **182 / 4414 / 0** |
+
+All three reproduce exactly. One process slip of my own, owned here: the `bb22728` run's gate was
+bundled into the same command as the tier and read 43.3 — the decaying burst of my own previous
+run — instead of being a separate check I stopped on. The run itself was 11 s and green; the
+`c6c04c7` run was gated separately at 1.83 after the session reset, and the `3807e90` run at 10.79.
+
+Timing note for later readers: this review covers `c6c04c7` → `3807e90` and its measurements were
+taken at those SHAs; the trunk had already moved past `3807e90` (T5 and later work) while the review
+was in flight, which does not affect the range read here.
 
 ## 6. Notes that cost nothing but are worth keeping
 

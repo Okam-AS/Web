@@ -23769,6 +23769,99 @@ tracked artifacts** — `run-sheet.json` and `run-sheet.md`. **Check every branc
 before merging and say that you did** — `8357c8a33` is gated and must not land. **In zsh write
 `${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
+### Lane L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK — the plan calls a capability proven and the trunk has no suite for it
+state: open
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: MealsXZCreditSaleTests is present on feature/restaurant-modules and green, named with its count from a trx, with the non-SQL tier green at the composed tip — or the branch is recorded unlandable with the reason
+
+**The plan records `L-MEALS-XZ-CREDIT` as `verified` while the suite that proves it is not on the trunk.**
+`MealsXZCreditSaleTests` lives on `lane/meals-xz-credit` @ `25586d86b`, unlanded — confirmed absent from
+the tip by `git ls-tree` while its two sibling receipt suites are present.
+
+**That is worse than an unlanded branch: it is a false claim in the record.** A reader of the plan sees a
+statutory credit-sale capability marked proven; a reader of the trunk finds no suite asserting it. **This
+lane makes the record true — by landing the suite, or by saying plainly that it cannot land and why.**
+
+**Reproduce before trusting the branch.** Five lanes today were dispatched at premises that had moved, and
+one landing lane found **two of three suites already on the trunk** when a brief said all three were absent.
+**Check what `25586d86b` actually contains against the tip before merging it.**
+
+**Its subject is the same ground the X/Z split landed on today.** The trunk now carries
+`PaymentMeansTotal.IsReceived` on the model and an ESC/POS roll that states company-account totals under
+`KREDITTSALG (IKKJE MOTTATT)`. **This branch predates that.** So expect one of three things and say which:
+its assertions are **already satisfied** by the landed split, they **conflict** with it, or they cover a
+**different** credit-sale surface the split did not reach. **If it is superseded, that is a good outcome —
+record it and do not force a landing.**
+
+**A sibling in this same family is a known trap**: `eod-credit-split`, `meals-xz-credit` and
+`xz-credit-fields` all touch the two files the X/Z split landed into hours ago, and `git cherry` calls them
+live because their patches are not upstream — **true but misleading. They want recomposing, never
+replaying.**
+
+**If it lands, use the atomic guard**: re-read the trunk **in the same command** as the `git branch -f` and
+refuse unless it still equals your merge base. **Create the worktree with `git worktree add --detach`.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **This suite may be SQL-tier**; say how you ran it and **cap at two SQL
+containers**. **Assert it by name from a `--logger trx`** — a console log names only failed and skipped
+tests, so an absent suite and a passing one look identical. **Assert `WebApi.dll`'s mtime MOVES.** **The
+tier rewrites TWO tracked artifacts** — `run-sheet.json` and `run-sheet.md`. **Check every branch against
+the open decisions before merging and say that you did.** **In zsh write `${ref}:path`.** **Gate on
+`uptime` — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH — redaction cannot reach a URL, and two of them carry a customer's identity
+state: open
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: no route carries a phone number or a device token in its path, shown by tests that red when either is placed there, with the non-SQL tier green at the composed tip
+
+**A URL is seen by every reverse proxy, load balancer and access log between the caller and the process,
+and sink-level redaction never reaches it — because no log statement is involved.** Two routes carry a
+credential there.
+
+1. **A customer's phone number in a URL path.** A fix exists unlanded at `lane/phone-in-path`
+   @ `a60da359b`.
+2. **An APNS/FCM device token — a push credential — in a URL path**, recorded as the request name. A fix
+   exists unlanded at `lane/push-token-in-path` @ `363d3f7fa`.
+
+**The objective names Datatilsynet explicitly**, and a phone number is personal data that this product is
+scattering into infrastructure it does not own. **These were ranked first and second of six by a census that
+read the diffs**, above defects touching money.
+
+**Reproduce both at the trunk before trusting either branch.** Five lanes today were dispatched at premises
+that had moved; one found two of three suites already landed when a brief said all three were absent.
+**`git cherry` calls a branch live when its patch is not upstream — true and misleading if the ground moved.**
+
+**`lane/phone-in-path` and `lane/route-guard-gaps` were measured byte-identical on their product diff**, so
+they are one change carried twice. **Do not land both.** And both **rewrite `TransferGiftcard`** — the
+method that received the ownership guard, the shared `GiftcardNotFound` refusal and the caller-resolution
+today. **Recompose against the trunk; a replay would undo that.** If the recomposed result touches the
+authorization guard at all, **stop and say so** — that guard's three properties each mask the others and
+breaking one silently reopens an id oracle.
+
+**Say where the credential goes instead, and why that is better rather than merely different.** A body, a
+header and a claim are not equivalent: a body is not logged by default but is still readable by a proxy
+terminating TLS; a claim binds the value to the caller rather than to the request. **Name the choice.**
+
+**One thing to check that neither branch may have**: whether the value is *also* still reaching a log by
+another route. Closing the URL while a log statement still prints it moves the exposure rather than ending
+it — **grep for the field name across log sites and say what you found.**
+
+**Land them one at a time.** Two backend landings ran concurrently today and clobbered each other; one merge
+ended up reachable from no ref. **Use the atomic guard**: re-read the trunk **in the same command** as the
+`git branch -f` and refuse unless it still equals your merge base. **Worktree with `--detach`.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert your tests by NAME from a `--logger trx`.** **Assert `WebApi.dll`'s
+mtime MOVES.** **The tier rewrites TWO tracked artifacts** — `run-sheet.json` and `run-sheet.md`; restore
+both, never `git add -A`. **Scan any evidence you commit for secrets and read it rather than trusting a
+pattern's silence** — this lane is about credentials, so an artifact quoting a real token would be the
+defect in a new place. **Check every branch against the open decisions before merging and say that you
+did.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
+
 ## Decisions
 
 **The cheapest discriminator, handed over by the lane that found the fourth one, and it needs no worktree:
@@ -36545,6 +36638,12 @@ state: open
 severity: warn
 owner: @sven
 clears_when: the expiry sweep Withheld site reds under an applied-and-restored mutation, with the mutation named
+### Flag F-AN-AGENT-RE-TASKED-MID-LANE-LEAVES-THE-LANE-CLAIMING-TO-RUN — a completed review sat marked running for eight hours because the clerk moved its agent onto other work without closing the lane
+state: open
+severity: warn
+owner: @sven
+clears_when: no lane is marked running whose agent has been re-tasked, checked by the clerk before every re-task
+
 
 
 
