@@ -1,0 +1,330 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using WebApi.Entities.Workforce;
+using WebApi.Enums.Workforce;
+using WebApi.Helpers;
+using WebApi.Helpers.Workforce;
+using WebApi.Models.Workforce;
+using WebApi.Services.Platform.FeatureFlags;
+using WebApi.Services.Workforce;
+using WebApi.Tests.Modules;
+using Xunit;
+
+namespace WebApi.Tests.Workforce;
+
+/// <summary>
+/// <b>Which <c>workforce.*</c> flags actually gate anything — measured, not read off the source.</b>
+///
+/// <para>This REPLACES the source-scanning census that landed with the stage-flag lane. That one asked
+/// whether a production file under <c>Services/Workforce</c> mentioned the flag's constant or its literal
+/// key, which is a weaker question in both directions and was wrong in both here: <c>workforce.clock</c>
+/// counted as enforced partly on a problem-details field that merely NAMES it, and
+/// <c>workforce.dispatch</c> counted on the dispatcher's own duplicate declaration of the key — so deleting
+/// the dispatcher's actual flag READ would have left it green. Driving the module answers the question the
+/// operator is really asking: if I flip this, does anything refuse?</para>
+///
+/// <para><see cref="ModuleFlagCensus"/> does the measuring (turn one flag off, leave the rest on, read the
+/// refusals). All that is module-specific, and all that is here, is what a Workforce mutation IS and how to
+/// attempt one.</para>
+///
+/// <para><b>Both refusal shapes count.</b> A stage flag answers 409
+/// <c>workforce.flag-disabled-read-only</c>; <c>workforce.module</c> answers 403
+/// <c>workforce.module-disabled</c> from one layer above. Counting only the 409 would have reported the
+/// module master as gating nothing while it gates everything.</para>
+///
+/// <para><b>What the probes deliberately do NOT cover, and must not.</b> Reads are never gated (§9.2 and
+/// journey WFJ-15 require reads and exports to survive a write flag going down), and manager DECISIONS on
+/// in-flight requests are not gated either (§9.1 stage 4's rollback keeps open requests decidable — gating
+/// them would strand every one the moment a flag went down). So the probe set is WRITES that start
+/// something, and a stage that adds one has to extend <see cref="Mutations"/> rather than be exempted.</para>
+///
+/// <para><b>The world is built with every flag on, before the census's flag state is applied.</b> The
+/// exchange probe needs a published week containing an open shift, and publishing is itself gated by
+/// <c>workforce.publication</c> — so building the world under the census's own flag state would make the
+/// exchange probe measure the publication flag. A probe whose precondition is another probe measures
+/// nothing.</para>
+/// </summary>
+internal sealed class WorkforceFlagCensus : IModuleFlagProbe
+{
+    private const string Manager = WorkforceWorld.ClaimedApplicationUserId;
+    private const string Worker = WorkforceW3TestHost.WorkerApplicationUserId;
+
+    private static readonly Guid CensusOutboxRow = Guid.Parse("cf000000-0000-0000-0000-000000000001");
+
+<<<<<<< trunk
+    /// <summary>The derived id of the scenario's Monday period — endpoint 28 addresses a period that has no row yet.</summary>
+    private static readonly Guid TimesheetPeriodId = WorkforceTimesheetPeriodKey.For(
+        WorkforceWorld.StoreId, WorkforceAttendanceScenario.WeekMonday, WorkforceAttendanceScenario.WeekMonday);
+=======
+    // The window the correction probe corrects. The two wall-clock times are DELIBERATELY not the instants
+    // above: the probe measures a refusal, so it must be a correction the module would otherwise accept.
+    private static readonly DateOnly CorrectionWindowDay = new(2026, 7, 13);
+    private static readonly DateTimeOffset CorrectionWindowIn = new(2026, 7, 13, 7, 0, 0, TimeSpan.Zero);
+    private static readonly DateTimeOffset CorrectionWindowOut = new(2026, 7, 13, 15, 0, 0, TimeSpan.Zero);
+    private static readonly DateTime CorrectionWindowStartLocal = new(2026, 7, 13, 9, 0, 0);
+    private static readonly DateTime CorrectionWindowEndLocal = new(2026, 7, 13, 16, 45, 0);
+>>>>>>> lane/wf-correction-path
+
+    /// <summary>Every mutation driven, by the route that reaches it.</summary>
+    public static readonly IReadOnlyList<string> Mutations = new[]
+    {
+        "POST   /workforce/{store}/staff",
+        "POST   /workforce/{store}/schedules/drafts",
+        "POST   /workforce/me/staff-memberships/{id}/time-off",
+        "POST   /workforce/me/staff-memberships/{id}/open-assignments/{id}/requests",
+        "POST   /workforce/{store}/attendance/adjustments",
+        "POST   /workforce/{store}/timesheets/{id}/approve",
+
+        // The § 8-5-6 correction, which is the module's one write behind NO stage flag. It is probed for
+        // exactly that reason: WorkforceFeatureFlags.Withheld says workforce.personnel-list can have no
+        // enforcement point, and until this row existed that claim was unmeasured for the only write it
+        // could possibly gate. A withholding whose evidence skips its own route is an assertion, not a
+        // measurement.
+        "POST   /workforce/{store}/personnel-list/entries/{id}/corrections",
+
+        // Not a route: the outbox drain is a background pass, and workforce.dispatch is the only flag in the
+        // family whose enforcement point is not a request. Its "refusal" is a withheld row rather than a
+        // status — the row is left completely untouched, which is what makes it observable at all.
+        "DRAIN  workforce notification outbox",
+    };
+
+    public string Module => "Workforce";
+
+    public IReadOnlyList<string> Probes => Mutations;
+
+    public async Task<IReadOnlyList<string>> RefusalsWithAsync(IReadOnlyCollection<string> enabled)
+    {
+        var refused = new List<string>();
+
+        await using (var harness = await WorkforceScheduleFixture.SeededSqliteAsync())
+        {
+            await WorkforceW3TestHost.ClaimWorkerAsync(harness);
+            var openShift = await WorkforceExchangeTestHost.PublishWeekWithOpenShiftAsync(harness, "flag-census");
+            await SeedDueOutboxRowAsync(harness);
+            var correctable = await SeedCorrectableWindowAsync(harness);
+            await ApplyAsync(harness, enabled);
+
+            if (await RefusedAsync(() => WorkforceStaffTestHost
+                    .Controller(harness, Manager, idempotencyKey: "census-staff")
+                    .CreateStaff(WorkforceWorld.StoreId, new CreateWorkforceStaffRequest
+                    {
+                        DisplayName = "Census Nyansatt",
+                        LegalEmployerId = WorkforceWorld.LegalEmployerId,
+                        Capabilities = new List<WorkforceCapability> { WorkforceCapability.WorkforceSelf },
+                    })))
+            {
+                refused.Add(Mutations[0]);
+            }
+
+            // A week the world has not already published: the open-shift setup above took the standard one,
+            // and a draft colliding with it would be refused for a DOMAIN reason the census would misread.
+            if (await RefusedAsync(() => WorkforceScheduleTestHost
+                    .Controller(harness, Manager, idempotencyKey: "census-draft")
+                    .CreateDraft(WorkforceWorld.StoreId, new CreateScheduleDraftRequest
+                    {
+                        RangeStartUtc = WorkforceClock.LocalMidnightUtc(WorkforceScheduleFixture.WeekMonday.AddDays(7)).UtcDateTime,
+                        RangeEndUtc = WorkforceClock.LocalMidnightUtc(WorkforceScheduleFixture.WeekMonday.AddDays(14)).UtcDateTime,
+                    })))
+            {
+                refused.Add(Mutations[1]);
+            }
+
+            if (await RefusedAsync(() => WorkforceW3TestHost.TimeOff(harness).RequestTimeOffAsync(
+                    Worker, WorkforceWorld.WorkerStaffMemberId, "census-timeoff",
+                    new CreateWorkforceTimeOffRequest
+                    {
+                        StartsUtc = new DateTime(2026, 8, 3, 6, 0, 0, DateTimeKind.Utc),
+                        EndsUtc = new DateTime(2026, 8, 3, 16, 0, 0, DateTimeKind.Utc),
+                        Reason = "Census",
+                        Visibility = WorkforceTimeOffVisibility.Managers,
+                    })))
+            {
+                refused.Add(Mutations[2]);
+            }
+
+            if (await RefusedAsync(() => WorkforceExchangeTestHost.Exchange(harness).RequestOpenShiftAsync(
+                    Worker, WorkforceWorld.WorkerStaffMemberId, openShift, "census-openshift",
+                    new RequestOpenShiftRequest { Note = "Census" })))
+            {
+                refused.Add(Mutations[3]);
+            }
+
+            if (await RefusedAsync(() => PersonnelListTestHost
+                    .Controller(harness, Manager, idempotencyKey: "census-correct")
+                    .CorrectEntry(WorkforceWorld.StoreId, correctable, new WorkforcePersonnelListCorrectionRequest
+                    {
+                        OnSiteStartLocal = CorrectionWindowStartLocal,
+                        OnSiteEndLocal = CorrectionWindowEndLocal,
+                    })))
+            {
+                refused.Add(Mutations[6]);
+            }
+
+            if (await DispatchWithheldAsync(harness))
+            {
+                refused.Add(Mutations[6]);
+            }
+        }
+
+        // The attendance correction needs the W4 clock sessions, which only this scenario seeds — and it is
+        // the one probe that measures workforce.clock, which used to gate the POS punch and not this.
+        await using (var attendance = await WorkforceAttendanceScenario.SeededSqliteAsync())
+        {
+            await ApplyAsync(attendance, enabled);
+
+            if (await RefusedAsync(() => WorkforceAttendanceTestHost
+                    .Controller(attendance, Manager, idempotencyKey: "census-adjust")
+                    .CreateAdjustment(WorkforceWorld.StoreId, new CreateWorkforceAttendanceAdjustmentRequest
+                    {
+                        ClockSessionId = WorkforceAttendanceScenario.WorkerMondaySessionId,
+                        AdjustedField = "SessionEnd",
+                        OriginalValue = "2026-07-06T15:10:00Z",
+                        CorrectedValue = "2026-07-06T15:00:00Z",
+                        Reason = "Census correction.",
+                        WorkerVisible = true,
+                    })))
+            {
+                refused.Add(Mutations[4]);
+            }
+
+            // W5's timesheet freeze — the enforcement point workforce.export got when the batch surface
+            // landed. Driven in this harness because a period can only be frozen where there are clocked
+            // hours to freeze; the export batch behind it is gated by the same flag on the same call path.
+            if (await RefusedAsync(() => WorkforceTimesheetTestHost
+                    .Controller(attendance, Manager, idempotencyKey: "census-timesheet")
+                    .ApproveTimesheet(WorkforceWorld.StoreId, TimesheetPeriodId, new ApproveWorkforceTimesheetRequest
+                    {
+                        FromBusinessDate = WorkforceAttendanceScenario.WeekMonday,
+                        ToBusinessDate = WorkforceAttendanceScenario.WeekMonday,
+                    })))
+            {
+                refused.Add(Mutations[5]);
+            }
+        }
+
+        // Back into Mutations order: the probes run across two harnesses, so the attendance one is attempted
+        // last while it sits fifth in the list, and a census whose order depended on the harness layout would
+        // make every expected-map assertion a statement about this method's internals.
+        var order = Mutations.Select((m, i) => new { m, i }).ToDictionary(x => x.m, x => x.i, StringComparer.Ordinal);
+        return refused.OrderBy(r => order[r]).ToList();
+    }
+
+    /// <summary>
+    /// Writes an EXPLICIT row for every declared key — including <c>workforce.module</c>, which the world
+    /// deliberately leaves rowless so its grandfather probe stays under test elsewhere. The census needs the
+    /// module master to be a variable like any other, and an explicit row is the only thing that makes it
+    /// one in both directions.
+    /// </summary>
+    private static async Task ApplyAsync(WorkforceHarness harness, IReadOnlyCollection<string> enabled)
+    {
+        await using var context = harness.NewContext();
+        var store = new FeatureFlagStore(context, harness.Clock);
+
+        foreach (var key in WorkforceFeatureFlags.All)
+        {
+            await store.SetAsync(WorkforceWorld.StoreId, key, enabled.Contains(key), "flag-census", null);
+        }
+    }
+
+    /// <summary>
+    /// A completed on-site window whose CURRENT entry the correction probe can name — folded through the
+    /// clock projection rather than inserted, so the entry the probe corrects is the shape the product
+    /// actually writes and carries the supersession chain the correction's own guard reads.
+    /// </summary>
+    private static async Task<Guid> SeedCorrectableWindowAsync(WorkforceHarness harness)
+    {
+        await PersonnelListFixture.PunchAsync(
+            harness, WorkforceWorld.WorkerStaffMemberId, WorkforceClockEventType.ClockIn,
+            CorrectionWindowIn, CorrectionWindowDay);
+        var closed = await PersonnelListFixture.PunchAsync(
+            harness, WorkforceWorld.WorkerStaffMemberId, WorkforceClockEventType.ClockOut,
+            CorrectionWindowOut, CorrectionWindowDay);
+        return closed.PersonnelListEntryId.Value;
+    }
+
+    /// <summary>A Pending outbox row already past its next-attempt time, so every drain pass finds it due.</summary>
+    private static async Task SeedDueOutboxRowAsync(WorkforceHarness harness)
+    {
+        await using var context = harness.NewContext();
+        context.WorkforceNotificationOutbox.Add(new WorkforceNotificationOutbox
+        {
+            NotificationOutboxId = CensusOutboxRow,
+            StoreId = WorkforceWorld.StoreId,
+            Channel = WorkforceNotificationChannel.InApp,
+            Status = WorkforceNotificationOutboxStatus.Pending,
+            LogicalDedupeKey = "flag-census-" + CensusOutboxRow.ToString("N"),
+            TargetReference = WorkforceWorld.WorkerStaffMemberId.ToString(),
+            PayloadJson = "{}",
+            AttemptCount = 0,
+            MaxAttempts = 5,
+            NextAttemptUtc = harness.Clock.UtcNowDateTime.AddMinutes(-5),
+            CreatedAtUtc = harness.Clock.UtcNowDateTime.AddMinutes(-10),
+        });
+        await context.SaveChangesAsync();
+    }
+
+    /// <summary>
+    /// True when the drain found the seeded row due and WITHHELD it on the flag. The pass is asserted to
+    /// have seen the row either way, because a drain that considered nothing would look identical to a
+    /// drain that was switched off — and that is precisely the reading the sentinel-store defect survived on.
+    /// </summary>
+    private static async Task<bool> DispatchWithheldAsync(WorkforceHarness harness)
+    {
+        await using var context = harness.NewContext();
+        var dispatcher = new WorkforceNotificationDispatcher(
+            context, new[] { new FailingNotificationDelivery(failCount: 0) }, WorkforceTestGates.Flags(context), harness.Clock);
+
+        var outcome = await dispatcher.DispatchPendingAsync(batchSize: 10);
+
+        Assert.True(
+            outcome.FlagDisabledSkipped + outcome.Considered > 0,
+            "The outbox drain saw no due rows at all, so it can measure nothing about workforce.dispatch.");
+
+        return outcome.FlagDisabledSkipped > 0;
+    }
+
+    /// <summary>
+    /// Whether a controller action was refused BY A FLAG. Any other problem is re-raised: a census that
+    /// treated every non-200 as a flag refusal would report a broken fixture as a fully gated module.
+    /// </summary>
+    private static async Task<bool> RefusedAsync(Func<Task<IActionResult>> action)
+    {
+        var result = await action();
+        if (result is not ObjectResult problem || problem.Value is not ProblemDetails details)
+        {
+            return false;
+        }
+
+        var code = details.Extensions.TryGetValue("code", out var value) ? value as string : null;
+        if (IsFlagRefusal(code))
+        {
+            return true;
+        }
+
+        Assert.Fail(
+            "A census probe was refused by something that is not a flag (status " + problem.StatusCode
+            + ", code " + (code ?? "<none>") + "): " + details.Detail);
+        return false;
+    }
+
+    /// <summary>The service-tier form: the <c>/me</c> surfaces are driven directly and THROW their refusal.</summary>
+    private static async Task<bool> RefusedAsync(Func<Task> action)
+    {
+        try
+        {
+            await action();
+            return false;
+        }
+        catch (WorkforceProblemException ex) when (IsFlagRefusal(ex.Code))
+        {
+            return true;
+        }
+    }
+
+    private static bool IsFlagRefusal(string code)
+        => string.Equals(code, WorkforceErrorCodes.FlagDisabledReadOnly, StringComparison.Ordinal)
+           || string.Equals(code, WorkforceErrorCodes.ModuleDisabled, StringComparison.Ordinal);
+}

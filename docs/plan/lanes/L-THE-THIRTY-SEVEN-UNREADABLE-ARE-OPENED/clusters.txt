@@ -1,0 +1,12 @@
+=== DISTINCT PRODUCT CHANGES among the 37 (identical diffs grouped) ===
+distinct diffs: 32   clusters of >1: 4   branches inside them: 9
+  x3  lane/flags-excuse-byflag, lane/flags-resolvers-cover-three, lane/growth-effective-resolver
+  x2  lane/ev-uri-relative, lane/guestlink-one-composer
+  x2  lane/gr-withdraw-origin, lane/growth-prefcentre
+  x2  lane/phone-in-path, lane/route-guard-gaps
+
+=== BRANCHES TOUCHING WHAT I LANDED TODAY ===
+  Models/Kassa/XZReportModels.cs             lane/eod-credit-split, lane/meals-xz-credit, lane/xz-credit-fields
+  Services/Kassa/EscPosXZReportBuilder.cs    lane/eod-credit-split, lane/meals-xz-credit, lane/xz-credit-fields
+  Controllers/GiftcardController.cs          lane/phone-in-path, lane/route-guard-gaps
+  Services/GiftcardService.cs                lane/rollback-tracked-sweep

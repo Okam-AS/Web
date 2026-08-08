@@ -1,0 +1,370 @@
+====================================================================================================
+lane/accounting-export-silent a154ca19b | fix(accounting): an export that ran on nothing stops reporting that it ran
+  product files: Controllers/ConfigController.cs, Enums/AccountingExportTarget.cs, Models/Maintenance/MaintenanceResults.cs, Services/Jobs/DailyMaintenanceBackgroundService.cs
+    -                    accountingSummariesProcessed = daily.StoresExported,
+    +                    // Both numbers, because they are different facts: the operator asked for an export and
+    +                    // needs to see how much of what was due actually happened. One number reported for the
+    +                    // other is how a run that exported nothing told an operator it had exported N stores.
+    +                    accountingStoresEligible = daily.StoresEligible,
+    +                    accountingStoresExported = daily.StoresExported,
+    +        /// <summary>
+====================================================================================================
+lane/compose-and-run-the-stack 38788369f | Catch up to the migration-stack tip, and record that two lanes measured 24cd4ead
+  product files: Controllers/GrowthWebhooksController.cs, Services/Growth/GrowthPostmarkEventReader.cs, Services/Growth/GrowthPrivacyObligation.cs, Services/Growth/GrowthProviderEventReader.cs
+    -                    // Idempotent acknowledgement — the provider must not retry a body that already applied.
+    +                case GrowthWebhookIngestOutcome.Ignored:
+    +                    // Idempotent acknowledgement — the provider must not retry a body that already applied,
+    +                    // nor one whose correct effect is none. The three share a response on purpose: a status
+    +                    // that distinguished them would tell an unauthenticated prober which record types this
+    +                    // module acts on, and telling a provider 4xx for an event it is right to send turns a
+    +                    // record type we ignore into an indefinite redelivery loop.
+====================================================================================================
+lane/cors-credentialed-origin edbb7dead | Merge the credentialed CORS policy (2a052800): the preference centre is served b
+  product files: Controllers/GrowthPreferenceController.cs, Helpers/GrowthGuestCorsOrigins.cs, Helpers/PolicyNames.cs, Helpers/ServiceCollectionExtensions.cs
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // CSRF token (returned in the body, echoed in ClaimConstants.GrowthCsrfHeader) is the signed
+    +        // double-submit companion.
+    -        private const string CsrfHeaderName = "X-Growth-Csrf";
+    +        private const string CsrfHeaderName = ClaimConstants.GrowthCsrfHeader;
+    +        // THE CREDENTIALED FOUR (3/4/5/7) carry the named CORS policy; endpoint 6 deliberately does not.
+    +        //
+====================================================================================================
+lane/cors-followups 17c12c206 | Keep the loopback origins out of every environment that is not Development
+  product files: Controllers/GrowthPreferenceController.cs, Helpers/GrowthGuestCorsOrigins.cs, Helpers/PolicyNames.cs, Helpers/ServiceCollectionExtensions.cs
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // CSRF token (returned in the body, echoed in ClaimConstants.GrowthCsrfHeader) is the signed
+    +        // double-submit companion.
+    -        private const string CsrfHeaderName = "X-Growth-Csrf";
+    +        private const string CsrfHeaderName = ClaimConstants.GrowthCsrfHeader;
+    +        // THE CREDENTIALED FOUR (3/4/5/7) carry the named CORS policy; endpoint 6 deliberately does not.
+    +        //
+====================================================================================================
+lane/eod-credit-split f028c0a87 | fix(kassa): the day settlement states kredittsal apart from the day's takings
+  product files: Models/Kassa/EodModels.cs, Models/Kassa/XZReportModels.cs, Services/Kassa/EodService.cs, Services/Kassa/EscPosXZReportBuilder.cs
+    -        // Any other payment medium, net of returns.
+    +        // Any other payment medium the register received, net of returns. Company-account
+    +        // allocations are not in here — see CreditTotal.
+    +        // Company-account allocations, net of returns. Its own bucket rather than part of OtherTotal
+    +        // because the other media in that bucket are money the register received and this one is a
+    +        // receivable the venue will invoice: folded together, the day settlement claims the venue was
+    +        // paid and contradicts the KREDITTSALG figures on the Z report the same close cuts.
+====================================================================================================
+lane/ev-accept-receipt 8ef3ce749 | Events: pin that the receipt rows never reach a save of their own
+  product files: Enums/Events/EventsNotificationKind.cs, Models/Events/EventsNotificationModels.cs, Services/Events/EventsAcceptanceReceiptComposer.cs, Services/Events/EventsAcceptanceReceiptDocument.cs
+    -    /// T3). v1 dispatches two link messages — the tokenised proposal page link on send, and the tokenised
+    +    /// T3). Two of the three are link messages — the tokenised proposal page link on send, and the tokenised
+    +        /// <summary>
+    +        /// The acceptance receipt staged when a guest accepts a proposal (T5) or an amendment (T17) — the
+    +        /// document naming the version, the typed name, the moment and the content hash, staged for BOTH
+    +        /// parties. Unlike the two link kinds it carries no token in its body: the document IS the payload,
+    +        /// so a forwarded copy grants nothing.
+====================================================================================================
+lane/ev-uri-relative 6a7bf75b6 | A relative guest-link origin becomes a file:// link instead of a refusal
+  product files: Helpers/Events/EventsGuestLink.cs, Services/Events/EventsEmailNotificationDelivery.cs
+    +namespace WebApi.Helpers.Events
+    +{
+    +    /// <summary>
+    +    /// The single composer for the tokenised guest-facing page URLs (Events spec §5):
+    +    /// <c>{Events:PublicBaseUrl}/events/proposal/{token}</c> and
+    +    /// <c>{Events:PublicBaseUrl}/events/deposit/{token}</c>.
+    +    ///
+====================================================================================================
+lane/ev-vipps-fallback-2 fc09be1d4 | A deposit initiate carries the address Vipps returns the guest to
+  product files: Helpers/Events/EventsGuestLink.cs, Services/Events/EventsDepositPaymentPortAdapter.cs
+    +namespace WebApi.Helpers.Events
+    +{
+    +    /// <summary>
+    +    /// The single composer for the tokenised guest-facing page URLs (Events spec §5):
+    +    /// <c>{Events:PublicBaseUrl}/events/proposal/{token}</c> and
+    +    /// <c>{Events:PublicBaseUrl}/events/deposit/{token}</c>.
+    +    ///
+====================================================================================================
+lane/finalize-index-or-a-reason 5e53de83a | The journal read that runs on every sale gets its index back
+  product files: Helpers/ApplicationDbContext.cs, Migrations/20260805160524_Kassa_FinalizeLookupIndex.Designer.cs, Migrations/20260805160524_Kassa_FinalizeLookupIndex.cs, Migrations/ApplicationDbContextModelSnapshot.cs
+    -            // journal slice on every sale. Filtered to receipt/order-linked entries.
+    +            // journal slice on every sale. Filtered to receipt/order-linked entries, NOT to Sale
+    +            // receipts: the § 2-8-7 handover reads (FinalizeService's own handover resolution on every
+    +            // sale, and PosReceiptService's delivery-document print) look the same order up by
+    +            // EventType = 'UTLEVREC', and SQL Server uses a filtered index only where the query's
+    +            // predicate implies the index's filter. Forcing the Sale-filtered index below onto those
+    +            // reads is refused with Msg 8622; they scan the whole append-only table without this one.
+====================================================================================================
+lane/flags-excuse-byflag 6ae0b8db5 | The catalog guard excuses a flag, never a module
+  product files: Services/Events/EventsModuleFlagEffectiveResolver.cs, Services/Growth/GrowthModuleFlagEffectiveResolver.cs, Services/Meals/MealsModuleFlagEffectiveResolver.cs
+    +namespace WebApi.Services.Events
+    +{
+    +    /// <summary>
+    +    /// Reports the <c>Events.*</c> family's effective values through the SAME gate that enforces them
+    +    /// (<see cref="IEventsModuleGate"/>), so the toggle API cannot disagree with the runtime.
+    +    ///
+    +    /// <para><b>The divergence this exists to close.</b> The toggle API's own arithmetic is
+====================================================================================================
+lane/flags-resolvers-cover-three 0f29a898e | The Meals flag board is checked against a deployment that lights the module
+  product files: Services/Events/EventsModuleFlagEffectiveResolver.cs, Services/Growth/GrowthModuleFlagEffectiveResolver.cs, Services/Meals/MealsModuleFlagEffectiveResolver.cs
+    +namespace WebApi.Services.Events
+    +{
+    +    /// <summary>
+    +    /// Reports the <c>Events.*</c> family's effective values through the SAME gate that enforces them
+    +    /// (<see cref="IEventsModuleGate"/>), so the toggle API cannot disagree with the runtime.
+    +    ///
+    +    /// <para><b>The divergence this exists to close.</b> The toggle API's own arithmetic is
+====================================================================================================
+lane/gr-withdraw-origin e0c2b02fd | The cookie half of the withdrawal, and the origin relationship that lets it ride
+  product files: Controllers/GrowthPreferenceController.cs, Helpers/GrowthGuestCorsOrigins.cs, Helpers/PolicyNames.cs, Helpers/ServiceCollectionExtensions.cs
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // CSRF token (returned in the body, echoed in ClaimConstants.GrowthCsrfHeader) is the signed
+    +        // double-submit companion.
+    -        private const string CsrfHeaderName = "X-Growth-Csrf";
+    +        private const string CsrfHeaderName = ClaimConstants.GrowthCsrfHeader;
+    +        // THE CREDENTIALED FOUR (3/4/5/7) carry the named CORS policy; endpoint 6 deliberately does not.
+    +        //
+====================================================================================================
+lane/growth-effective-resolver 107ca70ef | The Growth flag board stops reporting a dark capture surface as live
+  product files: Services/Events/EventsModuleFlagEffectiveResolver.cs, Services/Growth/GrowthModuleFlagEffectiveResolver.cs, Services/Meals/MealsModuleFlagEffectiveResolver.cs
+    +namespace WebApi.Services.Events
+    +{
+    +    /// <summary>
+    +    /// Reports the <c>Events.*</c> family's effective values through the SAME gate that enforces them
+    +    /// (<see cref="IEventsModuleGate"/>), so the toggle API cannot disagree with the runtime.
+    +    ///
+    +    /// <para><b>The divergence this exists to close.</b> The toggle API's own arithmetic is
+====================================================================================================
+lane/growth-prefcentre 2a0528005 | The preference centre is allowed to carry the credential it was built around
+  product files: Controllers/GrowthPreferenceController.cs, Helpers/GrowthGuestCorsOrigins.cs, Helpers/PolicyNames.cs, Helpers/ServiceCollectionExtensions.cs
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // CSRF token (returned in the body, echoed in ClaimConstants.GrowthCsrfHeader) is the signed
+    +        // double-submit companion.
+    -        private const string CsrfHeaderName = "X-Growth-Csrf";
+    +        private const string CsrfHeaderName = ClaimConstants.GrowthCsrfHeader;
+    +        // THE CREDENTIALED FOUR (3/4/5/7) carry the named CORS policy; endpoint 6 deliberately does not.
+    +        //
+====================================================================================================
+lane/guestlink-one-composer f1900cff7 | Pin the guest address to one composer at the source, not at the behaviour
+  product files: Helpers/Events/EventsGuestLink.cs, Services/Events/EventsEmailNotificationDelivery.cs
+    +namespace WebApi.Helpers.Events
+    +{
+    +    /// <summary>
+    +    /// The single composer for the tokenised guest-facing page URLs (Events spec §5):
+    +    /// <c>{Events:PublicBaseUrl}/events/proposal/{token}</c> and
+    +    /// <c>{Events:PublicBaseUrl}/events/deposit/{token}</c>.
+    +    ///
+====================================================================================================
+lane/isofix 1df46dcc9 | Fix two live pre-gate refusal leaks; replace three pins that could not fail
+  product files: Controllers/GrowthConsentAdminController.cs, Controllers/MarginPriceImportsController.cs, Helpers/Training/TrainingProblemException.cs
+    -            if (request == null)
+    +            // The store gate runs BEFORE the null-body check. Reversed, a caller who does not hold this store
+    +            // — or for whom Growth is dark — could tell a real store from an absent one by sending no body:
+    +            // the 400 is a shape the opaque 404 exists to withhold, and no absent store can produce it.
+    +            if (!await AuthorizeStoreAsync(storeId))
+    -                return GrowthError(GrowthApiException.BadRequest("growth.body_required", "A request body is required."));
+    +                return GrowthError(GrowthApiException.NotFound());
+====================================================================================================
+lane/margin-finalize-lag a6a1174b8 | Freeze a finalized margin statement below the service layer (THROW 50061)
+  product files: Entities/Margin/MarginPeriodStatement.cs, Helpers/ApplicationDbContext.cs, Migrations/20260731203011_Margin_PeriodStatementFinalizedImmutable.Designer.cs, Migrations/20260731203011_Margin_PeriodStatementFinalizedImmutable.cs
+    -    /// <see cref="PreviousStatementId"/> — forward-only, no destructive edit. The freeze immutability is
+    -    /// enforced by the statement service (Margin W3); the append-only projection facts it reads are enforced
+    -    /// physically (see <see cref="MarginSalesFact"/>).
+    +    /// <see cref="PreviousStatementId"/> — forward-only, no destructive edit.
+    +    ///
+    +    /// <para>The freeze has TEETH, in the three layers the artifact's standing demands. The service's
+    +    /// <c>requireOpen</c> guard refuses a mutation on the one code path that goes through it; the EF
+====================================================================================================
+lane/margin-violation-anchor a2bfd1165 | L-MARGIN-VIOLATION-ANCHOR: anchor the two Margin uniqueness classifiers
+  product files: Services/Margin/MarginPriceImportService.cs, Services/Margin/MarginRecipeSupport.cs
+    +        /// <summary>
+    +        /// True when the failed upload commit lost the unique <c>(StoreId, FileSha256)</c> index to a
+    +        /// concurrent upload of the SAME file — the only refusal the caller may answer by replaying the
+    +        /// winner. Delegates to <see cref="MarginRecipeSupport.IsUniqueViolation"/>, the module's single
+    +        /// predicate, so the classification cannot drift between the two Margin surfaces that need it.
+    +        ///
+    +        /// <para><b>What was here and why it is gone.</b> A private copy that fell back to
+====================================================================================================
+lane/margin-waste-500 1ed372bd5 | Index the L-MRG-WASTE-500 receipts, base and after, as the pair they are
+  product files: Services/Margin/Interfaces/IMarginWasteService.cs, Services/Margin/MarginWasteProblems.cs, Services/Margin/MarginWasteService.cs
+    -        /// (<c>margin.waste-week-frozen</c>) and when the caller carries no resolvable identity
+    +        /// (<c>margin.waste-week-frozen</c>), when the named ingredient is not in THIS store's master
+    +        /// (<c>margin.waste-ingredient-unknown</c> — the composite foreign key would otherwise refuse at
+    +        /// save, which is a 500 rather than an answer), and when the caller carries no resolvable identity
+    +        public const string WasteIngredientUnknownCode = "margin.waste-ingredient-unknown";
+    +        /// <summary>
+    +        /// 400: the named ingredient is not in this store's master. The composite (StoreId, IngredientId)
+====================================================================================================
+lane/meals-agreement-pin-inverts 4bbf34a5e | The corridor test pins the replayed refusal, and pins the in-flight guard beside
+  product files: Services/Meals/Interfaces/IMealsCommandReceiptService.cs, Services/Meals/MealsAgreementService.cs, Services/Meals/MealsCommandReceiptService.cs, Services/Meals/MealsCompanyService.cs
+    +        /// <summary>
+    +        /// Records a REFUSAL as the receipt's outcome, so a later same-key retry is answered with the
+    +        /// refusal itself instead of <c>meals.idempotency-in-progress</c>. A refusal decided after the
+    +        /// reservation is committed is still an answer the endpoint gave, and an answer nobody stored is a
+    +        /// key no client can ever use again — permanently, because this table carries no expiry column and
+    +        /// nothing purges it.
+    +        ///
+====================================================================================================
+lane/meals-idempotency-refusal 54714dd6e | A refused meals command answers the retry with its refusal, not with in-progress
+  product files: Services/Meals/Interfaces/IMealsCommandReceiptService.cs, Services/Meals/MealsCommandReceiptService.cs, Services/Meals/MealsCompanyService.cs, Services/Meals/MealsIdempotentMutation.cs
+    +        /// <summary>
+    +        /// Records a REFUSAL as the receipt's outcome, so a later same-key retry is answered with the
+    +        /// refusal itself instead of <c>meals.idempotency-in-progress</c>. A refusal decided after the
+    +        /// reservation is committed is still an answer the endpoint gave, and an answer nobody stored is a
+    +        /// key no client can ever use again — permanently, because this table carries no expiry column and
+    +        /// nothing purges it.
+    +        ///
+====================================================================================================
+lane/meals-reachable-api 02f27b951 | The determinism header the export exists for is readable by the client that down
+  product files: Controllers/GrowthPreferenceController.cs, Helpers/GrowthGuestCorsOrigins.cs, Helpers/PolicyNames.cs, Helpers/ServiceCollectionExtensions.cs
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // CSRF token (returned in the body, echoed in ClaimConstants.GrowthCsrfHeader) is the signed
+    +        // double-submit companion.
+    -        private const string CsrfHeaderName = "X-Growth-Csrf";
+    +        private const string CsrfHeaderName = ClaimConstants.GrowthCsrfHeader;
+    +        // THE CREDENTIALED FOUR (3/4/5/7) carry the named CORS policy; endpoint 6 deliberately does not.
+    +        //
+====================================================================================================
+lane/meals-xz-credit 25586d86b | feat(kassa): state kredittsalg apart from kontantsalg on X and Z
+  product files: Models/Kassa/EodModels.cs, Models/Kassa/XZReportModels.cs, Services/Kassa/EodService.cs, Services/Kassa/EscPosXZReportBuilder.cs
+    +        // Credit sales settled against a customer account (Company Meals), net of returns. Kept out
+    +        // of OtherTotal: the venue was not paid, it invoices the company later, so counting it as
+    +        // takings would overstate the day's settlement by the invoiced amount.
+    +        public int CreditTotal { get; set; }
+    -        // Section 2-8-2 elements.
+    +        // Section 2-8-2 elements. SalesAmount is every registered sale in the window; the cash/credit
+    +        // split below is what bokstav e and the second paragraph ask for.
+====================================================================================================
+lane/mrg-price-correction-2 58a635182 | Record the fast tier at e037f22f, and the base it was measured against
+  product files: Controllers/MarginSuppliersController.cs, Entities/Margin/MarginPriceImportBatch.cs, Entities/Margin/MarginSupplierItemPrice.cs, Enums/Margin/MarginPriceSource.cs
+    -    /// effective-dated prices (2) — 9 endpoints. Thin HTTP shell over the supplier / supplier-item / price
+    +    /// effective-dated prices (3) — 10 endpoints. Thin HTTP shell over the supplier / supplier-item / price
+    -        // ---- Prices (2) ------------------------------------------------------------------------------
+    +        // ---- Prices (3) ------------------------------------------------------------------------------
+    +        /// <summary>
+    +        /// Append a backdated correction into an already-superseded price interval (ruling
+    +        /// D-MRG-PRICE-CORRECTION) — the repair for a week frozen on a typo that the supersede-forward
+====================================================================================================
+lane/mrg-starter-150 8eeacae1f | L-MRG-STARTER-150: lane evidence for the 150-row curation
+  product files: Services/Margin/MarginCsvParser.cs, Services/Margin/MarginStarterLibrary.cs, Services/Margin/margin-starter-ingredients.csv
+    +        /// <summary>
+    +        /// Strips the space characters a spreadsheet uses as a thousands separator (ordinary, non-breaking
+    +        /// and narrow no-break), which no numeric cell may otherwise contain.
+    +        /// </summary>
+    +        internal static string StripGroupingSpaces(string raw)
+    +            => (raw ?? string.Empty)
+    +                .Replace("\u00a0", string.Empty)
+====================================================================================================
+lane/mrg-starter-150b 9a00da6e3 | The starter library is authored as data, and a short list reds instead of shippi
+  product files: Services/Margin/MarginCsvParser.cs, Services/Margin/MarginStarterLibrary.cs, Services/Margin/margin-starter-ingredients.csv
+    +        /// <summary>
+    +        /// Strips the space characters a spreadsheet uses as a thousands separator (ordinary, non-breaking
+    +        /// and narrow no-break), which no numeric cell may otherwise contain.
+    +        /// </summary>
+    +        internal static string StripGroupingSpaces(string raw)
+    +            => (raw ?? string.Empty)
+    +                .Replace("\u00a0", string.Empty)
+====================================================================================================
+lane/pdf-creditnote-name 015c07ca2 | test(invoices): two credit notes against one invoice download under distinct nam
+  product files: Controllers/InvoicesController.cs
+    -                    return File(await result.Content.ReadAsByteArrayAsync(), "application/pdf", model.Invoice.Heading + "-" + invoiceId + ".pdf");
+    +                    return File(await result.Content.ReadAsByteArrayAsync(), "application/pdf", DownloadNameOf(model));
+    -                    return File(await result.Content.ReadAsByteArrayAsync(), "application/pdf", model.Invoice.Heading + "-" + invoiceId + ".pdf");
+    +                    return File(await result.Content.ReadAsByteArrayAsync(), "application/pdf", DownloadNameOf(model));
+    +        /// <summary>
+    +        /// The name a downloaded invoice document is filed under, taken from the document's OWN number rather
+    +        /// than from the route parameter that asked for it.
+====================================================================================================
+lane/phone-in-path a60da359b | Two shut hazards stop being reported as open findings
+  product files: Controllers/GiftcardController.cs, Controllers/StoresController.cs, Models/Giftcard/GiftcardTransferModel.cs, Models/Store/StorePhoneNumberModel.cs
+    -        [HttpPost("transfer/{giftcardId}/{newReceiverPhoneNumber}")]
+    -        public async Task<IActionResult> TransferGiftcard(Guid giftcardId, string newReceiverPhoneNumber)
+    +        /// <summary>
+    +        /// The receiver's phone number travels in the BODY, never in the path. It used to be
+    +        /// <c>transfer/{giftcardId}/{newReceiverPhoneNumber}</c>: redaction at the telemetry sink kept it out of
+    +        /// Application Insights, but a URL is also seen by every intermediary, every reverse proxy and every
+    +        /// access log between the caller and this process, so a personal identifier in a path is published
+====================================================================================================
+lane/pref-cookie-half b5a3b1a6b | The preference-centre session cookie is the one the ruling chose
+  product files: Controllers/GrowthPreferenceController.cs, Models/Growth/GrowthPreferenceModels.cs, Services/Growth/IGrowthPreferenceTokenService.cs
+    -        // The HttpOnly/Secure/SameSite=Strict session cookie (spec §5 endpoint 3): JS cannot read it, so the
+    -        // CSRF token (returned in the body, echoed in this header) is the signed double-submit companion.
+    +        // The session cookie (spec §5 endpoint 3) is HttpOnly, so JS cannot read it and the CSRF token
+    +        // (returned in the body, echoed in this header) is the signed double-submit companion that authorizes
+    +        // every PrefSession call.
+    +        //
+    +        // SameSite is None, and that is a ruled trade rather than an oversight. The preference centre is
+====================================================================================================
+lane/push-token-in-path 363d3f7fa | L-PUSH-TOKEN-IN-PATH: evidence, four mutations and both tiers
+  product files: Controllers/ConsumerNotificationController.cs, Controllers/StoreNotificationController.cs, Models/Notification/NotificationRegistrationIdRequest.cs
+    -        [HttpGet("{handle}")]
+    -        public async Task<IActionResult> CreateRegistrationId(string handle)
+    +        /// <summary>
+    +        /// POST with the handle in the BODY. It was <c>GET {handle}</c>, which put an APNS/FCM device token —
+    +        /// a credential for pushing to that device — in a URL, where every intermediary, reverse proxy and
+    +        /// access log reads it and where Application Insights records it as the request name with no log
+    +        /// statement involved.
+====================================================================================================
+lane/rollback-tracked-sweep 118297520 | A refusal decided after the write leaves the scope holding a row the database ro
+  product files: Services/GiftcardService.cs, Services/Kassa/GoodsGroupService.cs, Services/TableService.cs
+    -            if (overridePaymentType != PaymentType.NotSet)
+    -                giftcard.PaymentType = overridePaymentType;
+    -            var captureStatus = await _paymentService.GetCaptureStatus(giftcard);
+    +            // The override decides which provider the capture is read from and taken through, so it is
+    +            // applied to a DETACHED copy for those reads and written to the tracked giftcard only once
+    +            // every refusal below has been passed. Assigned up front, a refusal left the scoped
+    +            // DbContext tracking a payment type the database never took — and this runs inside a
+====================================================================================================
+lane/route-guard-gaps a5b9e28ba | The route guard learns four words, and rule 2 stops proving only that a paramete
+  product files: Controllers/GiftcardController.cs, Controllers/StoresController.cs, Models/Giftcard/GiftcardTransferModel.cs, Models/Store/StorePhoneNumberModel.cs
+    -        [HttpPost("transfer/{giftcardId}/{newReceiverPhoneNumber}")]
+    -        public async Task<IActionResult> TransferGiftcard(Guid giftcardId, string newReceiverPhoneNumber)
+    +        /// <summary>
+    +        /// The receiver's phone number travels in the BODY, never in the path. It used to be
+    +        /// <c>transfer/{giftcardId}/{newReceiverPhoneNumber}</c>: redaction at the telemetry sink kept it out of
+    +        /// Application Insights, but a URL is also seen by every intermediary, every reverse proxy and every
+    +        /// access log between the caller and this process, so a personal identifier in a path is published
+====================================================================================================
+lane/wf-idempotency-refusal-rest 02684ecc1 | The last three backstops record their refusal, so no key is left running forever
+  product files: Services/Workforce/Interfaces/IWorkforceIdempotency.cs, Services/Workforce/WorkforceIdempotency.cs, Services/Workforce/WorkforceInvitationProblems.cs, Services/Workforce/WorkforceInvitationService.cs
+    +        /// <summary>
+    +        /// Records a REFUSAL as the outcome for <paramref name="key"/>, so a later same-key retry is
+    +        /// answered with the refusal itself instead of <c>workforce.idempotency-in-progress</c>. A refusal
+    +        /// decided AFTER the reservation is committed is still an answer the endpoint gave, and an answer
+    +        /// nobody stored is a key no client can ever use again.
+    +        ///
+    +        /// <para>Keyed by <c>(scope, key)</c> rather than by a reservation object because a refusal is
+====================================================================================================
+lane/wf-operator-unique c67d09238 | feat(workforce): one operator cannot hold two live links
+  product files: Migrations/20260806111500_Workforce_OperatorLinkUniqueness.Designer.cs, Migrations/20260806111500_Workforce_OperatorLinkUniqueness.cs, Services/Workforce/WorkforceDbViolations.cs, Services/Workforce/WorkforceOperatorImportService.cs
+    +﻿// <auto-generated />
+    +#nullable disable
+    +namespace WebApi.Migrations
+    +{
+    +    [DbContext(typeof(ApplicationDbContext))]
+    +    [Migration("20260806111500_Workforce_OperatorLinkUniqueness")]
+    +    partial class Workforce_OperatorLinkUniqueness
+====================================================================================================
+lane/wf-push-still-lies 100ae0001 | workforce: the delivery record stops claiming more than it knows
+  product files: Entities/Workforce/WorkforceSchedulePublicationRecipient.cs, Enums/Workforce/WorkforcePublicationDeliveryState.cs, Services/Interfaces/INotificationService.cs, Services/NotificationService.cs
+    -        // Eligible channel and delivery state (both stored as strings).
+    +        // The recipient's own channel and ITS delivery state (both stored as strings). The pair is one fact:
+    +        // Channel is the external tier WorkforceNotificationChannelPlan gave this person (InApp only when it
+    +        // gave none), and only that channel's outbox command moves DeliveryState. Reading the state without
+    +        // the channel is what let a push failure hide behind the in-app command's guaranteed success.
+    +    ///
+    +    /// <para><b>It is the state of ONE channel — the one named in
+====================================================================================================
+lane/wolt-sync-unregistered 3c7b28ee0 | A background service that has never run says so, and stays that way
+  product files: Services/WoltMenuSyncBackgroundService.cs
+    -	/// Background service that syncs pending Wolt menu changes every 8 minutes
+    +	/// Pushes every enabled store's pending Wolt menu changes to Wolt on an eight-minute timer.
+    +	///
+    +	/// <para><b>THIS CLASS HAS NEVER RUN, AND IS DELIBERATELY KEPT THAT WAY.</b> Nothing registers it as a
+    +	/// hosted service, so it has never ticked in any deployment. Menu changes reach Wolt only where
+    +	/// something calls <see cref="WebApi.Services.Interfaces.IWoltMenuSyncService"/> directly - never from
+    +	/// this loop, whose <see cref="ExecuteAsync"/> no host has ever entered.</para>
+====================================================================================================
+lane/xz-credit-fields 9bdfc2673 | feat(kassa): X and Z state kredittsal and utleveringskvitteringar
+  product files: Models/Kassa/XZReportModels.cs, Services/Kassa/EscPosXZReportBuilder.cs, Services/Kassa/KassaCreditSale.cs, Services/Kassa/XZReportService.cs
+    +        // § 2-8-2 bokstav e (kontantsalg) and the second paragraph's specification of kredittsal,
+    +        // stated apart because a credit sale is not a cash sale: the venue has handed over the goods
+    +        // and will invoice the buying company later, so per bokforingsforskriften § 5-3-1 it must not
+    +        // be reported inside the cash-sale total.
+    +        //
+    +        // WHAT IS COUNTED. Registered sales in the window only — the same set as SalesCount, so
+    +        // training sales are excluded from both halves exactly as they are excluded from SalesCount,

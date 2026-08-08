@@ -1,0 +1,27 @@
+run at 2026-08-07T18:29:25+0200 on Darwin 25.5.0, backend lane/mail-revocation-lever @ 69e6ca8af
+
+probe host=send.one.com port=465 options=SslOnConnect mailkit=4.16.0.0
+product assembly=/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/probe/bin/Debug/net8.0/WebApi.dll
+
+=== arm0 bare client, trunk's construction verbatim: new SmtpClient()
+CONNECT failed type=SslHandshakeException
+CONNECT failed msg=An error occurred while attempting to establish an SSL or TLS connection. | | The server's SSL certificate could not be validated for the following reasons: | • The server certificate has the following errors: |  • An incomplete certificate revocation check occurred. | [inner AuthenticationException]
+
+=== arm1 product transport via EmailService.CreateTransport, setting UNSET
+CONNECT failed type=SslHandshakeException
+CONNECT failed msg=An error occurred while attempting to establish an SSL or TLS connection. | | The server's SSL certificate could not be validated for the following reasons: | • The server certificate has the following errors: |  • An incomplete certificate revocation check occurred. | [inner AuthenticationException]
+
+=== arm2 product transport via EmailService.CreateTransport, setting FALSE
+CONNECT ok  transport=WebApi.Services.MailKitSmtpTransport
+DISCONNECT ok
+
+=== arm3a what the chain actually said, with the check left on
+policy errors = RemoteCertificateChainErrors
+chain status  = RevocationStatusUnknown (An incomplete certificate revocation check occurred.)
+CONNECT failed type=SslHandshakeException
+
+=== arm3 corroboration: is the session actually secured, and is AUTH offered
+CONNECT ok secure=True caps=Size, EnhancedStatusCodes, Authentication, EightBitMime, Pipelining, Chunking
+
+VERDICT PASS (expected arm0=Failed arm1=Failed arm2=Connected; got arm0=Failed arm1=Failed arm2=Connected)
+(exit 0)

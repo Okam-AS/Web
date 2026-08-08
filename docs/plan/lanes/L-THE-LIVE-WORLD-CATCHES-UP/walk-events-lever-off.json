@@ -1,0 +1,20 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "api": "http://127.0.0.1:5971",
+  "at": "2026-08-07T15:36:45.569Z",
+  "flag": "Events.Dispatch",
+  "steps": [
+    {
+      "step": "25-turn-off",
+      "url": "http://127.0.0.1:3971/admin/feature-flags?storeId=1",
+      "row": "Guest-link dispatch\nEvents.Dispatch\nAv\nStandard: av\nOverstyrt for butikken\nFaktisk: av\n\nSist endret av 6ba6dd27-42b0-4ba9-807b-96930c735f2f — 07.08.2026, 17:36 — L-THE-LIVE-WORLD-CATCHES-UP: walk recorded; held again so the ten queued links keep their attempt budget\n\nFør denne slås på: hver lenke er en nøkkel — den som har den, åpner siden uten å logge inn. Å slå på sender ut hele køen som har samlet seg mens den sto av, ikke bare det som kommer etterpå; antallet står på Events-siden under «Gjestelenker». En sendt e-post kan ikke kalles tilbake. Utsendingen går over den e-postkontoen driften har satt opp for denne installasjonen — er den satt opp mot ekte mottakere, er det ekte gjesteadresser som får post.\n\nNår denne står av, holdes lenkene tilbake — de forsvinner ikke. Personalet kan fortsatt sende tilbud og be om depositum, og hver lenke legges i kø nøyaktig som før; ingenting går ut, ingenting merkes som mislykket, og ingen forsøk brukes opp. Køen vokser bak bryteren, og slår du den på igjen går alt sammen ut på én gang.\n\nBEGRUNNELSE\nSlå på\nSlå av\nFjern overstyring"
+    },
+    {
+      "step": "26-events-held-again",
+      "url": "http://127.0.0.1:3971/admin/events-pipeline?storeId=1",
+      "panel": "Utsending er slått av, så ingen gjestelenke forlater huset. Venter: 10."
+    }
+  ],
+  "consoleErrors": [],
+  "failedRequests": []
+}

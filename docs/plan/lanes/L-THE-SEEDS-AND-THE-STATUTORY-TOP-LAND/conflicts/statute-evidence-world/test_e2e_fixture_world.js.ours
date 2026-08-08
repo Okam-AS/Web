@@ -1,0 +1,1071 @@
+// The world the fixture API answers from. Data only — no HTTP, no state machine.
+//
+// WHY A FIXTURE AND NOT THE REAL BACKEND. These journeys have to be runnable on a laptop with
+// nothing else started, or they will not be run, and an instrument nobody runs is not evidence. The
+// real API also cannot be driven honestly here: the schedule journey PUBLISHES a week, which on a
+// shared test database is a write somebody else has to live with, and the events journey needs a
+// proposal token that exists nowhere but in the database that minted it.
+//
+// WHAT THE FIXTURE IS THEREFORE ALLOWED TO BE. It answers the routes the CLIENTS call, in the shapes
+// the CLIENTS read, and it enforces the preconditions the clients claim to send — the
+// `Idempotency-Key` on every workforce mutation and the `If-Match` draft checksum on the batch edit
+// are both checked, and a mismatch is refused with the same typed problem+json the real surface
+// emits. That is the point: a fixture that accepts anything proves the page can render, and a
+// fixture that holds the contract proves the page is WIRED. It is not a backend model and does not
+// try to be — it holds no rules about overlapping shifts, wage rates or capabilities beyond the ones
+// these three journeys read.
+//
+// PHONE NUMBERS AND CODES are the demo credentials the project already uses (99999999 / 123123).
+// They are not secrets and they authenticate nothing outside this process.
+
+const MANAGER_PHONE = '+4799999999';
+const WORKER_PHONE = '+4790000001';
+// The administrator who signed up BY PHONE and therefore has no email address at all. She is the
+// whole subject of the account-email journey: the newsletter test-send binds to the acting
+// administrator's own account address and requires it CONFIRMED, so she is refused by a screen she
+// otherwise administers, and until an admin surface could confirm an address her only ways out were
+// the consumer app or curl. A third identity rather than a flip of the manager's, because the
+// manager's confirmed address is what `growth-newsletter-send-gate` test-sends to.
+const PHONE_SIGNUP_ADMIN_PHONE = '+4790000002';
+// The platform PowerUser. A fourth identity rather than a flag on the manager's, because three
+// journeys assert refusals that are only refusals for somebody who is NOT one — see USERS below.
+const CONCIERGE_PHONE = '+4790000003';
+// A FIFTH identity, and the reason for it is the whole point of the onboarding journey: an account
+// that holds NOTHING. `user-worker` is seeded as already claimed (staff-1), which is what the other
+// journeys need — but a claim journey run by an account that already has an engagement proves
+// nothing about the route in. This one starts with no engagement and acquires one by claiming.
+//
+// `+4790000004` rather than the `+4790000002` this identity was authored with on `lane/fe-wf-onboard`:
+// that number has since been taken by PHONE_SIGNUP_ADMIN_PHONE above. Two identities sharing a
+// number is not a merge cosmetic — `USERS` is keyed by it, so one would have silently replaced the
+// other and the account-email journey would have signed in as a new hire with no mailbox.
+const NEW_HIRE_PHONE = '+4790000004';
+const OTP = '123123';
+
+const STORE_ID = 42;
+const STORE_NAME = 'Fixture Kafé';
+
+// ---- THE SECOND VENUE: a store nobody has ever curled -------------------------------------------
+//
+// `STORE_ID` is a venue in mid-life. It has a roster, a role catalogue, publications and a month of
+// history, because the journeys that walk those surfaces need something to walk. That makes it
+// exactly the wrong place to prove a SETUP capability: a screen that authors the role catalogue
+// looks like it works on a store whose catalogue was seeded in this file, and proves only that the
+// list renders.
+//
+// This is the other case, and it is the one a real venue actually starts in: opened last week, two
+// people hired, and NOT ONE ROLE DEFINED — because until `/admin/workforce-roles` existed there was
+// no way in any browser to define one. `seededRoleCatalogue()` gives it an EMPTY ARRAY rather than
+// omitting it, so the difference between "this store has no roles" and "the read failed" stays
+// visible here too.
+//
+// It is deliberately NOT `GUEST_VENUE_STORE_ID`: that venue exists to be a store the manager does
+// NOT administer, and reusing it would make every refusal on this store ambiguous between "no roles"
+// and "no access".
+//
+// Declared beside `STORE_ID` rather than beside the roster below it because `USERS` names it, and
+// `USERS` is the next block in this file.
+const VIRGIN_STORE_ID = 44;
+const VIRGIN_STORE_NAME = 'Nyåpnet Filial';
+const TIME_ZONE = 'Europe/Oslo';
+const CURRENCY = 'NOK';
+
+// The two identities the journeys sign in as. `token` is what the app puts in the Authorization
+// header for every later call, so it is also this fixture's session key.
+const USERS = {
+  [MANAGER_PHONE]: {
+    id: 'user-manager',
+    token: 'fixture-token-manager',
+    phoneNumber: MANAGER_PHONE,
+    firstName: 'Marit',
+    lastName: 'Leder',
+    email: 'marit@example.test',
+    emailConfirmed: true,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // Non-empty: this is exactly what AdminPage.initAuth tests before it bounces to /registrer.
+    //
+    // TWO venues, and the order matters: `STORE_ID` stays FIRST because every page resolves its
+    // store as `selectedAdminStore ?? adminIn[0].id`, so a journey that does not touch the picker
+    // still lands where it always did. The second is the newly opened one — see `VIRGIN_STORE_ID`.
+    // One manager running two venues is also the ordinary case rather than a contrivance, and it is
+    // what makes the store picker in `AdminPageHeader` reachable at all in fixture mode.
+    adminIn: [
+      { id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' },
+      { id: VIRGIN_STORE_ID, name: VIRGIN_STORE_NAME, address: 'Havnegata 4, 0150 Oslo' }
+    ]
+  },
+  [WORKER_PHONE]: {
+    id: 'user-worker',
+    token: 'fixture-token-worker',
+    phoneNumber: WORKER_PHONE,
+    firstName: 'Ola',
+    lastName: 'Ansatt',
+    email: 'ola@example.test',
+    emailConfirmed: true,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // EMPTY, and empty on purpose. `[]` is the positive answer "administers no store" that
+    // utils/admin/nav-access.js resolves to ACCESS_WORKER — the refusal journey's whole subject.
+    // `undefined` would be ACCESS_UNKNOWN, which deliberately renders the admin nav, so a fixture
+    // that omitted the field would prove the opposite of what the journey claims.
+    adminIn: []
+  },
+  [PHONE_SIGNUP_ADMIN_PHONE]: {
+    id: 'user-phone-admin',
+    token: 'fixture-token-phone-admin',
+    phoneNumber: PHONE_SIGNUP_ADMIN_PHONE,
+    firstName: 'Kari',
+    lastName: 'Telefon',
+    // NULL, and null on purpose — this is what signing up with a phone number leaves behind, and it
+    // is the state `RequireOwnAccountAddressAsync` refuses first. `''` would be indistinguishable on
+    // screen but is a different thing in the account row, and the page's three-state status reads
+    // the row.
+    email: null,
+    emailConfirmed: false,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // A FULL STORE ADMIN. The refusal this journey walks is not about authority — she administers
+    // the same store the manager does and may draft, approve and dispatch. It is about whether the
+    // platform can prove one mailbox is hers.
+    adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
+  },
+  // THE ONLY PLATFORM POWERUSER IN THIS WORLD, and the reason one has to exist at all is that
+  // `isPowerUser` is a real authority boundary two surfaces draw on:
+  //
+  //   • the Company Meals concierge forms (`pages/admin/meals-companies.vue`) are not rendered for a
+  //     store admin, because company authority resolves from an active CompanyAdmin membership and
+  //     never from the role that created the company;
+  //   • the Margin projection repair rescans a store's whole journal, so a store admin meets a 403
+  //     from the framework's role filter before the module gate and the control is withheld.
+  //
+  // Every other identity here is `isPowerUser: false` and must stay that way — the refusal journeys
+  // are built on it — so this is the additive way to have both halves of that boundary walkable.
+  [CONCIERGE_PHONE]: {
+    id: 'user-concierge',
+    token: 'fixture-token-concierge',
+    phoneNumber: CONCIERGE_PHONE,
+    firstName: 'Ingrid',
+    lastName: 'Konsierge',
+    email: 'ingrid@okam.test',
+    emailConfirmed: true,
+    isPowerUser: true,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // A store admin AS WELL, because the switchboard and the venue-scoped reads authorize on
+    // `IStoreAdminAccess` and a PowerUser who administered nothing could not open either.
+    adminIn: [{ id: STORE_ID, name: STORE_NAME, address: 'Storgata 1, 0155 Oslo' }]
+  },
+  [NEW_HIRE_PHONE]: {
+    id: 'user-newhire',
+    token: 'fixture-token-newhire',
+    phoneNumber: NEW_HIRE_PHONE,
+    firstName: 'Nina',
+    lastName: 'Nyansatt',
+    email: 'nina@example.test',
+    emailConfirmed: true,
+    isPowerUser: false,
+    isKeyAccountManager: false,
+    favoriteProductIds: [],
+    // Administers nothing AND is linked to no engagement. Until this account claims an invitation,
+    // `GET /workforce/me/staff-memberships` answers `[]` for it — which is the state every worker
+    // starts in and which no journey could reach before an invitation surface existed.
+    adminIn: []
+  }
+};
+
+// `personState` is what the roster surfaces as "has a login attached": `Invited` means no
+// ApplicationUser has claimed this engagement's person, `Claimed` means one has. It was once the
+// only durable signal the invitation flow had; since endpoint 6b it answers alongside the
+// outstanding-code list, and the two are DIFFERENT questions — whether a login is attached, versus
+// whether a code is still redeemable. Neither substitutes for the other, and a fixture that omitted
+// this one would let the access panel render its unknown state and prove nothing. The values here
+// are only the STARTING POINT — `api-server.js` derives what it answers from the claims it has
+// actually recorded, so the roster flips because a claim happened.
+//
+// `workforcePersonId` is NOT decoration and is not the same id as `staffMemberId`. Training's
+// `personRef` names the PERSON — a completion is filed against a human being, not against one of
+// their engagements, which is the whole reason the two ids are different — and the Training
+// completion write binds it to a `Guid`. A reference the fixture cannot resolve to one of these is
+// refused exactly as `TrainingPersonBinding.RequireKnownPersonAsync` refuses it. Both are real GUIDs
+// because every `*Ref` binds to a `Guid` server-side and the forms refuse anything else before
+// sending, so a made-up string would never leave the browser and would prove nothing.
+const STAFF = [
+  {
+    staffMemberId: 'staff-1',
+    workforcePersonId: '0f7d2c1a-8b64-4f2e-9c31-1a5d6e7f8091',
+    displayName: 'Ola Ansatt',
+    isActive: true,
+    employmentNumber: '101',
+    personState: 'Claimed',
+    capabilities: ['WorkforceSelf']
+  },
+  {
+    staffMemberId: 'staff-2',
+    workforcePersonId: '3b91e40c-27af-4d5b-8e12-6c4f90ab7d23',
+    displayName: 'Kari Hansen',
+    isActive: true,
+    employmentNumber: '102',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  },
+  // The onboarding journey's subject: on the roster, schedulable, and unable to sign in. A real GUID
+  // like her two colleagues — `lane/fe-wf-onboard` authored all three as `person-N`, which this
+  // branch had already replaced with GUIDs because every `*Ref` binds to a `Guid` server-side and
+  // Training's completion write refuses anything else before it leaves the browser.
+  {
+    staffMemberId: 'staff-3',
+    workforcePersonId: 'c5e8f7a2-9d41-4b83-a716-2f0c9d8e4b57',
+    displayName: 'Nina Nyansatt',
+    isActive: true,
+    employmentNumber: '103',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  }
+];
+
+/** A well-formed person reference that names nobody. The completion refusal's subject. */
+const UNKNOWN_PERSON_REF = '11111111-2222-3333-4444-555555555555';
+
+const ROLES = [
+  { roleId: 'role-bar', name: 'Barista', sortOrder: 1, station: 'Bar', color: '#1bb776' },
+  { roleId: 'role-kitchen', name: 'Kjøkken', sortOrder: 2, station: 'Kjøkken', color: '#f59e0b' }
+];
+
+// Two engagements and nothing else. They are here rather than created by the journey because
+// `POST /staff` (#3) has no fixture handler and writing one would be a second lane's worth of
+// surface — but the ORDER a real venue does this in is preserved: people first, then the stations
+// they work. Without a row apiece the week grid has no rows, and the shift editor — where the role
+// select this whole page exists to fill actually lives — cannot be opened at all.
+const VIRGIN_STAFF = [
+  {
+    staffMemberId: 'staff-44-1',
+    workforcePersonId: 'a1c3e5f7-2b48-4d6a-9e10-3c5f7a9b1d24',
+    displayName: 'Sara Ny',
+    isActive: true,
+    employmentNumber: '201',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  },
+  {
+    staffMemberId: 'staff-44-2',
+    workforcePersonId: 'b2d4f6a8-3c59-4e7b-8f21-4d6a8b0c2e35',
+    displayName: 'Jonas Vik',
+    isActive: true,
+    employmentNumber: '202',
+    personState: 'Invited',
+    capabilities: ['WorkforceSelf']
+  }
+];
+
+/**
+ * The role catalogue, PER STORE — which is how the backend holds it
+ * (`ListRolesAsync` filters `Where(r => r.StoreId == storeId)`).
+ *
+ * Cloned rather than shared, because the catalogue is now WRITTEN by `PUT /roles` and a role created
+ * in one journey must not be visible to the next. A store with no entry here has no roles, which is
+ * the state every store in the world starts in.
+ */
+function seededRoleCatalogue () {
+  return {
+    [STORE_ID]: JSON.parse(JSON.stringify(ROLES)),
+    [VIRGIN_STORE_ID]: []
+  };
+}
+
+/** The roster, per store. A store nobody staffed has nobody — never `STORE_ID`'s people by default. */
+function staffFor (storeId) {
+  if (String(storeId) === String(STORE_ID)) { return STAFF; }
+  if (String(storeId) === String(VIRGIN_STORE_ID)) { return VIRGIN_STAFF; }
+  return [];
+}
+
+// ---- the shared per-store feature-flag catalog --------------------------------------------------
+//
+// `GET /feature-flags/catalog` — the ADVERTISED set, transcribed key-for-key and default-for-default
+// from the six modules' `Describe()` methods. Not invented: the flag keys are a contract the operator
+// screen writes back verbatim, so a made-up key here would prove the page can render a list rather
+// than that it can move a real switch.
+//
+//   Workforce   WorkforceFeatureFlags.Declared minus Withheld
+//   Training    TrainingFeatureFlags.Declared minus Withheld
+//   Margin      Helpers/Margin/MarginFeatureFlags.Describe()
+//   Events      Services/Events/EventsFeatureFlags.Describe()
+//   Meals       Services/Meals/MealsFeatureFlags.Describe()
+//   Growth      Services/Growth/GrowthFeatureFlags.Describe()
+//
+// DENY-CLOSED, with ONE exception that is deliberate on the backend's side and reproduced here:
+// `workforce.setup` ships ON, because setup is the stage a store is in the moment the module becomes
+// visible to it, and nothing behind it is reachable until `workforce.module` opens — which is itself
+// deny-closed. Copying the exception matters: a fixture with everything off would make the page's
+// "default: on" branch unreachable and therefore unproven.
+//
+// WHAT IS DELIBERATELY ABSENT. Six declared flags are WITHHELD from the catalog by their own
+// modules — `workforce.personnel-list` and five `training.*` — each because its enforcement point
+// would be unlawful (gating the personalliste an inspector may demand) or does not exist. The
+// controller refuses to write any key the catalog does not carry, so a withheld flag is not merely
+// un-togglable, it is invisible: there is no wire field for "withheld" and nothing for a client to
+// render. Their absence here is the accurate model.
+//
+// `workforce.export` WAS on that withheld list, for the stated reason that its enforcement point did
+// not exist — "a W5 batch that is not built". It is built: `WorkforceTimesheetService` now passes
+// `WorkforceFeatureFlags.Export` to `RequireWriteCapabilityAsync` on BOTH its writes (approve at
+// :164, export at :297), and the backend advertises it as
+// `new FeatureFlagDescriptor(Export, "Workforce", "Export", false)`. So the flag has a real gate and
+// a real lever, and withholding it here would now be the inaccurate model — it would make the
+// timesheet surface's read-only refusal unreachable and leave the journey unable to pull the lever
+// an operator actually pulls.
+const FEATURE_FLAG_CATALOG = [
+  { flagKey: 'Events.Core', module: 'Events', title: 'Core (inquiries/proposals)', defaultEnabled: false },
+  { flagKey: 'Events.Deposits', module: 'Events', title: 'Deposit money path', defaultEnabled: false },
+  { flagKey: 'Events.Settlement', module: 'Events', title: 'Settlement machine', defaultEnabled: false },
+  { flagKey: 'Margin.Module', module: 'Margin', title: 'Module master', defaultEnabled: false },
+  { flagKey: 'Margin.PriceImport', module: 'Margin', title: 'Price import (CSV)', defaultEnabled: false },
+  { flagKey: 'Margin.Statements', module: 'Margin', title: 'Statements', defaultEnabled: false },
+  { flagKey: 'growth.module', module: 'Growth', title: 'Module (guest capture)', defaultEnabled: false },
+  { flagKey: 'growth.dispatch', module: 'Growth', title: 'Live newsletter dispatch (kill switch)', defaultEnabled: false },
+  { flagKey: 'meals.module', module: 'Meals', title: 'Module (store surfaces)', defaultEnabled: false },
+  { flagKey: 'training.assignments', module: 'Training', title: 'Assignments', defaultEnabled: false },
+  { flagKey: 'training.setup', module: 'Training', title: 'Setup (courses/certificates)', defaultEnabled: false },
+  { flagKey: 'workforce.clock', module: 'Workforce', title: 'POS clock write', defaultEnabled: false },
+  { flagKey: 'workforce.dispatch', module: 'Workforce', title: 'Dispatch', defaultEnabled: false },
+  { flagKey: 'workforce.exchange', module: 'Workforce', title: 'Shift exchange', defaultEnabled: false },
+  // The §9.1 stage-6 gate on the timesheet's two WRITES — approve and export. Default OFF, matching
+  // `FeatureFlagDescriptor(Export, "Workforce", "Export", false)`. The three timesheet READS are
+  // never gated on it (§9.2): a disabled stage goes read-only, not dark.
+  { flagKey: 'workforce.export', module: 'Workforce', title: 'Export', defaultEnabled: false },
+  { flagKey: 'workforce.module', module: 'Workforce', title: 'Module (store surfaces)', defaultEnabled: false },
+  { flagKey: 'workforce.publication', module: 'Workforce', title: 'Schedule publication', defaultEnabled: false },
+  { flagKey: 'workforce.selfservice', module: 'Workforce', title: 'Self-service', defaultEnabled: false },
+  { flagKey: 'workforce.setup', module: 'Workforce', title: 'Setup', defaultEnabled: true }
+];
+
+/**
+ * The stage flag every schedule WRITE is gated on.
+ *
+ * All four of them — `CreateDraftAsync`, `BatchAssignmentsAsync`, `ValidateAsync` and `PublishAsync`
+ * — pass `WorkforceFeatureFlags.Publication` to `RequireWriteCapabilityAsync`, so this one key
+ * decides whether the whole authoring surface is writable. Named once here rather than spelled at
+ * each of the four fixture routes, which is how the four would drift apart.
+ */
+const SCHEDULE_WRITE_FLAG = 'workforce.publication';
+
+/**
+ * The stage flag the role catalogue's WRITE is gated on.
+ *
+ * `UpsertRolesAsync` passes `WorkforceFeatureFlags.Setup` to `RequireWriteCapabilityAsync`, and it is
+ * the one flag in the family whose compile-time default is TRUE — so unlike `workforce.publication`
+ * above, a store that has never had a switch flipped CAN author roles. That asymmetry is the point of
+ * naming it: a fixture that gated setup like publication would make the first screen of a new venue
+ * refuse for a reason the real server does not have, and a fixture that gated it not at all would let
+ * a page ship that ignores an operator turning it off.
+ *
+ * The READ (#8) is not gated — §9.2 forbids gating a read.
+ */
+const ROLE_WRITE_FLAG = 'workforce.setup';
+
+/**
+ * The stage flag the timesheet's two WRITES are gated on — and only the writes.
+ *
+ * `ApproveAsync` (:164) and `ExportAsync` (:297) both pass `WorkforceFeatureFlags.Export` to
+ * `RequireWriteCapabilityAsync`. The list, the period detail and the batch download pass nothing:
+ * §9.2 requires that turning this off stops NEW batches while what has already been sent stays
+ * readable, and journey WFJ-15 is the pin. Named once here for the same reason the schedule's is —
+ * so the write gate and the ungated reads cannot drift apart one route at a time.
+ */
+const TIMESHEET_WRITE_FLAG = 'workforce.export';
+
+/**
+ * The stage flag every Events ADMIN route is gated on — reads included.
+ *
+ * `EventsController.GuardStoreAsync`, `EventsRunSheetController.GuardStoreAsync`,
+ * `EventsNotificationsController.AuthorizeStoreAsync` and `EventsDepositsController.AuthorizeStoreAsync`
+ * all call `IEventsModuleGate.IsStoreEnabledAsync`, which is `Events.Core` for the route's store. So
+ * this one key decides whether the pipeline page can see ANYTHING — unlike `workforce.publication`,
+ * which leaves the reads answering and stops only the writes. Named once here for the same reason
+ * the workforce one is: five fixture routes enforce it and they must not drift apart.
+ */
+const EVENTS_CORE_FLAG = 'Events.Core';
+
+/**
+ * The money flag the SETTLEMENT read additionally sits behind.
+ *
+ * `EventsSettlementController.AuthorizeSettlementAsync` requires `Events.Settlement` on top of
+ * `Events.Core`, and it gates the GET as well as every mutation — deliberately, so a venue that has
+ * not opened the settlement machine cannot read a half-built statement. It is modelled because the
+ * pipeline page fans four facet reads out at once and one of them answering `EVENTS_DISABLED` is the
+ * NORMAL state of a pilot venue: Core on, money paths still closed. A fixture that answered a
+ * settlement document to every store would never let that state be walked.
+ */
+const EVENTS_SETTLEMENT_FLAG = 'Events.Settlement';
+
+// ---- Events: the guest surface -----------------------------------------------------------------
+//
+// THE READ IS NOT GATED PER STORE AND THE TWO WRITES NOW ARE, and the asymmetry is the backend's
+// rather than a choice made here. All three public proposal routes
+// (`EventsController.GetProposal/AcceptProposal/DeclineProposal`) are `[AllowAnonymous]` and carry the
+// controller-wide action filter on the deployment-wide `Events:Enabled` CONFIG switch, which is not a
+// per-store flag and which no lever on `/admin/feature-flags` can move. On top of that:
+//
+//   GetPublicAsync      performs NO store refinement. Still open, recorded as a read-side leak.
+//   AcceptAsync         `GuardStoreEnabledAsync` — store-scoped `Events.Core`, deny-closed.
+//   DeclineAsync        the same guard, the same code.
+//
+// The two writes were ungated until `F-EV-ACCEPT-UNGATED` closed it, and the refusal they give is
+// `EVENTS_PROPOSAL_NOT_FOUND` — the same 404 an unknown token gets, so no anonymous caller can turn
+// this surface into a roster of which venues bought the module.
+//
+// WHICH MEANS THESE TOKENS NEED A VENUE THAT HAS THE MODULE. A sent proposal only exists because a
+// venue with `Events.Core` on drafted and sent it, so a world in which one exists at a store that
+// never switched the module on is a world the backend cannot produce. `GUEST_VENUE_STORE_ID` is that
+// venue, and its override row is seeded below — deliberately NOT `STORE_ID`, whose empty deny-closed
+// flag state is the control every admin journey opens with ("before any switch is flipped, the venue
+// is dark"). No journey reads store 43's flag board; it exists to own these two tokens.
+// ---- the personalliste day, and the kodeoversikt it is decoded by ------------------------------
+//
+// A FIXED business day rather than "today", so the register and the overview issued beside it can be
+// asserted by value. The page never asks for a date on first load — it lets the SERVER resolve the
+// venue's own day and then follows the answer — so this constant is also what proves that echo
+// happened: the date picker ends up holding a day the browser did not choose.
+const PERSONNEL_BUSINESS_DATE = '2026-07-13';
+const PERSONNEL_AS_OF_UTC = '2026-07-13T12:00:00Z';
+// Accounting-year end (2026-12-31) + three years six months, the § 8-5-7 horizon the real
+// `WorkforcePersonnelListRetention` computes. Held as a constant so the document and the issue row
+// cannot disagree about it.
+const PERSONNEL_RETAIN_UNTIL = '2030-06-30';
+const PERSONNEL_BUSINESS_NAME = 'Okam Testrestaurant AS';
+const PERSONNEL_ORGNR = '912345678';
+
+// Two people carrying a protected identity code and ONE carrying none.
+//
+// The codeless row is the point of the third entry, not padding: § 8-5-6 requires everyone present
+// on the list, and the real service prints such a person with an empty code column and counts them
+// on `rowsWithoutIdentityCode` rather than dropping them. A fixture with only coded people would let
+// a regression that silently drops them pass.
+const PERSONNEL_ROWS = [
+  {
+    personnelListEntryId: 'entry-1',
+    participantName: 'Ola Ansatt',
+    protectedIdentityCodeRef: 'wf-person:0f7d2c1a-8b64-4f2e-9c31-1a5d6e7f8091',
+    category: 'Employee',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T06:00:00Z',
+    onSiteEndUtc: '2026-07-13T12:00:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  },
+  {
+    personnelListEntryId: 'entry-2',
+    participantName: 'Kari Hansen',
+    protectedIdentityCodeRef: 'wf-person:3b91e40c-27af-4d5b-8e12-6c4f90ab7d23',
+    category: 'Employee',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T07:30:00Z',
+    onSiteEndUtc: '2026-07-13T13:30:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  },
+  {
+    personnelListEntryId: 'entry-3',
+    participantName: 'Uregistrert Hjelper',
+    protectedIdentityCodeRef: null,
+    category: 'Unpaid',
+    hiredInOrganizationNumber: null,
+    onSiteStartUtc: '2026-07-13T09:00:00Z',
+    onSiteEndUtc: '2026-07-13T11:00:00Z',
+    businessName: PERSONNEL_BUSINESS_NAME,
+    organizationNumber: PERSONNEL_ORGNR,
+    retainUntilUtc: PERSONNEL_RETAIN_UNTIL + 'T00:00:00Z',
+    correctionActorReference: null,
+    correctedAtUtc: null
+  }
+];
+
+const GUEST_VENUE_STORE_ID = 43;
+
+// Two tokens, and the second one is the point of having two. `EventsProposalService.GetPublicAsync`
+// answers a SUPERSEDED version with its own content and `isActionable:false` rather than a 404, so
+// the guest sees exactly what they were sent and is told it no longer stands. The refusal journey
+// reads that token and asserts the accept form is absent — which only means anything if the offer
+// itself is still on the page, which is why both are modelled.
+
+const OPEN_PROPOSAL_TOKEN = 'fixture-proposal-open';
+const SUPERSEDED_PROPOSAL_TOKEN = 'fixture-proposal-superseded';
+
+/**
+ * The per-store flag overrides a freshly reset fixture starts with.
+ *
+ * ONE ROW, and every module flag on `STORE_ID` is deliberately absent from it: they are deny-closed,
+ * and a fixture that started them on would hide the fact the whole switchboard exists for — that a
+ * store nobody has flipped cannot write through the module it gates.
+ *
+ * The row that IS here is `Events.Core` on `GUEST_VENUE_STORE_ID`, and it is not a bypass of that
+ * rule but a consequence of it: the two proposal tokens above are SENT versions, which the backend
+ * can only have produced for a venue that had the module. See the comment on that constant.
+ */
+function seededFlagOverrides () {
+  return {
+    [GUEST_VENUE_STORE_ID + '|' + EVENTS_CORE_FLAG]: {
+      enabled: true,
+      updatedByReference: 'user-manager',
+      updatedAtUtc: '2026-09-01T08:00:00Z',
+      note: 'the venue whose sent proposals the guest journeys open'
+    }
+  };
+}
+
+function proposalBase () {
+  return {
+    eventTitle: 'Julebord for Nordane AS',
+    eventDate: '2026-12-12',
+    guestCountPlanned: 40,
+    currencyCode: CURRENCY,
+    isAmendment: false,
+    lines: [
+      { lineNo: 1, kind: 'Package', description: 'Julebordmeny', quantity: 40, unitPriceMinor: 89500, amountMinor: 3580000, vatRate: 0.25 },
+      { lineNo: 2, kind: 'AddOn', description: 'Velkomstdrink', quantity: 40, unitPriceMinor: 12500, amountMinor: 500000, vatRate: 0.25 },
+      { lineNo: 3, kind: 'RoomFee', description: 'Leie av selskapslokale', quantity: 1, unitPriceMinor: 400000, amountMinor: 400000, vatRate: 0.25 }
+    ],
+    totalMinor: 4480000,
+    roomFeeMinor: 400000,
+    minimumSpendMinor: 3000000,
+    depositRequiredMinor: 1000000,
+    termsText: 'Avbestilling senere enn 14 dager før arrangementet faktureres i sin helhet.\nDepositum refunderes ikke ved avbestilling.'
+  };
+}
+
+const PROPOSALS = {
+  [OPEN_PROPOSAL_TOKEN]: Object.assign(proposalBase(), {
+    versionNo: 2,
+    status: 'Sent',
+    isActionable: true,
+    expiresAtUtc: '2026-11-30T22:59:59Z',
+    contentHash: 'b7d3f1a29c4e5806'
+  }),
+  [SUPERSEDED_PROPOSAL_TOKEN]: Object.assign(proposalBase(), {
+    versionNo: 1,
+    status: 'Superseded',
+    // The server's own gate. The page reads it and never re-derives it from the status and a clock.
+    isActionable: false,
+    expiresAtUtc: '2026-11-20T22:59:59Z',
+    contentHash: 'a10cc4419e2b7735',
+    // An older, cheaper offer — so the journey can tell the superseded page apart from the live one
+    // by what it shows, not only by what it withholds.
+    totalMinor: 4180000,
+    depositRequiredMinor: 800000
+  })
+};
+
+// ---- Events: the ADMIN surface -----------------------------------------------------------------
+//
+// One event, read out the way `/events/admin/{store}/events/{id}` and its four sibling reads answer.
+// It is modelled for the run-sheet print journey, and that journey needs the page to hold two things
+// AT THE SAME TIME:
+//
+//   • a recorded dietary requirement, which is what the printed sheet must carry, and
+//   • a live guest bearer link — a proposal address AND a deposit address — which the pipeline page
+//     shows on screen on purpose (email dispatch is dark by default, so a member of staff copies the
+//     link out of here) and which must NOT be on the paper the kitchen gets.
+//
+// A world with only the first would let an inert print stylesheet pass: there would be nothing to
+// leak, so "no token on the sheet" would be true of a page that had no token anywhere. The token is
+// therefore part of the fixture's job, not decoration.
+
+const ADMIN_EVENT_ID = 7001;
+
+// Distinctive on purpose. The journey asserts this exact sentence reaches the paper, so a sheet that
+// printed some other event's requirement, or a placeholder, fails rather than passes.
+const DIETARY_STATEMENT =
+  'To gjester har cøliaki. Én gjest har alvorlig nøtteallergi — ingen nøtter på noen tallerken.';
+
+// The bearer the printed sheet must not carry. Its VALUE is never written into a journey artifact;
+// the journey asserts its absence by looking for it, not by echoing it.
+const ADMIN_DEPOSIT_TOKEN = 'fixture-deposit-bearer-9f3c1d';
+
+// The proposal bearer on the SAME sheet, and its own token rather than a reuse of
+// `OPEN_PROPOSAL_TOKEN`. The two belong to different venues — this event is `STORE_ID`'s and the open
+// proposal is `GUEST_VENUE_STORE_ID`'s — and one token resolving to two stores would make the public
+// gate unmodellable: there would be no answer to "which venue is this link's".
+const ADMIN_PROPOSAL_TOKEN = 'fixture-proposal-bearer-4c81ba';
+
+const ADMIN_EVENT_ROW = {
+  id: ADMIN_EVENT_ID,
+  publicId: 'e1000000-0000-0000-0000-000000000001',
+  status: 'Confirmed',
+  title: 'Julebord for Nordane AS',
+  eventDate: '2026-12-12T00:00:00',
+  guestCountPlanned: 40,
+  contactName: 'Kari Nordmann',
+  acceptedProposalVersionNo: 2,
+  createdAtUtc: '2026-10-01T09:00:00'
+};
+
+const ADMIN_EVENT_DETAIL = {
+  id: ADMIN_EVENT_ID,
+  publicId: ADMIN_EVENT_ROW.publicId,
+  status: 'Confirmed',
+  title: 'Julebord for Nordane AS',
+  eventDate: '2026-12-12T00:00:00',
+  startTime: '18:00:00',
+  endTime: '23:30:00',
+  guestCountPlanned: 40,
+  contactName: 'Kari Nordmann',
+  contactEmail: 'kari@nordane.test',
+  contactPhone: '+4791000001',
+  companyName: 'Nordane AS',
+  source: 'Manual',
+  timeZoneId: TIME_ZONE,
+  createdAtUtc: '2026-10-01T09:00:00',
+  // The recorded requirement, with the stamp that says when the venue was told.
+  dietary: { statement: DIETARY_STATEMENT, statedAtUtc: '2026-11-02T13:20:00' },
+  versions: [
+    {
+      versionNo: 2,
+      status: 'Accepted',
+      currencyCode: CURRENCY,
+      totalMinor: 4480000,
+      sentAtUtc: '2026-10-05T10:00:00',
+      // The proposal address the admin copies out. On screen, deliberately; not on the sheet.
+      publicToken: ADMIN_PROPOSAL_TOKEN,
+      lines: [
+        { lineNo: 1, kind: 'Package', description: 'Julebordmeny', quantity: 40, unitPriceMinor: 89500, amountMinor: 3580000 },
+        { lineNo: 2, kind: 'AddOn', description: 'Velkomstdrink', quantity: 40, unitPriceMinor: 12500, amountMinor: 500000 }
+      ]
+    }
+  ],
+  transitions: [
+    { createdAtUtc: '2026-10-01T09:00:00', action: 'Create', fromStatus: null, toStatus: 'Inquiry', actorKind: 'Staff', reasonCode: null },
+    { createdAtUtc: '2026-10-05T10:00:00', action: 'SendProposal', fromStatus: 'Proposing', toStatus: 'ProposalSent', actorKind: 'Staff', reasonCode: null },
+    { createdAtUtc: '2026-10-09T18:12:00', action: 'Accept', fromStatus: 'ProposalSent', toStatus: 'Accepted', actorKind: 'Guest', reasonCode: null }
+  ]
+};
+
+const ADMIN_DEPOSITS = [
+  {
+    id: 5501,
+    status: 'Paid',
+    paymentType: 'Card',
+    amountMinor: 1000000,
+    refundedMinor: 0,
+    currencyCode: CURRENCY,
+    paidAtUtc: '2026-10-10T11:04:00',
+    expiresAtUtc: '2026-10-17T21:59:59',
+    // The deposit address. The one that must never reach the pass.
+    publicToken: ADMIN_DEPOSIT_TOKEN,
+    receipts: [
+      { kind: 'Capture', providerReference: 'dintero-cap-77120', amountMinor: 1000000, createdAtUtc: '2026-10-10T11:04:00' }
+    ]
+  }
+];
+
+// The sheet itself. `EventsRunSheetComposer` embeds the dietary requirement as an item, which is the
+// mechanism the module's exit rests on — so the fixture carries it as an item AND the detail carries
+// it as the recorded statement, exactly as a real read answers.
+const ADMIN_RUN_SHEET = {
+  versionNo: 3,
+  status: 'Issued',
+  generatedFromProposalVersionNo: 2,
+  issuedByUserId: 'user-manager',
+  issuedAtUtc: '2026-11-02T14:00:00',
+  isStale: false,
+  items: [
+    { section: 'Dietary', timeLabel: null, body: DIETARY_STATEMENT, quantityLabel: null },
+    { section: 'Timeline', timeLabel: '17:00', body: 'Rigging av selskapslokalet', quantityLabel: null },
+    { section: 'Timeline', timeLabel: '18:00', body: 'Velkomstdrink serveres i baren', quantityLabel: '40 stk' },
+    { section: 'Kitchen', timeLabel: '19:00', body: 'Julebordmeny, hovedrett ut samlet', quantityLabel: '40 kuvert' }
+  ]
+};
+
+// No statement has been opened yet — a 200 whose `settlement` is null, which the client reads as an
+// answered absence rather than as a failed read.
+const ADMIN_SETTLEMENT = { settlement: null, revision: null };
+
+const ADMIN_NOTIFICATION_HEALTH = {
+  dispatchEnabled: false,
+  queuedCount: 2,
+  deadLetteredCount: 0,
+  deadLettered: []
+};
+
+// ---- Growth: the venue's privacy queue ----------------------------------------------------------
+//
+// The rows a guest's own rights journey leaves behind. `GrowthPrivacyRequests` is written by
+// `POST /v1/growth/preference-session/privacy-requests` — the button on
+// `pages/preferences/communications.vue`, which then tells the guest, verbatim, that «the venue has
+// one month to answer you. That follows from GDPR article 12.»
+//
+// WHY THE FILING IS SEEDED AND NOT DRIVEN. The guest half of that journey cannot be walked in a
+// browser against this fixture, and the obstacle is a real deployment defect rather than a gap here:
+// the preference session is an HttpOnly cookie, so endpoints 4/5/7 are sent `credentials: 'include'`
+// — and a browser refuses to attach credentials to a response carrying
+// `Access-Control-Allow-Origin: *`, which is what `Program.cs` builds and what `send()` below
+// reproduces. Teaching this fixture to echo the origin would model a backend that does not exist and
+// would make a page that only works here pass. So the row is seeded in the state the guest's filing
+// leaves it in, and the venue's half — the half with no surface at all until now — is what the
+// browser drives.
+//
+// NOT LITERAL DATES, because the whole subject is a countdown. A hard-coded `receivedAt` would be
+// overdue by a different number of days every day the suite runs and eventually stop being a
+// countdown at all. Computed from the clock at reset so «past the one-month deadline» and «filed
+// this week» stay true facts about the world rather than about the calendar.
+const GROWTH_PRIVACY_OVERDUE_ID = 9101;
+const GROWTH_PRIVACY_FRESH_ID = 9102;
+const GROWTH_PRIVACY_CLOSED_ID = 9100;
+
+// The row belonging to a store this caller does not administer. It exists so that «only this store's
+// requests are shown» is a claim with something to be wrong about: a list route that stopped
+// filtering by store would surface it, and a single-store fixture could never notice.
+const GROWTH_PRIVACY_FOREIGN_STORE_ID = 99;
+const GROWTH_PRIVACY_FOREIGN_ID = 9900;
+
+// ---- Growth: the consent wording a capture is pinned to -----------------------------------------
+//
+// ONE ROW, PLATFORM-GLOBAL, AND THE PAGE RENDERS IT VERBATIM. The version id travels in the same
+// response as the text precisely so a page cannot display one version and post another, and the
+// journey asserts the sentence on screen is this string character for character — a page that
+// summarised, translated or re-wrapped it would be showing a guest something other than what the
+// receipt will say they agreed to.
+const GROWTH_CONSENT = {
+  consentTextVersionId: 'cnst-v3-nb-no',
+  version: 3,
+  locale: 'nb-NO',
+  text: 'Ja, jeg vil ha nyhetsbrev på e-post fra denne bedriften. Jeg kan melde meg av når som helst, ' +
+    'og avmeldingslenken ligger i hver e-post.'
+};
+
+/**
+ * A second venue, used by the guest journey as the store nobody has ever switched Growth on for.
+ *
+ * It is NOT a special-cased dark store here: `fixture/growth.js` resolves `growth.module` out of the
+ * same per-store override table the operator switchboard writes, so this id is dark for the ordinary
+ * reason — deny-closed and never flipped — and store 42 is dark too until somebody pulls the lever.
+ * A hard-coded dark id would have modelled a world with no flags in it, which is the defect the
+ * journey sweep found in six other walks.
+ */
+const GROWTH_DARK_STORE_ID = 77;
+
+// ---- Meals: the company, its corridor, and the three invitation codes ---------------------------
+//
+// THE CONTACT ON THE GOOD CODE IS THE MANAGER'S EMAIL, AND THE CLAIM JOURNEY SIGNS IN AS THE WORKER
+// FIRST. That ordering is the whole point: `meals.invitation-contact-mismatch` is the refusal that a
+// forwarded token must meet, and it is the one refusal on the surface that has to withhold — the
+// server "deliberately does NOT echo the intended contact", so the page may not either, and the only
+// way to prove that is to be refused while holding a code that names somebody else.
+
+const MEALS_COMPANY_ID = 'comp-fixture-1';
+const MEALS_COMPANY_NAME = 'Nordane AS';
+
+/** Names the manager. A worker holding it is refused without being told whose it is. */
+const MEALS_INVITE_OK = 'mealsinv_fixture_open';
+/** Already spent — `meals.invitation-not-claimable` with `currentState: Claimed`. */
+const MEALS_INVITE_USED = 'mealsinv_fixture_used';
+/** Names nothing. Indistinguishable, by design, from a module that is switched off. */
+const MEALS_INVITE_UNKNOWN = 'mealsinv_fixture_nonexistent';
+
+const MEALS_INVITATIONS = {
+  [MEALS_INVITE_OK]: {
+    invitationId: 'inv-1',
+    contactEmail: 'marit@example.test',
+    contactPhone: null,
+    intendedRole: 'Employee',
+    state: 'Pending',
+    expiresAtUtc: '2026-12-31T22:59:59Z'
+  },
+  [MEALS_INVITE_USED]: {
+    invitationId: 'inv-2',
+    contactEmail: 'ola@example.test',
+    contactPhone: null,
+    intendedRole: 'Employee',
+    state: 'Claimed',
+    expiresAtUtc: '2026-12-31T22:59:59Z'
+  }
+};
+
+function daysAgo (days) {
+  return new Date(Date.now() - days * 24 * 3600 * 1000).toISOString();
+}
+
+function growthPrivacyRequests () {
+  return [
+    {
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_FRESH_ID,
+      contactPointId: 5502,
+      requestType: 'Access',
+      state: 'Received',
+      receivedAt: daysAgo(3),
+      resolvedAt: null,
+      noticeDelivery: null
+    },
+    {
+      // THE SUBJECT OF THE JOURNEY: an art. 17 erasure filed 41 days ago, so the one-month deadline
+      // the guest was shown has already run out. Seeded SECOND on purpose, and after a request that
+      // is three days old, so that a list served in seed order would bury the one about to run out
+      // of month — the fixture has to sort by deadline to put it first, exactly as `ListAsync` does.
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_OVERDUE_ID,
+      contactPointId: 5501,
+      requestType: 'Erasure',
+      state: 'Received',
+      receivedAt: daysAgo(41),
+      resolvedAt: null,
+      noticeDelivery: null
+    },
+    {
+      storeId: STORE_ID,
+      requestId: GROWTH_PRIVACY_CLOSED_ID,
+      contactPointId: 5500,
+      requestType: 'Access',
+      state: 'Fulfilled',
+      receivedAt: daysAgo(70),
+      resolvedAt: daysAgo(68),
+      // What the TRANSPORT reported, never a delivery. There is deliberately no `Delivered` member
+      // in the enum this models.
+      noticeDelivery: 'SubmittedToTransport'
+    },
+    {
+      storeId: GROWTH_PRIVACY_FOREIGN_STORE_ID,
+      requestId: GROWTH_PRIVACY_FOREIGN_ID,
+      contactPointId: 7700,
+      requestType: 'Erasure',
+      state: 'Received',
+      receivedAt: daysAgo(50),
+      resolvedAt: null,
+      noticeDelivery: null
+    }
+  ];
+}
+
+// ---- Margin: the ingredient master, the catalog, and the week ----------------------------------
+//
+// THE NUMBERS ARE CHOSEN SO A JOURNEY CAN ASSERT THEM AS TEXT. A browser walk that only checks "some
+// money appeared" cannot tell a plate cost from a menu price, so every figure below divides cleanly
+// through the whole chain: 500 g of flour at kr 24,00/kg plus 1 litre of milk at kr 18,00/l is
+// kr 30,00 for the batch and kr 3,00 for one of ten portions, and a take-away price of kr 34,50 at
+// 15 % VAT is exactly kr 30,00 net, which makes the food-cost ratio exactly 10,00 %. None of that is
+// arithmetic the PAGE performs — every one of those figures is computed in `fixture/margin.js` and
+// read off one field on the wire — but a journey asserting `kr 3,00` is asserting the field it meant.
+
+/**
+ * The starter library `GET /margin/ingredients` offers a store that has none. Copying one is an
+ * ordinary create, which is how an empty store reaches its first costed recipe.
+ *
+ * `pricePerBaseUnitMinor` is NOT on the wire — the real surface resolves a price through supplier
+ * items and their effective-price windows. It lives here because the cost preview is computed on
+ * read and this fixture has to compute one; the shape the client sees is the preview, never this.
+ */
+const MARGIN_STARTERS = [
+  { name: 'Hvetemel', baseUnit: 'Kilogram', notes: 'Siktet', pricePerBaseUnitMinor: 2400 },
+  { name: 'Melk', baseUnit: 'Liter', notes: 'Helmelk', pricePerBaseUnitMinor: 1800 },
+  { name: 'Kardemomme', baseUnit: 'Gram', notes: 'Malt', pricePerBaseUnitMinor: 12 }
+];
+
+/**
+ * The store's product catalog, as the menu-margin read reports it — ONE ROW PER PRICE BASIS, because
+ * a dish has one plate cost and up to three prices at up to three VAT rates.
+ *
+ * `Kaffe` is already claimed by the seeded `Kaffebrygg` recipe. That is deliberate: the backend
+ * allows at most one ACTIVE link per product, so a second recipe pointing at it is refused
+ * `margin.product-link-invalid` — a refusal no unit test can reach.
+ */
+const MARGIN_PRODUCTS = [
+  {
+    productId: 'prod-vaffel',
+    productName: 'Vaffel med rømme',
+    goodsGroupName: 'Mat',
+    bases: [
+      { priceBasis: 'Base', grossPriceMinor: 3450, vatPercent: 15, netPriceMinor: 3000 },
+      { priceBasis: 'Table', grossPriceMinor: 5000, vatPercent: 25, netPriceMinor: 4000 }
+    ]
+  },
+  {
+    productId: 'prod-kaffe',
+    productName: 'Kaffe',
+    goodsGroupName: 'Drikke',
+    bases: [
+      { priceBasis: 'Base', grossPriceMinor: 4000, vatPercent: 25, netPriceMinor: 3200 }
+    ]
+  }
+];
+
+/** The store's suppliers. Read only, so a spend line's attribution has a name. */
+const MARGIN_SUPPLIERS = [
+  { supplierId: 'sup-1', name: 'Bergen Storkjøkken AS' },
+  { supplierId: 'sup-2', name: 'Nordane Kaffe' }
+];
+
+/**
+ * The week the statement surface reconciles. Every figure is the SERVER's — the page adds nothing up
+ * — and they are chosen to make the ratios exact: 1 200 000 / 4 000 000 = 30,00 % theoretical.
+ */
+const MARGIN_WEEK = {
+  netFoodSalesMinor: 4000000,
+  theoreticalIngredientCostMinor: 1200000,
+  coveredNetSalesMinor: 3600000,
+  uncoveredNetSalesMinor: 400000,
+  projectionWatermark: 918273,
+  // A Monday, and the Sunday six days later. The page refuses to send a non-Monday and offers the
+  // Monday of the picked week as a one-click suggestion.
+  weekStart: '2026-07-20',
+  weekEnd: '2026-07-26',
+  // Deliberately NOT a Monday.
+  weekMidweek: '2026-07-22'
+};
+
+// ---- CULTURES: a long page to put BEHIND a modal -----------------------------------------------
+//
+// `/admin/lang` renders one table row per translation key, and it is the only admin surface reachable
+// from this fixture that is TALLER THAN THE VIEWPORT while also opening a real `atoms/Modal`. That
+// combination is what the scroll-lock journey needs: a modal whose exit criterion is "the page behind
+// it does not scroll" cannot be proven on a page that had nothing to scroll.
+//
+// The keys are generated rather than copied out of `translations/no.ts`. Copying them would couple a
+// browser journey to a dictionary that changes weekly, and 60 synthetic rows make the page ~3x the
+// viewport, which is all the journey needs. NOTHING here claims to be the real dictionary.
+const CULTURE_KEYS = Array.from({ length: 60 }, (_, i) => 'fixture_key_' + String(i + 1).padStart(2, '0'));
+
+function translationsFor (prefix) {
+  return CULTURE_KEYS.reduce((acc, key) => {
+    acc[key] = prefix + ' ' + key;
+    return acc;
+  }, {});
+}
+
+const CULTURES = [
+  { code: 'no', name: 'Norwegian', nativeName: 'Norsk', translations: translationsFor('Tekst') },
+  { code: 'en', name: 'English', nativeName: 'English', translations: translationsFor('Text') }
+];
+
+// ---- ONGOING ORDERS: the one page that hosts six different modals ------------------------------
+//
+// `/admin/ongoing` renders a card per live order and mounts SIX modal components over one shared
+// `currentOrder` — OrderProcessing, Receipt, TransferOrder, ChangeDeliveryType, SmsDriver and
+// CustomerInfo. That is what the estate scroll-lock journey needs and `/admin/lang` cannot give it:
+// the previous journey could only ever open two instances of the SAME component, and the defect
+// being closed here is what happens when two DIFFERENT modals, each with its own idea of when to
+// release the body, are open at once.
+//
+// Enough of them to make the "new" column taller than the viewport, for the same reason the culture
+// keys exist: "the page behind does not scroll" cannot be proven on a page with nothing to scroll.
+// The shape is the one `components/molecules/OrderCard.vue` reads, not a copy of the API's model.
+const ONGOING_ORDER_COUNT = 14;
+
+const ONGOING_ORDERS = Array.from({ length: ONGOING_ORDER_COUNT }, (_, i) => ({
+  id: 'order-' + (i + 1),
+  friendlyOrderId: String(1000 + i + 1),
+  storeId: STORE_ID,
+  storeLegalName: STORE_NAME,
+  // The receipt's statutory header is behind `v-if="order.storeVAT"` in
+  // `components/molecules/ReceiptModal.vue`, so WITHOUT this field the two lines that carry the
+  // issuing authority — the org-number line and the register name — do not render at all, and a
+  // journey that opens the receipt would report a clean surface while saying nothing about the
+  // part of it a bokføring inspector reads. `core/models/order/order.ts:50` declares `storeVAT` on
+  // the order, so this is the field the API supplies and not a prop invented for a test.
+  //
+  // A NORWEGIAN organisasjonsnummer, because this fixture's venue is Norwegian and the number is
+  // what the wrong German label is printed OVER. Nine digits, the shape Brønnøysund issues.
+  storeVAT: '912345678',
+  status: 'Accepted',
+  deliveryType: 'SelfPickup',
+  // WITHOUT THIS FIELD THE RECEIPT'S PAYMENT ROW CAN ONLY EVER EXERCISE THE UNKNOWN FALLBACK.
+  // `plugins/global-mixin.js` resolves `paymentTypeLabel` through `PAYMENT_TYPE_LABEL_KEYS`, and an
+  // order with no `paymentType` at all misses every member of that map — so the row read
+  // "Unbekannt" / "Ukjent" and a walk asserting it would have said nothing about whether the
+  // seventeen mapped members reach the dictionary. Same reasoning as `storeVAT` above: a fixture
+  // that omits the field renders a surface the journey cannot measure.
+  //
+  // `PayInStore` rather than a card rail because these are live orders on `/admin/ongoing` awaiting
+  // pickup, and it is one of the ten the pre-existing switch already carried — so the Norwegian arm
+  // of the journey pins a word that did not move in this change either.
+  paymentType: 'PayInStore',
+  platform: 'Web',
+  created: new Date(Date.UTC(2026, 7, 1, 9, i)).toISOString(),
+  requestedCompletion: null,
+  userFullName: 'Gjest ' + (i + 1),
+  userId: 'user-guest-' + (i + 1),
+  userIsMember: false,
+  user: { id: 'user-guest-' + (i + 1), phoneNumber: '+479000' + String(1000 + i) },
+  totalAmount: 249 + i,
+  currencyCode: CURRENCY,
+  items: [
+    { id: 'line-' + (i + 1), name: 'Dagens rett', amount: 1, price: 249 + i, comment: '' }
+  ]
+}));
+
+module.exports = {
+  ONGOING_ORDERS,
+  MANAGER_PHONE,
+  WORKER_PHONE,
+  PHONE_SIGNUP_ADMIN_PHONE,
+  CONCIERGE_PHONE,
+  NEW_HIRE_PHONE,
+  OTP,
+  CULTURES,
+  STORE_ID,
+  STORE_NAME,
+  VIRGIN_STORE_ID,
+  VIRGIN_STORE_NAME,
+  VIRGIN_STAFF,
+  seededRoleCatalogue,
+  staffFor,
+  TIME_ZONE,
+  CURRENCY,
+  USERS,
+  STAFF,
+  UNKNOWN_PERSON_REF,
+  ROLES,
+  MARGIN_STARTERS,
+  MARGIN_PRODUCTS,
+  MARGIN_SUPPLIERS,
+  MARGIN_WEEK,
+  FEATURE_FLAG_CATALOG,
+  SCHEDULE_WRITE_FLAG,
+  ROLE_WRITE_FLAG,
+  TIMESHEET_WRITE_FLAG,
+  EVENTS_CORE_FLAG,
+  EVENTS_SETTLEMENT_FLAG,
+  GUEST_VENUE_STORE_ID,
+  OPEN_PROPOSAL_TOKEN,
+  SUPERSEDED_PROPOSAL_TOKEN,
+  PROPOSALS,
+  seededFlagOverrides,
+  ADMIN_EVENT_ID,
+  ADMIN_DEPOSIT_TOKEN,
+  ADMIN_PROPOSAL_TOKEN,
+  DIETARY_STATEMENT,
+  ADMIN_EVENT_ROW,
+  ADMIN_EVENT_DETAIL,
+  ADMIN_DEPOSITS,
+  ADMIN_RUN_SHEET,
+  ADMIN_SETTLEMENT,
+  ADMIN_NOTIFICATION_HEALTH,
+  GROWTH_PRIVACY_OVERDUE_ID,
+  GROWTH_PRIVACY_FRESH_ID,
+  GROWTH_PRIVACY_CLOSED_ID,
+  GROWTH_PRIVACY_FOREIGN_STORE_ID,
+  GROWTH_PRIVACY_FOREIGN_ID,
+  GROWTH_CONSENT,
+  GROWTH_DARK_STORE_ID,
+  MEALS_COMPANY_ID,
+  MEALS_COMPANY_NAME,
+  MEALS_INVITE_OK,
+  MEALS_INVITE_USED,
+  MEALS_INVITE_UNKNOWN,
+  MEALS_INVITATIONS,
+  growthPrivacyRequests,
+  PERSONNEL_BUSINESS_DATE,
+  PERSONNEL_AS_OF_UTC,
+  PERSONNEL_RETAIN_UNTIL,
+  PERSONNEL_BUSINESS_NAME,
+  PERSONNEL_ORGNR,
+  PERSONNEL_ROWS
+};

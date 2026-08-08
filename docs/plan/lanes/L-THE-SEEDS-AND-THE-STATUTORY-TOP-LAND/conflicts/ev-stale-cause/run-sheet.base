@@ -1,0 +1,49 @@
+{
+  "journey": "ev-dietary",
+  "capturedBy": "WebApi.Tests/Wire/EventsDietaryRunSheetWireTests.cs",
+  "capturedAtUtc": "2026-07-31T21:13:36.4942370Z",
+  "steps": [
+    {
+      "name": "Print the run sheet (v1) \u2014 nothing stated yet",
+      "method": "PUT",
+      "path": "/events/admin/4101/events/4390/run-sheet",
+      "status": 200,
+      "response": {"versionNo":1,"status":"Issued","generatedFromProposalVersionNo":1,"operativeProposalVersionNo":1,"isStale":false,"issuedByUserId":"wire-admin-a","createdAtUtc":"2026-07-31T21:13:36.372523Z","issuedAtUtc":"2026-07-31T21:13:36.372523Z","items":[{"section":"Timeline","sortOrder":0,"timeLabel":"18:30","body":"Service begins.","quantityLabel":null},{"section":"Timeline","sortOrder":1,"timeLabel":"23:00","body":"Service ends.","quantityLabel":null},{"section":"Space","sortOrder":2,"timeLabel":null,"body":"No space assigned.","quantityLabel":null},{"section":"Menu","sortOrder":3,"timeLabel":null,"body":"Four-course tasting menu","quantityLabel":"24"},{"section":"Menu","sortOrder":4,"timeLabel":null,"body":"Cheese board","quantityLabel":"3"},{"section":"Dietary","sortOrder":5,"timeLabel":null,"body":"Dietary and allergen requirements are not captured as structured data, so this sheet cannot confirm that there are none. Nothing has been stated on this booking — the field is empty, which is not an answer. Confirm with the booking contact before service, and record what they say on the event.","quantityLabel":null},{"section":"Dietary","sortOrder":6,"timeLabel":null,"body":"Guest wrote (verbatim, unscreened): Looking forward to it — one of our party is coeliac.","quantityLabel":null},{"section":"Staffing","sortOrder":7,"timeLabel":null,"body":"Plan staffing for 24 guests.","quantityLabel":null},{"section":"Contacts","sortOrder":8,"timeLabel":null,"body":"Sofie Berg — +4740000024 / sofie@example.invalid","quantityLabel":null}]}
+    },
+    {
+      "name": "Record the booking\u0027s dietary statement",
+      "method": "PUT",
+      "path": "/events/admin/4101/events/4390/dietary",
+      "status": 200,
+      "response": {"eventId":4390,"statement":"One coeliac (strict, shared fryer is a problem) and one severe nut allergy with an EpiPen, table 3.","statedAtUtc":"2026-07-31T21:13:36.445197Z","statedByUserId":"wire-admin-a"}
+    },
+    {
+      "name": "Read the printed sheet again \u2014 it is now stale",
+      "method": "GET",
+      "path": "/events/admin/4101/events/4390/run-sheet",
+      "status": 200,
+      "response": {"versionNo":1,"status":"Issued","generatedFromProposalVersionNo":1,"operativeProposalVersionNo":1,"isStale":true,"issuedByUserId":"wire-admin-a","createdAtUtc":"2026-07-31T21:13:36.372523","issuedAtUtc":"2026-07-31T21:13:36.372523","items":[{"section":"Timeline","sortOrder":0,"timeLabel":"18:30","body":"Service begins.","quantityLabel":null},{"section":"Timeline","sortOrder":1,"timeLabel":"23:00","body":"Service ends.","quantityLabel":null},{"section":"Space","sortOrder":2,"timeLabel":null,"body":"No space assigned.","quantityLabel":null},{"section":"Menu","sortOrder":3,"timeLabel":null,"body":"Four-course tasting menu","quantityLabel":"24"},{"section":"Menu","sortOrder":4,"timeLabel":null,"body":"Cheese board","quantityLabel":"3"},{"section":"Dietary","sortOrder":5,"timeLabel":null,"body":"Dietary and allergen requirements are not captured as structured data, so this sheet cannot confirm that there are none. Nothing has been stated on this booking — the field is empty, which is not an answer. Confirm with the booking contact before service, and record what they say on the event.","quantityLabel":null},{"section":"Dietary","sortOrder":6,"timeLabel":null,"body":"Guest wrote (verbatim, unscreened): Looking forward to it — one of our party is coeliac.","quantityLabel":null},{"section":"Staffing","sortOrder":7,"timeLabel":null,"body":"Plan staffing for 24 guests.","quantityLabel":null},{"section":"Contacts","sortOrder":8,"timeLabel":null,"body":"Sofie Berg — +4740000024 / sofie@example.invalid","quantityLabel":null}]}
+    },
+    {
+      "name": "Reissue the run sheet (v2)",
+      "method": "PUT",
+      "path": "/events/admin/4101/events/4390/run-sheet",
+      "status": 200,
+      "response": {"versionNo":2,"status":"Issued","generatedFromProposalVersionNo":1,"operativeProposalVersionNo":1,"isStale":false,"issuedByUserId":"wire-admin-a","createdAtUtc":"2026-07-31T21:13:36.463941Z","issuedAtUtc":"2026-07-31T21:13:36.463941Z","items":[{"section":"Timeline","sortOrder":0,"timeLabel":"18:30","body":"Service begins.","quantityLabel":null},{"section":"Timeline","sortOrder":1,"timeLabel":"23:00","body":"Service ends.","quantityLabel":null},{"section":"Space","sortOrder":2,"timeLabel":null,"body":"No space assigned.","quantityLabel":null},{"section":"Menu","sortOrder":3,"timeLabel":null,"body":"Four-course tasting menu","quantityLabel":"24"},{"section":"Menu","sortOrder":4,"timeLabel":null,"body":"Cheese board","quantityLabel":"3"},{"section":"Dietary","sortOrder":5,"timeLabel":null,"body":"Dietary and allergen requirement recorded by the venue (stated 2026-07-31): One coeliac (strict, shared fryer is a problem) and one severe nut allergy with an EpiPen, table 3.","quantityLabel":null},{"section":"Dietary","sortOrder":6,"timeLabel":null,"body":"That is the venue's record of what it was told, not a checked list. Confirm with the booking contact before service.","quantityLabel":null},{"section":"Dietary","sortOrder":7,"timeLabel":null,"body":"Guest wrote (verbatim, unscreened): Looking forward to it — one of our party is coeliac.","quantityLabel":null},{"section":"Staffing","sortOrder":8,"timeLabel":null,"body":"Plan staffing for 24 guests.","quantityLabel":null},{"section":"Contacts","sortOrder":9,"timeLabel":null,"body":"Sofie Berg — +4740000024 / sofie@example.invalid","quantityLabel":null}]}
+    },
+    {
+      "name": "Re-read the current sheet as the kitchen would",
+      "method": "GET",
+      "path": "/events/admin/4101/events/4390/run-sheet",
+      "status": 200,
+      "response": {"versionNo":2,"status":"Issued","generatedFromProposalVersionNo":1,"operativeProposalVersionNo":1,"isStale":false,"issuedByUserId":"wire-admin-a","createdAtUtc":"2026-07-31T21:13:36.463941","issuedAtUtc":"2026-07-31T21:13:36.463941","items":[{"section":"Timeline","sortOrder":0,"timeLabel":"18:30","body":"Service begins.","quantityLabel":null},{"section":"Timeline","sortOrder":1,"timeLabel":"23:00","body":"Service ends.","quantityLabel":null},{"section":"Space","sortOrder":2,"timeLabel":null,"body":"No space assigned.","quantityLabel":null},{"section":"Menu","sortOrder":3,"timeLabel":null,"body":"Four-course tasting menu","quantityLabel":"24"},{"section":"Menu","sortOrder":4,"timeLabel":null,"body":"Cheese board","quantityLabel":"3"},{"section":"Dietary","sortOrder":5,"timeLabel":null,"body":"Dietary and allergen requirement recorded by the venue (stated 2026-07-31): One coeliac (strict, shared fryer is a problem) and one severe nut allergy with an EpiPen, table 3.","quantityLabel":null},{"section":"Dietary","sortOrder":6,"timeLabel":null,"body":"That is the venue's record of what it was told, not a checked list. Confirm with the booking contact before service.","quantityLabel":null},{"section":"Dietary","sortOrder":7,"timeLabel":null,"body":"Guest wrote (verbatim, unscreened): Looking forward to it — one of our party is coeliac.","quantityLabel":null},{"section":"Staffing","sortOrder":8,"timeLabel":null,"body":"Plan staffing for 24 guests.","quantityLabel":null},{"section":"Contacts","sortOrder":9,"timeLabel":null,"body":"Sofie Berg — +4740000024 / sofie@example.invalid","quantityLabel":null}]}
+    },
+    {
+      "name": "Read the event detail \u2014 the field a screen would bind to",
+      "method": "GET",
+      "path": "/events/admin/4101/events/4390",
+      "status": 200,
+      "response": {"id":4390,"publicId":"cf8ddcff-812c-4b9a-b96d-df199c8e8c0c","storeId":4101,"status":"Confirmed","title":"Sofie's 40th","eventDate":"2026-09-19T00:00:00","startTime":"18:30:00","endTime":"23:00:00","timeZoneId":"Europe/Oslo","guestCountPlanned":24,"spaceId":null,"contactName":"Sofie Berg","contactEmail":"sofie@example.invalid","contactPhone":"+4740000024","companyName":null,"companyOrgNumber":null,"source":"ConsumerInquiry","acceptedProposalVersionNo":1,"createdAtUtc":"2026-07-31T21:13:36.139183","versions":[{"versionNo":1,"status":"Accepted","currencyCode":"NOK","totalMinor":2400000,"minimumSpendMinor":0,"roomFeeMinor":0,"depositRequiredMinor":0,"termsText":null,"expiresAtUtc":null,"publicToken":"823a6f21-9bed-4639-94cd-fa0256e995be","contentHash":"wire-hash-dietary","createdAtUtc":"2026-07-31T21:13:36.139183","sentAtUtc":"2026-07-31T21:13:36.139183","lines":[{"lineNo":1,"kind":"Package","description":"Four-course tasting menu","quantity":24.0,"unitPriceMinor":95000,"amountMinor":2280000,"vatRate":0.25},{"lineNo":2,"kind":"AddOn","description":"Cheese board","quantity":3.0,"unitPriceMinor":40000,"amountMinor":120000,"vatRate":0.25}],"vat":{"rates":[{"vatPercent":25,"vatCode":"TwentyFivePercent","grossMinor":2400000,"netMinor":1920000,"vatMinor":480000}],"coveredGrossMinor":2400000,"withheldGrossMinor":0,"vatTotalMinor":480000,"withheldLines":[],"isComplete":true}}],"transitions":[],"notes":[{"id":1,"authorUserId":null,"body":"Looking forward to it — one of our party is coeliac.","createdAtUtc":"2026-07-31T21:13:36.139183"}],"dietary":{"eventId":4390,"statement":"One coeliac (strict, shared fryer is a problem) and one severe nut allergy with an EpiPen, table 3.","statedAtUtc":"2026-07-31T21:13:36.445197","statedByUserId":"wire-admin-a"}}
+    }
+  ]
+}

@@ -1,0 +1,1089 @@
+{
+  "startedAt": "2026-08-07T08:05:32.277Z",
+  "steps": [
+    {
+      "name": "board:initial",
+      "board": {
+        "blocker": null,
+        "notices": [
+          "«Faktisk» er svaret modulens egen port gir. Noen moduler ligger i tillegg under en driftsbryter i serveroppsettet som denne siden ikke ser. Derfor er «faktisk: av» til å stole på, mens «faktisk: på» ikke er et løfte om at skrivingen går gjennom.",
+          "Listen er katalogen tjenesten oppgir. En modul kan ha trinn som med vilje ikke tilbys her — de gir ingen effekt uansett hva de settes til, og en bryter som ikke gjør noe er verre enn ingen bryter."
+        ],
+        "modules": [
+          {
+            "module": "Events",
+            "rows": [
+              {
+                "key": "Events.Core",
+                "title": "Core (inquiries/proposals)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Events.Deposits",
+                "title": "Deposit money path",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Events.Settlement",
+                "title": "Settlement machine",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Growth",
+            "rows": [
+              {
+                "key": "growth.dispatch",
+                "title": "Live newsletter dispatch (kill switch)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "growth.module",
+                "title": "Module (guest capture)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Margin",
+            "rows": [
+              {
+                "key": "Margin.Module",
+                "title": "Module master",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Margin.PriceImport",
+                "title": "Price import (CSV)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Margin.Statements",
+                "title": "Statements",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Meals",
+            "rows": [
+              {
+                "key": "meals.module",
+                "title": "Module (store surfaces)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Training",
+            "rows": [
+              {
+                "key": "training.assignments",
+                "title": "Assignments",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "training.setup",
+                "title": "Setup (courses/certificates)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Workforce",
+            "rows": [
+              {
+                "key": "workforce.clock",
+                "title": "POS clock write",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.dispatch",
+                "title": "Dispatch",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.exchange",
+                "title": "Shift exchange",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.export",
+                "title": "Export",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.module",
+                "title": "Module (store surfaces)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.publication",
+                "title": "Schedule publication",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.selfservice",
+                "title": "Self-service",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.setup",
+                "title": "Setup",
+                "badge": "På",
+                "facts": [
+                  "Standard: på",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Workforce:off:workforce.module",
+      "toast": "workforce.module er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Workforce:surface-dark",
+      "url": "/admin/workforce-roster",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 403,
+          "url": "/workforce/stores/1/context"
+        },
+        {
+          "status": 403,
+          "url": "/workforce/stores/1/context"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nDu har ikke bemanningstilgang i denne butikken."
+    },
+    {
+      "name": "Workforce:on:workforce.module",
+      "toast": "workforce.module er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Workforce:surface-lit",
+      "url": "/admin/workforce-roster",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "url": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/context"
+        },
+        {
+          "status": 404,
+          "url": "/workforce/stores/1/invitations"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        }
+      ],
+      "text": "Ansatte\nHvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes.\nLegg til person\nOppdater\nPERSON\tFULLMAKTER\tANSATTNR.\tSTATUS\tFRA\tTIL\nAstrid Vik\nRegistrert\nEgen vaktplan\nANS-002\tAktiv\t01. jan. 2024\t—\nIngrid Moen\nRegistrert\nEgen vaktplan\nPlanlegger\nLeder\nLønn\nANS-001\tAktiv\t01. jan. 2020\t—\nJonas Lie\nInvitert\nEgen vaktplan\nANS-003\tAktiv\t01. jan. 2024\t—\nNora Berg\nInvitert\nEgen vaktplan\nTH-104\tAktiv\t10. aug. 2026\t—\nSander Holm\nInvitert\nEgen vaktplan\nTH-105\tAktiv\t10. aug. 2026\t—\nSelma Haug\nInvitert\nEgen vaktplan\nANS-004\tAktiv\t01. jan. 2024\t—"
+    },
+    {
+      "name": "Margin:off:Margin.Module",
+      "toast": "Margin.Module er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Margin:surface-dark",
+      "url": "/admin/margin-recipes",
+      "calls": [
+        {
+          "status": 404,
+          "url": "/margin/status?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 404,
+          "url": "/margin/status?storeId=1"
+        }
+      ],
+      "text": "Oppskrifter og kostpris\nLegg inn en oppskrift og se hva den koster å lage.\nMargin-modulen er ikke slått på for denne butikken."
+    },
+    {
+      "name": "Margin:on:Margin.Module",
+      "toast": "Margin.Module er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Margin:surface-lit",
+      "url": "/admin/margin-recipes",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/margin/status?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/status?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/ingredients?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/recipes?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/ingredients?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/recipes?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/menu-margin?storeId=1"
+        },
+        {
+          "status": 200,
+          "url": "/margin/menu-margin?storeId=1"
+        }
+      ],
+      "text": "Oppskrifter og kostpris\nLegg inn en oppskrift og se hva den koster å lage.\nHent på nytt\nKostprisen regnes ut når siden leses. Har du lagt inn priser i et annet vindu, henter dette de nye tallene.\nRåvarer\n19 råvarer i butikken.\nKopier fra startbiblioteket:\n+ Kjøttdeig+ Kyllingfilet+ Poteter+ Hvitløk+ Tomat, hermetisk+ Olivenolje+ Salt+ Pasta, tørr+ Ris+ Revet ost\nNy oppskrift\nNAVN\nUTBYTTE\nENHET\ngram\nkilo\nmilliliter\nliter\nstk\nPORSJONER\nLINJER\n+ Legg til linje Lagre og regn ut\nOppskrifter\nAvokadotoast\nAktiv v1 · Koblet til 1 produkt\nCappuccino\nAktiv v1 · 1 utkast · Koblet til 1 produkt\nDessertsaus (uten rett)\nAktiv v1 · Ikke koblet til noe produkt\nFiskekraft (grunnbase)\nAktiv v1 · Ikke koblet til noe produkt\nFiskesuppe (oppskrift)\nAktiv v1 · Koblet til 1 produkt\nGrønnsakskraft (grunnbase)\nAktiv v1 · Ikke koblet til noe produkt\nHusets isvann\nAktiv v1 · Koblet til 1 produkt\nHusets vann (oppskrift)\nAktiv v1 · Koblet til 1 produkt\nKanelboller (batch)\nAktiv v1 · Koblet til 1 produkt\nOstesmørbrød\nAktiv v1 · Koblet til 1 produkt\nSafranrisotto (oppskrift)\nAktiv v1 · Koblet til 1 produkt\nSommersuppe (utgått – demo)\nIngen aktiv versjon · Ikke koblet til noe produkt\ntest\nIngen aktiv versjon · 1 utkast · Ikke koblet til noe produkt\nTomatsuppe (batch)\nAktiv v1 · Koblet til 1 produkt\nVaniljesaus (uten rett)\nAktiv v1 · Ikke koblet til noe produkt\nVelg en oppskrift, eller legg inn en ny, for å se kostprisen."
+    },
+    {
+      "name": "Training:off:training.setup",
+      "toast": "training.setup er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Training:surface-dark",
+      "url": "/admin/training-courses",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/context"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/context"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/completions"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/assignments"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/courses"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/certificates"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/assignments"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/completions"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/certificates"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/courses"
+        }
+      ],
+      "text": "Opplæring\nEtt kurs blir til dokumentasjon: lag kurset, publiser en versjon, tildel den, før gjennomføringen — og slå opp hva personen faktisk innehar.\nLes inn på nytt\nModulstatus\nTidssone\nEurope/Oslo\nDine rettigheter\nmanage\nKompetansekobling mot bemanning\nIkke koblet\nFunksjonsbrytere\nKurs og sertifikater\nAv\nTildeling og gjennomføring\nPå\nOnboarding\nAv\nSjekklister\nAv\nAvvikslogg\nAv\nKompetansekobling\nAv\nPåminnelser\nAv\nBryterne er serverens svar, ikke en gjetning. Er en bryter av, svarer lesing fortsatt — men skriving avvises.\n1. Kurs\nTittel\tKategori\tKompetansenøkkel\tVersjoner\tOpprettet\nBrannvern og romningsveier\tHMS\t—\t1\t06.08.2026, 22:06\nAlkoholservering og skjenkeregler (193639)\tAlkoholservering\talkoholservering\t1 publisert\t06.08.2026, 19:36\nHMS og brannvern\tHMS\t—\t1 publisert\t06.08.2026, 17:38\nKassaopplæring – oppgjør og retur\tDrift\t—\t1 publisert\t06.08.2026, 17:38\nAllergener og merking\tMattrygghet\tallergener\t1 publisert\t06.08.2026, 17:38\nNæringsmiddelhygiene og temperaturkontroll\tMattrygghet\tnaeringsmiddelhygiene\t3 publisert\t06.08.2026, 17:38\nNytt kurs\nTITTEL\nKATEGORI\nKOMPETANSENØKKEL\nNøkkelen er det en bestått gjennomføring gir personen. La den stå tom for kurs som ikke gir kompetanse.\nOpprett kurs\nServeren melder at kurs og sertifikater er slått av for butikken. Skriving vil bli avvist.\n2. Versjoner\nVelg et kurs i listen for å se versjonene.\n5. Sertifikater\nPerson\tType\tUtsteder\tUtstedt\tUtløper\tStatus\nSelma Haug\tfagbrev-kokk\tVestland fylkeskommune\t2022-06-29\t—\tGyldig\nAstrid Vik\tfagbrev-kokk\tVestland fylkeskommune\t2019-06-20\t—\tGyldig\nJonas Lie\tforstehjelp\tRøde Kors Førstehjelp\t2024-06-10\t2026-07-01\tUtløpt\nJonas Lie\tnaeringsmiddelhygiene\tMattilsynet-godkjent kurs\t2024-07-27\t2026-07-27\tUtløpt\nNora Berg\talkoholservering\tBergen kommune\t2025-08-31\t2026-08-26\tUtløper snart\nAstri"
+    },
+    {
+      "name": "Training:on:training.setup",
+      "toast": "training.setup er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Training:surface-lit",
+      "url": "/admin/training-courses",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/context"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/context"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/completions"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/assignments"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/certificates"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/courses"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/completions"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/staff"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/assignments"
+        },
+        {
+          "status": 200,
+          "url": "/workforce/stores/1/roles"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/certificates"
+        },
+        {
+          "status": 200,
+          "url": "/training/stores/1/courses"
+        }
+      ],
+      "text": "Opplæring\nEtt kurs blir til dokumentasjon: lag kurset, publiser en versjon, tildel den, før gjennomføringen — og slå opp hva personen faktisk innehar.\nLes inn på nytt\nModulstatus\nTidssone\nEurope/Oslo\nDine rettigheter\nmanage\nKompetansekobling mot bemanning\nIkke koblet\nFunksjonsbrytere\nKurs og sertifikater\nPå\nTildeling og gjennomføring\nPå\nOnboarding\nAv\nSjekklister\nAv\nAvvikslogg\nAv\nKompetansekobling\nAv\nPåminnelser\nAv\nBryterne er serverens svar, ikke en gjetning. Er en bryter av, svarer lesing fortsatt — men skriving avvises.\n1. Kurs\nTittel\tKategori\tKompetansenøkkel\tVersjoner\tOpprettet\nBrannvern og romningsveier\tHMS\t—\t1\t06.08.2026, 22:06\nAlkoholservering og skjenkeregler (193639)\tAlkoholservering\talkoholservering\t1 publisert\t06.08.2026, 19:36\nHMS og brannvern\tHMS\t—\t1 publisert\t06.08.2026, 17:38\nKassaopplæring – oppgjør og retur\tDrift\t—\t1 publisert\t06.08.2026, 17:38\nAllergener og merking\tMattrygghet\tallergener\t1 publisert\t06.08.2026, 17:38\nNæringsmiddelhygiene og temperaturkontroll\tMattrygghet\tnaeringsmiddelhygiene\t3 publisert\t06.08.2026, 17:38\nNytt kurs\nTITTEL\nKATEGORI\nKOMPETANSENØKKEL\nNøkkelen er det en bestått gjennomføring gir personen. La den stå tom for kurs som ikke gir kompetanse.\nOpprett kurs\n2. Versjoner\nVelg et kurs i listen for å se versjonene.\n5. Sertifikater\nPerson\tType\tUtsteder\tUtstedt\tUtløper\tStatus\nSelma Haug\tfagbrev-kokk\tVestland fylkeskommune\t2022-06-29\t—\tGyldig\nAstrid Vik\tfagbrev-kokk\tVestland fylkeskommune\t2019-06-20\t—\tGyldig\nJonas Lie\tforstehjelp\tRøde Kors Førstehjelp\t2024-06-10\t2026-07-01\tUtløpt\nJonas Lie\tnaeringsmiddelhygiene\tMattilsynet-godkjent kurs\t2024-07-27\t2026-07-27\tUtløpt\nNora Berg\talkoholservering\tBergen kommune\t2025-08-31\t2026-08-26\tUtløper snart\nAstrid Vik\tnaeringsmiddelhygiene\tAnticimex Smittevern (kursbevis)\t2025-08-31\t2026-08-27\tUtløper "
+    },
+    {
+      "name": "Events:off:Events.Core",
+      "toast": "Events.Core er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Events:surface-dark",
+      "url": "/admin/events-pipeline",
+      "calls": [
+        {
+          "status": 404,
+          "url": "/events/admin/1/events"
+        },
+        {
+          "status": 404,
+          "url": "/events/admin/1/notifications/health"
+        },
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 404,
+          "url": "/events/admin/1/notifications/health"
+        },
+        {
+          "status": 404,
+          "url": "/events/admin/1/events"
+        }
+      ],
+      "text": "Selskap og arrangement\nÉn forespørsel, fulgt så langt denne backend-en faktisk går. Alle beløp leses fra serveren; ingenting summeres her.\nSTATUS\nAlle statuser\nForespørsel\nTilbud under arbeid\nTilbud sendt\nGodtatt\nVenter på depositum\nBekreftet\nUnder avvikling\nUnder oppgjør\nOppgjort\nTapt\nAvlyst\nFRA DATO\nTIL DATO\nHent på nytt\nNy forespørsel\nGjestelenker\nEvents er ikke slått på for dette utsalgsstedet, så det er ingenting å følge med på.\nForespørsler\nEvents er ikke slått på for dette utsalgsstedet. Det er en innstilling, og sier ingenting om hvor mange forespørsler stedet har."
+    },
+    {
+      "name": "Events:on:Events.Core",
+      "toast": "Events.Core er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Events:surface-lit",
+      "url": "/admin/events-pipeline",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/events/admin/1/events"
+        },
+        {
+          "status": 200,
+          "url": "/events/admin/1/notifications/health"
+        },
+        {
+          "status": 200,
+          "url": "/events/admin/1/events"
+        },
+        {
+          "status": 200,
+          "url": "/events/admin/1/notifications/health"
+        }
+      ],
+      "text": "Selskap og arrangement\nÉn forespørsel, fulgt så langt denne backend-en faktisk går. Alle beløp leses fra serveren; ingenting summeres her.\nSTATUS\nAlle statuser\nForespørsel\nTilbud under arbeid\nTilbud sendt\nGodtatt\nVenter på depositum\nBekreftet\nUnder avvikling\nUnder oppgjør\nOppgjort\nTapt\nAvlyst\nFRA DATO\nTIL DATO\nHent på nytt\nNy forespørsel\nGjestelenker\nUtsending er slått av, så ingen gjestelenke forlater huset. Venter: 10.\nIngen gjestelenke er gitt opp.\nForespørsler\nDATO\tTITTEL\tSTATUS\tGJESTER\tKONTAKT\tGODTATT VERSJON\nfre. 7. aug. 2026\tLørdagskveld – privat selskap\tUnder avvikling\t16\tHenrik Bråten\t1\nsøn. 9. aug. 2026\tBarnedåp familien Vandvik\tBekreftet\t20\tIda Vandvik\t1\ntor. 13. aug. 2026\tFagseminar Bergen Sjømat AS\tOppgjort\t24\tTrine Vik\t1\nfre. 14. aug. 2026\tTapasaften Sjomat AS\tOppgjort\t24\tTrine Vik\t1\ntir. 18. aug. 2026\tFirmalunsj Vestkant Eiendom\tTapt\t22\tNora Lindgren\t—\nman. 24. aug. 2026\tUtdrikningslag for Sindre\tTapt\t15\tJørgen Dahl\t—\nfre. 28. aug. 2026\tFagdag for Nordsjo Consulting\tForespørsel\t18\tIngrid Solberg\t—\nlør. 29. aug. 2026\tBursdagsmiddag 40 ar - Kristoffer\tTilbud under arbeid\t12\tKristoffer Moen\t—\nman. 31. aug. 2026\tKlassetreff 2006-kullet\tAvlyst\t30\tPål Iversen\t1\nsøn. 6. sep. 2026\tKonfirmasjon for Mathilde\tForespørsel\t30\tAnette Skarsbo\t—\nsøn. 6. sep. 2026\tSommerfest Bryggen Sport\tTapt\t45\tJonas Lie\t—\ntor. 10. sep. 2026\tJubileumsmiddag Fjordkraft Regnskap AS\tGodtatt\t25\tMarte Aasheim\t1\nons. 16. sep. 2026\tJulebord Havnekontoret\tTilbud sendt\t60\tMarius Lund\t—\ntor. 1. okt. 2026\tBryllupsmiddag Haug/Berg\tGodtatt\t12\tSelma Haug\t1\nlør. 12. des. 2026\tFirmajulebord Nordane AS\tTilbud sendt\t45\tElin Hovland\t—"
+    },
+    {
+      "name": "Meals:off:meals.module",
+      "toast": "meals.module er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Meals:surface-dark",
+      "url": "/admin/meals-companies",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 404,
+          "url": "/v1/stores/1/meals/companies"
+        },
+        {
+          "status": 200,
+          "url": "/stores/1/market"
+        },
+        {
+          "status": 404,
+          "url": "/v1/stores/1/meals/companies"
+        },
+        {
+          "status": 200,
+          "url": "/stores/1/market"
+        }
+      ],
+      "text": "Bedriftskontoer\nHer settes en bedrift opp: selve bedriften, avtalen med dette utsalgsstedet, måltidsordningen med regelverket sitt, og invitasjonene.\nHent på nytt\nIngenting her gjør at en ansatt kan bestille. Bestilling på bedriftskonto ligger bak et eget flagg, og ingen av appene tilbyr bedriftskonto som betalingsmåte i dag. Å sette opp en ordning her gjør altså ikke lunsjen kjøpbar.\nBedrifter\nBedriftene som har avtale med dette utsalgsstedet, pluss dem du har opprettet nå.\nCompany Meals er ikke slått på for dette utsalgsstedet. Modulen svarte, men viser ingenting her.\nÅpne en bedrift ved identifikator\nModulen har ingen rute som lister opp bedriftskontoer. Listen over er avtalene ved dette utsalgsstedet, så en bedrift du opprettet tidligere og ennå ikke har signert avtale for, nås bare ved identifikatoren sin.\nBEDRIFTSIDENTIFIKATOR\nÅpne\nBedriften\nOpprett bedrift\nBedriften opprettes sammen med sin første bedriftsadministrator. Det finnes ingen annen vei inn: invitasjoner krever at det allerede finnes en administrator.\nORGANISASJONSNUMMER\nLAND (ISO)\nJURIDISK NAVN\nVISNINGSNAVN\nFAKTURAKONTAKT\nE-POST TIL FAKTURAKONTAKT\nTELEFON TIL FAKTURAKONTAKT\nFØRSTE BEDRIFTSADMINISTRATOR\nFullmakt over en bedrift kommer bare fra et aktivt medlemskap som bedriftsadministrator — aldri fra Okam-rollen som oppretter bedriften. Navngir du noen andre her, kan du selv verken lese eller endre kontoen etterpå.\nBruk min egen konto\n6ba6dd27-42b0-4ba9-807b-96930c735f2f\nOpprett bedrift\nVelg en bedrift over for å se avtale, ordninger og invitasjoner."
+    },
+    {
+      "name": "Meals:on:meals.module",
+      "toast": "meals.module er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Meals:surface-lit",
+      "url": "/admin/meals-companies",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/user"
+        },
+        {
+          "status": 200,
+          "url": "/stores/1/market"
+        },
+        {
+          "status": 200,
+          "url": "/v1/stores/1/meals/companies"
+        },
+        {
+          "status": 200,
+          "url": "/stores/1/market"
+        },
+        {
+          "status": 200,
+          "url": "/v1/stores/1/meals/companies"
+        }
+      ],
+      "text": "Bedriftskontoer\nHer settes en bedrift opp: selve bedriften, avtalen med dette utsalgsstedet, måltidsordningen med regelverket sitt, og invitasjonene.\nHent på nytt\nIngenting her gjør at en ansatt kan bestille. Bestilling på bedriftskonto ligger bak et eget flagg, og ingen av appene tilbyr bedriftskonto som betalingsmåte i dag. Å sette opp en ordning her gjør altså ikke lunsjen kjøpbar.\nBedrifter\nBedriftene som har avtale med dette utsalgsstedet, pluss dem du har opprettet nå.\nBEDRIFT\tORG.NR.\tAVTALE\tVALUTA\nAkersgata Arkitekter\nAkersgata Arkitekter AS\n\t923456789\tAktiv\tNOK\nHavnekontoret\nHavnekontoret Drift AS\n\t915002002\tAktiv\tNOK\nNordsjo Consulting\nNordsjo Consulting AS\n\t915001001\tAktiv\tNOK\nÅpne en bedrift ved identifikator\nModulen har ingen rute som lister opp bedriftskontoer. Listen over er avtalene ved dette utsalgsstedet, så en bedrift du opprettet tidligere og ennå ikke har signert avtale for, nås bare ved identifikatoren sin.\nBEDRIFTSIDENTIFIKATOR\nÅpne\nBedriften\nOpprett bedrift\nBedriften opprettes sammen med sin første bedriftsadministrator. Det finnes ingen annen vei inn: invitasjoner krever at det allerede finnes en administrator.\nORGANISASJONSNUMMER\nLAND (ISO)\nJURIDISK NAVN\nVISNINGSNAVN\nFAKTURAKONTAKT\nE-POST TIL FAKTURAKONTAKT\nTELEFON TIL FAKTURAKONTAKT\nFØRSTE BEDRIFTSADMINISTRATOR\nFullmakt over en bedrift kommer bare fra et aktivt medlemskap som bedriftsadministrator — aldri fra Okam-rollen som oppretter bedriften. Navngir du noen andre her, kan du selv verken lese eller endre kontoen etterpå.\nBruk min egen konto\n6ba6dd27-42b0-4ba9-807b-96930c735f2f\nOpprett bedrift\nVelg en bedrift over for å se avtale, ordninger og invitasjoner."
+    },
+    {
+      "name": "Growth:off:growth.module",
+      "toast": "growth.module er slått av for butikken.",
+      "row": {
+        "badge": "Av",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: av"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Growth:surface-dark",
+      "url": "/subscribe/1",
+      "calls": [
+        {
+          "status": 404,
+          "url": "/v1/growth/stores/1/consent-text"
+        }
+      ],
+      "text": "NYHETSBREV\nNorsk\nEnglish\nDeutsch\nIngen påmelding her\nDette stedet tar ikke imot påmeldinger på denne siden. Enten har de ikke slått på nyhetsbrev, eller så peker lenken et sted vi ikke finner — og vi skiller ikke mellom de to, med vilje.\nSendt med Okam"
+    },
+    {
+      "name": "Growth:on:growth.module",
+      "toast": "growth.module er slått på for butikken.",
+      "row": {
+        "badge": "På",
+        "facts": [
+          "Standard: av",
+          "Overstyrt for butikken",
+          "Faktisk: på"
+        ],
+        "warn": []
+      }
+    },
+    {
+      "name": "Growth:surface-lit",
+      "url": "/subscribe/1",
+      "calls": [
+        {
+          "status": 200,
+          "url": "/v1/growth/stores/1/consent-text"
+        }
+      ],
+      "text": "NYHETSBREV\nNorsk\nEnglish\nDeutsch\nMeld deg på nyhetsbrevet\nPåmeldingen skjer i to trinn. Du legger inn e-postadressen din her, og den blir aktiv først når den er bekreftet fra innboksen din. Fram til det står du ikke på lista, og du får ingenting fra oss.\nSamtykket gjelder bare spisestedet du kom hit fra. Har du meldt deg på flere steder, er hvert av dem for seg.\nE-postadresse\nJa, jeg vil motta nyhetsbrev med tilbud og nyheter på e-post fra denne virksomheten. Du kan melde deg av når som helst med lenken nederst i hver e-post.\nOrdlyd versjon 1 (nb-NO). Det er nøyaktig denne setningen som blir lagret sammen med samtykket ditt — ikke et sammendrag av den.\nMeld meg på\nDu kan melde deg av når som helst, og det skal ikke være vanskeligere enn å melde seg på. Nederst i hver e-post er det en lenke rett til innstillingene dine.\nSendt med Okam"
+    },
+    {
+      "name": "board:final",
+      "board": {
+        "blocker": null,
+        "notices": [
+          "«Faktisk» er svaret modulens egen port gir. Noen moduler ligger i tillegg under en driftsbryter i serveroppsettet som denne siden ikke ser. Derfor er «faktisk: av» til å stole på, mens «faktisk: på» ikke er et løfte om at skrivingen går gjennom.",
+          "Listen er katalogen tjenesten oppgir. En modul kan ha trinn som med vilje ikke tilbys her — de gir ingen effekt uansett hva de settes til, og en bryter som ikke gjør noe er verre enn ingen bryter."
+        ],
+        "modules": [
+          {
+            "module": "Events",
+            "rows": [
+              {
+                "key": "Events.Core",
+                "title": "Core (inquiries/proposals)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Events.Deposits",
+                "title": "Deposit money path",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Events.Settlement",
+                "title": "Settlement machine",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Growth",
+            "rows": [
+              {
+                "key": "growth.dispatch",
+                "title": "Live newsletter dispatch (kill switch)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "growth.module",
+                "title": "Module (guest capture)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Margin",
+            "rows": [
+              {
+                "key": "Margin.Module",
+                "title": "Module master",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Margin.PriceImport",
+                "title": "Price import (CSV)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "Margin.Statements",
+                "title": "Statements",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Meals",
+            "rows": [
+              {
+                "key": "meals.module",
+                "title": "Module (store surfaces)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Training",
+            "rows": [
+              {
+                "key": "training.assignments",
+                "title": "Assignments",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "training.setup",
+                "title": "Setup (courses/certificates)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          },
+          {
+            "module": "Workforce",
+            "rows": [
+              {
+                "key": "workforce.clock",
+                "title": "POS clock write",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.dispatch",
+                "title": "Dispatch",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.exchange",
+                "title": "Shift exchange",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.export",
+                "title": "Export",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.module",
+                "title": "Module (store surfaces)",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.publication",
+                "title": "Schedule publication",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.selfservice",
+                "title": "Self-service",
+                "badge": "På",
+                "facts": [
+                  "Standard: av",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              },
+              {
+                "key": "workforce.setup",
+                "title": "Setup",
+                "badge": "På",
+                "facts": [
+                  "Standard: på",
+                  "Overstyrt for butikken",
+                  "Faktisk: på"
+                ],
+                "warn": [],
+                "hasOn": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

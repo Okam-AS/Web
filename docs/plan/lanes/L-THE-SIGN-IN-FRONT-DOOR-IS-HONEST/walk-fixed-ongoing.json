@@ -1,0 +1,82 @@
+{
+  "arm": "fixed-ongoing",
+  "web": "http://127.0.0.1:3975",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/ongoing",
+  "at": "2026-08-06T20:20:21.365Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 491,
+    "path": "/admin?redirect=%2Fadmin%2Fongoing",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 491,
+    "path": "/admin?redirect=%2Fadmin%2Fongoing",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 4,
+      "p": "/admin/ongoing",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 463,
+      "p": "/admin?redirect=%2Fadmin%2Fongoing",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 491,
+      "p": "/admin?redirect=%2Fadmin%2Fongoing",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 534,
+      "p": "/admin?redirect=%2Fadmin%2Fongoing",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 747,
+      "p": "/admin/ongoing",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 774,
+      "p": "/admin/ongoing?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3975/admin/ongoing?storeId=1",
+  "finalPath": "/admin/ongoing",
+  "landedOnThePageAsked": true,
+  "headings": [
+    "Pågående bestillinger",
+    "Nye",
+    "Pågående",
+    "Klar"
+  ],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

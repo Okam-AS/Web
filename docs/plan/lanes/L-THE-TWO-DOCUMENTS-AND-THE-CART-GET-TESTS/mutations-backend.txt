@@ -1,0 +1,12 @@
+    0 Error(s)
+===== M9 CartService.Validate — the capture-amount guard is disabled: a capture for a different amount than the cart holds is waved through
+[xUnit.net 00:00:03.79]     WebApi.Tests.Services.CartValidateGateTests.A_capture_for_a_different_amount_than_the_cart_holds_is_refused [FAIL]
+Failed!  - Failed:     1, Passed:    18, Skipped:     0, Total:    19, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    0 Error(s)
+===== M10 CartService.Validate — the minimum-order floor reads the TOTAL instead of the items, so a delivery fee carries a small basket over it
+[xUnit.net 00:00:05.27]     WebApi.Tests.Services.CartValidateGateTests.The_floor_is_measured_on_the_ITEMS_not_on_the_total_so_a_delivery_fee_cannot_carry_a_small_basket_over_it [FAIL]
+Failed!  - Failed:     1, Passed:    18, Skipped:     0, Total:    19, Duration: 2 s - WebApi.Tests.dll (net8.0)
+    0 Error(s)
+===== M11 CartService.Validate — an unapproved store is allowed to take a card payment
+[xUnit.net 00:00:04.42]     WebApi.Tests.Services.CartValidateGateTests.An_unapproved_store_may_take_cash_over_the_counter_and_may_not_take_a_card [FAIL]
+Failed!  - Failed:     1, Passed:    18, Skipped:     0, Total:    19, Duration: 2 s - WebApi.Tests.dll (net8.0)

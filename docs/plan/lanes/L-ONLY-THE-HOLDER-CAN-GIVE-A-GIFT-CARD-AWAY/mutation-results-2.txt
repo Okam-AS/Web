@@ -1,0 +1,8 @@
+RED    failed=4/13  the ownership check is deleted outright
+RED    failed=9/13  the check is inverted: only NON-holders may transfer
+RED    failed=1/13  a blank holder id satisfies the check
+RED    failed=2/13  the refusal names a distinct reason, making the route an id oracle
+GREEN  failed=0/13  the ownership check moves BELOW the status guard
+GREEN  failed=0/13  the status guard names a distinct reason, re-opening the oracle by another door
+
+4 of 6 applied mutations reddened the suite (baseline 13 tests executed each time)

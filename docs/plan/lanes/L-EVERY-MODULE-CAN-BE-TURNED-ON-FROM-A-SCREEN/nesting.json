@@ -1,0 +1,171 @@
+{
+  "before": [],
+  "masterDown": [
+    {
+      "key": "Events.Core",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Events.Deposits",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Events.Settlement",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Margin.Module",
+      "badge": "Av",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: av"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Margin.PriceImport",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: av"
+      ],
+      "warn": [
+        "Bryteren står på, men modulens port svarer likevel av. Noe annet holder modulen nede — en hovedbryter eller en driftsbryter i serveroppsettet. Å skru denne av og på igjen endrer ingenting."
+      ]
+    },
+    {
+      "key": "Margin.Statements",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: av"
+      ],
+      "warn": [
+        "Bryteren står på, men modulens port svarer likevel av. Noe annet holder modulen nede — en hovedbryter eller en driftsbryter i serveroppsettet. Å skru denne av og på igjen endrer ingenting."
+      ]
+    },
+    {
+      "key": "training.assignments",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "training.setup",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    }
+  ],
+  "after": [
+    {
+      "key": "Events.Core",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Events.Deposits",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Events.Settlement",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Margin.Module",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Margin.PriceImport",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "Margin.Statements",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "training.assignments",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    },
+    {
+      "key": "training.setup",
+      "badge": "På",
+      "facts": [
+        "Standard: av",
+        "Overstyrt for butikken",
+        "Faktisk: på"
+      ],
+      "warn": []
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED — observations at trunk feature/restaurant-modules @ 78ed84f
+(worktree /Users/svendaneel/okam/web-rcptlabels, core pinned 9626a561, no file modified)
+
+THE BRIEF'S PREMISE, CHECKED LINE BY LINE
+  Brief: "paymentTypeLabel:82, deliveryTypeLabel:97, orderStatusLabel:134 ... There is no lookup at all."
+  Those three line numbers land exactly on those three function signatures at 811818c^ — the commit
+  BEFORE `lane/mixin-labels-translate` landed. At 78ed84f they land on comment/data lines.
+    git show 811818c^:plugins/global-mixin.js | sed -n '82p;97p;134p'
+      paymentTypeLabel (paymentTypeEnum) {
+      deliveryTypeLabel (deliveryTypeEnum) {
+      orderStatusLabel (orderStatusEnum) {
+  811818c is an ancestor of 78ed84f (git merge-base --is-ancestor 811818c 78ed84f => true).
+
+AT THE TIP THE THREE FUNCTIONS ARE ALREADY LOOKUPS
+  plugins/global-mixin.js:206 paymentTypeLabel  -> PAYMENT_TYPE_LABEL_KEYS  then this.$i(key)
+  plugins/global-mixin.js:215 deliveryTypeLabel -> DELIVERY_TYPE_LABEL_KEYS then this.$i(key)
+  plugins/global-mixin.js:249 orderStatusLabel  -> ORDER_STATUS_LABEL_KEYS  then this.$i(key)
+
+THE COVERAGE DEFECT IS ALSO ALREADY CLOSED
+  PAYMENT_TYPE_LABEL_KEYS = 17 members  (brief describes ten cases against seventeen)
+  DELIVERY_TYPE_LABEL_KEYS = 8 members, ORDER_STATUS_LABEL_KEYS = 8 members
+  Landed as 4465d02 "A cash sale stops reading «Ukjent» in the admin order list".
+
+THE GERMAN-FALSIFIABLE TEST THE EXIT CRITERION ASKS FOR ALREADY EXISTS
+  test/payment-type-label.test.js + test/order-label-dictionaries.test.js = 252 tests, green.
+  Mutations applied to the German dictionary and reverted:
+    de.ts orders_deliverySelfPickup 'Selbstabholung' -> 'Hent selv'  => 3 failed / 249 passed
+    de.ts orders_paymentCash        'Bar bezahlt'    -> 'Kontant'    => 1 failed / 251 passed
+  Mutation applied to the lookup itself and reverted:
+    deliveryTypeLabel `return this.$i(key)` -> `return 'Hent selv'` => 63 failed / 57 passed
+  So a lookup is proven to happen, and the tests red exactly as the brief requires.
+
+THE RECEIPT SURFACE
+  components/molecules/ReceiptModal.vue renders all three label functions and nothing else that is
+  hardcoded: every label on it goes through $i, and a scan for Ukjent / Hent selv / Forespurt /
+  Ikke satt / Levert / Fullført / Betalt over the whole template returns nothing.
+
+ADJACENT AND STILL UNFIXED — NOT ON THE RECEIPT SURFACE, SO OUTSIDE THIS EXIT CRITERION
+  plugins/global-mixin.js:231 woltDeliveryStatusLabel — eleven Norwegian literals, no $i, no key.
+    Rendered at components/molecules/OrderCard.vue:84 and NOT shadowed there, so it reaches a screen.
+  plugins/global-mixin.js:221 dineHomeDeliveryStatusLabel — six Norwegian literals, no $i, no key.
+    Its only render site (OrderCard.vue:69) is served by a LOCAL copy at OrderCard.vue:310 that does
+    use $i, so the mixin's copy is shadowed dead code — two copies of one vocabulary, one translated.

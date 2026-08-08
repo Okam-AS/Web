@@ -1,0 +1,77 @@
+{
+  "arm": "fixed-goods",
+  "web": "http://127.0.0.1:3975",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/goods",
+  "at": "2026-08-06T20:26:24.085Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 452,
+    "path": "/admin?redirect=%2Fadmin%2Fgoods",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 452,
+    "path": "/admin?redirect=%2Fadmin%2Fgoods",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 5,
+      "p": "/admin/goods",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 437,
+      "p": "/admin?redirect=%2Fadmin%2Fgoods",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 452,
+      "p": "/admin?redirect=%2Fadmin%2Fgoods",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 520,
+      "p": "/admin?redirect=%2Fadmin%2Fgoods",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 653,
+      "p": "/admin/goods",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 679,
+      "p": "/admin/goods?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3975/admin/goods?storeId=1",
+  "finalPath": "/admin/goods",
+  "landedOnThePageAsked": true,
+  "headings": [],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

@@ -1,0 +1,386 @@
+Opplæringsdokumentasjon
+Selma Haug
+4dc94bb7-2515-46ed-aad5-c9e23552dabd
+
+Minst én gjennomføring er ført som bestått.
+Hentet 07.08.2026, 12:57.
+Dokumentet finner ingen brudd på seg selv: hver gjennomføring peker fortsatt på innholdet den ble tatt mot, og hver rad har en
+journalrad som sier hvem som førte den.
+
+Gjennomføringer
+Kurs
+
+Når
+
+Poeng
+
+Resultat
+
+Næringsmiddelhygiene og
+temperaturkontroll
+
+07.08.2026,
+09:59
+
+85%
+
+Bestått
+
+Grense 80%
+
+Innhold
+
+Opphav
+
+sha256:db69110e600bbeeeaa1fdad2776edcec1d2c8
+144d06ff07920671902dfe0d9d0
+
+v1
+
+Koblet
+
+Innholdssider
+
+Ført av 6ba6dd27-42b0-4ba9807b-96930c735f2f
+
+I journalen
+Ført av leder
+
+[{"h": "Håndhygiene"}, {"h": "Kjølekjede
+0–4 °C"}, {"h": "Varmebehandling ≥ 75
+°C"}]
+
+Quiz
+[{"q": "Maks temperatur i kjøleskap?",
+"a": 4}]
+
+Beståttgrense: 80%
+
+Sertifikater
+Type
+
+Utsteder
+
+Utstedt
+
+Utløper
+
+Status
+
+Opphav
+
+fagbrev-kokk
+
+Vestland fylkeskommune
+
+2022-06-29
+
+Uten utløp
+
+Gyldig
+
+I journalen
+
+forstehjelp
+
+Norsk Folkehjelp Bergen
+
+2026-04-09
+
+2027-02-23
+
+Gyldig
+
+I journalen
+
+Journalrader
+Dette er opphavet til radene over — hvem som førte dem, og når. Det er ikke en oversikt over hvem som har sett dokumentet: de oppslagene føres
+på personen og ikke på radene, og står med hensikt ikke her.
+Når
+
+Hendelse
+
+Gjelder
+
+Ført av
+
+Endring
+
+07.08.2026,
+09:59
+
+completion.record
+
+Gjennomførin
+g
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"completionSource":"ManagerRecorded","passed":"tru
+
+30c735f2f
+
+e","scorePercent":"85"}
+
+07.08.2026,
+09:59
+
+certificate.register
+
+Sertifikat
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"certificateType":"forstehjelp","expiryDateUtc":"2027
+
+30c735f2f
+
+-02-23T00:00:00.0000000Z","issueDateUtc":"2026-04-09T0
+0:00:00.0000000Z","issuer":"Norsk Folkehjelp"}
+
+07.08.2026,
+09:59
+
+certificate.register
+
+Sertifikat
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"certificateType":"fagbrev-kokk","expiryDateUt
+
+30c735f2f
+
+c":"","issueDateUtc":"2022-06-29T00:00:00.0000000Z","i
+ssuer":"Vestland fylkeskommune"}
+
+07.08.2026,
+09:59
+
+certificate.update
+
+07.08.2026,
+09:59
+
+certificate.update
+
+Sertifikat
+Sertifikat
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+Når
+
+Hendelse
+
+Gjelder
+
+Ført av
+
+Endring
+
+07.08.2026,
+09:59
+
+certificate.update
+
+Sertifikat
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+09:59
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+09:59
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+09:59
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+09:59
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+10:05
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+10:05
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+10:13
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+10:13
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+10:28
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+10:28
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+07.08.2026,
+10:28
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp"}
+
+07.08.2026,
+10:28
+
+certificate.update
+
+6ba6dd27-42b0-4ba9-807b-969
+
+{"expiryDateUtc":"2027-02-23T00:00:00.0000000","issue
+
+30c735f2f
+
+r":"Norsk Folkehjelp Bergen"}
+
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+Sertifikat
+
+Journalen navngir ingen. Serveren lagrer en brukerreferanse og ikke et navn, og å slå den opp mot et navn ville vært en utlevering om den som førte
+raden — på et dokument som forlater huset.
+Tidspunkter vises i butikkens tidssone (Europe/Oslo), slik serveren oppga den. Datoer (utstedt, utløper, frist) vises som den dagen som ble ført, uten
+omregning.
+Dokumentet er én persons journal i denne butikken. Det henter ingenting fra andre butikker, og det avgjør ingenting — det viser hva som er ført.
+
+

@@ -1,0 +1,22 @@
+# Mutation proof, run at the tip this lane produced, not inherited from the three refs.
+#   python3 lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/mutation-proof.py
+# Each mutation is written into the source file, the pinned suite is run, and the file is
+# restored from a byte copy that is asserted to match. Working tree verified clean after.
+
+M1  RED       components/admin/pos/PosReceiptView.vue    Tests:       8 failed, 13 passed, 21 total   [the receipt deduction row, back to the `> 0` guard the fix removed]
+M2  RED       components/admin/pos/CheckPanel.vue        Tests:       9 failed, 20 passed, 29 total   [the row total that IS the refund, back to a bare `+=` off the wire object]
+M3  RED       components/admin/pos/CheckPanel.vue        Tests:       4 failed, 25 passed, 29 total   [the pant sum, back to the `|| 0` coercion]
+M4  RED       components/admin/pos/SellScreen.vue        Tests:       6 failed, 23 passed, 29 total   [the refusal itself deleted, so an unpriceable bill builds a return again]
+M5  RED       components/admin/pos/CheckLine.vue         Tests:       2 failed, 27 passed, 29 total   [the pant tag, back to `> 0` — the sum's defect moved one screen down]
+M6  RED       utils/price.js                             Tests:       3 failed, 26 passed, 29 total   [the shared predicate, so a stated zero starts counting as in play]
+M7  RED       components/shared/OfferDocument.vue        Tests:       5 failed, 18 passed, 23 total   [the offer column gate, so an unstated line folds back in as a zero]
+M8  RED       components/shared/OfferDocument.vue        Tests:       1 failed, 22 passed, 23 total   [the note that tells the reader why there is no total]
+
+8/8 mutations red. Every guard has a test behind it.
+working tree after restore: ?? lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/
+
+## Note on M1
+M1 restores the exact pre-fix guard (`line.discountAmount > 0`), and its red profile --
+8 failed / 13 passed / 21 total -- is byte-identical to the reproduction this lane ran at
+trunk 78ed84f BEFORE landing anything. The mutation and the original defect are the same
+thing, which is what makes the pin a reproduction rather than a restatement of the fix.

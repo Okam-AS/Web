@@ -1,0 +1,80 @@
+{
+  "arm": "stock-wrapped",
+  "web": "http://127.0.0.1:3971",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/wrapped",
+  "at": "2026-08-06T20:14:52.480Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 867,
+    "path": "/admin",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 867,
+    "path": "/admin",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 21,
+      "p": "/admin/wrapped",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 828,
+      "p": "/admin",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 867,
+      "p": "/admin",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 909,
+      "p": "/admin",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 1258,
+      "p": "/admin",
+      "modalId": "1",
+      "sendControl": false,
+      "boxes": 6
+    },
+    {
+      "ms": 1469,
+      "p": "/admin?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3971/admin?storeId=1",
+  "finalPath": "/admin",
+  "landedOnThePageAsked": false,
+  "headings": [
+    "Velkommen !",
+    "Butikkinformasjon"
+  ],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

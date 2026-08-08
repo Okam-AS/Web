@@ -1,0 +1,87 @@
+{
+  "arm": "fixed-training",
+  "web": "http://127.0.0.1:3975",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/training-courses",
+  "at": "2026-08-06T20:26:19.372Z",
+  "reachedOtpFromTheEarliestClick": true,
+  "extraPresses": 0,
+  "otpReached": true,
+  "firstSendControlAppearedAt": {
+    "ms": 322,
+    "path": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+    "modalId": "1"
+  },
+  "earliestClick": {
+    "ms": 322,
+    "path": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+    "modalId": "1"
+  },
+  "samples": [
+    {
+      "ms": 5,
+      "p": "/admin/training-courses",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 314,
+      "p": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 322,
+      "p": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 0
+    },
+    {
+      "ms": 363,
+      "p": "/admin?redirect=%2Fadmin%2Ftraining-courses",
+      "modalId": "1",
+      "sendControl": true,
+      "boxes": 6
+    },
+    {
+      "ms": 445,
+      "p": "/admin/training-courses",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    },
+    {
+      "ms": 464,
+      "p": "/admin/training-courses?storeId=1",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 1,
+  "finalUrl": "http://127.0.0.1:3975/admin/training-courses?storeId=1",
+  "finalPath": "/admin/training-courses",
+  "landedOnThePageAsked": true,
+  "headings": [
+    "Opplæring",
+    "Modulstatus",
+    "1. Kurs",
+    "2. Versjoner",
+    "5. Sertifikater",
+    "3. Tildelinger",
+    "4. Gjennomføringer",
+    "6. Hva personen innehar",
+    "7. Hvem har sett dette"
+  ],
+  "whoAmI": {
+    "id": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+    "isPowerUser": true,
+    "isKeyAccountManager": false,
+    "adminIn": 1
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

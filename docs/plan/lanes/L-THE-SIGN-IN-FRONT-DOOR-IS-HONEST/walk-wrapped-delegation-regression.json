@@ -1,0 +1,34 @@
+{
+  "arm": "wrapped-delegation-regression",
+  "web": "http://127.0.0.1:3975",
+  "api": "http://127.0.0.1:5971",
+  "deepLink": "/admin/wrapped",
+  "at": "2026-08-06T20:36:18.085Z",
+  "reachedOtpFromTheEarliestClick": false,
+  "extraPresses": 3,
+  "otpReached": false,
+  "otpVanishedWhileTyping": false,
+  "firstSendControlAppearedAt": null,
+  "earliestClick": null,
+  "samples": [
+    {
+      "ms": 35,
+      "p": "/admin/wrapped",
+      "modalId": null,
+      "sendControl": false,
+      "boxes": 0
+    }
+  ],
+  "smsSendRequests": 0,
+  "finalUrl": "http://127.0.0.1:3975/admin/wrapped",
+  "finalPath": "/admin/wrapped",
+  "landedOnThePageAsked": true,
+  "headings": [],
+  "whoAmI": {
+    "isPowerUser": false,
+    "isKeyAccountManager": false,
+    "adminIn": 0
+  },
+  "failedResponses": [],
+  "consoleErrors": []
+}

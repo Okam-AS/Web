@@ -1,0 +1,47 @@
+=== A1 real provider, product settings (CheckCertificateRevocation default true, no cert callback)
+probe host=send.one.com port=465 mode=connect checkRevocation=True
+CONNECT failed type=SslHandshakeException
+CONNECT failed inner=AuthenticationException msg=An error occurred while attempting to establish an SSL or TLS connection.
+
+The server's SSL certificate could not be validated for the following reasons:
+• The server certificate has the following errors:
+  • An incomplete certificate revocation check occurred.
+
+(exit 2)
+
+=== A2 real provider, revocation check disabled
+probe host=send.one.com port=465 mode=connect checkRevocation=False
+CONNECT ok secure=True caps=Size, EnhancedStatusCodes, Authentication, EightBitMime, Pipelining, Chunking
+DISCONNECT ok
+(exit 0)
+
+=== B1 loopback capture sink, product settings
+probe host=localhost port=14650 mode=send checkRevocation=True
+CONNECT failed type=SslHandshakeException
+CONNECT failed inner=AuthenticationException msg=An error occurred while attempting to establish an SSL or TLS connection.
+
+The server's SSL certificate could not be validated for the following reasons:
+• The server certificate has the following errors:
+  • The certificate was not trusted.
+
+(exit 2)
+
+=== B2 loopback capture sink, revocation check disabled only
+probe host=localhost port=14650 mode=send checkRevocation=False
+CONNECT failed type=SslHandshakeException
+CONNECT failed inner=AuthenticationException msg=An error occurred while attempting to establish an SSL or TLS connection.
+
+The server's SSL certificate could not be validated for the following reasons:
+• The server certificate has the following errors:
+  • The certificate was not trusted.
+
+(exit 2)
+
+=== B3 loopback capture sink, revocation disabled + accept-any-certificate callback
+probe host=localhost port=14650 mode=send checkRevocation=False
+CONNECT ok secure=True caps=Size, Authentication, EightBitMime
+AUTH ok
+SEND ok messageId=KC7ZR7JKZTU4.R28DYE3T6CLF1@svens-macbook-pro.local
+DISCONNECT ok
+(exit 0)
+

@@ -1,0 +1,59 @@
+===========================================================
+  ANTI-DRIFT DEMO -- injected drift, nobody told the system
+===========================================================
+  tree under test : /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/fullsrc
+  bench           : /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/bench-full
+
+=== ACT 1  a checkout quietly moves to a lane branch ===
+   injecting: git checkout lane/somelane in the sibling repo
+   guard says: on_expected=False ancestor=False behind=2
+   PASS  caught: named the wrong branch AND the two landed commits it is missing
+   FALSIFYING -- removing world.config, re-running the IDENTICAL injection
+   PASS  falsified: with the guard off the same drift reports 'unknown', not 'false'
+         (and NOT 'true' -- an absent guard must never read as conformance)
+
+=== ACT 2  a probe's source vanishes underneath a recorded fact ===
+     refresh: refreshed 40 fact span(s), 38 unconfirmed
+   before injection: <!--fact demo.retain 2026-08-06T18:17Z ok-->present<!--/fact-->
+   injecting: delete the file the probe reads
+     refresh: refreshed 40 fact span(s), 39 unconfirmed
+   after injection:  <!--fact demo.retain 2026-08-06T18:17Z unconf-->present<!--/fact-->
+   PASS  caught, MEASURED: status flipped ok -> unconf and the value was RETAINED
+   FALSIFYING -- the alternative design is blanking the value on failure.
+   PASS  falsified: blanking would have destroyed the fact that there WAS
+         a value. The retained 'present' beside 'unconf' is what makes
+         'we lost sight of this' distinguishable from 'this was never true'.
+
+=== ACT 3  the wake channel vs. a clerk who filters ===
+   injecting: the clerk's historical move -- 'plan check | grep -v warn'
+   what the filtering clerk sees:  check: 0 error(s), 133 warning(s)
+   what the harness injects anyway: PLAN NEEDED(193): rule D-CATEGORY-IMAGE-CLIENT-GATE; rule F-MIG-CHAIN-STACKED; rule F-WF-TWO-ADMINS-TWO-ENGAGEMENTS +190 more · run 6/12 ready 0 · flags 130! 164~ · facts 2h, 12 unconf
+   PASS  caught: the flag count rides in on a channel the clerk does not author
+   FALSIFYING -- remove the UserPromptSubmit hook and the same filter runs:
+   the count appears NOWHERE. That is the July incident verbatim.
+   PASS  falsified: with no hook, filtered == gone
+
+=== ACT 4  THE MISS -- a false sentence with no fact behind it ===
+   injecting into a scratch copy of the plan:
+     "Both panels carry the fix at the branch tip."  (false; no fact span)
+   by construction, not measured here:
+     worldstamp  -- it measures branches, never sentences
+     refresh     -- no span in that line, so there is nothing to probe
+   MEASURED, on the bench copy, is the one guard that reads the file:
+     plan check errors before the sentence: 1   after: 1
+   PASS  NOT CAUGHT, and it never will be. Law 2 forbids a machine editing human prose,
+         so this class is out of reach BY CONSTRUCTION, not by omission.
+         The only counter is editorial: a structural claim carries its span.
+
+=== ACT 5  THE SECOND MISS -- caught, recorded, and invisible to the reader ===
+   the wrong-world finding from ACT 1 is now a fact in the real plan.
+   checking whether a person reading the served page can SEE it:
+   flag id present on the page:        2
+   its explanatory body present:       2
+   SKIP  the claim did not reproduce: the flag's prose body IS on this page (2 hit(s))
+         wanted: file:///private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/hub/plan.html rendering the flag id and DROPPING its body text 'It is twenty' -- re-measure the projection before quoting the old result
+
+===========================================================
+  caught+falsified: 6     shown-uncatchable: 1
+  failures: 0     skipped for absent inputs: 1
+===========================================================

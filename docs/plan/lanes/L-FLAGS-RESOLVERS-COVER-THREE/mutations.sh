@@ -17,11 +17,32 @@ run () {
   echo
 }
 
-restore () { cd "$WT" && git checkout -- Program.cs; }
-
+# RESTORE FROM A SNAPSHOT, NEVER FROM GIT.
+#
+# This used to be `git checkout -- Program.cs`, which reverts to HEAD. That is a restore only while
+# Program.cs is unmodified relative to HEAD; against uncommitted work it DELETES the edits and calls
+# it a restore. The sibling JS runner had the identical defect and it fired once on a live lane, so
+# the pattern is removed here too rather than left for the next person to copy.
+#
+# The snapshot is taken AFTER the detach below, so it is the pinned commit's Program.cs — the same
+# content the old `git checkout` was reaching for, but read from disk rather than re-derived from
+# git on every call, and therefore correct even if the worktree is dirty or moves.
+#
+# The `cmp` is not belt-and-braces. When the JS runner's restore silently did the wrong thing, its
+# equivalent byte-check was the only thing that noticed and halted; without it the run would have
+# continued over a corrupted file and the loss would have surfaced hours later, if at all.
 cd "$WT" || exit 1
 git checkout --detach 107ca70e >/dev/null 2>&1 || exit 1
 git rev-parse HEAD
+
+PRISTINE=$(mktemp -t flagscover-program) || exit 1
+cp "$WT/Program.cs" "$PRISTINE" || exit 1
+trap 'rm -f "$PRISTINE"' EXIT
+
+restore () {
+  cp "$PRISTINE" "$WT/Program.cs" || { echo "RESTORE FAILED: could not write Program.cs"; exit 1; }
+  cmp -s "$PRISTINE" "$WT/Program.cs" || { echo "RESTORE FAILED: Program.cs does not match the snapshot — STOP"; exit 1; }
+}
 
 restore
 run control

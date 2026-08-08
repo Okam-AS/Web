@@ -1,0 +1,28 @@
+# Backend non-SQL tier, feature/restaurant-modules @ 057c390ad (guest-exit pair landed)
+#   cd OkamAPI-modules-wt/L-LAND-THE-EVENING-WORK/WebApi.Tests
+#   dotnet test --no-build --filter "Database!=SqlServer"   -> exit 0
+# Raw log 30,385 lines (almost all EF Information logging). Kept below: the abort greps,
+# every Failed test line, the whole skip list, and the summary. Full log not committed.
+
+## grep ABOVE the summary for an abort - 'test host process crashed', 'active test run was aborted',
+##   'No test is available', 'error CS', 'error MSB'
+   (no match - the run was not aborted)
+
+## every Failed TEST line ('Failed <FullyQualifiedName>'; the 'Failed to ...' lines are EF/auth log noise)
+   (no match - nothing failed)
+
+## skip list (11) - byte-identical to the one lane/the-guest-exit-is-finished recorded at a65d9ab70
+  Skipped WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox
+  Skipped WebApi.Tests.Surfboard.SurfboardCashSplitSmokeTests.Cash_Portion_Completes_A_Partially_Paid_Order
+  Skipped WebApi.Tests.Meals.MealsInvitationIdentityBindingTests.Only_the_account_the_company_meant_ends_up_holding_the_membership
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.An_authenticated_event_from_outside_the_providers_address_ranges_is_refused
+  Skipped WebApi.Tests.Wire.GrowthWebhookAuthWireTests.A_bounce_from_the_bound_provider_suppresses_the_guest_channel_globally
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow
+  Skipped WebApi.Tests.Growth.GrowthGuestExitWorldTests.The_guest_exit_world_serves_the_real_api_on_its_own_origin_until_a_browser_has_walked_it
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission
+
+## summary
+Passed!  - Failed:     0, Passed:  4949, Skipped:    11, Total:  4960, Duration: 5 m 46 s - WebApi.Tests.dll (net8.0)

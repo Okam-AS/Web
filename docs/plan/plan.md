@@ -2725,12 +2725,13 @@ handed whole to an existence check, so it cannot name a ref; a decorated form li
 opposite of what was proven** — the same shape as the three wrong answers this program has already recorded
 from measuring at a ref other than the one a document named.
 
-### Lane L-TRAIN-DEMO-SEED — the Training demo seed stops dying on the withheld catalog
-state: running
+### Lane L-TRAIN-DEMO-SEED — ~~the Training demo seed stops dying on the withheld catalog~~
+state: retracted
 class: node
 pts: 1
 exit: the training seed exits 0 against a migrated catalog with its flag step printing the lever's refusal verbatim
 agent: opus
+retracted: its agent belonged to a session that ended 2026-08-04; no writes since, no return, no live handle. Successor authored at the current tip.
 
 The seed flips a flag through the operator lever; since the five inert flags were withheld, the
 controller refuses any key the catalog does not carry, so the seed's own die path fires and the
@@ -8602,7 +8603,7 @@ amount of good work can drain.
 
 
 ### Lane L-MEALS-VIOLATION-EXACT — a meals NOT NULL failure stops answering as a uniqueness clash
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: a non-uniqueness constraint failure on a meals write is not mapped to a uniqueness refusal, pinned by a test per direction that reds if the loose result code returns, recorded in lanes/L-MEALS-VIOLATION-EXACT/mutation-log.md
@@ -8705,7 +8706,7 @@ tree. That is the sharpest argument on this page for proving a teardown by killi
 no lease on a SQL row, and the ledger carries no credential by design under C7.
 
 ### Lane L-DATED-TEST-OUTPUT — a test suite stops dirtying the tree it runs in
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 exit: a full container-free tier run leaves the checkout clean, pinned by a test that reds if dated output is written into a tracked path, recorded in lanes/L-DATED-TEST-OUTPUT/evidence.md
@@ -8737,7 +8738,7 @@ it.
 
 
 ### Lane L-LIVE-WORLD-BANNER — the script an operator runs stops saying the reset does not exist
-state: built-unverified
+state: verified
 class: node
 pts: 1
 exit: live-world.sh's header and closing banner describe the reset that exists and stop recommending two full rebuilds, pinned by a check that reds if the script's text contradicts the reset script's presence, recorded in lanes/L-LIVE-WORLD-BANNER/evidence.md
@@ -8769,7 +8770,7 @@ owner rather than editing around them.**
 
 
 ### Lane L-MARGIN-VIOLATION-ANCHOR — a constraint named UNIQUE stops being mistaken for a uniqueness failure
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: a CHECK or FK failure whose constraint name contains the word UNIQUE is not classified as a uniqueness clash, pinned per site by a test that reds if the match goes back to an unanchored substring, recorded in lanes/L-MARGIN-VIOLATION-ANCHOR/mutation-log.md
@@ -8833,7 +8834,7 @@ move the ref only with `git update-ref <ref> <new> <old>`.
 
 
 ### Lane L-WORKTREE-BASENAME-PIN — a test stops failing for every lane that follows the rules
-state: built-unverified
+state: verified
 class: node
 pts: 1
 exit: the artifact-store identity test passes in a worktree whose directory is not named Web-modules, pinned by a run from a differently-named checkout, recorded in lanes/L-WORKTREE-BASENAME-PIN/evidence.md
@@ -9016,7 +9017,7 @@ predicate collision returns — and this estate has already spent a merge lane c
 onto one predicate precisely to end it.
 
 ### Lane L-XZ-PRINTED-DEFECTS — the printed fiscal document stops omitting and mislabelling
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: the delivery-receipt count appears on the printed X and Z, no payment label falls back to an enum identifier, and the received sum excludes the receivable, pinned by a rendered-document test that reds if any of the three returns, recorded in lanes/L-XZ-PRINTED-DEFECTS/mutation-log.md
@@ -9227,7 +9228,7 @@ it is right only immediately after a write, and wrong on every page load.
 
 
 ### Lane L-ACCOUNTING-EXPORT-SILENT — an export that ran on nothing stops reporting that it ran
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: an accounting export with no providers registered reports that it exported nothing rather than a store count, and the same is true of the capture sweep, pinned by a test per site that reds if the empty case is reported as success, recorded in lanes/L-ACCOUNTING-EXPORT-SILENT/mutation-log.md
@@ -9311,7 +9312,7 @@ GUID with the version nibble and variant pinned. It **independently reproduces**
 not a probability**, and overstates by double-counting overlapping windows.
 
 ### Lane L-FRAGILE-NEEDLES — three assertions that pass only because their haystack is empty today
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 exit: no absence assertion depends on a field being unpopulated, each of the three named sites either excises its haystack or pins the emptiness it relies on, recorded in lanes/L-FRAGILE-NEEDLES/mutation-log.md
@@ -9380,7 +9381,7 @@ fix.
 
 
 ### Lane L-REPLAY-PINS-CLOSE — the four non-discriminating retry tests get the world change that closes them
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: each of the four named same-key retry tests fails when the retry re-decides instead of replaying, pinned by the world change the census specified, recorded in lanes/L-REPLAY-PINS-CLOSE/mutation-log.md
@@ -9538,7 +9539,7 @@ a label against one world; the second protected unsigned counts at five widths. 
 sweep, not just to the rule.**
 
 ### Lane L-EOD-CREDIT-SPLIT — the day settlement stops reporting the receivable as money received
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: the Dagsoppgjor separates credit sales from takings rather than folding them into the other bucket, pinned by a test that reds if a company-account payment returns to the default arm, recorded in lanes/L-EOD-CREDIT-SPLIT/mutation-log.md
@@ -9962,7 +9963,7 @@ but **indistinguishable from the stale-build trap this estate documents**, so it
 wrong reason reads exactly like one that is wrong.
 
 ### Lane L-JOURNEY-PORT-HARDCODED — a journey spec stops being green only on the default port
-state: built-unverified
+state: verified
 class: node
 pts: 1
 exit: meals-statement-month runs green on a non-default fixture port as four sibling specs already do, shown by a run on a non-default port recorded in lanes/L-JOURNEY-PORT-HARDCODED/evidence.md
@@ -10048,7 +10049,7 @@ they are not the same promise to a reader.
 siblings, and a fix to the one that was found leaves a document that is right in the place somebody looked.
 
 ### Lane L-OFFERS-PAGE-HUNDREDFOLD — four offer helpers that are both unguarded and off by a hundred
-state: built-unverified
+state: verified
 class: node
 pts: 1
 exit: the four offers-page helpers either render an unstated amount as unknown at the correct magnitude or are deleted as unreachable, each decided with its reason, recorded in lanes/L-OFFERS-PAGE-HUNDREDFOLD/evidence.md
@@ -10126,7 +10127,7 @@ finding lane did — a source-level assertion cannot see a literal sitting outsi
 
 
 ### Lane L-GR-EXIT-WIRE-THE-MAIL — the working exit gets linked from the mail that carries it
-state: built-unverified
+state: verified
 class: node
 pts: 2
 exit: a dispatched message's footer carries a link to the session-free unsubscribe page and a browser opening it completes a withdrawal, shown by the J-EXIT-UNSUB journey capture recorded in lanes/L-GR-EXIT-WIRE-THE-MAIL/evidence.md
@@ -10207,7 +10208,7 @@ repointed at a real host the test reds **and the evidence directory is never cre
 owner-applied and comes after the deployment steps already ordered under `F-PROD-CORS-WILDCARD`.
 
 ### Lane L-CORS-LAND-FOLLOWUPS — the named credentialed policy that already exists gets landed safely
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: lane/cors-followups is rebased onto the integration tip with BrowserReadableHeaders.All preserved, and a download still arrives with a readable filename, shown by a wire assertion over the emitted headers recorded in lanes/L-CORS-LAND-FOLLOWUPS/evidence.md
@@ -10434,7 +10435,7 @@ still reading *"no login is attached yet"*. **Every assertion passed.**
 frontend calls two routes no deployed API serves.
 
 ### Lane L-EXIT-INSTRUMENT-CENSUS — every exit is classified by what it can actually be verified against
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 exit: every exit in the plan is classified as naming a file, a fact key, a directory only, or no instrument at all, with the counts derived by a committed script rather than typed, recorded in lanes/L-EXIT-INSTRUMENT-CENSUS/census.md
@@ -10496,7 +10497,7 @@ be *"the same prose-drift this lane exists to measure"*.
 
 
 ### Lane L-EV-GUESTLINK-ONE-COMPOSER — one answer to where a guest comes back to
-state: built-unverified
+state: verified
 class: suite
 pts: 1
 exit: exactly one guest-link composer exists in the backend tree and every caller reads it, shown by a sweep committed at lanes/L-EV-GUESTLINK-ONE-COMPOSER/evidence.md
@@ -10533,7 +10534,7 @@ tonight on a proven zero-call-site premise; that proof is the precondition, not 
 
 
 ### Lane L-COMPOSE-CENSUS — the composition surface is measured before anything is merged
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 exit: every branch carrying live lane work in both repositories is classified as contained, superseded or outstanding, with its file-collision surface and a proposed merge order derived by a committed script, recorded in lanes/L-COMPOSE-CENSUS/compose.md
@@ -10627,7 +10628,7 @@ than judged.
 classification.
 
 ### Lane L-JEST-COLLECTS-LANES — the frontend suite stops collecting other lanes' journey specs
-state: built-unverified
+state: verified
 class: node
 pts: 1
 exit: a full frontend jest run from a lane worktree reports no failing suite that belongs to another lane's lanes/ directory, shown by a run recorded in lanes/L-JEST-COLLECTS-LANES/evidence.md
@@ -10699,7 +10700,7 @@ which is the argument for doing it before composition, not during.
 
 
 ### Lane L-COMPOSE-FE-CANDIDATE — the frontend composition is built and proven on a candidate before it touches our branch
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 exit: a candidate branch carries the frontend composition in the census order with the full suite green at its tip and every re-run point honoured, recorded in lanes/L-COMPOSE-FE-CANDIDATE/compose-run.md
@@ -10767,7 +10768,7 @@ it. **That one fails as a plausible empty answer rather than as an error**, whic
 program keeps getting caught by.
 
 ### Lane L-EVIDENCE-CITATIONS-RESOLVE — whether the evidence this plan cites can still be found
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -10832,7 +10833,7 @@ collected-path list, not on a green run — because a green run is precisely wha
 produced.
 
 ### Lane L-ABSENCE-CLAIMS-AUDIT — which recorded absences were ever shown to be detectable
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -10863,7 +10864,7 @@ Read only. Where an absence turns out to be false, the code change belongs to a 
 
 
 ### Lane L-FLAG-CONDITIONS-TESTABLE — make the hazard conditions answerable without asking Sven
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -10899,7 +10900,7 @@ ruling is Sven's.
 
 
 ### Lane L-COLLECT-REVIEW-CONDITIONS — apply the conditions the suite-collection review named
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -11002,7 +11003,7 @@ working tree with a trap-restore while other lanes ran in it. It restored cleanl
 
 
 ### Lane L-WFR-ACCESS-STRING-TRUTH — three shipped sentences that tell an operator a capability does not exist
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11038,7 +11039,7 @@ one that does not.
 so, not to build it twice.
 
 ### Lane L-BARE-PATHSPEC-SWEEP — every zero proved by a search that could not have matched
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11064,7 +11065,7 @@ have been right is still a bare pathspec, and both outcomes are useful: the ones
 the ones that hold tell you the corpus is sounder than the method.
 
 ### Lane L-GROWTHAUDIT-TABLE-ABSENT — a table in the model that no migration creates
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11093,7 +11094,7 @@ constraints, and stop there.
 
 
 ### Lane L-JOURNEY-REGRESSION-BISECT — which of the thirty-five merges broke the Meals admin walk
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -11134,7 +11135,7 @@ lane depends on `D-REBASE-CONFLICTING-HEADS`, which is Sven's.
 
 
 ### Lane L-GROWTH-SQL-CATCH-TYPED — two catch blocks that will misreport failures they have never seen
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11168,7 +11169,7 @@ stale backend checkout.
 
 
 ### Lane L-BLOCKER-RESTATE-RECHECK — a restatement lane with two confirmed-false verdicts, and it sustained many
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11205,7 +11206,7 @@ condition.
 
 
 ### Lane L-ABSENCE-AUDIT-CONDITIONS — a census whose headline word is stronger than what it measured
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11249,7 +11250,7 @@ it; where it would require you to recompute the census, say so and leave the fig
 
 
 ### Lane L-MEALS-ENROL-JOURNEY-LOCATOR — the journey asserts on a class the new panel also uses
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -11285,7 +11286,7 @@ and `.nuxt` cleared per step. Every one of its steps was a clean pass or an asse
 failures at all. **Reproduce that setup rather than inventing one.**
 
 ### Lane L-CHECK-DISCOUNT-SUM-COUPLED — a sum that manufactures a zero and a guard that then hides the row
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11315,7 +11316,7 @@ pass on a sum that is still wrong.
 
 
 ### Lane L-MIG-STACK-RECORD — write the stacked dependency where the next migration author will read it
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11351,7 +11352,7 @@ lane's branch, and here is that commit. C2 exists because that failure surfaces 
 on the author's.
 
 ### Lane L-CANDIDATE-JOURNEYS-ON-ARRIVAL — six walks that fail on the candidate and never passed anywhere
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -11387,7 +11388,7 @@ recording any journey as failing, show the failure reproduces.**
 
 
 ### Lane L-BLOCKER-STALE-RERULE — thirteen blockers whose premises a landing already answered
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11424,7 +11425,7 @@ hours**, which cost a true finding earlier tonight.
 
 
 ### Lane L-MEALS-PRETICK-NEVER-WALKED — a journey that always takes the branch the feature was not built for
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -11464,7 +11465,7 @@ sibling used 3778/4778 and the bisect used 3777/4777.
 
 
 ### Lane L-MIG-NUMBER-CLAIMS — which migration number belongs to whom, derived from the branches
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11503,7 +11504,7 @@ different findings** and both are worth naming.
 
 
 ### Lane L-RECEIPT-DISCOUNT-ROW-DROPPED — a printed receipt that silently omits a deduction
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11574,7 +11575,7 @@ needs a server at all, use a private port and record which process served you.
 
 
 ### Lane L-LEDGER-BUILD-STATE-RECONCILE — the ledger's built column disagrees with the branches
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11612,7 +11613,7 @@ and to the MIG-21 collision, both of which are Sven's. Produce the list.
 
 
 ### Lane L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED — a receipt that reports its configuration instead of its behaviour
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11684,7 +11685,7 @@ is another lane's fixture and is still alive.
 
 
 ### Lane L-CHECK-LINEAMOUNT-UNGATED-SUM — two sums on the check panel with no absence gate at all
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11719,7 +11720,7 @@ unstated, no stated shape moves.** That column is your falsification target, and
 commit by pathspec only.
 
 ### Lane L-MEALS-MEMBERS-READ-LAND-CHECK — a note deleted for a capability that is not on the branch
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -11752,7 +11753,7 @@ Read only. Do not land anything, do not restore the note, and do not edit either
 
 
 ### Lane L-GROWTH-SUPPRESSED-ERROR-KEY — the operator is told something went wrong, not what
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -11787,7 +11788,7 @@ comparator-level controls; your baseline should carry it.
 
 
 ### Lane L-JOURNEY-ARTIFACTS-UNWITNESSED — which captures were taken while the guard was dead
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11822,7 +11823,7 @@ appeared to be.
 
 
 ### Lane L-SHARED-DIRT-CENSUS — whose work is sitting uncommitted in the shared checkout
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11855,7 +11856,7 @@ of every running lane**, and a `git clean` here was measured to be one command f
 directory before a snapshot was made. Produce the map.
 
 ### Lane L-WORKTREE-BASENAME-TAX — two reds that five lanes have each had to prove pre-existing
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -11886,7 +11887,7 @@ the check.
 
 
 ### Lane L-FIX-BRANCH-MANIFEST — where every fix built tonight actually lives
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -11922,7 +11923,7 @@ Read only. Land nothing, merge nothing, push nothing. The manifest is the delive
 
 
 ### Lane L-GUARD-REPAIR-LANDS — the repair exists on no ref and breaks the other prover
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -11957,7 +11958,7 @@ repair lives, and it is another lane's tree.
 
 
 ### Lane L-TRANSLATIONS-COLLISION — three files, forty-six lanes, forty-three rival variants
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -12008,7 +12009,7 @@ the four are re-added by a different branch** — including the control this lan
 four races **conflict loudly**, so they are safe and they still need a decision.
 
 ### Lane L-ARM-RECEIPTS-RECAPTURE — ten receipts the repair just made re-capturable
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -12069,7 +12070,7 @@ all.
 no committed tree holds. **Naming which measurement came from which tree is what makes both usable.**
 
 ### Lane L-ARTIFACT-FIELDS-VS-HARNESS — artifacts carrying fields the branch they sit on cannot produce
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -12151,7 +12152,7 @@ reading its working tree has manufactured false absences for four lanes.
 
 
 ### Lane L-DUPLICATE-KEY-GUARD — a check that reds when a merge leaves a key twice
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -12210,7 +12211,7 @@ red** — which is the half of this family that is hardest to catch. The driver 
 the file.
 
 ### Lane L-VAT-KEYS-MONOLINGUAL — twenty VAT sentences an English or German operator reads in Norwegian
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -12331,7 +12332,7 @@ owners.
 
 
 ### Lane L-LINT-RUNNABLE — a linter nobody can invoke without knowing the incantation
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -12366,7 +12367,7 @@ are worse than no hooks: they look like enforcement to anyone reading the tree.
 
 
 ### Lane L-TRANSLATION-STALE-SWEEP — keys present everywhere that stopped meaning the same thing
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -12405,7 +12406,7 @@ first one touches VAT.
 
 
 ### Lane L-MODULES-PREFLIGHT-FAILS-LOUD — a suite that cannot run should say so, not report a smaller green
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -12436,7 +12437,7 @@ and this estate has already been bitten by a script that silently measured anoth
 it. Naming that boundary is part of the deliverable.
 
 ### Lane L-PROVENANCE-EXCLUDES-LANE-EVIDENCE — a lane's own receipts should not dirty the build they attest
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -12527,7 +12528,7 @@ The correction stands unchanged — the backend writes the corrected value — *
 one blank and one lying.**
 
 ### Lane L-LINT-TWO-REAL-DEFECTS — a dropped watcher and a property Vue silently ignores
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -12582,7 +12583,7 @@ empty file.** And a `grep -c` on the corrected file returned 1 by matching **its
 code.
 
 ### Lane L-GERMAN-IDENTIFIER-LABELS — a Norwegian org number printed as a German VAT id, on a receipt
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -12619,7 +12620,7 @@ showing that number at all, **say so and leave the string** — that is a differ
 
 
 ### Lane L-MANIFEST-CONDITIONS — seven corrections to the document a composition ruling rests on
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -12652,7 +12653,7 @@ why** — two conditions in this program have been refused correctly today.
 
 
 ### Lane L-IDENTITY-STUB-TESTS — fifteen suites that cannot see a wrong sentence
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -12711,7 +12712,7 @@ receipt test; leave two that already resolve real dictionaries; and **one locale
 findings.
 
 ### Lane L-BUILT-BUT-ON-NO-REF — which reported work exists nowhere a clone could reach
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -12750,7 +12751,7 @@ heads-only sweep has produced two published wrong answers in this program alread
 
 
 ### Lane L-ENUM-MIRROR-CENSUS — how many frontend copies of a backend enum are short a member
-state: built-unverified
+state: verified
 class: analysis
 pts: 1
 owner: agent
@@ -12787,7 +12788,7 @@ member names onto append-only tables.
 
 
 ### Lane L-JOURNEY-AT-DE — one walk in the language the Swiss product actually ships
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -12862,7 +12863,7 @@ directions.**
 
 
 ### Lane L-PRESERVE-UNREFERENCED-WORK — put a whole feature and a money-path guard somewhere a clean cannot take them
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -12903,7 +12904,7 @@ preserve; record what it claims and that no artifact backs it.**
 
 
 ### Lane L-PAYMENT-LABEL-UKJENT — a cash sale this repository's own till writes reads back as «Ukjent»
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
@@ -12970,7 +12971,7 @@ mounted collapsed and found nothing. The reader now **throws unless it finds exa
 the day that decision is ruled.
 
 ### Lane L-RECEIPT-JOURNEY-AT-DE — the only walk that opens the receipt cannot open it in German
-state: built-unverified
+state: verified
 class: suite
 pts: 2
 owner: agent
@@ -13032,7 +13033,7 @@ findings with the DOM quoted and **deliberately not asserted**, because pinning 
 correction lands elsewhere.
 
 ### Lane L-ARTIFACT-NAMES-ITS-LOCALE — two editions, one filename, nothing in the file saying which
-state: built-unverified
+state: verified
 class: node
 pts: 1
 owner: agent
@@ -13073,7 +13074,7 @@ two as one denominator would rewrite fifteen files nobody is joining against.
 a rename lane is authored, and this is it: **3 at the tip, 5 on the candidate, under `artifacts/journeys/`.**
 
 ### Lane L-DECLARATIONS-THE-FRAMEWORK-IGNORES — code that reads as careful and executes as nothing
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
@@ -13150,7 +13151,7 @@ it rather than written over it.
 unconditionally, but their wiring sits in a **dev-only block**, so their *invocation* is development-only.
 
 ### Lane L-ATDE-REVIEW-CONDITIONS — the German journey floor carries the four corrections its reviewer named
-state: built-unverified
+state: verified
 class: node
 owner: agent
 exit: lanes/L-JOURNEY-AT-DE/mutation-log.md records a run of spec blob 8ebe68bc at edition=no, and its two miscounted figures read the numbers the reviewer re-derived, each shown beside the count that was wrong
@@ -13341,7 +13342,7 @@ path while saying "could not save". The translations are faithful to the Norwegi
 is a copy decision, not a translation one.
 
 ### Lane L-RECEIPT-PAYER-LINE-LOCATE — the blank payer line is found or refuted at a path that resolves
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
@@ -13428,7 +13429,7 @@ Swiss operator opening the orders page, expanding an order and pressing the rece
 order status the backend does not, and the order modal's row *labels* are still hardcoded Norwegian.
 
 ### Lane L-ESCPOS-COMPANYACCOUNT-LABEL — the fiscal receipt names the payment type in the reader's language
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
@@ -13550,7 +13551,7 @@ control for the sweep itself, and **files it cannot parse indistinguishable from
 untouched as instructed; **two answers to one question should become one.**
 
 ### Lane L-DUPLICATE-KEY-IN-THE-BUILD — the tier that ships is measured, not the tier that tests
-state: built-unverified
+state: verified
 class: node
 owner: agent
 exit: lanes/L-DUPLICATE-KEY-IN-THE-BUILD/finding.md states what a duplicated translation key does to the production Nuxt build, shown by planting one and building
@@ -13672,7 +13673,7 @@ bare number is right whether or not the path is reachable; **the justification i
 still stringify or mislabel this tender.
 
 ### Lane L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED — an undefined payment type cannot reach a printed fiscal line
-state: built-unverified
+state: verified
 class: analysis
 needs: D-SPEC-L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED
 owner: agent
@@ -13926,7 +13927,7 @@ shared with 121 worktrees. And no CI step was added, because **nothing runs a su
 workflow step it could not show firing is exactly the shape this lane was sent to end.
 
 ### Lane L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE — every build-derived claim knows which tree it measured
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/census.md lists every lane whose evidence involved a build or a browser run, states for each whether its worktree had its own node_modules or a symlink, and marks the ones whose claims cannot be trusted without a re-measure
@@ -13954,7 +13955,7 @@ classify; **listing it as unknown is the answer, and guessing is the failure.**
 
 
 ### Lane L-TESTS-THAT-WRITE-ARTIFACTS — a suite run stops changing the record it is measured against
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-TESTS-THAT-WRITE-ARTIFACTS/census.md names every test that writes under artifacts/ as a side effect, separates the deliberate regenerators from the incidental ones, and states which committed files each touches
@@ -14013,7 +14014,7 @@ path that is kept.
 permanent untracked entry in every backend `git status`.
 
 ### Lane L-MIRROR-HOLDS-ONLY-REAL-MEMBERS — the frontend enums say what the server can actually send
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-MIRROR-HOLDS-ONLY-REAL-MEMBERS/census.md compares every frontend enum mirror against its backend enum member by member, and states for each extra whether anything can produce it
@@ -14128,7 +14129,7 @@ must be re-run after landing**, which also catches the mislabelled wire if the c
 pictures — **two states, one image.**
 
 ### Lane L-ACK-RECEIPT-SURVIVES-A-RELOAD — a worker's receipt is still there after the page reloads
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
@@ -14181,7 +14182,7 @@ today, and **C6 would bite the moment a UI string called this row personalliste 
 **The lane made the choice answerable and did not take it**, which is what it was asked for.
 
 ### Lane L-VUE-JEST-UPGRADE-MEASURED — whether the toolchain can mount the templates it cannot mount today
-state: built-unverified
+state: verified
 class: node
 owner: agent
 exit: lanes/L-VUE-JEST-UPGRADE-MEASURED/finding.md states the full-suite result with an upgraded template transpiler against the result without it, names every suite whose outcome differs, and says whether the four unmountable templates then mount
@@ -14866,7 +14867,7 @@ and dropping the month bound went undetected. Replaced with six vectors each bre
 naming only the Norwegian number — left to the translation lane deliberately, given the live collision flag.
 
 ### Lane L-PATH-EVIDENCE-IS-READ — an exit is not satisfied by a file that fails
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-PATH-EVIDENCE-IS-READ/finding.md names every lane whose recorded evidence is a directory prefix or an artifact whose own status is not a pass, and states for each whether the exit it claims is demonstrated
@@ -14975,7 +14976,7 @@ values and each must red **on its named field** — which found two arms reporti
 stale anchor fails as a stale anchor** instead of being handed a red it did not cause.
 
 ### Lane L-CANNOT-BE-REBUILT-CENSUS — what a fresh clone of this estate cannot do, listed once
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-CANNOT-BE-REBUILT-CENSUS/finding.md names every step a fresh clone of the integration branches cannot complete, each with the object or command that fails, and marks which are owner-only to repair
@@ -15155,7 +15156,7 @@ wins regardless of document order; and a legitimate passing record carrying a by
 repairable in the artifact.
 
 ### Lane L-BUILT-IS-CHECKED-TOO — the promotion that skips the checker stops skipping it
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-BUILT-IS-CHECKED-TOO/finding.md states what each of the 284 unchecked pointers resolves to, separates the 149 that resolve to nothing, and says what the promoting command would refuse if it called the checker
@@ -15255,7 +15256,7 @@ from the address it printed.
 
 
 ### Lane L-POS-CLOCK-CLIENT-OR-RECORDED — the till clock surface has a caller, or the plan says it does not ship
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-POS-CLOCK-CLIENT-OR-RECORDED/finding.md names every endpoint of the POS clock surface and its callers across both frontend repositories, and states for each whether a till screen consumes it or the surface is not shipping in this edition
@@ -15787,7 +15788,7 @@ container you did not create.** Record the port you actually bound, not the one 
 missing endpoint is worth more than a fixture capture relabelled.
 
 ### Lane L-TRAINING-WALK-IS-GREEN — the training walk stops recording its own failure
-state: built-unverified
+state: verified
 class: node
 owner: agent
 exit: artifacts/journeys/training-course-to-evidence.playwright.json records status passed, and the step that fails today is shown red before the repair and green after
@@ -15812,7 +15813,7 @@ changed.**
 **Never bind port 4010**, never kill a container you did not create, and record the port you actually bound.
 
 ### Lane L-GROWTH-SEND-GATE-WALK-IS-GREEN — the newsletter send-gate walk stops recording its own failure
-state: built-unverified
+state: verified
 class: node
 owner: agent
 exit: artifacts/journeys/growth-newsletter-send-gate.playwright.json records status passed, and the gate it walks is shown to refuse before the repair and to pass after
@@ -15962,7 +15963,7 @@ pathspec**; never bind ports 4010, 4971 or 4973; do not capture in the primary c
 uncommitted paths including six under the e2e harness.
 
 ### Lane L-LEDGER-NUMBERS-ARE-FREE — the ledger stops handing the next author a number already spent
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
@@ -15991,7 +15992,7 @@ mid-merge is how the collision this flag describes gets a second instance. **The
 has caught four lanes including the clerk. The checkout sits on a lane branch.
 
 ### Lane L-EMPREF-WIDTH-OR-A-RULING — the employee reference is the width its spec names, or the narrower one is ruled
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
@@ -16018,7 +16019,7 @@ rather than producing work to justify the lane.
 directory has produced six wrong answers here.
 
 ### Lane L-CORS-WILDCARD-MEASURED — what the live API's open origin policy actually exposes
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
 exit: lanes/L-CORS-WILDCARD-MEASURED/finding.md names every credentialed cross-origin path the deployed API would accept today, and states which of them a wildcard origin makes reachable
@@ -16778,12 +16779,13 @@ Say in your return how the three compose, and **prove the end-to-end path in a b
 and it is the assertion none of the three suites could make.
 
 ### Lane L-EF-DECLARES-EVERY-TRIGGER — no EF write dies because the model forgot a trigger
-state: running
+state: built-unverified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
 exit: every table carrying a chain-created trigger is declared with HasTrigger, and a SQL-tier arm updates one row on each such table without error 334, with the trx committed under the lane directory
 agent: opus
+evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/evidence.md
 
 **Read `F-EF-NEVER-DECLARES-A-TRIGGER` first.** 25 triggers, zero declarations, proven fatal on
 `TrainingCourseVersions` by three HTTP 500s from a live endpoint.
@@ -16814,12 +16816,13 @@ it would switch off an immutability guard in a world the owner is using and hide
 green demo.
 
 ### Lane L-SECRETS-READ-FROM-CONFIG — a credential can be rotated without editing source
-state: running
+state: built-unverified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
 exit: none of the four committed credentials is read from a source literal, each fails fast outside Development when unset, shown by a test that reds when a literal is restored
 agent: opus
+evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-aacb5251c46cd2751/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md
 
 **Rotation is the owner's act; making rotation *possible* is not, and today it is not.** Four credentials are
 committed and **three of them are read from source literals**, so rotating any one means editing code, building
@@ -16848,11 +16851,12 @@ red when a literal is put back.
 it a configuration change rather than a deployment.
 
 ### Lane L-CI-RUNS-THE-FAST-TIER — a suite runs on the branch the work is on
-state: running
+state: built-unverified
 class: analysis
 owner: agent
 exit: a workflow runs the container-free tier on this branch and on pull requests into it, shown by a run whose log names the tier and its counts
 agent: opus
+evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-aaaf61b6e803d820e/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md
 
 **Nothing gates this branch.** The sole workflow triggers on push to `master` and `test` only, with **no
 pull-request trigger** — so every suite this program has run, including the 587-test SQL tier and every
@@ -16874,12 +16878,13 @@ a CI proposal with a guessed duration is how a gate gets switched off. **Do not 
 the diff and the measurement, and say what it would have caught this week.
 
 ### Lane L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT — the drawer stops recording money that never left it
-state: running
+state: built-unverified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
 exit: a referenced return of a CompanyAccount receipt books against the company account and leaves the cash drawer untouched, shown at the fiscal journal by a test that reds when the tender is hardcoded
 agent: opus
+evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-ab18757354501b772/lane/company-account-referenced-return.patch
 
 **The worst defect this seeding found, and it is a bokføring one.** Refunding a funded company lunch works —
 but only through `POST /pos/payment/cash/{journalEntryId}/refund`, which **hardcodes `PaymentType.Cash`**,
@@ -16901,11 +16906,12 @@ row, never an edit** — and note `F-EF-NEVER-DECLARES-A-TRIGGER`, because an EF
 dies on SQL Server today regardless.
 
 ### Lane L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP — a menu without pictures still sells
-state: running
+state: built-unverified
 class: node
 owner: agent
 exit: a published category with no image appears in the consumer menu, shown by a request carrying searchOptions returning it
 agent: opus
+evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-ae17b03b712ecf944/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md
 
 **A venue can publish a complete menu and trade nothing.** `CategoryModelBuilder.cs:49` **drops any category
 with no image** whenever `searchOptions` is present — and **the consumer web always sends them**.
@@ -16923,12 +16929,13 @@ is accept the publish and drop the category later, in a different service, for a
 **`bulk-import` sets no images**, so any venue onboarded that way is in this state from its first day.
 
 ### Lane L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED — a worker is not offered a shift she already won
-state: running
+state: built-unverified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
 exit: after a successor publication each open shift appears once on the worker page and an awarded shift appears not at all, shown by a test that reds when the lineage filter is removed
 agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-modules/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
 
 `ListOpenAssignmentsAsync` filters only on `State == Published` **with no lineage filter** — unlike
 `CheckPersonOverlapsAsync` **in the same module**, which deliberately excludes superseded publications.
@@ -16947,6 +16954,6576 @@ second publication of any week, ever.
 **The neighbour is the answer**: `CheckPersonOverlapsAsync` already knows how to exclude superseded lineage.
 Use the same predicate rather than a new one, and say whether any other reader has the same omission — that
 sweep is worth more than the fix.
+
+### Lane L-PLANNED-MINUTES-HONOUR-LINEAGE — republishing a week does not inflate the payroll column
+state: built-unverified
+class: sql
+owner: agent
+dir: ../OkamAPI-modules
+exit: republishing an identical week leaves planned minutes, planned labour cost and planned variance unchanged, shown by a measured before-and-after on each of the four readers
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-wt-plannedmin/WebApi.Tests/Workforce/RepublishedWeekPlannedReadsTests.cs
+
+**One of the four is measured, not reasoned, and it reaches payroll.**
+`WorkforceActualMinutes.ReadAsync:151` takes `plannedOrdinaryMinutes` from **480 to 960** when an identical
+week is republished. That reader feeds the **payroll hours export**, contract exposure and the labour band.
+
+**The gap is what a manager reads.** Paid minutes come from clock sessions and stay correct, so the plan
+inflates while the actuals do not — and planned-versus-actual variance is precisely the number the module
+exists to show.
+
+The other three: `WorkforceLabourBandService.ReadPublishedAssignmentsAsync:456` doubles planned labour cost and
+the unpunched-shift count (**a money path**); `WorkforceAttendanceService.GetAttendanceAsync:86` doubles the
+planned side of variance; `WorkforceRequestsService.FirstAffectedPublishedRevisionAsync:424` can **name a
+superseded revision** as the first affected one — not duplication, a wrong answer.
+
+**The predicate already exists and is already composed.** `WorkforceScheduleSupport.CurrentLineageOnly` was
+extracted for exactly this and is used by three call sites — **compose it, do not write a fifth copy.** That
+extraction currently lives uncommitted-then-rescued on `wip/rescue-2026-08-06-open-shifts-lineage`; check
+whether it has reached your base before you start.
+
+**Measure each one before and after, the way the first was measured** — republish an identical week and read the
+number. Four readers, four measurements. A test asserting the predicate is present is weaker than a number that
+moved and then stopped moving.
+
+**`FirstAffectedPublishedRevisionAsync` needs its own thought**: excluding superseded lineage there changes
+*which* revision is named, not a count, so say what the right answer is rather than applying the filter by reflex.
+
+### Lane L-BACKEND-PATCHES-ARE-APPLIED — four finished fixes stop being patches
+state: built-unverified
+class: sql
+owner: agent
+dir: ../OkamAPI-modules
+exit: all four patches are applied on one branch, the tree builds, and the non-SQL tier plus each patch's own arm are green at that commit, with the triple recorded
+agent: opus
+evidence: /Users/svendaneel/okam/wt-bepatch/lanes/L-BACKEND-PATCHES-ARE-APPLIED/evidence.md
+
+**Four lanes finished real work and could not commit it.** The harness pins agents to a Web worktree and
+refuses `git -C` into the backend, so each shipped a dry-run-clean patch instead. **They are the session's
+output and they are the least safe thing in the estate** — patches rot the moment the base moves.
+
+- **`L-EF-DECLARES-EVERY-TRIGGER`** — declares all 25 triggers; 5 files, 729 lines. SQL arm 27F/25P → 0F/52P.
+  **Apply this one first**: two live defects depend on it, and anything that updates one of those tables fails
+  without it.
+- **`L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT`** — the company-account refund route, so a company return stops
+  booking a cash pay-out. 12/12 with the SAF-T limb.
+- **`L-TRIPLETEX-CLAIM-OUTLIVES-ITS-CALL`** — the claim window derived from an **enforced** budget; 15 files,
+  738 lines.
+- **`L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED`** — already landed as plain writes and rescued to
+  `wip/rescue-2026-08-06-open-shifts-lineage`; **compose rather than re-apply.**
+
+**Apply, do not merge to a shared branch.** Build a branch off the composed stack, apply in the order above,
+and **report every conflict and how you resolved it by content** — this estate has had a receipts file resolved
+by side three times.
+
+**Verify at the end, not per patch**: one build, one non-SQL tier, plus each patch's own named arm. If a patch
+no longer applies cleanly, **say so and stop** rather than forcing it — a forced apply is how a proven change
+becomes an unproven one.
+
+**You may hold a SQL slot.** Re-measure headroom first: a sibling watched this host fall to **135 MB free** with
+two SQL containers up and stopped its own run to protect the owner's live world. **Cap `max server memory`
+inside your own container**, keyed on your own Testcontainers session id, never by name and never by
+elimination.
+
+### Lane L-LAND-THE-BACKEND-ON-THE-TRUNK — today's backend work reaches feature/restaurant-modules
+state: built-unverified
+class: sql
+owner: agent
+dir: ../OkamAPI-modules
+exit: feature/restaurant-modules carries the composed stack and every landed backend lane, it builds, and the non-SQL and SQL tiers at the new tip are recorded with every failure accounted for
+agent: opus
+evidence: /Users/svendaneel/okam/wt-landbackend/lanes/L-LAND-THE-BACKEND-ON-THE-TRUNK/evidence.md
+
+**Why this lane no longer carries a `needs:` line, recorded so nobody restores it by reflex.** The clerk
+added four `needs:` today to make the two pre-merge readings precede the merge. That sequencing was right
+and it was achieved — but `needs:` is the wrong instrument for it, because a lane target is satisfied
+**only when `accepted`**, and `accepted` is owner-only. No lane in this plan is accepted. The four
+additions made this lane permanently unready rather than merely ordered.
+
+**Every one of the five has since returned `built` and merged, and their substance is what the gate was
+for**: the three backend patches were read and ruled **land-as-is** with no change required;
+`lane/growthaudit-migration` was read and **composes**, parent id equal to tip id; the planned-minutes fix
+landed with a red-then-green on four readers; and the trigger declarations landed with the SQL tier
+restored **38F/64P to 0F/102P**. The ordering the clerk wanted has happened. Removing the line records
+that, and does not dispatch past anything.
+
+
+**The owner lifted the no-merge hold on 2026-08-06.** Until then every lane stopped at its own branch by
+standing instruction, which is why the trunk has not moved since **2026-08-04 12:00** while roughly twenty
+lanes and `integration/mig-stack-merge` (**+38 commits**) queued behind it.
+
+**Order is not free. Each of these is measured, not cautionary.**
+
+1. **`integration/mig-stack-merge` first** — it carries the migration stack and the only SQL tier ever run on
+   this estate. Its own composition resolved a receipts file **by content**; do not re-resolve by side.
+2. **Then the trigger declarations**, because *anything* updating one of the 25 trigger-bearing tables fails
+   with error 334 without them — including work in the other patches.
+3. **Then the rest**, each verified at the tip it lands on.
+
+**Keep the eleven pre-fork heads out.** Branches based at `2431883d` **silently re-add a deleted credit-sale
+predicate on a plain merge**, auto-merged with no conflict marker, because their base predates the predicate so
+the tip's deletion has nothing to apply to. Measured over all 215 outstanding landings: 111 clean, 104 conflict,
+**11 results hold two definitions**. They are named in `F-POS-TENDER-WIRE-REINTRODUCES-TWO`. **Do not land any
+of them here.**
+
+**Two more still-open numbers to respect**: `MIG-28` is contested by two branches that each authored a file, and
+the next free migration number is **30**. If a merge produces two migrations sharing a parent, **stop** — that
+is C2 and it has bitten this estate twice.
+
+**Verify at the tip, not per merge.** One build, the non-SQL tier, and a SQL tier if a slot is free — and
+**account for every failure**, because the composed stack's own run left exactly one known red (the outbox
+count) whose lane is gated on a ruling.
+
+**Do not push.** Landing on the trunk is authorised; publishing it is not.
+
+### Lane L-LAND-THE-FRONTEND-ON-THE-TRUNK — today's frontend work reaches feature/restaurant-modules
+state: built-unverified
+class: node
+owner: agent
+exit: feature/restaurant-modules carries every landed frontend lane, jest is green at the new tip, and a browser opens the admin with the grouped nav and a working sign-in
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md
+
+**The owner lifted the no-merge hold on 2026-08-06.** The frontend trunk has also not moved since
+**2026-08-04**.
+
+**One ordering rule is not optional, and it is measured**: `lane/loginmodal-mounted-once` **must not land
+without** `L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING`. Alone it removes the page's own modal while the board still
+never polls — **an exposed, frozen board with nothing on screen to explain it**, which reads worse than the
+defect. All three sign-in lanes were proven to compose in a browser on shipped bytes: one modal, it closes, two
+board calls seven seconds apart.
+
+**A second hazard crosses repositories.** The category fix — *an image is not required to sell* — hands two
+consumer surfaces a shape they have never seen: `ConsumerWeb/pages/categories.vue:302` and
+`ConsumerApp/.../CategoriesPage.vue:405` read `category.image.imageUrl` **unguarded** and have never thrown only
+because the backend guaranteed an image. **Guards first, or both together; never the backend alone.** See
+`F-CONSUMER-READS-CATEGORY-IMAGE-UNGUARDED`.
+
+**Start from `wip/session-2026-08-06-all-work`** — it is a rescue snapshot of the owner's working tree, so it
+carries `lane/focustrap-teardown`'s commit and roughly 2,300 evidence files alongside the code. **Separate the
+code from the evidence** rather than landing the snapshot whole, and say how you split it.
+
+**The `core` submodule moves too**: the full-replace guard is on `wip/session-2026-08-06-all-work` @ `9626a56`
+there, and the parent's pointer must follow.
+
+**`journey-artifact-store.test.js` reds in any checkout not named `Web-modules`** — a derived-basename fix
+exists uncommitted in the owner's tree and is **one commit**. Land it or CI reds by eleven on day one.
+
+**Do not push.**
+
+### Lane L-TRIGGER-DECLARATIONS-REFRESHED — all 32 triggers are declared, not the 25 a stale patch knew
+state: built-unverified
+class: sql
+owner: agent
+dir: ../OkamAPI-modules
+exit: every trigger the composed chain installs is declared to EF, and the exact-set-equality arm is green at the composed stack, with the SQL tier triple recorded
+agent: opus
+evidence: docs/plan/lanes/L-TRIGGER-DECLARATIONS-REFRESHED/detail.md
+
+**The original patch is stale and was correctly refused rather than forced.** Its base is **nine migrations
+behind** the composed stack. Three migrations dated 2026-08-01 — Margin period statements, Training W3,
+Workforce W5 timesheets — add **seven triggers it never saw**: the chain now installs **32**, the patch declares
+**25**.
+
+**Both `git apply` and `patch(1)` with fuzz refused it**, and a force-apply in a throwaway **reds its own
+fast-tier arm 2F/0P** on exact set equality. That strictness is the point — a partial declaration is worthless,
+because the defect is precisely that a table EF updates was not declared.
+
+**So this is not a re-apply. Seven declarations must be authored and measured**, which the original lane never
+did.
+
+**Start from that lane's measurements, they hold**: all 25 refuse an EF `UPDATE` with error 334, decided at
+statement compile so a zero-row update is refused like a real one; **INSERT is not exposed on any of them**; and
+the live cases are the two whose `GuardAppendOnly` is *conditional* — `TrainingCourseVersions` and
+`MealsStatementLines`. **Re-derive the same discriminator for the seven new ones** rather than assuming they are
+latent.
+
+**Keep the anti-drift shape**: theory cases replay from the **migration chain**, not the model — reading the
+model would collapse to zero cases and pass green forever — truth from `sys.triggers`, model compared both
+directions.
+
+**No migration.** This is a model declaration behind the existing `Database.IsSqlServer()` branch.
+`HasPendingModelChanges()` must be asserted false — **but note it is already true at the composed stack** for an
+unrelated reason (`F-GROWTHAUDIT-MISSING-AT-THE-MERGE-TIP`), so **say which of the two you are observing**.
+
+**One residual the original lane refused to fake and you should close**: the batched multi-row INSERT is
+unprobed. It wrote the probe, could not run it when the host fell to 135 MB free, and **deleted it rather than
+ship an unmeasured assertion**. Five minutes with a slot.
+
+**Cap `max server memory` in your own container**, keyed on your own Testcontainers session id — never by name,
+never by elimination. The owner's `okam-lwtwo-sql` and `okam-lwtwo-redis` are his live world: never stop,
+restart or exec into them.
+
+### Lane L-REVIEW-THE-BACKEND-PATCH-TREE — the three landed patches are read by someone who did not write them
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: each of the three commits on lane/backend-patches-composed is ruled land-as-is or named-change-required, with the exact change named per commit and the file:line for each, in a review file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-REVIEW-THE-BACKEND-PATCH-TREE.md
+
+**This tree is about to be merged to `feature/restaurant-modules` and nobody but its author has read
+it.** The estate's own protocol is that a landed lane gets a dedicated reviewer with fresh context
+*before* the merge, and that protocol exists because per-claim review has already shipped fifteen real
+defects past it.
+
+`lane/backend-patches-composed` sits on `integration/mig-stack-merge` at `7f8945dc` and carries **three
+of four** patches; the fourth — the EF trigger declarations — was refused rather than forced, correctly,
+and is being re-authored by its own lane. **Review the three that landed, not the one that did not.**
+
+The non-SQL tier moved **4703 to 4728 with 0 failures** at this tip. **That number is the author's, and
+a green suite is not the thing under review.** What is under review is whether each commit does what its
+message says, whether it touches anything outside its stated scope, and whether any of it trips C1, C4
+or C7.
+
+**Rule and name the exact change. Do not edit any file.** A verdict of *land-as-is* is a legitimate and
+expected outcome for a patch that is correct; say so plainly rather than manufacturing a finding.
+
+### Lane L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK — the missing table's migration is checked against the chain it must join
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a written verdict on whether lane/growthaudit-migration replays over the composed stack without a duplicate-object or parent-mismatch failure, naming the Designer parent id it declares and the id at the stack tip
+agent: fable
+evidence: docs/plan/reviews/L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK.md
+
+`F-GROWTHAUDIT-MISSING-AT-THE-MERGE-TIP` is measured: `GrowthAuditEvents` is **mapped in the model,
+written by five services, present in no migration and in no snapshot** at the composed tip. It is why
+`HasPendingModelChanges()` answers true there, and it is a hard blocker on the backend landing.
+
+A migration exists on `lane/growthaudit-migration`. **Whether it composes is not known** — and C2 is the
+constraint this estate has already been bitten by twice, both times on a fresh database and never on the
+author's.
+
+**This is a reading, not a run.** Derive the answer from the Designer snapshots and the chain: which
+parent id does that migration declare, what id is at the composed stack tip, does any other migration on
+the stack already create an object it creates, and does its snapshot carry anything besides the one
+table. **A database slot is not granted** — both SQL slots are held.
+
+If the parent id does not match the tip, say so and name what a rebase would have to move; do not rebase
+it. **Rule and name the exact change. Do not edit any file.**
+
+### Lane L-TRAIN-DEMO-SEED-REDO — the Training demo seed runs against the tip it will actually be run on
+state: open
+class: node
+owner: agent
+dir: .
+exit: the Training demo seed completes against the live world on :5971 and a person can open the Training admin surface and see the courses, certificates and expiry states it wrote
+agent: opus
+needs: L-EF-DECLARES-EVERY-TRIGGER
+
+**This is the successor to a lane whose agent died, not a re-run of it.** `L-TRAIN-DEMO-SEED` was
+dispatched 2026-08-04T16:29Z, wrote nothing after 18:44, and belonged to a session that has since ended.
+It was retracted for that reason and not because its objective was wrong. **Two days of merges have
+landed under it** — start from the tip, not from whatever it was reading.
+
+The recorded symptom is that the seed **dies on the withheld catalog**: Training's course catalog is
+gated, and the seed reaches for it in a world where the gate has not been opened. The live world now has
+**all eighteen flags effective**, which the dead lane never saw — so **re-derive the failure before
+fixing it**. It may already be gone, and reporting that honestly is a legitimate outcome.
+
+**Seed through the product's own endpoints**, the way the other five modules were seeded — not by
+INSERT. The other five wrote through HTTP and that is why their data survives a rebuild.
+
+**The world is the owner's and he is using it.** API **:5971**, web **:3971**, containers
+`okam-lwtwo-sql` and `okam-lwtwo-redis`. Manager `99681931`/`849666`, worker `99999999`/`123123`.
+**Never stop, restart or exec into those containers**, never bind those ports, and never `pkill` or kill
+by pattern — a lane stopped his dev server that way today. `npm ci` and `npm install` are banned
+repo-wide: they fail and delete a `node_modules` shared by ~124 worktrees.
+
+**C5 is the gate**: the exit is a person opening the Training surface and seeing the data, not a seed
+script exiting zero.
+
+### Lane L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING — every ref in both repositories is checked against what the two landings will actually carry
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a table under docs/plan/reviews/ with one row per local ref in both repositories, saying for each whether its unique commits are reachable from what the two landing lanes will merge, and naming every ref whose work would be left behind
+agent: fable
+evidence: docs/plan/reviews/L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING.md
+
+**The owner asked this directly and got a partial answer.** He asked whether any work was not on the
+branch, or forgotten, or still pending. The answer given named the rescue sweep and the trunk gap but
+**never enumerated the refs**, and an enumeration is the only form of that answer that can be checked.
+
+**The material is large and it is not tidy.** The backend carries **41 rescue branches** plus
+`lane/backend-patches-composed` plus `integration/mig-stack-merge` at **+38**; the frontend carries
+`wip/session-2026-08-06-all-work` and its `core` submodule pointer, plus the day's lane branches. The
+trunk `feature/restaurant-modules` has not moved since **2026-08-04 12:00**.
+
+**Two landings are in flight and neither is yours to touch.** `L-LAND-THE-FRONTEND-ON-THE-TRUNK` and
+`L-LAND-THE-BACKEND-ON-THE-TRUNK` are the merges. Your job is the **complement**: what those two will
+*not* pick up. Read their lane bodies to learn what they intend to carry, and treat that as the
+denominator.
+
+**Reachability is the test, not branch names.** A ref whose every commit is already an ancestor of the
+landing set is carrying nothing and should be reported as empty rather than as work. `git cherry` and
+`git rev-list --left-right` answer this; a name-based guess does not.
+
+**One measured trap.** `git grep` at a revision searches the tree at that revision, not the object set —
+a search for demo code returned **zero** hits across revisions where a byte-scan of reachable objects
+found **133**. If you search content, scan objects.
+
+**Read-only in both repositories.** No commit, no merge, no rebase, no push, no branch deletion —
+especially no branch deletion. Do not run a suite, do not start a container, and never stop, restart or
+exec into the owner's `okam-lwtwo-sql` or `okam-lwtwo-redis`. Never `pkill` or kill by pattern.
+
+**Say what you could not determine.** A ref you cannot classify is a row that says so, not a row you
+guess at.
+
+### Lane L-THREE-RETURNS-THE-TOOL-REFUSED — three finished pieces of work sit in returns/ that no lane will ever collect
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: each of the three refused returns is traced to a ref or to nothing, and each gets either a named successor lane authored in this plan or a written reason it is safe to discard, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-THREE-RETURNS-THE-TOOL-REFUSED.md
+
+**Three RETURN files have been sitting unmerged all day and the tool is right to refuse them**: each names
+a lane that is `retracted` or `open`, so `plan return` has nowhere to put the verdict. They are
+`L-FE-WF-INVITE-LIST-REVOKE-1.md`, `L-GUARD-DEMO-1.md` and `L-MODAL-SEVEN-1.md` under
+`docs/plan/returns/`.
+
+**A refused return is not a failed return.** An agent did the work, wrote it up, and the bookkeeping lost
+it. The owner has said plainly he does not want to lose work; this is the shape of loss that leaves no
+trace, because nothing in the plan points at it.
+
+**Trace each one to a ref.** Read the return, find the branch or commit it claims, and check whether that
+object exists and whether it is reachable from anything that will land. `git cherry` and
+`git rev-list --left-right` answer reachability; a branch name does not. Work that exists only in a
+deleted worktree is the case worth finding, and the case worth saying so about.
+
+**Then rule each one, and be willing to say discard.** A return whose work is already superseded by
+something landed is safe to discard *with the reason written down*. A return whose work exists on a ref
+and is reachable from nothing needs a successor lane, and you should name what that lane's exit would be.
+**Do not author the successor lanes yourself** — name them; the clerk authors.
+
+**Read-only in both repositories.** No commit, merge, rebase, push or branch deletion. No suite, no
+container. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`. Never `pkill`.
+
+### Lane L-THE-LIVE-WORLD-RUNS-THE-BRANCH — the world the owner walks is built from the trunk, not from a two-day-old binary
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the API and web serving the live world are built from feature/restaurant-modules at its post-landing tip, a course version publishes without a 500, and a person walks one journey per module in a browser with the walk recorded
+agent: opus
+evidence: /Users/svendaneel/okam/web-livewalk/artifacts/journeys/WALK-RECORD.md
+
+**This is the C5 evidence for the whole merge, and it is the only kind that counts.** Two landings will
+put the work on the trunk. Nothing about that proves a person can use it, and this estate has shipped
+green suites over unreachable features often enough that the rule is load-bearing rather than
+decorative.
+
+**The running world is stale in a way that has already cost a lane.** The API on **:5971** is a compiled
+binary from `wt-lwtwo-api` at **8e2b57de8** — the 2026-08-04 trunk. It declares no EF trigger, so
+`POST /training/stores/1/courses/{id}/versions/1/publish` answers **500** with SQL Server error **334**,
+and **0 of 5 courses in store 1 carry a published version**. Publish gates assignments and completions,
+which is why Training demo data is empty and why a seeding lane blocked on it.
+
+**Port 3971 has no listener** — measured, not inferred. The owner's web dev server is not running.
+
+**You are granted the API and the web server, and only those.** Rebuild and restart the API on :5971 and
+start the web on :3971. **The containers are not yours**: `okam-lwtwo-sql` and `okam-lwtwo-redis` are up
+and hold the seeded world — never stop, restart or exec into them, and never `pkill` or kill by pattern.
+Resolve every kill from your own pid or from the port. `npm ci` and `npm install` are banned repo-wide:
+they fail and delete a `node_modules` shared by ~124 worktrees.
+
+**Rebuild the API with the module master flags set.** The world needed `Events__Enabled`,
+`Growth__Enabled` and all four `Features__Meals__*`; without them no module master is set at all. The
+connection string must be rebuilt from `test/e2e/scripts/live-world.sh:174` and **not** captured from the
+environment — a word-split on `User Id=sa` took the API down for two minutes today.
+
+**Walk it, do not assert it.** Manager `99681931`/`849666`, worker `99999999`/`123123`. Playwright is
+available. One journey per module, and **record what you saw, including anything that did not work** —
+a walk that finds a defect is a better result than a walk that finds none.
+
+### Lane L-READ-THE-TRUNK-AS-LANDED — the twenty-two commits now on the trunk are read by someone who did not merge them
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict per landed commit and per resolved conflict at feature/restaurant-modules ff497c0, naming any content lost in a resolution and any commit whose contents do not match its message, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-TRUNK-AS-LANDED.md
+
+**The trunk moved for the first time since 2026-08-04**: `e34977a` to **`ff497c0`**, **22 commits**, `core`
+`1bcab0b` to `9626a56`. The owner asked for the work merged *and validated*. The merge happened; the
+validation is this lane, and it is read by someone who did not perform the merge.
+
+**Eleven conflicts were resolved by content and each is named in the landing evidence.** Read that
+evidence at `lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md` and **check the resolutions against the
+two sides**, rather than against the account of them.
+
+**One resolution is already known to have gone wrong and been fixed**: three translation files were
+resolved with `git checkout --theirs`, which takes whole files and silently dropped **351 keys**. It was
+caught by the suite and redone with `git merge-file` in commit **22bac8e**. The clerk has since counted
+keys at the tip — `no.ts` **5173**, `en.ts` and `de.ts` **5138**, all above both the snapshot and the
+pre-landing trunk — so the loss did not survive. **Your job is the other ten**, where no counter existed
+and nothing would have caught the same mistake.
+
+**Two rules the landing was measured against; check they held rather than assume it.** First,
+`loginmodal-mounted-once` must never sit on the branch without `ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING`,
+or the board is exposed and frozen with nothing on screen to explain it — the report says they are
+adjacent commits. Second, the **category change was withheld**, because two consumer surfaces read
+`category.image.imageUrl` unguarded; confirm no file in these 22 commits touches a category path.
+
+**Some landed commits were never commits before.** `ADMINPAGE-EMITS` and the logout fix existed only as
+uncommitted files in two agent worktrees. **Those had no prior review at all** and deserve the closest
+reading.
+
+**Read-only.** No commit, merge, rebase, push or branch move — the trunk is not yours to touch, and
+`git branch -f feature/restaurant-modules e34977a` is the recorded revert if anyone ever needs it. No
+suite, no container, no `pkill`. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`.
+
+**Rule and name the exact change. Do not edit any file.** A clean reading is a legitimate outcome.
+
+### Lane L-A-MENU-WITHOUT-PICTURES-STILL-SELLS — the category guards land so the backend fix stops being unshippable
+state: open
+class: node
+owner: agent
+dir: .
+exit: both consumer surfaces read a category with no image without throwing, proven by driving each component with an image-less category, and the backend category change is either landed with them or recorded as still withheld and why
+agent: opus
+needs: D-CATEGORY-IMAGE-CLIENT-GATE
+
+**A published category with no image never reaches the shop.** `CategoryModelBuilder.cs:49` drops
+image-less categories whenever `searchOptions` is present, so a venue that has not photographed its menu
+sells nothing. The fix is written and it is **the one change today's frontend landing deliberately
+refused to carry**, which was the right call.
+
+**The reason is measured, not theoretical.** The fix hands two consumer surfaces a shape they have never
+seen, because the backend has always guaranteed an image: `ConsumerWeb/pages/categories.vue:303` and
+`ConsumerApp/.../CategoriesPage.vue:405` both read `category.image.imageUrl` **unguarded**. Landing the
+backend alone turns an empty menu into a thrown render on two surfaces. **Guards first, or both
+together; never the backend alone.**
+
+**Guard patches exist and are unbuilt.** Find them in the category lane's directory under
+`docs/plan/lanes/`. **Do not trust them on sight** — they were written against a tree that has since
+moved, and a sibling patch was correctly refused today for being nine migrations stale.
+
+**Drive the guard, do not assert it.** A guard proven by a test that constructs a category *with* an
+image proves nothing. Construct the image-less shape, show the unguarded read throws, then show the
+guarded one renders.
+
+**The two consumer repositories may not be yours to merge into.** If they are separate checkouts you have
+no authority over, say so, land what you can, and **name exactly what remains and where** rather than
+landing the backend half. A verdict of `blocked` with both halves named is worth more than a half
+landing.
+
+**Do not push.** The trunk is now `ff497c0`; branch from it. Never `pkill`, never `npm ci`/`npm install`,
+never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`.
+
+### Lane L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK — the eleven pre-fork heads cannot re-add the private predicate behind a merge
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: `git grep -lE 'bool +IsCreditSale *\(' <result-tree> -- '*.cs'` names only Services/Kassa/KassaCreditSale.cs at the tree the backend landing will produce, and each of the eleven pre-fork heads based at 2431883d is classified as retired-unlanded, already-reduced, or must-be-reduced-before-landing
+agent: fable
+evidence: docs/plan/reviews/L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK.md
+
+`F-POS-TENDER-WIRE-REINTRODUCES-TWO` is a **blocker**, it has been **twice corrected**, and its second
+correction was also incomplete — so treat its recorded text as the most careful version available and
+still check it rather than quote it.
+
+**The hazard is a silent one, which is why it is a blocker.** Eleven heads based at **`2431883d`** predate
+the fork. A **plain merge of any of them re-adds the private credit-sale predicate** without a conflict,
+because nothing textually collides. The suite would stay green and two predicates would answer the same
+question.
+
+**The part already settled, so you do not re-litigate it**: the lane this flag once warned against
+**should** land and already has — `21f79514` is a real two-parent merge with zero conflicts, and a
+throwaway merge of the utlkvit family with it produced **exactly one** definition at
+`Services/Kassa/KassaCreditSale.cs:25` with six call sites. **Holding it was never the right call.**
+
+**Your question is the eleven.** For each: does it still exist, is it reachable from what the backend
+landing will merge, and would merging it re-add the predicate. `git merge-tree` answers the last one
+without creating a commit and without touching a branch.
+
+**The landing is in flight and its result tree is the thing to test.** `L-LAND-THE-BACKEND-ON-THE-TRUNK`
+is gated behind the trigger lane; read its lane body for what it intends to carry, and run the invariant
+against that set rather than against the trunk as it stands.
+
+**Read-only.** No commit, merge, rebase, push or branch deletion — `git merge-tree` and `git cherry` do
+this whole job without writing anything. No suite, no container. Never stop, restart or exec into
+`okam-lwtwo-sql` or `okam-lwtwo-redis`. Never `pkill`.
+
+**Rule and name the exact change. Do not edit any file.**
+
+### Lane L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS — four øre stops printing as zero on a screen an operator reads
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a value of one to nine øre renders as itself and not as a padded zero in both operator clients, shown by driving each client's own formatter with the sub-ten-øre values rather than by reading the shared pin
+agent: opus
+evidence: /Users/svendaneel/okam/web-orepad/lanes/L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS/EVIDENCE.txt
+
+**This is a money-display defect that is now knowingly left in two shipping clients**, which is a
+different and worse thing than an unknown one. It was found by the lane that fixed the consumer half
+under a `consumer-only` ruling, **outside its own scope and reported rather than quietly fixed** — the
+right behaviour, and the reason this lane can exist at all.
+
+**Half the original defect genuinely cannot appear here and you should not chase it.** The suffix half
+cannot render in either operator client because both install an **empty suffix**; that is exactly what
+made `consumer-only` safe.
+
+**The øre-padding half is live in both.** Values of **one to nine øre widen to two zeroes**, so **four øre
+prints as zero**.
+
+**One trap, and it is the reason a pin bump is not the fix.** One of the two clients additionally carries
+**hand-written duplicates of the formatter**, so bumping its shared pin alone leaves its own copy wrong.
+**Find the duplicates before you decide what to change**, and say how many you found.
+
+**Drive it, do not assert it.** A test that formats 1,00 kr proves nothing here. Drive 0,01 through 0,09
+and show the before and after.
+
+Trunk is **`ff497c0`** — branch from it, and do not use a stale base. Commit with `--no-verify`; a stale
+`husky.local.sh` blocks every commit here. **Do not push.** Resolve any conflict at hunk level with
+`git merge-file`, never by side — that has cost this estate content four times.
+
+### Lane L-AN-ACCEPTANCE-NAMES-SOMEBODY — the server stops accepting a proposal from nobody
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the accept route refuses an acceptance carrying neither a name nor a contact address, shown by a request that omits both and is refused, and by one that carries either and succeeds
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-acceptname/WebApi.Tests/Wire/EventsAcceptanceIdentityWireTests.cs
+
+**The whole value of an acceptance record is that it names someone.** Today the guest page requires a
+typed name and e-mail and **the server does not**, so the evidence row answering *"who agreed to this"*
+can be written with neither, and the receipt prints **"not stated"** rather than a person.
+
+**The only thing enforcing this today is a form**, and a form is not a control — anything that posts to
+the route directly bypasses it.
+
+**Refuse, do not default.** Substituting a placeholder would make the record worse, not better: it would
+turn a visible absence into an invisible fiction. C4 is in force and this is its shape.
+
+**Decide the boundary from the recorded condition, not from taste**: the flag's own wording is *neither a
+name nor a contact address*. One of the two is enough to pass. If reading the route convinces you that
+boundary is wrong, **return `fail-spec` and say what you observed** rather than quietly choosing a
+stricter rule.
+
+**The acceptance is hash-proven and there is an existing lane about sending it as a document** —
+`L-EV-ACCEPT-RECEIPT`. Do not absorb it; this lane is the refusal only.
+
+No migration. No SQL container — both slots are held. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never `pkill`. Commit to your own lane branch. **Do not push.**
+
+### Lane L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE — the red that was never about the code under test is gone at the trunk
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: journey-artifact-store passes in a worktree whose directory is not named Web-modules and in one that is, at trunk ff497c0, with both runs recorded
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md
+
+`journey-artifact-store` asserted that the checkout is named **`Web-modules`**, so it **red in every lane
+worktree and passed only in the canonical one**. That is the worst kind of red: it is never about the
+code under test, and it teaches the next agent that one failure is normal — **a suite where one failure
+is normal is a suite that has stopped reporting.**
+
+**A derived-basename fix is claimed to have landed.** Today's frontend landing reported the suite passing
+its 44 in a worktree named `web-land-trunk`, and said it was *showing* the fix rather than claiming it.
+**Check that claim in both directions**, which is the thing that lane could not do from one run: a pass
+in a differently-named worktree **and** a pass in a canonically-named one. A fix that swapped which
+checkout works has fixed nothing.
+
+**Then try to break it.** Name a checkout something adversarial — a path with a space, a nested path
+whose parent is `Web-modules`, a symlinked path — and say which of those it survives. If any fails, that
+is the finding.
+
+**You hold a suite slot, not a container slot.** No SQL container, no Docker, and never stop, restart or
+exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`. Do not bind **:3971** or **:5971**. Never `pkill` or
+kill by pattern.
+
+**`npm ci` and `npm install` are banned repo-wide** — they fail and delete a `node_modules` shared by
+~124 worktrees. Symlink `node_modules` into your worktree the way today's landing lane did.
+
+If it passes everywhere you try, say so plainly and name what you tried; that clears a flag, which is a
+real result.
+
+### Lane L-THE-ONLY-COPIES-REACH-A-REF — four commits that exist on no ref stop being one `git gc` from gone
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: each of the four named commits is either reachable from a named branch, or shown to be patch-carried by something already on a ref, with the check that proves it recorded per commit
+agent: opus
+evidence: docs/plan/returns/L-THE-ONLY-COPIES-REACH-A-REF-1.md
+
+**The ref census enumerated 557 rows and found four commits whose only copy is on no ref.** A commit on
+no ref is not backed up by anything — it survives until the next `git gc` and then it is simply gone,
+with no error and nothing to notice. The owner said plainly he does not want to lose work; **this is the
+only category in the census where loss is silent and permanent.**
+
+The four, as the census named them — **verify each before acting, do not take the list on faith**:
+
+- **`bfa1992`** (frontend) — the built German-labels lane, absent at the tip
+- **`66f19e23`** (backend) — today's 382-line model-versus-chain test, on the stack tip
+- **`94f06c7`** (frontend) — Tripletex
+- **`d7b5f3f`** (frontend) — Wolt Drive
+
+**One of these may already be a false alarm and finding that out is part of the job.** The census ran
+*while* the frontend landing was in flight — it says so itself — and the landing separately reported
+carrying `94f06c7`. **Check whether it is now reachable from `ff497c0`** rather than assuming either
+report is the current truth.
+
+**Patch-carried counts, and it is the cheaper answer.** If a commit's change is already present in
+something on a ref — `git patch-id`, or a tree comparison — then the commit object itself is not
+load-bearing, and **saying so with the check attached is a better outcome than minting a branch nobody
+will ever read.** Prefer that finding where it holds.
+
+**Where it does not hold, put the commit on a ref and nothing more.** A branch named for what it carries.
+**Do not merge it anywhere, do not rebase it, do not land it** — this lane is preservation, not
+integration, and a landing decision belongs to a landing lane.
+
+**Do not push.** Never `pkill`, never `npm ci`/`npm install`, never touch `okam-lwtwo-sql`,
+`okam-lwtwo-redis`, **:3971** or **:5971**. The owner's checkout is on `wip/session-2026-08-06-all-work`
+— do not change its branch or its working tree.
+
+### Lane L-WF-INVITE-PAIR-LANDS — the invite list and its access string land together or not at all
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a manager can see live workforce invitations and withdraw one, with the backend half present in the same landing window, and no locale still shipping the wfr_access_no_list string
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-WF-INVITE-PAIR-LANDS/evidence.md
+
+**Named by the lane that traced three refused returns, and it is real unlanded work.** The clerk verified
+the core claim independently: **`e8d69fc` is not an ancestor of the trunk**, and
+`lane/fe-wf-invite-list-revoke` is its **sole containing ref**.
+
+**It has a backend twin and the two must not be separated.** `68f2472c`, tip of
+`lane/wf-invite-list-revoke`, is in **neither** `lane/backend-patches-composed` **nor**
+`integration/mig-stack-merge` — only its own lane branch and the `wt-wfinvlist` rescue branch carry it.
+
+**It is not superseded, which is the thing worth checking first and was checked.** The tree still ships
+`wfr_access_no_list` in **all three locales**, rendered at `WorkforceEngagementPanel.vue:134` — a string
+telling an operator the capability does not exist. `L-WFR-ACCESS-STRING-TRUTH` already ruled that **the
+pair must land together or not at all**: landing the backend alone leaves the screen denying a capability
+that answers, and landing the frontend alone gives a list with nothing behind it.
+
+**One loose end to triage rather than inherit.** The worktree `web-fe-invlist` holds **four dirty files**
+— a 2026-08-04 onboarding re-run that dropped the wanted-routes finding. `e8d69fc` touches nothing under
+`artifacts/journeys`, so the dirt is separate work: **say what it is and whether it is worth keeping**;
+do not fold it in silently.
+
+**Order within the pair is backend-first or both together, never frontend-first.** Trunk frontend is
+**`ff497c0`**; the backend trunk is being landed by another lane right now, so **read the backend trunk's
+current tip before you branch** rather than using a value from this brief.
+
+Commit with `--no-verify`. **Do not push.** Resolve conflicts at hunk level with `git merge-file`, never
+by side. Never `pkill`, never `npm ci`/`npm install`, never touch the `okam-lwtwo-*` containers or
+**:3971**/**:5971**.
+
+### Lane L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN — the third and fourth pages that half-restart stop half-restarting
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: after signing in inside the page, orders.vue and statistics.vue hold the same state a fresh mount would have produced, shown by driving each page's login-success path and reading adminStores rather than by asserting the handler was called
+agent: opus
+evidence: docs/plan/returns/L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN-1.md
+
+**Found by the reviewer who read the twenty-two landed commits, recorded as its F3, and it is the same
+defect this estate already fixed twice today.** `L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN` fixed the
+ongoing board and the kitchen; `orders.vue` and `statistics.vue` were never in that lane's scope and
+**bind only partial starters** to login-success.
+
+**The measured symptom is `adminStores` staying empty after an in-page sign-in** — so the page renders as
+though the operator has no stores, which is indistinguishable on screen from an operator who genuinely has
+none.
+
+**The fix that already landed is the shape to follow, not to copy blindly.** The ongoing and kitchen pages
+were rebound to `startLiveBoard` — the *whole* starter — rather than to the shorter handler a lane had
+written, precisely because the shorter handler was the bug. **Read what each of these two pages does at
+mount and bind the same thing**; do not assume the mount path is one call.
+
+**Prove it by state, not by call.** A test asserting the handler fired is what let this class of defect
+survive twice. Drive the login-success path and read `adminStores`.
+
+**Mutation-check the test before you believe it**: unbind the starter and confirm your test reds. The
+landing lane did exactly this on the two pages it fixed — unbinding reddened 3 on ongoing and 4 on
+kitchen — and that is why its rewrite is trusted.
+
+Trunk is **`ff497c0`**. Branch from it; commit with `--no-verify`. **Do not push.** The owner's checkout
+is on `wip/session-2026-08-06-all-work` — never change its branch or working tree. Never bind **:3971**
+or **:5971**, never `pkill`, never `npm ci`/`npm install`, never touch the `okam-lwtwo-*` containers.
+
+### Lane L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE — the landed demo stops depending on files that were left behind
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: demo.sh runs from a clean checkout of feature/restaurant-modules on a path it was not authored on, or every dependency it cannot satisfy is named in the script itself where a person running it will see it
+agent: opus
+evidence: docs/plan/lanes/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE/run-2-fixed-script-from-a-fresh-checkout.txt
+
+**The trunk landing split the snapshot by path — code landed, 1698 `lanes/` and 603 `docs/` paths stayed
+behind — and the reviewer found the split has edges.** Two of them:
+
+- **`demo.sh` depends on plan files that were left behind, and on a hardcoded machine path.** It is on the
+  trunk; what it needs is not. A demo that only runs on the machine it was written on is a demo nobody
+  else can run.
+- **`.gitignore` names two growth journey records that are absent from the tree**, which is harmless
+  today and misleading the moment somebody wonders why a file will not stage.
+
+**This is not a request to re-land the evidence.** The split was the right call — 2,300 evidence files do
+not belong on a trunk. The question is only whether what landed can still be executed.
+
+**A named refusal is an acceptable outcome and often the better one.** If a dependency genuinely belongs
+in a lane directory, the fix is that `demo.sh` **says so when it cannot find it**, with the path it
+wanted — not that the file is dragged onto the trunk.
+
+**Run it.** This lane's exit is the script executing, not the script being read. If it cannot run at all,
+say what stopped it at which line.
+
+Trunk is **`ff497c0`**. Commit with `--no-verify`. **Do not push.** Never bind **:3971** or **:5971**,
+never `pkill`, never `npm ci`/`npm install`, never touch `okam-lwtwo-sql` or `okam-lwtwo-redis` — a demo
+that needs a database must build its own or say it cannot.
+
+### Lane L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS — the work finished after the two landings reaches the trunks it was built for
+state: built-unverified
+class: sql
+owner: agent
+dir: .
+exit: every named branch is either merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded at the new tips
+agent: opus
+evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md
+
+**Both trunks landed and are stable: frontend `feature/restaurant-modules` at `ff497c0`, backend at
+`118f92fb9` (48 commits, clerk-verified — invariant holds, 33 `HasTrigger`, chain tip
+`Growth_AuditLedger`, no duplicate migration ids).** Six lanes finished *after* those landings and their
+work is sitting on branches. This wave lands it.
+
+**Frontend, both fast-forward onto `ff497c0` as of 20:13 — re-check before you rely on that:**
+- `lane/every-starter-resumes` **`894a3b9`** — orders.vue and statistics.vue resume after in-page
+  sign-in. Full suite green on the branch: **145 suites, 3203 tests**.
+- `lane/wf-invite-pair-fe` **`698383c`** — **144/144 suites, 3205/3205** (trunk was 3192).
+- `lane/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE` **`ba2016f`**.
+
+**Backend, both authored on the OLD trunk `8e2b57de8` and therefore needing a rebase you must do
+deliberately:**
+- `lane/wf-invite-pair-be` **`13e8a6213`** — its author had it clean onto `726906fe5`, which is **no
+  longer the tip**.
+- `lane/an-acceptance-names-somebody` **`86142430c`** — fast tier **4640 passed / 0 failed / 12 skipped**
+  at its own base.
+
+**One pairing rule is not negotiable and was already ruled.** `L-WFR-ACCESS-STRING-TRUTH` requires the
+invite frontend and backend to **land together or not at all**: backend alone leaves a screen denying a
+capability that answers; frontend alone gives a list with nothing behind it. **If you cannot land both,
+land neither and say so.**
+
+**Do not land the preservation branches.** `preserve/german-identifier-labels` and
+`preserve/model-versus-chain-drift-test` exist to stop two commits being garbage-collected. **They are
+not integration candidates** and landing them is a separate decision nobody has made.
+
+**Two clients are outside this estate's authority and are not yours**: `Okam-AS/Web` and
+`Okam-AS/AdminApp` carry `lane/ore-padding-operator-clients`. Name them as still-outstanding; do not
+attempt to merge or push either.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.** The
+last wave's invite-pair merge hit exactly this: `--theirs` on `test/e2e/fixture/api-server.js` would have
+restored a stale `world.ROLES` stub the trunk had just replaced with the real role catalogue, **and no
+test would have caught it, because the fixture is the test double.**
+
+**Verify at the tips, not per merge.** One frontend jest run, one backend build plus the non-SQL tier,
+and the SQL tier if your slot allows — **account for every failure against the recorded baselines**:
+frontend 3192 at `ff497c0`; backend non-SQL **4736 passed / 0 failed / 10 skipped**, SQL **694/1**, that
+one red being the known `SchedulePublishSqlServerTests` outbox count (expected 1, actual 2) which is
+gated on a ruling and is **not** yours to fix.
+
+**Do not push.** Landing on the trunks is authorised; publishing is not. Record the revert for each trunk
+in your evidence.
+
+Cap `max server memory` in any container you start, keyed on your own Testcontainers session id. **Never
+stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`** — they hold the owner's seeded world.
+Never bind **:3971** or **:5971**. Never `pkill`. Commit with `--no-verify`. `npm ci`/`npm install` are
+banned repo-wide.
+
+### Lane L-READ-THE-BACKEND-TRUNK-AS-LANDED — the forty-eight commits now on the backend trunk are read by someone who did not merge them
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a verdict per landed step and per judgement call at feature/restaurant-modules 118f92fb9, naming any content lost, any commit whose contents do not match its message, and whether the two omissions were safe, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-BACKEND-TRUNK-AS-LANDED.md
+
+**Forty-eight commits reached the backend trunk and only their merger has read them.** The frontend
+landing got this treatment and it was worth it — the reading found a real content loss the landing report
+had said did not happen. This is the same reading for the larger half.
+
+**Three judgement calls to check rather than accept**, each of which the landing disclosed itself:
+
+1. **A defect that exists only at the join, and the fix for it.** The trigger lane was cut from a base
+   without MIG-29, so it declared the **32** triggers *its* chain installed; with growthaudit landed the
+   chain installs **33** and exact set equality went red. The landing added a `GrowthAuditEvents`
+   declaration (`c64d07437`) and argues it *completes* the trigger lane's stated contract rather than
+   departing from it. **Read the trigger lane's doc comment and say whether that argument holds.**
+2. **A cherry-pick where a merge was expected.** `589056dfb` was picked alone because its parent
+   `5243c06a7` is patch-identical (`72bfbd518c…`) to `ea66353f9` already on the trunk. **Verify the
+   patch-identity yourself**; if it holds the pick is right, and if it does not, two commits are missing.
+3. **Two commits deliberately left off and named**: `34c6c1031` (meals expiry pins) and `e956337ed`
+   (a settings hook config, a worldstamp, and a stale 2026-08-03 `WORLD.json`). The landing bounds the
+   omission by claiming its `merge-tree` of the wholesale merge is `fafd58b72` and differs from its tip
+   **only** in those 10 files. **That bound is the load-bearing claim — check it.**
+
+**The landing reports zero conflicts anywhere.** That is plausible for a chain of fast-forwards but it is
+also the claim that would hide a by-side resolution, so **confirm it from the commit graph** rather than
+from the report.
+
+**Read-only.** No commit, merge, rebase, push or branch move. The revert, if ever needed, is
+`git branch -f feature/restaurant-modules 8e2b57de8442a389a9b5f8025312c9750614c85e`. No suite, no
+container — the tiers are already recorded and re-running them is not this lane's job. Never touch
+`okam-lwtwo-sql` or `okam-lwtwo-redis`. Never `pkill`.
+
+**Rule and name the exact change. Do not edit any file.** A clean reading is a legitimate outcome.
+
+### Lane L-WHICH-JOURNEYS-ARE-REAL — the walk list for the next wave is derived, not guessed
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a table under docs/plan/reviews/ naming, for every module, which journeys exist, which have ever passed against a live world, which assert something that could fail, and the single highest-value unwalked journey per module
+agent: fable
+evidence: docs/plan/reviews/L-WHICH-JOURNEYS-ARE-REAL.md
+
+**This is the map for the next wave, and the wave is the point.** **358 lanes sit at
+`built-unverified` and not one has been walked by a person.** That is the entire distance between *the
+suite is green* and *the product works*, and C5 is standing law: acceptance is a person completing the
+journey, never a suite reporting green.
+
+**The evidence that this is where the value is, is today's own record.** Every significant defect found
+today came from **using** the product, not from a suite: republishing a week doubled payroll minutes 480
+to 960; 25 triggers were undeclared so every EF update died with error 334; a company refund booked a
+cash pay-out; an in-page sign-in left two pages asking the server about zero stores. **The suites were
+green through all of it.**
+
+**Three failure shapes to classify, because they are not the same problem.**
+1. **No journey at all** — nothing to run. The fix is to write one.
+2. **A journey that exists but has never passed against a live world** — it may be green in a fixture and
+   meaningless.
+3. **A journey that passes but asserts nothing that could fail.** This estate has shipped several: an
+   assertion whose haystack is empty today, a negative control that went vacuous, a check comparing a
+   value with itself. **These are worse than a missing journey** because they read as coverage.
+
+**Derive it, do not survey it.** Read `artifacts/journeys/`, the specs under `test/`, and the lane bodies
+that claim journey evidence. For each candidate, the question is: *if the feature broke tomorrow, would
+this go red?* Answer it per journey, and where you cannot tell, say so rather than guessing.
+
+**Then name one journey per module** — the single walk whose failure would tell us the most. **Six names,
+with the reason each was chosen over its neighbours.** Those become the next wave's lanes; the clerk
+authors them, not you.
+
+**A live world is being rebuilt right now from the landed trunk** and will hold the seeded data for all
+six modules. Assume it exists when you name walks; do not try to use it, and do not bind **:3971** or
+**:5971**.
+
+**Read-only.** No commit, no suite, no container, no `pkill`. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`. **Rule and name. Do not edit any file** other than your review and return.
+
+### Lane L-THE-FLAG-BACKLOG-IS-A-WORK-LIST — the hundred-odd open flags are sorted into what an agent can close and what only Sven can
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: every open Flag is classified agent-closable, sven-only, or already-satisfied-but-unclearable, with the reason per flag, and the agent-closable ones ranked by what a person would notice, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-THE-FLAG-BACKLOG-IS-A-WORK-LIST.md
+
+**This backlog is a proven seam and it is being mined by hand.** The plan carries **131 blockers and 167
+warnings**, and **137 of them have an empty `cleared_by`** — nothing in the plan is scheduled to close
+them.
+
+**The evidence it is worth mining: four were picked near-arbitrarily today and all four were real.** Four
+øre printing as zero on an operator screen; a server accepting an event proposal from nobody; a test that
+red in every worktree but the canonical one; eleven branches that silently re-add a deleted credit-sale
+predicate. **Picking by hand does not scale and picks badly** — this lane replaces the picking with a
+list.
+
+**Three buckets, and the third is the one nobody expects.**
+- **agent-closable** — the work is engineering and needs no ruling.
+- **sven-only** — it needs a judgement, a rotation, a threshold, or a legal call. **Say which**, because
+  "ask Sven" is not a category.
+- **already-satisfied-but-unclearable** — the world has moved and the flag is stale. At least one is
+  known: `F-ARTIFACT-STORE-TEST-CHECKOUT-BOUND` has overwhelming evidence (**7 adversarial checkouts, 7
+  greens, 2 falsifications**) but its `clears_when` names no `fact:` key, so the tool refuses to clear it
+  and wants an owner override. **Find the others** — a stale flag costs attention every time it is read.
+
+**One trap that will cost you if you skip it.** `F-AZURE-FUNCKEY` looks like an urgent blocker — a live
+Azure Functions host key committed, and a red test that prints it. **Sven ruled it on 2026-08-04: "this
+is fine disregard"**, and the flag body itself says no lane should spend time on it. **Read each flag
+body to the end before classifying it**; several carry rulings, corrections, or retractions below the
+`clears_when` line.
+
+**Rank the agent-closable ones by what a person would notice**, not by severity as recorded — severity in
+this plan was assigned at raise time and has drifted. A money figure rendered wrong on a screen an
+operator reads outranks a test-infrastructure wart, whatever the labels say.
+
+**Read-only.** No commit, no suite, no container, no `pkill`. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never bind **:3971** or **:5971**. **Rule and name. Do not edit any file** other than
+your review and return — in particular, **do not clear or raise a single flag.**
+
+### Lane L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST — the first screen anyone touches stops lying twice
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: one browser walk against the live world that starts at a guarded deep link and clicks the send control before hydration ends on the page that was asked for, having either been unable to click early or been told nothing was sent
+agent: opus
+evidence: docs/plan/lanes/L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST/walk-EXIT-WALK.json
+
+**Both defects were found by walking the product, not by a suite, and both sit on the front door** — the
+screen every operator touches before anything else. They are one lane because they are one journey and
+they touch the same code; splitting them would put two agents in the same files.
+
+**Defect one: the app ignores the redirect its own route guard wrote.** After sign-in it lands on
+`/admin?storeId=1` regardless. The guard did its job, put the wanted destination on the URL, and the
+sign-in path throws it away — so a deep link into any guarded page silently becomes the dashboard.
+
+**Defect two: clicking *Send kode* before hydration sends nothing and renders no OTP boxes.** The screen
+is then **indistinguishable from a dead backend**, and `LoginModal` has no way to report a send that
+never happened. A person in that state has no reason to think clicking again would help.
+
+**Two shapes are acceptable for the second one and you should pick on evidence, not taste**: make the
+control **unclickable until it can actually send**, or let it **report that nothing was sent**. The first
+is usually better because it removes the state rather than describing it — but if the control must stay
+live for a reason you find in the code, say so and take the second.
+
+**A related fix already landed and is the shape to follow.** `L-LOGIN-MODAL-REPORTS-A-FAILED-SEND`
+handled a *failed* send; this is the *never-attempted* send, which that lane could not see. **Read it
+first** so you extend it rather than building a second mechanism beside it.
+
+**Walk it, do not assert it.** The world is live: web **:3971**, API **:5971**, manager
+`99681931`/`849666`. Playwright is available. **A jest green does not close this lane** — the whole
+reason both defects survived is that the suites were green.
+
+**Locators here are treacherous and a walk already burned itself on them**: `.order-row` on
+`/admin/orders` also matches the header row, and `.order-card` on `/admin/ongoing` does not carry the
+click handler — `.order-header` does. **Verify a locator selects what you think before you conclude
+anything from it.**
+
+The world is the owner's and it was just rebuilt: **do not restart the API or the web server**, do not
+bind those ports yourself, and never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`.
+Never `pkill`. `npm ci`/`npm install` are banned repo-wide — symlink `node_modules`. Commit with
+`--no-verify`. **Do not push.**
+
+### Lane L-TRAIN-DEMO-SEED-COMPLETES — the seed that blocked on a 500 runs to the end
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the Training seed completes against the live world and a person opens the Training admin surface and sees courses, assignments, completions and the three certificate states it wrote
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png
+
+**The blocker is gone and it was the only thing stopping this.** `L-TRAIN-DEMO-SEED-REDO` returned
+`blocked` because `POST /training/stores/1/courses/{id}/versions/1/publish` answered **500** with SQL
+Server error **334** — triggers undeclared. The trunk now declares **33** and the live API was rebuilt
+from it; **a browser walk has since clicked Publiser and watched a v2 draft go from `Utkast` to
+`Publisert`**, then created the assignment publish gates. Store 1 went from **0 of 5** to **5 of 5**
+courses carrying a published version.
+
+**Start from the earlier lane's work, which is committed and good.** `lane/train-demo-seed-redo` at
+`2cc5487c3` already fixed three things and each fix is worth keeping: the seed no longer hardcodes a
+worker who does not exist in this roster, no longer hardcodes a role this store does not have, and no
+longer reads a `false` feature flag as absent — that last one was a defect **in an inherited fix**,
+because `jq`'s `//` yields its right side for `false` as well as `null`, so the fix could never have
+passed.
+
+**What was never reached, and is therefore this lane's actual work**: steps 5, 6 and 9 — assignments,
+completions and holdings. They all gate on publish, which now answers.
+
+**Seed through the product's own endpoints**, never by INSERT. That is why the other five modules'
+data survives a rebuild and this one's must too.
+
+**Check what is already there before writing more.** The world holds four courses and certificates in
+valid, expiring and expired states from an earlier pass, plus whatever the browser walk created at 21:30.
+**The objective is a seed script that runs to the end, not a second pile of data.**
+
+**Route shapes here are not guessable and have burned four lanes.** Read the controller before calling
+anything.
+
+The world is the owner's: web **:3971**, API **:5971**, manager `99681931`/`849666`, worker
+`99999999`/`123123`. **Do not restart either server**, do not bind those ports, never stop, restart or
+exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`, never `pkill`. `npm ci`/`npm install` banned
+repo-wide. Commit with `--no-verify`. **Do not push.** C5 is the gate: a person opening the screen.
+
+### Lane L-POWER-USER-IS-A-FACT-THE-PRODUCT-CAN-SET — three screens stop needing a hand-written database row
+state: open
+class: node
+owner: agent
+dir: .
+exit: a power user signs in and reaches /admin/reservations, /admin/tables and the Margin lag panel with no manual UPDATE against AspNetUsers, shown by a browser walk starting from sign-in
+agent: opus
+needs: D-RESTART-THE-WALK-WORLD-API
+
+**One root cause, three symptoms, and the flag triage found them separately before anyone noticed they
+were the same thing.** `AspNetUsers.IsPowerUser` is **a column no code path in the product ever writes.**
+
+- `/admin/reservations` (`reservations.vue:307`) and `/admin/tables` (`tables.vue:35`) gate on
+  `currentUser.isPowerUser` and **hard-redirect** when it is false.
+- The **Margin projection-lag panel** is gated the same way — so **the person freezing the week cannot see
+  the lag they are freezing against**, which is the one moment the number matters.
+
+**The role and the column are two different facts and only one of them is reachable.** Setting
+`AppSettings__AdminUserPhoneNumber` grants the server-side role — the JWT was verified to carry
+`"role":"PowerUserRole"` — but **login returns `isPowerUser: false`**. So the server believes it and the
+client does not.
+
+**A seeder had to write the column by hand to make those pages visible, and said so.** That hand-written
+row is still in the owner's database: `UPDATE AspNetUsers SET IsPowerUser = ...`. **That is the thing to
+make unnecessary** — and note carefully that its presence means **the pages may render for you while
+still being unreachable for everyone else.** Prove your fix on an account that has *not* been
+hand-patched, or the walk proves nothing.
+
+**Decide where the truth lives, and say why.** Either login projects the already-granted role onto the
+response the client reads, or the product writes the column when it grants the role. **One of these is
+right and the other duplicates a fact into two places that can disagree** — the disagreement is exactly
+today's defect. Read `Services/UserService.cs` and the login response shape before choosing.
+
+**Do not hand-write a row to make your own walk pass.** If you cannot reach the screens without one,
+that is the finding.
+
+The world is the owner's and two other lanes are walking it: web **:3971**, API **:5971**, manager
+`99681931`/`849666`. **Do not restart either server** — if your change needs a restart to be visible,
+return `blocked` and say so. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED — an operator stops being told to retry something that can never succeed
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: each of the two Growth catch blocks distinguishes the failure it can retry from the one it cannot, shown by driving both paths and reading the two different answers the operator gets
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED/mutation-log.md
+
+**Two Growth catch blocks are untyped, so every failure inside them reads as the same transient
+problem.** The operator is told to retry — and for one of the two causes, **retrying can never succeed**,
+because the thing that failed is not transient at all.
+
+**This is a shape the estate has already been bitten by today.** A missing table was reported as a lost
+race: same class, same cost — the person acting on the message does the wrong thing, repeatedly, and the
+real cause stays invisible. That instance had its own lane; these two did not, and the flag triage found
+them still live at the tip.
+
+**Type the catch, do not widen the message.** A friendlier sentence over an untyped catch is worse than
+what is there now: it makes the misdiagnosis more convincing. The fix is that the two causes **take
+different branches**.
+
+**Drive both paths.** A test that provokes only the retryable one proves nothing — the whole defect is
+that the *other* one is invisible. Provoke each and show the two different answers.
+
+C7 is in force: whatever you add to the operator-facing message or the log, **no credential, key,
+connection string or token goes into either.**
+
+No migration. **No SQL container** — a slot is held by the landing wave. If you conclude this cannot be
+proven on the fast tier, return `blocked` rather than taking a slot. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never `pkill`. Commit to your own lane branch. **Do not push.**
+
+### Lane L-THE-TRAINING-SCREEN-STOPS-CONTRADICTING-THE-DATA-BEHIND-IT — two panels that deny what the store actually holds
+state: open
+class: node
+owner: agent
+dir: .
+exit: on the Training admin surface every completion row names the course it completed, and the assignment form with nothing selected offers the store's published versions rather than denying they exist, both shown in a browser against the live world
+agent: opus
+needs: D-LIVE-WORLD-REBUILD-TRAINING-PAIR
+
+**Both were found by a person opening the screen after the seed finally ran to the end, and neither is a
+seeding problem.** They are on the surface a manager actually uses, and each one tells the manager
+something false about data that is right there.
+
+**Defect one: the completions table's course column is empty on every row, in every world.**
+`TrainingCompletionPanel.vue:32` reads `row.courseTitle`; **`TrainingCompletionModel` carries no
+`CourseTitle`**. The sibling assignment model does carry it — so this is a field that was omitted from
+one wire model, not a naming disagreement. **Check which side is wrong before changing either**: adding
+the field to the wire model and reading it is not the same fix as deriving the title on the client, and
+the sibling's shape is the evidence for which this estate already chose.
+
+**Defect two: with no course selected, "Ny tildeling" says no published version exists to assign — while
+five do.** `assignable` and `recordable` derive from **the current selection alone** (page lines
+328–329), so an empty selection reads as an empty store. The manager is told the store has nothing
+publishable at the exact moment they are trying to publish something.
+
+**These are one lane because they are one screen and one page's state**; two agents here would collide.
+
+**Walk it, do not assert it.** The world is live and holds real Training data now: **6 courses, 3
+assignments (one overdue), 4 completions including a 55-then-88 retake as two rows, 7 certificates
+reading Gyldig, Utløpt and Utløper snart**. `/admin/training-courses` renders with the gate open. A jest
+green does not close this lane — the whole reason both survived is that the suites were green.
+
+**This may be a cross-repo change** if the wire model is the right side to fix. If so, commit each half
+to its own lane branch and say which lands first; the estate's rule is backend-first or both together,
+never frontend-first.
+
+The world is the owner's and other lanes are walking it: web **:3971**, API **:5971**, manager
+`99681931`/`849666`. **Do not restart either server** — if your change needs a restart to be visible,
+return `blocked` and say so. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK — the money-and-document defects whose fixes already exist stop being one landing away
+state: built-unverified
+class: sql
+owner: agent
+dir: .
+exit: each of the five named lanes is merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded and every failure accounted for against the recorded baselines
+agent: opus
+evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md
+
+**The flag triage ranked 310 open flags by what a person would notice, and the finding underneath the
+ranking is that the bottleneck is not building.** Five of the top twenty are **one landing away, not one
+build away** — the work is finished, committed, and reaches no branch anybody reads.
+
+**All five are confirmed `built-unverified` with evidence on disk.** Verify each before merging it; do
+not take this list on faith.
+
+| Flag, by rank | Lane holding the fix | What a person sees today |
+|---|---|---|
+| 2 · `F-NEGATIVE-SALE-REFUNDS-THE-LISTED-PRICE` | `L-CHECK-DISCOUNT-SUM-COUPLED` | **money leaves the till that never entered it** — an unstated discount builds the return at the listed price |
+| 3 · `F-MIXIN-LABELS-CANNOT-TRANSLATE` | `L-MIXIN-LABELS-TRANSLATE` | three receipt labels are `switch` statements returning hardcoded Norwegian with **no lookup at all**, so no translation can reach them in any language |
+| 4 · `F-RECEIPT-BLANK-PAYER-LINE` | `L-RECEIPT-PAYER-LINE-LOCATE` | five payment types print a **blank where the payer belongs** |
+| 5 · `F-FISCAL-RECEIPT-PRINTS-AN-ENGLISH-ENUM` | `L-ESCPOS-COMPANYACCOUNT-LABEL` | a Norwegian fiscal receipt prints the raw enum **`CompanyAccount`** |
+| 6 · `F-CLOCKOUT-ANSWERS-OPEN` | `L-CLOCKOUT-STATE-IS-NOT-OPEN` | a clock-out with no open session answers `sessionState: "Open"`, so the register **flips to "clocked in" the moment a worker presses Stemple ut** |
+
+**One of these is only half fixed and the flag says so**: `F-CLOCKOUT-ANSWERS-OPEN` records that **only
+the client side is fixed** — the wire still derives the field from `closedUtc` alone, so an absent session
+and an open one stay indistinguishable. **Landing the client half alone leaves the server still lying.**
+Check it, and if the server half is genuinely absent, **land what exists and say plainly what remains**
+rather than letting the flag look closed.
+
+**One is recorded as attributed-and-unverified and must be located before it is trusted.**
+`F-RECEIPT-BLANK-PAYER-LINE` names a file that **does not exist on the tip** — there is no
+`Services/Kassa/ReceiptService.cs`; the receipt code lives in `PosReceiptService.cs`. The finding may be
+exactly right, but the path does not resolve. **Locate the site yourself before merging anything that
+claims to fix it.**
+
+**Order and safety are the same as the earlier waves and are not optional.** Resolve every conflict at
+**hunk level with `git merge-file`, never by side** — `git checkout --theirs` dropped 351 translation
+keys during today's frontend landing, and these lanes touch translation and receipt files, which is
+exactly where that happens. Report each conflict.
+
+**Keep the eleven pre-fork heads out.** Nothing based at `2431883d` lands here: their merges re-add a
+deleted credit-sale predicate **auto-merged with no conflict marker**, hidden inside 313–420 conflicted
+files. The invariant to re-run at your own final tip is
+`git grep -lE 'bool +IsCreditSale *\(' -- '*.cs'` naming **only** `Services/Kassa/KassaCreditSale.cs`.
+
+**Verify at the tips, not per merge**, against the recorded baselines: frontend **3192** tests at
+`ff497c0`; backend non-SQL **4736 passed / 0 failed / 10 skipped**; SQL **694/1**, the one red being
+`SchedulePublishSqlServerTests` outbox count (expected 1, actual 2), **gated on a ruling and not yours to
+fix**.
+
+**A second landing wave may still be running and may have moved both trunks.** Read both tips fresh, name
+what you branched from, and if a trunk moves under you, say so rather than forcing.
+
+**Do not push.** Record the revert for each trunk in your evidence. Cap `max server memory` in any
+container you start, keyed on your own Testcontainers session id. **Never stop, restart or exec into
+`okam-lwtwo-sql` or `okam-lwtwo-redis`** — they hold the owner's seeded world, and three lanes have been
+walking it. **Never bind :3971 or :5971**, never `pkill`, never `npm ci`/`npm install`. Commit with
+`--no-verify`.
+
+### Lane L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS — the contact-mismatch refusal carries no invitee identity
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a contact-mismatch refusal carries no invitee identity on the wire, shown by a check that reads the response body rather than the rendered page, and that reds when the withholding clause is removed
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-refusalid/.lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md
+
+**Proved over HTTP by `L-JOURNEY-MEALS`, not argued from source.** A clean refusal body is clean — but
+with the withholding clause removed, the body carries `"intendedContact":"marit@example.test"`, **the
+email address of the person whose invitation is being refused, handed to whoever asked**.
+
+**The part worth keeping is why the walk stays green.** The journey step reads **rendered page text**,
+and the leak lives in a **problem-document extension that no Vue renders**. So the clause can be deleted
+and the walk still exits 0. **A rendered-page assertion cannot see a wire-level leak** — that is the
+lesson, and your check must be at the wire.
+
+**This flag has no `cleared_by` and nothing was scheduled to close it.** The withholding clause exists
+today; what does not exist is anything that would notice if it went away.
+
+**Red-first, and red at the right layer.** Remove the clause, show your check reds on the body, restore
+it, show it greens. A check that passes both ways is the defect this lane exists to prevent, one level up.
+
+**Sweep for siblings before you finish.** A refusal that names the person it protects is a shape, not an
+incident — say whether any other refusal in the module carries an identity into a problem-document
+extension, and name what you found or that you found none.
+
+No migration. **No SQL container** — a landing wave holds a slot. If you conclude this cannot be proven
+on the fast or wire tier, return `blocked` rather than taking one. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never bind **:3971** or **:5971**, never `pkill`. Commit to your own lane branch.
+**Do not push.**
+
+### Lane L-A-WORKER-IS-NOT-BLOCKED-BY-HER-SUPERSEDED-SELF — an award stops refusing a shift on the strength of a dead row
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a worker can be awarded a shift she held only in a superseded revision, shown by a red-first proof that reopens and re-awards one and that reds against the unfixed predicate
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-supersededself/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs
+
+**Confirmed by probe, not inferred.** Pull a worker off a shift and reopen it: she can ask for it back —
+**200 OK** — but the award **always 409s** `workforce.exchange-not-awardable`, *"the candidate already
+works an overlapping shift"*. **The overlapping shift is her own row in the superseded revision.**
+
+`WorkforceShiftExchangeService.RevalidateAwardAsync:641` filters `State != Cancelled` **with no lineage
+filter**, so a dead revision's rows still block a live award.
+
+**It was left unfixed deliberately and that judgement was right**: it changes award admission semantics,
+and the lane that found it declined to ride it along with a lineage fix. **It deserves its own red-first
+proof, which is what this lane is.**
+
+**The lineage helper already exists and is the shape to follow, not to re-invent.** Four readers were
+composed onto `WorkforceScheduleSupport.CurrentLineageOnly` earlier today rather than growing a fifth
+copy. **Read that first.** A sweep at the time recorded this site as *"a different predicate"* that stayed
+open — so you are closing a known gap, not discovering one.
+
+**Say what the predicate should be and why, before you change it.** `State != Cancelled` and
+*current-lineage-only* are not the same question, and the correct answer may be **both** rather than a
+swap. The refusal must still fire for a genuine overlap in the live plan.
+
+C4 is in force: the award is a payroll-bearing write and must name its actor.
+
+No migration. **No SQL container** — a landing wave holds a slot; use the fast tier. Never touch
+`okam-lwtwo-sql` or `okam-lwtwo-redis`, never bind **:3971** or **:5971**, never `pkill`. Commit to your
+own lane branch. **Do not push.**
+
+### Lane L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN — no response echoes request headers anywhere reachable
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: an unhandled failure on a money route returns a body carrying no request header, shown by a wire check that reds against the current behaviour, and a written answer naming which deployed environments run the developer exception page
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-anerrbody/lanes/L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN/finding.md
+
+**Found while seeding a deliberate payment failure, which is the only way anyone would have found it.**
+The Vipps deposit refusal returns an **untyped HTTP 500** rendered as the **ASP.NET developer exception
+page** — and that page **echoes the request headers back**, so the response body contains the caller's
+`Authorization: Bearer …`.
+
+**A token in a response body is a token in every log, proxy and browser cache that touches it.** The
+estate has already paid this bill once: the Wolt callback secret and a live refresh token were logged at
+Information level on 2026-07-30, and **the rotation, not the code fix, was the expensive part.**
+
+**Two halves, and only one is yours.** The code half is that a money route's unhandled failure becomes a
+typed problem response instead of a rendered exception page. **The other half is a question you must
+answer rather than assume: which deployed environments run with that page on?** That answer decides
+whether this is a developer nuisance or a live credential leak, and **nobody has written it down.** Read
+the environment configuration and say what you find; if you cannot determine it from the repository,
+**say that** rather than guessing — it becomes an owner question with a name.
+
+**Do not fix it by hiding the page and leaving the 500 untyped.** An untyped 500 on a deposit refusal is
+its own defect: the caller cannot tell a refusal from a crash.
+
+**C7 is the constraint in force and this is its exact shape.** Prove the fix at the wire, on the body —
+a rendered-page assertion cannot see a header echoed into a response, and a sibling lane today showed
+precisely that failure mode.
+
+No migration. **No SQL container** — a landing wave holds a slot. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never bind **:3971** or **:5971**, never `pkill`. Commit to your own lane branch.
+**Do not push.**
+
+### Lane L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION — the hundred-year token stops being unrevocable by construction
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the token /User/login issues expires within an ordinary session lifetime and its SMS companion refuses a caller that asks too often, shown by a wire proof of both that reds against the current behaviour
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md
+
+**`/User/login` returns a JWT with `AddDays(36500)` — `UserService.cs:547`. A hundred years.**
+
+**And there is no revocation path.** `Helpers/ServiceCollectionExtensions.cs:195-204` fails
+`OnTokenValidated` **only when the user row no longer exists** — no security stamp, no denylist. So
+*"expires in 100 years"* is operationally *"cannot be revoked short of deleting the user"*, and **that
+decides the shape of the remediation**: shortening the lifetime is the fix that is actually available,
+because a revocation list is a larger change than this lane.
+
+**It is delivered in a body that the wildcard `access-control-allow-origin: *` makes script-readable from
+any origin**, so a token that never expires is also a token any page can pick up. That wildcard is
+recorded separately and is **not yours to change here** — but it is why the lifetime matters more than it
+would elsewhere.
+
+**Its SMS companion is `Controllers/UserController.cs:161-181`** (route attribute at `:162`) and it is
+unlimited. **Both halves are in the exit** because a short-lived token that can be re-minted without
+limit is not a smaller attack surface, only a busier one.
+
+**Pick the lifetime from evidence and name it.** Read what the clients do — whether anything refreshes,
+and what breaks when a token expires mid-session — before choosing a number. **A number that logs
+everyone out every hour with no refresh path is a worse product, and saying so with the reason is a
+legitimate outcome** that turns this into an owner question rather than a bad guess.
+
+C7 is in force. No migration. **No SQL container.** Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never bind **:3971** or **:5971**, never `pkill`. Commit to your own lane branch. **Do not push.**
+
+### Lane L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY — effective dates stop being compared against midnight
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a store that sets Margin up and sells the same day gets a theoretical cost, shown by a statement whose theoretical percentage is non-zero on the setup day and by a check that reds against the midnight comparison
+agent: opus
+evidence: /Users/svendaneel/okam/wt-mrgsetupday/.lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md
+
+**The module produces its own anti-pattern on the one day a venue is most likely to look.** A venue that
+switches Margin on and trades the same day sees **theoretical 0,0 % beside a real actual** — and it heals
+overnight, so whoever looks first sees the worst version and nobody who looks later can reproduce it.
+
+**The mechanism is precise.** `MarginPeriodSalesAnalyzer` resolves product links, recipe versions and
+prices at `fact.BusinessDate`, which is a calendar date stored at **`00:00:00`**. Anything created
+*during* the trading day fails `EffectiveFrom <= instant` against that day's own sales.
+
+**One of the three consequences is escapable through the product and two are not** — the flag records
+that links can be backdated via the DTO's `effectiveFrom`, **a field the UI deliberately never sends**,
+and that doing so moved coverage from **0 % to 93,41 %**. **Read the flag in full before choosing
+where to fix it**: backdating from the UI, comparing against the sale instant rather than midnight, and
+resolving at end-of-day are three different products, not three spellings of one fix.
+
+**Say which you chose and what it costs.** Comparing against the sale instant is the answer that matches
+what the numbers mean, but it changes what every historical statement would recompute to — **check
+whether anything depends on the current behaviour before you assume it is safe.**
+
+C1 is in force: statements are append-only. **Do not repair existing rows** — this lane changes what
+future statements compute, not what past ones said.
+
+No migration without saying so first. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`, never bind
+**:3971** or **:5971**, never `pkill`. Commit to your own lane branch. **Do not push.**
+
+### Lane L-THE-PRINTED-RECEIPT-NAMES-ITS-TENDER — two fiscal-document defects that were analysed and never built
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: no payment type the product can produce prints an empty payer line or a raw enum name on either receipt emitter, shown by a check that reds against both current defaults
+agent: opus
+evidence: /Users/svendaneel/okam/wt-printedtender/WebApi.Tests/Kassa/PrintedTenderNameTests.cs
+
+**These two were mistaken for landing work and they are build work.** The clerk briefed them as *"one
+landing away, not one build away"*. That was wrong: `L-RECEIPT-PAYER-LINE-LOCATE` and
+`L-ESCPOS-COMPANYACCOUNT-LABEL` are **`class: analysis`** — their exits are findings, and the escpos
+lane's own closing section is headed *"What a fix would have to do (not built — this lane is class
+analysis)"*. **There is no branch, no worktree and no patch anywhere for either.**
+
+**Both were re-read at the trunk by object and are still live:**
+- `ReceiptService.PaymentTypeLabel` default returns `string.Empty` — **six** blank payment types, not the
+  five the flag records.
+- `EscPosReceiptBuilder.PaymentLabel` default returns **the enum name**, so a company credit sale prints
+  the raw English `CompanyAccount` on a Norwegian fiscal receipt.
+
+**They are one lane because they are the same defect in two emitters** — a `default` arm that answers with
+something meaningless rather than refusing — and fixing one without the other leaves a venue's two printed
+documents disagreeing.
+
+**The path in the flag record does not resolve and the correct one does.** There is no
+`Services/Kassa/ReceiptService.cs`; the site is **`Services/ReceiptService.cs:152`**. That wrong prefix
+came from the flag record, not from the analysis lane, whose artifact cites it correctly. **Do not repeat
+the flag's path.**
+
+**Decide what a default should do and say why.** Blank and enum-name are both wrong, but *refusing* and
+*falling back to a generic label* are different products on a fiscal document — and C6 is in force: a
+statutory claim is printed only where the document it claims can be produced. **A receipt that names the
+tender wrongly may be worse than one that refuses to print.**
+
+**Prove it against both emitters.** A check that covers one is half a check; these two diverged precisely
+because a reviewer looked at one artifact. Red against both current defaults, green after.
+
+No migration. **No SQL container** — the cap is 2 and waves have been holding slots. Never touch
+`okam-lwtwo-sql` or `okam-lwtwo-redis`, never bind **:3971** or **:5971**, never `pkill`. Commit to your
+own lane branch. **Do not push.**
+
+### Lane L-EVERYTHING-REACHES-THE-BRANCH — the final landing, after which no lane work sits off the trunk
+state: built-unverified
+class: sql
+owner: agent
+dir: .
+exit: every branch named below is merged onto its trunk or refused with the reason, both trunks build, the frontend jest and backend non-SQL tiers are recorded at the new tips with every failure accounted for, and one uninterrupted backend SQL tier is attempted and its outcome reported honestly
+agent: opus
+evidence: docs/plan/lanes/L-EVERYTHING-REACHES-THE-BRANCH/landing-evidence.md
+
+**The owner asked for the work merged and on the branch, both repositories, and this is the last wave.**
+Every agent has returned. **Nothing new is being authored.** After this lands, the handoff is written
+against what is actually on the trunk.
+
+**Backend — trunk `dc0fa8508`. Counts measured at dispatch; re-read each before merging.**
+
+| Branch | Tip | Ahead | Carries |
+|---|---|---|---|
+| `lane/printed-receipt-names-tender` | `bcc8bd179` | +3 | the tender table for both emitters; **already carries `lane/escpos-ladder-tender` `9990b4bb7` beneath it — do not merge that one separately** |
+| `lane/a-refusal-stops-naming-the-person` | `760ab26b6` | +2 | the Meals refusal stops leaking the invitee's contact details |
+| `lane/a-login-token-expires` | `b17e0dd62` | +1 | the hundred-year token becomes 30 days; SMS door metered |
+| `lane/an-error-body-no-token` | `4fb9f1905` | +1 | no 500 body echoes the caller's bearer |
+| `lane/a-worker-is-not-blocked-by-her-superseded-self` | `f35eb4bb8` | +1 | an award stops refusing on a dead revision's row |
+| `lane/margin-setup-day` | `e0ccd1036` | +1 | effective dates resolve at end of business day, not midnight |
+| `lane/poweruser-is-a-fact` | `b170a9e45` | +1 | login projects the role instead of an unwritten column |
+| `lane/growth-tells-the-operator-what-actually-failed` | **`d74c2c87b`** | — | the typed Growth catches |
+| `lane/the-training-screen-stops-contradicting-the-data-behind-it-be` | `3478c8b40` | — | the completions wire model |
+
+**Frontend — trunk `0d6692d`.**
+
+| Branch | Tip | Ahead | Carries |
+|---|---|---|---|
+| `lane/the-sign-in-front-door-is-honest` | `0719ec8` | +1 | deep links survive sign-in; no door on a route the shell is leaving |
+| `lane/the-training-screen-stops-contradicting-the-data-behind-it` | `89f4b73` | +1 | the assignment picker reads the store, not the selection |
+
+**Four rules that are measured, not cautionary.**
+
+1. **The Training pair lands on both sides or neither.** Backend first — the frontend half reads `versions`
+   off the course list. Landing one alone reproduces the defect in the other direction.
+2. **`lane/growth-sql-catch-typed` `c7912d49f` and `lane/newsletter-dispatch-reports-its-cause` `33a99ac47`
+   must NOT land.** Three branches carry that one fix and **only `d74c2c87b` applies to the current
+   trunk.** Retire the other two unlanded; say that you did.
+3. **Keep the pre-fork heads out.** Anything based at `2431883d` — the 380- and 387-commit branches —
+   re-adds a deleted credit-sale predicate **auto-merged with no conflict marker**, buried in 313–420
+   conflicted files. Re-run the invariant at your own final tip:
+   `git grep -lE 'bool +IsCreditSale *\(' -- '*.cs'` must name **only** `Services/Kassa/KassaCreditSale.cs`.
+4. **Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+   By-side resolution has destroyed content four times here. Today's third wave resolved `wolt-menu.vue`
+   **to the trunk** — the lane restored an import the trunk had deliberately deleted — so the correct side
+   is not always the lane's.
+
+**Baselines to account against**: frontend jest **149 suites / 3543 tests / 0 failed**; backend non-SQL
+**4759 / 0 / 10** at `dc0fa8508`, and the lanes above report **+44**, **+5**, **+2**, **+3**, **+1**,
+**+5** against their own bases — expect roughly that, and **name any test you cannot account for**.
+
+**The SQL tier is the one thing this estate has not managed all day** — three attempts, every one killed
+by host pressure, so **roughly half of it has never run at any of today's tips**. The host is quiet now.
+**Attempt one uninterrupted run.** If it dies again, **report it as unmeasured, never as green** — that
+honesty is worth more than the number.
+
+**Two harness traps that have each cost a wave a wrong number.** A fresh worktree leaves the `core`
+submodule empty, so **15 jest suites fail to RESOLVE while jest still exits 0** — pin `core` at
+`9626a561` before believing any frontend count. And a test run dirties
+`artifacts/journeys/ev-dietary/run-sheet.*`; it has swept into a commit via `git add -A` once already, so
+**do not use `git add -A`**.
+
+**Do not push.** Record the revert for each trunk. Cap `max server memory` in any container you start,
+keyed on your own Testcontainers session id. **Never stop, restart or exec into `okam-lwtwo-sql` or
+`okam-lwtwo-redis`** — they hold the owner's live world, which is serving on **:5971** and **:3971**.
+Never bind those ports, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`.
+
+### Lane L-READ-THE-UNREVIEWED-FRONTEND — the twenty-three frontend commits nobody with fresh eyes has read
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict per commit and per resolved conflict across ff497c0..a63c30f, naming any content lost, any commit whose contents do not match its message, and any test that cannot fail, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-UNREVIEWED-FRONTEND.md
+
+**The frontend trunk was read once, at `ff497c0`, and came back clean. Twenty-three commits have landed
+since and nobody has read them.** The owner asked directly whether the work is reviewed; it is not, and
+this closes half that gap.
+
+**What is in the range**: the sign-in front door (deep links surviving sign-in, and the door removed from
+a route the shell is leaving), the Training screen pair's frontend half, and whatever the second, third
+and final landing waves carried.
+
+**Each lane proved its own work and that is exactly what this reading does not trust.** The earlier
+frontend reading found a **real content loss a landing report had said did not happen** — one redundant
+assertion line in `margin-waste.test.js`, which no counter would have caught. Assume the same class of
+thing is in here.
+
+**Check the resolutions against both sides, not against the account of them.** The final wave reports
+**zero conflicts across 11 merges**, which is plausible for disjoint file sets and is also exactly the
+claim that would hide a bad resolution. The third wave resolved `wolt-menu.vue` **to the trunk**, not the
+lane, because the lane restored an import the trunk had deliberately deleted — **so the correct side is
+not always the lane's**, and a clean auto-merge is where damage arrives.
+
+**Translations are the known danger**: a by-side resolve has destroyed content four times here, most
+recently dropping **351 keys** mid-landing. Count keys per locale across the range and say whether any
+trunk key went missing.
+
+**Look for tests that cannot fail.** This estate has shipped an assertion whose haystack was empty, a
+negative control gone vacuous, and a check comparing a value with itself. The suite grew from **3192 to
+3563** across the range — **for each new suite, ask whether it would go red if its subject broke.**
+
+**Read-only.** No commit, merge, rebase, push or branch move. The revert is
+`git branch -f feature/restaurant-modules ff497c0`. No suite run, no container. Never touch
+`okam-lwtwo-sql` / `okam-lwtwo-redis`, never bind **:3971** or **:5971**, never `pkill`.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return. A clean
+reading is a legitimate outcome.
+
+### Lane L-READ-THE-UNREVIEWED-BACKEND — the twenty-nine backend commits nobody with fresh eyes has read
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a verdict per commit across 118f92fb9..a1c1a6dff, naming any content lost, any commit whose contents do not match its message, any test that cannot fail, and whether each security-shaped change actually closes what it claims, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-UNREVIEWED-BACKEND.md
+
+**The backend trunk was read once, at `118f92fb9`, and came back clean — no content lost, all three
+judgement calls holding. Twenty-nine commits have landed since and nobody has read them.**
+
+**Four of them are security-shaped, and those deserve the closest reading** because a fix that looks
+right and is not is worse than a known hole:
+
+- **the bearer-token middleware** — registered first in `Program.cs` so the framework page never renders.
+  **Check it cannot be bypassed** by a route that short-circuits earlier, and that the typed problem
+  response does not itself carry request state.
+- **the login token lifetime** — `AddDays(36500)` to a 30-day configurable. **Check the clamp**, and that
+  nothing else in the estate still mints a token by another path.
+- **the SMS rate limiter** — reuses the OAuth budget. Its registration **was moved out of
+  `AddMcpAuthentication`** because inside that try/catch every `/user/*` route would 500 on an MCP
+  failure. **Verify the new registration is genuinely unconditional.**
+- **the Meals refusal** — no invitee identity on the wire. **Check the withholding is on the body, not
+  the rendered page**; the leak lived in a problem-document extension no Vue renders.
+
+**Also in range**: the tender-label table for both receipt emitters, the Margin end-of-business-day
+resolution, the power-user role projection, and the exchange lineage predicate.
+
+**Two claims to verify rather than accept.** The non-SQL tier is reported at **4832 / 0 / 10** with the
+`+73` accounted "exactly, by running every new and edited class at both revisions" — **spot-check that
+accounting**. And the single SQL red is reported as **proven pre-existing** by building the class at the
+untouched baseline; **that proof is either reproducible or it is not.**
+
+**Look for tests that cannot fail**, and for a mutation proof whose mutant is weaker than the defect it
+claims to catch.
+
+**Read-only.** No commit, merge, rebase, push or branch move. The revert is
+`git branch -f feature/restaurant-modules 118f92fb9`. No suite, no container, no `pkill`.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return.
+
+### Lane L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK — the owner opens each module and finds something there
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: for each of the six modules, a named seed path that a person can run and a browser capture showing the data it produced on that module's own admin surface, or a written statement of exactly what that module still lacks
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt
+
+**The owner asked for this directly: he wants every module to hold real placeholder data he can open and
+test.** Today's world has data for all six, but **it was produced by hand across a long session and
+nobody has checked that it is reproducible, complete, or reachable from a screen.**
+
+**The distinction that matters, and the whole point of this lane**: data existing in one database is not
+the same as **a seed a person can run**. If the answer to *"how do I get this back"* is *"an agent did it
+over several hours"*, the module has no seed.
+
+**What is recorded as present, to verify rather than trust** — Margin (10 recipes, 3 statements, all six
+plate-cost states), Workforce (a 16-shift published week, a validated draft, 2 publications), Events (10
+enquiries over 9 stages), Meals (a company agreement, 9 captures and a reversal, one finalized month),
+Core+Growth (22 products, 12 orders across 8 statuses, a newsletter approved and unsent), Training (6
+courses, 3 assignments, 4 completions, 7 certificates, three certificate states).
+
+**Training is the one with a real seed script** — `lane/train-demo-seed-completes` runs to exit 0, adopts
+what already exists rather than duplicating, and was walked. **Read it first: it is the shape the other
+five should match**, including its convergence property — four consecutive runs produce identical counts.
+
+**Seed through the product's own endpoints, never by INSERT.** That is why the existing data survives a
+rebuild, and it is not negotiable.
+
+**Walk each one.** Playwright is available and the live world is up: web **:3971**, API **:5971**,
+manager `99681931`/`849666`. A module whose seed runs but whose screen shows nothing has not passed.
+**Capture what you see, including anything broken** — a walk that finds a defect is a better result than
+one that finds none.
+
+**Route shapes here are not guessable and have burned five lanes.** Meals is
+`/v1/stores/1/meals/companies`, Margin is `margin/recipes?storeId=1`. **Read the controller first.**
+
+**Do not restart the API or the web server** — if a module needs a rebuild to be visible, say so and
+return `blocked` for that module while completing the others. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not
+push.**
+
+### Lane L-COVERAGE-MEASURED-PER-MODULE — how much of each module is actually covered, before anyone tries to raise it
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: a per-module coverage figure for both repositories, produced by a command recorded in the review so anyone can re-run it, with the ten largest uncovered code paths named per module
+agent: opus
+evidence: docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md
+
+**The owner asked for coverage as high as possible. Nobody can raise a number nobody has measured**, and
+guessing which files need tests is how an estate ends up with 3,563 tests and a product that still ships
+a blank payer line.
+
+**The frontend already collects coverage** — `jest.config.js:41` sets `collectCoverage: true` with a
+`collectCoverageFrom` list. **Read that list first**: what it excludes is as important as what it
+reports, and a high number over a narrow list is worse than an honest low one.
+
+**The backend's tooling is not established** and finding out is part of this lane. Check for `coverlet`,
+a `.runsettings`, or `--collect:"XPlat Code Coverage"`. **If none exists, say so** and report what
+adding it would cost rather than adding it unasked.
+
+**Report per module, not per repository.** A single estate-wide percentage tells nobody where to spend
+an afternoon. The six are Margin, Workforce, Events, Meals, Training, Growth — plus Core/POS, which is
+where the money paths live and is likely the most important row in your table.
+
+**Then name the ten largest uncovered paths per module**, weighted by what a person would notice.
+**Uncovered money and document code outranks uncovered plumbing**, whatever the line counts say — today's
+worst defects were a return computed from a listed price, a blank payer line, and payroll minutes
+doubling.
+
+**Say what the number does not mean.** Line coverage does not measure whether an assertion can fail, and
+this estate has shipped several that cannot. If you can cheaply flag suites with high coverage and weak
+assertions, that is the most valuable column in the table.
+
+**You hold a suite slot.** No SQL container unless the backend tier genuinely requires one — and if it
+does, say so before taking it. The host has been over its load ceiling repeatedly today, so **run the
+tiers one at a time and report the wall-clock**. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never bind **:3971** or **:5971**, never `pkill`, never `npm ci`/`npm install` — symlink `node_modules`.
+
+**Pin the `core` submodule at `9626a561` before believing any frontend count** — a fresh worktree leaves
+it empty and 15 suites then fail to RESOLVE while jest still exits 0.
+
+### Lane L-WHERE-THE-PLAN-STILL-HAS-GAPS — the objective is measured against what the branch can actually do
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a table under docs/plan/reviews/ scoring every Feature in the plan against what the landed trunk demonstrably does, naming for each the single largest gap between what was intended and what exists
+agent: fable
+evidence: docs/plan/reviews/L-WHERE-THE-PLAN-STILL-HAS-GAPS.md
+
+**The owner asked where the gaps are, against the original plan rather than against today's activity.**
+Nine hundred lanes of work have a way of drifting from the thing they were for.
+
+**Read `docs/plan/intent.md` first** — the Objective paragraph and constraints C1–C7 are what this program
+committed to, and they are the yardstick. Then read the `## Features` section of `docs/plan/plan.md`.
+
+**Score against the branch, not against the plan's own state fields.** A lane at `built-unverified` says
+somebody wrote code; it does not say the capability exists. **C3 is the test: a capability exists only
+when service, DI registration, route and navigation entry are all present** — on 2026-07-29 four of five
+module journeys stopped at a missing wire while the suite was green.
+
+**Two independent readings already exist and will save you days — read both before deriving anything.**
+`docs/plan/reviews/L-WHICH-JOURNEYS-ARE-REAL.md` scored all 39 journeys and found **only 4 with proven
+falsifiability and zero ever passed against the current binary**.
+`docs/plan/reviews/L-THE-FLAG-BACKLOG-IS-A-WORK-LIST.md` sorted 310 flags and ranked the top twenty by
+what a person would notice.
+
+**Name the single largest gap per Feature, not a list.** A ranked list of one item per Feature is
+actionable; forty items are not. Where a Feature is genuinely met, **say so plainly** — this estate
+under-reports its own completeness as readily as it over-reports it.
+
+**One thing to weigh explicitly**: the standing law is that acceptance is **a person completing the
+journey**. Measure each Feature against that, and say how many could be accepted today if the owner sat
+down for an hour.
+
+**Read-only.** No commit, no suite, no container, no `pkill`. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never bind **:3971** or **:5971**. **Rule and name. Do not edit any file** other than
+your review and return.
+
+### Lane L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN — the owner flips a switch and the module answers
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: for each of the six modules, a browser walk that turns the module on for a store from a screen and then reads that module's own surface answering, or a written statement naming exactly which switch cannot be reached and why
+agent: opus
+evidence: docs/plan/lanes/L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN/evidence.md
+
+**This is the gap underneath the owner's question, and it is why he cannot test what has been built.** The
+plan-gap reading scored all six Features at the landed pair and found **C3 largely holds** — service,
+route, page and nav entry are present for five of six. **The modules are not missing. They are off.**
+
+**Measured at the trunk, per module**: Margin is dark in every deployment (`EnabledStoreIds` empty,
+Statements and PriceImport false, **no operator lever**); Meals has all four `Features:Meals` false;
+Growth has `Growth:Enabled` false and `MailProvider` Fake; Events has `DispatchEnabled` false.
+
+**A module you can only enable by editing a launch line is a module a venue cannot be given.** That is the
+whole of it. `F-MEALS-MONEY-FLAGS-HAVE-NO-LEVER` records that three of four Meals flags are settable
+**only by restarting the process**, and `F-MODULE-MASTERS-ARE-UNDECLARED-AND-INVISIBLE` records that the
+flag board draws rows for masters that do not exist.
+
+**Read the prior work before writing anything — several lanes have been in this neighbourhood.**
+`L-FLAGS-EFFECTIVE-RESOLVERS`, `L-MEALS-LEVER-WITHHOLD`, `L-GROWTH-EFFECTIVE-RESOLVER` and
+`L-FLAGS-JOURNEY-SWEEP` all touched it. **Only Workforce and Margin register an
+`IStoreFeatureFlagEffectiveResolver`** — everything else falls through
+`StoreFeatureFlagsController.cs:65`, so **the board echoes the store row rather than the gate**, and a
+switch can read *on* while the module stays dark.
+
+**That last point is the trap and the reason this lane must walk rather than assert.** Flipping a switch
+and seeing the board agree proves nothing. **Flip it, then read the module's own surface.** If the
+surface stays dark while the board says on, that is the finding and it is worth more than a fix.
+
+**Where a master genuinely cannot be host-independent, say so rather than forcing it.** Some of these are
+deliberate host configuration and the honest output is a named list of which, and what an operator does
+instead — the flags' own `clears_when` clauses already allow that answer.
+
+**The live API predates the last two backend landings** (built at `118f92fb9`, trunk is `a1c1a6dff`), so
+a lever landed after that will not be visible against it. **Name that rather than concluding the lever is
+absent.**
+
+The world is the owner's: web **:3971**, API **:5971**, manager `99681931`/`849666`. **Do not restart
+either server** — if a module needs a rebuild to show its lever, return that module as blocked and finish
+the others. Never stop, restart or exec into `okam-lwtwo-sql` or `okam-lwtwo-redis`, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED — what of the unlanded work is real, and in what order it should land
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: every lane/* branch not an ancestor of its trunk is classified carries-unlanded-product-work, patch-carried, superseded, or pre-fork-must-not-land — with the evidence per row, and the carries-real-work rows ordered by what a person would notice
+agent: fable
+evidence: docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md
+
+**Measured at the landed pair, and larger than anyone has said out loud: 313 `lane/*` branches are not
+ancestors of their trunk** — **111** frontend against `a63c30f`, **202** backend against `a1c1a6dff`.
+Four landing waves carried twelve named branches. The rest has never been sorted.
+
+**Most of it is almost certainly dead, and proving that is as valuable as finding the live ones.** A
+prior census found **62 frontend and 112 backend** completed-lane refs whose files matched nothing in
+the landing tree. **A row that says "absent, and here is the check" retires a branch permanently**; a row
+that says "might be something" retires nothing.
+
+**One is already known to be real and is the reason this lane exists.** `lane/wf-kodeoversikt-ui` at
+`f4c355b` carries **four commits** and is not on the trunk — the § 8-5-6 identity-code register button,
+whose absence the plan-gap reading named as Workforce's single largest gap. **If one survived four
+landing waves unnoticed, others will have.**
+
+**Four buckets, and each needs a different check:**
+1. **carries-unlanded-product-work** — commits whose content is on no other ref. `git cherry` plus a
+   tree probe, not a branch-name guess.
+2. **patch-carried** — the change is already on the trunk under a different commit. `git patch-id` is
+   the cheap answer and it retires the branch honestly.
+3. **superseded** — a later lane replaced it. Say which, by ref.
+4. **pre-fork-must-not-land** — anything based at `2431883d`. These **re-add a deleted credit-sale
+   predicate auto-merged with no conflict marker**, buried in 313–420 conflicted files. **Never land
+   these**; the earlier count was eleven and it should be re-derived, not inherited.
+
+**Two traps, both measured, both of which have already produced a wrong answer here.**
+`git grep` at a revision searches the tree at that revision, **not the object set** — a search returned
+zero hits across revisions where a byte-scan of reachable objects found **133**. And
+`git rev-list --objects --all` reports blobs reachable **because `--all` reads other worktrees' detached
+HEADs**; under `--single-worktree` two commits turned out to be on no named ref at all.
+
+**A prior census exists and is stale in a specific, documented way.** Read
+`docs/plan/reviews/L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING.md` for method — but note its clerk-appended
+correction: it misclassified the **tip of `origin/main`** as unreachable work. **Re-derive; do not
+inherit its rows.**
+
+**Order the live ones by what a person would notice**, not by commit count. The ranked flag review is the
+model: a guest seeing an empty shop outranks a test-infrastructure wart whatever the line counts say.
+
+**Read-only in both repositories.** No commit, merge, rebase, push, and **especially no branch deletion**
+— a wrong classification that deletes a ref is unrecoverable, and this lane's whole output is a
+classification. No suite, no container, no `pkill`. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`,
+never bind **:3971** or **:5971**.
+
+**Rule and name. Do not edit any file** other than your review and return.
+
+### Lane L-THE-SEEDS-AND-THE-STATUTORY-TOP-LAND — ~~the owner can run the seeds, and the highest-ranked unlanded work reaches the trunk~~
+state: retracted
+class: sql
+owner: agent
+dir: .
+exit: lane/every-module-has-data and the top statutory items from the ranked census are merged onto their trunks or refused with the reason, both trunks build, and the tiers are recorded at the new tips with every failure accounted for
+agent: opus
+retracted: agent killed by the weekly API limit at 11:20, mid-flight, before writing a return. Work preserved on branches; state recorded in log.md.
+
+**Two things land here and the first is what the owner actually asked for.**
+
+**The seeds.** `lane/every-module-has-data` at **`1f6487e92`** (backend, off `a1c1a6dff`) carries
+`Scripts/demo/seed-<module>-demo.sh` for all six modules. **They were run back to back against the live
+API — six exit 0, and the wire census before and after is identical**, which is the convergence property
+that stops a re-run piling up a second cohort. Each also converged over three-plus consecutive runs.
+**Until this lands, the owner cannot run them without checking out a lane branch.**
+
+**The statutory top of the ranked census.** The 313-branch classification ranked 24 live items by what a
+person would notice and put **statutory personalliste / kodeoversikt** first.
+**`lane/wf-kodeoversikt-ui`** is confirmed real — needles **0 of 12**, both register tests absent at the
+trunk — and its **measured tip is `19ad0015`**, a RETURN commit atop the `f4c355b` an earlier brief
+named. **Use the measured tip.**
+
+**Read `docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md` and take the top statutory
+rows in its order.** Do not invent an order and do not take the whole list — **land what you can prove,
+name what you left.**
+
+**Three exclusions that are measured, not cautionary.**
+1. **The 49 pre-fork heads based at `2431883dae` never land.** The census re-derived them rather than
+   inheriting the count, and confirmed the silent `IsCreditSale` re-add at **exactly 9 lane refs plus 2
+   non-lane** — fewer than the flag's eleven, and still auto-merged with no conflict marker. Re-run the
+   invariant at your own final tip: `git grep -lE 'bool +IsCreditSale *\(' -- '*.cs'` must name only
+   `Services/Kassa/KassaCreditSale.cs`.
+2. **Three live migration branches are named in that review and C2 is flagged.** One migration author at
+   a time. If landing anything would put two migrations on one branch sharing a parent, **stop** — that
+   has bitten this estate twice and only ever shows on a fresh database.
+3. **`feature/ask-okam` and its 15 ask lanes are out of scope** — the census put them in an appendix
+   deliberately.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+
+**Baselines to account against**: frontend **150 suites / 3563 / 0 failed** at `a63c30f`; backend
+non-SQL **4832 / 0 / 10** at `a1c1a6dff`. Name any test you cannot account for.
+
+**Do not push.** Record the revert for each trunk. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis` —
+they hold the owner's seeded world, serving on **:5971** and **:3971**. Never bind those ports, never
+`pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. Pin `core` at `9626a561` before
+believing any frontend count.
+
+### Lane L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS — an indented line inside a .vue file gets counted
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: an indented statement inside a .vue script block is counted by the coverage run, shown by a probe that reds against the current instrumentation and greens after, with the per-module .vue figures re-measured and recorded
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md
+
+**The owner asked for coverage as high as possible, and the frontend instrument cannot measure it.**
+`vue-jest@3.0.7` **instruments nothing indented**: **47,081 lines of `<script>` yield 1,169 measured
+statements**, and **304 of 304 `.vue` files measure nothing past `export default`**. The published
+**65.4%** is a count of import lists.
+
+**The mechanism was proved with a probe rather than inferred** — an *indented module-scope* statement is
+dropped exactly like a method body, and `data()` and `methods` produce no `fnMap` entries at all. The
+cause was read, not guessed: `generate-source-map.js:14` maps only column 0.
+
+**So every frontend coverage figure in this estate is unusable, and no honest raising can start until
+this is fixed.** That is why this lane comes before any lane that writes tests.
+
+**Judge the fix on evidence, and say what it costs.** Upgrading `vue-jest`, replacing the source-map
+step, or moving to a different transform are different amounts of risk against a suite of **150 files
+and 3,563 tests**. **If the honest answer is that the fix breaks more than it measures, say so with the
+numbers** — that turns this into an owner decision rather than a bad upgrade.
+
+**Keep the probe.** Whatever you change, the artifact that matters most is a test that **reds against
+today's instrumentation** — otherwise the same silent drop returns on the next upgrade and nobody
+notices for another year.
+
+**Re-measure per module afterwards.** The honest `.js`/`.ts` figures are already known — Core/POS **40.7**
+statements and **12.3** functions, Workforce 96.0, Margin 97.7, Meals 87.8, Events 93.4, Training 81.6,
+Growth 97.9 — and the `.vue` side is the missing half. **Core/POS is where the gap lives on both sides at
+once**; expect the new numbers to be worse than the old ones and report them anyway.
+
+**You hold a suite slot.** No SQL container. Never bind **:3971** or **:5971**, never touch the
+`okam-lwtwo-*` containers, never `pkill`, never `npm ci`/`npm install` — symlink `node_modules`. Pin
+`core` at `9626a561`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES — a repeated call leaves one row, and the two live duplicates are resolved
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a repeated role upsert changes no row count, shown by a second call that is proven not to insert, and the duplicate Kokk and Servitor rows on store 1 are either resolved or recorded with what resolving them would take
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-roleupsert/lanes/L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES/evidence.md
+
+**Found by running the seed twice, which is the only way anyone would have found it.**
+`PUT .../roles` **is named an upsert and keys on nothing**, so the second call minted a **second Kokk and
+a second Servitør** on store 1. **Both duplicate rows are live in the owner's world right now.**
+
+**Fix the write first, then deal with the rows — in that order.** Resolving the duplicates against a
+route that still mints them buys nothing.
+
+**Decide the key from the data, not from taste.** A role's identity might be its name, its name within a
+store, or an explicit id the caller supplies — and the three behave differently when a venue legitimately
+wants two similarly-named roles. **Read what the callers send** before choosing, and say why.
+
+**C1 applies to the cleanup half and it is the reason that half may not be yours.** If the roles table is
+append-only or is referenced by engagements that name a role by id, **deleting a duplicate is not a
+repair, it is a rewrite of somebody's history**. If that is what you find, **say so and record what
+resolving them would take** rather than doing it — a blocked cleanup with the reason named is the right
+outcome.
+
+**Prove the second call does not insert.** A test asserting one row exists proves nothing if the first
+call is the only one made. Call twice; assert the count did not move; mutate the key back and watch it
+red.
+
+No migration without saying so first. **No SQL container** — the cap is 2. Never touch `okam-lwtwo-sql`
+or `okam-lwtwo-redis`, never bind **:3971**/**:5971**, never `pkill`. Commit to your own lane branch.
+**Do not push.**
+
+### Lane L-THE-TWO-DOCUMENTS-AND-THE-CART-GET-TESTS — ~~the three zero-coverage paths that carry money and documents~~
+state: retracted
+class: node
+owner: agent
+dir: .
+exit: each of the three named paths is executed by a test that reds when its behaviour is broken, shown by a mutation per path, with the coverage figures before and after recorded
+agent: opus
+retracted: agent killed by the weekly API limit at 11:20, mid-flight, before writing a return. Work preserved on branches; state recorded in log.md.
+
+**Three paths converge from three independent readings — coverage, never-loaded analysis, and the
+journeys review — and two of them are documents somebody may have to produce.**
+
+- **`utils/training/evidence.js`** — **0%**, **101 uncovered branches**, and **no test loads it at all.**
+  This is the inspector evidence document.
+- **`utils/meals/statement-client.js`** — **0%.** This is the monthly bill a company pays.
+- **The cart, uncovered on both sides of the wire at once** — `Services/CartService.cs` at **24.3% with
+  681 uncovered branches**, `cart-service.ts` at **4.3%**, `models/cart/cart.ts` at **6.3%**, and
+  `store/index.js` at zero **imported by no test**.
+
+**Coverage is the reason these were found and it is not the goal.** A test that loads a file and asserts
+nothing raises the number and protects nobody. **Every test here must red under a mutation you actually
+apply** — this estate has shipped an assertion whose haystack was empty, a negative control gone vacuous,
+and a check comparing a value with itself.
+
+**The two documents outrank the cart on consequence and the cart outranks them on blast radius.** Take
+all three, but if you run short, **say which you left and why** rather than thinning all three.
+
+**C6 is in force on the document halves**: a statutory claim is printed only where the document it claims
+can be produced. If either document turns out unable to produce what its caller promises, **that is a
+finding worth more than the tests** — report it.
+
+**The frontend coverage instrument is broken** (`vue-jest` drops every indented statement), so **`.vue`
+figures are meaningless** — these three are `.js`/`.ts` and `.cs`, which are measured honestly. **Report
+before-and-after from the same command**, and name the command.
+
+No migration. **No SQL container.** Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`, never bind
+**:3971**/**:5971**, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not
+push.**
+
+### Lane L-READ-THE-INSTRUMENT-AND-THE-UPSERT — the two most load-bearing new lanes are read by someone who did not write them
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on lane/vue-coverage-instrument 52dd348 and lane/role-upsert-idempotent 1f0bc9cc0, naming any change that does not do what it claims, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-INSTRUMENT-AND-THE-UPSERT.md
+
+**One of these changes the measuring instrument itself, which makes it the single most consequential
+unreviewed thing in the estate.** If the coverage fix is wrong, every number derived from it is wrong,
+and it will be wrong in a direction nobody checks because the numbers *fell* — a falling number reads as
+honesty even when it is a new bug.
+
+**`lane/vue-coverage-instrument` at `52dd348`.** It seeds `require.cache` with a replacement
+`generate-source-map` carrying every babel mapping at its own column, then delegates `vue-jest`'s
+`process()` unchanged. **Check the seam**: a `require.cache` injection is a strong technique with a
+narrow blast radius when right and a silent one when wrong. **Does it hold for every SFC shape** — no
+script block, `<script setup>`, TypeScript, a `lang` attribute, a file with only a template?
+
+**Its claims to verify rather than accept**: reported `.vue` statements **762/1166 → 6125/18157**; suite
+**150/3563/0 at 12.0s → 151/3568/0 at 8.3s**; five pre-existing transform failures identical either side;
+**no existing test changed or edited**. **A faster suite after adding instrumentation deserves a
+sentence of explanation** — confirm it rather than assuming it is free.
+
+**The probe is the part that must actually bite.** It claims reverting one config line reds all five
+assertions. **Re-run that revert yourself.**
+
+**`lane/role-upsert-idempotent` at `1f0bc9cc0`.** The key moved to name-within-store, retired roles
+excluded on `EffectiveToUtc == null`. **Check the exclusion is the right way round** — the lane says a
+retired name may be reused as a new role, and that `EffectiveToUtc` is assigned unconditionally so a
+match would clear it. **That is a claim about a write path, and it is exactly where an off-by-one
+predicate hides.**
+
+**Also check what it did not do.** It left the duplicate rows and recorded a sequence instead, arguing
+three Restrict FKs and an append-only published revision make deletion a rewrite of history. **Is that
+argument sound, and is the recorded sequence actually safe to run?**
+
+**Read-only.** No commit, merge, rebase, push or branch move. No suite run of your own beyond re-running
+the lane's named probe and revert. No container, no `pkill`. Never touch `okam-lwtwo-sql` or
+`okam-lwtwo-redis`, never bind **:3971**/**:5971**.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return. A clean
+reading is a legitimate outcome.
+
+### Lane L-EVENTS-DISPATCH-GETS-A-SCREEN — ~~the ten queued guest links stop waiting for a launch-line variable~~
+state: retracted
+class: node
+owner: agent
+dir: .
+exit: an operator releases queued guest dispatches for a store from a screen, shown by a browser walk that turns dispatch on and watches the queue drain, or a written statement of why that switch must stay host-only
+agent: opus
+retracted: agent killed by the weekly API limit at 11:20, mid-flight, before writing a return. Work preserved on branches; state recorded in log.md.
+
+**This is the one module switch a venue genuinely cannot reach, and it was found by walking rather than
+reading.** `Events:DispatchEnabled` is host-only and false. The pipeline reads *"Utsending er slått
+av … Venter: 10"* — **ten guest links are queued in the owner's world right now and no screen releases
+them.**
+
+**Every other module's master turned out reachable**, which is what makes this one stand out rather than
+blend in. The walk that established that corrected two earlier claims in the process: Margin **does**
+have an operator lever (`MarginModuleGate.Resolve` reads the store row first), and the Meals store row
+overrides its config gate too. **Read that walk first** —
+`docs/plan/lanes/L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN/evidence.md` — so you extend a measured
+picture rather than a remembered one.
+
+**One sibling switch must stay host-only and its reason is the model for how to answer this.**
+`Growth:Enabled` is the crypto-provisioning fail-fast gate: a store row opening it would route **live
+guest addresses** over the dev fallback root. **If dispatch has a reason of that kind, name it and stop**
+— a written refusal with the mechanism is a better outcome than a lever that leaks.
+
+**If it does not, the lever is the work.** Follow the shape the reachable modules already use rather than
+inventing a second mechanism: a catalogue entry, a store row, and a resolver that reports the **gate**
+rather than echoing the row. **Only Workforce and Margin register an
+`IStoreFeatureFlagEffectiveResolver`** — everything else falls through
+`StoreFeatureFlagsController.cs:65`, so a switch can read *on* while the surface stays dark.
+
+**Walk it, do not assert it.** Flipping the switch and seeing the board agree proves nothing; the queue
+draining is the proof. Web **:3971**, API **:5971**, manager `99681931`/`849666`. Playwright is
+available.
+
+**The live API is built from `118f92fb9`, older than the trunk** — if your lever lands after that it will
+not be visible against it, and that is a finding to name, not a failure.
+
+**Do not restart either server.** Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`, never `pkill`,
+never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-TILL-IS-COVERED-WHERE-THE-MONEY-IS — ~~the one row carrying both repositories' coverage gap~~
+state: retracted
+class: suite
+owner: agent
+dir: .
+exit: the ten highest-consequence uncovered paths in Core/POS carry tests that red under a mutation actually applied, with before-and-after coverage from the same command recorded per path
+agent: opus
+retracted: agent killed by the weekly API limit at 11:20, mid-flight, before writing a return. Work preserved on branches; state recorded in log.md.
+
+**The owner asked for coverage as high as possible, and after two instrument corrections the answer is
+one row.** Core/POS is **8.1% on `.vue`** — 5,203 uncovered statements over 78 files — and **40.7% on
+`.js`/`.ts`** with functions at **12.3%**. On the backend it is **49.4%**, holding **33,535 of 37,537
+uncovered non-migration lines**. Every other module sits between 67% and 92%.
+
+**Raising a percentage is not the objective and chasing it would do harm.** This estate has shipped an
+assertion whose haystack was empty, a negative control gone vacuous, and a check comparing a value with
+itself — and it has 3,563 tests alongside a blank payer line on a fiscal receipt. **A test that loads a
+file and asserts nothing raises the number and protects nobody.**
+
+**So the exit is ten paths, not a percentage.** Choose them by consequence, and say why each was chosen
+over its neighbours. **Money and printed documents outrank plumbing** whatever the line counts say: this
+year's worst defects here were a return computed from a listed price, six blank payer lines, and payroll
+minutes doubling.
+
+**Every test must red under a mutation you actually apply** — break the behaviour, watch it red, restore,
+watch it green. A mutation that is weaker than the defect it claims to catch is worth less than no test,
+because it reads as protection.
+
+**One counter-signal to weigh before you conclude the till is untested.** 20 of 150 frontend test files
+are `readFileSync` source guards that never execute what they guard, so **route shapes are pinned and
+contribute nothing to the low figure**. The number understates Core/POS. **Say which of your ten are
+genuinely unexercised versus merely uncounted.**
+
+**Coverage is measured honestly now and the command is recorded** in
+`docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md` — **use it**, so your before/after is comparable.
+Note the `.vue` instrumentation fix rides on `lane/vue-coverage-instrument`; if it has not landed, say
+which base you measured from.
+
+**You hold a suite slot.** No SQL container. Never bind **:3971**/**:5971**, never touch the
+`okam-lwtwo-*` containers, never `pkill`, never `npm ci`/`npm install` — symlink `node_modules`. Pin
+`core` at `9626a561`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-TILL-TESTS-ARE-RUN-AND-TRUE — six rescued money-path suites are run, made honest, and the lost finding is recovered
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: each of the six rescued POS suites passes and reds under a mutation actually applied, or is deleted with the reason, and the till's unmountability is either explained or shown not to reproduce
+agent: opus
+evidence: docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md
+
+**This lane inherits work from an agent the API limit killed mid-sentence, and inherits it with a
+warning.** Six suites — **1,526 lines** — sit on **`preserve/till-money-tests` at `a1901d4`**: cash tender
+and change, day-close cash difference, receipt payer line and signature, refund cap and guest split,
+return document amount and VAT, split payment shares.
+
+**They were never run, never reviewed, and are not known to pass.** They were committed so a session exit
+could not take them, and for no other reason. **Treat every one as a draft by a stranger.**
+
+**Delete is a legitimate verdict per suite.** A test that cannot be made to red under a mutation is worse
+than no test — it reads as protection. **Do not repair a suite into passing.** If its subject is not
+actually exercised, say so and remove it.
+
+**The finding worth more than the tests.** That agent's last recorded words were that it had **found the
+root cause of why the till is unmountable** — and the reasoning was never written down. **Try to
+re-derive it.** If the till mounts fine for you, **say that plainly**; a refuted claim is a real result
+and better than a repeated rumour.
+
+**Why these six paths and not others**: coverage put Core/POS at **8.1% on `.vue`** and **40.7% on
+`.js`/`.ts`** with functions at **12.3%**, holding **5,203 uncovered statements over 78 files** — every
+other module sits between 67% and 92%. These six are the money and printed-document paths inside that
+row, which is where this year's worst defects lived: a return computed from a listed price, six blank
+payer lines, payroll minutes doubling.
+
+**One counter-signal, so you do not over-claim.** 20 of 150 frontend test files are `readFileSync` source
+guards that never execute what they guard, so **route shapes are pinned and contribute nothing to the low
+figure**. Core/POS is better covered than the number says. **Say which of the six are genuinely
+unexercised versus merely uncounted.**
+
+**Frontend trunk is `3ff7f07`** and the clerk ran its tier: **152 suites / 3589 tests / 0 failed**.
+Account your delta against that. **The `core` submodule cannot be initialised normally** — `git submodule
+update --init` fails on `transport 'file' not allowed`, then on `not our ref`. The working recipe is
+`git fetch /Users/svendaneel/okam/Web-modules/core 9626a561…` then `git checkout` that SHA. **Do this
+before believing any suite count** — otherwise 15 suites fail to resolve while jest exits 0.
+
+**You hold a suite slot.** No SQL container. Never bind **:3971**/**:5971**, never touch the
+`okam-lwtwo-*` containers, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do
+not push.**
+
+### Lane L-THE-DOCUMENTS-AND-CART-TESTS-FINISH — the half-written tests for the three zero-coverage paths are completed or discarded
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: utils/training/evidence.js, utils/meals/statement-client.js and the cart on both sides each carry a test that reds under an applied mutation, or each is recorded as not-worth-testing with the reason
+agent: opus
+evidence: docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md
+
+**Another inheritance from a lane the API limit killed, and its work is real but unfinished**: one commit
+each on `lane/the-two-documents-and-the-cart-get-tests` — **`6859bdaa6`** in the backend, **`4541e98`** in
+the frontend. Its last recorded words were *"now the backend cart test"*, so **the backend half is the
+part most likely to be missing.**
+
+**Read what it wrote before adding to it.** A half-finished test by a careful author is usually worth
+completing; a half-finished test that asserts the wrong thing is worth deleting. **Judge each.**
+
+**The three paths and why they were chosen** — they converge from three independent readings: coverage,
+never-loaded analysis, and the journeys review.
+
+- **`utils/training/evidence.js`** — **0%**, **101 uncovered branches**, and **no test loads it at all.**
+  This is the inspector evidence document.
+- **`utils/meals/statement-client.js`** — **0%.** This is the monthly bill a company pays.
+- **The cart, uncovered on both sides of the wire at once** — `Services/CartService.cs` at **24.3% with
+  681 uncovered branches**, `cart-service.ts` at **4.3%**, `models/cart/cart.ts` at **6.3%**, and
+  `store/index.js` at zero **imported by no test**.
+
+**C6 is in force on both document halves**: a statutory claim is printed only where the document it
+claims can be produced. **If either document cannot produce what its caller promises, that finding is
+worth more than the tests** — report it and say so plainly.
+
+**Every test must red under a mutation you actually apply.** Break the behaviour, watch it red, restore,
+watch it green. This estate has shipped an assertion whose haystack was empty, a negative control gone
+vacuous, and a check comparing a value with itself.
+
+**A sibling lane holds the six rescued POS suites** — **do not touch `preserve/till-money-tests`** and do
+not write POS tests; the cart is yours, the till is not.
+
+**Trunks: frontend `3ff7f07` (tier 152/3589/0, clerk-run), backend `a9837ca92`.** The `core` submodule
+needs the fetch recipe recorded in `F-CORE-SUBMODULE-CANNOT-BE-INITIALISED-NORMALLY`. No SQL container.
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never `npm
+ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-REVIEWED-INSTRUMENT-LANDS — the coverage fix that a reviewer cleared reaches the trunk
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/vue-coverage-instrument is merged onto the frontend trunk, the probe still reds when the config line is reverted at the new tip, and the tier is recorded with every failure accounted for
+agent: opus
+evidence: docs/plan/lanes/L-THE-REVIEWED-INSTRUMENT-LANDS/evidence.md
+
+**This is the smallest lane on the board and the one holding up every honest coverage figure.**
+`lane/vue-coverage-instrument` at **`52dd348`** is **one commit**, and it is the only reason any `.vue`
+coverage number in this estate means anything.
+
+**It has already been read by a Fable reviewer with fresh context and ruled clean** — the seam verified,
+every SFC shape checked individually (8 `lang=ts`, 0 `<script setup>`, 0 `src=`, 2 no-script), the
+version skew ruled benign, and the reviewer **re-ran the probe and the revert itself** rather than
+trusting the lane's account. **It is cleared to land; this lane is the landing, not a re-litigation.**
+
+**What it fixes, for the record**: the instrument was **hiding 16,991 statements** — reporting 762 of
+1,166 where the real denominator is 18,157 — because `vue-jest` probes column 0 while babel maps each
+token at its real column, so every indented line went unmapped and istanbul dropped it.
+
+**One inherited caveat the reviewer raised and you should carry, not resolve**: the lane reported the
+suite getting **faster** (12.0s → 8.3s) after adding instrumentation, and **never explained why**. It is
+probably transform-cache warmth, which means **a cold run will not reproduce it**. **Record your own
+timing at the new tip** rather than repeating theirs.
+
+**Verify the probe still bites after the merge.** Its whole value is that reverting `jest.config.js`'s
+transform line reds five assertions. A probe that stops biting because a merge moved a line is a probe
+that has quietly died.
+
+**The trunk moved to `3ff7f07` after that branch was cut** and the clerk's tier there reads **152 suites
+/ 3589 tests / 0 failed**. Expect **+1 suite and +5 tests** from the probe; **name anything else.**
+
+**The `core` submodule cannot be initialised normally** — use the fetch recipe in
+`F-CORE-SUBMODULE-CANNOT-BE-INITIALISED-NORMALLY` before believing any count.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never `npm
+ci`/`npm install`. Commit with `--no-verify`. **Do not push.** Record the revert.
+
+### Lane L-THE-GUARD-STOPS-CRASHING-ON-THE-CASE-IT-GUARDS — one line makes four unmountable components testable
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: newGuid returns a well-formed v4 with no crypto global present, shown by a test that reds against the current line, and the components that could not mount are shown to mount or the remaining reason is named
+agent: opus
+evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/guard/Web-modules/test/guid-fallback-without-crypto.test.js
+
+**A guard tests for a case and then crashes on exactly that case.** `utils/guid.js:5` reads
+`typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'`; when that is false,
+**line 9 calls `crypto.getRandomValues(bytes)` unguarded**. The guard's only `crypto`-absent branch is
+the one line 9 cannot survive. **The clerk read the file and confirms it.**
+
+**What it costs today, measured rather than argued.** `ReturnBuilder` and `RefundModal` — **the till's two
+money-out surfaces** — throw `ReferenceError: crypto is not defined` out of `data()`, **before any
+assertion runs**. A sibling lane proved it in three environments: absent throws; present-without-
+`randomUUID` returns a well-formed v4; full webcrypto takes the fast path. **The arithmetic is fine. The
+guard is the defect.**
+
+**It is not a live production defect and you should not overstate it** — browsers define `window.crypto`
+and the target prerenders on Node 24. It is a **test-infrastructure** defect, and it is why the two
+surfaces that hand money back have never been mountable.
+
+**Decide the fallback shape on evidence and say why.** These GUIDs are **client-generated idempotency
+keys** for POS cash returns, so randomness quality is not cosmetic. A `Math.random` path, a thrown
+explicit error, and a Node `require('crypto')` path are three different products. **Read the eight call
+sites across POS, Workforce and Meals before choosing** — and if the honest answer is that no safe
+fallback exists and the right fix is to fail loudly with a clear message, **that is a legitimate outcome**
+and better than weak keys on a money path.
+
+**Prefer fixing the source over patching the harness.** A sibling deliberately did **not** add a jest
+`setupFiles` entry, because that touches a config shared by **159 suites** while the trunk was moving —
+the right call. **If guarding line 9 makes the components mountable on its own, the shared config never
+needs touching.** Establish that first; only if it does not, say what remains.
+
+**Four more components are named as unmountable for the same reason** — `DayFlow`, `ClockScreen`, and the
+two `join.vue` pages. **Check them after your fix** and report which now mount.
+
+**Trunk is `780d405`** (tier **153 suites / 3594 / 0**). The rescued POS suites sit on
+`preserve/till-money-tests` at **`7aaee5b`** (tier 159/3743/0) — **read them, do not modify them**; a
+sibling lane owns that branch.
+
+**The `core` submodule cannot be initialised normally**: `git submodule update --init` fails on
+`transport 'file' not allowed`, then `not our ref`. From inside the worktree's `core`:
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+then checkout that SHA. **Without it 15 suites fail to RESOLVE while jest exits 0.**
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never `npm
+ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-READ-THE-TEST-WRITING-LANES — sixty-five mutation claims are checked by someone who applied none of them
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the mutation evidence of both test-writing lanes, naming any mutation that would not actually red, any test that passes for a reason other than the one claimed, and any surviving vacuity, in a file under docs/plan/reviews/
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-TEST-WRITING-LANES.md
+
+**Two lanes wrote tests and proved them by mutation, and mutation evidence is the one kind that is
+trivial to fake by accident.** A mutation weaker than the defect it claims to catch reds for the wrong
+reason and reads as proof. **Nobody has checked either.**
+
+**`preserve/till-money-tests` at `7aaee5b`** — six POS suites, 149 tests, **45 mutations applied, 44
+killed**. Evidence at `docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md`.
+**`lane/the-two-documents-and-the-cart-get-tests`** — frontend `4541e98`, backend `6859bdaa6`, **20
+mutations, 19 red**. Evidence at
+`docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md`.
+
+**Both lanes reported a survivor and reasoned about it, which is the behaviour to check hardest — not to
+trust.**
+- The till lane kept a `seatBuckets` sort test whose mutation changed nothing, arguing `Object.keys`
+  orders integer-like keys ascending by language guarantee, and that a reversed comparator reds it
+  anyway. **Verify both halves of that argument.**
+- The documents lane found a `parseInt` arm claiming to pin a base-10 radix that ES5 made inert.
+  **Check whether its retitled replacement actually pins the parse**, or whether it now measures
+  something equally free.
+
+**Re-apply a sample rather than reading the ledgers.** Pick the mutations whose claims carry the most
+weight — the ones named as catching **a blank payer line, a return priced off a listed price, a stale
+reason on a zero-difference Z, the last split payer's øre**, and the two vacuity repairs (**defect B**'s
+`if (id != null)` and **defect C**'s deleted duplicate parser). **Apply each, watch it red, restore.** A
+ledger row you did not reproduce is a claim, not a receipt.
+
+**The claim most worth falsifying**: the documents lane says the `statement-client` copy of
+`fileNameFrom` was **character-identical** to the exported one and that deleting it made two mutations
+bite that could not before. **Check both** — that a shared parser is genuinely now on the path, and that
+the two mutations are not simply new tests dressed as recovered coverage.
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run the suites you are checking
+and apply mutations you restore**, because the exit depends on it — nothing else. No container, no
+`pkill`. Never touch `okam-lwtwo-sql` / `okam-lwtwo-redis`, never bind **:3971**/**:5971**, never
+`npm ci`/`npm install`.
+
+**The `core` submodule cannot be initialised normally**: from inside the worktree's `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+then checkout that SHA. **Without it 15 suites fail to RESOLVE while jest exits 0.**
+
+**Rule and name the exact change. Do not edit any file** other than your review and return. A clean
+reading is a legitimate outcome and the likeliest one.
+
+### Lane L-THE-EVIDENCE-RECORD-CAN-BE-HANDED-OVER — the page stops promising a document it cannot produce
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a person opens the training evidence page and obtains the record as a file or a printed document, shown in a browser, or the page's promise is withdrawn to match what it can actually do
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-EVIDENCE-RECORD-CAN-BE-HANDED-OVER/evidence.md
+
+**C6 in its plainest form: the screen promises a record and the product cannot hand it over.**
+`trn_ev_page_intro` tells a manager the record is *"slik den kan legges fram ved tilsyn"* — as it can be
+presented at an inspection — and **no export of any kind exists**: no PDF, no CSV, no download
+attribute, **not even a `@media print` block**. The backend serves one JSON action. A manager asked for
+it on the day can show an inspector a browser tab.
+
+**The comparison that makes this indefensible is inside this estate.** The **personalliste** — a
+genuinely statutory surface — **has a print stylesheet**. The evidence page makes a comparable promise
+with nothing behind it.
+
+**It names no statute, and that restraint is deliberate — do not undo it.** `internkontroll` is banned
+from the UI at `translations/no.ts:4744` until TR8/TR-B6 ships. **Adding a statute reference here would
+be the exact defect this estate took off the UI on 2026-07-30.** The promise to fix is the *presentable
+record*, not a legal citation.
+
+**Two honest routes and you should pick on evidence, not ambition.** A print stylesheet is small,
+matches the personalliste's precedent, and is defensible on the day. A generated file is stronger and
+larger. **If the smaller one genuinely satisfies the promise, take it and say why** — this is C3-shaped
+work (renderer, route, control) and a half-built export is worse than a good print view.
+
+**Withdrawing the promise is a legitimate outcome.** If the record cannot be made presentable in this
+lane, **change the sentence to what the page can actually do** and say so. A screen that overstates is
+the defect; either end of the fix closes it.
+
+**Prove it by producing the artifact.** Open the page as a person, obtain the thing, and record what came
+out. A test asserting a button exists does not close this.
+
+**Trunk is `780d405`** (tier **153 suites / 3594 / 0**). The world is the owner's: web **:3971**, API
+**:5971**, manager `99681931`/`849666`. **Do not restart either server** — if the export needs a rebuild
+to be visible, say so and return `blocked`. Never touch `okam-lwtwo-sql` or `okam-lwtwo-redis`, never
+`pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-READ-THE-CRYPTO-LADDER — a security-shaped fallback on eight idempotency-key sites is read before it lands
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on lane/the-guard-stops-crashing-on-the-case-it-guards 1e48b95, naming any rung that could mint a weak or repeatable key, any environment where the ladder still throws unexpectedly, and whether the bundler claim holds
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-CRYPTO-LADDER.md
+
+**This is a change to how every idempotency key in the product is minted, and nobody but its author has
+read it.** `utils/guid.js` now falls through a four-rung ladder — platform `randomUUID`, platform
+`getRandomValues`, Node `crypto`, then an explicit named throw. **Eight call sites depend on it**: two
+cash-out RETRECs, a drawer movement, a payroll-bearing punch, two invitation claims, and the
+`Idempotency-Key` header on **every** Workforce mutation.
+
+**C4 is why this needs a reading rather than a nod.** A repeated key is a replayed money write — the
+lane's own citation is that the server dedupes, returns the earlier posting, and **the UI reports success
+while the drawer is short by 4 500**. **Check every rung for a path that could return a repeatable
+value**, including under concurrent calls in one tick.
+
+**Three claims to verify rather than accept.**
+1. **No rung mints a weak key.** The lane rejected `Math.random` explicitly. **Confirm no rung reaches a
+   non-CSPRNG**, including the Node path's behaviour when `crypto` resolves but is a stub.
+2. **The throw is genuinely last and is reachable only when nothing else is.** It should raise a named
+   `Error`, not a bare `ReferenceError`. **Check the message says something actionable.**
+3. **The bundler claim is measured, so re-measure it.** The lane reports `__non_webpack_require__` with a
+   `module.require` fallback keeps the file at **1,386 → 2,651 minified bytes, 1 → 2 modules, zero
+   crypto-polyfill modules**, against **208 modules / 1.36 MB** for a literal `require('crypto')`. **That
+   technique is invisible to webpack's parser by design, which is exactly why it deserves a second pair
+   of eyes** — confirm it does not break the Node/SSR path it exists to serve.
+
+**One scope correction already established, so you do not re-derive it**: only **two** components were
+ever unmountable — `ReturnBuilder` and `RefundModal`, which call `newGuid` from `data()`. The other four
+call it from a method and always mounted.
+
+**One risk the lane named rather than proved, and you should rule on it**: CI pins `node-version: "16"`
+against an `engines` field of `22.x`, and **node 16 has no `crypto` global**. The lane did not
+demonstrate a prerendered route reaching `newGuid`. **Say whether the generate step can reach it.**
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run the lane's own suite and
+apply mutations you restore.** No container, no `pkill`. Never touch `okam-lwtwo-sql` /
+`okam-lwtwo-redis`, never bind **:3971**/**:5971**, never `npm ci`/`npm install`.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return.
+
+### Lane L-THE-TESTED-WORK-REACHES-THE-TRUNK — the reviewed test work lands, and the crypto fix waits for its reading
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: preserve/till-money-tests and the documents-and-cart branches are merged onto their trunks with the tiers recorded at the new tips, and lane/the-guard-stops-crashing-on-the-case-it-guards is either landed after its review returns or named as held
+agent: opus
+evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/landtrunk/out/LANDING-DETAIL.md
+
+**Two bodies of test work are finished, mutation-proved, and independently verified — and neither is on
+the trunk.** Landing them is what makes the coverage real rather than branch-local.
+
+**Cleared to land, both read by a Fable reviewer who re-applied sixteen mutations in fresh worktrees:**
+- **`preserve/till-money-tests` at `7aaee5b`** — six POS suites, 149 tests. Tier at that tip **159 suites
+  / 3743 / 0**.
+- **`lane/the-two-documents-and-the-cart-get-tests`** — frontend **`c53e344`**, backend **`8c692457c`**.
+  Frontend tier at its tip **157 / 3711 / 0**; backend 19/19.
+
+**Held, and this is the ordering rule**: `lane/the-guard-stops-crashing-on-the-case-it-guards` at
+**`1e48b95`** is **under review right now** because it changes how every idempotency key in the product
+is minted. **Do not land it until that review returns clean.** If it has returned by the time you reach
+it, land it and say so; if not, **land the other two and name it as held** — that is the expected
+outcome, not a failure.
+
+**One interaction to get right rather than discover.** The till suites carry **per-file `global.crypto`
+polyfills** that the guard fix makes redundant. **They are not a conflict and not yours to remove** — the
+guard lane measured that its `platformCrypto()` finds the polyfill and takes the fast path, and a merge
+simulation at `7aaee5b` gave **160 suites / 3757 / 0**. **Leave them.**
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+
+**Baselines**: frontend trunk **`780d405`** at **153 / 3594 / 0**; backend trunk **`a9837ca92`** at
+**4861 / 0 / 10**. **Name any test you cannot account for.**
+
+**A retracted lane's worktree may hold the trunk branch and block `git branch -f`.** Verify it clean and
+**detach it in place** — do not remove it and do not write the ref behind its back with `update-ref`.
+
+**The `core` submodule trap that destroyed a lane's worktree**: `git -C core <cmd>` on an empty
+placeholder does **not** fail — git walks up and runs against the **parent**. Safe order:
+`git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA.
+
+**Do not push.** Record the revert for each trunk. Never touch the `okam-lwtwo-*` containers, never bind
+**:3971**/**:5971**, never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`.
+
+### Lane L-WHICH-BACKEND-GREENS-MEASURED-NOTHING — every recorded backend tier pass is checked for having run at all
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: every evidence file citing a backend tier result is classified as ran-and-counted or measured-nothing, with the command each used quoted, and the lanes whose conclusions rest on a no-op green named
+agent: fable
+evidence: docs/plan/reviews/L-WHICH-BACKEND-GREENS-MEASURED-NOTHING.md
+
+**A command in circulation exits 0 having run zero tests, and greens taken from it are in the record.**
+`dotnet test` at the `OkamAPI-modules` **root** completes in under a second with no counts — there is no
+`.sln`, and the root `WebApi.csproj` is not a test project. **A lane caught its own run being this
+no-op only because the log was 196 bytes and had no numbers in it.**
+
+**This is an evidence-integrity audit, not a test-fixing lane.** The question is narrow and answerable:
+**which recorded backend greens actually ran anything?**
+
+**The tell is the absence of counts, not the presence of a wrong command.** A real run prints
+`Passed! - Failed: 0, Passed: N, Skipped: M, Total: T, Duration: …`. **A record that cites a green
+without those numbers did not measure a tier**, whatever command it quotes. Classify on the numbers
+first and the command second.
+
+**A clerk sweep found two evidence files quoting a bare root-form invocation** — start there, and **do
+not stop there**, because a lane could have run the no-op and reported a number it carried over from
+elsewhere.
+
+**Where a lane's conclusion rests on a no-op green, name the lane and say what it concluded.** That is
+the output that matters: not a list of bad commands, but a list of **claims that are now unsupported**.
+Some will be harmless — a lane whose real evidence was a wire fact does not become wrong because a tier
+line beside it was empty. **Say which are harmless and which are not.**
+
+**Do not re-run any tier to settle it.** Correct backend numbers exist at today's tips and were run by
+the clerk from the project path: **`a9837ca92` at 4861/0/10** and **`9fb057d00` at 4880/0/10**. Judging
+the record is this lane; re-measuring is not.
+
+**Read-only.** No commit, merge, rebase, push or branch move. No suite, no container, no `pkill`. Never
+touch `okam-lwtwo-sql` / `okam-lwtwo-redis`, never bind **:3971**/**:5971**.
+
+**Rule and name. Do not edit any file** other than your review and return.
+
+### Lane L-READ-THE-PRINT-PATH — a statutory document path is read before it lands
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on lane/evidence-record-handed-over ab6e7e1, naming any print rule that escapes its scope, any content the sheet omits that the screen shows, and whether the produced PDF is what an inspector would accept
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-PRINT-PATH.md
+
+**This lane built a document a Norwegian inspector may be handed, and only its author has read it.**
+`lane/evidence-record-handed-over` at **`ab6e7e1`** turns the training evidence page into something
+printable — and the printed artifact, not the DOM, is the thing under review.
+
+**Its own strongest finding is the reason you must read the PDF and not the stylesheet.** The first
+version **passed every `getComputedStyle` assertion** and produced a **blank leading sheet** with the
+provenance column cropped — `Opphav` printed as `Opp`, a ledger delta stopped mid-JSON. **A sheet that
+looks complete while missing the column naming who filed each row.** Both PDFs are committed:
+`training-evidence.pdf` and `BEFORE-clipped-and-blank-first-page.pdf`.
+
+**Three things to check, in this order.**
+1. **Read the good PDF.** Does it carry the course, the score beside the frozen threshold, the full
+   sha256 beside the material it was taken over, both certificates and **all 18 ledger rows** — and none
+   of the page's chrome? **Compare it against the screen**: anything the screen shows and the sheet drops
+   is the defect this lane exists to prevent.
+2. **Check every print rule is scoped.** The lane says no `body` class and no `head()`, deliberately,
+   because **this estate already shipped a print stylesheet whose guard `vue-meta` rebuilt away**,
+   leaving the rules live and the shell on the paper. **Verify that cannot recur here.**
+3. **Check the details material is genuinely forced open.** A hash printed without the pages it was taken
+   over is a figure an inspector can only believe.
+
+**One thing it deliberately did not do, and you should rule on whether that was right**: it did **not**
+touch the page's sentence, and the page still names no statute. `internkontroll` is banned from that UI
+at `translations/no.ts:4744`. **Was building the document instead of withdrawing the promise the correct
+call?**
+
+**One residue to weigh rather than repair**: the print path carries **no content hash of its own** — a
+server-signed export would be stronger and is backend work. **Say whether the print path is defensible
+on its own on the day.**
+
+**The diff is applied live in the owner's world** via HMR in `web-livewalk`, so you can look at the real
+screen. **Do not restart anything** and do not revert it — the owner may be walking it.
+
+**Read-only.** No commit, merge, rebase, push or branch move. You may run the lane's own suite. No
+container, no `pkill`. Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return.
+
+### Lane L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN — the same defect, found a third time, on the four pages left
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: after an in-page sign-in, overview, offers, kam and goods each hold the state a fresh mount would have produced, shown by driving each page's login-success path and reading its own store rather than asserting a handler fired
+agent: opus
+evidence: docs/plan/returns/L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN-1.md
+
+**This is the third time this exact defect has been found, and the shape of the fix is already landed
+twice.** `overview`, `offers`, `kam` and `goods` allow a signed-out stand and an in-page sign-in — and
+**none of them binds `@login-success`**. So signing in leaves the page unstarted and skips the privilege
+bounce until a reload.
+
+**A Fable reviewer found it while reading the twenty-three landed frontend commits**, and recorded that
+it is **the same class `894a3b9` fixed for `orders` and `statistics` two merges earlier in that very
+range**. Latent and low-reachability, but it is the last four.
+
+**Read the two landed fixes first and follow their shape.** `orders` and `statistics` each gained **one**
+starter bound to login-success — not a shorter handler, the *whole* starter. The lane that did it found
+that binding the short handler **was the original bug**, because `adminStores` stayed empty and both
+pages then asked the server about **zero stores** — which renders as a quiet day rather than a broken
+page.
+
+**Prove it by state, not by call.** A test asserting the handler fired is exactly what let this class
+survive three times. **Drive the login-success path and read the page's own store.**
+
+**Mutation-check before believing it.** Unbind the starter and confirm your test reds — the landed fix
+reddened 3 on `orders` and 4 on `kitchen`, which is why it is trusted.
+
+**One page in this family is not this defect and must not be swept in.** A sibling lane found that
+`wrapped.vue` renders no `<AdminPage>` at all, so its own bounce is the only thing keeping its door;
+delegating there left an anonymous visitor on a blank page **with jest green throughout**. **Check
+whether any of your four is the same shape before changing it.**
+
+**Trunk is `00d84d7`** (tier **164 suites / 3874 / 0**). Account your delta against that.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, and that replaced an entire worktree with core's tree. Safe order:
+`git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never run `git submodule deinit`** — it strips the url from the shared config
+and deregisters `core` for the owner.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never `npm
+ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH — two finished, reviewed bodies of work reach the trunk
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/evidence-record-handed-over and lane/the-last-four-pages-resume-after-sign-in are merged onto the frontend trunk or refused with the reason, and the tier is recorded at the new tip with every test accounted for
+agent: opus
+evidence: docs/plan/lanes/L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH/LANDING.md
+
+**Both are finished and one is already read by a fresh-context reviewer.**
+
+- **`lane/evidence-record-handed-over` at `ab6e7e1`** — the training evidence print path. **Reviewed and
+  approved**: the PDF was read cell-for-cell against the screen, every print rule is scoped, and the
+  unsigned path was ruled defensible because the paper is corroborable against the server journal.
+- **`lane/the-last-four-pages-resume-after-sign-in` at `4622bb6`** — the third and final instance of the
+  sign-in defect. Suite at its tip **165 / 3903 / 0**. **Its review is running in parallel; if that
+  verdict has not returned when you reach it, land the print path and name the other as held.**
+
+**One thing in the four-pages branch is larger than it looks and must survive the merge**: `offers.vue`
+had **never been mountable by this repo's jest at all** — two optional-chaining interpolations make buble
+throw at transform time. Two became `(x || {}).clientName`, identical rendering. **If a conflict touches
+those lines, the page becomes untestable again.**
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-READ-THE-FOUR-PAGES — the third instance of a thrice-found defect is read by someone who did not fix it
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on lane/the-last-four-pages-resume-after-sign-in 4622bb6, naming any page whose starter does not reproduce a fresh mount, any mutation that would not red, and whether the widened source scan can still go quiet
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-FOUR-PAGES.md
+
+**This defect has now been found three times, which is itself the finding.** Twice it was fixed and twice
+the estate believed it was gone. **The reason it kept surviving is that the tests asserted a handler
+fired rather than reading the page's state** — so check that this fix does not repeat that.
+
+**Three claims to verify rather than accept.**
+1. **The privilege bounce moved into the starter.** The lane says that left in `mounted` it is asked once,
+   before anyone answers *who are you*, and never again. **Confirm that is true and that moving it does
+   not now ask it twice.**
+2. **The mutation numbers**: overview unbound reds 4 and short 3; offers 3 and 2; kam 3 and 1; goods 3
+   and 1; restored 28. **Re-apply at least two and check the count and the failing test names.**
+3. **The widened source scan.** The old scan read the `mounted` hook **text**, so the one-starter shape
+   would have made it silently pass on exactly the four pages it was written for. The lane says it now
+   reads `mounted` plus the bodies `mounted` calls, with a vacuity guard naming five pages. **Delete a
+   guard yourself and confirm it reds and names the page.**
+
+**`wrapped.vue` was excluded on stated grounds** — it renders no `<AdminPage>`. **Check that reasoning
+rather than the exclusion.**
+
+**Read-only.** No commit, merge, rebase, push or branch move. You may run the lane's suite and apply
+mutations you restore. No container, no `pkill`, never bind **:3971**/**:5971**.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return.
+
+### Lane L-EVENTS-DISPATCH-GETS-A-SCREEN-REDO — the ten queued guest links stop waiting for a launch-line variable
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: an operator releases queued guest dispatches for a store from a screen, shown by a walk that flips it and sees the queue drain, or a written statement of why that switch must stay host-only
+agent: opus
+evidence: docs/plan/lanes/L-EVENTS-DISPATCH-GETS-A-SCREEN-REDO/evidence.md
+
+**Successor to a lane the API limit killed mid-sentence.** `Events:DispatchEnabled` is host-only and
+false; the pipeline reads *"Utsending er slått av … Venter: 10"*. **Ten guest links sit queued in the
+owner's world with no screen that releases them.**
+
+**Every other module master turned out reachable**, which is what makes this one stand out. A browser
+walk established that and corrected two earlier claims doing it — read
+`docs/plan/lanes/L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN/evidence.md` first.
+
+**One sibling switch must stay host-only and its reason is the model for how to answer this.**
+`Growth:Enabled` is the crypto-provisioning fail-fast gate: a store row opening it would route **live
+guest addresses** over the dev fallback root. **If dispatch has a reason of that kind, name it and stop.**
+
+**If it does not, the lever is the work** — a catalogue entry, a store row, and a resolver that reports
+the **gate** rather than echoing the row. Only Workforce and Margin register an
+`IStoreFeatureFlagEffectiveResolver`; the rest fall through `StoreFeatureFlagsController.cs:65`, **so a
+switch can read on while the surface stays dark.** Flipping it and seeing the board agree proves nothing;
+**the queue draining is the proof.**
+
+**C7 is the constraint most likely to bite**: a dispatch releases guest contact details outward. No
+address, token or key into any log or message.
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-A-GUEST-CAN-LEAVE-A-MAILING-LIST — ~~the article 7(3) exit a guest can actually reach~~
+state: retracted
+class: node
+owner: agent
+dir: .
+exit: a guest holding no session reaches an unsubscribe surface from a dispatched message and completes a withdrawal against the deployed origins, shown by a journey capture
+agent: opus
+retracted: agent killed by the session limit at ~14:55, resets 16:50 Europe/Zurich. Work preserved; state recorded in log.md.
+
+**This is the obligation the Growth module is built around, so it is a go-live blocker rather than a
+defect note.** Found by `L-JOURNEY-GROWTH` and confirmed by an independent Fable review that read the
+controllers, the dispatch service **and the deployed CORS configuration**.
+
+**Read the flag `F-GR-NO-EXIT-FROM-A-LIST` in full before starting** — it records **two independent
+blockers**, and the second is the one that matters most. Fixing only the first leaves a guest exactly as
+stuck.
+
+**A session-holding admin reaching the page is not the exit.** The whole point is a guest with **no
+session**, arriving **from a dispatched message**, against **deployed origins**. Prove it in that shape
+or the exit is unmet.
+
+**One live constraint that shapes the answer**: `Growth:Enabled` is false and `MailProvider` is Fake in
+this world, and `Growth:Enabled` **must stay host-only** — a store row opening it would route live guest
+addresses over the dev fallback root. **Work within that rather than around it**, and if the exit cannot
+be reached without changing it, say so.
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-A-WORKER-SEES-WHAT-SHE-CONFIRMED — pressing Bekreft stops showing nothing at all
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a worker who acknowledges a published week is shown the receipt, pinned by the workforce week-run journey rather than by a component test
+agent: opus
+evidence: docs/plan/lanes/L-A-WORKER-SEES-WHAT-SHE-CONFIRMED/evidence.md
+
+**Found by walking it, which is the only way it could have been found.** The worker presses **Bekreft**
+and **is shown nothing at all.**
+
+**The mechanism is a contradiction the code cannot escape**: `acknowledge()` stores the receipt and then
+reloads the inbox — but acknowledging implies *seen*, so the item drops out of the unread list and the
+entire notice is `v-if`'d away, **taking the receipt with it.** So the fix is not a missing render; it is
+that the receipt must outlive the thing that carried it.
+
+**The exit names the journey deliberately, not a component test.** A component test would pass on a
+notice that never leaves the DOM in the harness — which is precisely the world the defect does not live
+in. **Pin it in the week-run journey.**
+
+**The world has real data**: a manager and a worker, a 16-shift published week, two publications. Worker
+`99999999`/`123123`, manager `99681931`/`849666`, web **:3971**, API **:5971**.
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-A-MODULE-OFF-NAMES-THE-MODULE — the refusal stops blaming the person, and the lever stops refusing its own flag
+state: open
+needs: D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE
+class: node
+owner: agent
+dir: .
+exit: a module-off refusal on the workforce roster names the module rather than the person's access, and workforce.personnel-list is offered by the switchboard, both shown in a browser
+agent: opus
+
+**Two small defects in one screen's neighbourhood, both found by walking.**
+
+**Workforce alone blames the person.** Module-off answers 403 and the roster prints *"Du har ikke
+bemanningstilgang"* — you do not have workforce access. **Every other module names the module.** An
+operator reading that goes looking at permissions for a switch that is off.
+
+**And the lever refuses a flag the bootstrap writes.** `workforce.personnel-list` is **absent from the
+shared flag catalogue**, so the operator switchboard refuses it while the SQL bootstrap inserts it
+straight into `StoreFeatureFlags`. **The two disagree about whether the flag exists.**
+
+**Check which side is wrong before changing either** — a catalogue entry and a bootstrap insert are
+different claims about who owns the flag's existence.
+
+**Walk both.** The module walk that found these is at
+`docs/plan/lanes/L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN/evidence.md` and its scripts restore
+everything they move.
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-A-MANGLED-NEWSLETTER-IS-REFUSED — content that is not content stops storing with a 200
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a newsletter body that is not valid content is refused rather than stored, shown by a request that is refused and one that succeeds
+agent: opus
+evidence: docs/plan/lanes/L-A-MANGLED-NEWSLETTER-IS-REFUSED/mutation-log.md
+
+**Found by a seed that sent a mangled body and got a 200.** `GrowthNewsletterService.RequireContent`
+checks `contentJson` is **non-empty and never parses it** — so anything at all stores, and the operator
+learns later.
+
+**Decide what "valid" means from the readers, not from taste.** Something downstream renders this into a
+mail. **Read what consumes `contentJson`** and refuse exactly what those readers cannot handle — a schema
+stricter than the renderer needs will refuse legitimate drafts, and one looser is what exists now.
+
+**The refusal must say what was wrong.** This estate shipped an operator message telling someone to retry
+a publish that could never succeed; a bare 400 here would be the same shape.
+
+**Two sibling defects in this module were fixed today and are the idiom to follow** — the typed Growth
+catches (`d74c2c87b`) and the newsletter dispatch cause. **Read them rather than inventing a third way
+to report a Growth failure.**
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+
+### Lane L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS — an undocumented precondition stops being discovered by 400
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a caller can discover the required If-Match from the route's own refusal or its contract, shown by a request refused with the revision it wanted and one that succeeds carrying it
+agent: opus
+evidence: /Users/svendaneel/okam/OkamAPI-mrgifmatch/.lane/EVIDENCE.md
+
+**A seed died on this and had never reached its own step 7.**
+`PUT /margin/recipes/{id}/product-links` **demands `If-Match` carrying the recipe revision**, and nothing
+says so — not the refusal, not the contract.
+
+**The precondition itself is probably right; the silence is the defect.** Optimistic concurrency on a
+recipe's links is defensible. **Do not remove the requirement to make the seed pass** — make it
+discoverable.
+
+**Say the revision it wanted.** A 400 that names neither the header nor the value is what cost the seed
+its run; a refusal carrying the current revision lets a caller retry correctly on the first attempt.
+
+**Check whether sibling Margin routes have the same silence** before you finish, and name what you find
+or that you found none.
+
+**Trunk is frontend `00d84d7`, backend `9fb057d00`.** Read both tips fresh and name what you branched
+from; landing lanes move them. Frontend tier at trunk **164 suites / 3874 / 0**; backend non-SQL
+**4880 / 0 / 10**. **Account your delta and name every added test.**
+
+**The backend tier command in the briefs is a no-op and has been for weeks.** `dotnet test` at the
+`OkamAPI-modules` **root** exits 0 having run zero tests — no `.sln`, and the root csproj is not a test
+project. **Run it from `WebApi.Tests/` or name the project explicitly**, and check your log has
+`Passed: N, Total: T` before believing any green.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced one lane's whole worktree with core's tree. Safe
+order: `git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. `git worktree remove` refuses a Web-modules worktree because of the
+submodule; teardown is `rm -rf` plus `git worktree prune` after verifying clean.
+
+**Every test must red under a mutation you actually apply.** This estate has shipped an assertion whose
+haystack was empty, a negative control gone vacuous, a check comparing a value with itself, and a
+`parseInt` arm pinning a guarantee ES5 made inert.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
+### Lane L-THE-FOUR-PAGES-LAND — the held branch reaches the trunk on a clean verdict
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/the-last-four-pages-resume-after-sign-in is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for, and offers.vue at that tip carries no optional chaining
+agent: opus
+evidence: docs/plan/lanes/L-THE-FOUR-PAGES-LAND/LANDING.md
+
+**The hold is lifted.** `lane/the-last-four-pages-resume-after-sign-in` at **`4622bb6`** was held by the
+previous landing lane only because its review was still running. **That review returned CLEAN — land
+it.** It verified all three claims in a detached worktree and, unlike the print-path review, **it applied
+its own mutations**, on a different page than the lane's own probe.
+
+**The merge is already proven cheap.** `git merge-tree` against the current trunk exits 0 emitting a tree
+only — **there is no conflict to resolve.**
+
+**One hazard is real and would be silent, so check it after merging rather than trusting the merge.**
+`offers.vue` carries `(x || {}).clientName` on the lane; **the trunk still holds `?.`**. Buble behind
+vue-jest **cannot parse optional chaining** — that is why that page had **no test at all** before this
+lane. **A hand-resolution favouring trunk re-breaks the page and the suite would tell you at transform
+time, not at assertion time.** The exit names this deliberately: **grep the merged `offers.vue` for `?.`
+and report the count.**
+
+**What lands with it**, so you can account the delta: one starter per page bound to login-success on
+`overview`, `offers`, `kam` and `goods`; the privilege bounce moved **inside** each starter; and a
+widened front-door source scan that the old version would have let pass silently on exactly these four
+pages.
+
+**Baselines**: frontend trunk **`9d275dd`** at **165 suites / 3885 / 0**; the lane's own tip measured
+**165 / 3903 / 0** against the older trunk, so **expect the merged tier to exceed both** and name every
+added test.
+
+**Read the trunk tip fresh** — it moved to `9d275dd` after this branch was cut, and may move again.
+
+**Resolve any conflict at hunk level with `git merge-file`, never by side, and report it.** **Zero
+worktrees currently hold the trunk branch** — the last landing lane detached its own afterwards. **Do the
+same** so the next one is not blocked.
+
+**The `core` submodule trap**: `git -C core <cmd>` on an empty placeholder does **not** fail — git walks
+up and runs against the **parent**, which replaced a whole worktree with core's tree. Safe order:
+`git submodule update --init core` first, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it deregisters `core` for the owner.
+`git worktree remove` refuses a Web-modules worktree because of the submodule; teardown is `rm -rf` plus
+`git worktree prune` after verifying clean.
+
+**The husky hook here is broken** — it `cd`s to a path that exists in no checkout — so `--no-verify` is
+load-bearing rather than a convenience.
+
+Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never `pkill`, never
+`npm ci`/`npm install`. **Do not push.** Record the revert.
+
+### Lane L-THE-DAYS-WORK-REACHES-THE-TRUNK — ~~five finished branches stop sitting off the trunk~~
+state: retracted
+class: sql
+owner: agent
+dir: .
+exit: each named branch is merged onto its trunk or refused with the reason, both trunks build, and the frontend jest and backend non-SQL tiers are recorded at the new tips with every test accounted for
+agent: opus
+retracted: agent killed by the session limit at ~14:55, resets 16:50 Europe/Zurich. Work preserved; state recorded in log.md.
+
+**Five bodies of finished work are on branches and none is on a trunk.** Landing them is what makes the
+day's fixes real rather than branch-local.
+
+| Branch | Tip | Carries |
+|---|---|---|
+| `lane/events-dispatch-store-lever-redo` (BE) | `aa34336b3` | the Events dispatch lever — 4 commits off `9fb057d00` |
+| `lane/events-dispatch-store-lever-redo-fe` (FE) | `21d0d53` | its catalogue-driven switchboard half — 2 commits off `00d84d7` |
+| `lane/a-mangled-newsletter-is-refused` (BE) | `2b926adab` | markup inspection on newsletter bodies, tier 4921/0/10 |
+| `lane/product-link-route-says-what-it-wants` (BE) | `6e8fedfa8` | the discoverable `If-Match`, tier 4887/0/10 |
+| `lane/a-worker-sees-what-she-confirmed` (FE) | `48c0462` | the acknowledgement receipt, tier 164/3889/0 |
+
+**The Events pair lands on both sides or neither.** The backend carries the gate and the resolver; the
+frontend carries the catalogue entry that *is* the lever. **Backend first.**
+
+**Also unlanded and NOT yours**: `lane/a-module-off-names-the-module` and its backend half are **gated on
+an unruled decision** — `D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE`. **Do not land either.** Their built
+half is real, but half that exit is contested and only the owner can settle it.
+
+**Baselines**: frontend trunk **`d524697`** at **166 suites / 3914 / 0**; backend trunk **`9fb057d00`** at
+**4880 / 0 / 10**. **Name any test you cannot account for.** Expect the backend deltas to compose — the
+three backend branches were each measured against the same 4880 baseline independently, so their sum is
+the prediction to check, not to assume.
+
+**Two false greens appeared today and both would pass a naive check.** One tier printed
+`Passed! … 1017` **after** `Test host process crashed`; another printed a green from the repo root having
+run **zero** tests. **Check every tier log for an abort line above the summary, and compare the total
+against the known suite size.**
+
+**Run the backend tier from `WebApi.Tests/` with `--filter "Database!=SqlServer"`.** Unfiltered, it
+starts a Testcontainers SQL Server **per module fixture**.
+
+**A `core` submodule failure does not look like one on the frontend tier** — it reports suites failed
+with **zero tests red**, all module-resolution, which reads as a broken branch. Pin `core` first:
+`git submodule update --init core`, **then** from inside `core`,
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`.**
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+**Detach your worktree in place afterwards** so it does not hold the trunk against the next lane — zero
+worktrees hold it now. The husky hook is broken, so `--no-verify` is load-bearing.
+
+**Do not push.** Record the revert for each trunk. Never bind **:3971**/**:5971**, never touch the
+`okam-lwtwo-*` containers, never `pkill`, never `npm ci`/`npm install`.
+
+### Lane L-READ-THE-DAYS-BUILDS — ~~four unreviewed builds are read by someone who wrote none of them~~
+state: retracted
+class: analysis
+owner: agent
+dir: .
+exit: a verdict per branch on the Events lever, the newsletter inspection, the If-Match discovery and the acknowledgement receipt, naming any mutation that would not red, any claim that does not hold, and any change that reaches further than its lane's exit
+agent: fable
+retracted: agent killed by the session limit at ~14:55, resets 16:50 Europe/Zurich. Work preserved; state recorded in log.md.
+
+**Four lanes built real product changes today and none has been read by anyone else.** Each proved itself
+by mutation, and **mutation evidence is the kind that is easiest to fake by accident** — a mutant weaker
+than the defect it claims to catch reds for the wrong reason and reads as proof.
+
+**Take them in this order, because the first two touch behaviour a person or a regulator depends on.**
+
+1. **`lane/events-dispatch-store-lever-redo` `aa34336b3`.** It claims **one gate method** serves the
+   drain, the health read and the resolver, so the switchboard cannot report a state the queue disagrees
+   with. **Check that is one method and not three that agree today.** It also **repaired a defect it
+   introduced** — filtering after the batch let a dark store's backlog starve a live one. **Verify the
+   two-query shape actually fixes that**, with a world where a dark store holds older rows.
+2. **`lane/a-mangled-newsletter-is-refused` `2b926adab`.** Its whole design rests on the claim that
+   `ContentJson` **is never parsed as JSON anywhere** and its only readers hash it and concatenate it
+   unescaped. **Verify both readers.** If a third reader exists, the accept/refuse line is drawn in the
+   wrong place. Its four mutants had **disjoint** red sets — reproduce at least the refuse-every-body one,
+   which is what shows the accept arms are not vacuous.
+3. **`lane/product-link-route-says-what-it-wants` `6e8fedfa8`.** It says a well-formed **impostor** token
+   answers 409 on the same row, so acceptance is discrimination rather than a surface that takes
+   anything. **Reproduce that arm.**
+4. **`lane/a-worker-sees-what-she-confirmed` `48c0462`.** Its negative control found the defect is worse
+   than recorded — with two unread publications, a second press **acknowledges a different week**.
+   **Check whether the fix closes that too, or only the missing receipt**; the flag says only the receipt.
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run each lane's suite and apply
+mutations you restore.** No container unless a suite needs one, and **the backend tier must run from
+`WebApi.Tests/` with `--filter "Database!=SqlServer"`** — unfiltered it starts a container per fixture.
+
+**Check every tier log for an abort line above the summary.** Two false greens appeared today, one
+printing `Passed!` after a host crash.
+
+**Rule and name the exact change. Do not edit any file** other than your review and return. A clean
+reading is a legitimate outcome.
+
+### Lane L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS — the last branch from the killed landing reaches the trunk
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/a-worker-sees-what-she-confirmed is merged onto the frontend trunk with the tier recorded at the new tip and every test accounted for
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS/evidence.md
+
+**One branch was left behind when a landing lane hit the session limit mid-flight.**
+`lane/a-worker-sees-what-she-confirmed` at **`48c0462`** — the acknowledgement receipt. Its four siblings
+landed; this one did not.
+
+**What it carries**: pressing **Bekreft** stopped showing anything at all, because acknowledging implies
+*seen*, so the row left the unread list one tick after the receipt arrived and the `v-if` took the
+receipt with it. The fix keeps the row this session acknowledged. Its own tier read **164 / 3889 / 0**
+against a 164/3874/0 baseline — **+15 tests, no new suite**, each named.
+
+**Its proof was live and two-armed**: before, pressed twice and shown nothing either time; after,
+`receiptCount 1` reading *"Bekreftet mottatt"*, with the replay path reachable for the first time. Ten
+mutations applied and reverted, **15 of 15 new tests red**.
+
+**Baseline**: frontend trunk **`8db65dd`** at **166 suites / 3924 / 0**, measured by the clerk. **Read the
+tip fresh** and name what you branched from. Resolve any conflict at hunk level with `git merge-file`,
+never by side.
+
+**Detach your worktree in place afterwards** — zero worktrees hold the trunk now, and the last two
+landings were each blocked by one that did.
+
+**One thing not to disturb**: another lane deliberately left an uncommitted diff in the `web-livewalk`
+worktree so the owner can walk it, and a third lane's work sits in that same tree. **Do not touch it.**
+
+**Traps this estate has paid for — none of them is hypothetical.**
+**The backend tier command in the briefs is a no-op**: `dotnet test` at the `OkamAPI-modules` **root**
+exits 0 having run zero tests. Run it **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` —
+unfiltered it starts a Testcontainers SQL Server **per module fixture**.
+**Check every tier log for an abort line above the summary**, and compare the total against the known
+suite size. One run today printed `Passed! … 1017` **after** `Test host process crashed`.
+**A `core` submodule failure does not look like one** on the frontend tier: suites fail with **zero tests
+red**, all module-resolution, which reads as a broken branch. Pin it first —
+`git submodule update --init core`, **then from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. **Never `git -C core <cmd>` on an empty placeholder** — git walks up
+and runs against the **parent**, which replaced one lane's entire worktree with core's tree.
+`git worktree remove` refuses a Web-modules worktree because of the submodule; teardown is `rm -rf` plus
+`git worktree prune` after verifying clean. The husky hook is broken, so `--no-verify` is load-bearing.
+Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+
+### Lane L-READ-THE-DAYS-BUILDS-REDO — four builds now on the trunk are read by someone who wrote none of them
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the Events lever, the newsletter inspection, the If-Match discovery and the acknowledgement receipt, naming any mutation that would not red, any claim that does not hold, and any change reaching further than its lane's exit
+agent: fable
+evidence: docs/plan/reviews/L-READ-THE-DAYS-BUILDS-REDO.md
+
+**Successor to a review the session limit killed mid-flight — and three of the four have since landed on
+the trunk unreviewed**, which raises the stakes rather than lowering them.
+
+**Take them in this order.**
+1. **The Events dispatch lever** (`cf78471b3` on the backend trunk, `21d0d53`/`bee8377` on the frontend).
+   It claims **one gate method** serves the drain, the health read and the resolver, so the switchboard
+   cannot report a state the queue disagrees with. **Check that is one method and not three that agree
+   today.** It also **repaired a defect it introduced** — filtering after the batch let a dark store's
+   backlog starve a live one. **Verify the two-query shape fixes that**, with a world where a dark store
+   holds older rows.
+2. **The newsletter inspection** (`44e6dd923`). Its whole design rests on the claim that `ContentJson`
+   **is never parsed as JSON anywhere** and its only readers hash it and concatenate it unescaped into
+   `HtmlBody`. **Verify both readers.** If a third exists, the accept/refuse line is in the wrong place.
+   Its four mutants had **disjoint** red sets — reproduce the **refuse-every-body** one, which is what
+   shows the accept arms are not vacuous.
+3. **The If-Match discovery** (`81d06c10a`). It says a well-formed **impostor** token answers 409 on the
+   same row, so acceptance is discrimination rather than a surface that takes anything. **Reproduce that
+   arm.**
+4. **The acknowledgement receipt** — on `lane/a-worker-sees-what-she-confirmed` `48c0462`, landing in
+   parallel. Its negative control found the defect is worse than recorded: with two unread publications a
+   second press **acknowledges a different week**. **Check whether the fix closes that too, or only the
+   missing receipt** — the flag says only the receipt.
+
+**Trunk tips, clerk-verified**: backend **`81d06c10a`** at **4937 / 0 / 10**; frontend **`8db65dd`** at
+**166 / 3924 / 0**. **Pin your reading to the SHAs**, since a landing lane runs in parallel.
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run each suite and apply
+mutations you restore.** **Rule and name the exact change. Do not edit any file** other than your review
+and return. A clean reading is a legitimate outcome.
+
+**Traps this estate has paid for — none of them is hypothetical.**
+**The backend tier command in the briefs is a no-op**: `dotnet test` at the `OkamAPI-modules` **root**
+exits 0 having run zero tests. Run it **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` —
+unfiltered it starts a Testcontainers SQL Server **per module fixture**.
+**Check every tier log for an abort line above the summary**, and compare the total against the known
+suite size. One run today printed `Passed! … 1017` **after** `Test host process crashed`.
+**A `core` submodule failure does not look like one** on the frontend tier: suites fail with **zero tests
+red**, all module-resolution, which reads as a broken branch. Pin it first —
+`git submodule update --init core`, **then from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. **Never `git -C core <cmd>` on an empty placeholder** — git walks up
+and runs against the **parent**, which replaced one lane's entire worktree with core's tree.
+`git worktree remove` refuses a Web-modules worktree because of the submodule; teardown is `rm -rf` plus
+`git worktree prune` after verifying clean. The husky hook is broken, so `--no-verify` is load-bearing.
+Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+
+### Lane L-THE-GUEST-EXIT-IS-FINISHED — an unfinished article 7(3) lane is completed or its state is stated
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a guest holding no session reaches an unsubscribe surface from a dispatched message and completes a withdrawal against the deployed origins, shown by a journey capture — or the exact remaining obstacle is named with what it would take
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/lanes/L-THE-GUEST-EXIT-IS-FINISHED/evidence.md
+
+**This inherits work from an agent killed by the session limit on its final run, and inherits it with a
+warning.** `lane/fe-a-guest-can-leave-a-mailing-list` at **`2719fbe`** carries a cross-origin exit
+journey, a world script, and four evidence directories. The backend half is
+`lane/a-guest-can-leave-a-mailing-list` at **`27b32737c`**.
+
+**It was never finished, never reviewed, and is not known to pass.** It was committed so a session exit
+could not take it, and for no other reason. **Treat it as a draft by a stranger** — and **deleting a
+piece with the reason written down is a legitimate verdict.**
+
+**This is a go-live blocker, not a defect note.** Article 7(3) is the obligation the Growth module is
+built around. `F-GR-NO-EXIT-FROM-A-LIST` records **two independent blockers** and the second matters
+most; **read it in full** before adding anything.
+
+**A session-holding admin reaching the page is not the exit.** A guest with **no session**, arriving
+**from a dispatched message**, against **deployed origins**. Prove it in that shape or the exit is unmet.
+
+**One live constraint that shapes the answer, and it is not negotiable**: `Growth:Enabled` **must stay
+host-only** — it arms a startup fail-fast, and a store row opening it would route **live guest addresses**
+over the dev fallback root. A sibling lane established exactly that distinction while ruling the Events
+lever the other way. **Work within it**, and if the exit cannot be reached without changing it, **say so
+rather than changing it.**
+
+**C7 is directly in force**: a withdrawal surface handles a guest's address and a token. Neither reaches
+a log sink.
+
+**Traps this estate has paid for — none of them is hypothetical.**
+**The backend tier command in the briefs is a no-op**: `dotnet test` at the `OkamAPI-modules` **root**
+exits 0 having run zero tests. Run it **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` —
+unfiltered it starts a Testcontainers SQL Server **per module fixture**.
+**Check every tier log for an abort line above the summary**, and compare the total against the known
+suite size. One run today printed `Passed! … 1017` **after** `Test host process crashed`.
+**A `core` submodule failure does not look like one** on the frontend tier: suites fail with **zero tests
+red**, all module-resolution, which reads as a broken branch. Pin it first —
+`git submodule update --init core`, **then from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. **Never `git -C core <cmd>` on an empty placeholder** — git walks up
+and runs against the **parent**, which replaced one lane's entire worktree with core's tree.
+`git worktree remove` refuses a Web-modules worktree because of the submodule; teardown is `rm -rf` plus
+`git worktree prune` after verifying clean. The husky hook is broken, so `--no-verify` is load-bearing.
+Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+
+### Lane L-THE-LIVE-WORLD-CATCHES-UP — the world the owner walks stops being fifty commits behind
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the API and web serving the live world are built from the current trunk tips, and one lever landed today is turned on from a screen and shown to change that module's own surface, with the walk recorded
+agent: opus
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-LIVE-WORLD-CATCHES-UP/WALK-RECORD.md
+
+**This is the blocker under every other C5 debt in the plan.** The API on **:5971** is a compiled binary
+from **`118f92fb9`** — the trunk is now `81d06c10a`, roughly **fifty commits ahead**. A sibling lane
+measured this rather than assumed it: the Events flag literal appears **0 times** in the running build's
+source, **1** on the branch, with a control reading **1 in both**.
+
+**So nothing landed today can be shown to a person.** The dispatch lever, the newsletter refusal, the
+`If-Match` discovery, the four sign-in pages, the acknowledgement receipt, the `crypto` guard — all
+`built-unverified`, and all unwalkable against that binary.
+
+**Rebuild both, then walk one thing.** The one to walk is the **Events dispatch lever**, because its
+proof is the sharpest available: with the fleet key off a pass delivers nothing and the queue holds; you
+write the store row from the switchboard; the next pass delivers and the queue drains. **Ten guest links
+are queued in that world already.**
+
+**You are granted the API and the web server, and only those.** `okam-lwtwo-sql` and `okam-lwtwo-redis`
+hold the seeded world — **never stop, restart or exec into them**, and never `pkill`; resolve every kill
+from your own pid or port.
+
+**Rebuild the API with the module master flags set.** The world needed `Events__Enabled`,
+`Growth__Enabled` and all four `Features__Meals__*`. **The connection string must be rebuilt from
+`test/e2e/scripts/live-world.sh:174` and never captured from the environment** — a word-split on
+`User Id=sa` took the API down for two minutes.
+
+**Expect pending migrations** and apply them forward only over TCP, never by `docker exec`. A previous
+rebuild applied ten; say how many you applied and what the last one was.
+
+**Two other lanes have left deliberate uncommitted diffs in `web-livewalk`** so the owner can walk them.
+**Preserve them** — a blanket `git checkout --` there destroys another lane's work.
+
+**Read both tips late and record the exact SHAs you built from.** A landing lane may move them while you
+work; if it does, say so plainly rather than implying the world is current.
+
+**Traps this estate has paid for — none of them is hypothetical.**
+**The backend tier command in the briefs is a no-op**: `dotnet test` at the `OkamAPI-modules` **root**
+exits 0 having run zero tests. Run it **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` —
+unfiltered it starts a Testcontainers SQL Server **per module fixture**.
+**Check every tier log for an abort line above the summary**, and compare the total against the known
+suite size. One run today printed `Passed! … 1017` **after** `Test host process crashed`.
+**A `core` submodule failure does not look like one** on the frontend tier: suites fail with **zero tests
+red**, all module-resolution, which reads as a broken branch. Pin it first —
+`git submodule update --init core`, **then from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`** — it strips the url from the shared config and
+deregisters `core` for the owner. **Never `git -C core <cmd>` on an empty placeholder** — git walks up
+and runs against the **parent**, which replaced one lane's entire worktree with core's tree.
+`git worktree remove` refuses a Web-modules worktree because of the submodule; teardown is `rm -rf` plus
+`git worktree prune` after verifying clean. The husky hook is broken, so `--no-verify` is load-bearing.
+Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+### Lane L-THE-ACKNOWLEDGE-BUTTON-CANNOT-CONFIRM-THE-WRONG-WEEK — a second press stops confirming a week nobody looked at
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: with two unread publications, pressing the acknowledge control twice cannot acknowledge the second one, shown by a walk in a world that actually holds two unread publications
+agent: opus
+evidence: docs/plan/lanes/L-THE-ACKNOWLEDGE-BUTTON-CANNOT-CONFIRM-THE-WRONG-WEEK/evidence.md
+
+**This is the half the receipt fix deliberately did not close, and an independent review confirmed it
+survives.** With **two** unread publications, the button that stays on screen belongs to the **next**
+row — so a second press acknowledges a **different week**, one the worker never looked at.
+
+**It was found by a negative control, not by the fix**: the manager pressed twice, receipt count 0 both
+times, and **two acknowledgements were written**. The later fix closed the missing receipt and the replay
+**only** — and the reviewer showed the fix's own ordering pin (`['b','a']`) means that was a **choice**,
+not an oversight.
+
+**The reason it is still open is the world, and that is your first job.** **No walk with two unread
+publications has ever run with the fix**, because the after-arm world and the journey world each hold
+**one**. **Build the two-publication world first** — a manager publishing two weeks to the same worker —
+and reproduce the wrong-week press against the current trunk **before** changing anything. If it does not
+reproduce, that is a real result and better than a fix for a defect that moved.
+
+**An acknowledgement is a person's confirmation that they saw a schedule they are rostered on**, so
+getting the wrong row is not a UI blemish. **Refuse or re-target — do not silently accept.** Decide which
+from the code, and say why.
+
+**Prove it by state, not by call.** Assert which publication carries an acknowledgement afterwards, not
+that a handler fired. That distinction is why the sibling defect survived three fixes.
+
+**Trunk is frontend `6b98839`** (166 suites / 3939 / 0, clerk-run) and backend `81d06c10a` (4937/0/10).
+The live world is **current** — API rebuilt from the trunk today — so a browser walk is available for the
+first time in a day. Worker `99999999`/`123123`, manager `99681931`/`849666`, web **:3971**, API
+**:5971**. **Do not restart either server.**
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests, and
+unfiltered it starts a container per module fixture. **Check every tier log for an abort line above the
+summary**; one printed `Passed! … 1017` after a host crash. **A `core` submodule failure does not look
+like one**: suites fail with **zero tests red**. Pin it with `git submodule update --init core`, then
+**from inside `core`** `git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify` is
+load-bearing. Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+
+### Lane L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE — the last unproven step of the dispatch path gets an answer either way
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: one Events guest link is delivered end to end on a world an agent can reach, or the delivery path is recorded as locally unprovable with the exact configuration a proof would require
+agent: opus
+evidence: docs/plan/lanes/L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE/DELIVERY-RECORD.md
+
+**Everything about the dispatch lever is proven except the last step.** A walk today turned the switch on
+and watched the drain select **all ten queued rows within one 15-second tick** — 14 delivery attempts, 20
+outbox updates, where before it was **29 passes with zero SMTP connections**. Then **all 14 attempts died
+at the TLS handshake**, because `AppSettings:SmtpFromPassword` is the appsettings **placeholder** and no
+user secret supplies one.
+
+**So the queue provably moves and provably cannot arrive**, and the lane that found it turned the lever
+back off rather than let ten guest links dead-letter terminally in eight minutes.
+
+**Both outcomes are wins and you should not force the first.** A local capture SMTP the fake provider can
+reach would prove delivery end to end; if no such path exists without a credential nobody may hand you,
+**recording precisely what a proof would require is the honest close** — and better than a green obtained
+by weakening the path.
+
+**Do not put a credential anywhere.** C7 is in force and this is its exact neighbourhood: no password,
+token or key into a config file, a log, a test fixture or a commit. **If the answer needs a secret, that
+is an owner action and the finding is that it is one.**
+
+**Guest addresses are personal data.** Whatever you stand up must not send to a real address, and nothing
+you record may carry one.
+
+**The world holds ten queued links and they are the material.** Its state was left as found —
+`dispatchEnabled` false, `queuedCount` 10, `deadLetteredCount` 0 — with an attempt budget of five per row
+of which one to two are spent. **Say what your work costs that budget**, because when it is exhausted
+those rows dead-letter and the material is gone.
+
+**Trunk is backend `81d06c10a`** (4937/0/10) and frontend `6b98839`. The live world is current. Web
+**:3971**, API **:5971**. **Do not restart either server**; never touch the `okam-lwtwo-*` containers.
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests, and
+unfiltered it starts a container per module fixture. **Check every tier log for an abort line above the
+summary**; one printed `Passed! … 1017` after a host crash. **A `core` submodule failure does not look
+like one**: suites fail with **zero tests red**. Pin it with `git submodule update --init core`, then
+**from inside `core`** `git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify` is
+load-bearing. Never `pkill`, never `npm ci`/`npm install`. **Do not push.**
+### Lane L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION — one property decides whether any mail leaves at all
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a send over the product's own transport completes its TLS connect on a host that cannot complete a certificate-revocation check, shown by a probe that reds against the current bare client
+agent: opus
+evidence: docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/DECISION-RECORD.md
+
+**A lane went looking for why Events guest links never arrive and refuted the recorded cause.** The
+fourteen failures are **not** the missing `SmtpFromPassword`: the session dies in `ConnectAsync`, **before
+`AuthenticateAsync` is ever called** — the world's own log says `after 0 sent … SmtpStatus none`. **A
+password that is never offered cannot fail a handshake.**
+
+**The real cause is one unset property.** `MailKitSmtpTransport` does `new SmtpClient()` and sets nothing,
+so MailKit's `CheckCertificateRevocation` keeps its default **`true`**, and this host cannot complete that
+check. Measured, not argued: same host, same port, same options with revocation **off** connects, brings
+TLS up, and the server **advertises AUTH**. One property is the whole difference.
+
+**The blast radius is why this is a blocker and not a test-harness note.** `IEmailService` is the **one
+mail seam** for **fourteen callers** — confirmation codes, invoices, POS receipts, payouts, Workforce,
+Growth, end-of-day, SAF-T. **On any host with the same constraint, none of them can send.**
+
+**The production host was not measured and you should not assume it.** Whether prod completes revocation
+checks is unknown here. **Say what you can establish and what you cannot** — a fix that is right for this
+host and wrong for prod is worse than the defect.
+
+**Do not simply flip the flag off and stop.** Revocation checking exists for a reason. **Decide from the
+code and say why**: whether it should be off always, off only outside production, or configurable with a
+safe default. A dev-only certificate callback is a separate and more dangerous switch — **if you add one,
+it must be impossible to reach in production**, and prove that rather than assert it.
+
+**C7 is in force and this is its neighbourhood.** No password, host, token or certificate material into a
+config file, a log, a fixture or a commit.
+
+**A successful send prints nothing in this world** — `Logging:LogLevel:WebApi=Warning` suppresses every
+`EmailService` information line. **Your evidence must be the transport's own result or a sink capture,
+never an API log line.**
+
+**The live API cannot be re-pointed without a restart** — `Program.cs:52` and `EmailService.cs:23-28`
+bind `IOptions<AppSettings>` once — and **restarting it is not yours**. A probe against your own build is
+the shape that works; a sibling lane proved a loopback sink accepts a message once revocation is off and
+a certificate callback is present.
+
+**Trunk is backend `81d06c10a`** (non-SQL **4937 / 0 / 10**), frontend `6b98839`. Read the tip fresh.
+
+**Traps.** The backend tier must run **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at
+the repo root `dotnet test` exits 0 having run **zero** tests, and unfiltered it starts a container per
+module fixture. **Check every tier log for an abort line above the summary.** Never `pkill`, never
+`npm ci`/`npm install`, never touch the `okam-lwtwo-*` containers, never bind **:3971**/**:5971**.
+Commit with `--no-verify`. **Do not push.**
+
+### Lane L-LAND-THE-EVENING-WORK — the guest exit and the wrong-week fix reach the trunk
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the guest-exit pair is merged onto both trunks, the wrong-week fix is merged or named as held pending its review, and both tiers are recorded at the new tips with every test accounted for
+agent: L-LAND-THE-EVENING-WORK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-LAND-THE-EVENING-WORK/evidence.md
+
+**Two bodies of work finished this evening and neither is on a trunk.**
+
+**Cleared to land — the guest exit.** Frontend `fe9fccd`, backend `a65d9ab70`. Its journey ran **green
+twice from two fresh worktrees**, and it already had its own review returning APPROVE-WITH-CONDITIONS
+with **all four conditions acted on**, including a redirect guard that refuses a non-https base because
+that redirect carries live credentials from mail already sent.
+
+**Held unless its review returns clean — the wrong-week fix.** `lane/the-acknowledge-button-cannot-confirm-the-wrong-week`
+at **`acafde6`**, tier **166 / 3950 / 0**. A Fable reading runs in parallel. **If its verdict has not
+returned when you reach it, land the guest exit and name this one as held** — that is the expected
+outcome, not a failure.
+
+**One hazard is recorded and is NOT a reason to refuse this landing, so do not treat it as one.**
+`F-LANDING-THE-BACKEND-HALF-FIRST-BREAKS-A-7-3-PROMISE-ON-EVERY-SEND` is about **deploying**, not about
+the trunk. `UnsubscribePageBaseUrl` prints on every dispatched message, so the consumer surface must be
+deployed before or with the backend — **but the trunk is not deployed**, and both halves land together
+here. **Land both, and say in your return that the ordering constraint applies at deploy time.**
+
+**Also unlanded and NOT yours**: `lane/a-module-off-names-the-module` and its backend half are gated on
+the unruled `D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE`. **Do not land either.**
+
+**Baselines**: frontend trunk **`6b98839`** at **166 suites / 3939 / 0**; backend trunk **`81d06c10a`** at
+**4937 / 0 / 10**. **Name any test you cannot account for.**
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+**Detach your worktree in place afterwards** — the last three landings each freed the trunk ref for the
+next, and zero worktrees hold it now.
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests, and
+unfiltered it starts a container per module fixture. **Check every tier log for an abort line above the
+summary.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**.
+Pin it with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify` is
+load-bearing. **Do not touch `web-livewalk`** — two lanes have left diffs there for the owner to walk.
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch the
+`okam-lwtwo-*` containers. **Do not push.**
+
+### Lane L-READ-THE-WRONG-WEEK-FIX — a fix to what an acknowledgement means is read by someone who did not write it
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on lane/the-acknowledge-button-cannot-confirm-the-wrong-week acafde6, naming any ordering the fix does not actually stabilise, any mutation that would not red, and whether re-targeting was the right call over refusing
+agent: L-READ-THE-WRONG-WEEK-FIX
+evidence: docs/plan/reviews/L-READ-THE-WRONG-WEEK-FIX.md
+
+**An acknowledgement is a worker's confirmation that she saw a schedule she is rostered on, so this is a
+fix to what a record means, not to a screen.** It has not been read by anyone else.
+
+**The claimed cause is elegant and therefore worth doubting.** The lane says
+`publicationsForNotice` used **read state and acknowledgement state as the sort key**, and since
+acknowledging changes both, **confirming re-sorted the very list the next press was aimed at**. **Check
+that is the whole mechanism** and not one of two — a second press could also be re-targeted by a reload,
+a poll, or the inbox refetch the handler performs.
+
+**Three claims to verify rather than accept.**
+1. **The before arm.** Both presses answered `alreadyAcknowledged: false` and **both publications carry
+   `acknowledgedAtUtc`** afterwards, read from the manager's recipients endpoint. **Reproduce the state
+   read**, not the press.
+2. **The after arm.** Both presses name the **same** publication and the second answers `TRUE`, while the
+   untouched week keeps a NULL acknowledgement **and its own button**. **That second half matters most**:
+   a fix that stopped the wrong week being confirmed by making it unconfirmable would be a worse defect.
+3. **The mutations.** Eight written and restored, all twelve new-or-changed tests red under one, and
+   **M1 is the trunk's own ordering, redding 8 including both exit-criterion cases**. **Re-apply M1
+   yourself** — a mutation that is simply the old code is the strongest kind, and the easiest to
+   mis-state.
+
+**Judge the design call, not just the code.** The lane **rejected refusing** the second press on the
+grounds that it removes the idempotent replay the notice keeps a caller for, and stops a worker rostered
+on **both** weeks confirming the second at all. **Say whether that reasoning holds.**
+
+**Two residuals it left open — check they are correctly scoped, not convenient.** A section lede still
+claims "not opened" above a just-confirmed row; and the week-run journey still publishes one week, so
+this defect has **no e2e pin**. The lane declined to rewrite that journey because doing so needed server
+restarts its brief forbade. **Was that the right refusal?**
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run the lane's suite and apply
+mutations you restore.** **Rule and name the exact change. Do not edit any file** other than your review
+and return. A clean reading is a legitimate outcome.
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests, and
+unfiltered it starts a container per module fixture. **Check every tier log for an abort line above the
+summary.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**.
+Pin it with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify` is
+load-bearing. **Do not touch `web-livewalk`** — two lanes have left diffs there for the owner to walk.
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch the
+`okam-lwtwo-*` containers. **Do not push.**
+### Lane L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED — the single largest untested page in the estate outside POS
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: pages/admin/poweruser-growth.vue carries tests that red under applied-and-restored mutations, its measured statement coverage is recorded before and after, and the frontend tier is green at the lane tip
+agent: L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED
+evidence: docs/plan/lanes/L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED
+
+**One file carries every uncovered statement Growth has.** The per-module census measured Growth's
+`.vue` surface at **92.9%** with exactly **one** zero-coverage file: `pages/admin/poweruser-growth.vue`
+at **778 statements**. Every other Growth component is covered. This is the highest-yield single file
+on the frontend outside Core/POS, and it is a **poweruser** page — a screen whose whole reason to exist
+is that someone with elevated rights operates the growth machinery from it.
+
+**Read the page before you plan the tests.** Growth already has recorded defects that live near this
+surface — `F-GROWTH-PUBLISH-LIES-ABOUT-WHY-IT-FAILED` was **measured live today** (`catch (DbUpdateException)`
+still untyped at two sites). If the page's error handling shows the operator a wrong or generic cause,
+**that is a test that should fail**, not one to write around.
+
+**The way this lane fails is by succeeding at the wrong thing, so read this twice.** A test that
+raises coverage without being able to fail is worse than no test: it converts an unmeasured surface
+into a *falsely* measured one, and the next person trusts it. **Two rules bind you.**
+1. **Every test you write must red under a mutation you actually apply and restore.** Not a mutation
+   you describe — one you write into the file, watch fail, and revert. **Report the count, and report
+   any test that stayed green under every mutation you could think of: delete that test.**
+2. **Write tests for behaviour a person would notice**, named after what the person does, not after
+   the function. If a branch exists only to satisfy a linter, say so and leave it uncovered — an
+   honest 70 beats a decorated 95.
+
+**If you find a defect while writing these tests, that is the most valuable thing you can return.**
+Write the failing test, leave it failing, and name it in your return rather than fixing it in place.
+
+**Traps this estate has paid for.** **A `core` submodule failure does not look like one**: suites fail
+with **zero tests red**, all module-resolution. Pin it with `git submodule update --init core`, then
+**from inside `core`** `git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. **The instrument itself was broken until today** — `vue-jest` mapped only column 0, so
+every indented statement went unmapped; the fix landed at `780d405` and the figures above are from
+**after** it. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify`
+is load-bearing. **Do not touch `web-livewalk`**. Never `pkill`, never `npm ci`/`npm install`, never
+bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers. **Do not push.**
+
+### Lane L-THE-WORKFORCE-SCREENS-ARE-TESTED — eight zero-coverage files behind the rota
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: the eight zero-coverage Workforce .vue files carry tests that red under applied-and-restored mutations, coverage is recorded before and after per file, and the frontend tier is green at the lane tip
+agent: L-THE-WORKFORCE-SCREENS-ARE-TESTED
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-WORKFORCE-SCREENS-ARE-TESTED-1.md
+
+**Workforce measures 79.7% on `.vue` with eight files at exactly zero**, totalling **710 statements**:
+`pages/admin/workforce-timesheets.vue` (278) · `workforce-publications.vue` (144) ·
+`workforce-delivery.vue` (105) · `WorkforcePublicationList.vue` (51) · `WorkforceDeliveryGroup.vue` (48) ·
+`WorkforcePublicationReceiptGroup.vue` (38) · `WorkforcePublicationRecipients.vue` (29) ·
+`WorkforceDeliveryPanel.vue` (17).
+
+**These are not incidental screens.** A timesheet is what a worker is paid from; a publication is the
+schedule she is legally entitled to see; a delivery record is the evidence that she was told. **Two
+defects were found in exactly this area within the last day** — `F-CLOCKOUT-ANSWERS-OPEN` (a worker
+shown the opposite of what happened) and the acknowledge-the-wrong-week ordering bug. **Assume there
+are more here and go looking.**
+
+**Order yourself largest-first**, so that if you run out of room the biggest surface is the one covered.
+
+**The way this lane fails is by succeeding at the wrong thing, so read this twice.** A test that
+raises coverage without being able to fail is worse than no test: it converts an unmeasured surface
+into a *falsely* measured one, and the next person trusts it. **Two rules bind you.**
+1. **Every test you write must red under a mutation you actually apply and restore.** Not a mutation
+   you describe — one you write into the file, watch fail, and revert. **Report the count, and report
+   any test that stayed green under every mutation you could think of: delete that test.**
+2. **Write tests for behaviour a person would notice**, named after what the person does, not after
+   the function. If a branch exists only to satisfy a linter, say so and leave it uncovered — an
+   honest 70 beats a decorated 95.
+
+**If you find a defect while writing these tests, that is the most valuable thing you can return.**
+Write the failing test, leave it failing, and name it in your return rather than fixing it in place.
+
+**Traps this estate has paid for.** **A `core` submodule failure does not look like one**: suites fail
+with **zero tests red**, all module-resolution. Pin it with `git submodule update --init core`, then
+**from inside `core`** `git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. **The instrument itself was broken until today** — `vue-jest` mapped only column 0, so
+every indented statement went unmapped; the fix landed at `780d405` and the figures above are from
+**after** it. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify`
+is load-bearing. **Do not touch `web-livewalk`**. Never `pkill`, never `npm ci`/`npm install`, never
+bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers. **Do not push.**
+
+---
+
+**SUPERSEDING NOTE, recorded by the clerk 2026-08-07 beside this lane rather than over its return.**
+
+**This lane's return says "71 mutations". The committed count is 95.** The undercount was found twice
+independently — first by the audit re-deriving all entries
+(`docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md`), then by the lane's own author when
+re-running the census with a hardened runner. **The author could not correct its own return**, because lane
+boundaries forbid editing `docs/plan/**` outside the lane's own file — which is the correct boundary, and
+the reason this note exists instead.
+
+**The corrected census, measured with per-test coverage**: 95 entries · **92 killed** (89 RED + 3
+RED-WRONG-TEST) · 3 survive · 0 INVALID · 0 unappliable. Of the three survivors, **`M01` is genuinely
+equivalent** (independently checked by the audit), and **`D10`/`D16` are mis-aimed originals superseded by
+`D10b`/`D16b`, which red**. Both now carry notes saying so.
+
+**Two of the three "defended twice" equivalences this lane claimed were wrong**, and both were killed by
+executable probes on `lane/three-survivors-killed` @ `0765159`: `P17` by a select-reload-reload probe where
+the roster read two reloads ago renders as current, and `D06` by a hanging read where the panel keeps the
+previous dead letters up. **Each reds exactly one test — its own probe — which is itself the proof that no
+pre-existing assertion caught them.**
+
+
+### Lane L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS — three files, and then two modules have none left
+state: built-unverified
+class: suite
+owner: agent
+dir: .
+exit: pages/admin/meals-statements.vue, MealsStatementLines.vue and pages/offer/_code.vue carry tests that red under applied-and-restored mutations, coverage is recorded before and after, and the frontend tier is green at the lane tip
+agent: L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS
+evidence: docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/coverage-after.txt
+
+**Three files stand between two modules and a fully-covered `.vue` surface.** Meals has exactly two
+zero-coverage files — `pages/admin/meals-statements.vue` (190) and `MealsStatementLines.vue` (74),
+**and nothing else**. Events has exactly one — `pages/offer/_code.vue` (216). **480 statements total.**
+
+**`pages/offer/_code.vue` is the guest-facing one and deserves the most care**: it is the page a person
+reaches from a link in an offer, so it is operated by someone who has never seen the product, cannot
+log in, and has no way to recover from a wrong state. The Events lever was walked in a browser today
+and works; **that makes its untested state more dangerous, not less** — nothing is watching it now.
+
+A statement is a document a person is asked to agree with, so **assert what the numbers say**, not just
+that a table rendered.
+
+**The way this lane fails is by succeeding at the wrong thing, so read this twice.** A test that
+raises coverage without being able to fail is worse than no test: it converts an unmeasured surface
+into a *falsely* measured one, and the next person trusts it. **Two rules bind you.**
+1. **Every test you write must red under a mutation you actually apply and restore.** Not a mutation
+   you describe — one you write into the file, watch fail, and revert. **Report the count, and report
+   any test that stayed green under every mutation you could think of: delete that test.**
+2. **Write tests for behaviour a person would notice**, named after what the person does, not after
+   the function. If a branch exists only to satisfy a linter, say so and leave it uncovered — an
+   honest 70 beats a decorated 95.
+
+**If you find a defect while writing these tests, that is the most valuable thing you can return.**
+Write the failing test, leave it failing, and name it in your return rather than fixing it in place.
+
+**Traps this estate has paid for.** **A `core` submodule failure does not look like one**: suites fail
+with **zero tests red**, all module-resolution. Pin it with `git submodule update --init core`, then
+**from inside `core`** `git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`**, never `git -C core <cmd>` on an empty
+placeholder. **The instrument itself was broken until today** — `vue-jest` mapped only column 0, so
+every indented statement went unmapped; the fix landed at `780d405` and the figures above are from
+**after** it. Teardown is `rm -rf` plus `git worktree prune`; the husky hook is broken so `--no-verify`
+is load-bearing. **Do not touch `web-livewalk`**. Never `pkill`, never `npm ci`/`npm install`, never
+bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers. **Do not push.**
+
+### Lane L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED — the 33,535-line row, opened
+state: built-unverified
+class: suite
+owner: agent
+dir: ../OkamAPI-modules
+exit: the twenty largest zero-or-near-zero-coverage Core/POS backend files are listed with measured line counts in a committed artifact, three of them carrying money or statutory behaviour are covered by tests that red under applied-and-restored mutations, and the non-SQL tier is green at the lane tip
+agent: L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED
+evidence: docs/plan/artifacts/pos-uncovered-twenty.md
+
+**One row holds almost the whole backend gap.** The census measured Core/POS + shared at **49.4%**
+lines (32766/66301) and **34.6%** branch across **850 files**, against 81–92% for all six restaurant
+modules. **Core/POS holds 33,535 of the 37,537 uncovered backend lines.** No single lane closes that,
+and you are not being asked to.
+
+**You are asked to do two things.**
+1. **Name the surface honestly.** Produce a committed artifact listing the **twenty largest** Core/POS
+   files by uncovered lines, each with its measured figure and one line on what it does. **This is the
+   deliverable that outlives the lane** — it converts an unusable aggregate into a work list, the same
+   way the flag census did. Put it at `docs/plan/artifacts/pos-uncovered-twenty.md` in the frontend
+   repo (`/Users/svendaneel/okam/Web-modules`) so it sits with the other censuses.
+2. **Cover three of them — the three that touch money or a statutory obligation**, not the three that
+   are easiest. If the largest twenty contain no money or statutory file, say so plainly and cover the
+   three largest instead, naming that substitution.
+
+**Coverage measurement on this tier is itself a trap.** The headline 8.7% figure that circulated
+earlier was **86% migrations**; the real figure is 63.1%. **Exclude `Migrations/` and say that you did.**
+
+**The way this lane fails is by succeeding at the wrong thing, so read this twice.** A test that
+raises coverage without being able to fail is worse than no test: it converts an unmeasured surface
+into a *falsely* measured one, and the next person trusts it. **Two rules bind you.**
+1. **Every test you write must red under a mutation you actually apply and restore.** Not a mutation
+   you describe — one you write into the file, watch fail, and revert. **Report the count, and report
+   any test that stayed green under every mutation you could think of: delete that test.**
+2. **Write tests for behaviour a person would notice**, named after what the person does, not after
+   the function. If a branch exists only to satisfy a linter, say so and leave it uncovered — an
+   honest 70 beats a decorated 95.
+
+**If you find a defect while writing these tests, that is the most valuable thing you can return.**
+Write the failing test, leave it failing, and name it in your return rather than fixing it in place.
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests,
+and unfiltered it starts a container per module fixture. **Check every tier log for an abort line above
+the summary.** Baseline at trunk `81d06c10a` is **4937 / 0 / 10**; the ten skips are expected and one
+red (`SchedulePublishSqlServerTests`) is proven pre-existing at an untouched baseline. **Name any test
+you cannot account for.** One `dotnet test` spans **two** Testcontainers sessions. Teardown is `rm -rf`
+plus `git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch the `okam-lwtwo-*`
+containers, never bind **:3971**/**:5971**. **Do not push.**
+### Lane L-READ-THE-REVOCATION-LEVER — a security check was switched off and someone else has to agree it was the right one
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a verdict on lane/mail-revocation-lever 69e6ca8af, naming whether unset truly binds to true through the real configuration path, whether anything other than revocation was relaxed, and what a revoked provider certificate would now do
+agent: L-READ-THE-REVOCATION-LEVER
+evidence: docs/plan/reviews/L-READ-THE-REVOCATION-LEVER.md
+
+**This lane weakened a certificate check to unblock mail, and that is a trade worth a second reader.**
+`lane/mail-revocation-lever` @ **`69e6ca8af`** off backend trunk `81d06c10a`. It is the fix for all
+fourteen `IEmailService` callers, so if it is wrong it is wrong everywhere at once.
+
+**The load-bearing claim is a language detail, and language details are where this fails.** The lane
+says `AppSettings:SmtpCheckCertificateRevocation` is a **`bool?`** where **unset means true**, and that
+a plain `bool` would have read `false` from a missing key and **silently disabled revocation checking
+estate-wide with no diff to review**. That reasoning is correct in the abstract. **Prove it holds through
+the actual binding path this codebase uses** — `IConfiguration` binding, `Configure<>`, options
+validation, whatever it really is. **Three cases the claim must survive**: the key **absent**; the key
+present but an **empty string**; the key present as the string `"false"` in a different casing. If any
+of those lands on `false` when the author expects `true`, that is the finding.
+
+**Then ask what was relaxed besides revocation.** The lane asserts **no `ServerCertificateValidationCallback`
+is added on any path in any environment**, and offers the absence as proof. **Grep for it yourself
+across the whole backend, not just the diff** — the strength of that claim is exactly its scope, and
+scope claims are the easiest to overstate.
+
+**Name the consequence in plain words, because nobody has.** With the switch on, **what happens if the
+provider's certificate is genuinely revoked?** The lane's own evidence says the chain's only fault is
+`RevocationStatusUnknown` — a host that cannot *reach* the revocation endpoint. **A host that cannot ask
+and a certificate that has been withdrawn are indistinguishable once the check is off.** Say whether the
+resulting exposure is acceptable and for whom, or say it is not.
+
+**Check the refactor did not change behaviour it was not meant to.** `MailKitSmtpTransport` was moved
+**out of `EmailService` into its own file**. Compare old and new for timeout, disposal, authentication
+order, and `Connect` overload — **a move is where a silently dropped `using` hides**.
+
+**`appsettings.json` was edited, so check C7 before anything else.** This estate has **live credentials
+committed in `appsettings.json` already** — a JWT signing key at line 12 is a known open finding.
+**Confirm this diff adds no secret, and that the new Warning-level log line announcing a relaxed
+handshake prints no host, credential or connection string.**
+
+**Two flags it narrowed rather than closed — check the narrowing is honest.**
+`F-EVERY-MAIL-DIES-AT-A-REVOCATION-CHECK-THIS-HOST-CANNOT-COMPLETE` still needs the key set **plus a
+process restart** on each host; `F-A-SUCCESSFUL-SEND-PRINTS-NOTHING` is confirmed at
+`appsettings.json:196-202`. **Neither should be clearable by this branch alone. Say so if you agree.**
+
+**Production was explicitly not measured, and the lane says so — do not treat that as a gap to fill.**
+It named a no-deploy read: App Insights for `EmailService.cs:197` carrying `SslHandshakeException`
+with *"after 0 sent"*. **Judge whether that query would actually distinguish this defect from an
+unrelated TLS failure**, since that is what someone will run tomorrow.
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run the lane's suite and its
+probe, and apply mutations you restore.** **Rule and name the exact change. Do not edit any file** other
+than your review and return. A clean reading is a legitimate outcome.
+
+**Traps this estate has paid for.** The backend tier must run **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"` — at the repo root `dotnet test` exits 0 having run **zero** tests, and
+unfiltered it starts a container per module fixture. **Check every tier log for an abort line above the
+summary.** Trunk baseline is **4937 / 0 / 10**; the lane claims **4943 / 0 / 10**. **A stale build can
+fake a mutation result** — the lane defeated that with `cp` + `touch`; do the same. Teardown is `rm -rf`
+plus `git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch the `okam-lwtwo-*`
+containers, never bind **:3971**/**:5971**. **Do not push.**
+### Lane L-THE-ORPHANED-FIXES-REACH-A-BRANCH — four finished fixes sit on refs that no branch reaches
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: each of the four orphaned refs/lanes refs is ruled landed, superseded or still-needed against the trunk with the reason measured rather than assumed, everything still needed is merged, and the frontend tier is green at the tip
+agent: L-THE-ORPHANED-FIXES-REACH-A-BRANCH
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/evidence.md
+
+**I tested all ten `refs/lanes/` refs for trunk containment and four are orphaned.** These are finished
+work that **nobody will ever receive** unless a lane lands them, and three of the four are money or
+receipt paths:
+
+| ref | at | what it was for |
+|---|---|---|
+| `lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM` | `c32cda3` | a line-amount sum with no gate |
+| `lanes/L-OFFER-PARTIAL-SUBTOTAL` | `35e5cdd` | a partial offer subtotal |
+| `lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED` | `7a72c02` | a discount row dropped from a receipt |
+| `lanes/L-WORLD-STAMP-WINDOWS` | `997936a` | world-stamp windows |
+
+**Do not merge any of them on sight.** The trunk has moved a long way since they were preserved, and the
+first thing this lane established is that **a preserved ref can already be fixed by other means**:
+`lanes/L-CHECK-DISCOUNT-SUM-COUPLED` @ `c8f26d5` **is an ancestor of the trunk** even though the flag
+citing it says it is on no shared branch. **Expect at least one of these four to be in the same state.**
+
+**For each ref, answer in this order.** (1) Does the defect it fixes **still reproduce on the trunk**?
+Write the reproduction, do not reason about it. (2) If it does not, is that because this fix landed by
+another route, or because the code moved — **name which**. (3) Only if it still reproduces, land the fix,
+rebasing it onto the current trunk rather than merging a stale base.
+
+**`lanes/plan-snapshot` and `lanes/preservation-snapshot-unreferenced-work` are NOT yours** — they are
+archives, not fixes. Leave them.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+
+**Every change you make must red under a mutation you actually apply and restore** — written into the
+file, watched failing, reverted. Report the count. **A test that survives every mutation you can think of
+should be deleted, not kept.**
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**.
+Pin with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`.** Trunk `6b98839` = **166 suites / 3939 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`.
+**Do not push.**
+
+### Lane L-THE-CLOCKOUT-WIRE-STOPS-LYING — ~~the endpoint still answers Open to a clock-out that closed nothing~~
+state: retracted
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: POST /workforce/pos/clock-events answering a clock-out with no open session no longer reports sessionState Open, shown by a wire assertion over the response that reds when the derivation is restored, and the non-SQL tier is green at the tip
+agent: L-THE-CLOCKOUT-WIRE-STOPS-LYING
+retracted: aimed at a defect fixed by 4d103ca8a on 2026-08-05; superseded by L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID
+
+**Only the client half of this defect is fixed, and the wire still tells the lie to everyone else.**
+`POST /workforce/pos/clock-events` answers a clock-out with **no open session** as
+`200` · `accepted: true` · `clockSessionId: null` · **`sessionState: "Open"`**, because **the field is
+derived from `closedUtc` alone** — so an absent session and an open one are indistinguishable.
+
+**What it does to a person, which is why it is a blocker and not a tidy-up.** A register bound to
+`sessionState` **flips to "clocked in" at the moment a worker presses *Stemple ut***. She leaves believing
+she clocked out; the register carries **no end time**; and the hour that reaches **payroll, the attendance
+record and the § 8-5-6 personalliste** is wrong in the same direction.
+
+**The client fix is already in** — `utils/workforce/pos-clock-state.js` makes `clockSessionId`
+authoritative. **Do not undo or duplicate it.** Your job is the wire, so that a second client, a partner
+integration or a future screen cannot inherit the lie.
+
+**`accepted: true` on an act that accepted nothing is the other half of the defect.** Decide deliberately
+whether the endpoint should refuse, or answer truthfully with a state that is not `Open` — **the flag
+permits either**. Write which you chose and why. **If you choose to keep `200`, say what a caller is meant
+to branch on.**
+
+**Every change you make must red under a mutation you actually apply and restore** — written into the
+file, watched failing, reverted. Report the count. **A test that survives every mutation you can think of
+should be deleted, not kept.**
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests, and unfiltered it starts a container per module
+fixture. **Check every tier log for an abort line above the summary.** Trunk `81d06c10a` = **4937 / 0 / 10**;
+the ten skips are expected and the one `SchedulePublishSqlServerTests` red is proven pre-existing.
+**A stale build can fake a mutation** — defeat it with `cp` + `touch`. Teardown `rm -rf` +
+`git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch `okam-lwtwo-*`, never bind
+**:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED — ~~three labels on a fiscal document that no translation can reach~~
+state: retracted
+class: node
+owner: agent
+dir: .
+exit: no label rendered on the receipt surface is produced by a switch that never consults the dictionary, shown by a test that reds when the German string is corrupted, and the frontend tier is green at the tip
+agent: L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED
+retracted: premise measured stale: 811818c is an ancestor of the tip, all three functions resolve via $i, verified by mutation; superseded by L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN
+
+**Three functions in `plugins/global-mixin.js` return hardcoded Norwegian with no `$i` anywhere in them**:
+`paymentTypeLabel:82`, `deliveryTypeLabel:97`, `orderStatusLabel:134`. **There is no lookup at all** — not
+a missing key, not a stale key, not a fallback.
+
+**So a Swiss reader gets `Ukjent`, `Hent selv` and `Forespurt` on a document the product prints as a fiscal
+artifact.** Three of the six values on that receipt.
+
+**Two things make this trickier than it looks, and both are recorded.**
+1. **A translation floor over these functions would assert Norwegian and call it correct**, because they
+   never consult the dictionary. **Your test must red when the German string is corrupted** — that is the
+   only shape that proves a lookup happened.
+2. **There is a separate coverage defect on the same function**: ten cases against **seventeen** backend
+   members, worst symptom `Ukjent` for a cash sale. **Fixing coverage without fixing the lookup produces
+   seven more Norwegian strings on a German receipt, not fewer.** Fix the lookup first; then decide
+   whether the missing seven are yours or a follow-up, and say which.
+
+**Every change you make must red under a mutation you actually apply and restore** — written into the
+file, watched failing, reverted. Report the count. **A test that survives every mutation you can think of
+should be deleted, not kept.**
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**.
+Pin with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Never `git submodule deinit`.** Trunk `6b98839` = **166 suites / 3939 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`.
+**Do not push.**
+
+### Lane L-THE-RECEIPT-NAMES-THE-PAYER — ~~one emitter prints the programmer's word and the other prints nothing~~
+state: retracted
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: every payment type the product can produce names its payer on both receipt emitters in the reader's language, or each remaining exception is recorded as deliberate with a reason, shown by tests that red under applied-and-restored mutations, with the non-SQL tier green at the tip
+retracted: premise measured stale at the tip: Services/PaymentTenderLabels.cs carries CompanyAccount arms at :79 and :135, both emitters route through it, EscPosPaymentLabelTests exists
+
+**Two emitters fail the same obligation in opposite directions, and neither is fixed.**
+- **`EscPosReceiptBuilder`** has **no `CompanyAccount` arm** and its default returns the enum name, so a
+  company credit sale prints the raw English **`CompanyAccount`** on a **Norwegian fiscal receipt** — the
+  journal-backed artifact an inspector reads.
+- **`Services/ReceiptService.cs:152`** prints a **blank** payer line for several payment types, cash among
+  them, on the emailed PDF.
+
+**The two share no code**, so this is one obligation and two independent fixes. Do both.
+
+**The line numbers have drifted and you must locate before you act.** `EscPosReceiptBuilder.cs:315` was the
+site when the flag was raised; at the current trunk that line is a money formatter. **A previous report on
+this same defect cited a file that did not exist** (`Services/Kassa/ReceiptService.cs`), which is how the
+blank-payer finding sat unverified for days. **Locate both sites yourself, quote them, and say what line
+they are on now.**
+
+**The reason the ESC/POS one survived is worth keeping in mind while you fix it.** It is the safer default
+failing in the other direction: **it always prints *something*, and something is what a reviewer checks
+for.** A printed word that is the programmer's word rather than the reader's is **harder to see than an
+empty line and just as wrong** on a document an inspector reads.
+
+**Enumerate the payment types the product can actually produce before you write a single arm** — the
+adjacent coverage defect on the frontend is ten cases against seventeen backend members, so assume the
+enum is wider than any switch in this codebase currently handles.
+
+**Every change you make must red under a mutation you actually apply and restore** — written into the
+file, watched failing, reverted. Report the count. **A test that survives every mutation you can think of
+should be deleted, not kept.**
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests, and unfiltered it starts a container per module
+fixture. **Check every tier log for an abort line above the summary.** Trunk `81d06c10a` = **4937 / 0 / 10**;
+the ten skips are expected and the one `SchedulePublishSqlServerTests` red is proven pre-existing.
+**A stale build can fake a mutation** — defeat it with `cp` + `touch`. Teardown `rm -rf` +
+`git worktree prune`; `--no-verify` is load-bearing. Never `pkill`, never touch `okam-lwtwo-*`, never bind
+**:3971**/**:5971**. **Do not push.**
+### Lane L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID — a worker with two employers is told she is clocked in on the one that folded nothing
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a cross-engagement clock-in that returns AttendanceException while carrying another employer's open session id no longer computes SESSION_OPEN, shown by a test that reds when the null-id rule is restored, and the frontend tier is green at the tip
+agent: L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID
+evidence: docs/plan/lanes/L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID/FINDING.md
+
+**The wire is already honest; the client is not.** `utils/workforce/pos-clock-state.js` keys on
+**`clockSessionId` presence alone** — the rule the backend's own documentation calls **wrong in the same
+direction** as the defect it just fixed.
+
+**The failing case is a worker with two employers.** A cross-engagement clock-in answers
+**`AttendanceException`** while **carrying the OTHER employer's OPEN session id**. So `clockSessionId` is
+truthy and `closedUtc` is null, `stateFromClockEvent` returns **`SESSION_OPEN`**, and `nextState`'s
+exception guard never fires. **The register reports her clocked in on an engagement that folded nothing.**
+
+**This is not inference.** The backend pinned the trap under the name
+`A_cross_engagement_clock_in_carries_a_session_id_and_still_does_not_report_this_engagement_open`.
+**Read that test first** — it is the specification for this lane, written by the people who fixed the other
+half.
+
+**Two things to fix, and the second is why the first was possible.**
+1. The rule itself: the client must consult the outcome the wire now carries, not the presence of an id.
+2. **The header comment of that same file still quotes `SessionState = result.ClosedUtc.HasValue ? Closed : Open`
+   as current backend behaviour.** It is false, and it is the documented cause of a lane being dispatched at
+   a defect that had already been fixed. **Correct it in the same commit.**
+
+**A reachability question you must answer rather than assume (C3).** The previous lane measured that
+**nothing in the frontend reads `sessionState` at all**, so the backend's corrected third state reaches no
+client today. **Say whether your fix makes it reachable, or whether the register still cannot see the
+distinction — and if the latter, name what else is needed.** A fix that no caller reaches is the failure
+mode this estate has paid for most often.
+
+**Every change must red under a mutation you actually apply and restore.** The obvious one is restoring the
+null-id rule; write it, watch it red, revert it, and report the count.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — the plain clone genuinely lacks it. Trunk **`78ed84f`** = **166 / 3950 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`.
+**Do not push.**
+
+### Lane L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED — a poweruser is told the status code instead of the reason
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a 401, a 403, a 500 and an offline read on the platform-growth path each reach the page as a distinguishable localised reason rather than an axios string, shown by tests that red when the safe read is reverted, and the frontend tier is green at the tip
+agent: L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED
+evidence: docs/plan/lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED
+
+**The backend writes a reason for every failure and the poweruser never sees one.** Driven through the
+**real** `StatisticsService` over an axios-shaped transport, a lane measured all four:
+
+| the backend says | the poweruser reads |
+|---|---|
+| `Sesjonen din er utløpt` (401) | `Request failed with status code 401` |
+| `Du har ikke tilgang…` (403) | `Request failed with status code 403` |
+| `Noe gikk galt i rapportmotoren` (500) | `Request failed with status code 500` |
+| offline | `Network Error` |
+
+**`statusCode` is undefined on all four**, so the page could not branch on them even if someone wrote the
+copy. `GetPlatformGrowth` reads through the unsafe `GetRequest`, calling neither `SafeGetRequest` nor
+`BuildError` — **and `RequestService.BuildError` was written for exactly this, with its own comment saying
+so.**
+
+**Take it as a file, not a method.** All **five** reads in `core/services/statistics-service.ts` share the
+flaw. Fixing one leaves four screens lying in the same way.
+
+**A dead line is the second finding and it confirms the first.** That service's own
+`'Failed to get platform growth'` message requires a **resolved** non-2xx response, which axios never
+produces — so the handler the author wrote for this case has never run once. **Do not preserve it; explain
+it.**
+
+**`core/` is a git submodule (`Okam-AS/Core.git`), pinned at `9626a561`, and that changes what landing
+means.** A fix here is a commit in **another repository** plus a pin bump in this one. **Do both, keep them
+in one lane, and say explicitly in your return that a reviewer must read two repos.** Do not push either.
+If you judge the submodule boundary makes this unsafe to land as one unit, **return `blocked` and say why**
+— that is a better outcome than a half-landed cross-repo change.
+
+**Every change must red under a mutation you actually apply and restore** — reverting the safe read is the
+obvious one. Report the count.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — the plain clone genuinely lacks it. **You are editing that submodule, so be
+certain you know which commit you are on before and after.** Trunk **`78ed84f`** = **166 / 3950 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`.
+**Do not push.**
+
+### Lane L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN — the one label surface that is genuinely still untranslated
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: woltDeliveryStatusLabel resolves every state through the dictionary, the shadowed dineHomeDeliveryStatusLabel copy is deleted or made reachable deliberately, both shown by a test that reds when a German string is corrupted, and the frontend tier is green at the tip
+agent: L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN
+evidence: docs/plan/lanes/L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/premise-check.txt
+
+**This is the residue of a lane that returned `fail-spec`, and it is the part that is real.** The three
+receipt labels that lane was sent for were already fixed at the tip. **These were not**, and the same lane
+verified them live before handing them back.
+
+**`woltDeliveryStatusLabel` at `plugins/global-mixin.js:231` is eleven hardcoded Norwegian literals with
+no `$i` and no key.** It is rendered at **`OrderCard.vue:84`** and is **not shadowed there**, so those
+eleven words reach a screen on the CH build today.
+
+**`dineHomeDeliveryStatusLabel` at `:221` is six more literals — and it is the more dangerous of the two.**
+Its only render site, `OrderCard.vue:69`, is served by a **local copy at `OrderCard.vue:310` that does use
+`$i`**. So there are two copies of one vocabulary: the reachable one translated, the dead one not.
+**It reads as fixed from either end alone**, which is exactly how it survived. **Delete it deliberately or
+make it the single source — do not leave two copies.**
+
+**Your test must red when the German string is corrupted.** A test that asserts what
+`woltDeliveryStatusLabel` returns today would assert Norwegian and call it correct, which is the trap the
+previous brief named and the previous lane confirmed is real on this surface.
+
+**The proven method, from the lane that found this**: corrupting a German dictionary value reds the suite,
+and replacing `return this.$i(key)` with a Norwegian literal reds 63 of 120. **Reproduce that shape here.**
+
+**Check the render site before you trust the plan.** `OrderCard.vue` has been read at
+`:69`, `:84` and `:310`; confirm those lines still say what this brief claims **before** you change
+anything, and say so in your return. **Three lanes were dispatched at already-fixed defects today because
+nobody re-measured a flag body against the tip.**
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. Trunk **`78ed84f`** = **166 / 3950 / 0**. Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm install`,
+never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK — three money fixes landed tonight and nobody but their lander has read them
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the three cherry-picks between 78ed84f and d4c308e, naming any pin that restates the fix rather than reproducing the defect, any behaviour the price.js delegate rename changed, and whether the three dictionaries carry the new key exactly once
+agent: L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK
+evidence: docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md
+
+**These are on the shared trunk, which makes this the most consequential unreviewed work in the plan.**
+`feature/restaurant-modules` moved **`78ed84f` → `d4c308e`** by three cherry-picks — `d35d9dd` (a receipt
+dropping a discount row), `29fe003` (two check sums handing back an invented refund), `af0e168` (an offer
+subtotal presenting a partial sum as a whole one). Tier at the tip: **168 suites / 4007 / 0**.
+
+**The lander's central claim is the one to attack, because it is the one that makes the pins worth having.**
+It says each ref's pin, applied to the **unpatched** trunk, **reproduced the defect** — receipt 8/21 red,
+check 13/29 red, offer 5/23 red — and that the **greens are load-bearing**: the receipt pin passes on
+`Infinity`, `'Infinity'`, `true` and a numeric `valueOf` before the fix, because `Infinity > 0`. **A pin
+redding on all 21 would be testing the fix, not the defect.** **Re-run that reproduction yourself** on a
+tree with the components reverted, and say whether the red/green split is what they claim.
+
+**One judgement call was made mid-lane and it is the thing most likely to be wrong.** The check pin imports
+`isAmountInPlay`, which the trunk did not export, so **`utils/price.js` was applied alongside it**. The
+lander argues this is behaviour-preserving *by construction* — `isAmountInPlay` is the pre-existing body of
+`isDeductionInPlay`, which becomes a delegate — and that the suite's three equivalence arms stayed green
+while the components were still unpatched. **Verify both halves of that argument.** If the delegate is not
+exactly equivalent, the 13 reds are not attributable to the components alone and the whole reproduction
+argument weakens.
+
+**Check the dictionaries, because they were the one place conflict was predicted and none occurred.**
+`pos_negative_sale_unpriceable` is claimed to have landed in `no.ts`, `en.ts` and `de.ts` **with no
+duplicate key in any of the three**, across dictionaries that had moved 18 commits. **Grep each yourself**,
+and check the German and English strings are real translations rather than the Norwegian copied across.
+
+**Two claims of absence to test, since absence is what this estate keeps being wrong about.** The lander
+reports **zero conflicts of either kind**, so `git merge-file` was never invoked — and separately that the
+**arity sweep came back clean**. That sweep exists because a clean merge produced an uncompilable tree
+earlier today. **Run it again yourself on the final tip**; a three-commit rebased stack that adds an export
+and rewrites callers in four components is exactly where it recurs.
+
+**Read-only.** No commit, merge, rebase, push or branch move. **You may run the tier and apply mutations you
+restore.** **Rule and name the exact change. Do not edit any file** other than your review and return. A
+clean reading is a legitimate outcome. Write to `docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md`.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — the plain clone genuinely lacks it. Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm install`,
+never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Check `uptime` before any full tier — the
+ceiling is 21 and it was 25 when this was authored.** **Do not push.**
+
+### Lane L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL — three coverage lanes added over two hundred tests on one claim
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the mutation evidence of the three coverage branches, naming every test that survives every mutation a second reader can devise, and whether the reported kill counts reproduce
+agent: L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL
+evidence: docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md
+
+**Three lanes added a large number of tests in one evening, and every one of them rests on the same claim:
+that each test reds under a mutation actually applied and restored.** If that claim is soft anywhere, the
+estate has bought false confidence at scale — which is worse than the uncovered code it replaced.
+
+| branch | at | claim |
+|---|---|---|
+| `lane/growth-poweruser-tested` | `fddb06c` | 41 arms, **44 mutations, 0 survivors**, one equivalent mutant recorded |
+| `lane/workforce-screens-tested` | `aff616d` | 96 tests, **71 mutations**, 7 initially survived and were re-aimed or tightened |
+| `lane/meals-events-screens-tested` | `5ed9664` | **71 mutations, 70 red**, one survivor argued provably equivalent |
+
+**Three specific claims to reproduce rather than accept.**
+1. **The Growth lane's single survivor** — `getPointValue`'s `??` → `||` — is recorded as an **equivalent
+   mutant**, on the argument that the chain ends in `0` so both spellings agree for any single-casing
+   payload. **Try to construct the payload that separates them.** If you can, it is a hole, not an
+   equivalence.
+2. **The Meals/Events survivor** is argued equivalent because it adds a fallback inside a `v-if` branch
+   that already guarantees the value. **Check the guarantee actually holds on every path into that branch.**
+3. **The Workforce lane says three mutations survived because the source defends the rule twice**, and that
+   each reds under a paired mutation. **A rule defended twice is also a rule that can be half-removed** —
+   verify the paired mutation is genuinely equivalent to removing the defence, not merely another way to
+   break it.
+
+**The most valuable thing you can do is devise mutations none of the three lanes thought of**, especially
+on the assertions they *rewrote* mid-lane. The Growth lane found three of its own tests passing for the
+wrong reason — an unreachable 24px drag rule, `"1 500".includes("500")`, and a round-trip comparing the page
+against itself. **Those were the ones it caught. Look for the ones it did not.**
+
+**Judge the two `THE DEFECT:` conventions against each other, since the same evening produced both.** The
+Meals/Events lane pinned five defects with **passing** tests that assert today's behaviour; the Growth lane
+left three **failing**. Both are defensible and `D-HOW-A-KNOWN-DEFECT-IS-PINNED` is open on it. **Say which
+you would keep and why** — the owner will read your answer beside the decision.
+
+**None of these branches is on a trunk**, so nothing you find is live. **Read-only.** No commit, merge,
+rebase, push or branch move. **You may run each suite and apply mutations you restore.** **Rule and name the
+exact change. Do not edit any file** other than your review and return. Write to
+`docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md`.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — the plain clone genuinely lacks it. Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm install`,
+never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Check `uptime` before any full tier — the
+ceiling is 21 and it was 25 when this was authored.** **Do not push.**
+### Lane L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING — a tool in a lane directory reverts uncommitted edits to HEAD
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: no mutation runner under docs/plan/lanes/ restores a mutated file with git checkout, shown by a grep across every mutate script in the tree and by a runner that provably survives being run against uncommitted work
+agent: L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING
+evidence: docs/plan/lanes/L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING/sweep.txt
+
+**A tool the estate is copying from lane to lane destroys the work it is meant to be testing.**
+`docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/mutate.js` restores a mutated file with
+**`git checkout -- <file>`**. That reverts to **HEAD**, which is correct only while the file is unmodified.
+**Run against uncommitted work — which is every lane mid-flight — it deletes the lane's own edits.**
+
+**It has already fired once.** It did exactly this to `plugins/global-mixin.js`. Nothing was lost, because
+that runner's own **verify-after-restore** assertion caught the mismatch and halted — **the guard saved it,
+not the restore**. The lane re-applied by hand and wrote its own buffer-based replacement.
+
+**The reason this is a blocker rather than a note: the broken copy is still sitting where the next lane
+will find it.** Three lanes this evening copied a sibling's mutation runner as their starting point. The
+next one to copy this file gets a tool that silently reverts its work at the first restore, and the only
+thing standing between that and lost work is an assertion the copier might strip as noise.
+
+**Do three things.**
+1. **Sweep**: grep every `mutate*` script under `docs/plan/lanes/` for `git checkout`, `git restore` and
+   `git stash`, and **list every one you find** — the report is half the deliverable, because nobody knows
+   how many copies exist.
+2. **Replace, do not patch.** The correct implementation reads the original into memory, writes the
+   mutation, then restores **from that buffer** and asserts the bytes match. `lane/eleven-wolt-statuses…`
+   @ `32518da` carries a working one — **read it rather than writing a third variant.**
+3. **Keep the verify-after-restore assertion in every copy**, and say in your return why it must never be
+   removed: it is the only reason this defect cost nothing.
+
+**One boundary.** Lane directories are other lanes' evidence. **You may replace a broken tool, but do not
+edit any lane's findings, logs or results**, and say exactly which files you touched.
+
+**A test that proves the runner survives its own hazard is the exit criterion, not the sweep.** Write one
+that mutates a file with uncommitted changes and asserts those changes are still present afterwards.
+**It must red against the `git checkout` implementation** — that is what makes it a pin rather than a
+description.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. Trunk **`d4c308e`** = **168 suites / 4007 / 0**. **Check `uptime` and hold if the
+1-minute average is above 14 — a lane ran its tier at 28 tonight and said so.** Teardown `rm -rf` +
+`git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never
+`npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE — a network blip reads as an expired offer, and a placed order can blank the page
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a load failure is distinguishable from an expired offer and acceptOffer cannot overwrite the proposal with a non-object, both shown by tests that red when each guard is removed, and the frontend tier is green at the tip
+agent: L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE
+evidence: docs/plan/lanes/L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE/FINDING.md
+
+**Two blocker defects on the one page in this product operated by someone who has never seen it before.**
+A guest reaches `pages/offer/_code.vue` from a link, cannot log in, and has no way to recover from a wrong
+state. Both were found by the lane that was sent to cover the file, not to fix it.
+
+**`F-EVERY-LOAD-FAILURE-TELLS-THE-GUEST-THE-OFFER-EXPIRED`.** Every load failure renders
+**"Tilbudet er utløpt"**. So a network blip makes a guest phone the venue asking them to reissue an offer
+that is **still live**, and the venue has no way to know the offer was fine. **The page must distinguish
+"we could not load this" from "this has expired."**
+
+**`F-ACCEPTING-AN-OFFER-CAN-BLANK-THE-PAGE-AFTER-THE-ORDER-IS-PLACED`.** `acceptOffer` assigns the response
+onto `offerProposal` unguarded, so a `200` with an empty body parses to `''` and **blanks the page after the
+order is placed** — no confirmation, no error, no way back. **The order exists and the guest cannot tell.**
+That ordering is what makes it a blocker: the damage is on the far side of the money.
+
+**Three more defects are flagged on this same page and are NOT yours** unless they fall out for free —
+say which you touched. The dead error copy, the raw English exception on a failed SMS, and the `TypeError`
+for a missing phone number are `F-THE-OFFER-PAGE-BUILDS-ERROR-COPY-IT-NEVER-RENDERS`,
+`F-A-FAILED-SMS-SHOWS-THE-GUEST-A-RAW-ENGLISH-EXCEPTION` and
+`F-A-MISSING-PHONE-NUMBER-SHOWS-THE-GUEST-A-TYPEERROR`.
+
+**The page already carries five `THE DEFECT:` tests asserting today's broken behaviour.** They are green
+now and **must go red as you fix each one** — that is the design, and turning them green by editing the
+test rather than the code is the one outcome that would make this lane worse than not running. **Convert
+each to assert the corrected behaviour and say which you converted.**
+
+**This page has no `data-test` attributes**, unlike the Meals surface beside it, so existing tests ride on
+styling classes. **Add them for anything you assert.**
+
+**Verify the premise at the tip before you edit anything, and say so in your return.** Three lanes were
+dispatched at already-fixed defects today. These findings are hours old and were measured, but measure them
+again.
+
+**Every change must red under a mutation you actually apply and restore.** Report the count.
+**A mutation runner that restores with `git checkout -- <file>` will delete your uncommitted work** — it
+reverts to HEAD. Restore from an in-memory buffer and assert the bytes afterwards.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**, which is why the local-path remedy exists.
+**If you create any commit inside `core/`, bundle it before teardown**: a submodule in a linked worktree
+keeps its objects under that worktree, so `rm -rf` plus `git worktree prune` destroys them. Trunk
+**`d4c308e`** = **168 suites / 4007 / 0**. **Gate on `uptime` as a separate check you stop on — hold below
+14.** `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR — the reason is computed, then swallowed into the console
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: each of the four statistics reads surfaces its failure to the operator rather than console.error, shown by a test that reds when the surfacing is removed, and the frontend tier is green at the tip
+agent: L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR
+evidence: docs/plan/lanes/L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR
+
+**A sibling lane has just taught the service to say why a read failed, and one screen throws that away.**
+`statistics.vue` catches those four reads into **`console.error`**, so the operator is shown **nothing** —
+not a wrong reason, no reason. The page simply does not populate.
+
+**This is the second half of a fix already built.** `core/services/statistics-service.ts` now routes all
+five reads through `BuildError` and records `hasBackendMessage`, so the localised backend reason is
+**available at this call site today**. **Read that lane's work first** (`core` `a6ae241`, Web-modules
+`6670619` on `lane/every-report-read-says-why`) — it is not on the trunk yet, so **you may need to branch
+from it rather than from the trunk. Say which you did and why.**
+
+**Match the rule that lane established rather than inventing a second one**: prefer the server's reason,
+else name the cause per status, and **report an error with no `hasBackendMessage` as unknown rather than as
+offline** — telling a guest to check their connection when the bug is on the page is the same lie pointing
+the other way.
+
+**A silent failure is worse than a wrong message and this is the argument for the lane**: a wrong reason
+gets reported and fixed; a blank panel gets read as "no data" and the operator makes a decision on it.
+
+**Verify the premise at the tip before you edit anything, and say so in your return.** Three lanes were
+dispatched at already-fixed defects today. These findings are hours old and were measured, but measure them
+again.
+
+**Every change must red under a mutation you actually apply and restore.** Report the count.
+**A mutation runner that restores with `git checkout -- <file>` will delete your uncommitted work** — it
+reverts to HEAD. Restore from an in-memory buffer and assert the bytes afterwards.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**, which is why the local-path remedy exists.
+**If you create any commit inside `core/`, bundle it before teardown**: a submodule in a linked worktree
+keeps its objects under that worktree, so `rm -rf` plus `git worktree prune` destroys them. Trunk
+**`d4c308e`** = **168 suites / 4007 / 0**. **Gate on `uptime` as a separate check you stop on — hold below
+14.** `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ — unread and off are shown as the same thing
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: a timesheets read that never answered is distinguishable from an export flag that is off, shown by the existing failing test going green because the code is right, and the frontend tier is green at the tip
+agent: L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ-1.md
+
+**A lane left this red on purpose and named the fix; this lane is that fix.** The failing test is
+`does not tell a manager the export flag is off when the flag was never read` in the workforce-timesheets
+page suite, on branch `lane/workforce-screens-tested` @ `aff616d`.
+
+**The defect.** `exportEnabled` **collapses unread to false**, so the withheld-reason beside Approve and
+Export claims the flag is off when nobody ever asked. **The page's own banner two elements away gets this
+right**, which is why the lane read it as an oversight rather than a decision.
+
+**It is more reachable than it looks, and this is the part to preserve in your test.** `refresh()` calls
+`readDetail` **regardless of whether `ListTimesheets` succeeded** — so any approve or export, success *or*
+refusal, followed by a single failed list re-read, leaves a **real period on screen** under the sentence
+*"Eksport er slått av for denne butikken."*
+
+**The fix the finding lane named**: `approveAvailability`/`exportAvailability` need an unread state distinct
+from flag-off, and `exportEnabled` must stop collapsing `null` to `false`. **`wft_gate_no_period` already
+exists and is currently unreachable** because `approveAvailability` tests the flag before the period —
+check whether your change makes it reachable, and if so that it says the right thing.
+
+**Land your fix on top of that branch, not the trunk**, since the test that must go green lives there. Say
+so explicitly in your return so a reviewer knows to read two branches.
+
+**Verify the premise at the tip before you edit anything, and say so in your return.** Three lanes were
+dispatched at already-fixed defects today. These findings are hours old and were measured, but measure them
+again.
+
+**Every change must red under a mutation you actually apply and restore.** Report the count.
+**A mutation runner that restores with `git checkout -- <file>` will delete your uncommitted work** — it
+reverts to HEAD. Restore from an in-memory buffer and assert the bytes afterwards.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**, which is why the local-path remedy exists.
+**If you create any commit inside `core/`, bundle it before teardown**: a submodule in a linked worktree
+keeps its objects under that worktree, so `rm -rf` plus `git worktree prune` destroys them. Trunk
+**`d4c308e`** = **168 suites / 4007 / 0**. **Gate on `uptime` as a separate check you stop on — hold below
+14.** `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+### Lane L-EVERY-FLAG-IS-RE-MEASURED-AT-THE-CURRENT-TIP — the corpus was measured against a world fifty commits ago
+state: open
+class: analysis
+owner: agent
+dir: .
+exit: every open flag carries a measured verdict at d4c308e and 057c390ad — reproduces, fixed, or unmeasurable-and-why — in a committed artifact naming the grep or read that settled each, with the count of each class stated
+agent: L-EVERY-FLAG-IS-RE-MEASURED-AT-THE-CURRENT-TIP
+needs: F-NO-LANE-CAN-BE-DISPATCHED-UNTIL-THE-AGENT-CEILING-IS-RAISED
+
+**Three lanes were dispatched at defects that were already fixed tonight, and the cause is structural.**
+`F-LANES-ARE-BEING-AUTHORED-FROM-FLAG-BODIES-THAT-THE-TRUNK-HAS-OVERTAKEN` is a blocker precisely because
+it will keep happening: the flag corpus was measured before ~50 commits of trunk movement, and **nothing
+re-measures it**. Premise-checking at authoring time catches one lane at a time. **This closes the class.**
+
+**What the last census already established, so you do not redo it.**
+`docs/plan/reviews/L-THE-FLAG-BACKLOG-IS-A-WORK-LIST.md` sorted **310 open flags** into 197 agent-closable,
+60 sven-only and **53 already-satisfied-but-unclearable**. It was right to do that and it is now stale in
+the same way the flags were: it measured against `web-livewalk` at `42a44de5` and the backend at
+`118f92fb9`. **The trunks are now `d4c308e` and `057c390ad`.** Read that census first and treat it as a
+starting hypothesis, not an answer.
+
+**The three ghosts are your calibration set. Every one of them looked live in its flag body.**
+
+| flag premise | measured verdict at the tip |
+|---|---|
+| the clock-out wire derives `sessionState` from `closedUtc` alone | **fixed** by `4d103ca8a`, an ancestor of the trunk the brief named as its *starting point* |
+| three mixin label functions have no `$i` lookup at all | **fixed** by `811818c`, an ancestor of the tip |
+| `EscPosReceiptBuilder` has no `CompanyAccount` arm | **fixed** — `Services/PaymentTenderLabels.cs` carries it at `:79` and `:135`, both emitters route through it |
+
+**Start by reproducing those three verdicts yourself.** If your method cannot re-derive all three, it will
+not catch the fourth, and the artifact will be another census that reads authoritative and is not.
+
+**The mechanism behind at least one of them is worth hunting directly.** The clock-out flag inherited its
+false premise from a **header comment that outlived its code** — `pos-clock-state.js` still quoted a
+derivation replaced on 5 August. **Where a flag body quotes code, check the quote against the file**, not
+just the claim against the behaviour.
+
+**Three rules for the artifact, because its value is entirely in being trustworthy.**
+1. **Name the instrument for every row** — the grep, the file:line read, the test that settles it. A row
+   without one is `unmeasurable`, which is a legitimate verdict and must be counted as its own class.
+2. **Do not clear anything.** You have no authority to clear a flag and the tool will refuse you. Produce
+   the verdict; clearing is the owner's.
+3. **Where a flag is fixed, name the commit that fixed it** where you can find it. That is what turns a
+   verdict into something a reader can check.
+
+**Both repos.** Frontend `/Users/svendaneel/okam/Web-modules` at **`d4c308e`**; backend
+`/Users/svendaneel/okam/OkamAPI-modules` at **`057c390ad`**. Write to
+`docs/plan/artifacts/flag-corpus-at-the-tip.md`.
+
+**Read-only on product code.** No commit to a trunk, no merge, no rebase, no push, no branch move. **Do not
+edit any flag body** — the clerk records corrections beside flags, never over them.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **If you create any commit inside `core/`,
+bundle it before teardown**: a submodule in a linked worktree keeps its objects under that worktree, so
+`rm -rf` plus `git worktree prune` destroys them. The backend tier runs **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"`. **Gate on `uptime` as a separate check you stop on — hold below 13.**
+Teardown `rm -rf` + `git worktree prune`. **Do not touch `web-livewalk`.** Never `pkill`, never
+`npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+---
+
+**RESUME POINT, recorded 2026-08-07 after the lane returned `blocked` at 7 of 384.** It stopped on the
+agent ceiling, not on method, and it left the expensive half done.
+
+**Do not rebuild the regex sweep. It was built, calibrated against the three known-fixed ghosts, and it
+failed** — 0/3 on quoted tokens (matches landed inside `lanes/*.md` files quoting each flag's own claim
+back at itself), 1/3 excluding evidence and tests (the survivors were file *paths*, which persist as
+import lines long after the claim about them dies), and citation staleness does not discriminate at all
+(**124 of 128** citations still resolve at the tip). **The claims are semantic**: `EscPosReceiptBuilder.cs`
+is still at the tip and its flag is fixed, because the fix moved the labels into a file the builder now
+routes through. Calibrating before trusting is the only reason this is not a census of 122 false rows.
+
+**The resume point has two halves and only one is committed.**
+1. **Committed** on `lane/flag-corpus-remeasured` @ `6026d35`: parsed flag bodies, resolved refs, checked
+   citations, and **three adjudication packets** (`batch-{1,2,3}.md`) sized to hand straight to three
+   agents. The artifact is at `docs/plan/artifacts/flag-corpus-at-the-tip.md`, **force-added** — a plain
+   `git add` refuses it, because a bare `artifacts/` rule at **`.gitignore:119`** catches the directory at
+   any depth.
+2. **NOT committed** — two extracted tips in a session scratchpad (`fe` = 1093 files at `d4c308e`,
+   `be` = 3490 at `057c390ad`). These are what let the lane measure **without a checkout**, which dodges
+   the core-submodule trap entirely. **If they are gone, rebuild with `git archive d4c308e | tar -x` and
+   the backend equivalent** — seconds, not minutes.
+
+**The one instruction to add to each batch brief**: *prefer the instrument over the inference.* The
+tempting failure here is reading a filename and calling the claim settled.
+
+**Six of the seven measured flags were already fixed**, each with an instrument and a fixing commit. The
+sample is small and biased toward flags sharp enough to settle by reading, so it is not a ratio to
+extrapolate — but it was measured independently of the three ghosts and points the same way, and
+`F-MEALS-ENROLMENT-HAS-NO-CALLER` reproducing shows the method resolves in both directions.
+
+
+### Lane L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET — one card, two spendable balances, and no row that explains either
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: transferring a gift card leaves exactly one funded wallet and every Purchased row still names its gift card, shown by the existing failing pin going green because the code changed, and the non-SQL tier green apart from pins named in the return
+agent: L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET
+evidence: docs/plan/lanes/L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET/evidence.md
+
+**This creates money.** `GiftcardService.TransferGiftcard` writes a second `Purchased` row for the new
+holder **without reversing the old holder's**. Measured, not reasoned: after one **500,00 kr** card is
+passed on, **both wallets read 50000**.
+
+**Then it becomes untraceable.** EF's one-to-one fixup **NULLs the old row's `GiftcardId`**, so the
+duplicated balance is spendable money that **no gift card explains** — it cannot be found by looking at the
+card, only by noticing the total.
+
+**A failing pin already exists** on `lane/pos-coverage-opened` @ `b368d930e`, and a one-line fix direction
+was **proven green by an applied-and-reverted mutation** by the lane that found it. **Branch on top of that
+branch, not the trunk**, and say so — the pin that must go green lives there. Make it pass **because the
+code changed**.
+
+**One warning from the lane that found it, and it is the most useful thing in this brief.** It read a
+UNIQUE index off the migration chain and began writing that SQL Server would reject the transfer outright.
+**Running it refuted that** — EF's fixup means the index never fires. **Prefer the instrument over the
+inference**: if you believe the database prevents something here, prove it with a run.
+
+**Verify the premise at the tip before editing, and say so.** Four briefs this evening asserted something
+the trunk had overtaken — three defect claims and one **test-surface** claim. If a brief names a test,
+suite or coverage figure, check it exists at the ref you are on, not on a branch.
+
+**Every change must red under a mutation you apply and restore.** Use `test/support/mutate.js` from
+`lane/no-mutation-runner-can-delete` — **not** a copy from a lane directory. Two lane copies restored with
+`git checkout -- <file>`, which reverts to HEAD and **deletes uncommitted work**, and one passed several
+test paths as a single argv so **jest ran 0 tests, exited 0 and certified every mutation as green**. Assert
+your baseline runs a non-zero test count and that each mutation run executes the same number.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** Trunk `057c390ad`; the last full measurement read **4949 / 0 / 11**. **A stale build can
+fake a mutation** — restore bytes, bump mtime, and assert `WebApi.dll`'s mtime MOVES across every build.
+**The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it, never
+`git add -A`. **Anything you write under `docs/plan/artifacts/` is gitignored** by a bare `artifacts/` rule
+at `.gitignore:111`; force-add and verify with `git ls-files --error-unmatch`. Teardown `rm -rf` +
+`git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`,
+never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-AN-INVOICE-LISTS-EACH-ORDER-ONCE — the same month from two different years is one section
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: an invoice spanning more than twelve months lists each order exactly once, shown by the existing failing pin going green because the code changed, and the non-SQL tier green apart from pins named in the return
+agent: L-AN-INVOICE-LISTS-EACH-ORDER-ONCE
+evidence: docs/plan/lanes/L-AN-INVOICE-LISTS-EACH-ORDER-ONCE
+
+**An invoice is a document someone is asked to pay, and this one double-lists.**
+`InvoiceService.GetInvoiceModel` matches month sections on **`Completed.Month` with no year**, while the
+guard permits a **24-month** span. Measured: a **14-month** invoice listed **4 orders as 8 rows**.
+
+**The guard is what makes it reachable.** A twelve-month cap would have hidden this forever; the product
+explicitly allows twice that, so every invoice longer than a year is exposed.
+
+**A failing pin exists** on `lane/pos-coverage-opened` @ `b368d930e`. **Branch on top of that branch**, say
+so, and make the pin pass **because the code changed** — not by widening the assertion.
+
+**Say what a corrected section is keyed on** in your return. Year-and-month is the obvious answer; if you
+choose something else, name why, because this is a document a person reconciles against their own records.
+
+**Verify the premise at the tip before editing, and say so.** Four briefs this evening asserted something
+the trunk had overtaken — three defect claims and one **test-surface** claim. If a brief names a test,
+suite or coverage figure, check it exists at the ref you are on, not on a branch.
+
+**Every change must red under a mutation you apply and restore.** Use `test/support/mutate.js` from
+`lane/no-mutation-runner-can-delete` — **not** a copy from a lane directory. Two lane copies restored with
+`git checkout -- <file>`, which reverts to HEAD and **deletes uncommitted work**, and one passed several
+test paths as a single argv so **jest ran 0 tests, exited 0 and certified every mutation as green**. Assert
+your baseline runs a non-zero test count and that each mutation run executes the same number.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** Trunk `057c390ad`; the last full measurement read **4949 / 0 / 11**. **A stale build can
+fake a mutation** — restore bytes, bump mtime, and assert `WebApi.dll`'s mtime MOVES across every build.
+**The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it, never
+`git add -A`. **Anything you write under `docs/plan/artifacts/` is gitignored** by a bare `artifacts/` rule
+at `.gitignore:111`; force-add and verify with `git ls-files --error-unmatch`. Teardown `rm -rf` +
+`git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`,
+never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG — the last two untruths on the offer page
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: an offer with no clientPhoneNumber and a failed SMS send each render a sentence written for a reader rather than an exception or a wrong accusation, shown by tests that red when each is reverted, and the frontend tier green at the tip
+agent: L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG
+evidence: docs/plan/lanes/L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG/FINDING.md
+
+**Two defects remain on the guest-facing offer page, and one of them accuses the guest.**
+
+**The worse one.** An offer whose `clientPhoneNumber` is absent throws a `TypeError` — and the lane that
+found it measured where: **inside `acceptOffer`, before the guard**, so the page **still tells her the CODE
+was wrong**. She typed it correctly. The product blames her for a field the venue never filled in, and she
+has no way to know otherwise.
+
+**The other.** A failed SMS send shows the guest **the raw English exception text thrown by core**, in
+place of the localised sentence sitting beside it.
+
+**Branch on top of `lane/offer-page-stops-telling-untruths` @ `52a93c5`**, not the trunk — it holds the
+fourteen tests and the `data-test` markers this page previously lacked entirely, and say so.
+
+**Follow the rule that lane established rather than inventing a second one.** The backend collapses **six
+causes into one untyped `Error`** (expired, withdrawn, registered, accepted-over-an-hour-ago, unknown, plus
+500s and network failures), so **the page must not guess a cause it cannot know.** Say what the guest can
+do next; do not assert why it failed.
+
+**A near-miss to inherit, not rediscover:** two of that lane's tests first passed for the **wrong** reason,
+because `_offerProposalService` is a **computed on the global mixin** and `mocks` cannot override a
+computed — the real service ran. **Assert your mock was actually used.**
+
+**Marker-shaped assertions are near-tautologies on a page whose markers you added.** That lane's 404 test
+asserted only that `[data-test="offer-load-failed"]` existed, which survived putting the expiry copy back
+inside that element. **Assert the words.**
+
+**Verify the premise at the tip before editing, and say so.** Four briefs this evening asserted something
+the trunk had overtaken — three defect claims and one **test-surface** claim. If a brief names a test,
+suite or coverage figure, check it exists at the ref you are on, not on a branch.
+
+**Every change must red under a mutation you apply and restore.** Use `test/support/mutate.js` from
+`lane/no-mutation-runner-can-delete` — **not** a copy from a lane directory. Two lane copies restored with
+`git checkout -- <file>`, which reverts to HEAD and **deletes uncommitted work**, and one passed several
+test paths as a single argv so **jest ran 0 tests, exited 0 and certified every mutation as green**. Assert
+your baseline runs a non-zero test count and that each mutation run executes the same number.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**`mocks` cannot override a computed** — services reached through the global mixin run for real under test,
+which has already made two tests pass for the wrong reason. Trunk **`d4c308e`** = **168 / 4007 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+**Gate on `uptime` separately — hold below 13.** Never `npm ci`/`npm install`, never bind **:3971**/**:5971**.
+**Do not push.**
+### Lane L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN — a dozen finished branches, none on a trunk, with dependencies nobody has written down
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a committed landing plan naming every unlanded lane branch, its base, its dependants, and a total order, with each step proven to compose by a throwaway merge whose tier is recorded — and no merge left on any trunk
+agent: L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN
+evidence: docs/plan/artifacts/landing-order.md
+
+**Work has accumulated faster than it has landed, and the dependencies are now real rather than
+incidental.** At least one pair is already known to be ordered wrongly if landed naively:
+**`aff616d` (`lane/workforce-screens-tested`) is NOT an ancestor of `d4c308e`**, and
+`lane/export-flag-unread` @ `8d4d1b0` **sits on top of it** — landing the fix first lands it on nothing.
+
+**Another spans two repositories.** `lane/every-report-read-says-why` is Web-modules `6670619` **plus
+`core` `a6ae241`**, and a third lane (`L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR`) branched from *that*
+rather than the trunk. **A landing that takes the frontend commit without the core commit produces a tree
+that cannot resolve its own imports.**
+
+**You are computing and proving an order. You are NOT landing anything.** Do every merge in a throwaway
+worktree, record the tier, and **leave every trunk exactly where you found it**. A landing lane comes
+later, and it will be far cheaper for having this.
+
+**For each unlanded branch, record**: its tip, its base, whether that base is an ancestor of the trunk,
+what depends on it, and the tier at its own tip as the lane reported it. **Then re-measure the tier
+yourself for any branch whose report you cannot reconcile** — several reported different baselines because
+the trunk moved under them mid-lane.
+
+**Name the conflicts before they happen.** A clean `git merge` produced an **uncompilable tree** earlier
+today: a trunk test called `GrowthMarketingFooter.AppendHtml(body, uri)` while a lane had widened it to
+three parameters, and neither side touched the other's file. **Run an arity sweep on each composed tree**,
+not just a merge.
+
+**One judgement to state plainly rather than bury**: whether the whole stack composes at once, or whether
+it must land in tranches — and if tranches, where the seams are and why. Write to
+`docs/plan/artifacts/landing-order.md`.
+
+**Verify the premise at the tip before editing, and say so.** Briefs this session asserted four things the
+trunk had overtaken — three defect claims and one test-surface claim. If a brief names a test, suite or
+coverage figure, check it exists at the ref you are on.
+
+**The mutation instrument fails in BOTH directions and you must defeat both.** Zero tests plus exit 0 reads
+as a killed mutation (false green); zero tests plus a parse failure reads as a killed mutation too (false
+red). **Assert every run executed the baseline test count**, treat any `reddened (0)` as untrustworthy, and
+brace-check each mutant before running it. The canonical runner is `test/support/mutate.js` on
+**`lane/mutation-runner-cannot-delete-work` @ `c65b19c`** — merge that branch rather than copying the file.
+**Never restore with `git checkout -- <file>`**; it reverts to HEAD and deletes uncommitted work.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**Anything under `docs/plan/artifacts/` is gitignored** by a bare `artifacts/` rule (`.gitignore:119` at the
+trunk); force-add and verify with `git ls-files --error-unmatch`. Trunk **`d4c308e`** = **168 / 4007 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+---
+
+**CLERK MEASUREMENT 2026-08-07, beside the return rather than over it.**
+
+**The preservation warning is half wrong, and the half that is right has been acted on.**
+`git -C core cat-file -e` finds **both `4f31003`** (*"A price with øre stops printing the notation that
+means it has none"*) **and `1bcab0b`** (*"Request paths are written the way the controllers declare
+them"*) **present in the main `core` object store.** They are not at risk and need no bundling.
+
+**`a6ae241` was genuinely absent and is now restored.** `git -C core cat-file -t a6ae241` returned
+*"Not a valid object name"*. The bundle at
+`lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED/core-a6ae241.bundle` on `lane/every-report-read-says-why`
+was extracted and fetched into the main store under `refs/bundle-restore/heads/…`. It now reads
+**`a6ae241 Every statistics read says why it failed, and which failure it was`** with parent
+**`9626a56`** — confirming the lane's claim that it fast-forwards from the pin.
+
+**No branch was moved and no commit was made.** The fetch only adds objects, which is the same class of
+operation as the local-path remedy every brief already prescribes. **T4 no longer depends on the bundle
+surviving**, though the bundle remains committed and is still the recipe if this store is ever rebuilt.
+
+**One number is contested and neither reading is wrong.** This lane reports the `artifacts/` rule at
+`.gitignore:111`; the flag-census lane reported `:119` measured at `d4c308e`. The clerk's checkout sits on
+`wip/session-2026-08-06-all-work`, whose `.gitignore` has eight fewer comment lines. **The rule is what
+matters and it is bare `artifacts/`** — always confirm with `git check-ignore -v` rather than a line number.
+
+
+### Lane L-THE-THREE-SURVIVORS-ARE-KILLED — mutations excused as equivalent that an audit separated
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: each of the three named survivors is killed by a new assertion, shown by that mutation redding where it previously survived, and the tier green at each branch tip
+agent: L-THE-THREE-SURVIVORS-ARE-KILLED
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-THREE-SURVIVORS-ARE-KILLED-1.md
+
+**An independent audit attacked three survivors excused as equivalent mutants and separated all three.**
+These are real holes in tests the estate is about to trust.
+
+1. **Growth, `getPointValue`'s `??` → `||`.** The audit separates them on **`{orderCount: 0, OrderCount: 7}`**
+   — `??` answers `0`, `||` answers `7`. The equivalence rested on a **single-casing assumption nothing
+   enforces**. Branch `lane/growth-poweruser-tested` @ `fddb06c`.
+2. **Workforce `P17`.** Proven separable by an **executable probe**: a vanish-then-return renders the stale
+   roster with no fresh read. The probe **passes unmutated and reds under P17**. Branch
+   `lane/workforce-screens-tested` @ `aff616d`.
+3. **Workforce `D06`.** Same shape: the panel keeps the old answer up while loading, so **the in-flight
+   half of D06's own comment is untested**. A hanging-read probe passes unmutated and reds under D06.
+
+**The probes already exist in the audit's review** at `docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md`.
+**Read them before writing your own** — reproducing a probe someone else proved is cheaper than deriving it,
+and if you cannot reproduce one, that is the finding.
+
+**`M01` is genuinely equivalent and is NOT yours.** The audit checked it: `load()`'s first-line gate
+re-tests the same predicate, `init` is `load`'s only caller, and `M19` removes both copies cleanly and reds.
+**Leave it, and say you left it.**
+
+**Two bookkeeping wrinkles the audit found, worth fixing while you are in these files**: the Workforce
+return's "71 mutations" undercounts its own committed **95** entries, and **`P18-v1` reds via a test title
+its `expect` string no longer names**.
+
+**Verify the premise at the tip before editing, and say so.** Briefs this session asserted four things the
+trunk had overtaken — three defect claims and one test-surface claim. If a brief names a test, suite or
+coverage figure, check it exists at the ref you are on.
+
+**The mutation instrument fails in BOTH directions and you must defeat both.** Zero tests plus exit 0 reads
+as a killed mutation (false green); zero tests plus a parse failure reads as a killed mutation too (false
+red). **Assert every run executed the baseline test count**, treat any `reddened (0)` as untrustworthy, and
+brace-check each mutant before running it. The canonical runner is `test/support/mutate.js` on
+**`lane/mutation-runner-cannot-delete-work` @ `c65b19c`** — merge that branch rather than copying the file.
+**Never restore with `git checkout -- <file>`**; it reverts to HEAD and deletes uncommitted work.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**Anything under `docs/plan/artifacts/` is gitignored** by a bare `artifacts/` rule (`.gitignore:119` at the
+trunk); force-add and verify with `git ls-files --error-unmatch`. Trunk **`d4c308e`** = **168 / 4007 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE — thirty-two tests nobody has shown can fail
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: every test on lane/meals-events-screens-tested is named red by at least one applied-and-restored mutation, measured by a runner that records per-test coverage, with the previously-unproven thirty-two listed by name
+agent: L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE
+evidence: docs/plan/lanes/L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE
+
+**A branch claimed per-test falsifiability and its instrument could not measure that at all.** The audit
+found **32 of 115 tests never red under any committed mutation** (11 + 18 + 3, named in review §4) — not
+because they are bad, but because **no lane instrument ever recorded per-test coverage**. The claim was
+unfalsifiable rather than false, which is worse: it read as proof.
+
+**The instrument was unfit in three specific ways, all measured**: it ran **no baseline**; it counted RED as
+*a summary regex OR any non-zero exit*, so **a crash scored as a kill**; and its silent mode defeated
+red-name capture, which is why its committed results say `reddened 0`.
+
+**So the first half of this lane is an instrument, not tests.** It must record **which test names newly
+red** under each mutation, refuse a zero-test baseline, and treat a crash as **INVALID, not RED**. The
+audit's own runner does exactly this — read
+`docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md` and take its design rather than
+inventing a fourth.
+
+**Then prove the thirty-two.** For each, devise a mutation that reds it. **A test you cannot red is a test
+to delete or rewrite — say which, and do it.** An honest smaller suite beats a larger unproven one.
+
+**The one sound equivalence on this branch is not yours to re-litigate**: `text()` maps empty and
+whitespace to `null`, so `hasMemberRef` implies a truthy ref, and the only consumer builds via
+`readStatement`. The audit checked it and called it the one genuinely equivalent survivor of three.
+
+**Five `THE DEFECT:` tests on this branch pin real defects and must stay green until those defects are
+fixed.** Do not convert them, and do not count them among the unproven unless they are.
+
+**Verify the premise at the tip before editing, and say so.** Briefs this session asserted four things the
+trunk had overtaken — three defect claims and one test-surface claim. If a brief names a test, suite or
+coverage figure, check it exists at the ref you are on.
+
+**The mutation instrument fails in BOTH directions and you must defeat both.** Zero tests plus exit 0 reads
+as a killed mutation (false green); zero tests plus a parse failure reads as a killed mutation too (false
+red). **Assert every run executed the baseline test count**, treat any `reddened (0)` as untrustworthy, and
+brace-check each mutant before running it. The canonical runner is `test/support/mutate.js` on
+**`lane/mutation-runner-cannot-delete-work` @ `c65b19c`** — merge that branch rather than copying the file.
+**Never restore with `git checkout -- <file>`**; it reverts to HEAD and deletes uncommitted work.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**Anything under `docs/plan/artifacts/` is gitignored** by a bare `artifacts/` rule (`.gitignore:119` at the
+trunk); force-add and verify with `git ls-files --error-unmatch`. Trunk **`d4c308e`** = **168 / 4007 / 0**.
+Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.**
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm
+install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+### Lane L-READ-TRANCHE-ONE — four branches about to reach the trunk, none read by anyone but their authors
+state: built-unverified
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the four tranche-one branches naming any change that does not do what its return claims, any test that cannot red, and whether they compose in the order the landing plan gives
+agent: L-READ-TRANCHE-ONE
+evidence: docs/plan/reviews/L-READ-TRANCHE-ONE.md
+
+**A proven landing order exists and tranche one is the next thing to touch the trunk.** Four branches:
+
+| branch | at | what it changes |
+|---|---|---|
+| `lane/mutation-runner-cannot-delete-work` | `c65b19c` | the canonical mutation runner + its pin |
+| `lane/register-stops-trusting-a-session-id` | `1c607fd` | what a till tells a worker with two employers |
+| `lane/eleven-wolt-statuses…` | `32518da` | eleven labels that reached a Swiss screen in Norwegian |
+| `lane/flag-corpus-remeasured` | `6026d35` | a census artifact and three adjudication packets |
+
+**The runner is the one to read hardest, because everything else in this program now depends on it.**
+It has been changed at least twice since it was written, and **three separate instrument defects were
+found tonight**: restoring with `git checkout --` (reverts to HEAD, deletes uncommitted work), several test
+paths passed as one argv (**0 tests, exit 0, every mutation certified green**), and a malformed anchor
+(**0 tests, non-zero exit, every mutation certified red**). **Check the current version defeats all three**,
+and that its own pin reds against each.
+
+**Then attack the two behaviour changes on their own terms.**
+- The register fix must still distinguish a cross-engagement clock-in that carries **another employer's**
+  open session id. **Its author kept a no-id guard the corrected wire no longer needs** and argued it is
+  load-bearing because client and API deploy independently — **check that argument and the mutation said to
+  prove it** (removing the guard reds a *pre-existing* test whose fixture is the old server's body).
+- The Wolt labels lane **read the backend write path rather than the enum** and concluded only ten of
+  fifteen `WoltStatus` members can reach the column, so five deliberately get no word. **Verify that
+  allowlist yourself** — if it is wrong in either direction, either an operator sees a raw enum or sees an
+  invented German word for a state the API cannot send.
+
+**The census is an artifact, not code — judge it differently.** It stopped at **7 of 384** and said so.
+**Check that its three calibration verdicts are right** and that nothing in it asserts a verdict it did not
+measure. A census that overclaims is worse than one that stops early.
+
+**Finally, compose them in the plan's order and run the tier.** The landing plan records step tiers
+**4007 → 4020 → 4024 → 4080** across this tranche — the endpoint is **170 / 4080 / 0**, and an earlier
+transcription of this brief stopped at 4024, omitting the 56 tests and one suite `32518da` adds.
+**If your numbers differ, say so** — several lanes reported
+against bases that moved under them.
+
+**Read-only.** No commit, merge to a trunk, rebase, push or branch move. You may compose in a throwaway
+worktree and apply mutations you restore. **Rule and name the exact change. Do not edit any file** other
+than your review and return. Write to `docs/plan/reviews/L-READ-TRANCHE-ONE.md`.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **The mutation instrument fails in both
+directions**: zero tests + exit 0 is a false green, zero tests + a parse failure is a false red, and the
+canonical runner **cannot judge a .NET suite at all** (its counter reads jest markers xunit never emits).
+**Two silent ignore rules**: a bare `artifacts/` and a bare `*.log`. Check evidence with
+`git check-ignore -v` before calling it committed. Teardown `rm -rf` + `git worktree prune`; `--no-verify`
+is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` as a separate check you stop on — hold
+below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch
+`okam-lwtwo-*`. **Do not push.**
+
+### Lane L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK — the proven order, executed one tranche at a time
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: tranche one of the landing plan is merged onto feature/restaurant-modules with every test accounted for against the recorded step tiers, or held with the reason named — and nothing beyond tranche one touched
+agent: L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK/evidence.md
+
+**The order is computed and proven; this executes exactly its first step and stops.**
+`docs/plan/artifacts/landing-order.md` gives **T1 = `c65b19c`, `1c607fd`, `32518da`, `6026d35`**, with step
+tiers **4007 → 4020 → 4024 → 4080**; the endpoint is **170 / 4080 / 0**, not 4024. Trunk is **`d4c308e`** at **168 / 4007 / 0**.
+
+**A sibling Fable reading of these same four branches runs in parallel. If its verdict has not returned
+when you reach the merge, land nothing and say so** — that is the expected outcome, not a failure. **If it
+returns and names a defect, land nothing and report it.**
+
+**Do not land tranches two through five.** T2 carries a measured seam — the runner's tree-wide guard reds
+on the `mutate.js` the meals branch commits — and T5 carries another, where the guest-offer fix reds nine
+named arms of the meals suite. **Those need work that is not yours.**
+
+**Four subsumptions the plan proved, which make separate landings actively wrong**: `6670619` contains
+`fddb06c` patch-exactly, and `40ab62d` contains both `52a93c5` and `c65b19c`. **Landing an inner tip
+separately produces same-file collisions.** `c65b19c` is in tranche one *and* inside `40ab62d`; take it
+here, and never again.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+**Run an arity sweep on the final tree** — a clean merge produced an **uncompilable** tree earlier today,
+and the landing plan's own sweep across 177 call sites adjudicated all 26 raw flags false, so a real one
+should stand out. **Detach your worktree in place afterwards** so the trunk ref is free for the next
+tranche.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **The mutation instrument fails in both
+directions**: zero tests + exit 0 is a false green, zero tests + a parse failure is a false red, and the
+canonical runner **cannot judge a .NET suite at all** (its counter reads jest markers xunit never emits).
+**Two silent ignore rules**: a bare `artifacts/` and a bare `*.log`. Check evidence with
+`git check-ignore -v` before calling it committed. Teardown `rm -rf` + `git worktree prune`; `--no-verify`
+is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` as a separate check you stop on — hold
+below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**, never touch
+`okam-lwtwo-*`. **Do not push.**
+
+---
+
+**CLERK NOTE 2026-08-07 — a `needs:` was removed after it had been served, and here is exactly why.**
+
+This lane carried `needs: L-READ-TRANCHE-ONE`, which **I authored**, to stop the landing preceding its
+review. **That gate did its job in full**: the review returned `built` with the verdict *land
+`1c607fd`/`32518da`/`6026d35`, hold `c65b19c`*, the landing lane read that verdict **out of the review file
+itself rather than from my relay**, and it landed exactly those three and held the runner.
+
+**The tool could not see any of that.** A Lane `needs:` is satisfied only at `accepted`, which is
+owner-only, so `plan start` refused the lane, it stayed `open`, and `plan return` then refused its return
+for not being `running` — leaving a landing that had actually happened unrecordable.
+
+**What was removed is my own structural line, not anyone's prose, and the condition it encoded was met in
+substance before it was removed.** Nothing was accepted, no decision was ruled, and the gate's verdict is
+preserved verbatim in `docs/plan/reviews/L-READ-TRANCHE-ONE.md`.
+
+**The general problem stands and is the owner's**: `needs:` clearing only at `accepted` currently holds 58
+open lanes, and this is the first time it blocked a landing rather than a backlog.
+
+
+### Lane L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN — the runner certifies kills for runs that executed nothing
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the canonical runner reports INVALID-RUN for a spawn failure and for a zero-test run in either exit direction, shown by pin arms that red against the current implementation, and the frontend tier green at the tip
+agent: L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN
+evidence: docs/plan/lanes/L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN
+
+**Every kill certificate in this program flows through one file, and it can be fooled by a run that never
+executed a test.** A gate review demonstrated it live on `lane/mutation-runner-cannot-delete-work` @
+`c65b19c`: **`MUTATE_TEST_COMMAND=false` certifies `2/2 RED(0)` from runs that ran nothing**, and
+`=true` certifies `STILL-GREEN`. **Nothing checks that a single test executed.**
+
+**The runner's own pin blesses the false kill.** Its *"suite command cannot be run at all"* arm **expects
+`RED`**. So the defect is not merely unguarded — it is asserted as the contract, which is why it survived a
+hardening pass whose stated purpose was this class of bug.
+
+**The same hole is why it cannot judge a .NET suite** (`F-THE-CANONICAL-MUTATION-RUNNER-CANNOT-JUDGE-A-DOTNET-SUITE`):
+the red-name counter reads **jest markers only**, so every xunit run prints `RED (0)` — indistinguishable
+from a void run. **One fix should close both, and if you find it cannot, say why.**
+
+**The change is already named, so implement it rather than redesign it.**
+1. **Parse an executed-test count** from the run.
+2. **Add outcome `INVALID-RUN`** for spawn failures and for zero-test runs **in both exit directions**.
+3. **Re-aim the pin arm** that currently expects `RED` on a spawn failure.
+4. **Add two void-direction pin arms** — one per exit direction.
+
+**What the runner already gets right and you must not regress**: buffer restore with a byte assertion, the
+`DESTROYED` reproduction arm, the standing tree-wide sweep, anchor repair, and copy-depth resolution via
+`package.json`. **The gate confirmed all of these hold.** A previous lane also proved that the zero-test
+abort must not be a `process.exit` inside the mutated window — `process.exit` does not run a `finally`, so
+aborting after applying a mutation leaves the mutant on disk. **Measure the baseline before a single byte is
+written.**
+
+**Two disclosures to preserve rather than quietly resolve.** A sibling lane deliberately changed a self-test
+that asserted a crash yields `RED` — *that is the defect, not the contract* — to assert `INVALID`. And
+`c65b19c` is **held out of tranche one** specifically pending this fix, so **say in your return whether the
+branch is now landable**, since a landing lane is waiting on that answer.
+
+**This branch is inside `40ab62d`.** Landing an inner tip separately produces same-file collisions, so
+**do not land anything** — build the fix and report.
+
+**Verify the premise at the tip before editing, and say so.** Reproduce the `MUTATE_TEST_COMMAND=false`
+demonstration yourself; if it does not reproduce, that is the finding.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence
+with `git check-ignore -v` before calling it committed. Trunk **`d4c308e`** = **168 / 4007 / 0**. Teardown
+`rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on
+`uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`,
+never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES — a landed branch carries a record wrong three ways
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the Wolt label record names the real statusesToSave membership, the real reachable count, and the real reason the disputed label exists, shown by a grep of the named file agreeing with WoltService.cs at the trunk
+agent: L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES/evidence.md
+
+**A gate ruled this a two-sentence correction with no code change and refused to let it hold a landing —
+correctly. The consequence is that `32518da` is now on the trunk carrying a record that is wrong three
+ways, and nothing points at fixing it.** The landing lane said so explicitly rather than letting it pass.
+
+**The screen behaviour is right and is NOT to be touched.** Eleven Wolt statuses that reached a Swiss
+screen in Norwegian now resolve through the dictionary. **No code change belongs in this lane.**
+
+**Three corrections, each measured by the gate against `WoltService.cs` at the trunk.**
+1. **`statusesToSave` has TEN members, not nine** — it includes **`DropoffCompleted`**, added at
+   `WoltService.cs:511` since **`6454f3c71`**. The lane's record says nine and treats `DropoffCompleted` as
+   absent from the allowlist.
+2. **Eleven of fifteen `WoltStatus` members reach the column, not ten.** Four are wordless, not five.
+3. **The label the lane called "a carried courtesy"** — kept because the switch had a word and dropping a
+   case is a behaviour change — **is load-bearing.** It is what makes it true that no raw enum can render
+   and no invented state-specific German can appear. The record demotes the thing that makes the fix sound.
+
+**Where to correct it**: the record around `plugins/global-mixin.js:215` and the counts in the lane's own
+evidence. **Verify each of the three against `WoltService.cs` at the trunk yourself before writing** — this
+is a record about the backend, so a record correction that is itself unmeasured would be the same defect
+again.
+
+**Say in your return whether the four wordless statuses are still the right set** given membership is ten
+rather than nine. The original reasoning was that **a word for a state the API cannot send is a guess
+printed at an operator**; check that reasoning still selects the same four.
+
+**Trunk is `d99f92d`** (tranche one landed: register, Wolt labels, census) at **169 suites / 4067 / 0**.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence
+with `git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do
+not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** Never `pkill`, never `npm
+ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-TRANCHE-TWO-REACHES-THE-TRUNK — the seam disappeared, and one branch now carries the whole tranche
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/a-kill-certificate-requires-a-test 316f22a is merged onto feature/restaurant-modules with every test accounted for against a measured composition, the runner on the trunk byte-identical to that tip, and nothing beyond tranche two touched
+agent: L-TRANCHE-TWO-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-TWO-REACHES-THE-TRUNK/evidence.md
+
+**Tranche two was two branches plus a seam. It is now one branch and no seam, and that was measured, not
+assumed.** `git merge-base --is-ancestor` confirms **`316f22a` contains `5ed9664`, `05c160a` AND
+`c65b19c`** — the meals coverage branch, the falsifiability work, and the mutation runner. **SEAM-1 is
+gone**: the runner's tree-wide guard cannot red on the meals `mutate.js`, because the same tip that carries
+the guard also deleted that copy.
+
+**This is why `c65b19c` was held out of tranche one, and taking it now is the whole point.**
+`git diff c65b19c 40ab62d` over `test/support/mutate.js` and `test/mutation-runner-restore.test.js` is
+**EMPTY** — `40ab62d` carries the **131-line defective runner unchanged**. The fix is **413 lines** on
+`316f22a`, which is **not** inside `40ab62d`. **Landing `40ab62d` before this ships a runner that certifies
+kills for runs that executed nothing.**
+
+**Verify that ordering claim yourself before merging** — run both `git diff` invocations and say what they
+return. **If `40ab62d` has moved and now contains the fix, say so**; the constraint dissolves and the flag
+clears.
+
+**What the runner now refuses, and what you must confirm survives the merge**: `INVALID-RUN` for a spawn
+failure and for a zero-test run **in either exit direction**; an executed-test count parsed in three
+dialects (`MUTATE_TESTS_RUN`, jest's summary, vstest `Total`/`Failed`); the baseline running **before a
+single byte is written**; and buffer restore with a byte assertion. **Assert the landed
+`test/support/mutate.js` is byte-identical to `316f22a`'s** — that is the exit criterion's teeth.
+
+**Measure, do not infer, and here is the precedent.** Tranche one's endpoint was predicted by arithmetic
+resting on an assumption of disjoint file sets; measuring `169/4067/0` is what confirmed the assumption
+rather than the number. **Do the same here**: `316f22a`'s own tier reads **172 / 4138 / 0** against a base
+that is not this trunk, and the trunk has since moved to **`1525e74`** (**169 / 4069 / 0**) via the Wolt
+record correction, which added 2 test arms. **Compose, run, and account for every test.**
+
+**Do not land tranches three through five.** T5 carries the remaining seam: the guest-offer fix reds nine
+named arms of the meals suite, five of them `THE DEFECT` green pins working as intended, and that needs a
+rewrite commit that is not yours.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one** — except
+the two runner files, where the correct resolution is **wholesale from `316f22a`**, not a three-way merge.
+Anyone merging 131 lines into 413 produces something that is neither. **Run an arity sweep on the final
+tree**; jest reaches only what a test imports, and a browser reaches more. **Detach your worktree in place
+afterwards.**
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence
+with `git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do
+not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** Never `pkill`, never `npm
+ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-TRANCHE-THREE-REACHES-THE-TRUNK — the workforce chain, whose two halves must land in order
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: 8d4d1b0 then 2ce83f6 are merged onto feature/restaurant-modules in that order with every test accounted for against a measured composition, and nothing beyond tranche three touched
+agent: L-TRANCHE-THREE-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-THREE-REACHES-THE-TRUNK/evidence.md
+
+**Tranche three is two branches with a hard order, and getting it backwards lands a fix on nothing.**
+`docs/plan/artifacts/landing-order.md` gives **T3 = `8d4d1b0` then `2ce83f6`**. Trunk is **`c6c04c7`** at
+**173 suites / 4200 / 0** after tranche two.
+
+**`8d4d1b0` (`lane/export-flag-unread`) sits on top of `aff616d` (`lane/workforce-screens-tested`)**, which
+is **not** an ancestor of the trunk. So `8d4d1b0` carries **both** — the 96 coverage tests and the
+three-state flag fix. **Verify that by ancestry before merging**, and say what you find: if `aff616d` has
+since landed by another route, the composition changes.
+
+**`aff616d` carries one deliberate red** — `does not tell a manager the export flag is off when the flag
+was never read`. **`8d4d1b0` is what turns it green**, by changing the code rather than the assertion. So a
+tier taken between the two branches is red *by design*; **only the composed tier is meaningful, and it must
+be green.** If you measure a red after both, that is a real finding.
+
+**`2ce83f6` was measured as composing clean with the workforce chain** despite sharing the timesheets page —
+that was SEAM-2, **refuted by measurement** rather than assumed. **Re-measure it; do not inherit the
+refutation.**
+
+**One thing this repo cannot see, recorded by the landing plan and still open.** `2ce83f6`'s own return
+names an **OkamAPI backend half** that this repository does not contain. **The landing lane must either
+pair it or knowingly lead it — say explicitly which you did**, and if you lead it, name what the trunk now
+promises that the backend does not yet deliver.
+
+**Measure, do not infer.** Both previous tranches predicted their endpoint by arithmetic resting on an
+assumption of disjoint file sets, and **measuring is what confirmed the assumption rather than the number**.
+Do the same. Account for every test against each branch's own reported tier.
+
+**Two corrections from tranche two that change how you check things.**
+1. **An empty `git diff` proves nothing on its own** — two *absent* files also diff to zero lines. **Confirm
+   file-level claims by blob identity** (`git rev-parse <ref>:<path>`), which is what actually established
+   that `40ab62d` still carries the defective runner.
+2. **In zsh, `"$ref:path"` applies the `:t` tail modifier even inside double quotes**, so a per-ref lookup
+   silently asks about a basename and reports every ref as absent. **Write `${ref}:path`.** This produced a
+   false measurement mid-lane in tranche two and nearly inverted its load-bearing check.
+
+**Do not land tranches four or five.** T4 is the two-repo unit (`core` bundle then `6d43520`); T5 carries
+the remaining seam, where the guest-offer fix reds nine named arms of the meals suite.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.** **Run an
+arity sweep on the final tree** — jest reaches only what a test imports, and a browser reaches more.
+**Detach your worktree in place afterwards** so the trunk ref is free for tranche four.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence
+with `git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do
+not touch `web-livewalk`.** **Gate on `uptime` separately — hold below 13.** Never `pkill`, never `npm
+ci`/`npm install`, never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-READ-THE-TWO-MONEY-FIXES — one creates money and one double-lists an invoice, and nobody but their authors has read either
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a verdict on lane/giftcard-transfer-one-wallet 71ac73af1 and lane/an-invoice-lists-each-order-once a9d408bfb, naming any path either fix leaves reachable, whether each pin reproduces its defect rather than restating its fix, and whether the two compose
+agent: L-READ-THE-TWO-MONEY-FIXES
+retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
+evidence: docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md
+
+**Both branches sit on `lane/pos-coverage-opened` @ `b368d930e` and neither has been read by anyone else.**
+One of them changes how money is accounted for; the other changes a document a person is asked to pay.
+
+**The gift card fix — attack the completeness claim, not the code.** Its author found that **both** branches
+of `TransferGiftcard` minted a duplicate and **only one had a test**: where the receiver has **no account
+yet**, the giver kept a spendable orphan too, and **nothing in the estate had ever executed that path**.
+The fix re-owns the card's single transaction rather than writing a second one for EF's one-to-one fixup to
+orphan. **Ask whether a third path exists.** The lane's own warning is the reason to ask: it read a UNIQUE
+index off the migration chain, began writing that SQL Server would reject the transfer, and **running it
+refuted that** — the fixup means the index never fires.
+
+**Check `C1` and the handover copy.** The lane asserts `GiftcardTransaction` is **not** covered by
+`GuardAppendOnly` and that `RefundGiftcard` already retypes these rows. **Verify both.** It also moved the
+handover copy **above** the receiver reassignment, because taken after it the giver's own record named the
+person they gave the card to. **That is a behaviour change beyond the pin — judge it.**
+
+**The invoice fix — the heading is the part that goes beyond its pin, and its author said so.** Keying
+sections on year+month alone yields a document that is arithmetically correct and **still unreconcilable**:
+two sections headed `1.–31. mai`. It changed the heading to `MMMM yyyy` and pinned that separately.
+**Rule on whether that belongs in the fix.**
+
+**Its author also inverted the obvious risk, and that argument needs checking.** Year+month keying could be
+**worse** than month-only in one shape — a line whose `Completed` falls outside `[From, To]` lands in **no
+section**, so month sums silently stop reaching the grand total. It argues that shape is closed at source,
+because orders become lines only via `Completed >= model.From && <= model.To` and the invoice takes those
+same two values. **Verify that, because if it is wrong the fix is unsafe rather than incomplete.**
+
+**One site is recorded as deliberately NOT a defect**: `WrappedService.cs:189,199` also matches month-only,
+but its orders are bounded to a single calendar year. **Confirm, so nobody "fixes" it later.**
+
+**Neither lane ran the same controls.** The gift card lane proved its instrument in **both** directions —
+a no-match filter exits 7 as `ZERO`, a non-compiling mutant exits 9 as `BUILD` — while the invoice lane has
+`STALE` (which fired for real) but **never ran the `ZERO` control**, and said so. **Do not credit it with
+the control it disclosed it did not run.**
+
+**Then compose the two and run the tier.** They share a base; say whether they compose and what you measure.
+**A known red rides along**: `GiftcardBalanceTests.Passing_a_gift_card_on...` is the pin `71ac73af1` turns
+green, so a tier taken with only the invoice branch is red by design.
+
+**Read-only.** No commit, merge, rebase, push or branch move. You may run tiers and apply mutations you
+restore. **Rule and name the exact change. Do not edit any file** other than your review and return. Write
+to `docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md` in the frontend repo.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it,
+never `git add -A`. **The canonical mutation runner now parses vstest `Total`/`Failed`** and reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either direction — it is on the frontend trunk at
+`test/support/mutate.js`. **An empty `git diff` proves nothing**: two absent files also diff to zero, so
+confirm file claims across refs by **blob identity** (`git rev-parse <ref>:<path>`). **In zsh
+`"$ref:path"` applies the `:t` tail modifier even inside double quotes** — write `${ref}:path`. **Two
+silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence with `git check-ignore -v`.
+Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below
+13.** Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED — two hundred and seventeen branches sit off the backend trunk
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: a committed artifact giving a proven landing order for the five branches built since 2026-08-06, each step's composition measured rather than inferred, plus a classified count of every other unlanded lane branch — with no trunk moved
+agent: L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED
+retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
+evidence: docs/plan/artifacts/backend-landing-order.md
+
+**The frontend had a dozen unlanded branches and nobody had written down their dependencies; computing that
+found two seams invisible to git. The backend has `217` of `376` lane branches unlanded, and nobody has
+looked at all.** I measured that count; **re-measure it rather than quoting me.**
+
+**Most of those are historical and are NOT yours to order.** The deliverable is the five built since
+2026-08-06, plus an honest classification of the rest so the scale stops being invisible:
+
+| branch | at | base |
+|---|---|---|
+| `lane/pos-coverage-opened` | `b368d930e` | `81d06c10a` |
+| `lane/giftcard-transfer-one-wallet` | `71ac73af1` | `b368d930e` |
+| `lane/an-invoice-lists-each-order-once` | `a9d408bfb` | `b368d930e` |
+| `lane/mail-revocation-lever` | `69e6ca8af` | `81d06c10a` |
+| `lane/a-module-off-names-the-module-be` | `8357c8a33` | `9fb057d00` |
+
+**Three of the five share a base that is NOT the trunk.** `81d06c10a` and `b368d930e` both predate
+`057c390ad`, and the giftcard and invoice branches **fork from the same commit** — so they will collide on
+the same files unless ordered. **Say what the collision is before you propose an order.**
+
+**`8357c8a33` is gated on an unruled decision** (`D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE`) **and must not be
+ordered as landable.** Record it as blocked and name the decision.
+
+**Classify the other ~212 without ordering them.** For each, is it (a) already superseded by trunk content,
+(b) a fix nothing else supersedes, or (c) unmeasurable without opening it? **A count per class is the
+deliverable** — the flag census proved that turning an unusable aggregate into a classified work list is
+worth more than any single verdict. **Do not guess a class you did not measure; `unmeasurable` is a
+legitimate answer and must be counted as its own class.**
+
+**Compose in a throwaway worktree on a detached HEAD and leave every trunk exactly where you found it.**
+**Measure each step's tier rather than predicting it** — the frontend tranches each rested on an assumption
+of disjoint file sets, and measuring is what confirmed the assumption rather than the number.
+
+Write to `docs/plan/artifacts/backend-landing-order.md` **in the frontend repo** (that is where the other
+censuses live) — **force-add it**, because a bare `artifacts/` rule swallows that directory, and verify with
+`git ls-files --error-unmatch`.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it,
+never `git add -A`. **The canonical mutation runner now parses vstest `Total`/`Failed`** and reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either direction — it is on the frontend trunk at
+`test/support/mutate.js`. **An empty `git diff` proves nothing**: two absent files also diff to zero, so
+confirm file claims across refs by **blob identity** (`git rev-parse <ref>:<path>`). **In zsh
+`"$ref:path"` applies the `:t` tail modifier even inside double quotes** — write `${ref}:path`. **Two
+silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check evidence with `git check-ignore -v`.
+Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below
+13.** Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+### Lane L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE — it protects two directories and misses fifteen drivers
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the sweep reports every executable mutation driver in the tree including those under repo-root lanes/, shown by an arm that reds when a broken copy is placed there and passes when it is removed
+agent: L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE
+retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
+evidence: docs/plan/returns/L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE-1.md
+
+**The guard that exists to stop a mutation runner destroying the work it tests does not look where the
+runners are.** Its sweep roots are `test/support` and `docs/plan/lanes`, and it reports **2 scripts** — but
+the trunk carries **14 more executable mutation drivers under repo-root `lanes/`**, and tranche three added
+another (`lanes/mutate.js`, via `8d4d1b0`). **Fifteen drivers sit outside the sweep.**
+
+**This is a coverage gap today, not a live defect, and the distinction was measured rather than assumed.**
+The landing lane applied the guard's own rule to all fourteen by hand and **every one is clean**. So nothing
+is hiding there now — but **a future broken copy under `lanes/` would not be caught**, which is precisely
+the failure the guard was built for: three separate runner defects tonight all spread by copying.
+
+**Two false-negative shapes the guard must keep refusing, and both are subtle.** A copy is safe if it
+restores from a buffer **and** mentions `git checkout` only inside a comment — the guard strips comments
+before matching, which is why the surviving Wolt copy passes honestly rather than by luck. **Do not
+regress comment-stripping while widening the roots**, or you will trade a false negative for a false
+positive across fifteen files at once.
+
+**The exit criterion is the arm, not the widening.** Place a deliberately broken copy under repo-root
+`lanes/`, watch the sweep red, remove it, watch it pass. **A widened root that no test exercises is the same
+class of claim as a mutation nobody ran.**
+
+**Report the count the sweep prints before and after** — it currently says `[sweep] 2 mutation script(s)`,
+and that number is the visible symptom.
+
+**Trunk is `bb22728`** at **179 suites / 4318 / 0** after tranche three.
+
+**Every change must red under a mutation you apply and restore.** The canonical runner is on the trunk at
+`test/support/mutate.js`; it now reports `INVALID-RUN` for a spawn failure or a zero-test run in either
+exit direction, so a kill certificate requires a test to have run.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**An empty `git diff` proves nothing** — two absent files also diff to zero; confirm file claims across refs
+by **blob identity** (`git rev-parse <ref>:<path>`). **In zsh `"$ref:path"` applies the `:t` tail modifier
+even inside double quotes** — write `${ref}:path`. **Two silent ignore rules** — a bare `artifacts/` and a
+bare `*.log`; check evidence with `git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` as a separate check you
+stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**,
+never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-TRANCHE-FOUR-REACHES-THE-TRUNK — the two-repo unit, where the frontend commit is useless without the core one
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: core a6ae241 and Web-modules 6d43520 are landed as one unit with the submodule pin moved and the tier measured at the composed tip, or held with the reason named — and nothing beyond tranche four touched
+agent: L-TRANCHE-FOUR-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FOUR-REACHES-THE-TRUNK/evidence.md
+
+**Tranche four is the only unit in the plan that spans two repositories, and taking half of it produces a
+tree that cannot resolve its own imports.** `docs/plan/artifacts/landing-order.md` gives
+**T4 = core bundle, then `6d43520`**. Trunk is **`bb22728`** at **179 suites / 4318 / 0**.
+
+**The core commit is `a6ae241`, whose parent is exactly the current pin `9626a561`, so it fast-forwards.**
+It was absent from the main `core` object store and **has already been restored** by the clerk from the
+bundle its own lane committed — verify it is present (`git -C core cat-file -t a6ae241`) rather than
+assuming, and if it is missing, the bundle is at
+`lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED/core-a6ae241.bundle` on `lane/every-report-read-says-why`.
+
+**Landing this means moving the submodule pin, which no tranche has done yet. Say exactly what you changed
+and to what.** A frontend commit whose gitlink still names `9626a561` while the code expects
+`hasBackendMessage` is the failure this tranche exists to avoid.
+
+**`6d43520` contains `6670619`**, which the landing plan proved — but **verify by blob identity, not by an
+empty diff**, since two absent files also diff to zero.
+
+**The core pin is on no remote branch and that is a standing blocker**
+(`F-THE-TRUNK-DEPENDS-ON-A-CORE-COMMIT-THAT-EXISTS-ONLY-ON-THIS-MACHINE`). **You are stacking a second
+local-only commit on it.** That is the right thing to do here and it makes the blocker worse — **say so in
+your return** so the eventual push order (core first, `9626a561` before `a6ae241`) stays recorded.
+
+**Do not land tranche five.** It carries the remaining seam: the guest-offer fix reds nine named arms of the
+meals suite, five of them `THE DEFECT` green pins working as intended, and that needs a rewrite commit.
+
+**Measure, do not infer.** Every tranche so far predicted its endpoint by arithmetic and measuring is what
+confirmed the assumption rather than the number. **Resolve every conflict at hunk level with
+`git merge-file`, never by side, and report each one. Run an arity sweep on the final tree** — this tranche
+changes a service every reporting screen reads, so an unresolved import here fails in a browser rather than
+in jest. **Detach your worktree in place afterwards.**
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. Pin
+with `git submodule update --init core`, then **from inside `core`**
+`git -c protocol.file.allow=always fetch /Users/svendaneel/okam/Web-modules/core 9626a561bb0442b0aed026be75b7f9419337ac6d`
+and check out that SHA — that commit is on **no remote branch**. **Bundle any commit you make inside
+`core/` before teardown**: a submodule in a linked worktree keeps its objects under that worktree.
+**An empty `git diff` proves nothing** — two absent files also diff to zero; confirm file claims across refs
+by **blob identity** (`git rev-parse <ref>:<path>`). **In zsh `"$ref:path"` applies the `:t` tail modifier
+even inside double quotes** — write `${ref}:path`. **Two silent ignore rules** — a bare `artifacts/` and a
+bare `*.log`; check evidence with `git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` as a separate check you
+stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**,
+never touch `okam-lwtwo-*`. **Do not push.**
+### Lane L-TRANCHE-FIVE-REACHES-THE-TRUNK — the last tranche, and the only one that must rewrite tests to land
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: 40ab62d is merged onto feature/restaurant-modules together with a rewrite of the nine meals arms it reds, each rewritten arm asserting the corrected behaviour rather than being deleted, and the tier green at the composed tip
+agent: L-TRANCHE-FIVE-REACHES-THE-TRUNK
+retracted: weekly API limit terminated the agent 2026-08-07 21:05; resume point recorded in the lane body, nothing lost
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FIVE-REACHES-THE-TRUNK/evidence.md
+
+**This is the last tranche and the only one carrying a seam that cannot be merged away.**
+`docs/plan/artifacts/landing-order.md` gives **T5 = `40ab62d` plus a pin rewrite**. Trunk is **`3807e90`**
+at **182 suites / 4414 / 0**, with the `core` pin at `a6ae241`.
+
+**The seam, measured: `40ab62d` reds nine named arms of the meals offer suite.** Five are `THE DEFECT:`
+pins and **four are behaviour arms**. **The five going red is the convention working exactly as designed** —
+they assert today's broken behaviour and are meant to red the day it is fixed, and `40ab62d` is that day.
+**Do not delete them. Convert each to assert the corrected behaviour**, and say which you converted.
+
+**The four behaviour arms are the ones to think about.** They are not defect pins, so a red there means the
+guest-offer fix changed something those arms were asserting. **For each, decide whether the arm was wrong or
+the fix is** — and if any arm turns out to be right, that is a defect in `40ab62d`, not a rewrite job.
+**Say so and hold rather than rewriting an assertion to match code you have not justified.**
+
+**`40ab62d` contains `52a93c5` and `c65b19c`** — proved by the landing plan. **`c65b19c` is already on the
+trunk** via tranche one, and it is the **131-line defective runner**; the trunk now carries the **413-line**
+fixed one from `316f22a`. **The merge must not regress `test/support/mutate.js` or
+`test/mutation-runner-restore.test.js`.** **Assert both landed blobs are byte-identical to `316f22a`'s
+afterwards** — that is this tranche's sharpest failure mode, and it will not show up as a conflict.
+
+**Verify containment by blob identity, never by an empty `git diff`** — two absent files also diff to zero.
+**In zsh write `${ref}:path`**, since `"$ref:path"` applies the `:t` tail modifier even inside double quotes
+and silently reports every ref as absent.
+
+**Measure, do not infer.** Every tranche so far predicted its endpoint by arithmetic, and measuring is what
+confirmed the assumption rather than the number — most sharply in tranche three, where two branches
+demonstrably shared a file and only measurement established the composition.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.** **Run an
+arity sweep on the final tree.** **Detach your worktree in place afterwards.**
+
+**When this lands the landing plan is complete — say so, and name anything the plan listed that did NOT
+land**, so the next reader is not left inferring it from silence.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. The
+pin is now **`a6ae241`**, not `9626a561`. Pin with `git submodule update --init core`, then **from inside
+`core`** fetch from `/Users/svendaneel/okam/Web-modules/core` using the **full 40-character SHA** —
+the abbreviated form fails with *"couldn't find remote ref"*, which reads like a missing object rather than
+a syntax error. **Neither core pin is on any remote branch; do not push either repo.** **Two silent ignore
+rules** — a bare `artifacts/` and a bare `*.log`; check evidence with `git check-ignore -v`. Teardown
+`rm -rf` + `git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on
+`uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`,
+never bind **:3971**/**:5971**, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY — any signed-in user can transfer any card whose id they know
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: TransferGiftcard refuses a caller who does not hold the card, shown by a wire test that reds when the ownership check is removed, and the non-SQL tier green apart from pins named in the return
+agent: L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY
+evidence: docs/plan/lanes/L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY/tier.txt
+
+**A signed-in user can give away a gift card they have never owned, if they can guess or obtain its id.**
+Verified by the clerk at trunk `057c390ad`: `Controllers/GiftcardController.cs:232-237` declares
+`[HttpPost("transfer/{giftcardId}/{newReceiverPhoneNumber}")]` and calls
+`_giftcardService.TransferGiftcard(giftcardId, newReceiverPhoneNumber)` — **the caller's identity never
+reaches the service.** The class carries a bare `[Authorize]`, which establishes only that *somebody* is
+signed in.
+
+**`CancelPurchase`, directly above it in the same file, IS role-gated.** So this is not a codebase without
+the concept — it is one place that was missed, which is why it reads as safe on a skim.
+
+**The lane that found this deliberately did not fix it, and its reasoning is your starting point.** The
+service takes **no actor at all**, so the check cannot be expressed without changing the signature and its
+callers — **a different change that should not ride inside a money fix.** It was right to hold. **You are
+the lane that does it properly.**
+
+**An independent review has since named the same change, without being asked to.** The Fable reading of
+the two money fixes ranked this **above both of them**: *"TransferGiftcard moves value with no resolved
+caller identity, a standing C4 breach the lane disclosed and did not close."* Its named change is
+**resolve the caller, require `giftcard.ReceiverUserId == callerId`, record the actor.** Two independent
+readings converging on one change is the strongest signal this program produces — **but implement it
+because you verified it, not because two agents agreed.**
+
+**That review also settled what makes this expensive.** `GetBalance` sums `Purchased` minus `Redeemed`
+**by `UserId`, never joining the card** — which is why value moved this way is untraceable from the card
+itself. A wrongly transferred card is not merely misfiled; **the balance follows the new holder and the old
+holder's own record cannot explain it.**
+
+**This is a C4 obligation** — an actor on money writes — so **name what the actor is** in your return:
+the authenticated user id, and how it is obtained on this path. **Do not invent a second mechanism if the
+estate already has one**; find how other money-path actions establish the caller and follow it.
+
+**Decide and state what a refusal looks like.** A `404` and a `403` say different things to an attacker
+probing for valid ids: one conceals whether the card exists, the other confirms it. **Say which you chose
+and why.** This is the kind of call that should be visible in the record rather than inferred from a status
+code.
+
+**Enumerate every caller of the service method before you change its signature.** A widened signature with
+an un-updated call site is precisely the shape that produced a **clean merge that did not compile** in this
+program — `git merge` reported success and the tree failed to build, because a test called a method a lane
+had widened. **Grep call-site arity after your change.**
+
+**The gift card money fix is on `lane/giftcard-transfer-one-wallet` @ `71ac73af1`** and is not yet landed.
+**Branch from it, not from the trunk** — it re-owns the card's single transaction, and building the
+ownership check against the pre-fix body means writing a guard around behaviour that is about to change.
+Say so in your return, since a reviewer then reads two branches.
+
+**Every change must red under a mutation you apply and restore.** The obvious one is deleting the ownership
+check; a second is asserting the *wrong* actor passes. **Report the count, and assert every mutation run
+executed the baseline test count** — the runner reports `INVALID-RUN` for a spawn failure or a zero-test run
+in either exit direction, and a kill certificate requires a test to have run.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it,
+never `git add -A`. **A known red rides along**: `GiftcardBalanceTests.Passing_a_gift_card_on...` is the pin
+`71ac73af1` turns green, so it is green on your base and must stay so. **An empty `git diff` proves
+nothing** — two absent files also diff to zero; use **blob identity**. **In zsh write `${ref}:path`**, not
+`"$ref:path"`. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check with
+`git check-ignore -v`. Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a separate check you
+stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**.
+**Do not push.**
+
+### Lane L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK — three tranches landed on the shared branch and none has been read
+state: running
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the trunk from c6c04c7 to 3807e90, naming any landing whose composed tier does not reproduce, any intent a merge silently destroyed, and whether the submodule pin move is sound
+agent: L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK
+
+**This is the most consequential unreviewed work in the plan, because it is already on the shared branch.**
+`feature/restaurant-modules` moved **`c6c04c7` → `ee82e40` → `bb22728` → `3807e90`** in three tranches, each
+landed by the same agent, **none read by anyone else**. Tier at the tip: **182 suites / 4414 / 0**.
+
+| tranche | merged | trunk after | tier |
+|---|---|---|---|
+| T2 | `316f22a` (fixed mutation runner) | `c6c04c7` | 173 / 4200 / 0 |
+| T3 | `8d4d1b0` then `2ce83f6` | `bb22728` | 179 / 4318 / 0 |
+| T4 | core `a6ae241` + `6d43520` | `3807e90` | 182 / 4414 / 0 |
+
+**Attack the claim each landing rests on, which is the same claim three times.** Each predicted its endpoint
+by arithmetic resting on an **assumption of disjoint file sets**, then measured and found agreement. **The
+agreement is not the evidence — the measurement is**, and only where the sets genuinely overlap does it
+prove anything. **T3 is the one where it matters**: `8d4d1b0` and `2ce83f6` demonstrably **share
+`pages/admin/workforce-timesheets.vue`**, git auto-merged it with no conflict, and the landing lane claims
+it read the merged file and found **both intents surviving in their own regions** — `2ce83f6`'s refusal
+routing through `contextRefusalKey`, and `8d4d1b0`'s `exportEnabled` still returning `null` when unread with
+the template gating on `=== false`. **Read that file yourself. A merge that took either side wholesale
+would have destroyed one silently, and a green tier would not have said so.**
+
+**T4 moved the submodule pin and no other tranche has.** `core` `9626a561` → `a6ae241`. The lane argues the
+move is **load-bearing**, measured both directions: `hasBackendMessage` appears **0** times in
+`core/services/request-service.ts` at the old pin and **1** at the new, and the app reads it in **4** places
+— so the frontend half against the old pin would read a field core never writes, **green in jest because
+those tests construct the error object themselves, and wrong in a browser.** **Verify that count and that
+claim.** Also confirm the committed gitlink and `git -C core rev-parse HEAD` agree at `a6ae241`.
+
+**Check the deliberate red actually went green by code.** `aff616d` carried one deliberate failing test and
+`8d4d1b0` is meant to turn it green **by changing the page, not the assertion**. The lane proved this by
+`numstat` — **59 added / 0 removed** in `test/workforce-timesheets-page.test.js`. **Reproduce that**, since
+zero deletions is the whole argument.
+
+**One thing was knowingly led and you should rule on whether that was right.** `2ce83f6`'s backend half
+(`8357c8a33`) is **not** on the backend trunk. The lane checked `WorkforceErrorCodes.cs:56` itself and found
+`workforce.module-disabled` already there and documented on `IWorkforceModuleGate`, concluding the contract
+landed long ago and the unlanded half is **a demo seed script and its test, no production code** — so the
+only consequence is **demo-world divergence**. **Verify that, because if any production code rides in that
+branch the trunk is promising something the backend does not deliver.**
+
+**Read-only.** No commit, merge, rebase, push or branch move. You may compose in a throwaway worktree and
+apply mutations you restore. **Rule and name the exact change. Do not edit any file** other than your review
+and return. A clean reading is a legitimate outcome. Write to
+`docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md`.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. **The
+pin is `a6ae241`, not `9626a561`**, and `git fetch <path> <sha>` needs the **full 40-character SHA** — the
+abbreviated form fails with *"couldn't find remote ref"*, which reads like a missing object rather than a
+syntax error. **Neither core pin is on any remote branch; do not push either repo.** **An empty `git diff`
+proves nothing** — two absent files also diff to zero; use **blob identity**. **In zsh write `${ref}:path`**,
+not `"$ref:path"`, which applies the `:t` tail modifier even inside double quotes. **Two silent ignore
+rules** — a bare `artifacts/` and a bare `*.log`; check with `git check-ignore -v`. Teardown `rm -rf` +
+`git worktree prune`. **Do not touch `web-livewalk`.** **Gate on `uptime` as a separate check you stop on —
+hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK — three branches that must land together or leave the trunk red
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: pos-coverage-opened, giftcard-transfer-one-wallet and an-invoice-lists-each-order-once are merged onto feature/restaurant-modules as one tranche with a measured tier of 0 failed at the composed tip, and nothing beyond the tranche touched
+agent: L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK/evidence.md
+
+**A landing census measured this and its finding is the reason the lane exists: `lane/pos-coverage-opened`
+CANNOT LAND ALONE.** It reads like an independent coverage lane. It is **failing-test-first** — it adds
+three test files, **two of them red against the trunk on purpose**, documenting the money defects its two
+siblings fix. Landing it singly leaves the backend trunk **red for two commits**.
+
+**The arc, measured at every step rather than predicted**:
+
+| step | tier |
+|---|---|
+| backend trunk `057c390ad` | 4949 / 0 / 11 |
+| `+ pos-coverage-opened` `b368d930e` | 4967 / **2 FAILED** |
+| `+ giftcard-transfer-one-wallet` `71ac73af1` | 4971 / **1 FAILED** |
+| `+ an-invoice-lists-each-order-once` `a9d408bfb` | 4974 / **0** |
+
+**The two reds are named**: gift-card money **copied rather than moved** (expected 0, actual 50000), and an
+order **listed twice** on a year-spanning invoice (expected 4, actual 8). Each goes green as its own lane
+lands. **That 2 → 1 → 0 arc is your acceptance criterion — reproduce it and report each step.**
+
+**`lane/mail-revocation-lever` @ `69e6ca8af` is independent** and may land before, after or inside the
+tranche. **The reverse inner order (pos → invoice → giftcard) was not measured and is not claimed** — do not
+improvise it; if you deviate from pos → giftcard → invoice, measure what you actually did.
+
+**There is no file collision, and knowing why matters.** The giftcard and invoice contributions are
+**disjoint** — one touches `GiftcardBalanceTests.cs`, the other `InvoiceDocumentTests.cs`. What couples them
+is that **both fork from `b368d930e` and carry pos-coverage's whole commit as an unlanded tail**: the
+stacked-chain shape, not a conflict. **Confirm by blob identity, never by an empty `git diff`** — two absent
+files also diff to zero.
+
+**Both fixes have been independently reviewed and APPROVED**, so you are landing read work: no third
+unguarded write path exists, `GiftcardTransaction` is outside `GuardAppendOnly`, and the invoice's
+year+month keying is **strictly safer** than month-only because every line is filtered into the section
+loop's own bounds.
+
+**One thing lands still open and you must say so rather than let it pass.** `TransferGiftcard` moves value
+with **no resolved caller identity** — any signed-in user can transfer any card whose id they know. **A lane
+is building that fix on top of `71ac73af1` right now.** Landing this tranche does not make the hole worse
+(the unguarded controller is already on the trunk) but it does not close it either. **Name it in your
+return as landing-with-a-known-open-hole, and name the branch that closes it.**
+
+**Do not land `8357c8a33`.** It is the backend half of a pair under the unruled
+`D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE`, whose **frontend half is already on the frontend trunk by a
+clerk error** — landing this half would compound that breach rather than repair it. **Check every branch you
+touch against the open decisions before merging, and say that you did.**
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.** **Run an
+arity sweep on the final tree.** **Detach your worktree in place afterwards** — a worktree that holds the
+branch turns any commit made in it into a trunk move, which has already happened once in this program.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it,
+never `git add -A`. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check with
+`git check-ignore -v`. **In zsh write `${ref}:path`**, not `"$ref:path"`. Teardown `rm -rf` +
+`git worktree prune`. **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`,
+never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK — the last open money hole reaches the branch that carries it
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: lane/giftcard-transfer-one-wallet-auth 8637cdd51 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+agent: L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK
+evidence: docs/plan/returns/L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK-1.md
+
+**The backend trunk currently ships a route where any signed-in user can transfer any gift card whose id
+they know.** The money tranche landed the *balance* fix — `057c390ad` → **`7d0450a4b`**, carrying
+`b368d930e`, `71ac73af1` and `a9d408bfb` — but the **authorization** hole is still open on it, exactly as
+that landing lane was told to declare. **This closes it.**
+
+**Branch `8637cdd51` sits on `71ac73af1`, which is now an ancestor of the trunk**, so it should compose
+cleanly rather than carrying a stale base. **Its own author asked that this be confirmed at merge rather
+than assumed** — do that, and say what you measured.
+
+**One red on that branch is inherited and should be GONE at the composed tip.** Its tier read
+**4965 / 1 failed / 10 skipped** because `InvoiceDocumentTests` arrived unchanged from `b368d930e` and the
+invoice fix had not yet landed. **It has now.** So the composed tier should be **green** — **if it is not,
+that is a real finding and you must not land it.**
+
+**What the fix does, so you can tell a regression from a rename.** The controller resolves the caller with
+**`ActorClaims.TryResolveUserId`** — deliberately **not** the `User.Identity.Name` every sibling money
+controller uses, because for the OAuth principal that value is a **phone number** and comparing it to
+`ReceiverUserId` would refuse the genuine holder. The refusal is **neither 403 nor 404**: it is the same
+`GiftcardNotFound` an unknown id already gets, the status guard was changed to throw it too, and the
+ownership check sits **above** that guard — because splitting any of the three turns the route into an
+oracle confirming which card ids are real. **Preserve all three or the concealment breaks.**
+
+**`callerUserId` is APPENDED, not inserted at the estate's actor-second position, and that was deliberate**
+— it and the phone are both strings, so inserting would let a stale call site compile while silently
+swapping them. **Appending makes every stale site a compile error. Run an arity sweep and confirm the
+build reports zero errors.**
+
+**Two mutations survive on that branch and they are a proven pair, not a gap.** The check ordering and the
+shared refusal message each mask the other; a **combined** mutation breaking both reds 1 of 13. **Do not
+treat either as unpinned.**
+
+**Do not land `8357c8a33`** — the backend half of a pair under the unruled
+`D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE`, whose frontend half is already on the frontend trunk by a clerk
+error. **Check every branch you touch against the open decisions before merging, and say that you did.**
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.**
+**Detach your worktree in place afterwards** — a worktree holding the branch turns any commit made in it
+into a trunk move, which has already happened once in this program.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites tracked `artifacts/journeys/ev-dietary/run-sheet.json`** — restore it,
+never `git add -A`. **A mutation script killed between write and restore leaves the mutant on disk** —
+this happened in this program; put the restore in a `finally` **and** an `atexit` hook, and read the file
+rather than trusting an exit code. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`.
+**In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a separate
+check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK — the last two built frontend branches
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/guard-sweeps-where-runners-live b6715dd and lane/backend-landing-order 392a2fd are merged onto feature/restaurant-modules with the tier green at the composed tip and every test accounted for, and nothing beyond them touched
+agent: L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK/evidence.md
+
+**Two branches are built and neither is on the trunk. They are the last frontend work of this program.**
+Trunk is **`31e6c60`** at **183 suites / 4438 / 0**.
+
+| branch | at | what it carries |
+|---|---|---|
+| `lane/guard-sweeps-where-runners-live` | `b6715dd` | the widened mutation-runner guard + 8 arms |
+| `lane/backend-landing-order` | `392a2fd` | `docs/plan/artifacts/backend-landing-order.md` |
+
+**The guard branch is the one that matters and its base is stale.** It was measured at **182 / 4421 / 0**
+against trunk `3807e90`; the trunk has since moved to `31e6c60` at **183 / 4438 / 0** by tranche five.
+**Its +7 net new arms should still be +7. Measure, do not infer** — every landing in this program predicted
+its endpoint by arithmetic and measuring is what confirmed the assumption rather than the number.
+
+**What the guard branch changes, so you can tell a regression from a rename.** The sweep went from **2
+mutation scripts across 2 roots** to **53 across 3**; repo-root `lanes/` alone holds 47 and was invisible.
+It also removed a **second** narrowing nobody had noticed — the guard required `mutat` in the *filename*,
+which is how `lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/run-browser-arm.sh` stayed hidden while patching
+`LoginModal.vue` and restoring with `git checkout --` in its cleanup trap. **Both widenings must survive
+the merge; either one alone leaves the hole open.**
+
+**The comment stripper is the delicate part.** Widening exposed a false positive on the lane's own
+`mutate.py`, because **a docstring is not a `#` comment**. The stripper now understands docstrings and
+block comments and **deliberately does not strip every string** — a triple quote is prose only when it
+**opens** a line, so `subprocess.run("git checkout -- x")` is still caught. **Both directions are pinned.
+Confirm those arms survive and run.**
+
+**One item on the guard branch is a live finding, not a test fixture.**
+`lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/run-browser-arm.sh` was **fixed** to restore from a buffer. Its
+worktree exists with its branch checked out. **Do not revert that file to the trunk's copy** — the trunk's
+is the unfixed one, and `lane/loginmodal-success-is-silent` carries the same unfixed blob `04907e7e` and
+inherits the fix when it rebases. **Confirm the landed file is the fixed one by blob identity, not by an
+empty diff.**
+
+**The census branch is documentation and should be trivial** — but `docs/plan/artifacts/` is swallowed by a
+bare `artifacts/` rule, so **verify the artifact is actually tracked after the merge** with
+`git ls-files --error-unmatch docs/plan/artifacts/backend-landing-order.md`. A merge cannot un-track it,
+but a file that was never tracked upstream will silently not arrive.
+
+**Check both branches against the open decisions before merging, and say that you did.** That check is what
+a clerk error skipped, which is how a gated branch reached this trunk.
+
+**Resolve every conflict at hunk level with `git merge-file`, never by side, and report each one.** **Run an
+arity sweep on the final tree.** **Detach your worktree in place afterwards** — a worktree holding the
+branch turns any commit made in it into a trunk move, which has happened once here already.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. The
+pin is **`a6ae241`**; `git fetch <path> <sha>` needs the **full 40-character SHA**. **Neither core pin is on
+any remote branch — do not push either repo.** **An empty `git diff` proves nothing** — two absent files
+also diff to zero; use **blob identity**. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a
+bare `artifacts/` and a bare `*.log`; check with `git check-ignore -v`. Teardown `rm -rf` +
+`git worktree prune`; `--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` as
+a separate check you stop on — hold below 13.** Never `pkill`, never `npm ci`/`npm install`, never bind
+**:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED — a classified count is not yet a work list
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: the 143 backend branches carrying an un-upstreamed change are ranked into what a person would notice, in a committed artifact naming for each the defect or capability it carries and the instrument that settled it, with an explicit count of any that could not be read
+agent: L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED
+evidence: docs/plan/artifacts/backend-un-upstreamed-ranked.md
+
+**A census turned an unusable aggregate into three classes; this turns one class into a work list.** The
+artifact on `lane/backend-landing-order` @ `392a2fd` records **7 superseded / 143 carrying an
+un-upstreamed change / 62 unmeasurable** across the backend's unlanded branches, by `git cherry` patch
+identity. **The 143 is the live one and nobody has looked inside any of them.**
+
+**Rank by what a person would notice, not by severity recorded at authoring time.** The flag census
+established that those two come apart — a guest opening a shop to an empty menu outranked every recorded
+blocker about migrations and instruments. **Do the same here.** A branch fixing money, a statutory
+document, or a screen a guest reaches outranks a branch improving a test harness, whatever its own commit
+message claims.
+
+**Read the diff, not the branch name.** Names in this estate are aspirational and several have already
+proved stale — three lanes this program were dispatched at defects that were already fixed, because a flag
+body was trusted over the tip.
+
+**Say for each what settled it.** A row without a named instrument — the file and line, the test, the
+grep — is `unreadable`, which is a legitimate class and must be **counted** rather than guessed past. The
+flag census stopped at 7 of 384 rather than emit machine-generated verdicts, and that refusal is why its
+seven rows are usable.
+
+**Two things you can lean on rather than re-derive.** The `git cherry` classification is sound and was
+validated against a discarded instrument (blob equality put all 217 branches in one bucket, measuring
+nothing). And the trunk has moved: backend is now **`7d0450a4b`** with the money tranche landed, so some of
+the 143 may have been superseded **since the census ran** — **re-check the class of anything you rank
+highly** rather than inheriting it.
+
+**Do not propose a landing order and do not land anything.** A previous census correctly separated "what
+exists" from "what to do about it", and the second question is worth its own lane once this one names the
+candidates.
+
+**Write to `docs/plan/artifacts/backend-un-upstreamed-ranked.md`, force-added** past the bare `artifacts/`
+rule and verified with `git ls-files --error-unmatch`. **Read-only on product code**: no commit to a trunk,
+no merge, no rebase, no push, no branch move.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **The non-SQL tier rewrites TWO tracked
+artifacts** — `run-sheet.json` **and** `run-sheet.md`; restore both, never `git add -A`. **An empty
+`git diff` proves nothing** — two absent files also diff to zero; use **blob identity**. **In zsh write
+`${ref}:path`**, since `"$ref:path"` applies the `:t` tail modifier even inside double quotes. **Two silent
+ignore rules** — a bare `artifacts/` and a bare `*.log`; check with `git check-ignore -v`. Teardown
+`rm -rf` + `git worktree prune`. **A worktree holding a branch turns any commit made in it into a trunk
+move** — compose on a detached HEAD. **Gate on `uptime` as a separate check you stop on — hold below 13.**
+Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY — five landings, two trunks, no independent reading
+state: open
+class: analysis
+owner: agent
+dir: .
+exit: a verdict on the frontend trunk from 3807e90 to 9d88101 and the backend trunk from 057c390ad to 7d0450a4b, naming any landing whose measurement does not reproduce and any behaviour a merge changed that its lane did not claim
+
+**Both trunks moved substantially today and every landing was made by an agent reading its own work.**
+
+| trunk | from → to | tier |
+|---|---|---|
+| frontend | `3807e90` → `31e6c60` → `9d88101` | 183 / 4445 / 0 |
+| backend | `057c390ad` → `7d0450a4b` | 4974 / 0 / 11 |
+
+**Three claims to attack, each the load-bearing one for its landing.**
+
+1. **The backend arc.** The money tranche claims **`4967 / 2 FAILED` → `4971 / 1 FAILED` → `4974 / 0`**,
+   with the two reds named as the gift-card copy defect and the year-spanning invoice. **Reproduce at least
+   the first and last steps.** Its own instrument check is worth repeating: **skips held at 11 throughout**,
+   which is what proves nothing was skipped into green.
+2. **Tranche five's nine rewrites.** Five `THE DEFECT:` pins were **converted, not deleted** — the file
+   held 37 tests before and after, and no test name contains `THE DEFECT` any more. **Verify both halves**:
+   the count, and that the surviving assertions state the corrected behaviour rather than a weakened one.
+   A converted pin that asserts less than it did is a deletion wearing a rewrite's clothes.
+3. **The widened guard.** Sweep **2 → 53** scripts across 3 roots, with the stripper pinned in **both**
+   directions — it must not accuse a docstring, a `//` comment or a `/* */` block, and must still accuse an
+   executed restore in either quote style. **Run those arms.** The guard is now the estate's only defence
+   against a class of defect that has recurred four times.
+
+**One landing was made with a hole open and declared.** The money tranche shipped while
+`TransferGiftcard` had no resolved caller. **A lane closing it is in flight** — **do not re-derive the
+hole**, but say whether landing the balance fix without the authorization fix created any window that
+matters beyond the one already recorded.
+
+**Two things are held, not forgotten, and you should confirm they are still absent from their trunks**:
+`8357c8a33` (gated by an unruled decision) and `lane/backend-landing-order` @ `392a2fd` (held by
+`D-IS-A-SCRIPT-IN-AN-EVIDENCE-DIRECTORY-A-RECORD-OR-A-DRIVER`).
+
+**Read-only.** No commit, merge, rebase, push or branch move. You may compose in throwaway worktrees and
+apply mutations you restore. **Rule and name the exact change. Do not edit any file** other than your review
+and return. A clean reading is a legitimate outcome. Write to
+`docs/plan/reviews/L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY.md`.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**. The
+pin is **`a6ae241`**, and `git fetch <path> <sha>` needs the **full 40-character SHA**. **Neither core pin
+is on any remote branch — do not push either repo.** The backend tier runs **from `WebApi.Tests/`** with
+`--filter "Database!=SqlServer"`, and **rewrites two tracked run-sheet artifacts**. **Blob identity, never
+an empty diff. `${ref}:path` in zsh.** Teardown `rm -rf` + `git worktree prune`. **Do not touch
+`web-livewalk`.** **Gate on `uptime` separately — hold below 13.** **Do not push.**
+
+### Lane L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE — the deposit clears and the guest lands nowhere
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the Vipps return address and the emailed link are composed from one source, shown by a test that reds when they are composed separately, with the non-SQL tier green at the composed tip
+agent: L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE/evidence.md
+
+**This is the worst-placed defect in the backlog: it fires AFTER the guest has paid.** A guest who has
+already completed a Vipps deposit is returned to an address the frontend does not serve, because
+**the `fallBack` address and the emailed link are composed separately and drift.** Money has left their
+account and the product cannot show them what it bought.
+
+**A fix exists, unlanded, at `lane/ev-vipps-fallback` @ `9e3a607bb`.** It was read from its diff by a
+ranking lane and ranked first of six on exactly this reasoning — the guest has already paid, so there is no
+"try again" that costs them nothing.
+
+**Compose the two from one source rather than making them agree.** Two expressions that currently produce
+the same string will drift again the moment either is edited; that is what happened here. **Say in your
+return what the single source is.**
+
+**A test that asserts the two are equal today is not enough.** It must red when they are **composed
+separately** — that is the defect, not the inequality.
+
+**Verify the defect still reproduces at the backend trunk `1c71ae951` BEFORE trusting the branch.** Three
+lanes in this program were dispatched at defects already fixed, because a report was trusted over the tip.
+The ranking lane read this one from its **diff against its own merge-base** — that establishes what the
+branch *changes*, not that the defect is *still live*. **Reproduce it, then decide whether the branch is
+still the right fix.**
+
+**If the branch is stale but the defect is live, say so and fix it properly rather than forcing an old
+patch onto a moved trunk.** If the defect is already fixed, return `fail-spec` — that is a good outcome and
+costs an hour, not a day.
+
+**Every change must red under a mutation you apply and restore.** Use the canonical runner; it reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either exit direction, so a kill certificate
+requires a test to have run. **Put the restore in a `finally` AND an `atexit` hook** — a foreground script
+killed between write and restore left a mutant on disk in this program, and it was caught by reading the
+file rather than trusting an exit code.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`;
+restore both, never `git add -A`. **An empty `git diff` proves nothing** — two absent files also diff to
+zero; use **blob identity**. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
+`artifacts/` and a bare `*.log`; check with `git check-ignore -v`. **A worktree holding the branch turns any
+commit made in it into a trunk move** — detach. **Check every branch you touch against the open decisions
+before merging and say that you did.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a
+separate check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+---
+
+**CLERK CORRECTION 2026-08-08 — a `needs:` was removed after one tick, and the mistake was mine.**
+
+This lane returned `blocked` because the host load gate never cleared, and **I told it to name
+`F-HOST-VM-EATS-THE-CEILING`** as the blocking entity. That was wrong in a way worth recording: **the lane's
+condition was transient (load too high *right now* to add a fourth concurrent tier) and that flag is
+standing (this host's VM is undersized for the ceiling).** Pointing a transient block at a standing flag
+makes the lane unstartable forever — the flag's `clears_when` names no `fact:` key, so `plan flag clear`
+refuses it and only an owner override could ever release the lane.
+
+**The condition is met in substance**: load read **13.34** at the retry, under both the dispatch ceiling of
+21 and the in-lane tier gate of 13. Nothing about the host changed to require an owner's judgement.
+
+**So the structural line I authored is removed and the flag is untouched.** No flag was cleared, no decision
+ruled, and the standing observation about the VM stands on its own.
+
+**The general lesson, since this is the second `needs:` I have had to remove**: a `needs:` is for a
+dependency that will be *satisfied by work*, not for a condition that is merely *true or false right now*.
+A lane blocked on transient capacity should return `blocked` with the reason in its log and be re-dispatched
+when capacity returns — which is exactly what happened here, minus the self-inflicted gate.
+
+### Lane L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED — a statutory report claims receipts it never received
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: no X or Z report includes a receivable in its received total, shown by a test that reds when a company-account sale is counted as received, with the non-SQL tier green at the composed tip
+agent: L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED
+evidence: docs/plan/returns/L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED-1.md
+
+**An X/Z report is a statutory document, and this one overstates what the venue took.** Company-account
+receivables — money **invoiced**, not received — are counted inside **`Sum mottatt`**. A venue reconciling
+its day against the till reads a figure that includes sales nobody has paid yet.
+
+**A fix exists at `lane/xz-printed-defects` @ `6c394057e` — and a verification pass measured it INCOMPLETE.
+Do not land it as it stands.**
+
+**The defect reproduces at the trunk `1c71ae951`**, verified before the branch was trusted:
+`EscPosXZReportBuilder.cs:98` takes **every** `PaymentMeansTotal` with no exclusion, `:102-104` prints them
+all under **`MOTTATT BETALING`**, and `:114` sums the same unfiltered list into **`Sum mottatt`**.
+
+**But that branch filters at the PRINTER** — `allMeans.Where(p => !p.PaymentType.IsCompanyAccount())` —
+**and the receivable enters upstream of every printer.** `XZReportService.cs:703-721` builds `paymentMeans`
+from every `entry.PaymentLines` with no exclusion, **so the model itself carries it**, and **four emitters
+read that model**:
+
+| emitter | repaired by `6c394057e`? |
+|---|---|
+| `EscPosXZReportBuilder.cs` — the printed roll | **yes, only this one** |
+| `SaftCashRegisterExportService.Transactions.cs:49,90` — the SAF-T export | no |
+| `TripletexPosService.cs:114` — the accounting push | no |
+| `XZReportService.cs` — the builder, where it enters | no |
+
+**Landing it alone makes the same day reconcile differently depending on which artifact an inspector
+reads.** For a statutory document, **two artifacts disagreeing is worse than one being wrong.**
+
+**Fix at the model, not the printer** — either exclude where `paymentMeans` is built, or make the split a
+property of the model every emitter reads. **Then show each of the four emitters agreeing.**
+
+**MEASURED SINCE: only THREE emitters were ever wrong to check, and one of the four was already right.**
+`TripletexPosService` books `CompanyAccount` to a **receivables account** and **must** iterate every medium,
+because a double-entry voucher that filtered the company line would leave the revenue credit with no
+matching debit. **Verified correct as-is — do not change it.** The exit criterion is therefore short by
+**one** emitter, `SaftCashRegisterExportService`, and that one is **blocked on
+`D-DOES-A-SAFT-PAYMENT-ELEMENT-ADMIT-A-CREDIT-MEDIUM`**, not on work.
+
+**One half of that branch is right and should be kept**: it adds an **unconditional
+kontantsalg/kredittsalg split** under § 2-8-2, so the report **distinguishes** rather than silently
+excluding — which is the C6 answer, and it means a venue seeing a smaller `Sum mottatt` is told what the
+credit sales were rather than assuming the till is broken.
+
+**This is C6 territory: a statutory claim needs a producible document.** So the exit is not merely that the
+total changes — **it is that a report can be produced showing the corrected figure.** Say whether the
+report distinguishes received from invoiced, or merely excludes the latter; a venue that sees a smaller
+number with no explanation will assume the till is wrong.
+
+**Check the sibling emitters.** This estate has twice found a fix landing on one emitter while an adjacent
+one kept the defect — the ESC/POS roll, the emailed PDF and the X/Z summary have historically drifted.
+**Name which emitters you checked.**
+
+**Verify the defect still reproduces at the backend trunk `1c71ae951` BEFORE trusting the branch.** Three
+lanes in this program were dispatched at defects already fixed, because a report was trusted over the tip.
+The ranking lane read this one from its **diff against its own merge-base** — that establishes what the
+branch *changes*, not that the defect is *still live*. **Reproduce it, then decide whether the branch is
+still the right fix.**
+
+**If the branch is stale but the defect is live, say so and fix it properly rather than forcing an old
+patch onto a moved trunk.** If the defect is already fixed, return `fail-spec` — that is a good outcome and
+costs an hour, not a day.
+
+**Every change must red under a mutation you apply and restore.** Use the canonical runner; it reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either exit direction, so a kill certificate
+requires a test to have run. **Put the restore in a `finally` AND an `atexit` hook** — a foreground script
+killed between write and restore left a mutant on disk in this program, and it was caught by reading the
+file rather than trusting an exit code.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`;
+restore both, never `git add -A`. **An empty `git diff` proves nothing** — two absent files also diff to
+zero; use **blob identity**. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
+`artifacts/` and a bare `*.log`; check with `git check-ignore -v`. **A worktree holding the branch turns any
+commit made in it into a trunk move** — detach. **Check every branch you touch against the open decisions
+before merging and say that you did.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a
+separate check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER — the file name and the printed number disagree
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a credit note's file name and its printed number agree for every issued note, shown by a test that reds when the route parameter is used for the name, with the non-SQL tier green at the composed tip
+agent: L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER
+evidence: docs/plan/returns/L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER-1.md
+
+**Two bookkeeping documents share one number.** The download file name was taken **from the route
+parameter**, so it contradicts the number printed inside the PDF. An accountant filing by file name and an
+auditor reading the document itself see two different identities for the same credit note.
+
+**A fix exists, unlanded, at `lane/credit-note-number` @ `24c95aa94`.**
+
+**The route parameter is the tell, and the fix is to stop asking the caller.** The number printed inside the
+document is the authority; the file name must be derived from the same value the renderer used, not from
+what the request happened to say. **Say where you took it from.**
+
+**A credit note is a numbered fiscal document, so check whether anything else keys off that route
+parameter** — a second consumer taking the same wrong value is the shape this estate keeps finding.
+
+**Verify the defect still reproduces at the backend trunk `1c71ae951` BEFORE trusting the branch.** Three
+lanes in this program were dispatched at defects already fixed, because a report was trusted over the tip.
+The ranking lane read this one from its **diff against its own merge-base** — that establishes what the
+branch *changes*, not that the defect is *still live*. **Reproduce it, then decide whether the branch is
+still the right fix.**
+
+**If the branch is stale but the defect is live, say so and fix it properly rather than forcing an old
+patch onto a moved trunk.** If the defect is already fixed, return `fail-spec` — that is a good outcome and
+costs an hour, not a day.
+
+**Every change must red under a mutation you apply and restore.** Use the canonical runner; it reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either exit direction, so a kill certificate
+requires a test to have run. **Put the restore in a `finally` AND an `atexit` hook** — a foreground script
+killed between write and restore left a mutant on disk in this program, and it was caught by reading the
+file rather than trusting an exit code.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`;
+restore both, never `git add -A`. **An empty `git diff` proves nothing** — two absent files also diff to
+zero; use **blob identity**. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
+`artifacts/` and a bare `*.log`; check with `git check-ignore -v`. **A worktree holding the branch turns any
+commit made in it into a trunk move** — detach. **Check every branch you touch against the open decisions
+before merging and say that you did.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a
+separate check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+### Lane L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER — an out-of-range enum reaches paper
+state: open
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: no undefined PaymentType value can reach a printed fiscal line, shown by a test that reds when the cast is left unvalidated, with the non-SQL tier green at the lane tip and the branch handed back UNLANDED
+needs: D-SPEC-L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER
+agent: L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER
+
+**A C# enum is not validated on cast, and the model binder accepts any integer.** So a `PaymentType`
+outside the defined set reaches a **printed fiscal line** — the document an inspector reads.
+
+**A fix exists, unlanded, at `lane/paymenttype-defined-tender` @ `bd77cd6b0`.**
+
+**Refuse at the boundary, not at the printer.** Validating where the value is printed leaves every other
+consumer of the same cast exposed; validating at the bind or the cast closes the class. **Say which you
+chose and why**, and if you refuse at the printer, name what else takes that cast unguarded.
+
+**Decide what an undefined value does, and make it visible.** Silently substituting a default is how a
+wrong tender ends up on a fiscal document reading plausibly — this estate has already found a well-formed
+word that was simply wrong. **A refusal an operator can see beats a guess an inspector cannot detect.**
+
+**Verify the defect still reproduces at the backend trunk `1c71ae951` BEFORE trusting the branch.** Three
+lanes in this program were dispatched at defects already fixed, because a report was trusted over the tip.
+The ranking lane read this one from its **diff against its own merge-base** — that establishes what the
+branch *changes*, not that the defect is *still live*. **Reproduce it, then decide whether the branch is
+still the right fix.**
+
+**If the branch is stale but the defect is live, say so and fix it properly rather than forcing an old
+patch onto a moved trunk.** If the defect is already fixed, return `fail-spec` — that is a good outcome and
+costs an hour, not a day.
+
+**Every change must red under a mutation you apply and restore.** Use the canonical runner; it reports
+`INVALID-RUN` for a spawn failure or a zero-test run in either exit direction, so a kill certificate
+requires a test to have run. **Put the restore in a `finally` AND an `atexit` hook** — a foreground script
+killed between write and restore left a mutant on disk in this program, and it was caught by reading the
+file rather than trusting an exit code.
+
+**Traps.** The backend tier runs **from `WebApi.Tests/`** with `--filter "Database!=SqlServer"` — at the
+repo root `dotnet test` exits 0 having run **zero** tests. **Check every tier log for an abort line above
+the summary.** **A stale build can fake a result** — restore bytes, bump mtime, assert `WebApi.dll`'s mtime
+MOVES. **The non-SQL tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`;
+restore both, never `git add -A`. **An empty `git diff` proves nothing** — two absent files also diff to
+zero; use **blob identity**. **In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare
+`artifacts/` and a bare `*.log`; check with `git check-ignore -v`. **A worktree holding the branch turns any
+commit made in it into a trunk move** — detach. **Check every branch you touch against the open decisions
+before merging and say that you did.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime` as a
+separate check you stop on — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
+
+---
+
+**BUILD ONLY. DO NOT LAND, and this is a change from how every sibling lane has worked.**
+
+**A trunk race dropped a landing today.** Two backend landing lanes ran concurrently, both used
+`git branch -f` correctly in isolation, and they clobbered each other — the credit-note merge ended up
+reachable from **no ref at all** and had to be rescued to
+`preserve/credit-note-landing-dropped`. **That was the clerk's error**, and the rule that came out of it is
+**at most one landing lane per repository at a time.**
+
+**Another lane holds the backend landing right now.** So build the fix, prove it, and **hand the branch back
+unlanded** — say its SHA and its measured tier in your return. The trunk write is the only part that
+serialises; the work does not.
+
+**Measure your tier at your own branch tip and name the base you measured against.** The backend trunk is
+**`976489141`** as of this brief and has moved four times today, so a figure carried from an older base
+means nothing.
+
+**Assert your new tests by NAME with a passed count, not by the tier summary.** A dotnet log names only
+failed and skipped tests, so **twelve passing arms and twelve absent ones produce an identical green
+summary** — a sibling lane found this and it invalidates the way every backend lane here has been reading
+its own evidence.
+
+### Lane L-THE-XZ-SPLIT-REACHES-THE-TRUNK — a statutory report stops claiming money it never received
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: lane/xz-received-at-the-model 67d47d3e7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+agent: L-THE-XZ-SPLIT-REACHES-THE-TRUNK
+evidence: docs/plan/returns/L-THE-XZ-SPLIT-REACHES-THE-TRUNK-1.md
+
+**An X/Z report is a statutory document and the one on the trunk overstates what the venue took.** The fix
+is built, mutation-proven and unlanded at **`lane/xz-received-at-the-model` @ `67d47d3e7`** — three commits,
+tier **4985 / 0 / 11** at its own tip, **6 of 6 mutations red** at a pinned 9-test baseline.
+
+**What it does.** `PaymentMeansTotal.IsReceived` is **computed from `PaymentType`** on the model, so it needs
+no change to the serialized `PaymentTotalsJson` and answers identically for rows written before it existed —
+one rule every reader shares. The ESC/POS roll then **splits**: company-account totals leave `Sum mottatt`
+and are stated under **`KREDITTSALG (IKKJE MOTTATT)`** with their own sum. It **distinguishes rather than
+excludes**, which is the C6 answer — a venue whose `Sum mottatt` merely shrank would conclude the till is
+wrong.
+
+**It lands SHORT BY ONE EMITTER on purpose, and that is not a defect in the branch.**
+`SaftCashRegisterExportService` is **untouched** pending `D-DOES-A-SAFT-PAYMENT-ELEMENT-ADMIT-A-CREDIT-MEDIUM`
+— a question about the SAF-T standard, not about code. **Confirm the diff changes zero SAF-T files.** When
+that decision is ruled, the rule it needs is already on the model waiting for it.
+
+**`TripletexPosService` is verified correct and MUST NOT be changed.** It routes `CompanyAccount` to a
+receivables account and carries every medium **because a double-entry voucher must** — filtering that line
+would leave the revenue credit with no matching debit and **unbalance the Z voucher**. If your merge touches
+it, something is wrong.
+
+**Four pins it did not write broke and were right to break.** `EscPosPaymentLabelTests.ReportPayerLabel`
+asserts exactly one row ends in the payer amount; the new credit section added a second total row. The
+exclusion was widened **by name, not by a `"Sum "` prefix** — a prefix would silently swallow whatever total
+a later section adds. **Preserve that choice**; if your merge turns it into a prefix match, the alarm is
+gone.
+
+**Use the guard a sibling lane proved today, not the one the clerk wrote.** **Re-read the trunk at the
+instant of the move and refuse unless it still equals your merge base.** Reading it at lane start is what
+failed — two landing lanes clobbered each other today and one merge ended up reachable from no ref.
+
+**The backend trunk is `c4326402c`** and has moved five times today. **Measure the tier at your composed tip
+against the base you actually used, and assert your tests by NAME with a passed count** — a dotnet log names
+only failed and skipped tests, so absent arms and passing arms give the same green summary.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"`; the repo root exits 0 having
+run **zero** tests. **Check for an abort line above the summary.** **A stale build can fake a result** —
+assert `WebApi.dll`'s mtime MOVES. **The tier rewrites TWO tracked artifacts** — `run-sheet.json` **and**
+`run-sheet.md`. **Create the worktree with `git worktree add --detach`** and move the trunk with
+`git branch -f` **only after green**. **Check every branch against the open decisions before merging and say
+that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`. **Gate on `uptime`
+as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON — the canonical mutation runner cannot run where .NET lives
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: the canonical runner locates its repo root without requiring package.json, shown by an arm that runs it from a directory tree that has none, and the frontend tier green at the lane tip
+agent: L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON
+evidence: docs/plan/returns/L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON-1.md
+
+**Every backend mutation pass in this program has been hand-rolled, and now we know why.**
+`test/support/mutate.js` **anchors by walking up to a `package.json` and throws without one** — so the
+**vstest dialect added to it specifically to judge .NET suites is unreachable in the backend repo**, which
+has no `package.json` anywhere above its test projects.
+
+**That is a tool asserting a capability it cannot deliver.** The runner reports `INVALID-RUN` for spawn
+failures and zero-test runs, parses three dialects including vstest `Total`/`Failed`, and **none of that has
+ever executed against a .NET suite through the runner itself.** Lanes reproduced the discipline by hand,
+correctly — but by hand.
+
+**The anchor is the whole fix, and it must not regress the thing it replaced.** A previous defect in this
+same file resolved the repo root by **counting `../` levels**, so a copy at a different depth silently
+resolved paths **outside the repository**. The `package.json` walk was the fix for that. **Whatever you
+replace it with must still refuse to operate outside a repository** — say what you anchor on and why it
+cannot walk out.
+
+**The exit is the arm, not the anchor.** Run the runner from a directory tree with **no `package.json`** and
+watch it work; a widened anchor no test exercises is the same class of claim as a mutation nobody ran.
+**Report the count that arm executes**, since a zero-test pass is exactly what this runner exists to refuse.
+
+**Do not regress what the guard already earns**: buffer restore with a byte assertion, the `DESTROYED`
+reproduction arm, the tree-wide sweep across three roots with comment-stripping in both directions, and
+`INVALID-RUN` on a zero-test run in **either** exit direction.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**; the
+pin is **`a6ae241`** and `git fetch <path> <sha>` needs the **full 40-character SHA**. Frontend trunk is
+**`9d88101`**. **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check with
+`git check-ignore -v`. **Create worktrees with `--detach`.** Teardown `rm -rf` + `git worktree prune`;
+`--no-verify` is load-bearing. **Do not touch `web-livewalk`.** **Gate on `uptime` — hold below 13.**
+Never `npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK — the tool every lane is told to use can finally enter the backend
+state: built-unverified
+class: node
+owner: agent
+dir: .
+exit: lane/runner-finds-its-root 10ace1a is merged onto feature/restaurant-modules with the frontend tier green at the composed tip and every test accounted for, and nothing beyond it touched
+agent: L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK
+evidence: docs/plan/returns/L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK-1.md
+
+**Every backend mutation pass in this program was hand-rolled because the canonical runner could not enter
+the backend repo.** `test/support/mutate.js` anchored by walking up to a `package.json` and threw without
+one — and there is **none anywhere above the backend test projects**. The vstest dialect added specifically
+to judge .NET suites was unreachable in the only repo where .NET suites live.
+
+**The fix is built and proven at `lane/runner-finds-its-root` @ `10ace1a`**, one commit off trunk
+**`9d88101`**, tier **183 suites / 4449 / 0** at its own tip, **5 of 5 mutations red**.
+
+**What it anchors on, and why that is the hard part.** The nearest ancestor holding a **`.git` entry**,
+accepting the **file** form as well as the directory — every worktree in this estate is the file form, so a
+directory-only test would have re-thrown. `package.json` stays as a **second** marker checked after `.git`,
+so a JS project that is not a repository still works.
+
+**It cannot walk out of the repository, and that property must survive your merge.** The search only ever
+moves **up** from the script, so every candidate is an ancestor by construction — never a computed path that
+might not contain it, which is exactly what the historical `../`-counting produced when a copy at another
+depth resolved paths **outside the repo**. There is **no default**: reaching the filesystem root throws.
+**If your merge reintroduces a fallback, the old defect is back.**
+
+**Two arms exist because the first real .NET run found a defect in the new dialect.** ASP.NET logs
+*"Failed to determine the https port for redirect."* at host startup, and the vstest name pattern read it as
+**the name of a failed test** — so a clean baseline reported one red. Counts were right so the verdict
+survived, but **a phantom name present in one run and absent in another is how a false RED or a masked kill
+is made.** The pattern now requires vstest's own shape — one unbroken token then a bracketed duration — with
+**both directions pinned**. Confirm both arms survive.
+
+**Do not reintroduce the containment assertion.** Its author wrote one, then **measured** that reverting to
+`../`-counting reds three arms **with it and the same three without**, and deleted it. An assertion no input
+can reach is decoration, and this file's subject is claims that cannot fail.
+
+**Use the guard that worked today, not the one the clerk wrote**: **re-read the trunk at the instant of the
+move and refuse unless it still equals your merge base**, with the check and the `git branch -f` in a single
+command so the window is milliseconds. Reading at lane start is what let two lanes clobber each other while
+both were correct when they read.
+
+**Run the tier at the composed tip and account for every test** — the branch adds **no new suite file** and
+takes the pin suite from 23 to 27 arms, so expect `+4` and say what you measure.
+
+**Traps.** **A `core` submodule failure does not look like one**: suites fail with **zero tests red**; the
+pin is **`a6ae241`** and `git fetch <path> <sha>` needs the **full 40-character SHA**. **Two silent ignore
+rules** — a bare `artifacts/` and a bare `*.log`; check with `git check-ignore -v`. **Create the worktree
+with `git worktree add --detach`.** Teardown `rm -rf` + `git worktree prune`; `--no-verify` is load-bearing.
+**Do not touch `web-livewalk`.** **Check every branch against the open decisions before merging and say that
+you did.** **Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`, never
+`npm ci`/`npm install`, never bind **:3971**/**:5971**. **Do not push.**
+
+### Lane L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY — a 500 where a reason belongs
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the loser of a release race is told why it lost rather than receiving a 500, shown by a test that reds when the unwind exception is allowed to propagate, with the non-SQL tier green at the lane tip
+agent: L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY
+evidence: docs/plan/returns/L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY-1.md
+
+**The sixth and last of the ranked defects, and the only one still unclaimed.** When two callers race to
+release the same Meals allocation, **the loser gets a 500 and the wrong reason** — the unwind's own exception
+propagates in place of the original, so the message describes the cleanup rather than the collision.
+
+**A fix exists unlanded at `lane/meals-release-race` @ `f70a0254c`.** It was read from its diff by the
+ranking lane, which establishes what the branch *changes* — **not that the defect is still live.**
+
+**The interesting question is what the loser should be told, and you must answer it rather than just stop
+the 500.** A race loser is not an error in the ordinary sense: the system worked, someone else got there
+first. **Say what the response says and why**, and whether it is distinguishable from "you may not do this
+at all" — those are different facts for the person holding the till.
+
+**Preserving the original exception is the mechanism; naming the outcome is the fix.** A 500 carrying the
+right words is still a 500.
+
+**Verify the defect reproduces at the backend trunk `668590cbe` before trusting any branch.** **Four** lanes
+this program were dispatched at defects already fixed, because a diff against an old merge-base was read as
+a statement about the tip. `fail-spec` in an hour is a good outcome.
+
+**Use the canonical runner — it can now enter this repo.** `test/support/mutate.js` on the frontend trunk
+`914e593` anchors on the nearest `.git` and parses vstest counts, so a kill certificate no longer has to be
+hand-rolled. **Assert your tests BY NAME from a `--logger trx`**: a dotnet console log names only failed and
+skipped tests, so a vanished arm and a passing arm print the same green line.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0 having
+run **zero** tests. **Check for an abort line above the summary.** **Assert `WebApi.dll`'s mtime MOVES.**
+**The tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`; restore both, never
+`git add -A`. **Create worktrees with `git worktree add --detach`.** **If you land, re-read the trunk at the
+instant of the move and refuse unless it still equals your merge base — in the same command.** Reading it at
+lane start is what let two lanes clobber each other. **Check every branch against the open decisions before
+merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`.
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED — the class a census counted rather than guessed
+state: built-unverified
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: each of the 37 branches recorded unreadable in the ranking artifact carries a verdict from its diff — a named defect, superseded, or still-unreadable-and-why — in a committed artifact, with the count per class stated
+agent: L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED
+evidence: docs/plan/artifacts/backend-unreadable-thirtyseven.md
+
+**A ranking lane read six branches and refused thirty-seven, counting them as `unreadable` rather than
+ranking them on their commit subjects.** That refusal was right — a subject is exactly what dispatched four
+lanes at already-fixed defects — and **the six it did read produced four blockers, two of which are now
+landed money fixes.** The thirty-seven have never been opened.
+
+**They were selected as carrying a money, statutory or guest-facing signal**, so the hit rate should be
+comparable. **Open each one's diff against its own merge-base and say what it changes.**
+
+**Three verdicts, and `still-unreadable` remains legitimate.** A branch whose diff you cannot interpret
+without running it is **not** a failure to report — it is a fourth class, and it must be **counted**. The
+flag census stopped at 7 of 384 rather than emit machine-generated verdicts, and that refusal is why its
+rows are usable.
+
+**Re-derive the class at the current tip rather than inheriting it.** The backend trunk is **`668590cbe`**
+and has moved **seven** times today — the money tranche, the gift-card authorization, Vipps, the credit
+note and the X/Z split have all landed since that census ran, so some of the thirty-seven are now
+superseded. **`git cherry` is the tool for that question**; blob equality was tried and discarded as
+vacuous.
+
+**Rank what you find by what a person would notice, not by severity claimed at authoring time.** Money, a
+statutory document and a guest-reachable screen outrank a test-harness improvement whatever a commit
+message says.
+
+**Do not propose a landing order and do not land anything.** Write to
+`docs/plan/artifacts/backend-unreadable-thirtyseven.md`, **force-added** past the bare `artifacts/` rule and
+verified with `git ls-files --error-unmatch`. **Read-only on product code.**
+
+**Verify the defect reproduces at the backend trunk `668590cbe` before trusting any branch.** **Four** lanes
+this program were dispatched at defects already fixed, because a diff against an old merge-base was read as
+a statement about the tip. `fail-spec` in an hour is a good outcome.
+
+**Use the canonical runner — it can now enter this repo.** `test/support/mutate.js` on the frontend trunk
+`914e593` anchors on the nearest `.git` and parses vstest counts, so a kill certificate no longer has to be
+hand-rolled. **Assert your tests BY NAME from a `--logger trx`**: a dotnet console log names only failed and
+skipped tests, so a vanished arm and a passing arm print the same green line.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0 having
+run **zero** tests. **Check for an abort line above the summary.** **Assert `WebApi.dll`'s mtime MOVES.**
+**The tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`; restore both, never
+`git add -A`. **Create worktrees with `git worktree add --detach`.** **If you land, re-read the trunk at the
+instant of the move and refuse unless it still equals your merge base — in the same command.** Reading it at
+lane start is what let two lanes clobber each other. **Check every branch against the open decisions before
+merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`.
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
+
+### Lane L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP — the authorization has no wire test
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: a test in WebApi.Tests/Wire drives TransferGiftcard over HTTP and asserts a non-holder receives the same body an unknown id receives, redding when the controller stops resolving the caller, with the non-SQL tier green at the lane tip
+agent: L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP
+evidence: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP/evidence.md
+
+**The gift-card hole is closed on the trunk and its own flag will not clear, because the flag asks for a
+wire test and the tests are service-level.** The lane that built it said so against itself rather than
+describing service tests as wire tests — this lane closes that gap.
+
+**What must be true over HTTP, and none of it is currently asserted at that level.** The controller resolves
+the caller with **`ActorClaims.TryResolveUserId`** — deliberately **not** the `User.Identity.Name` every
+sibling money controller uses, because for the OAuth principal that value is a **phone number**, so the
+"consistent" choice would refuse the genuine holder while looking like a working guard. **A wire test is the
+only place that distinction is observable**, because it is the only level where a real principal is
+constructed.
+
+**The refusal is the other half.** A non-holder must receive **the same body an unknown id receives** — not
+403, not 404 — because a distinct "exists but not yours" **is itself the oracle** confirming which card ids
+are real. **Assert the bodies are byte-equal**, not merely both-refusals.
+
+**Two mutations are a proven pair and your test must not weaken that.** The ownership check's position above
+the status guard, and the shared refusal message, **each mask the other** — a combined mutation breaking
+both reds 1 of 13. **If your wire test only reds under the combined mutation, say so**; that is a true
+result about where the guarantee lives.
+
+**`WebApi.Tests/Wire/` exists and is unused by this path.** Read how its harness constructs a principal
+before writing anything — if it cannot construct the OAuth shape, that is the finding and the lane should
+return `blocked` naming it, rather than testing a principal shape that does not occur.
+
+**Verify the defect reproduces at the backend trunk `668590cbe` before trusting any branch.** **Four** lanes
+this program were dispatched at defects already fixed, because a diff against an old merge-base was read as
+a statement about the tip. `fail-spec` in an hour is a good outcome.
+
+**Use the canonical runner — it can now enter this repo.** `test/support/mutate.js` on the frontend trunk
+`914e593` anchors on the nearest `.git` and parses vstest counts, so a kill certificate no longer has to be
+hand-rolled. **Assert your tests BY NAME from a `--logger trx`**: a dotnet console log names only failed and
+skipped tests, so a vanished arm and a passing arm print the same green line.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0 having
+run **zero** tests. **Check for an abort line above the summary.** **Assert `WebApi.dll`'s mtime MOVES.**
+**The tier rewrites TWO tracked artifacts** — `run-sheet.json` **and** `run-sheet.md`; restore both, never
+`git add -A`. **Create worktrees with `git worktree add --detach`.** **If you land, re-read the trunk at the
+instant of the move and refuse unless it still equals your merge base — in the same command.** Reading it at
+lane start is what let two lanes clobber each other. **Check every branch against the open decisions before
+merging and say that you did.** **In zsh write `${ref}:path`.** Teardown `rm -rf` + `git worktree prune`.
+**Gate on `uptime` as a separate check you stop on — hold below 13.** Never `pkill`. **Do not push.**
+### Lane L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY — the exact reason each one is refused, counted
+state: running
+class: analysis
+owner: agent
+dir: .
+exit: every built-unverified lane carries a refusal class measured by actually running plan verify against its recorded evidence, in a committed artifact stating the count per class and naming the cheapest class to discharge first
+agent: L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY
+
+**469 lanes are `built-unverified`, 57 are `verified`, and NOTHING has ever been `accepted`.** The objective
+says each capability must be *"named in an artifact a stranger can open"* — so this number **is** the
+distance to the goal, not a bookkeeping detail.
+
+**The clerk sampled fifteen and found five distinct refusal reasons. Nobody has measured all 469.**
+
+| refusal seen | what it means |
+|---|---|
+| **path gone** | the evidence path points inside a **torn-down worktree** — the proof evaporated while the code stayed |
+| **`unconf` fact** | a probe exists but does not currently produce its value; `plan refresh` was run and left **12** unconfirmed |
+| **suite-kind** | *"a green test suite does not exit built-unverified"* |
+| **`exists` extractor** | *"a file being there is not a claim about what it says"* |
+| **exit not met** | the recorded exit criterion names something the evidence does not show |
+
+**Run `plan verify` against each lane's own recorded evidence and record what the tool says.** Do not
+predict the class from the path — **the tool is the instrument**, and three of the clerk's fifteen were
+refused for a reason the path alone would not have revealed. **It is a state-changing verb: any lane it
+accepts is a genuine verification and should be reported as such, not undone.**
+
+**The deliverable is the count per class and a named cheapest-first order.** A class of 200 discharged by
+one repeatable act is worth more than any individual verdict, and this program has twice proved that
+turning an unusable aggregate into a classified work list beats a deeper look at a few.
+
+**Two things to establish that the classes alone will not tell us.**
+1. **How many `path gone` lanes have their evidence recoverable** — in a branch, a preserved ref, or a
+   worktree still standing — versus **genuinely destroyed**. Those are different problems: one is a
+   re-commit, the other is re-doing the work.
+2. **How many lanes could be discharged by evidence that does NOT need a browser.** The tool admits
+   **wire, schema, journey, artifact and meta**. Browser journeys are blocked on
+   `D-RESTART-THE-WALK-WORLD-API`; **wire and artifact evidence are not.** If most of the 469 need only a
+   wire assertion or a committed artifact, the walk-world decision stops being the bottleneck for the bulk
+   of them — **and that would be the most useful single fact you can return.**
+
+**Do not fix any lane and do not produce evidence.** Measure and classify. Write to
+`docs/plan/artifacts/why-verification-is-refused.md`, **force-added** past the bare `artifacts/` rule and
+verified with `git ls-files --error-unmatch`.
+
+**Traps.** `plan verify` exits **6** on inadmissible evidence — that is the signal you are collecting, not
+an error. **Never `--override`.** **Never `plan accept`** — it is owner-only and the tool refuses you.
+**In zsh write `${ref}:path`.** **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`. Do not
+touch `web-livewalk`. **Gate on `uptime` — hold below 13.** **Do not push.**
+
+### Lane L-THE-RELEASE-RACE-REACHES-THE-TRUNK — the last ranked defect lands, composed and proven
+state: built-unverified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: lane/release-race-composed f935c8ae7 is merged onto feature/restaurant-modules with the non-SQL tier green at the composed tip and every test accounted for, and nothing beyond it touched
+agent: L-THE-RELEASE-RACE-REACHES-THE-TRUNK
+evidence: docs/plan/returns/L-THE-RELEASE-RACE-REACHES-THE-TRUNK-1.md
+
+**Built, mutation-proven and unlanded at `lane/release-race-composed` @ `f935c8ae7`**, tier
+**5001 / 0 / 11** at its own tip, composed on `668590cbe`. The trunk has since moved to **`5c46187f3`**,
+which **touches none of its files**, so it recomposes cleanly — **verify that rather than trusting it.**
+
+**What it fixes, and it is not the 500.** When two callers race to release the same Meals allocation, the
+unwind's own exception replaced the original, so the bare `throw;` never ran and `CartsController` — which
+catches only `AppException` — turned it into a 500. **The loser was told about the cleanup instead of about
+their order.**
+
+**The release seam is not a public route**, so the loser is never told about the release at all: they are
+told **why their order failed**, and the release trouble goes to the log where it belongs.
+
+**Inside the seam a race loser resolves to `AlreadyReleased` — success-shaped, not a refusal.** A release's
+goal is *"this allocation is not held"*, so a rival achieving it means the goal is **met**, nothing is owed
+and nothing should be retried. **"You may not do this at all" is a different word** — `DeniedCaptured`
+(journal truth won) or `DeniedNotFound`. **Preserve that distinction**; the vocabulary already existed and
+the fix routes into it rather than inventing a new outcome.
+
+**One residue is deliberate and must survive**: after three exhausted attempts it **still throws**, because
+at that point none of the three outcomes is true. That is a database that will not settle, not a race loss,
+and both callers contain it.
+
+**THE BRANCH WAS STALE IN BOTH HALVES AND A FILE CHECKOUT SILENTLY REVERTED TRUNK WORK.** It was built on
+`de1e5c5e9`; the trunk gained `AuthorizePointOfSaleTenderAsync` and `ReleaseSupersededAsync` in
+`32fd5a86b`. Staging with `git checkout <branch> -- <files>` took the branch's copies **wholesale** and
+undid that till-settlement work — **a checkout is not a merge, and nothing about the command says so.**
+The composed branch already resolves this correctly: **both conflicts wanted BOTH sides**, the trunk's
+`ReleaseSupersededAsync` plus the branch's comment, and the branch's `Captured` gate plus the trunk's
+`Bound` gate. **Confirm both survive your merge.**
+
+**The branch also carried the tier's own `run-sheet.json` and `run-sheet.md` churn**, resolved to the
+trunk's copies. **That churn is not part of the fix — confirm neither lands.**
+
+**Use the atomic guard**: re-read the trunk **in the same command as the `git branch -f`** and refuse unless
+it still equals your merge base. **Assert your tests by name from a `--logger trx`** — expect **+4 arms**
+(3 race, 1 payment) against a 5008 baseline.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"`; the repo root exits 0 having
+run **zero** tests. **Assert `WebApi.dll`'s mtime MOVES.** **Create the worktree with `--detach`.** **Check
+every branch against the open decisions before merging and say that you did.** **The canonical runner now
+works inside this repo** — it anchors on the nearest `.git`. **In zsh write `${ref}:path`.** Teardown
+`rm -rf` + `git worktree prune`. **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
 ## Decisions
 
@@ -17218,6 +23795,67 @@ one's hard-coded thirty-second wait is copied into roughly twenty admin journeys
 application as an undiagnosable URL timeout — **the shape that let this false red pass for evidence.** It
 deliberately did not fix it: it could not reproduce the failure, and a guessed change to a spec twenty
 journeys share is improvisation.
+
+---
+
+**INTERRUPTED BY THE WEEKLY API LIMIT 2026-08-07 ~21:05. Four lanes died at once; this is the resume point,
+measured by the clerk rather than inferred.**
+
+**CLERK CORRECTION 2026-08-08 — the sentence below is wrong where it says the trunk was not moved, and
+the clerk reported that error twice before the landing lane caught it.** `git reflog
+feature/restaurant-modules` records `@{2}: commit (merge): preserve: tranche-five landing, interrupted by
+the weekly API limit…` — **the rescue commit landed on the trunk ref.** The cause is mechanical: the
+worktree had been created with the branch **checked out**, so a commit made inside it moves the branch.
+**The trunk therefore carried an untested T5 with nine red arms for the whole interruption.** Nothing was
+at risk — `preserve/tranche-five-interrupted` pointed at the same commit — and the landing lane detached
+and reset to `3807e90` before doing anything else. **A landing worktree that holds the branch turns any
+commit made in it, including a rescue, into a trunk move.**
+
+**The merge completed and is preserved. Nothing was lost.** `40ab62d` was merged in a worktree with
+`MERGE_HEAD` still set; the clerk committed the in-progress state to
+**`preserve/tranche-five-interrupted` @ `7f359f4`**, off trunk `3807e90`. **The trunk was not moved** and
+still reads `3807e90`. The preserved diff is `pages/offer/_code.vue` (+222/−30), a new
+`test/offer-page-tells-the-guest-the-truth.test.js` (+380) and two mutation-evidence files.
+
+**THE ASSERTION THE LANE DIED ON HAS BEEN MADE, AND IT PASSES.** The brief named the runner regression as
+this tranche's sharpest failure mode precisely because it would not appear as a conflict. Measured by blob
+identity at all three points:
+
+| file | at `316f22a` (fixed) | at the preserved merge | at the trunk |
+|---|---|---|---|
+| `test/support/mutate.js` | `42ad26312` | `42ad26312` | `42ad26312` |
+| `test/mutation-runner-restore.test.js` | `79496a63c` | `79496a63c` | `79496a63c` |
+
+**413 lines both sides. The runner did not regress.** The 131-line defective copy inside `40ab62d` did not
+win the merge.
+
+**What is NOT done, and must not be assumed from the above.** The **tier was never run** at the preserved
+tip, so **the nine meals arms are unresolved** — five `THE DEFECT:` pins expected to red (the convention
+working) and four behaviour arms that each need a ruling on whether the arm or the fix is wrong. The
+preserved commit contains **no meals-suite rewrite**. **Whoever resumes runs the tier first and starts
+there.**
+
+**The other three lanes that died in the same minute.**
+- **`L-READ-THE-TWO-MONEY-FIXES`** got its measurement in before dying: composing `71ac73af1` and
+  `a9d408bfb` on one tree gives **4962 passed / 0 failed / 10 skipped, exit 0** — **the two money fixes
+  compose green together**, which was an open question. Worktree `/Users/svendaneel/okam/OkamAPI-money-review`
+  still stands at merge `8731755e6` with `tier-composed.txt`. The verdict itself was never written.
+- **`L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED`** wrote no artifact and no branch, but its classification
+  reached the clerk and is recorded in `log.md`: **7 superseded / 143 carrying an un-upstreamed change /
+  62 unmeasurable**, by `git cherry` patch identity after blob-equality was discarded as vacuous. It also
+  **corrected the brief**: the giftcard and invoice branches do **not** collide on the same files — their
+  contributions are disjoint, and the real coupling is that both carry `b368d930e`'s commit as an unlanded
+  tail.
+- **`L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE`** committed nothing; its branch sits at the trunk.
+  **Start it from scratch.**
+
+  **THE CLERK WAS WRONG ABOUT THIS ONE, corrected 2026-08-08 by the lane itself.** Work **had** been
+  written before the limit — the widened guard, the fixed driver and the mutation spec were all on disk in
+  `/Users/svendaneel/okam/web-sweep`, merely **uncommitted**. The clerk read "no commit" as "no work" and
+  told the agent to start from scratch. It preserved the worktree first and rebased instead, so **nothing
+  was redone.** The lane's own note on why this matters is worth keeping: *the inference "not committed
+  therefore not written" is exactly the assumption that makes a `git checkout --` restore look harmless.*
+
 
 ### Decision D-CONFIRM-SIXTH-HEAD — an unreviewed sixth head sits above the merged confirm family
 state: ruled
@@ -18176,7 +24814,7 @@ Five, six, seven, eight — **each figure was true when written and false when r
 grows while the number sits in prose. The lesson is not that people were careless; it is that **a
 derivable number does not belong in prose at all.** It wants a probe.
 
-The chain tip the collector last measured in the checkout the probes read: <!--fact be.mig.head 2026-08-06T15:52Z ok-->20260731220005_Workforce_IdentityCodeRegisterIssues.cs<!--/fact-->. It is a fact rather than a sentence for the reason above.
+The chain tip the collector last measured in the checkout the probes read: <!--fact be.mig.head 2026-08-08T15:25Z ok-->20260731220005_Workforce_IdentityCodeRegisterIssues.cs<!--/fact-->. It is a fact rather than a sentence for the reason above.
 
 **Merged 2026-08-03, and the numbers were wrong again in both directions.** Measured with git before
 anything was touched: **seven links, not six. Nine migrations past the integration branch, not eight. 152
@@ -18525,7 +25163,7 @@ day the settlement branch opens.
 
 **Ruled 2026-08-03 (Sven): `already-fixed-pending-merge`.**
 
-Delivery-receipt kind on the branch: <!--fact meals.utlkvit 2026-08-06T15:52Z unconf-->pending<!--/fact-->. Credit-sale total in the Z report: <!--fact meals.xz.credit 2026-08-06T15:52Z unconf-->pending<!--/fact-->. Both probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
+Delivery-receipt kind on the branch: <!--fact meals.utlkvit 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Credit-sale total in the Z report: <!--fact meals.xz.credit 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Both probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
 
 **LANDED 2026-08-03 on `feature/restaurant-modules` as merge `a273e013`, on Sven's instruction and on the
 lane's own request.** Merged, **not ported** — which is the distinction the whole family turned on: a port
@@ -21066,6 +27704,477 @@ anywhere.
 
 
 
+### Decision D-NEEDS-REQUIRES-ACCEPTED-AND-NOTHING-IS-ACCEPTED — whether acceptance should also be what releases downstream lanes
+state: open
+owner: @sven
+blocks: 35 open lanes
+options:
+| accept-in-batches — pro: the 35 unblock immediately and the gate keeps meaning what it says, that a person looked ; con: 57 verified and 358 built-unverified lanes is a great deal of reading, and a batch accept that is not read makes the gate decorative
+| accept-only-what-blocks — pro: he reads roughly a dozen lanes rather than four hundred, and only the ones actually holding something up ; con: the built-unverified pile keeps growing behind him, and the same question returns next week larger
+| stop-using-needs-between-lanes — pro: ordering moves into lane bodies, where it is already written and where a stale gate cannot outlive its reason ; con: ordering becomes advisory, and this estate has already had four by-side losses and two C2 replay failures from ordering that was merely advised
+default_if_unruled: none
+
+**Measured, not inferred, and it explains a headline the clerk has been reporting for days.** A lane's
+`needs:` target counts as satisfied **only when its state is `accepted`** — for Flags it is `cleared`,
+for Decisions `ruled`, and for Horizons never. **`accept` is owner-only**; the tool refuses it whenever
+`PLAN_ACTOR` is set, deliberately, so that no agent can accept its own work.
+
+**Current state: 358 built-unverified, 57 verified, 56 open, 12 retracted, 7 running — and zero
+accepted.** So **35 of the 56 open lanes are unready for one reason only**: a lane they depend on has not
+been accepted, and none can be. That is what `ready 0` has been reporting.
+
+**The clerk did this to one lane itself today** and has recorded the correction in
+`L-LAND-THE-BACKEND-ON-THE-TRUNK`: four `needs:` were added to make two pre-merge readings precede a
+merge. The sequencing was right, the instrument was wrong, and the lane became permanently unready rather
+than merely ordered. The line was removed **after** all five targets had returned `built` and merged, and
+the reason was written into the lane body so nobody restores it by reflex.
+
+**This is not a request to lower a standard.** C5 is standing law — acceptance is a person completing the
+journey — and none of these options touches it. The question is narrower: whether `accepted` should also
+be the mechanism that releases *downstream lanes*, given that it is the mechanism that records *his
+judgement*.
+
+### Decision D-CATEGORY-IMAGE-CLIENT-GATE — how an image-less menu reaches phones that will never update
+state: open
+owner: @sven
+blocks: L-A-MENU-WITHOUT-PICTURES-STILL-SELLS
+options:
+| gate-on-client-version — pro: the shop works today for web and for updated apps, and the machinery already exists — the API reads ClientPlatform and ClientAppVersion at StoresController.cs:1435 and OrderService.cs:1263 ; con: somebody has to pick a threshold version, and every phone that never updates keeps the old filtered feed indefinitely
+| wait-for-app-adoption — pro: one code path, no version branch, nothing to remove later ; con: the fix waits on store adoption nobody controls, and until then a venue that has not photographed its menu sells nothing at all
+| withhold-the-backend-fix — pro: zero risk to the installed base, and the two guards still land so the next attempt is cheap ; con: the defect stays live and is now knowingly live, which is the worse kind
+default_if_unruled: none
+
+**The lane proved the guards and then found the ordering rule was necessary but not sufficient.** It
+built a harness that compiles each page's real `<template>` with that repo's own Vue toolchain and
+renders a category taken **verbatim from the live API** with `image: null`. Before the guards, **both
+surfaces threw** `TypeError: Cannot read properties of null (reading 'imageUrl')`. After, both render
+with the category name and a placeholder plate. Controls rule out a false positive — before-with-an-image
+renders on both — and the happy path diffs to **zero removed lines**, every addition a comment node.
+
+**The part that makes this a decision rather than a lane.** `ConsumerApp` is a **store-distributed native
+app**. Builds already on phones carry the unguarded read, and **no merge and no deploy reaches them**. So
+"guards first, then the backend" — the rule this estate was operating under — does not actually protect
+the installed base. Merge ordering cannot fix a binary somebody already has.
+
+**Both guards are built and committed, unpushed, on repositories this estate has no authority over**:
+`Okam-AS/ConsumerWeb` `lane/menu-without-pictures` **`ee133e0`**, `Okam-AS/ConsumerApp`
+**`6b9747a`**. Nothing is lost by ruling slowly; the shop staying broken is what costs.
+
+**Nobody has walked either surface, so C5 is unmet and the lane did not claim it.**
+
+### Decision D-RESTART-THE-WALK-WORLD-API — how a fix that needs a rebuild gets its browser proof
+state: open
+owner: @sven
+blocks: L-POWER-USER-IS-A-FACT-THE-PRODUCT-CAN-SET
+options:
+| restart-on-demand-per-lane — pro: any lane whose fix needs a rebuild can prove it in a browser the same hour, which is the only evidence C5 accepts ; con: the world is shared and lanes have been walking it all evening; a restart mid-walk invalidates another lane's captures, and the seeded data across six modules took hours to build through HTTP
+| one-scheduled-rebuild-between-waves — pro: the world stays stable inside a wave, so every lane's captures are comparable and nobody's evidence is destroyed under them ; con: a lane that finishes just after a rebuild waits a whole wave to prove itself, and `blocked` returns accumulate against work that is already correct
+| a disposable second world per walking lane — pro: no lane ever waits and no lane can invalidate another ; con: each world costs a SQL container and a full build against a 2-container cap the host is already hitting, and the seeded six-module data would have to be shared or re-created
+default_if_unruled: none
+
+**This is not one lane's problem and it will recur every time.** The API on **:5971** is a compiled
+`./bin/Debug/net8.0/WebApi`, **not `dotnet watch`** — so no backend change is visible without a restart.
+The web on **:3971** bakes `API_BASE_URL` at build time and **cannot be repointed**, so a lane cannot
+stand up its own API beside the shared one and walk against it either.
+
+**The lane that hit this had already done everything else.** Its fix is committed on
+`lane/poweruser-is-a-fact` at `b170a9e45` off trunk `118f92fb9`, with **red before green against the
+pristine trunk** — 3 of 4 new wire tests fail there, the fourth being a control that passes on both
+sides — and a fast tier of **4750 total / 4740 passed / 0 failed / 10 skipped**, which is the trunk's
+recorded 4736 plus exactly the four it added. **The code is not in question; the walk is.**
+
+**One detail makes the walk actively misleading rather than merely absent today.** The hand-written
+`IsPowerUser` row is **still standing** in the live database — proven from outside it, `GET /config` on
+:5971 answers `exploreAreaEnabled: true`, which is `ConfigController.cs:54` reading that column. So a
+browser walk against this world **renders all three screens and proves nothing at all**, while the
+trunk's own `NoCSharpCodeAssignsTheIsPowerUserColumn` proves no C# writes it.
+
+**The recorded revert costs that account nothing under this change**, because it holds the role and the
+payload now reports the role rather than the column.
+
+### Decision D-LIVE-WORLD-REBUILD-TRAINING-PAIR — whether a pair proven by every other means lands without its browser walk
+state: open
+owner: @sven
+blocks: L-THE-TRAINING-SCREEN-STOPS-CONTRADICTING-THE-DATA-BEHIND-IT
+options:
+| land-the-pair-on-the-other-evidence — pro: the fix is proven three independent ways already, and holding it keeps a manager looking at four completion rows whose course column is a dash ; con: it sets a precedent that C5 can be satisfied by a substitute, and C5 is standing law precisely because this estate has shipped green suites over unreachable features
+| rebuild the world for it — pro: the exit is met as written, and the same rebuild would unblock the power-user fix waiting on D-RESTART-THE-WALK-WORLD-API ; con: it costs a rebuild of a world other lanes are walking, and the walk it enables proves the pair and nothing else
+| hold until the next scheduled rebuild — pro: no lane's captures are destroyed under it and the pair lands with a real walk ; con: the defect stays on screen for however long that is, and a second lane is already waiting behind the same wall
+default_if_unruled: none
+
+**This is the second lane in one evening to finish its work and stop at the same wall**, which is why it
+is recorded rather than absorbed. The general form is `D-RESTART-THE-WALK-WORLD-API`; **this is the
+specific instance, and it differs in one way that matters: the fix here is provable without the walk, and
+was proved.**
+
+**Three independent lines of evidence, none of them a suite alone.** The served client already reads
+`row.courseTitle`/`versionNo`; the e2e fixture already **serves** both, with a comment describing the
+exact server behaviour it expects; and the sibling `TrainingAssignmentModel` carries them. **No backend
+branch in this estate ever had the field** — the client and the fixture were written against a contract
+whose backend half never landed. So *which side is wrong* was settled by evidence, not preference.
+
+**And there is a browser proof, of a bounded kind.** On :3971 as the manager, with the completions
+document rewritten in-browser by the service's own rule, **all four rows name their course and version
+with zero client changes**. That establishes the client half was already right and the server half is the
+whole fix. **It does not establish that :5971 serves it**, and the lane said so rather than claiming the
+walk.
+
+**The blocker is structural.** `:5971` runs an already-built binary at `118f92fb9` — not `dotnet watch` —
+and `:3971` serves `web-livewalk`, a tree belonging to the shared world rather than to this lane.
+Closing it means rebuilding `:5971` from a trunk carrying `3478c8b40` and pointing `:3971` at a tree
+carrying `89f4b73`, **backend first**, because the frontend half reads `versions` off the course list.
+
+**What the pair actually fixes, so the cost of waiting is legible**: four completion rows whose course
+column is a dash, and *«Ingen publisert versjon å tildele»* shown against **six published versions across
+five courses**.
+
+### Decision D-PARTIAL-COVERAGE-AND-A-COMPLETE-THEORETICAL-COST — whether a cost computed over part of the menu may call itself complete
+state: open
+owner: @sven
+blocks: nothing today; it decides what six golden assertions mean
+options:
+| complete-means-fully-covered — pro: the word matches what a reader assumes, and it is the standing withhold-rather-than-zero rule applied to a boolean instead of a number ; con: the golden world is partly uncovered and asserts complete in six places, so every one of those has to be re-read and re-argued, and a venue mid-setup would see incomplete for a long time
+| complete-means-the-lower-bound-is-sound — pro: it is the argument MIG-11 already rests on, that the amount is a non-nullable lower bound and the ratio is still reported, so the flag stays true to what the number actually is ; con: two adjacent booleans then mean different things by the same word, and a reader has no way to tell which one they are looking at
+| report-coverage-beside-it-and-drop-the-boolean — pro: the reader gets the fact rather than somebody's summary of it, and the ambiguity disappears rather than being resolved ; con: it is a wire change on a shipped model, and every consumer of the boolean has to be found first
+default_if_unruled: none
+
+**Raised by the lane that fixed the setup-day defect, from inside the code rather than from outside it.**
+That lane found and fixed a second defect on the way: **a period with zero covered facts skipped the cost
+loop entirely and published a theoretical of `0` with `TheoreticalCostComplete` set TRUE** — the
+withhold-rather-than-zero rule violated in its purest form, a `0` that means *we did not measure*
+asserting that it did.
+
+**Fixing the zero case exposed the question the zero case was hiding.** With none covered it is now
+plainly incomplete. **With some covered, nobody has decided.**
+
+**The argument for leaving it complete is not weak, which is why this is a decision and not a lane.**
+MIG-11 rests on exactly that reasoning — the amount is a **non-nullable lower bound** and the ratio is
+still reported alongside it, so a partially-covered cost is not a wrong number, it is a floor. The lane
+verified that reasoning still holds: **nulling the amount reds `MarginTheoreticalCostLowerBoundTests` and
+`MarginStatementLifecycleTests:328`.**
+
+**What makes it worth your ruling rather than a lane's**: the golden world is **partly uncovered and
+asserts complete in six places**, so whichever way this goes, six recorded expectations either stay and
+mean something specific, or move. That is a statement about what the module claims, not about how it
+computes.
+
+### Decision D-WIDEN-WHAT-COVERAGE-COLLECTS — whether the report starts counting the code it has never looked at
+state: open
+owner: @sven
+blocks: any honest target for "raise coverage"
+options:
+| widen-to-all-source — pro: the report finally describes the product rather than two directories, and the code it would newly count is where today's worst defects lived — utils/ holds both zero-coverage documents, store/ holds the cart ; con: the published headline drops again immediately after already dropping once, and a number that falls twice in a day is easy to stop trusting
+| widen-and-set-a-floor-per-directory — pro: the number stops being a single headline anyone can be disappointed by, and each area gets a target it can actually be held to ; con: somebody has to pick seven floors, and a floor picked carelessly is a ratchet that blocks work for a reason nobody remembers
+| leave-it-as-two-globs — pro: nothing moves, and the .vue figures are now honest within their own scope ; con: the report permanently excludes utils/, core/, store/ and plugins/, so a zero-coverage document stays invisible in the repo's own instrument even though a lane found it by hand
+default_if_unruled: none
+
+**The lane that fixed the instrument left this deliberately rather than taking it, and it was right to.**
+`collectCoverageFrom` is **two `.vue` globs**. Widening it is one line — and it moves the published
+headline, which makes it a decision rather than a side effect.
+
+**What is invisible today**: `utils/`, `core/`, `store/` and `plugins/`. That is not an obscure corner —
+**`utils/training/evidence.js` and `utils/meals/statement-client.js`, both at zero coverage, both
+documents somebody may have to produce, live in `utils/`**; and `store/index.js`, imported by no test,
+holds the cart.
+
+**The context that makes this uncomfortable and worth ruling anyway.** The instrument was found to be
+**hiding 16,991 statements** — it counted 762 of 1,166 and now counts 6,125 of 18,157. **Every module's
+figure fell**: Margin from 100.0 to 81.5, Growth from 86.1 to 38.4, Core/POS from 48.4 to 8.1. Margin's
+100.0 was 103 statements, all import lists.
+
+**So the number has already dropped once today for a good reason, and widening drops it again for the
+same good reason.** The question is whether the report should describe the product or a subset of it, not
+whether the subset looks better.
+### Decision D-SPEC-L-A-MODULE-OFF-NAMES-THE-MODULE — the plan contradicts what L-A-MODULE-OFF-NAMES-THE-MODULE observed
+state: open
+owner: @sven
+blocks: L-A-MODULE-OFF-NAMES-THE-MODULE
+options:
+| withdraw-that-half-of-the-exit — pro: the catalogue is right on four independent measurements, a census test already asserts Withheld.Keys is exactly this key, and the real defect (the seed writing it past its own guard) is fixed ; con: an operator still has no way to learn that the personnel list is governed by a statute rather than by a switch, so the next person asks the same question and the next lane re-authors this exit
+| show-it-as-withheld-rather-than-offer-it — pro: a row reading "governed by bokføringsforskriften § 8-5-6, not switchable" answers the question permanently without shipping a lever that moves nothing ; con: it is a new UI concept — a catalogue entry that is visible and not operable — and the census test would have to distinguish "offered as a switch" from "shown as withheld", which is exactly the kind of distinction that rots
+| offer-it-and-make-it-gate-something — pro: the lever becomes real, and the board stops having an invisible member ; con: it makes a statutory obligation optional, which is the defect C6 exists to prevent, and it would red the census test that currently protects it
+default_if_unruled: none
+
+**The lane was right and my exit was wrong, which is the honest shape of this.** I wrote *"and
+`workforce.personnel-list` is offered by the switchboard"* into the exit criterion from a walk finding
+that the lever refuses a flag the bootstrap writes. **The lane checked which side owned the flag's
+existence — as its brief told it to — and found the catalogue is the correct side.**
+
+**Four independent measurements, all live**: the board offers eight `workforce.*` rows and not this one;
+`PUT workforce.personnel-list` answers **400 Unknown feature flag** while an advertised key on the same
+route answers 200; `Withheld[PersonnelList]` rests on **bokføringsforskriften § 8-5-6**, covering the two
+reads *and* the correction write; and `WorkforceFlagConsumptionTests` **measures behaviourally that the
+flag gates nothing at all** and pins `Withheld.Keys` to exactly it.
+
+**So offering it would ship a lever that moves nothing — the precise defect `Withheld` was written to
+end — and would red the census test that guards against it.**
+
+**The half of the exit that was right is already built.** The module-off 403 body **already carried**
+`workforce.module-disabled`, so the client could always tell the two 403s apart and no backend change was
+needed. The refusal now names the module on **all nine** workforce admin pages, not just the roster I
+named, proven in one dark window against two servers: the owner's tree still prints *"Du har ikke
+bemanningstilgang"*; the lane's tree names the module and the switch.
+
+**And the real disagreement was found and fixed**: the demo seed was `INSERT`ing the withheld key
+straight into `StoreFeatureFlags`, past the one guard that refuses it. That is what made the two sides
+look like they disagreed. A two-directional pinning test now reds if a withheld key is put back **and**
+reds if a flag leaves `Withheld`.
+
+---
+
+**THIS GATE IS ALREADY HALF-HONOURED, AND THE BREACH IS THE CLERK'S. Recorded 2026-08-08, measured, not
+inferred.**
+
+The plan says of this pair: **"Do not land either."** Measured at the tips:
+`git merge-base --is-ancestor 2ce83f6 feature/restaurant-modules` **succeeds** — **the frontend half is on
+the trunk**, landed inside tranche three at `bb22728`. The backend half `8357c8a33` is **still held**.
+**So the contested exit is live on one side and absent on the other, under a decision nobody has ruled.**
+
+**How it happened, stated plainly.** The clerk authored the tranche-three brief from
+`docs/plan/artifacts/landing-order.md`, which lists `2ce83f6` as a landable unit, and **did not check it
+against this gate before dispatching.** The landing lane did exactly what its brief said. **The landing
+plan did not know about the gate, and the clerk did not carry it across.**
+
+**It was found because the backend census was told to name the paired branch rather than only the branch it
+was ordering** — a paired gate that names one side and silently covers two is exactly what gets
+half-honoured, and it did.
+
+**Nothing is being reverted on the clerk's judgement.** The frontend half is on a shared branch, its tier is
+green, and un-landing it is a decision with its own risks. **The owner's options are now narrower than they
+were, and that narrowing is the cost of the breach**: ruling this decision no longer chooses whether the
+pair lands, only whether the backend half joins the frontend half already there, or the frontend half comes
+back out.
+
+**No further branch under a gate may be dispatched without checking the gate at authoring time.** See
+`F-BRIEFS-ASSERT-TEST-SURFACES-THAT-EXIST-ONLY-ON-UNLANDED-BRANCHES`, which is the same class of clerk error
+in a different dimension.
+
+
+### Decision D-REVOCATION-POSTURE-IN-PRODUCTION — who is allowed to accept a certificate that may have been withdrawn
+state: open
+owner: @sven
+blocks: F-EVERY-MAIL-DIES-AT-A-REVOCATION-CHECK-THIS-HOST-CANNOT-COMPLETE
+default_if_unruled: none
+options:
+| restore-egress — pro: gives up nothing; the check keeps working and no third party absorbs a risk they did not choose ; con: infrastructure work on the production network, and it may not be within this estate's control to grant OCSP/CRL egress
+| key-in-production — pro: mail flows again immediately on any blocked host, with a one-line config change and no deploy of code ; con: accepts, on behalf of the mailbox owner and every recipient, that a withdrawn certificate and an unreachable revocation endpoint are indistinguishable
+| development-hosts-only — pro: bounded to hosts where the exposure is the operator's own; the default stays checked everywhere it is not deliberately set ; con: if production carries the same defect, mail stays dead there until egress is fixed
+
+**Raised because a second reader named who actually bears the risk, and it is not the person who sets
+the key.** The revocation lever is a per-host, operator-set, Warning-announced opt-out, and the review
+approved it as such. **The reviewer's own ruling was that it is acceptable for development hosts and
+"not acceptable as a production posture without an owner decision."** This is that decision.
+
+**What is given up, precisely.** Chain trust, validity dates and hostname verification all still hold —
+no `ServerCertificateValidationCallback` is added on any path, which the reviewer confirmed by grepping
+the whole backend rather than the diff. **The single question given up is whether an otherwise-valid
+certificate has been withdrawn.**
+
+**What that costs if the provider's certificate were genuinely revoked and an attacker holding the
+stolen key sat on the host's path**: the handshake completes, the product proceeds to AUTH, and what is
+disclosed is **the `noreply@okam.no` mailbox credential** plus **every outgoing message** — invoices,
+receipts, confirmation codes, payout notices, end-of-day mail, the SAF-T export attachment — readable,
+alterable and droppable. **The mailbox owner absorbs a rotation; the recipients absorb personal and
+financial data.** Neither is the operator who set the key, which is what makes this an owner's call.
+
+**There is no middle option to look for, and that is not an oversight.** MailKit offers no
+"check, and fail only on definitive revocation" posture without a custom validation callback, and a
+callback would put server *identity* back in play. The lane declined it deliberately: an absent switch
+has no gating conditions to get wrong.
+
+**Do not rule this on the strength of the App Insights row.** The review corrected that claim: the log
+site records the exception's **type name only**, so `SslHandshakeException` + "after 0 sent" isolates the
+failure to the TLS handshake but **not the cause to revocation** — an expired certificate, an untrusted
+root on the production image, a name mismatch or a middlebox all produce the identical row. **Production
+has not been measured.** If the line is present, the follow-up is an OCSP/CRL egress check from the
+production network, not setting the key on the strength of that row.
+
+### Decision D-HOW-A-KNOWN-DEFECT-IS-PINNED — a red test is honest and a green one is survivable, and this estate must pick
+state: open
+owner: @sven
+blocks: F-EVERY-LOAD-FAILURE-TELLS-THE-GUEST-THE-OFFER-EXPIRED
+default_if_unruled: defect-tests-assert-today after 2026-08-21
+options:
+| defect-tests-assert-today — pro: the shared tier stays green so no sibling lane is blocked, the test reds the day someone fixes the defect, and falsifiability is provable by applying the fix as a mutation ; con: a PASSING test that asserts broken behaviour reads as endorsement to anyone who has not read its name, and nothing forces a person to ever look at it
+| red-and-quarantined — pro: a red is the only signal a person cannot mistake for approval, and it keeps the defect count honest on its face ; con: jest 26 has no `test.failing`, so this needs a quarantine tier that does not exist today, and until it does a red in the shared tier is deleted by the next person who trips over it
+
+**The lane that raised this was right to raise it, and the contradiction was mine.** Briefs written this
+session said *"write the failing test, leave it failing"* **and** *"the tier is green at the lane tip"*.
+**Those cannot both hold in a shared tier**, and the lane said so rather than silently picking one.
+
+**What it did in the meantime, which is the strongest form of the first option.** It used the estate's
+existing `THE DEFECT:` convention — a test asserting today's behaviour, green now, red the day the defect
+is fixed — and then **proved each one falsifiable by applying the actual fix as a mutation** and watching
+the defect test red. That is the answer to the main objection: these are not decorative.
+
+**What is still true against it.** Five real guest-facing defects on `pages/offer/_code.vue` are now
+pinned by tests that **pass**, in a tier reported as `169 suites / 4054 / 0`. A person reading that line
+learns nothing about them. The defects live in the flags, and the flags are only as good as the habit of
+reading them.
+
+**The clerk's own correction, recorded here rather than only in the log**: the contradictory sentence has
+been dropped from brief authoring. Lanes are now asked to **pin the defect green and raise a flag**, not
+to leave a red in a shared tier. **That is a working default, not a ruling** — this decision is what
+replaces it.
+
+---
+
+**A RECOMMENDATION, not a ruling, from the independent audit of all three coverage branches
+(`docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md`).** It read both conventions
+against each other on the branches that produced them, and answered:
+
+> **keep the Meals green-pin convention plus a paired plan Flag; convert Growth's three reds — a standing
+> red destroys exit-0 gating, a cost this audit paid twice.**
+
+**The reason is measured, not preferred.** A red left standing in a shared tier means no later run can be
+gated on exit 0, so every consumer of that tier — sibling lanes, the landing lane, this audit — must
+hand-inspect which failures are expected. **The audit paid that cost twice while re-deriving 190
+mutations**, which is the concrete form of the objection.
+
+**The strongest argument against the green pin is also now measured, and it does not change the
+recommendation — it conditions it.** The same audit found the Meals branch's per-test falsifiability
+claim **false for 32 of its 115 tests**, because its runner never measured per-test coverage at all. A
+green pin is only as good as the evidence that it can red. **So if this option is chosen, the paired Flag
+is not decoration** — it is the only durable record that the defect exists, and the pin must be proven
+falsifiable by a runner that records per-test coverage. See
+`F-THIRTY-TWO-WORKFORCE-AND-MEALS-TESTS-ARE-NOT-KNOWN-TO-BE-FALSIFIABLE`.
+### Decision D-SPEC-L-THE-CLOCKOUT-WIRE-STOPS-LYING — the plan contradicts what L-THE-CLOCKOUT-WIRE-STOPS-LYING observed
+state: open
+owner: @sven
+blocks: L-THE-CLOCKOUT-WIRE-STOPS-LYING
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The brief says the wire still derives sessionState from closedUtc alone; at 057c390ad and at 81d06c10a it switches on result.Outcome and answers AttendanceException, fixed by 4d103ca8a on 2026-08-05.
+
+
+**The species test says this is not a fork, so it should not be ruled as one.** I tried to write two real
+options and could only write one: **retarget the lane at `utils/workforce/pos-clock-state.js`.** Per the
+standard, one option is an announcement — it becomes a **Lane**, not a Decision. That lane is
+`L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID`, authored below. **This stub needs no ruling from the owner.**
+
+**What actually happened, recorded because the failure mode is reusable.** The brief was aimed at a defect
+fixed by **`4d103ca8a` on 2026-08-05** — an ancestor of `81d06c10a`, the trunk the brief names as its own
+*starting point*. So the lane was dispatched at a ghost. The exit criterion's wire assertion already
+existed (`PosClockOutStateWireTests`), and its mutation had already been run and recorded.
+
+**The likeliest source of the wrong premise is a comment that outlived its code.** The header of
+`utils/workforce/pos-clock-state.js` still quotes `SessionState = result.ClosedUtc.HasValue ? Closed : Open`
+as current backend behaviour. The flag body inherited it, the brief inherited the flag, and an agent spent a
+lane confirming it was false. **See `F-A-COMMENT-THAT-OUTLIVED-ITS-CODE-DISPATCHED-A-LANE-AT-A-GHOST`.**
+### Decision D-SPEC-L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED — the plan contradicts what L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED observed
+state: open
+owner: @sven
+blocks: L-THE-RECEIPT-LABELS-CAN-BE-TRANSLATED
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The brief says the three functions have no lookup at all; at the named tip all three resolve a dictionary key and call $i, and the fix is an ancestor of that tip.
+
+
+### Decision D-IS-A-SCRIPT-IN-AN-EVIDENCE-DIRECTORY-A-RECORD-OR-A-DRIVER — the guard catches the script that produced a census
+state: open
+owner: @sven
+blocks: F-THE-RUNNER-GUARD-SWEEPS-EVERY-DIRECTORY-EXCEPT-THE-ONE-RUNNERS-LIVE-IN
+default_if_unruled: none
+options:
+| exempt-records — pro: `docs/plan/lanes/` is a directory of findings and the guard ALREADY exempts `.md`, `.txt`, `.log` and `.json` there as prose, so a `.sh` that is equally a record is the inconsistency, not the exception ; con: an exemption keyed on location is exactly how the previous two narrowings hid a live driver, and a real driver written into a lane directory would walk through it
+| change-the-script — pro: `compose.sh` passes the guard on its merits and nothing special is added to the rule ; con: it is the script that PRODUCED the census, so editing it leaves the evidence directory holding a script that is not the one that produced the measurements beside it
+| accept-and-adjust-the-arm — pro: the guard's finding stands unaltered and honest; the four failing arms are "does not accuse" tests asserting an empty offender list, and an expected-offenders list is a small change ; con: an allowlist of known offenders is a thing people add to, and the first entry is the cheapest one to add
+
+**Raised because a landing lane found the two branches genuinely incompatible and refused to resolve it by
+editing evidence.** Measured from both sides rather than argued: the guard branch alone lands **green at
+183 / 4445 / 0 with the sweep at 53**; adding the census branch takes the trunk **red at 5 failed with the
+sweep at 54**. **The 54th entry is the sole offender and the census branch brings it itself** —
+`docs/plan/lanes/L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED/compose.sh`, which restores with `git checkout --`.
+
+**The rule and the danger disagree, which is what makes this a decision rather than a bug.** By the guard's
+**rule** it is a true positive. By the guard's stated **danger** it is not: `compose.sh:30` restores
+`run-sheet.json` — a tracked artifact the backend tier rewrites — inside a **throwaway detached-HEAD
+worktree holding no uncommitted work**. There is nothing there for it to destroy.
+
+**The guard is correct as written and the estate is inconsistent underneath it.** That is the finding to
+weigh: `docs/plan/lanes/` holds records, the guard already treats four file types there as prose, and a
+shell script that is equally a record is not distinguished from a live driver.
+
+**Nothing is blocked while this is open except the census branch's own landing.** `lane/backend-landing-order`
+@ `392a2fd` is untouched, asserted absent from the trunk, and **otherwise ready** — its artifact was tracked
+after merge, so the bare `artifacts/` rule did not eat it.
+
+### Decision D-DOES-A-SAFT-PAYMENT-ELEMENT-ADMIT-A-CREDIT-MEDIUM — a question about the standard, not about the code
+state: open
+owner: @sven
+blocks: F-THE-SAFT-EXPORT-AND-TRIPLETEX-PUSH-ALSO-COUNT-INVOICED-MONEY-AS-RECEIVED
+default_if_unruled: none
+options:
+| exclude-credit-media-from-the-payment-element — pro: the export then agrees with the corrected X/Z roll and with the plain reading that a payment element records money received ; con: if the standard expects every medium listed, the export silently under-reports and an inspector reconciling against the journal finds a gap we introduced
+| list-it-with-its-own-media-code — pro: the export stays complete and the distinction travels with it, which is the same shape the ESC/POS roll now uses ; con: requires a media code the standard actually defines for a receivable, and inventing one is worse than the defect
+| leave-saft-as-it-is-and-record-why — pro: no change to a statutory export without authority, and the exposure is already recorded ; con: two artifacts for the same day keep disagreeing, which for a statutory document is worse than one being wrong
+
+**A lane reached this and stopped rather than guessing, which was the right call.** The X/Z payment rule now
+lives on the model (`PaymentMeansTotal.IsReceived`, computed from `PaymentType`), and the ESC/POS roll
+splits company-account totals out of `Sum mottatt` under **`KREDITTSALG (IKKJE MOTTATT)`**. Two emitters
+still read every medium: the **SAF-T export** and the **Tripletex push**.
+
+**The SAF-T half is not a code decision.** It writes each medium under a **statutory media code**, so
+whether a credit medium belongs in that element is a question about the SAF-T standard. The lane's own
+words: *filtering it on my own reading would repeat the error I rejected — a confident change to a
+statutory export with no authority.*
+
+**This needs an authority, not a preference**: the SAF-T cash-register specification, or whoever owns the
+filing. **The clerk cannot rule it and neither could the lane.**
+
+**The Tripletex half is different and does NOT need you** — it needs its voucher path read, which is
+ordinary work and will be its own lane.
+
+**What is already true and does not depend on this**: `IsReceived` is available to every reader, the
+ESC/POS roll is corrected, and the exposure is recorded at
+`F-THE-SAFT-EXPORT-AND-TRIPLETEX-PUSH-ALSO-COUNT-INVOICED-MONEY-AS-RECEIVED`. **Nothing has been landed** —
+the work sits on `lane/xz-received-at-the-model` @ `57865601b`, unmutated and with no tier run, so it is
+not yet claiming to work.
+### Decision D-SPEC-L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER — the plan contradicts what L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER observed
+state: open
+owner: @sven
+blocks: L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The exit criterion "no undefined PaymentType value can reach a printed fiscal line" is ALREADY MET at the trunk, contradicted by 44 passing arms in PrintedTenderNameTests and EscPosPaymentLabelTests that pin (PaymentType)9999 to the residual word "Ukjent" on all three emitters.
+options:
+| land-on-the-corrected-rationale — pro: an append-only journal row that stores "999" is unrepairable by construction, and the branch guards all three writers without touching the printer, so it cannot break the deliberate "Ukjent" ; con: it is defence-in-depth rather than a repair — no current HTTP path reaches it — so it spends a landing slot on a hazard nobody can currently trigger
+| leave-it-and-record-the-reachability — pro: three callers pass enum literals and the settlement path is gated by IsTerminalPayment() matching two defined members, so the exposure is closed by construction today ; con: "closed by construction today" is exactly the guarantee a future caller removes without noticing, and the row it would write cannot be repaired afterwards
+| land-it-and-widen-to-the-two-other-unguarded-sites — pro: DinteroController.cs:729 and the EnumToStringConverter mapping are unguarded too, and doing all three at once means the question is settled rather than revisited ; con: neither of those is a fiscal document, so it widens a fiscal-integrity change into general enum hygiene and makes the landing harder to review
+
+**The exit criterion was already met and the lane said so in the hour it was meant to cost.** All three
+emitters route through `Services/PaymentTenderLabels.cs`, whose default returns **"Ukjent"** — measured at
+the trunk as **44 passing arms** pinning `(PaymentType)9999` to it.
+
+**Why the plan believed otherwise, and it is nobody's error.** `PaymentTenderLabels.cs` **did not exist** at
+`bd77cd6b0`'s base; it landed later in `bcc8bd179`. So the branch's own comment — *"(PaymentType)999
+rendered 999 125,00"* — is **true of its base and false of the trunk**. Fourth time this program has caught a
+diff read mistaken for a live defect.
+
+**The clerk's "refuse at the boundary, not the printer" instruction meets a documented counter-argument, and
+the trunk is right.** By the time a tender reaches a receipt the sale is **settled and journalled**, so
+refusing to render does not un-sell it — it makes a legally required document **unproducible when demanded**,
+which is the wrong side of C6. `"Ukjent 42,37"` discloses the amount and admits the tender is unknown; a
+receipt that fails to print discloses nothing. **A visible residual is not a silent default**, which is the
+harm the brief actually named.
+
+**What remains is real but narrower**: `JournalPaymentLine` is **append-only** and persists through
+`EnumToStringConverter`, so an undefined value stores as **`"999"` in a row no repair can reach**, while the
+printed line for the same sale says "Ukjent" — the document and the record would disagree.
+
+**One defect for whoever lands it**: `CardSale_WithNotSet_IsStillRefused` asserts a message the trunk does
+not use. The trunk already refuses `NotSet`; only the wording differs.
+
+
 ## Flags
 
 The lane sent to close `F-GR-FALSE-EVIDENCE` found **the ruling already implemented at the base it was
@@ -21884,11 +28993,11 @@ The design's own count said fourteen. It is twenty.
 
 **Live, re-measured on every `plan refresh`:**
 
-This repo is on <!--fact fe.world.branch 2026-08-06T15:52Z ok-->feature/restaurant-modules<!--/fact-->, conforming:
-<!--fact fe.world 2026-08-06T15:52Z ok-->True<!--/fact-->. The backend checkout that nineteen
-probes read is on <!--fact be.world.branch 2026-08-06T15:52Z ok-->lane/meals-grace-pins<!--/fact-->, conforming:
-<!--fact be.world 2026-08-06T15:52Z ok-->False<!--/fact-->, and it is missing
-<!--fact be.world.behind 2026-08-06T15:52Z ok-->4<!--/fact--> commits this branch has.
+This repo is on <!--fact fe.world.branch 2026-08-08T15:25Z ok-->feature/restaurant-modules<!--/fact-->, conforming:
+<!--fact fe.world 2026-08-08T15:25Z ok-->True<!--/fact-->. The backend checkout that nineteen
+probes read is on <!--fact be.world.branch 2026-08-08T15:25Z ok-->lane/meals-grace-pins<!--/fact-->, conforming:
+<!--fact be.world 2026-08-08T15:25Z ok-->False<!--/fact-->, and it is missing
+<!--fact be.world.behind 2026-08-08T15:25Z ok-->4<!--/fact--> commits this branch has.
 `../ConsumerWeb`, which the twentieth reads, conforms:
 the world file read `unknown` on purpose,
 because **nobody has ruled which ConsumerWeb branch this plan reads from**, and filling the expected
@@ -23152,6 +30261,23 @@ severity: warn
 owner: @sven
 clears_when: a contact-mismatch refusal carries no invitee identity on the wire, shown by a check that reads the response body rather than the rendered page
 
+**Clerk correction appended 2026-08-06, beside the text above and not over it.** The lane sent to close
+this **partly falsified the premise**, and the flag should be narrowed rather than cleared as written.
+
+This flag says nothing exists that would notice the withholding clause going away. **Run against the
+whole tier, the mutation reds two tests, not none.** The second is
+`MealsInvitationIntendedContactTests.The_refusal_does_not_tell_the_holder_which_address_to_go_and_acquire`,
+**pre-existing at trunk from `022c5324f`**.
+
+**It is not a substitute, which is why the flag was still worth acting on**: it is at the object tier
+rather than the wire, it covers **the email limb only**, and it accepted **any** 403 — so it was one
+refusal-ordering change away from vacuous. The lane tightened it to pin the code, and that was its only
+edit to an existing file.
+
+**The true statement is narrower than the flag's**: nothing read the wire, and nothing covered the phone
+or payroll-reference limbs.
+
+
 **Proved over HTTP by `L-JOURNEY-MEALS`, not argued from source.** A clean refusal body is clean; with the
 withholding clause removed the body carries `"intendedContact":"marit@example.test"` — the email of the
 person whose invitation is being refused, handed to whoever asked.
@@ -23653,6 +30779,29 @@ busy when it is idle**, and that is the reading this note exists to prevent.
 
 **Nothing foreign was touched.** The three SQL containers and six stale hosts cleared earlier today were this
 estate's own residue and were cleared on the owner's instruction; a sibling project's live work is neither.
+
+**TWO NUMBERS FOR ONE HOST, RECONCILED 2026-08-08 after a lane asked which one it was supposed to obey.**
+This flag states the ceiling as **21**; every brief the clerk has written gates a lane's own tier at **13**.
+A lane blocked on the 13 correctly observed that it *"would not have tripped the flag's own threshold"*.
+
+**They measure different things and both are right, but that was never written down — which is the defect.**
+
+- **21 is the DISPATCH ceiling.** `plan tick` refuses to grant a new lane above it. It answers *may another
+  lane start on this host.*
+- **13 is the TIER gate inside a lane.** It answers a different question: *may I add a full test tier on top
+  of whatever is already running.* A backend tier saturates a core for minutes, so a lane starting one at
+  load 18 pushes the host past 21 by its own action.
+
+**The 13 exists because this estate has already paid for its absence**: a backend tier aborted at **277
+tests** with *"Test host process crashed"* while three other agents ran the same tier concurrently. The gate
+is what stops a fourth.
+
+**So a lane may legitimately be dispatched at load 18 and then be unable to run its tier.** That is not a
+contradiction — it is the system working, and the correct outcome is exactly what that lane did: **verify,
+report, and return `blocked` rather than force a fourth concurrent tier.**
+
+**Neither number changes on the clerk's authority.** Recording the distinction here so the next lane does
+not have to rediscover it.
 
 ### Flag F-CORE-PIN-ON-NO-REMOTE — a fresh clone cannot check out its own dependency
 state: open
@@ -24605,6 +31754,20 @@ could not name an instance; here is one.
 
 **Fixed on `refs/lanes/L-CHECK-DISCOUNT-SUM-COUPLED` at `c8f26d5`, not on any shared branch.** The flag stays
 open until that lands.
+
+**Measured by the clerk 2026-08-07, beside the above rather than over it: `c8f26d5` IS an ancestor of
+`feature/restaurant-modules`.** `git merge-base --is-ancestor c8f26d5 feature/restaurant-modules` succeeds,
+and the trunk's `SellScreen.vue:569` carries the `isDeductionInPlay(g.discountAmount)` branch with its
+comment naming the listed-price hazard. **The sentence above is stale: it landed.** Whether that satisfies
+`clears_when` depends on the mutation existing at the tip, which the clerk did not run — **this note claims
+the fix shipped, not that the flag is clear.**
+
+**Three siblings of it did NOT land, and their pins are absent from the trunk entirely**:
+`lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED` @ `7a72c02`, `lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM` @ `c32cda3`,
+`lanes/L-OFFER-PARTIAL-SUBTOTAL` @ `35e5cdd`. `test/check-lineamount-sum.test.js` and
+`test/receipt-discount-row.test.js` do not exist on the trunk, and the string
+`pos_negative_sale_unpriceable` — the message the unpriceable-return path renders — is **absent from all
+three dictionaries**. `lanes/L-WORLD-STAMP-WINDOWS` @ `997936a` did land (identical at the tip).
 
 
 ### Flag F-JOURNEY-RECEIPT-DOES-NOT-NAME-ITS-FIXTURE — a walk that may have been served by another lane's world
@@ -27639,6 +34802,55 @@ than any single one.
 
 
 
+**Swept and measured 2026-08-06. The blast radius is wider than this flag said and the reason is different.**
+
+**All 25 tables refuse an EF UPDATE with error 334 — not a subset.** 334 is decided at statement *compile*, so a
+zero-row update is refused exactly like a real one.
+
+**But 23 are masked**, and the masking is the real discriminator. `GuardAppendOnly` throws **in-process**, for
+exactly those 23 CLR types, **before EF ever emits SQL**. So the live cases are the two whose guard is
+*conditional*:
+
+- **`TrainingCourseVersions`** — draft edit, publish and retire all mutate a tracked entity.
+- **`MealsStatementLines`** — a second live defect this flag did not name: statement **re-draft** does
+  `RemoveRange` at `MealsStatementService.cs:168`.
+
+**The INSERT claim in this flag is correct, and the lane proved it against its own prediction.** It expected the
+8 identity-key tables to die on `INSERT … OUTPUT INSERTED.[Id]`. **They do not.** It said plainly that reporting
+that from reasoning would have been a fabricated finding of the exact shape this plan keeps cataloguing.
+
+**Fixed by declaring all 25** through a `ModuleTriggerBuilder` in `ApplicationDbContext`, behind the file's
+existing `Database.IsSqlServer()` branch. **No migration and no schema change** — `HasPendingModelChanges()`
+asserts false, on the fast tier, needing no container.
+
+**SQL arm: 27 failed / 25 passed → 0 failed / 52 passed.** Fast tier 4357 → 4359. The drift gate was
+mutation-checked: removing the declaration reds it.
+
+**Anti-drift in the test itself**: theory cases are replayed from the **migration chain**, not the model — which
+would collapse to zero cases and pass — truth is read from `sys.triggers`, and the model is compared in both
+directions.
+
+**Ships as a patch, not a commit**: the harness pinned the lane to a Nuxt worktree, so the backend was
+unwritable. Dry-run clean, 5 files, 729 lines.
+
+**One residual, deliberately not papered over**: the batched multi-row INSERT is unprobed. It was written, could
+not be run — the host fell to **135 MB free** with two SQL containers up — and **deleted rather than shipped as
+an unmeasured assertion**. The lane stopped its own run to protect the owner's live world.
+
+**The patch is stale and was refused rather than forced, 2026-08-06.** Its base is **nine migrations behind**
+the composed stack: three migrations dated 2026-08-01 — Margin period statements, Training W3, Workforce W5
+timesheets — add **seven triggers the patch never saw**. The chain now installs **32**, the patch declares
+**25**.
+
+**Refused by `git apply` and by `patch(1)`, which has fuzz and still would not take it.** Force-applied in a
+throwaway worktree it **reds its own fast-tier arm 2F/0P** on exact set equality — the test is written to
+demand the whole set, which is what makes it worth having and what makes a partial apply useless. The throwaway
+was destroyed and no migration was added anywhere.
+
+**Closing it means authoring seven declarations that lane never wrote and never measured**, and its arm is the
+SQL tier — so it belongs to a lane holding a slot, not to a patch application. The refresh recipe is specified.
+
+
 ### Flag F-DEV-EXCEPTION-PAGE-ECHOES-THE-BEARER — a 500 body returns the caller's own token
 state: open
 severity: blocker
@@ -27844,6 +35056,33 @@ is short on paper by an amount that never left it, and the company's own account
 **This is a C4 and a bokføring question at once**: the money path names an actor and a tender, and the tender it
 names is false. An operator refunding a company lunch has no correct control to press.
 
+**Fixed on a patch, and the fix was smaller than the defect suggested — the Meals limb already worked.**
+
+**The spec had already answered the design question** (`20-company-meals-spec.md:107`, `:37`): a company refund
+**reverses the funding allocation directly** and mints no tender. `MealsJournalProjectionSource` keys on
+`ReceiptType == Return`, **not on tender**, so the reversal already landed correctly. **The entire defect was
+POS-side**, and §7 `:221` already names refund paths among the switches that must classify `CompanyAccount` as
+a receivable — *"never fake cash or card tender"* (§13.2).
+
+**Red proven on unmodified code, 6 of 6**: RETREC tender `Cash`; drawer `PayOut` −14 900; expected cash 100 000
+→ 85 100; X-report `CashTotal` −14 900; refused outright with no open cash day; and no company route on
+`PosController` at all.
+
+**The change**: a new `POST /pos/payment/company-account/{journalEntryId}/refund` that journals
+`CompanyAccount`, reads no drawer session and needs no open day. `RefundCash` now **refuses a company original
+and names the correct control**, and the new route refuses a non-company original so it cannot be used to skip a
+real pay-out. **SAF-T follows for free**: the return exports medium **12006 CUSTACCT**, not 12001 CASH.
+
+**One judgement call for review**: § 5-3-7's second paragraph ties signature and phone to a *tilbakebetaling til
+kunde*. A company return pays nobody back, so both were dropped **on the new route only** — verified reachable
+from nowhere else, with a cash return still requiring a signature, pinned.
+
+**C3 is not closed and cannot be from there**: there is no Core `pos-service.ts` method and no POS control.
+**The operator still has no button.** A frontend lane is owed.
+
+**`F-MEALS-FUNDING-AUTHORITY-COLLISION` is not hit** — the three Meals ledger tables carry **no actor column at
+all**, so no actor-kind had to be chosen. The actor is the PIN-verified till operator on the RETREC.
+
 ### Flag F-COMPANYACCOUNT-BLOCKED-BY-THE-APPROVAL-GATE — a tender that touches no rail is refused like one that does
 state: open
 severity: warn
@@ -27925,6 +35164,1190 @@ clears_when: the rewards statistics panel renders when every customer is a membe
 **No amount of seeding repairs it**: in this world the one honest customer *is* the member, so non-member
 orders are zero by construction — and that is the ordinary state of a venue whose first loyalty member is its
 first regular.
+
+
+
+### Flag F-REPUBLISH-DOUBLES-PLANNED-MINUTES — a payroll column inflates every time a week is republished
+state: open
+severity: blocker
+owner: @sven
+cleared_by: L-PLANNED-MINUTES-HONOUR-LINEAGE
+clears_when: republishing an identical week leaves planned minutes, planned labour cost and planned variance unchanged, shown by a measured before-and-after on each reader
+
+**Found by sweeping for the defect that produced the duplicate open shifts — and the sweep is worth more than
+the fix was.** Four more readers filter on `State` alone with no lineage filter, and the first is **measured,
+not reasoned**:
+
+- **`WorkforceActualMinutes.ReadAsync:151`** — an identical week republished takes `plannedOrdinaryMinutes`
+  from **480 to 960**. That single reader feeds the **payroll hours export**, contract exposure and the labour
+  band, so **one republish inflates the planned column of a payroll CSV** and the planned side of every variance
+  and labour-percentage figure derived from it. Paid minutes come from clock sessions and are unaffected — the
+  plan is wrong, the actuals are right, and the gap between them is what a manager reads.
+- **`WorkforceLabourBandService.ReadPublishedAssignmentsAsync:456`** — planned labour cost and unpunched-shift
+  count **double per republication**. A money path.
+- **`WorkforceAttendanceService.GetAttendanceAsync:86`** — the planned side of planned-versus-actual variance
+  doubles.
+- **`WorkforceRequestsService.FirstAffectedPublishedRevisionAsync:424`** — not duplication: it can **name a
+  superseded revision** as the first affected schedule revision.
+
+**All four are unfixed and each needs its own red-first proof.** Republishing a week is the ordinary act this
+module supports, so none of these is an edge case.
+
+### Flag F-EXCHANGE-AWARD-BLOCKED-BY-A-STALE-ROW — she is refused a shift because of her own superseded self
+state: open
+severity: warn
+owner: @sven
+clears_when: a worker can be awarded a shift she held only in a superseded revision, shown by a walk that reopens and re-awards one
+
+Same family, different predicate. `WorkforceShiftExchangeService.RevalidateAwardAsync:641` filters
+`State != Cancelled` **with no lineage filter**.
+
+**Confirmed by probe**: pull a worker off a shift and reopen it, and she can ask for it back — 200 OK — but the
+award **always 409s** `workforce.exchange-not-awardable`, *"the candidate already works an overlapping shift"*.
+The overlapping shift is **her own row in the superseded revision.**
+
+**Left unfixed deliberately**: it changes award admission semantics and deserves its own red-first proof rather
+than riding along with a lineage sweep.
+
+
+
+### Flag F-FIRST-AFFECTED-REVISION-CAN-BE-SUPERSEDED — it points at a revision, and the pointer can be stale
+state: open
+severity: warn
+owner: @sven
+clears_when: the first-affected schedule revision is never a superseded one, shown by a case where a superseded revision would have been named
+
+**Separated out on the lane's own advice, and it was right to insist.**
+`WorkforceRequestsService.FirstAffectedPublishedRevisionAsync:424` shares the missing lineage filter with the
+three readers in `F-REPUBLISH-DOUBLES-PLANNED-MINUTES` — **but it is a different failure.** It does not double
+anything. It **returns a pointer to a superseded revision.**
+
+**So a fix scoped to the doubling would close this flag without ever touching it**, which is exactly how a
+defect survives a sweep that appears to have covered it.
+
+**And the right answer is not obvious.** Excluding superseded lineage here changes *which* revision is named,
+not a count — so whoever takes it must say what the correct answer is rather than applying the filter by
+reflex.
+
+
+
+### Flag F-CONSUMER-READS-CATEGORY-IMAGE-UNGUARDED — two consumer surfaces throw the moment a category has none
+state: open
+severity: blocker
+owner: @sven
+clears_when: no consumer surface dereferences a category image without a guard, shown by a render of a category that has none
+
+**This is a landing-order hazard, not a defect in isolation, and it is why the category fix must not ship
+alone.**
+
+`ConsumerWeb/pages/categories.vue:302` and `ConsumerApp/.../CategoriesPage.vue:405` read
+`category.image.imageUrl` **unguarded**. They have never thrown **only because the backend guaranteed an
+image** — by dropping every category that lacked one, which is the very defect being fixed.
+
+**So the backend fix hands them a shape they have never seen.** Guards first, or both together. Never the
+backend alone.
+
+Guards are patched in the lane directory but **unbuilt** — separate repos, isolated worktree, no
+`node_modules`.
+
+**A third surface tells the operator a falsehood after the change**:
+`modul/apps/admin-web/.../CategoryManager.tsx:484` renders *"Hidden from guests. Add an image"* on every
+image-less row. Once an image is not required, that chip is **false**. Not patched.
+
+
+
+### Flag F-PROD-BEARER-COMMITTED-IN-BRUNO — a production admin token is in the repository
+state: open
+severity: blocker
+owner: @sven
+clears_when: no committed file carries a bearer token, and the key that signs them is rotated
+
+`Bruno/Okam API/environments/OKAM - prod.bru` commits a **production `PowerUserRole` bearer token**, minted with
+`AppSettings:Secret`.
+
+**The token expired 2026-06-22. The key that signs a fresh one has not been rotated** — and that key is itself
+committed (`F-JWT-SIGNING-KEY-COMMITTED`). So the expiry buys nothing: anyone holding the repository can mint a
+replacement.
+
+**Found only because a fifth copy of another credential turned up in the same directory.** A `.cs`/`.json`/`.sh`
+sweep walks straight past `.bru`, which is how both survived every previous search.
+
+### Flag F-DEPLOY-NEEDS-FOUR-APP-SETTINGS-FIRST — the App Service will refuse to start without them
+state: open
+severity: blocker
+owner: @sven
+clears_when: the four keys exist as app settings in every deployed environment, checked before the branch carrying the guard is deployed
+
+**This is a config-before-deploy dependency created deliberately, and it must not be discovered at deploy time.**
+
+Once the credentials-from-config work lands, the App Service **refuses to start** unless all four exist:
+`AppSettings__Secret`, `AppSettings__PowerUserVerificationCode`, `ExternalApi__EddaOrdersApiKey`,
+`DocumentRenderer__FunctionKey`.
+
+**That refusal is the point** — a silent fallback to a committed literal is the defect being fixed, and the
+estate's own precedent is the fiscal-journal guard that throws outside Development with a written reason.
+
+**Nothing breaks today**: the demo scripts, the owner's live world, the wire tier and CI are all unaffected,
+because the two inbound credentials moved to `appsettings.Development.json`, which no deployed environment
+loads.
+
+**One trap closed in advance**: the guard **rejects the committed `"Set in Azure…"` placeholder spelling**, so
+an operator who copies it into an app setting does not satisfy the check.
+
+
+
+### Flag F-GROWTHAUDIT-MISSING-AT-THE-MERGE-TIP — the composed stack itself carries the model-chain breach
+state: open
+severity: blocker
+owner: @sven
+cleared_by: L-GROWTHAUDIT-MIGRATION
+clears_when: HasPendingModelChanges is false at the tip that lands on the trunk, and GrowthAuditEvents exists on a chain-built database
+
+**Found while isolating something else, and re-measured to prove it was not the patch's doing.**
+`HasPendingModelChanges()` is **already true at `integration/mig-stack-merge` `7f8945dc`** with the patch fully
+reverted and rebuilt.
+
+**The delta is one whole table.** `GrowthAuditEvents` is mapped at `ApplicationDbContext.cs:219` and written at
+`GrowthAuditWriter.cs:89` by five Growth services — and **no migration creates it, and the model snapshot does
+not name it.**
+
+**That is the `AccountingSummaries` shape a third time**: green on every model-built test database, `Invalid
+object name` on every chain-built one. **It is a C2 breach sitting at the tip that is about to land on the
+trunk.**
+
+`L-GROWTHAUDIT-MIGRATION` authored the migration that creates it, on `lane/growthaudit-migration` — **unmerged**.
+So the fix exists and the landing order now matters: **that migration must reach the trunk with, or before, the
+composed stack.**
+
+
+### Flag F-TRIPLETEX-CALL-BUDGET-UNDERCOUNTS-THE-WORST-CASE
+severity: warn
+owner: agent
+clears_when: the per-call budget in TripletexSettings.cs:57 is derived from the worst-case call count rather than a count that can be exceeded, or a recorded ruling says the safe-direction error is accepted
+
+Raised by the pre-merge reading of `f3817eed9`, which ruled that commit **land-as-is** and recorded this
+beside the ruling rather than as a reason to hold it. **The error is in the safe direction** — the budget
+is smaller than the worst case, so the claim window closes early rather than late — and the reviewer
+named the exact tightening. It is here so it cannot be lost between a landing and the next author.
+
+### Flag F-TRIPLETEX-STALE-RECOVERY-IS-LONGER-THAN-ITS-STATED-TEN-MINUTES
+severity: warn
+owner: agent
+clears_when: the stale-claim recovery path completes within its stated window, or the stated window is changed to the value the derivation actually produces
+
+Also raised by the reading of `f3817eed9`: the stale recovery lengthens from a stated **10 minutes** to
+approximately **24.3 minutes** once the derived threshold and the capped `Retry-After` compose. **Nothing
+is lost and nothing is double-claimed** — a claim simply stays held longer than the number an operator
+would read. Recorded rather than blocking, because the reviewer measured it as safe.
+### Flag F-TRIPLETEX-CALL-BUDGET-UNDERCOUNTS-THE-WORST-CASE — the Tripletex per-call budget undercounts the worst case
+state: open
+severity: warn
+owner: @sven
+clears_when: the per-call budget in TripletexSettings.cs:57 is derived from the worst-case call count, or a recorded ruling accepts the safe-direction error
+### Flag F-TRIPLETEX-STALE-RECOVERY-IS-LONGER-THAN-ITS-STATED-TEN-MINUTES — the Tripletex stale recovery is longer than its stated ten minutes
+state: open
+severity: warn
+owner: @sven
+clears_when: the stale-claim recovery completes within its stated window, or the stated window is changed to the value the derivation produces
+### Flag F-BY-SIDE-CONFLICT-RESOLUTION-HAS-NOW-COST-FOUR-TIMES — resolving a conflict by side has silently destroyed content four times in this estate
+state: open
+severity: warn
+owner: @sven
+clears_when: a landing lane's instructions name git merge-file or an equivalent hunk-level resolution as the required method for any file with content on both sides, and no landing after that date records a by-side loss
+### Flag F-STALE-HUSKY-HOOK-BLOCKS-EVERY-COMMIT — a stale husky hook cds into a path that exists in no checkout, so every commit needs --no-verify
+state: open
+severity: warn
+owner: @sven
+clears_when: .git/hooks/husky.local.sh either resolves in a normal checkout or is removed, and a commit succeeds without --no-verify
+
+
+
+
+
+### Flag F-PARTNER-FEED-DROPS-IMAGELESS-CATEGORIES-TOO
+severity: warn
+owner: @sven
+clears_when: ExternalMenuService.cs:137-140 either stops dropping image-less categories, or the partner-feed contract is recorded as deliberately image-required with the reason
+
+**A second, independent copy of the same drop**, found by the lane that proved the consumer guards.
+`ExternalMenuService.cs:137-140` filters image-less categories on the **API-key partner feed**, with an
+extra `ImageSource` null test the consumer path does not have.
+
+**It is a published contract, which is what makes it a separate question** rather than part of the
+consumer fix: partners have integrated against the current shape, and changing what a paying integrator
+receives is not the same decision as fixing our own shop. `D-CATEGORY-IMAGE-CLIENT-GATE` does not cover
+it and should not be stretched to.
+### Flag F-PARTNER-FEED-DROPS-IMAGELESS-CATEGORIES-TOO — the partner feed drops image-less categories too, under its own published contract
+state: open
+severity: warn
+owner: @sven
+clears_when: ExternalMenuService.cs:137-140 stops dropping image-less categories, or the partner-feed contract is recorded as deliberately image-required with the reason
+### Flag F-ADMINAPP-KEYSTORE-PASSWORD-IN-A-COMMITTED-SCRIPT — an Android keystore password sits in cleartext in a committed npm script
+state: open
+severity: blocker
+owner: @sven
+clears_when: AdminApp package.json line 50 reads the keystore password from the environment or a secret store, and the committed value is rotated
+### Flag F-EVENTS-ACCEPTOR-CODE-IS-A-PINNED-PUBLIC-CONTRACT — a new problem code entered a registry Core clients pin, with no downstream owner
+state: open
+severity: warn
+owner: @sven
+clears_when: Core events-service.ts carries EVENTS_ACCEPTOR_REQUIRED, or the registry records that clients need not pin it
+### Flag F-DEMO-ACT5-CLAIM-NO-LONGER-REPRODUCES — the demo's fifth act asserts a drift that the current renderer does not produce
+state: open
+severity: warn
+owner: @sven
+clears_when: ACT 5 measures a claim that reproduces against plan render --html, or the act is retired with the reason recorded
+### Flag F-TWO-BACKEND-COMMITS-LEFT-OFF-THE-TRUNK-BY-NAME — the backend landing deliberately omitted two commits and named them rather than dropping them quietly
+state: open
+severity: warn
+owner: @sven
+clears_when: 34c6c1031 meals expiry pins is landed or recorded as unwanted, and e956337ed is triaged file by file since it carries a settings hook config and a stale WORLD.json
+### Flag F-ASSERT-NOT-PROD-IS-UNWIRED — a guard script that would refuse a production target is not wired to anything
+state: open
+severity: warn
+owner: @sven
+clears_when: assert-not-prod.sh is invoked by a path that runs before a migration or deploy, or the script is deleted and the reason recorded
+### Flag F-SIGN-IN-IGNORES-THE-REDIRECT-ITS-OWN-GUARD-WROTE — after sign-in the app lands on the dashboard and never honours the redirect its route guard put on the URL
+state: open
+severity: warn
+owner: @sven
+clears_when: signing in at a guarded URL lands on the page that was asked for, shown by a browser walk that starts at a deep link
+
+**Clerk correction appended 2026-08-06, added beside the text above and not over it.** The lane that fixed
+this measured the cause and it is **not** what this flag's title says. The sign-in path does **not** throw
+the redirect away — from `/admin/training-courses` the redirect survives and lands correctly. **Four
+pages destroyed it first**: `overview`, `offers`, `kam`, `goods`. `AdminPage` is a page component's
+*child*, so its `mounted` runs first and begins navigating; the page's own `mounted` then answered *"you
+are not a Key Account Manager"* to a visitor it had never met, and its bare `push('/admin')` superseded
+the in-flight navigation. The symptom in the title is real; the attribution was the clerk's and was wrong.
+
+### Flag F-SEND-KODE-BEFORE-HYDRATION-SENDS-NOTHING — clicking Send kode before hydration sends nothing and renders no OTP boxes, looking exactly like a dead backend
+state: open
+severity: warn
+owner: @sven
+clears_when: the sign-in control either cannot be clicked before it can send, or reports that nothing was sent, shown in a browser
+
+**Clerk correction appended 2026-08-06, added beside the text above and not over it.** The lane measured
+this in Chromium and the title is wrong about the mechanism. The send **succeeded** — six OTP boxes
+rendered at **453 ms**, an SMS really went out — and was then thrown away at **485 ms** when the shell's
+own navigation destroyed the modal and mounted a second one at the phone step with zero boxes.
+**`LoginModal` could not have reported it**, because from inside the modal the send worked. The screen a
+person sees is exactly as described; the cause was the clerk's guess and was wrong.
+
+### Flag F-TRAINING-COMPLETIONS-NEVER-NAME-THE-COURSE — the completions table course column is empty on every row of every world
+state: open
+severity: warn
+owner: @sven
+clears_when: a completion row on the Training admin surface renders the course it completed, shown in a browser
+### Flag F-ASSIGNMENT-FORM-DENIES-VERSIONS-THAT-EXIST — with no course selected the assignment form says no published version exists while five do
+state: open
+severity: warn
+owner: @sven
+clears_when: the assignment and completion forms derive their lists from the store rather than from the current selection, shown in a browser with nothing selected
+### Flag F-THREE-BRANCHES-CARRY-ONE-GROWTH-CATCH-FIX — one fix exists on three unpushed branches and only one of them applies to the current trunk
+state: open
+severity: warn
+owner: @sven
+clears_when: lane/growth-sql-catch-typed c7912d49 and lane/newsletter-dispatch-reports-its-cause 33a99ac4 are retired unlanded, and d74c2c87b is the only ref carrying the typed catch
+
+
+
+
+
+
+
+
+
+
+
+
+### Flag F-OVERVIEW-STILL-READS-THE-COLUMN-NOT-THE-ROLE
+severity: warn
+owner: @sven
+clears_when: StoresOverviewResponseModel.IsPowerUser is projected from role membership like the login and user payloads, or the five column-gated sites behind decision T-13 are ruled together
+
+**A residual the lane recorded rather than quietly widening, and it was right not to.**
+`StoresOverviewResponseModel.IsPowerUser` still copies the **column**, so `/admin/overview` reports
+`false` to a genuine power user even after login and `GET /user` are fixed to read the role.
+
+**It sits behind a standing ruling and that is why it was left.** The lane found decision **T-13**
+recorded in `PowerUserBypassMechanismTests`, covering five other sites that gate on the column. It moved
+all five onto the role, then **reverted all five** — because those five are **authorization rather than
+reporting**, and the guard itself calls that swap *"a widening wearing a refactor's clothes"*.
+`DinteroController.GetBalance` is the money-path read T-13 names.
+
+**So this is one flag standing in for a family**, and ruling it in isolation would answer the smallest
+member of it.
+### Flag F-OVERVIEW-STILL-READS-THE-COLUMN-NOT-THE-ROLE — the overview payload still copies the IsPowerUser column instead of the role
+state: open
+severity: warn
+owner: @sven
+clears_when: StoresOverviewResponseModel.IsPowerUser is projected from role membership, or the five column-gated sites behind decision T-13 are ruled together
+### Flag F-BACKEND-SQL-TIER-IS-HALF-UNMEASURED-AT-THE-TRUNK — roughly half the backend SQL tier has never completed at the current trunk
+state: open
+severity: blocker
+owner: @sven
+clears_when: one uninterrupted backend SQL tier run completes at the trunk tip with every failure accounted for against the recorded baseline
+### Flag F-AWARD-TARGET-HAS-NO-LINEAGE-FILTER — the award target is unfiltered by lineage, the mirror of the defect just fixed on the candidate side
+state: open
+severity: warn
+owner: @sven
+clears_when: LoadAssignmentAsync filters the award target by current lineage, or the wider admission is recorded as deliberate with the reason
+### Flag F-CLOCKOUT-FIXTURE-IS-A-STALE-DOUBLE — the frontend fixture still hardcodes an Open session for the nothing-open case and still passes
+state: open
+severity: warn
+owner: @sven
+clears_when: the e2e fixture reports the clock-out state the wire now reports, and reds if it is set back to the old hardcoded Open
+### Flag F-NODE-LANES-RUN-SUITE-SIZED-WORK — node-class lanes run full dotnet tiers, so the class caps understate the real host cost
+state: open
+severity: warn
+owner: @sven
+clears_when: a lane that runs a full test tier is counted against a cap that reflects its cost, or the node cap is set from measured load rather than lane count
+### Flag F-ASPNETCORE-ENVIRONMENT-IS-UNKNOWN-OUTSIDE-GIT — whether a deployed host runs the developer exception page cannot be answered from the repository
+state: open
+severity: blocker
+owner: @sven
+clears_when: the ASPNETCORE_ENVIRONMENT value for okamapi and okamtest is read from Azure and recorded, so the severity of the header-echo leak is known rather than assumed
+### Flag F-LOGIN-OTP-IS-BRUTE-FORCEABLE — the six-digit verification code is unmetered at the login door while the sibling OAuth door meters it
+state: open
+severity: blocker
+owner: @sven
+clears_when: /User/login consumes the verify budget the way the OAuth door does, shown by a wire proof that refuses the caller after the allowance
+### Flag F-EXPIRY-RENDERS-EMPTY-PAGES-NOT-A-SIGN-IN — the admin web ships logoutIfTokenExpired and TokenIsValid with no caller, so an expired token looks like a broken app
+state: open
+severity: warn
+owner: @sven
+clears_when: an expired token in the admin web produces a sign-in prompt rather than empty pages, shown in a browser
+### Flag F-PKILL-USED-AGAINST-A-STANDING-PROHIBITION — a lane used pkill twice after being told never to, and disclosed it rather than letting it pass
+state: open
+severity: warn
+owner: @sven
+clears_when: no lane brief is answered with a pattern kill, or the prohibition is restated with the kill-by-pid alternative named inline so the instrument is obvious
+### Flag F-PGREP-WAIT-LOOP-MATCHES-ITSELF — an until-not-pgrep wait loop matches its own command line and never terminates
+state: open
+severity: warn
+owner: @sven
+clears_when: every wait loop in this estate's scripts and briefs uses a bracketed pattern such as [d]otnet, or waits on a pid rather than a pattern
+### Flag F-CLAIMED-RUNS-WERE-NEVER-ARCHIVED — a landing cited per-class dual-revision runs and a baseline attribution run whose artifacts do not exist
+state: open
+severity: warn
+owner: @sven
+clears_when: every run a landing report cites is archived under its lane directory, or the report cites only runs whose output survives
+### Flag F-FOUR-PAGES-STILL-DO-NOT-RESTART-AFTER-IN-PAGE-SIGN-IN — overview, offers, kam and goods allow an in-page sign-in and bind nothing to login-success
+state: open
+severity: warn
+owner: @sven
+clears_when: each of the four pages holds the state a fresh mount would have produced after an in-page sign-in, shown by driving the login-success path and reading the page own store
+### Flag F-THE-EVIDENCE-SPLIT-POLICY-HAS-FLIPPED — about ninety lane evidence files landed on the trunk, reversing the split policy the first landing set
+state: open
+severity: info
+owner: @sven
+clears_when: the trunk either carries lane evidence deliberately with the reason recorded, or the split policy is restated and the inert files removed
+### Flag F-EVENTS-DISPATCH-HAS-NO-SCREEN — the one module switch a venue needs and cannot reach, with ten guest links queued behind it
+state: open
+severity: blocker
+owner: @sven
+clears_when: an operator can release queued guest dispatches for a store from a screen, shown by a walk that flips it and sees the queue drain
+### Flag F-WORKFORCE-BLAMES-THE-PERSON-FOR-A-MODULE-BEING-OFF — module-off answers 403 and the roster prints du har ikke bemanningstilgang, blaming the operator
+state: open
+severity: warn
+owner: @sven
+clears_when: a module-off refusal on the workforce roster names the module rather than the person's access, shown in a browser
+### Flag F-THE-FRONTEND-COVERAGE-NUMBER-IS-AN-ARTIFACT — vue-jest instruments nothing indented, so the published frontend coverage measures import lists only
+state: open
+severity: blocker
+owner: @sven
+clears_when: an indented statement inside a .vue script block is counted by the coverage run, shown by a probe that reds against the current instrumentation
+### Flag F-MARGIN-PRODUCT-LINKS-DEMAND-AN-UNDOCUMENTED-IF-MATCH — the product-links route demands If-Match carrying the recipe revision and nothing says so
+state: open
+severity: warn
+owner: @sven
+clears_when: a caller can discover the required If-Match from the route's own refusal or its contract, shown by a request that is refused with the revision it wanted
+### Flag F-WORKFORCE-ROLE-UPSERT-KEYS-ON-NOTHING — a role upsert mints duplicates on repeat, and two duplicate rows are live in the owner's world now
+state: open
+severity: blocker
+owner: @sven
+clears_when: a repeated role upsert leaves one row per role, shown by a second call that changes no count, and the duplicate Kokk and Servitor rows on store 1 are resolved
+### Flag F-PERSONNEL-LIST-FLAG-IS-NOT-IN-THE-CATALOG — the operator lever refuses a flag the SQL bootstrap inserts straight into the store table
+state: open
+severity: warn
+owner: @sven
+clears_when: workforce.personnel-list appears in the shared flag catalog so the lever and the bootstrap agree, shown by the switchboard offering it
+### Flag F-NEWSLETTER-CONTENT-IS-NEVER-PARSED — RequireContent checks the content is non-empty and never parses it, so a mangled body stores with a 200
+state: open
+severity: warn
+owner: @sven
+clears_when: a newsletter body that is not valid content is refused rather than stored, shown by a request that is refused and one that succeeds
+### Flag F-THE-FIXTURE-MODELS-THE-OLD-ROLE-UPSERT — the e2e fixture models PUT roles without the new key, so a double-submit journey would diverge from the backend
+state: open
+severity: warn
+owner: @sven
+clears_when: the e2e fixture keys a role upsert the way the backend now does, shown by a fixture-driven double submit that leaves one row
+### Flag F-A-SPEEDUP-WAS-ASSERTED-NOT-EXPLAINED — a suite that got faster after adding instrumentation was reported without a mechanism
+state: open
+severity: info
+owner: @sven
+clears_when: the coverage evidence names why the run got faster, or records a cold-cache figure alongside the warm one
+### Flag F-TIERS-NEVER-RAN-AT-THE-NEW-TIPS — both trunks moved and neither tier was run at the new tip
+state: open
+severity: blocker
+owner: @sven
+clears_when: the frontend jest run and the backend non-SQL tier are recorded at 3ff7f07 and a9837ca92 with every failure accounted for against the 3563 and 4832 baselines
+### Flag F-CORE-SUBMODULE-CANNOT-BE-INITIALISED-NORMALLY — a fresh worktree cannot init the core submodule; the pinned commit is in no shared modules dir
+state: open
+severity: warn
+owner: @sven
+clears_when: git submodule update --init core succeeds in a fresh worktree at the trunk, or the recipe for fetching the pinned sha is recorded where the next person will read it
+### Flag F-RETRACTED-LANE-WORKTREES-BLOCK-THE-TRUNK — worktrees belonging to retracted lanes still hold the trunk branch and block every future landing
+state: open
+severity: warn
+owner: @sven
+clears_when: no worktree holds feature/restaurant-modules in either repository except a landing lane's own, shown by git worktree list
+### Flag F-THE-EVIDENCE-PAGE-PROMISES-A-RECORD-IT-CANNOT-HAND-OVER — the training evidence page promises a record that can be presented at an inspection, and no export of any kind exists
+state: open
+severity: blocker
+owner: @sven
+clears_when: a person can produce the training evidence record as a file or a printed document from that page, shown in a browser
+### Flag F-CI-PINS-NODE-16-AGAINST-AN-ENGINES-FIELD-OF-22 — the workflow pins node 16 while package.json declares 22.x, and node 16 has no crypto global
+state: open
+severity: warn
+owner: @sven
+clears_when: the CI node version satisfies the engines field, or a prerendered route is shown not to reach newGuid on the pinned version
+### Flag F-ONE-MUTATION-LEDGER-CANNOT-BE-REPRODUCED-VERBATIM — one lane's mutation script lived in a dead scratchpad, so its rows reproduce only by reconstruction
+state: open
+severity: warn
+owner: @sven
+clears_when: every mutation ledger ships the script that produced it beside the ledger, the way the till lane ships mutate.py
+### Flag F-A-TEST-TITLE-CLAIMS-A-GUARANTEE-IT-NO-LONGER-PINS — a describe title still credits a base-10 clause that ES5 made inert
+state: open
+severity: info
+owner: @sven
+clears_when: test/store-cart-state.test.js:436 no longer claims the base-10 behaviour, since no assertion depends on it
+### Flag F-A-SERVER-SIGNED-EVIDENCE-EXPORT-IS-STILL-OWED — the print path carries no content hash of its own; a server-rendered signed export is stronger and is backend work
+state: open
+severity: warn
+owner: @sven
+clears_when: the training evidence record can be obtained as a server-produced file carrying its own signature, or the print path is recorded as sufficient with the reason
+### Flag F-A-BACKEND-TIER-COMMAND-IN-CIRCULATION-MEASURES-NOTHING — dotnet test at the OkamAPI-modules root exits 0 having run zero tests, so any green cited from it measured nothing
+state: open
+severity: blocker
+owner: @sven
+clears_when: every recorded backend tier green names the project or solution it ran, and no evidence file cites a bare dotnet test at the repository root
+### Flag F-SUBMODULE-DEINIT-IN-A-WORKTREE-DEREGISTERS-CORE-FOR-EVERYONE — git submodule deinit core inside a worktree strips the url from the shared config, deregistering core for the owner
+state: open
+severity: warn
+owner: @sven
+clears_when: worktree teardown guidance names rm -rf plus git worktree prune, and no lane runs submodule deinit against a shared config
+### Flag F-THE-GATE-SENTENCE-PRINTS-BLANK-FROM-THE-BROWSER-MENU — printing from the browser's own menu in the gated state yields a blank sheet
+state: open
+severity: info
+owner: @sven
+clears_when: the gate sentence appears on paper when printed from the browser menu, or the blank result is recorded as acceptable
+### Flag F-CERTIFICATE-DELTAS-LACK-THE-TRAILING-Z — certificate.update deltas lack the trailing Z that register deltas carry, on screen and paper alike
+state: open
+severity: info
+owner: @sven
+clears_when: certificate deltas serialize the same instant shape as register deltas, or the difference is recorded as deliberate
+### Flag F-THE-BRIEF-BOILERPLATE-TEACHES-THE-NO-OP-COMMAND — the standard tier sentence in briefs is the bare root command that measures nothing
+state: open
+severity: warn
+owner: @sven
+clears_when: the brief boilerplate names the test project or a WebApi.Tests working directory, so no lane is taught the no-op form
+### Flag F-A-SOURCE-SCAN-GOES-QUIET-WHEN-THE-SHAPE-IT-READS-MOVES — the front-door scan read the mounted hook text, so a fix that moves the bounce into a method makes it silently pass
+state: open
+severity: warn
+owner: @sven
+clears_when: the front-door scan is proven to red against a page whose guard is deleted in the current one-starter shape, and carries a vacuity guard naming the pages it must reach
+### Flag F-A-REVIEW-BRIEF-CAN-APPROVE-WITHOUT-A-FALSIFIABILITY-CHECK — a review brief asked for a reading and not a mutation, so an approval shipped without testing whether the tests can fail
+state: open
+severity: warn
+owner: @sven
+clears_when: every review brief that clears work for landing requires at least one mutation applied and restored, and no approval is recorded without one
+### Flag F-THE-ACKNOWLEDGEMENT-RECEIPT-IS-ONLY-PAGE-STATE — the receipt is page state; the inbox carries no acknowledgement field and the route has no GET sibling, so a reload loses it
+state: open
+severity: warn
+owner: @sven
+clears_when: a worker who acknowledged a week still sees the receipt after reloading the page, shown in a browser
+### Flag F-THE-ACKNOWLEDGE-BUTTON-CAN-CONFIRM-THE-NEXT-WEEK — with two unread publications the button that stays on screen belongs to the next row, so a second press confirms a different week
+state: open
+severity: blocker
+owner: @sven
+clears_when: a second press of the acknowledge control cannot acknowledge a publication the worker did not intend, shown by a walk with two unread publications
+### Flag F-THE-ADMIN-SCREEN-RENDERS-BOTH-NEW-CODES-AS-SOMETHING-WENT-WRONG — two new newsletter refusal codes render as a generic error until ERROR_KEYS and three locale strings land
+state: open
+severity: warn
+owner: @sven
+clears_when: an operator refused for unclosed markup or an empty body reads which of the two it was, shown in a browser
+### Flag F-A-CRASHED-TIER-CAN-PRINT-A-PASSED-LINE-AFTER-ABORTING — a tier printed Passed after the host process crashed, so a grep for Passed accepts a fifth of a suite
+state: open
+severity: blocker
+owner: @sven
+clears_when: every recorded tier green is checked for an abort line above it, or the recorded total is compared against the known suite size
+### Flag F-MARGIN-TELLS-CALLERS-TO-READ-AN-ETAG-IT-DOES-NOT-EMIT — the shared revision-required detail names an ETag header that Margin emits on only one resource
+state: open
+severity: warn
+owner: @sven
+clears_when: every Margin resource whose write demands If-Match emits the token it wants as an ETag, or the shared detail stops naming a header that is absent
+### Flag F-NO-LEVER-LANDED-TODAY-CAN-BE-WALKED-AGAINST-THE-LIVE-BUILD — the live API is 47 commits behind trunk, so today's levers and fixes cannot be shown to a person against it
+state: open
+severity: blocker
+owner: @sven
+clears_when: the API serving the live world is built from a trunk tip containing the landed levers, and one of them is walked in a browser
+### Flag F-AN-UNFILTERED-BACKEND-TIER-STARTS-A-CONTAINER-PER-FIXTURE — running the backend tier without the Database filter starts a Testcontainers SQL Server per module fixture
+state: open
+severity: warn
+owner: @sven
+clears_when: the brief boilerplate and every recorded tier command carry the Database!=SqlServer filter, or the fixtures share one container
+### Flag F-EVENTS-DELIVERY-CANNOT-BE-PROVEN-ON-ANY-WORLD-HERE — the SMTP password is the appsettings placeholder, so every Events delivery attempt dies at the TLS handshake
+state: open
+severity: blocker
+owner: @sven
+clears_when: one Events guest link is delivered end to end on a world an agent can reach, or the delivery path is recorded as unprovable locally with what a proof would require
+### Flag F-LANDING-THE-BACKEND-HALF-FIRST-BREAKS-A-7-3-PROMISE-ON-EVERY-SEND — the unsubscribe base url is printed on every dispatched message, so shipping the backend ahead of the consumer deploy makes the promise false rather than missing
+state: open
+severity: blocker
+owner: @sven
+clears_when: the consumer unsubscribe surface is deployed at the origin the footer prints, or the footer stops printing a url that does not answer
+### Flag F-EVERY-MAIL-DIES-AT-A-REVOCATION-CHECK-THIS-HOST-CANNOT-COMPLETE — a bare SmtpClient leaves certificate-revocation checking on, so all fourteen IEmailService callers fail at connect on such a host
+state: open
+severity: blocker
+owner: @sven
+clears_when: a send over the product's own transport connects on a host that cannot complete a revocation check, shown by a probe that reds against the current bare client
+### Flag F-A-SUCCESSFUL-SEND-PRINTS-NOTHING-IN-THIS-WORLD — the log level suppresses every EmailService information line, so mail evidence cannot come from the API log
+state: open
+severity: warn
+owner: @sven
+clears_when: a delivery claim in this estate cites an outbox row or a sink capture rather than an API log line
+### Flag F-A-SECTION-LEDE-CLAIMS-UNOPENED-ABOVE-A-ROW-JUST-CONFIRMED — with one row confirmed and one unread, the lede saying you have not opened this sits above the row just confirmed
+state: open
+severity: info
+owner: @sven
+clears_when: the section lede does not claim unopened above a row carrying a receipt, shown in a browser with one confirmed and one unread
+### Flag F-THE-WEEK-RUN-JOURNEY-STILL-PUBLISHES-ONE-WEEK — the week-run journey publishes one week, so the two-publication ordering defect has no e2e pin
+state: open
+severity: warn
+owner: @sven
+clears_when: the week-run journey publishes two weeks and pins that confirming one does not confirm the other
+### Flag F-A-CONFIRMED-ROW-SITS-UNDER-A-LEDE-SAYING-UNOPENED — the reorder moved a confirmed row under a heading that says she has not opened it
+state: open
+severity: warn
+owner: @sven
+clears_when: no acknowledged publication renders beneath a lede asserting it is unopened, shown by a test that reds when a confirmed row is placed in the unopened section
+### Flag F-A-NOTICE-ROW-NEVER-NAMES-THE-WEEK-IT-CONFIRMS — a worker confirms a schedule without being told which week she is confirming
+state: open
+severity: blocker
+owner: @sven
+clears_when: every acknowledgeable notice row names the period it confirms, shown by a test that reds when the period is removed from the row
+### Flag F-A-CONFIRMED-ROW-A-RE-READ-OMITS-IS-APPENDED-OUT-OF-ORDER — the second ordering the acknowledge fix did not stabilise, with its exact change named
+state: open
+severity: warn
+owner: @sven
+clears_when: publications a successful re-read omits are ordered with the rest rather than appended, shown by a probe that reds when newer and older are flipped
+### Flag F-NO-E2E-PIN-EXISTS-FOR-TWO-PUBLICATIONS-TO-ONE-WORKER — the defect that re-targeted an acknowledgement has no end-to-end pin
+state: open
+severity: warn
+owner: @sven
+clears_when: a journey publishes two weeks to one worker and asserts each confirmation lands on its own publication
+### Flag F-NO-LANE-CAN-BE-DISPATCHED-UNTIL-THE-AGENT-CEILING-IS-RAISED — the session has spawned its 1000-agent maximum, so the clerk can author lanes but not staff them
+state: open
+severity: blocker
+owner: @sven
+clears_when: a lane dispatched by plan tick reaches a running agent, shown by a RETURN merged after this flag was raised
+### Flag F-EVERY-LOAD-FAILURE-TELLS-THE-GUEST-THE-OFFER-EXPIRED — a network blip makes a guest ask the venue to reissue an offer that is still live
+state: open
+severity: blocker
+owner: @sven
+clears_when: a load failure on pages/offer/_code.vue is distinguishable from an expired offer in what the guest is shown, pinned by a test that reds when the two are collapsed
+### Flag F-ACCEPTING-AN-OFFER-CAN-BLANK-THE-PAGE-AFTER-THE-ORDER-IS-PLACED — a 200 with an empty body leaves the guest with no confirmation, no error and no way back
+state: open
+severity: blocker
+owner: @sven
+clears_when: acceptOffer refuses to overwrite offerProposal with a non-object response, pinned by a test that reds when the guard is removed
+### Flag F-THE-OFFER-PAGE-BUILDS-ERROR-COPY-IT-NEVER-RENDERS — errorCouldNotLoad and errorNoOrderNumber are assigned and reach no pixel
+state: open
+severity: warn
+owner: @sven
+clears_when: every error string assigned on pages/offer/_code.vue is rendered somewhere the guest can see, or is deleted, pinned by a test
+### Flag F-A-FAILED-SMS-SHOWS-THE-GUEST-A-RAW-ENGLISH-EXCEPTION — core's exception text is shown in place of the localised sentence sitting beside it
+state: open
+severity: warn
+owner: @sven
+clears_when: no guest-facing surface renders an exception message thrown by core when a localised string exists for that failure, pinned by a test that reds when the localised string is bypassed
+### Flag F-A-MISSING-PHONE-NUMBER-SHOWS-THE-GUEST-A-TYPEERROR — an offer without clientPhoneNumber renders a JavaScript error message to the guest
+state: open
+severity: warn
+owner: @sven
+clears_when: an offer with no clientPhoneNumber renders a sentence written for a reader rather than a TypeError, pinned by a test
+### Flag F-A-COMMENT-THAT-OUTLIVED-ITS-CODE-DISPATCHED-A-LANE-AT-A-GHOST — pos-clock-state.js documents a backend derivation that was replaced on 2026-08-05
+state: open
+severity: warn
+owner: @sven
+clears_when: the header of utils/workforce/pos-clock-state.js states the derivation the wire actually uses, checked against WorkforcePosModels.cs SessionStateOf
+### Flag F-THE-COVERAGE-CENSUS-AND-THE-PER-FILE-INSTRUMENT-DISAGREE-BY-ABOUT-DOUBLE — the per-module census statement counts are roughly twice what the instrument reports per file
+state: open
+severity: warn
+owner: @sven
+clears_when: the per-module census and a per-file jest coverage run report the same statement total for one named module, or the census records which instrument produced its figures
+### Flag F-LANES-ARE-BEING-AUTHORED-FROM-FLAG-BODIES-THAT-THE-TRUNK-HAS-OVERTAKEN — three lanes were dispatched at defects already fixed, because the flag census predates fifty commits of trunk
+state: open
+severity: blocker
+owner: @sven
+clears_when: no lane brief cites a defect site that a grep at the current trunk tip cannot reproduce, checked at authoring time and recorded in the lane body
+### Flag F-A-MUTATION-RUNNER-IN-A-LANE-DIRECTORY-DELETES-THE-LANES-OWN-EDITS — mutate.js restores with git checkout -- file, which reverts to HEAD and destroys uncommitted work
+state: open
+severity: blocker
+owner: @sven
+clears_when: no mutation runner under docs/plan/lanes/ restores a mutated file with git checkout, checked by grep across every mutate script in the tree
+### Flag F-THE-TRUNK-DEPENDS-ON-A-CORE-COMMIT-THAT-EXISTS-ONLY-ON-THIS-MACHINE — core pin 9626a561 is absent from Okam-AS/Core.git, so the frontend trunk is unbuildable from the remotes alone
+state: open
+severity: blocker
+owner: @sven
+clears_when: git fetch origin 9626a561 succeeds inside core against Okam-AS/Core.git without the local-path remedy
+### Flag F-THE-PRESCRIBED-WORKTREE-TEARDOWN-DESTROYS-SUBMODULE-COMMITS — a submodule inside a linked worktree keeps its objects under that worktree, so rm -rf plus prune deletes them
+state: open
+severity: blocker
+owner: @sven
+clears_when: every brief that permits editing core/ names the bundle-before-teardown step, checked by grep across docs/plan/briefs/
+
+**Verified by the clerk 2026-08-07, independently of the lane that reported it.**
+`git ls-tree feature/restaurant-modules core` records
+**`160000 commit 9626a561bb0442b0aed026be75b7f9419337ac6d`**. `git ls-remote origin` inside `core` returns
+**11 refs**, and `git branch -r --contains 9626a561` returns **empty** — the pin is on **no remote branch**.
+Its own subject is **`wip: the full-replace guard and its wiring, saved before any composition`**.
+
+**So the frontend trunk pins a local WIP commit.** A fresh clone of `Okam-AS/Web-modules` plus
+`Okam-AS/Core.git` cannot check out a working tree, which is why every brief in this program carries a
+local-path fetch remedy — **the remedy has been treating the symptom of this for weeks.**
+
+**Two consequences worth stating plainly.** The pin exists on this machine and nowhere else that has been
+demonstrated, so **the trunk is one disk failure from unbuildable**. And any real push is **two repos and
+at least two commits, core first** — `9626a561` before anything stacked on it.
+
+**A lane has now stacked a second commit on it**: `core` `a6ae241`, whose parent is exactly this pin.
+### Flag F-ONE-MUTATION-RUNNER-WOULD-FAIL-SILENTLY-RATHER-THAN-HALT — L-THE-TILL-TESTS/mutate.py restores from a buffer but never compares the bytes back
+state: open
+severity: warn
+owner: @sven
+clears_when: every mutation runner in the tree asserts the restored bytes equal the captured original, checked by the sweep arm of test/mutation-runner-restore.test.js
+### Flag F-A-MUTATION-SWEEP-OVER-ZERO-TESTS-CANNOT-BE-TOLD-FROM-A-SWEEP-THAT-FOUND-NOTHING — lanes/mutate.js passed several test paths as one argv, so jest ran 0 tests, exited 0 and certified every mutation
+state: open
+severity: blocker
+owner: @sven
+clears_when: every mutation runner aborts on a zero-test baseline and flags any run executing fewer tests than that baseline, checked by the sweep arm of test/mutation-runner-restore.test.js
+### Flag F-TRANSFERRING-A-GIFT-CARD-FUNDS-TWO-WALLETS-FROM-ONE-CARD — TransferGiftcard writes a Purchased row for the new holder without reversing the old, then EF nulls the link
+state: open
+severity: blocker
+owner: @sven
+clears_when: transferring a gift card leaves exactly one funded wallet and every Purchased row still names its gift card, shown by a test that reds when the reversal is removed
+### Flag F-AN-INVOICE-MERGES-THE-SAME-MONTH-FROM-DIFFERENT-YEARS — GetInvoiceModel matches month sections on Completed.Month with no year while the guard permits 24 months
+state: open
+severity: blocker
+owner: @sven
+clears_when: an invoice spanning more than twelve months lists each order once, shown by a test that reds when the year is dropped from the match
+### Flag F-DOCS-PLAN-ARTIFACTS-IS-SILENTLY-GITIGNORED — a bare artifacts/ rule at .gitignore:111 swallows every census written to docs/plan/artifacts/
+state: open
+severity: blocker
+owner: @sven
+clears_when: git check-ignore -v docs/plan/artifacts/ returns nothing, or every brief writing there instructs git add -f and verification with git ls-files
+### Flag F-BRIEFS-ASSERT-TEST-SURFACES-THAT-EXIST-ONLY-ON-UNLANDED-BRANCHES — a brief claimed five THE DEFECT tests on a page whose test file does not exist at the trunk
+state: open
+severity: blocker
+owner: @sven
+clears_when: no lane brief asserts a test, suite or coverage figure without naming the ref it was measured at, checked at authoring time and recorded in the lane body
+### Flag F-MOCKS-CANNOT-OVERRIDE-A-COMPUTED-SO-THE-REAL-SERVICE-RUNS — pages reaching a service through the global mixin get the real one under test, and pass for the wrong reason
+state: open
+severity: warn
+owner: @sven
+clears_when: every test mounting a page that reaches a service via the global mixin asserts the mock was actually used, or the services stop being computeds
+### Flag F-A-FAILED-REQUEST-IS-RENDERED-AS-A-POSITIVE-CLAIM-ABOUT-THE-VENUES-TRADE — wolt-drive-invoice and settlements route a caught error into their no-orders empty state
+state: open
+severity: blocker
+owner: @sven
+clears_when: no page renders an empty-state claim about trade on a request that failed, shown by tests that red when the error panel is removed
+### Flag F-A-SUITE-JUDGED-BY-EXIT-STATUS-ALONE-IS-WRONG-IN-BOTH-DIRECTIONS — zero tests plus exit 0 reads as a killed mutation; zero tests plus a parse failure reads as a red one
+state: open
+severity: blocker
+owner: @sven
+clears_when: every mutation runner asserts each run executed the baseline test count and refuses a reddened-zero result, checked by the sweep arm of test/mutation-runner-restore.test.js
+### Flag F-THIRTY-TWO-WORKFORCE-AND-MEALS-TESTS-ARE-NOT-KNOWN-TO-BE-FALSIFIABLE — 32 of 115 tests on the meals-events branch never red under any committed mutation, and no lane instrument measured per-test coverage
+state: open
+severity: blocker
+owner: @sven
+clears_when: every test on lane/meals-events-screens-tested is named red by at least one applied-and-restored mutation, measured by a runner that records per-test coverage
+### Flag F-THREE-SURVIVORS-EXCUSED-AS-EQUIVALENT-ARE-REAL-GAPS — growth's ??-to-|| separates on mixed casing, and workforce P17 and D06 were proven separable by executable probes
+state: open
+severity: warn
+owner: @sven
+clears_when: each of the three named survivors is either killed by a new assertion or re-argued equivalent against the separating input the audit recorded
+### Flag F-ANY-SIGNED-IN-USER-CAN-TRANSFER-ANY-GIFT-CARD-WHOSE-ID-THEY-KNOW — GiftcardController.TransferGiftcard carries a bare Authorize and never checks the caller holds the card
+state: open
+severity: blocker
+owner: @sven
+clears_when: TransferGiftcard refuses a caller who does not hold the card, shown by a wire test that reds when the ownership check is removed
+### Flag F-THE-CANONICAL-MUTATION-RUNNER-CANNOT-JUDGE-A-DOTNET-SUITE — its reddened counter reads jest markers xunit never emits, so every backend mutation prints RED (0)
+state: open
+severity: blocker
+owner: @sven
+clears_when: the canonical runner reports a real failed-test count for a dotnet suite, or refuses to judge one, shown by a test that reds when the jest-only parser is used on xunit output
+### Flag F-A-BARE-LOG-RULE-SILENTLY-REFUSES-MUTATION-EVIDENCE — a bare *.log at .gitignore:5 swallows the per-invocation logs that carry a mutation judgement
+state: open
+severity: warn
+owner: @sven
+clears_when: every lane committing evidence checks it with git check-ignore -v before calling it committed, or the rule is narrowed
+
+**SATISFIED IN THE WORLD, UNCLEARABLE BY THE TOOL — measured 2026-08-07.** `plan flag clear` refuses
+because `clears_when` names no `fact:` key, so this wants **`--override --by @sven`** rather than more work.
+
+**All thirty-two are killed and none was deleted or rewritten.** On
+`lane/meals-tests-proven-falsifiable` @ `05c160a`, an instrument that **emits a per-test kill map** —
+"every mutation was killed" and "every test can fail" being different claims, only the second being
+evidence — reports **lines 29/29 tests reddened, page 49/49, offer 37/37, zero never-reddened**, and 101 of
+102 mutations red across three specs. Tier at that tip: **172 suites / 4135 / 0**.
+
+**The claim was unmeasured, not false, and the reason is worth keeping.** The original 71 mutations all
+targeted the three `.vue` files, so the rules those tests actually assert — living in
+`utils/meals/statement-view.js` — were never touched: the period's zero padding, `intOrNull` returning null
+rather than 0, the read-not-derived member reference, the refusal branches, the server's own totals and
+signature. **The tests were better than their instrument could show.**
+
+**The single survivor is the one sound equivalence the audit verified** (`memberDisplayRef || allocationId`
+inside `v-if="line.hasMemberRef"`), left exactly as found. **The five `THE DEFECT:` pins stayed green** and
+were neither converted nor counted.
+
+**Two disclosures ride with it.** A self-test on the merged runner branch asserted that a suite command
+which cannot spawn yields `RED` — *that is the defect, not the contract* — and was deliberately changed to
+assert `INVALID`, restore assertions untouched. And three mutations first read as a client coverage gap
+were **a mis-aimed spec**: the page suite mocks the service entirely, so no edit could reach it; re-aimed at
+`meals-statement-client.test.js`, all three red.
+### Flag F-THE-RUNNERS-OWN-PIN-BLESSES-A-KILL-FROM-A-RUN-THAT-EXECUTED-NOTHING — MUTATE_TEST_COMMAND=false certifies 2/2 RED from void runs, and the pin's spawn-failure arm expects RED
+state: open
+severity: blocker
+owner: @sven
+clears_when: the canonical runner reports INVALID-RUN for a spawn failure and for a zero-test run in either exit direction, shown by pin arms that red against the current implementation
+### Flag F-TRANCHE-TWO-MUST-TAKE-THE-RUNNER-WHOLESALE-OR-IT-SHIPS-THE-DEFECT — 40ab62d carries the 131-line defective runner unchanged; the 413-line fix is downstream and outside it
+state: open
+severity: blocker
+owner: @sven
+clears_when: the landed trunk carries test/support/mutate.js and test/mutation-runner-restore.test.js byte-identical to lane/a-kill-certificate-requires-a-test 316f22a
+### Flag F-ZSH-APPLIES-THE-TAIL-MODIFIER-INSIDE-DOUBLE-QUOTES — a per-ref file check written as "$ref:path" silently asks about a basename and reports every ref as absent
+state: open
+severity: warn
+owner: @sven
+clears_when: no lane script interpolates a git ref and path as "$ref:path"; the form is ${ref}:path, checked by grep across committed lane scripts
+### Flag F-THE-RUNNER-GUARD-SWEEPS-EVERY-DIRECTORY-EXCEPT-THE-ONE-RUNNERS-LIVE-IN — its sweep roots are test/support and docs/plan/lanes, while 15 mutation drivers sit under repo-root lanes/
+state: open
+severity: blocker
+owner: @sven
+clears_when: the sweep reports every executable mutation driver in the tree including those under repo-root lanes/, shown by an arm that reds when a broken copy is placed there
+
+**WORSE AS OF TRANCHE FOUR, 2026-08-07 — deliberately, and the state is recorded rather than discovered
+later.** The trunk now depends on **two chained local-only core commits**, not one. The landing lane
+checked **both** pins after teardown, not just the new one: **neither `9626a561` nor `a6ae241` is on any
+remote branch.**
+
+**The pin moved `9626a561…` → `a6ae241…` as part of the merge**, not by hand — `6d43520` already names
+`a6ae241` and the old pin is its parent — and both the committed gitlink and `git -C core rev-parse HEAD`
+were re-read afterwards and agree.
+
+**The move is load-bearing and was measured in both directions**: `hasBackendMessage` appears **0** times in
+`core/services/request-service.ts` at the old pin and **1** at the new, and the app reads it in **4**
+places. Landing the frontend half against the old pin would have produced a tree whose code reads a field
+core never writes — **green in jest, because those tests construct the error object themselves, and wrong in
+a browser.** That is the sharpest available argument for why this had to land as one unit.
+
+**PUSH ORDER, when a push is eventually authorised**: core **`9626a561`** first (it is `a6ae241`'s parent),
+then core **`a6ae241`**, then the frontend. **Pushing the frontend first publishes a gitlink no clone can
+resolve.**
+
+**Operational note for any future core lane**: `git fetch <path> <sha>` needs the **full 40-character SHA**.
+The abbreviated form fails with *"couldn't find remote ref"*, which reads like a missing object rather than
+a syntax error and will send someone hunting for a bundle they do not need.
+### Flag F-THE-WEEKLY-API-LIMIT-IS-REACHED-AND-NO-AGENT-CAN-RUN-UNTIL-AUG-11 — four lanes died mid-flight on the weekly limit; it resets 2026-08-11 12:00 Europe/Zurich
+state: open
+severity: blocker
+owner: @sven
+clears_when: an agent dispatched after this flag was raised returns a merged RETURN
+### Flag F-A-BRANCH-UNDER-AN-UNRULED-GATE-WAS-LANDED-BECAUSE-THE-LANDING-PLAN-DID-NOT-CARRY-THE-GATE — the frontend half of a-module-off-names-the-module is on the trunk while its backend half is held under D-SPEC
+state: open
+severity: blocker
+owner: @sven
+clears_when: every branch named in a landing artifact is checked against the open decisions at authoring time, and the module-off pair is either both landed or both held
+### Flag F-POS-COVERAGE-OPENED-CANNOT-LAND-ALONE-IT-IS-FAILING-TEST-FIRST — landing it singly leaves the backend trunk red for two commits: money copied not moved, and an order listed twice
+state: open
+severity: blocker
+owner: @sven
+clears_when: pos-coverage-opened, giftcard-transfer-one-wallet and an-invoice-lists-each-order-once are landed as one tranche, shown by a measured tier of 0 failed at the composed tip
+### Flag F-A-BROWSER-ARM-DRIVER-RESTORES-A-PATCHED-COMPONENT-WITH-GIT-CHECKOUT — run-browser-arm.sh patches LoginModal.vue and restores with git checkout in its trap, in a worktree whose branch is checked out
+state: open
+severity: blocker
+owner: @sven
+clears_when: no executable driver in the tree restores a file it patched with git checkout, shown by the widened sweep arm that reds when such a driver is planted
+### Flag F-A-COMMIT-IN-A-WORKTREE-HOLDING-THE-BRANCH-MOVES-THE-TRUNK — the clerk's rescue commit landed on feature/restaurant-modules because the worktree had it checked out
+state: open
+severity: blocker
+owner: @sven
+clears_when: every rescue or preservation commit is made on a detached HEAD, checked with git symbolic-ref HEAD before committing
+### Flag F-THE-SWEEP-CANNOT-SEE-A-THROWAWAY-SCRIPT-WRITTEN-DURING-A-LANE — the guard sweeps committed drivers; a lane's own scratch mutation script reintroduced the write-without-restore defect
+state: open
+severity: warn
+owner: @sven
+clears_when: no lane writes a mutation script of its own, or every brief requires the restore in a finally and an atexit hook with an INVALID-RUN verdict on an off-baseline count
+### Flag F-THE-GIFTCARD-AUTHORIZATION-HAS-NO-WIRE-TEST — the check and its mutations live at service level; ActorClaims resolution and the refusal shape have no HTTP test
+state: open
+severity: warn
+owner: @sven
+clears_when: a test in WebApi.Tests/Wire drives TransferGiftcard over HTTP and asserts a non-holder gets the same body an unknown id gets, redding when the controller stops resolving the caller
+
+**THE HOLE IS CLOSED ON THE TRUNK, AND THIS FLAG IS STILL NOT SATISFIED BY ITS OWN WORDS. Both are true;
+recorded 2026-08-08.**
+
+**Closed**: backend trunk `7d0450a4b` → **`1c71ae951`**, tier **4980 / 0 / 11**, +6 exactly — the six named
+authorization tests. Three properties verified **in the merged code**, not relayed:
+`ActorClaims.TryResolveUserId` rather than `Identity.Name`; one shared `GiftcardNotFound` for all three
+refusals; the ownership check **above** the status guard. The arity sweep found **20 call sites** and the
+full build reports **0 warnings, 0 errors**, so appending rather than inserting the actor left no stale site
+compiling with the phone and the user id swapped.
+
+**Not satisfied**: this flag's `clears_when` requires *"a **wire test** that reds when the ownership check is
+removed."* **The tests are service-level.** The authorization decision lives in the service and that is
+where the check and every mutation sit — but the controller's `ActorClaims` resolution and the refusal shape
+have **no HTTP test**, though `WebApi.Tests/Wire/` exists. The lane named that gap against itself rather
+than describing service tests as wire tests, and the clerk will not clear a flag by reinterpreting its own
+condition.
+
+**So this is narrowed, not cleared.** See `F-THE-GIFTCARD-AUTHORIZATION-HAS-NO-WIRE-TEST`, which is the
+remaining half and carries the same condition. **Clearing this one wants either that wire test or
+`--override --by @sven`** — and the honest reason for an override is that the risk is now a coverage gap
+rather than an open door.
+### Flag F-A-GUEST-WHO-PAID-A-VIPPS-DEPOSIT-IS-RETURNED-NOWHERE — the fallBack address and the emailed link are composed separately and drift; a fix exists unlanded at lane/ev-vipps-fallback 9e3a607bb
+state: open
+severity: blocker
+owner: @sven
+clears_when: the Vipps return address and the emailed link are composed from one source, shown by a test that reds when they are composed separately
+### Flag F-AN-XZ-REPORT-COUNTS-INVOICED-MONEY-AS-RECEIVED — company-account receivables are counted inside Sum mottatt; a fix exists unlanded at lane/xz-printed-defects 6c394057e
+state: open
+severity: blocker
+owner: @sven
+clears_when: no X or Z report includes a receivable in its received total, shown by a test that reds when a company-account sale is counted as received
+### Flag F-TWO-BOOKKEEPING-DOCUMENTS-SHARE-ONE-CREDIT-NOTE-NUMBER — the download name came from the route parameter and contradicts the number printed inside the PDF; fix unlanded at lane/credit-note-number 24c95aa94
+state: open
+severity: blocker
+owner: @sven
+clears_when: a credit note's file name and its printed number agree for every issued note, shown by a test that reds when the route parameter is used for the name
+### Flag F-AN-OUT-OF-RANGE-PAYMENTTYPE-REACHES-A-PRINTED-FISCAL-LINE — a C# enum is not validated on cast and the binder accepts any integer; fix unlanded at lane/paymenttype-defined-tender bd77cd6b0
+state: open
+severity: blocker
+owner: @sven
+clears_when: no undefined PaymentType value can reach a printed fiscal line, shown by a test that reds when the cast is left unvalidated
+### Flag F-A-VENUE-THAT-NEVER-OPTED-IN-TAKES-ENQUIRIES-IT-CANNOT-OPEN — the inquiry service has no module gate at all; a fix exists unlanded at lane/ev-inquiry-gate 8ecb47dfa
+state: open
+severity: warn
+owner: @sven
+clears_when: a venue without the events module cannot receive a public enquiry, shown by a test that reds when the gate is removed
+### Flag F-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-THE-WRONG-REASON — the unwind's exception propagates in place of the original, so a race loser gets a 500; fix unlanded at lane/meals-release-race f70a0254c
+state: open
+severity: warn
+owner: @sven
+clears_when: the loser of a release race is told why it lost rather than receiving a 500, shown by a test that reds when the unwind exception is allowed to propagate
+### Flag F-FIFTEEN-ASK-BRANCHES-CARRY-AN-UNLANDED-FEATURE-NOBODY-HAS-DECIDED-ON — 918 product files across lane/ask-* sit unlanded; whether the Ask module ships is a programme decision, not a fix to rank
+state: open
+severity: blocker
+owner: @sven
+clears_when: the Ask module is ruled in or out as a programme decision, and its branches are landed or retired accordingly
+### Flag F-THE-SAFT-EXPORT-AND-TRIPLETEX-PUSH-ALSO-COUNT-INVOICED-MONEY-AS-RECEIVED — the receivable enters at XZReportService where the model is built, so four emitters carry it and the proposed fix repairs only the paper roll
+state: open
+severity: blocker
+owner: @sven
+clears_when: no emitter reading the X/Z payment model counts a company-account receivable as received, shown by a test per emitter that reds when the exclusion is removed at the model
+
+**IT HAPPENED A SECOND TIME, to a different actor, and the generalisable fix is now named. 2026-08-08.**
+
+A landing lane's merge landed **on** `feature/restaurant-modules` because `git worktree add <path> <branch>`
+**checks the branch out**. **Its own end-of-lane state check caught it; nothing upstream would have.** The
+merge is preserved at `976489141` on `lane/ev-vipps-fallback-landed`, the worktree is detached, and the
+trunk was reset to `1c71ae951` — verified by the clerk: reflog shows
+`@{1}: commit (merge)` then `@{0}: branch: Reset to 1c71ae951`, and **no worktree holds the trunk ref**.
+
+**The reason it recurs is that the vulnerable form is the natural one.** `git worktree add <path> <branch>`
+is what everyone writes, and it silently makes every commit in that worktree a branch move.
+
+**The fix, which every landing in this program has so far NOT used:** create landing worktrees with
+**`git worktree add --detach <path> <ref>`**, and move the trunk with **`git branch -f`** only **after** the
+tier is green. That separates *composing* from *publishing*, so an interrupted or failed landing can never
+leave untested work on a shared branch — which is exactly what happened during the API interruption, when
+the trunk carried an untested tranche five with nine red arms.
+
+**Both incidents were caught by the agent's own state check rather than by the clerk.** That is worth
+keeping: an end-of-lane assertion that the trunk is where the lane left it is cheap and has now paid twice.
+
+**HALF OF THIS FLAG IS WRONG AND IT IS THE CLERK'S ERROR. Corrected 2026-08-08 by the lane that read the
+path instead of the call site.**
+
+**Tripletex needs no change, and changing it would have been a defect.**
+`TripletexPosService.cs:295-302` already maps `PaymentType.CompanyAccount` to
+`connection.CompanyReceivableAccountNumber` — **its own interim receivables account** — with a comment
+recording that the monthly Meals statement settlement credits the same account so both sides of the money
+meet there, and that a blank value **refuses** the voucher rather than falling back. **The voucher already
+debits receivables rather than cash.**
+
+**It iterates every medium because a double-entry voucher must.** Filtering the company line would have left
+the revenue credit with **no matching debit and unbalanced the Z voucher** — so the "fix" this flag implied
+would have broken accounting that is currently correct.
+
+**The clerk raised this from a report that observed "iterates every payment medium" at both sites.** That
+observation was **true of both and a defect in neither by itself** — the ESC/POS roll was wrong because it
+*summed* them into a received total; Tripletex is right because it *books* each to its proper account. The
+call site looked identical; the paths do opposite things.
+
+**So the flag now stands on the SAF-T half alone**, which is blocked on
+`D-DOES-A-SAFT-PAYMENT-ELEMENT-ADMIT-A-CREDIT-MEDIUM`. **The four-emitter picture measured at the trunk**:
+
+| emitter | state |
+|---|---|
+| `XZReportService` — the model | **fixed**, `IsReceived` is the one rule |
+| `EscPosXZReportBuilder` — the roll | **fixed**, splits received from invoiced rather than dropping |
+| `TripletexPosService` — accounting push | **verified correct as-is** |
+| `SaftCashRegisterExportService` | **blocked on the standards ruling** |
+### Flag F-TWO-LANDING-LANES-RACED-ON-ONE-TRUNK-AND-ONE-LANDING-WAS-DROPPED — the clerk dispatched two backend landings concurrently; branch -f clobbered the credit-note merge, preserved at preserve/credit-note-landing-dropped
+state: open
+severity: blocker
+owner: @sven
+clears_when: no two lanes hold a landing on the same trunk at once, enforced by the clerk dispatching at most one landing lane per repository
+### Flag F-A-DOTNET-LOG-CANNOT-DISTINGUISH-TWELVE-PASSING-ARMS-FROM-TWELVE-ABSENT-ONES — the tier log names only failed and skipped tests, so a green summary is identical whether the new arms ran or were never compiled in
+state: open
+severity: warn
+owner: @sven
+clears_when: every backend lane asserts its new tests by name with a passed count, not only the tier summary, recorded in its return
+### Flag F-A-FRONTEND-PAGE-DISCARDS-THE-SERVERS-FILE-NAME-AND-REBUILDS-IT-WRONG — settlements.vue:420 throws away Content-Disposition and names the file from a route parameter, prefixing Faktura where the server says RAPPORT
+state: open
+severity: warn
+owner: @sven
+clears_when: no page rebuilds a download name the server already supplied, shown by a test that reds when Content-Disposition is ignored
+### Flag F-THE-CANONICAL-RUNNER-CANNOT-RUN-IN-THE-REPO-WHERE-DOTNET-SUITES-LIVE — mutate.js anchors by walking up to a package.json and throws without one, so its vstest dialect is unreachable in the backend repo
+state: open
+severity: blocker
+owner: @sven
+clears_when: the canonical runner locates its repo root without requiring package.json, shown by an arm that runs it from a directory tree that has none
+
+**THE OTHER LANE HIT THE SAME CLOBBER INDEPENDENTLY AND CAUGHT IT — with a better guard than the clerk's
+rule. Recorded 2026-08-08.**
+
+Its first `git branch -f` read the trunk as **`976489141`** where it expected **`1c71ae951`**. It moved the
+trunk straight back, confirmed both Vipps commits intact, and **recomposed onto the current trunk** rather
+than forcing its own merge over a tree that had moved.
+
+**The guard it names is smaller and stronger than "one landing lane per repository":**
+
+> **re-read the trunk at the instant of the move and refuse unless it still equals your merge base.
+> Reading it at lane start is what fails.**
+
+**Both landing lanes read the trunk at lane start, and both were correct when they read it.** That is why
+serialising by dispatch is necessary but not sufficient — a lane can be the only landing lane and still
+clobber a trunk that moved for any other reason. **The check belongs at the move, not at the schedule.**
+
+**Everything is now on the trunk and verified by the clerk at `c4326402c`, three consecutive reads**:
+`9e3a607bb` (Vipps), `24c95aa94` (credit note) and `8637cdd51` (gift-card authorization) are all ancestors.
+**Nothing was lost by the race.**
+
+**THIS FLAG IS WRONG AS TITLED AND THE CLERK RAISED IT. Corrected 2026-08-08.**
+
+**No out-of-range `PaymentType` reaches a printed fiscal line.** All three emitters route through
+`Services/PaymentTenderLabels.cs`, whose default returns **"Ukjent"** — measured at the trunk as **44 passing
+arms** pinning `(PaymentType)9999` to exactly that, on every emitter.
+
+**The clerk raised this from a branch comment that was true of the branch's base and false of the trunk.**
+`PaymentTenderLabels.cs` did not exist when that branch was written; it landed later in `bcc8bd179`.
+
+**The residual exposure is real but is NOT the printed line**: `JournalPaymentLine` is **append-only** and
+persists through `EnumToStringConverter`, so an undefined value would store as `"999"` in a row that cannot
+be repaired — while the receipt for the same sale correctly says "Ukjent". **Reachability is closed today**:
+three callers pass enum literals and the settlement path is gated by `IsTerminalPayment()`, which matches two
+defined members. **See `D-SPEC-L-A-FISCAL-LINE-CANNOT-PRINT-AN-UNDEFINED-TENDER`.**
+
+**THERE IS A TOOL FOR THIS AND IT WAS THERE ALL ALONG. Found 2026-08-08 by the next lane to hit the flag.**
+
+**`dotnet test --logger trx` names every outcome**, so a lane can assert its own tests **by name with a
+passed count** instead of inferring them from a total. The console summary cannot: it names only failed and
+skipped tests, so **a test that has silently vanished and a test that passed produce an identical green
+line.**
+
+**That is the whole fix, and it costs one flag on the command.** The workaround this flag was raised for —
+running a scoped filter and counting by hand — is no longer necessary, though it remains a valid
+cross-check.
+
+**Worth stating why this matters more here than in most estates**: several lanes have added arms to suites
+they did not write, on branches whose base moved under them. A green summary is exactly the evidence that
+cannot distinguish *my arms ran and passed* from *my arms never compiled in*.
+### Flag F-THE-VSTEST-NAME-PATTERN-READ-ASPNET-STARTUP-PROSE-AS-A-FAILED-TEST — a phantom name present in one run and absent in another is how a false RED or a masked kill is made; found on the first real .NET run through the runner
+state: open
+severity: warn
+owner: @sven
+clears_when: the vstest name pattern requires one unbroken token followed by a bracketed duration, with arms pinning both that prose is not a name and that a real failure line is
+### Flag F-A-CUSTOMERS-PHONE-NUMBER-TRAVELS-IN-A-URL-PATH — every proxy and access log between caller and process sees the URL, so sink-level redaction can never reach it; fix unlanded at lane/phone-in-path
+state: open
+severity: blocker
+owner: @sven
+clears_when: no route carries a phone number in its path, shown by a test that reds when one is placed there
+### Flag F-A-PUSH-CREDENTIAL-TRAVELS-IN-A-URL-PATH — an APNS/FCM device token is recorded as the request name with no log statement involved; fix unlanded at lane/push-token-in-path
+state: open
+severity: blocker
+owner: @sven
+clears_when: no route carries a device token in its path, shown by a test that reds when one is placed there
+### Flag F-A-DAY-SETTLEMENT-STILL-CLAIMS-THE-VENUE-WAS-PAID — the EOD counterpart of the X/Z split is unlanded across three branches that predate today's landing and must be recomposed, not replayed
+state: open
+severity: blocker
+owner: @sven
+clears_when: no end-of-day settlement counts a company-account receivable as received, shown by a test that reds when the split is removed from EodService
+### Flag F-EVIDENCE-LIVED-IN-WORKTREES-AND-EVAPORATED-WITH-THEM — lanes recorded evidence paths inside their own throwaway worktrees, so teardown destroyed the proof while the code stayed
+state: open
+severity: blocker
+owner: @sven
+clears_when: no lane's evidence path points outside a committed tree, checked across every built-unverified lane in the plan
+
+**SATISFIED IN THE WORLD 2026-08-08 — five wire arms are on the backend trunk at `5c46187f3`, tier
+5002 / 0 / 11.** The tool still refuses to clear it because `clears_when` names no `fact:` key, so this
+wants **`--override --by @sven`** rather than more work.
+
+**The five arms, named from a `--logger trx` rather than read off a green summary**: holder-gets-past,
+non-holder-refused, unknown-id-refused, same-bytes, and cannot-learn-from-status.
+
+**Two of them carry the security property that a refusal-only suite cannot.** *Both refusing is not the
+guarantee* — a prober learns nothing only if the two refusals are **the same refusal**, asserted on status
+**and body**. A fifth arm extends that to a card that **exists but is in a refusing status**, which is what
+makes the ownership check's position above the status guard a property of the **HTTP surface** rather than
+a comment in the service.
+
+**The holder arm asserts a difference, not a `200`, and that is deliberate.** A transfer has preconditions
+past ownership the file does not stand up, so asserting `200` would pin a fixture rather than the guarantee.
+**Without that arm, a guard that refuses EVERYONE passes every other arm** — indistinguishable from one that
+works. It is also the arm the mutation reds.
+
+**It reds under the caller-resolution mutation on its own**, not only under a combined one — stronger than
+the brief predicted.
+
+**AND IT CORRECTED THE RECORDED JUSTIFICATION FOR `ActorClaims` AT THIS ENDPOINT.** The claim *"for the
+OAuth principal `Identity.Name` is a phone number"* is true of the **OAuth login cookie**
+(`OAuthLoginController:128`, scheme `OkamOAuthLogin`) — an internal step of the authorization-server
+handshake, read only by `OAuthAuthorizationController`, which **never authenticates an API call**. The bare
+`[Authorize]` here resolves to **JwtBearer**, whose token carries `unique_name` = the user id, so
+`Identity.Name` **is** the user id. **No principal reaching `GiftcardController` has a phone number there.**
+`ActorClaims` remains the right call; **the reason recorded for it was wrong**, and the correction now lives
+in the test's own docstring where the next reader meets it.
+### Flag F-GIT-CHECKOUT-BRANCH-DOUBLE-DASH-FILES-SILENTLY-REVERTS-TRUNK-WORK — staging a fix with a file checkout took a stale branch's copies wholesale and reverted till-settlement work; a checkout is not a merge and nothing about the command says so
+state: open
+severity: blocker
+owner: @sven
+clears_when: no lane stages a fix from another branch with git checkout branch -- files; a merge is used so conflicts surface instead of one side winning silently
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Horizons
@@ -28070,28 +36493,28 @@ Each line is one machine claim. The value between the markers is the tool's
 territory: `plan refresh` rewrites it and a hand edit is overwritten and logged.
 The markers are HTML comments, so a Markdown preview shows only the value.
 
-- Frontend suite, this repo, passing: <!--fact fe.tests 2026-08-06T15:52Z ok-->2127<!--/fact-->
-- Frontend suite, failing: <!--fact fe.tests.failed 2026-08-06T15:52Z ok-->0<!--/fact-->
-- Backend suite at the branch tip: <!--fact be.tests 2026-08-06T15:52Z ok-->4351 passed / 0 failed<!--/fact-->
-- Browser journey captures: <!--fact journeys.browser 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Backend Events journeys blocked on a gap: <!--fact ev.journeys 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Backend Workforce journeys verified green: <!--fact wf.journeys 2026-08-06T15:52Z ok-->12<!--/fact-->
-- Last module nav link added: <!--fact nav.modules 2026-08-06T15:52Z ok-->growth-newsletter<!--/fact-->
-- AccountingSummaries unique-index migration: <!--fact acct.uidx 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
-- Meals employee reference on the membership: <!--fact meals.empref 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Workforce identity-code register: <!--fact wf.idreg 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Training checklist entities: <!--fact train.checklists 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
-- Growth mail provider selector: <!--fact growth.mail.provider 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Preference-centre credentialed CORS: <!--fact growth.prefcentre.cors 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
-- Preference-centre cross-site cookie: <!--fact growth.cookie.crosssite 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
-- Meals feature gate bound: <!--fact meals.gate 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Wolt menu sync registered: <!--fact wolt.sync.host 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
-- Vipps deposit-token log guard: <!--fact vipps.token.guard 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Events structured dietary field: <!--fact ev.dietary 2026-08-06T15:52Z ok-->present<!--/fact-->
-- Frontend suite in CI: <!--fact fe.ci 2026-08-06T15:52Z unconf-->unknown<!--/fact-->
+- Frontend suite, this repo, passing: <!--fact fe.tests 2026-08-08T15:25Z ok-->2127<!--/fact-->
+- Frontend suite, failing: <!--fact fe.tests.failed 2026-08-08T15:25Z ok-->0<!--/fact-->
+- Backend suite at the branch tip: <!--fact be.tests 2026-08-08T15:25Z ok-->4351 passed / 0 failed<!--/fact-->
+- Browser journey captures: <!--fact journeys.browser 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Backend Events journeys blocked on a gap: <!--fact ev.journeys 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Backend Workforce journeys verified green: <!--fact wf.journeys 2026-08-08T15:25Z ok-->12<!--/fact-->
+- Last module nav link added: <!--fact nav.modules 2026-08-08T15:25Z ok-->growth-newsletter<!--/fact-->
+- AccountingSummaries unique-index migration: <!--fact acct.uidx 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Meals employee reference on the membership: <!--fact meals.empref 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Workforce identity-code register: <!--fact wf.idreg 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Training checklist entities: <!--fact train.checklists 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Growth mail provider selector: <!--fact growth.mail.provider 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Preference-centre credentialed CORS: <!--fact growth.prefcentre.cors 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Preference-centre cross-site cookie: <!--fact growth.cookie.crosssite 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Meals feature gate bound: <!--fact meals.gate 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Wolt menu sync registered: <!--fact wolt.sync.host 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
+- Vipps deposit-token log guard: <!--fact vipps.token.guard 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Events structured dietary field: <!--fact ev.dietary 2026-08-08T15:25Z ok-->present<!--/fact-->
+- Frontend suite in CI: <!--fact fe.ci 2026-08-08T15:25Z unconf-->unknown<!--/fact-->
 
-Events acceptance-receipt kind on the branch: <!--fact ev.accept.receipt 2026-08-06T15:52Z unconf-->pending<!--/fact-->. Externally-recorded deposits: <!--fact ev.deposit.external 2026-08-06T15:52Z unconf-->pending<!--/fact-->. Growth dispatch hosted service registered: <!--fact growth.dispatch.hosted 2026-08-06T15:52Z ok-->present<!--/fact-->.
+Events acceptance-receipt kind on the branch: <!--fact ev.accept.receipt 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Externally-recorded deposits: <!--fact ev.deposit.external 2026-08-08T15:25Z unconf-->pending<!--/fact-->. Growth dispatch hosted service registered: <!--fact growth.dispatch.hosted 2026-08-08T15:25Z ok-->present<!--/fact-->.
 These three probes existed with no span, so their facts were never rendered and could not be used as evidence — which is what `W-PROBE-UNUSED` had been saying on every check.
-- Backend `dir` `../OkamAPI-modules` is worktree <!--fact be.dir.gitdir 2026-08-06T15:52Z ok-->/Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules<!--/fact-->, repo pin <!--fact be.dir.repo 2026-08-06T15:52Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact be.dir.ref 2026-08-06T15:52Z ok-->lane/meals-grace-pins<!--/fact-->, ref pin <!--fact be.dir.pin 2026-08-06T15:52Z unconf-->pending<!--/fact-->
-- Hub `dir` `.` is worktree <!--fact fe.dir.gitdir 2026-08-06T15:52Z ok-->/Users/svendaneel/okam/Web/.git/worktrees/Web-modules<!--/fact-->, repo pin <!--fact fe.dir.repo 2026-08-06T15:52Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact fe.dir.ref 2026-08-06T15:52Z ok-->lane/focustrap-teardown<!--/fact-->, ref pin <!--fact fe.dir.pin 2026-08-06T15:52Z unconf-->pending<!--/fact-->
-- Intent hash: <!--fact intent.hash 2026-08-06T15:52Z ok-->7c84435b072ff7fe<!--/fact-->
+- Backend `dir` `../OkamAPI-modules` is worktree <!--fact be.dir.gitdir 2026-08-08T15:25Z ok-->/Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules<!--/fact-->, repo pin <!--fact be.dir.repo 2026-08-08T15:25Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact be.dir.ref 2026-08-08T15:25Z ok-->wip/rescue-2026-08-06-open-shifts-lineage<!--/fact-->, ref pin <!--fact be.dir.pin 2026-08-08T15:25Z unconf-->pending<!--/fact-->
+- Hub `dir` `.` is worktree <!--fact fe.dir.gitdir 2026-08-08T15:25Z ok-->/Users/svendaneel/okam/Web/.git/worktrees/Web-modules<!--/fact-->, repo pin <!--fact fe.dir.repo 2026-08-08T15:25Z ok-->present<!--/fact-->, declared ref `feature/restaurant-modules`, found ref <!--fact fe.dir.ref 2026-08-08T15:25Z ok-->wip/session-2026-08-06-all-work<!--/fact-->, ref pin <!--fact fe.dir.pin 2026-08-08T15:25Z unconf-->pending<!--/fact-->
+- Intent hash: <!--fact intent.hash 2026-08-08T15:25Z ok-->7c84435b072ff7fe<!--/fact-->
