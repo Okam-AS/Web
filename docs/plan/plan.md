@@ -12291,13 +12291,13 @@ and having lost *"og styrer MVA"* from English and German. **Still unfixed and u
 `F-TRANSLATION-STALE-BUT-PRESENT` records.
 
 ### Lane L-FIXTURE-VOCABULARY-SWEEP — every word the e2e fixture puts in an operator's mouth
-state: built-unverified
+state: verified
 class: analysis
 pts: 2
 owner: agent
-exit: every string the e2e fixture emits in a field backed by a backend enum is checked against that enum at 8e2b57de, and each value with no member behind it is named with its field, its intended member and whether anything renders it, in lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
+exit: every string the e2e fixture emits in a field backed by a backend enum is checked against that enum at 8e2b57de, and each value with no member behind it is named with its field, its intended member and whether anything renders it, in lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md, recorded in docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
 agent: opus
-evidence: /Users/svendaneel/okam/web-vocabsweep/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
+evidence: docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
 
 **Three divergent strings were found in one fixture file against zero in the unit tests, and two of them were
 found by accident.** `SpamComplaint` and `ManualSuppression` for `Complaint` and `AdminBlock`, plus
@@ -12465,13 +12465,13 @@ still say `+dirty`. **Show both: a lane-evidence write that does not dirty, and 
 
 
 ### Lane L-FIXTURE-RENDERED-VALUES-FIX — the six wrong words an operator actually reads
-state: built-unverified
+state: verified
 class: node
 pts: 2
 owner: agent
-exit: every fixture value the sweep found rendered to an operator is a member of the enum its reading code binds it to, or is left with the reason recorded, shown by a mounted assertion per site in lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
+exit: every fixture value the sweep found rendered to an operator is a member of the enum its reading code binds it to, or is left with the reason recorded, shown by a mounted assertion per site in lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md, recorded in docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
 agent: opus
-evidence: /Users/svendaneel/okam/web-fixrendered/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
+evidence: docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
 
 **Six of the twelve wrong values reach a screen, and the corrections are already named with their intended
 members.** Four print through one Events component — one of them at a line that **does not route through the
@@ -16702,12 +16702,12 @@ and show it reds naming the drift. A check that cannot be made to fail is the in
 discovering it already had.
 
 ### Lane L-MEALS-ENROLMENT-HAS-A-BUTTON — a concierge can enrol a member from a screen
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a member is enrolled through the admin UI with no hand-made request, and the funded checkout's company tab appears for that member, shown by a browser capture
+exit: a member is enrolled through the admin UI with no hand-made request, and the funded checkout's company tab appears for that member, shown by a browser capture, recorded in docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-a0b63b4f563fc2786/artifacts/journeys/meals-admin-setup/fixture/03-a-programme-somebody-is-enrolled-in.png
+evidence: docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png
 
 **This one write is why the whole module is unwalkable.** `POST /v1/meals/programs/{programId}/members` has
 **no page, no button and no client binding anywhere in this tree**, while `MealsQuoteService.cs:164-170`
@@ -16754,12 +16754,12 @@ that reports absence it cannot distinguish from *"never asked"* will mislead aga
 which ending you choose.
 
 ### Lane L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING — the third of the sign-in fix, which nobody owns
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: signing in on an admin page reached with ?redirect= runs that page's own recovery, shown by a browser capture counting the board's requests after sign-in
+exit: signing in on an admin page reached with ?redirect= runs that page's own recovery, shown by a browser capture counting the board's requests after sign-in, recorded in docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-a65db45f6ddd4ab5b/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md
+evidence: docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md
 
 **Two lanes fixed their third and the path is still dead.** `F-IN-PAGE-SIGN-IN-IS-DEAD-END-TO-END` measured it:
 with the per-page starter list repaired **and** a clean compile, the ongoing board makes **zero requests** after
@@ -16779,13 +16779,13 @@ Say in your return how the three compose, and **prove the end-to-end path in a b
 and it is the assertion none of the three suites could make.
 
 ### Lane L-EF-DECLARES-EVERY-TRIGGER — no EF write dies because the model forgot a trigger
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: ../OkamAPI-modules
-exit: every table carrying a chain-created trigger is declared with HasTrigger, and a SQL-tier arm updates one row on each such table without error 334, with the trx committed under the lane directory
+exit: every table carrying a chain-created trigger is declared with HasTrigger, and a SQL-tier arm updates one row on each such table without error 334, with the trx committed under the lane directory, recorded in docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md
 agent: opus
-evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/evidence.md
+evidence: docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md
 
 **Read `F-EF-NEVER-DECLARES-A-TRIGGER` first.** 25 triggers, zero declarations, proven fatal on
 `TrainingCourseVersions` by three HTTP 500s from a live endpoint.
@@ -16816,13 +16816,13 @@ it would switch off an immutability guard in a world the owner is using and hide
 green demo.
 
 ### Lane L-SECRETS-READ-FROM-CONFIG — a credential can be rotated without editing source
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: none of the four committed credentials is read from a source literal, each fails fast outside Development when unset, shown by a test that reds when a literal is restored
+exit: none of the four committed credentials is read from a source literal, each fails fast outside Development when unset, shown by a test that reds when a literal is restored, recorded in docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-aacb5251c46cd2751/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md
+evidence: docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md
 
 **Rotation is the owner's act; making rotation *possible* is not, and today it is not.** Four credentials are
 committed and **three of them are read from source literals**, so rotating any one means editing code, building
@@ -16851,12 +16851,12 @@ red when a literal is put back.
 it a configuration change rather than a deployment.
 
 ### Lane L-CI-RUNS-THE-FAST-TIER — a suite runs on the branch the work is on
-state: built-unverified
+state: verified
 class: analysis
 owner: agent
-exit: a workflow runs the container-free tier on this branch and on pull requests into it, shown by a run whose log names the tier and its counts
+exit: a workflow runs the container-free tier on this branch and on pull requests into it, shown by a run whose log names the tier and its counts, recorded in docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-aaaf61b6e803d820e/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md
+evidence: docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md
 
 **Nothing gates this branch.** The sole workflow triggers on push to `master` and `test` only, with **no
 pull-request trigger** — so every suite this program has run, including the 587-test SQL tier and every
@@ -16878,13 +16878,13 @@ a CI proposal with a guessed duration is how a gate gets switched off. **Do not 
 the diff and the measurement, and say what it would have caught this week.
 
 ### Lane L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT — the drawer stops recording money that never left it
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: ../OkamAPI-modules
-exit: a referenced return of a CompanyAccount receipt books against the company account and leaves the cash drawer untouched, shown at the fiscal journal by a test that reds when the tender is hardcoded
+exit: a referenced return of a CompanyAccount receipt books against the company account and leaves the cash drawer untouched, shown at the fiscal journal by a test that reds when the tender is hardcoded, recorded in docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-ab18757354501b772/lane/company-account-referenced-return.patch
+evidence: docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch
 
 **The worst defect this seeding found, and it is a bokføring one.** Refunding a funded company lunch works —
 but only through `POST /pos/payment/cash/{journalEntryId}/refund`, which **hardcodes `PaymentType.Cash`**,
@@ -16906,12 +16906,12 @@ row, never an edit** — and note `F-EF-NEVER-DECLARES-A-TRIGGER`, because an EF
 dies on SQL Server today regardless.
 
 ### Lane L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP — a menu without pictures still sells
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: a published category with no image appears in the consumer menu, shown by a request carrying searchOptions returning it
+exit: a published category with no image appears in the consumer menu, shown by a request carrying searchOptions returning it, recorded in docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-ae17b03b712ecf944/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md
+evidence: docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md
 
 **A venue can publish a complete menu and trade nothing.** `CategoryModelBuilder.cs:49` **drops any category
 with no image** whenever `searchOptions` is present — and **the consumer web always sends them**.
@@ -17077,12 +17077,12 @@ count) whose lane is gated on a ruling.
 **Do not push.** Landing on the trunk is authorised; publishing it is not.
 
 ### Lane L-LAND-THE-FRONTEND-ON-THE-TRUNK — today's frontend work reaches feature/restaurant-modules
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: feature/restaurant-modules carries every landed frontend lane, jest is green at the new tip, and a browser opens the admin with the grouped nav and a working sign-in
+exit: feature/restaurant-modules carries every landed frontend lane, jest is green at the new tip, and a browser opens the admin with the grouped nav and a working sign-in, recorded in lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md
+evidence: lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md
 
 **The owner lifted the no-merge hold on 2026-08-06.** The frontend trunk has also not moved since
 **2026-08-04**.
@@ -17518,13 +17518,13 @@ No migration. No SQL container — both slots are held. Never touch `okam-lwtwo-
 never `pkill`. Commit to your own lane branch. **Do not push.**
 
 ### Lane L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE — the red that was never about the code under test is gone at the trunk
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: journey-artifact-store passes in a worktree whose directory is not named Web-modules and in one that is, at trunk ff497c0, with both runs recorded
+exit: journey-artifact-store passes in a worktree whose directory is not named Web-modules and in one that is, at trunk ff497c0, with both runs recorded, recorded in lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md
+evidence: lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md
 
 `journey-artifact-store` asserted that the checkout is named **`Web-modules`**, so it **red in every lane
 worktree and passed only in the canonical one**. That is the worst kind of red: it is never about the
@@ -17693,13 +17693,13 @@ never `pkill`, never `npm ci`/`npm install`, never touch `okam-lwtwo-sql` or `ok
 that needs a database must build its own or say it cannot.
 
 ### Lane L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS — the work finished after the two landings reaches the trunks it was built for
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: .
-exit: every named branch is either merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded at the new tips
+exit: every named branch is either merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded at the new tips, recorded in docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md
 agent: opus
-evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md
+evidence: docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md
 
 **Both trunks landed and are stable: frontend `feature/restaurant-modules` at `ff497c0`, backend at
 `118f92fb9` (48 commits, clerk-verified — invariant holds, 33 `HasTrigger`, chain tip
@@ -17920,13 +17920,13 @@ Never `pkill`. `npm ci`/`npm install` are banned repo-wide — symlink `node_mod
 `--no-verify`. **Do not push.**
 
 ### Lane L-TRAIN-DEMO-SEED-COMPLETES — the seed that blocked on a 500 runs to the end
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: the Training seed completes against the live world and a person opens the Training admin surface and sees courses, assignments, completions and the three certificate states it wrote
+exit: the Training seed completes against the live world and a person opens the Training admin surface and sees courses, assignments, completions and the three certificate states it wrote, recorded in lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png
+evidence: lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png
 
 **The blocker is gone and it was the only thing stopping this.** `L-TRAIN-DEMO-SEED-REDO` returned
 `blocked` because `POST /training/stores/1/courses/{id}/versions/1/publish` answered **500** with SQL
@@ -18075,13 +18075,13 @@ return `blocked` and say so. Never stop, restart or exec into `okam-lwtwo-sql` o
 never `pkill`, never `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK — the money-and-document defects whose fixes already exist stop being one landing away
-state: built-unverified
+state: verified
 class: sql
 owner: agent
 dir: .
-exit: each of the five named lanes is merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded and every failure accounted for against the recorded baselines
+exit: each of the five named lanes is merged onto its trunk or refused with the reason, and both trunks build with their tiers recorded and every failure accounted for against the recorded baselines, recorded in docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md
 agent: opus
-evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md
+evidence: docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md
 
 **The flag triage ranked 310 open flags by what a person would notice, and the finding underneath the
 ranking is that the bottleneck is not building.** Five of the top twenty are **one landing away, not one
@@ -18239,13 +18239,13 @@ No migration. **No SQL container** — a landing wave holds a slot. Never touch 
 **Do not push.**
 
 ### Lane L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION — the hundred-year token stops being unrevocable by construction
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: the token /User/login issues expires within an ordinary session lifetime and its SMS companion refuses a caller that asks too often, shown by a wire proof of both that reds against the current behaviour
+exit: the token /User/login issues expires within an ordinary session lifetime and its SMS companion refuses a caller that asks too often, shown by a wire proof of both that reds against the current behaviour, recorded in lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md
+evidence: lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md
 
 **`/User/login` returns a JWT with `AddDays(36500)` — `UserService.cs:547`. A hundred years.**
 
@@ -18503,13 +18503,13 @@ claims to catch.
 **Rule and name the exact change. Do not edit any file** other than your review and return.
 
 ### Lane L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK — the owner opens each module and finds something there
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: .
-exit: for each of the six modules, a named seed path that a person can run and a browser capture showing the data it produced on that module's own admin surface, or a written statement of exactly what that module still lacks
+exit: for each of the six modules, a named seed path that a person can run and a browser capture showing the data it produced on that module's own admin surface, or a written statement of exactly what that module still lacks, recorded in lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt
+evidence: lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt
 
 **The owner asked for this directly: he wants every module to hold real placeholder data he can open and
 test.** Today's world has data for all six, but **it was produced by hand across a long session and
@@ -18775,13 +18775,13 @@ they hold the owner's seeded world, serving on **:5971** and **:3971**. Never bi
 believing any frontend count.
 
 ### Lane L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS — an indented line inside a .vue file gets counted
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: an indented statement inside a .vue script block is counted by the coverage run, shown by a probe that reds against the current instrumentation and greens after, with the per-module .vue figures re-measured and recorded
+exit: an indented statement inside a .vue script block is counted by the coverage run, shown by a probe that reds against the current instrumentation and greens after, with the per-module .vue figures re-measured and recorded, recorded in lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web-modules/lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md
+evidence: lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md
 
 **The owner asked for coverage as high as possible, and the frontend instrument cannot measure it.**
 `vue-jest@3.0.7` **instruments nothing indented**: **47,081 lines of `<script>` yield 1,169 measured
@@ -19334,13 +19334,13 @@ apply mutations you restore.** No container, no `pkill`. Never touch `okam-lwtwo
 **Rule and name the exact change. Do not edit any file** other than your review and return.
 
 ### Lane L-THE-TESTED-WORK-REACHES-THE-TRUNK — the reviewed test work lands, and the crypto fix waits for its reading
-state: built-unverified
+state: verified
 class: suite
 owner: agent
 dir: .
-exit: preserve/till-money-tests and the documents-and-cart branches are merged onto their trunks with the tiers recorded at the new tips, and lane/the-guard-stops-crashing-on-the-case-it-guards is either landed after its review returns or named as held
+exit: preserve/till-money-tests and the documents-and-cart branches are merged onto their trunks with the tiers recorded at the new tips, and lane/the-guard-stops-crashing-on-the-case-it-guards is either landed after its review returns or named as held, recorded in docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md
 agent: opus
-evidence: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/landtrunk/out/LANDING-DETAIL.md
+evidence: docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md
 
 **Two bodies of test work are finished, mutation-proved, and independently verified — and neither is on
 the trunk.** Landing them is what makes the coverage real rather than branch-local.
@@ -19843,13 +19843,13 @@ Never bind **:3971**/**:5971**, never touch the `okam-lwtwo-*` containers, never
 `npm ci`/`npm install`. Commit with `--no-verify`. **Do not push.**
 
 ### Lane L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS — an undocumented precondition stops being discovered by 400
-state: built-unverified
+state: verified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
-exit: a caller can discover the required If-Match from the route's own refusal or its contract, shown by a request refused with the revision it wanted and one that succeeds carrying it
+exit: a caller can discover the required If-Match from the route's own refusal or its contract, shown by a request refused with the revision it wanted and one that succeeds carrying it, recorded in docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md
 agent: opus
-evidence: /Users/svendaneel/okam/OkamAPI-mrgifmatch/.lane/EVIDENCE.md
+evidence: docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md
 
 **A seed died on this and had never reached its own step 7.**
 `PUT /margin/recipes/{id}/product-links` **demands `If-Match` carrying the recipe revision**, and nothing
@@ -23572,11 +23572,12 @@ body around it is authored text. **In zsh write `${ref}:path`.** **Two silent ig
 **Do not push.**
 
 ### Lane L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED — twenty-one proofs exist and live nowhere anyone else can read them
-state: open
+state: running
 class: node
 owner: agent
 dir: .
 exit: every artifact named by a built-unverified lane and currently committed nowhere is either committed and its lane accepted by plan verify, or recorded as unrecoverable with the reason, with the count of each stated
+agent: L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED
 
 **The objective's bar is "an artifact a stranger can open", and twenty-one lanes fail it in the most
 avoidable way: the proof exists and is committed nowhere.** Measured with `git ls-files` rather than
@@ -34717,12 +34718,12 @@ storefront root** (`pages/index.vue` — hero image, app-store banner), **not th
 the product, and the assertion nobody writes is *"where does sign-out put me."*
 
 ### Lane L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN — signing out leaves you somewhere you can sign back in
-state: built-unverified
+state: verified
 class: node
 owner: agent
-exit: signing out of any admin page lands on a surface offering sign-in, shown by a browser capture that signs out and back in without typing a URL
+exit: signing out of any admin page lands on a surface offering sign-in, shown by a browser capture that signs out and back in without typing a URL, recorded in docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md
 agent: opus
-evidence: /Users/svendaneel/okam/Web/.claude/worktrees/agent-a2127f65723afed15/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md
+evidence: docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md
 
 **Read `F-ADMIN-LOGOUT-LANDS-ON-A-BLANK-PAGE` first.** `AdminPageHeader.vue:697-700` sends an admin to the
 consumer storefront root, which renders blank client-side in an admin-seeded world and links nowhere back to

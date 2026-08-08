@@ -1,0 +1,142 @@
+[
+{
+"id": "L-FIXTURE-VOCABULARY-SWEEP",
+"rc": 0,
+"msg": "L-FIXTURE-VOCABULARY-SWEEP built-unverified -> verified",
+"dest": "docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-FIXTURE-RENDERED-VALUES-FIX",
+"rc": 0,
+"msg": "L-FIXTURE-RENDERED-VALUES-FIX built-unverified -> verified",
+"dest": "docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-MEALS-ENROLMENT-HAS-A-BUTTON",
+"rc": 0,
+"msg": "L-MEALS-ENROLMENT-HAS-A-BUTTON built-unverified -> verified",
+"dest": "docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING",
+"rc": 0,
+"msg": "L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING built-unverified -> verified",
+"dest": "docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EF-DECLARES-EVERY-TRIGGER",
+"rc": 0,
+"msg": "L-EF-DECLARES-EVERY-TRIGGER built-unverified -> verified",
+"dest": "docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-SECRETS-READ-FROM-CONFIG",
+"rc": 0,
+"msg": "L-SECRETS-READ-FROM-CONFIG built-unverified -> verified",
+"dest": "docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-CI-RUNS-THE-FAST-TIER",
+"rc": 0,
+"msg": "L-CI-RUNS-THE-FAST-TIER built-unverified -> verified",
+"dest": "docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT",
+"rc": 0,
+"msg": "L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT built-unverified -> verified",
+"dest": "docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP",
+"rc": 0,
+"msg": "L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP built-unverified -> verified",
+"dest": "docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-LAND-THE-FRONTEND-ON-THE-TRUNK",
+"rc": 0,
+"msg": "L-LAND-THE-FRONTEND-ON-THE-TRUNK built-unverified -> verified",
+"dest": "lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE",
+"rc": 0,
+"msg": "L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE built-unverified -> verified",
+"dest": "lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS",
+"rc": 0,
+"msg": "L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS built-unverified -> verified",
+"dest": "docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-TRAIN-DEMO-SEED-COMPLETES",
+"rc": 0,
+"msg": "L-TRAIN-DEMO-SEED-COMPLETES built-unverified -> verified",
+"dest": "lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK built-unverified -> verified",
+"dest": "docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION",
+"rc": 0,
+"msg": "L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION built-unverified -> verified",
+"dest": "lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK",
+"rc": 0,
+"msg": "L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK built-unverified -> verified",
+"dest": "lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS",
+"rc": 0,
+"msg": "L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS built-unverified -> verified",
+"dest": "lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-TESTED-WORK-REACHES-THE-TRUNK",
+"rc": 0,
+"msg": "L-THE-TESTED-WORK-REACHES-THE-TRUNK built-unverified -> verified",
+"dest": "docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS",
+"rc": 0,
+"msg": "L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS built-unverified -> verified",
+"dest": "docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md",
+"outcome": "ACCEPTED"
+},
+{
+"id": "L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN",
+"rc": 0,
+"msg": "L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN built-unverified -> verified",
+"dest": "docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md",
+"outcome": "ACCEPTED"
+}
+]

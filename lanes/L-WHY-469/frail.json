@@ -10,7 +10,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/web-vocabsweep/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 25618,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-FIXTURE-RENDERED-VALUES-FIX",
@@ -23,7 +29,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/web-fixrendered/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 14395,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-MEALS-ENROLMENT-HAS-A-BUTTON",
@@ -36,7 +48,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-a0b63b4f563fc2786/artifacts/journeys/meals-admin-setup/fixture/03-a-programme-somebody-is-enrolled-in.png",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 553113,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING",
@@ -49,7 +67,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-a65db45f6ddd4ab5b/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 11936,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-EF-DECLARES-EVERY-TRIGGER",
@@ -62,7 +86,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/evidence.md",
-"_tracked": "not-a-repo"
+"_tracked": "not-a-repo",
+"_scan": [],
+"_bytes": 11241,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-SECRETS-READ-FROM-CONFIG",
@@ -75,7 +105,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-aacb5251c46cd2751/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 12959,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-CI-RUNS-THE-FAST-TIER",
@@ -88,7 +124,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-aaaf61b6e803d820e/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 24411,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT",
@@ -101,7 +143,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-ab18757354501b772/lane/company-account-referenced-return.patch",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 28582,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP",
@@ -114,7 +162,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-ae17b03b712ecf944/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 15266,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-LAND-THE-FRONTEND-ON-THE-TRUNK",
@@ -127,7 +181,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 11080,
+"_action": "commit-in-place",
+"_dest": "lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-THE-LIVE-WORLD-RUNS-THE-BRANCH",
@@ -140,7 +200,11 @@
 "browser": true,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/web-livewalk/artifacts/journeys/WALK-RECORD.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 8212,
+"_action": "UNTOUCHABLE",
+"_reason": "web-livewalk is under a standing prohibition"
 },
 {
 "id": "L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE",
@@ -153,7 +217,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 5742,
+"_action": "commit-in-place",
+"_dest": "lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS",
@@ -166,7 +236,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md",
-"_tracked": "not-a-repo"
+"_tracked": "not-a-repo",
+"_scan": [],
+"_bytes": 8796,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-TRAIN-DEMO-SEED-COMPLETES",
@@ -179,7 +255,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 526875,
+"_action": "commit-in-place",
+"_dest": "lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK",
@@ -192,7 +274,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md",
-"_tracked": "not-a-repo"
+"_tracked": "not-a-repo",
+"_scan": [],
+"_bytes": 17362,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION",
@@ -205,7 +293,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 9145,
+"_action": "commit-in-place",
+"_dest": "lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK",
@@ -218,7 +312,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 2317,
+"_action": "commit-in-place",
+"_dest": "lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS",
@@ -231,7 +331,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web-modules/lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 15022,
+"_action": "commit-in-place",
+"_dest": "lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-THE-TESTED-WORK-REACHES-THE-TRUNK",
@@ -244,7 +350,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/landtrunk/out/LANDING-DETAIL.md",
-"_tracked": "not-a-repo"
+"_tracked": "not-a-repo",
+"_scan": [],
+"_bytes": 6436,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS",
@@ -257,7 +369,13 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/OkamAPI-mrgifmatch/.lane/EVIDENCE.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 4153,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md",
+"_ignored": "",
+"_tracked_now": true
 },
 {
 "id": "L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN",
@@ -270,6 +388,12 @@
 "browser": false,
 "_artifact_present": true,
 "_p": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-a2127f65723afed15/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md",
-"_tracked": "untracked-in-repo"
+"_tracked": "untracked-in-repo",
+"_scan": [],
+"_bytes": 7817,
+"_action": "copied-into-repo",
+"_dest": "docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md",
+"_ignored": "",
+"_tracked_now": true
 }
 ]

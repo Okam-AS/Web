@@ -1,0 +1,40 @@
+The six modules, their seed path, and the capture that shows what it produced
+=============================================================================
+
+Live world: API http://127.0.0.1:5971 (built from 8e2b57de8), web http://127.0.0.1:3971,
+store 1 "Two Humans Kafé", manager +4799681931, worker +4799999999.
+
+The seeds live on branch lane/every-module-has-data (tip d8837960a, off trunk a1c1a6dff) in
+/Users/svendaneel/okam/OkamAPI-modules. It is unpushed and no worktree holds it, so check it out
+before running anything below:
+
+    git worktree add /some/path lane/every-module-has-data
+
+Every seed is then invoked the same way:
+
+    export API_BASE=http://127.0.0.1:5971
+    export MANAGER_PHONE=+4799681931 MANAGER_CODE=<this world's demo verification code>
+    export STORE_NAME='Two Humans Kafé'
+    Scripts/demo/seed-<module>-demo.sh
+
+Workforce additionally takes WORKER_PHONE=+4799999999 WORKER_CODE=<the worker's code>.
+
+The codes are not written down here. They are demo codes on a laptop world rather than live
+credentials, but a committed artifact that carries one is how the habit of committing one starts;
+`*.log` is gitignored, which is why the run logs beside this file may still print them.
+
+  module     seed script                          walk capture        rendered text
+  ---------  -----------------------------------  ------------------  -----------------
+  Margin     Scripts/demo/seed-margin-demo.sh     walk-margin.png     walk-margin.txt
+  Events     Scripts/demo/seed-events-demo.sh     walk-events.png     walk-events.txt
+  Workforce  Scripts/demo/seed-workforce-demo.sh  walk-workforce.png  walk-workforce.txt
+  Training   Scripts/demo/seed-training-demo.sh   walk-training.png   walk-training.txt
+  Meals      Scripts/demo/seed-meals-demo.sh      walk-meals.png      walk-meals.txt
+  Growth     Scripts/demo/seed-growth-demo.sh     walk-growth.png     walk-growth.txt
+
+The walk is walk-modules.js in this directory (MANAGER_CODE=... node walk-modules.js [module ...]).
+It signs in as the manager and, per page, writes the rendered text plus a full-page screenshot, and
+records every console error and every response >= 400. All six pages: zero of each.
+
+Run logs in this directory are kept including the failing ones, which are the receipts for the
+defects named in the RETURN.
