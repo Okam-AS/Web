@@ -131,11 +131,15 @@
 
                 <!-- ── STAGED PROPOSALS, AND WHAT BECAME OF THEM ───────────────────────────────
                      ⚠️ THE CONTAINER IS GATED ON THE OUTCOME AS WELL AS THE CARDS, AND THAT IS THE
-                     WHOLE POINT OF THIS BLOCK. Deciding CLEARS `turn.cards` — approve, reject and
-                     every non-kill-switch 409 all do — so a container gated on `cards.length` alone
-                     unrenders itself at the exact moment it has something to say, taking the
-                     confirmation down with the card it confirms. A merchant approved two hundred
-                     price changes and watched the card vanish in silence.
+                     WHOLE POINT OF THIS BLOCK. Deciding REMOVES the decided card — approve, reject
+                     and every non-kill-switch 409 all do — so on the ordinary one-card turn a
+                     container gated on `cards.length` alone unrenders itself at the exact moment it
+                     has something to say, taking the confirmation down with the card it confirms. A
+                     merchant approved two hundred price changes and watched the card vanish in
+                     silence.
+
+                     Only the DECIDED card goes (`dropCard`). A turn can carry several proposals,
+                     and the ones nobody ruled on stay exactly where they are.
 
                      The decided line and the conflict are rendered OUTSIDE the `v-for` because they
                      belong to the TURN, not to any one card: a turn-level sentence repeated once per
@@ -174,8 +178,21 @@
                     </p>
                   </div>
 
-                  <p v-if="turn.decided" class="assistant-cards__decided" data-test="decided">
-                    {{ turn.decided }}
+                  <!-- ⚠️ THE TONE IS LOAD-BEARING HERE, NOT DECORATION. This one line carries BOTH
+                       outcomes: "the change has been made", and "the decision failed and nobody
+                       knows whether it wrote". Rendered in a single style they are the same green
+                       box, so a 500 on approve — the one outcome whose write-fate is genuinely
+                       unknown — arrives wearing the chrome that otherwise means it worked. The
+                       words were always honest; the colour said the opposite, and a merchant reads
+                       colour first. `tone` is therefore set beside every text that sets it, and the
+                       inbox banner (`PendingActions.vue`) has always done exactly this. -->
+                  <p
+                    v-if="turn.decided"
+                    class="assistant-cards__decided"
+                    :class="'is-' + turn.decided.tone"
+                    data-test="decided"
+                  >
+                    {{ turn.decided.text }}
                   </p>
                 </div>
 
@@ -463,7 +480,8 @@ export default {
         needsStore: false,
         venues: [],
         conflict: null,
-        decided: ''
+        // `{ tone, text }` or null. The tone is not optional: see the decided line in the template.
+        decided: null
       };
       this.thread.push(turn);
       this.busy = true;
@@ -561,18 +579,35 @@ export default {
       });
       return periods.join(', ');
     },
+    /**
+     * Drop the card that was just decided, and ONLY that one.
+     *
+     * A turn can carry several staged proposals — `ChatOrchestrator` accumulates `Cards` across a
+     * turn's tool rounds — and clearing the whole list made deciding one of them silently retract
+     * the others, under a singular "Approved" line that spoke for a decision the merchant had not
+     * made. Nothing was lost (the survivors stay in the inbox), but the thread described a turn
+     * that never happened, which is the more expensive kind of wrong on a surface about money.
+     *
+     * `pick` because the wire's casing is not this function's business.
+     */
+    dropCard (turn, id) {
+      turn.cards = turn.cards.filter(card => pick(card, 'proposalId') !== id);
+    },
     async onApprove (turn, id) {
       if (this.busy) { return; }
       this.busy = true;
       turn.conflict = null;
       try {
         const result = await this.service.Approve(id);
-        turn.decided = pick(result, 'wasReplay')
-          ? this.$i('assistant_card_approvedReplay')
-          : this.$i('assistant_card_approved');
-        turn.cards = [];
+        turn.decided = {
+          tone: 'ok',
+          text: pick(result, 'wasReplay')
+            ? this.$i('assistant_card_approvedReplay')
+            : this.$i('assistant_card_approved')
+        };
+        this.dropCard(turn, id);
       } catch (error) {
-        this.applyDecisionFailure(turn, error);
+        this.applyDecisionFailure(turn, id, error);
       } finally {
         this.busy = false;
       }
@@ -583,26 +618,33 @@ export default {
       turn.conflict = null;
       try {
         await this.service.Reject(id);
-        turn.decided = this.$i('assistant_card_rejected');
-        turn.cards = [];
+        turn.decided = { tone: 'ok', text: this.$i('assistant_card_rejected') };
+        this.dropCard(turn, id);
       } catch (error) {
-        this.applyDecisionFailure(turn, error);
+        this.applyDecisionFailure(turn, id, error);
       } finally {
         this.busy = false;
       }
     },
-    applyDecisionFailure (turn, error) {
+    applyDecisionFailure (turn, id, error) {
       const conflict = describeConflict(error);
       if (conflict) {
         turn.conflict = conflict;
-        // The kill switch leaves the row STAGED and approvable later, so its card stays. Every
-        // other 409 has already moved the row and the card would be an offer that cannot be taken.
-        if (!conflict.keepCard) { turn.cards = []; }
+        // The kill switch leaves the row STAGED and approvable later, so its card stays. It is a
+        // refusal of the KIND, not of this proposal, so it removes nothing at all. Every other 409
+        // has already moved this one row, and its card would be an offer that cannot be taken —
+        // but only ITS card: the siblings on this turn were never decided.
+        if (!conflict.keepCard) { this.dropCard(turn, id); }
         return;
       }
-      turn.decided = isAssistantApiError(error) && error.message
-        ? error.message
-        : this.$i('assistant_card_decisionFailed');
+      // The decision FAILED — a 500, a dropped connection, a refusal that is not a 409. Whether it
+      // wrote is unknown, and 'refused' is what stops that from being painted as a confirmation.
+      turn.decided = {
+        tone: 'refused',
+        text: isAssistantApiError(error) && error.message
+          ? error.message
+          : this.$i('assistant_card_decisionFailed')
+      };
     }
   }
 };
@@ -849,14 +891,21 @@ export default {
 .assistant-cards__conflict-line { font-weight: 600; color: #292c34; }
 .assistant-cards__conflict-server { color: #64748b; font-style: italic; }
 
+/* Two tones because this line carries two opposite outcomes. `is-ok` is the house success green
+   (`CLAUDE.md`: #1bb776 / #159f63); `is-refused` mirrors the inbox banner's refused row
+   (`PendingActions.vue`) and the conflict block above it, so a refusal reads the same on both
+   surfaces. The red is #b91c1c rather than #ef4444 because #ef4444 on #FEF2F2 misses WCAG AA for
+   body text, and this sentence is the one the merchant most needs to be able to read. */
 .assistant-cards__decided {
   margin: 0;
   padding: 12px 16px;
-  background: #e8f7f1;
   border-radius: 8px;
-  color: #159f63;
+  border-left: 4px solid;
   font-weight: 600;
   font-size: 0.9em;
+
+  &.is-ok { background: #e8f7f1; border-left-color: #1bb776; color: #159f63; }
+  &.is-refused { background: #FEF2F2; border-left-color: #ef4444; color: #b91c1c; }
 }
 
 .assistant-basis__toggle {

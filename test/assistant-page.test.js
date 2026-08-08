@@ -317,7 +317,7 @@ describe('approving and rejecting from the thread', () => {
 
     expect(calls).toContainEqual(['Approve', 'p-1'])
     expect(wrapper.vm.thread[0].cards).toEqual([])
-    expect(wrapper.vm.thread[0].decided).toBe('assistant_card_approved')
+    expect(wrapper.vm.thread[0].decided).toEqual({ tone: 'ok', text: 'assistant_card_approved' })
   })
 
   // Approving an already-executed row REPLAYS the recorded outcome rather than creating a second
@@ -333,7 +333,7 @@ describe('approving and rejecting from the thread', () => {
 
     await wrapper.vm.onApprove(wrapper.vm.thread[0], 'p-1')
 
-    expect(wrapper.vm.thread[0].decided).toBe('assistant_card_approvedReplay')
+    expect(wrapper.vm.thread[0].decided).toEqual({ tone: 'ok', text: 'assistant_card_approvedReplay' })
   })
 
   // The kill switch is the ONE refusal where retrying later can succeed with the merchant doing
@@ -393,6 +393,9 @@ describe('approving and rejecting from the thread', () => {
     const decided = wrapper.find('[data-test="decided"]')
     expect(decided.exists()).toBe(true)
     expect(decided.text()).toBe('assistant_card_approved')
+    // And it is rendered as a SUCCESS. The tone is asserted, not just the sentence, because the
+    // failure path renders into this same element and the two must never look alike.
+    expect(decided.classes()).toContain('is-ok')
     // The card is gone and the confirmation is not: the container outlives its cards.
     expect(wrapper.find('proposalcardview-stub').exists()).toBe(false)
   })
@@ -408,6 +411,48 @@ describe('approving and rejecting from the thread', () => {
     await decide(wrapper, 'onReject')
 
     expect(wrapper.find('[data-test="decided"]').text()).toBe('assistant_card_rejected')
+    expect(wrapper.find('[data-test="decided"]').classes()).toContain('is-ok')
+  })
+
+  // ── A FAILURE MUST NOT WEAR THE CONFIRMATION'S CHROME ───────────────────────────────────────────
+  // The decided line carries both outcomes. A 500 on approve is the one case where NOBODY knows
+  // whether the prices moved, and it used to render in the same green box that otherwise means "the
+  // change has been made". The words were honest; the colour was not, and colour is read first.
+  // These fail against a decided line with no tone on it.
+  test('a 500 on approve is rendered as a REFUSAL, not as a confirmation', async () => {
+    script.ask = () => Promise.resolve(staged)
+    script.approve = () => Promise.reject(new AssistantApiError(500, { message: 'Noe gikk galt.' }))
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onApprove')
+
+    const decided = wrapper.find('[data-test="decided"]')
+    expect(decided.text()).toBe('Noe gikk galt.')
+    expect(decided.classes()).toContain('is-refused')
+    expect(decided.classes()).not.toContain('is-ok')
+    // The card stays: a 500 is not an answer about what the proposal now is, and withdrawing the
+    // offer would tell the merchant a decision was reached.
+    expect(wrapper.find('proposalcardview-stub').exists()).toBe(true)
+  })
+
+  test('a non-typed failure falls back to the house sentence, still refused', async () => {
+    script.ask = () => Promise.resolve(staged)
+    script.approve = () => Promise.reject(new Error('socket hang up'))
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onApprove')
+
+    const decided = wrapper.find('[data-test="decided"]')
+    expect(decided.text()).toBe('assistant_card_decisionFailed')
+    expect(decided.classes()).toContain('is-refused')
   })
 
   // The worst of the three: `applyDecisionFailure` sets the conflict and clears the cards, and the
@@ -449,6 +494,92 @@ describe('approving and rejecting from the thread', () => {
     await decide(wrapper, 'onApprove')
 
     expect(wrapper.find('proposalcardview-stub').exists()).toBe(true)
+    expect(wrapper.find('[data-test="conflict"]').text()).toContain('assistant_conflict_kindDisabled')
+  })
+
+  // ── DECIDING ONE CARD IS NOT DECIDING THE OTHERS ───────────────────────────────────────────────
+  // Two staged proposals on one turn is a shape the wire really produces: `ChatOrchestrator` ships an
+  // ACCUMULATED `Cards` list across a turn's tool rounds. Clearing the whole list made approving one
+  // of them silently retract the other, under a singular "Approved" line speaking for a decision the
+  // merchant never made. The survivor stayed reachable in the inbox, so nothing was lost — but the
+  // thread described a turn that did not happen. These three fail against `turn.cards = []`.
+  const twoStaged = {
+    Answer: 'Jeg har forberedt to endringer.',
+    Status: 'proposal_staged',
+    StoreIds: [1],
+    Cards: [
+      { ProposalId: 'p-1', Title: 'Prisøkning', AffectedCount: 3, ChangeSet: [] },
+      { ProposalId: 'p-2', Title: 'Prisnedgang', AffectedCount: 5, ChangeSet: [] }
+    ]
+  }
+
+  async function mountTwoCardTurn () {
+    script.ask = () => Promise.resolve(twoStaged)
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'juster prisene' })
+    wrapper.vm.submit()
+    await settled()
+    // The premise of all three: BOTH are on screen before anything is decided.
+    expect(wrapper.findAll('proposalcardview-stub').length).toBe(2)
+    return wrapper
+  }
+
+  test('approving one of two proposals leaves the other standing', async () => {
+    const wrapper = await mountTwoCardTurn()
+
+    await decide(wrapper, 'onApprove') // p-1
+
+    expect(calls).toContainEqual(['Approve', 'p-1'])
+    expect(calls).not.toContainEqual(['Approve', 'p-2'])
+    // ON SCREEN: one card, and it is the one nobody ruled on.
+    const surviving = wrapper.findAll('proposalcardview-stub')
+    expect(surviving.length).toBe(1)
+    expect(surviving.at(0).props('card').ProposalId).toBe('p-2')
+    // …next to a confirmation that speaks only for the one that was decided.
+    expect(wrapper.find('[data-test="decided"]').text()).toBe('assistant_card_approved')
+  })
+
+  test('rejecting one of two proposals leaves the other standing', async () => {
+    const wrapper = await mountTwoCardTurn()
+
+    await decide(wrapper, 'onReject') // p-1
+
+    const surviving = wrapper.findAll('proposalcardview-stub')
+    expect(surviving.length).toBe(1)
+    expect(surviving.at(0).props('card').ProposalId).toBe('p-2')
+    expect(wrapper.find('[data-test="decided"]').text()).toBe('assistant_card_rejected')
+  })
+
+  test('an unresolvable 409 removes only the proposal it was about', async () => {
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This proposal has expired — nothing was created.'
+    }))
+    const wrapper = await mountTwoCardTurn()
+
+    await decide(wrapper, 'onApprove') // p-1
+
+    const surviving = wrapper.findAll('proposalcardview-stub')
+    expect(surviving.length).toBe(1)
+    expect(surviving.at(0).props('card').ProposalId).toBe('p-2')
+    expect(wrapper.find('[data-test="conflict"]').text()).toContain('assistant_conflict_unresolvable')
+  })
+
+  // ⚠️ AND THE KILL SWITCH STILL CLEARS NOTHING. It is a refusal of the KIND, not of a proposal, so
+  // both cards stay — including the one that was never decided. This is the case a naive "filter out
+  // the decided id" would quietly break, and it is why the filter sits behind `!conflict.keepCard`.
+  test('a kill-switch refusal on a two-card turn keeps BOTH cards', async () => {
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This kind of change is switched off for this store…', code: CONFLICT_KIND_DISABLED
+    }))
+    const wrapper = await mountTwoCardTurn()
+
+    await decide(wrapper, 'onApprove') // p-1
+
+    const stubs = wrapper.findAll('proposalcardview-stub')
+    expect(stubs.length).toBe(2)
+    expect(stubs.at(0).props('card').ProposalId).toBe('p-1')
+    expect(stubs.at(1).props('card').ProposalId).toBe('p-2')
     expect(wrapper.find('[data-test="conflict"]').text()).toContain('assistant_conflict_kindDisabled')
   })
 

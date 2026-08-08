@@ -402,7 +402,20 @@ export default {
         // And say so ABOVE the list, not only on the row — because for every 409 except the kill
         // switch the re-read above has just removed that row from the default `Staged` filter, so
         // the per-row binding matches nothing and the refusal would be rendered nowhere.
-        this.say('refused', this.$i(conflict.key), conflict.serverMessage);
+        //
+        // …but when the row DID survive the re-read — which is the kill switch's whole point, since
+        // it leaves the proposal Staged and approvable later — the card a few centimetres below is
+        // already carrying the server's own sentence under the same translated line, and the banner
+        // would be printing the entire refusal twice on one screen. So the banner keeps the
+        // headline, which a merchant scrolled past the row still needs, and drops the detail it
+        // would only be duplicating.
+        //
+        // The test is whether the row survived rather than `keepCard`, because that is the exact
+        // condition under which the row's own block renders (`:conflict="conflictId === idOf(row)"`).
+        // Under the `All` filter a non-kill-switch refusal survives the re-read too, and it would
+        // read double for the same reason.
+        const rowSurvived = Array.isArray(this.rows) && this.rows.some(row => this.idOf(row) === id);
+        this.say('refused', this.$i(conflict.key), rowSurvived ? null : conflict.serverMessage);
         return;
       }
       // NOT `this.failure`: that is the read-failure slot and the template renders it INSTEAD of the

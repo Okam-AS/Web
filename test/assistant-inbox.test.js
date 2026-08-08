@@ -2,7 +2,7 @@ import { shallowMount } from '@vue/test-utils'
 
 // eslint-disable-next-line import/first -- the mock must be registered before the component is imported.
 import PendingActions from '~/components/admin/assistant/PendingActions.vue'
-import { AssistantApiError } from '~/utils/assistant/api-client'
+import { AssistantApiError, CONFLICT_KIND_DISABLED } from '~/utils/assistant/api-client'
 
 const calls = []
 const script = {}
@@ -477,6 +477,35 @@ describe('what the inbox says about a decision', () => {
     wrapper.destroy()
   })
 
+  // ── ONE REFUSAL, STATED ONCE ───────────────────────────────────────────────────────────────────
+  // The kill switch is the 409 that LEAVES the row on the board, so its card renders the same
+  // translated line and the same server sentence a few centimetres below the banner. The whole
+  // refusal printed twice on one screen reads as two of them. The banner keeps the headline — a
+  // merchant scrolled past the row still needs it — and drops the detail the row already carries.
+  test('a kill-switch refusal is not stated twice when the row survives', async () => {
+    script.list = () => Promise.resolve([row()])
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This kind of change is switched off for this store…', code: CONFLICT_KIND_DISABLED
+    }))
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    // The row stayed, which is what makes this the duplicating case…
+    const card = wrapper.find('proposalcardview-stub')
+    expect(card.exists()).toBe(true)
+    expect(card.props('conflict').serverMessage).toBe('This kind of change is switched off for this store…')
+    // …so the banner states the refusal, once, without repeating the sentence below it.
+    const decision = wrapper.find('[data-test="decision"]')
+    expect(decision.text()).toContain('assistant_conflict_kindDisabled')
+    expect(decision.text()).not.toContain('switched off for this store')
+    expect(wrapper.find('.pending-actions__decision-detail').exists()).toBe(false)
+    wrapper.destroy()
+  })
+
   // `failure` is the READ-failure slot and the template renders it INSTEAD of the list. A failed
   // decision routed through it would blank an inbox that is perfectly readable.
   test('a non-409 refusal is reported without blanking the list', async () => {
@@ -513,15 +542,26 @@ describe('what the inbox says about a decision', () => {
 
   // A bare method reference in `@click` receives the EVENT as its first argument, which `load` reads
   // as `quiet` — so this button used to run the silent poll path and could never show its own label.
+  //
+  // ⚠️ THE ORDERING BELOW IS THE ENTIRE TEST. An earlier version installed the never-resolving read
+  // BEFORE mount, so `mounted()` started a loud read that never settled: `loading` was already true
+  // and the button already `:disabled` at click time, which makes `trigger('click')` a no-op in
+  // vue-test-utils. The assertion then passed against the bug it was written to catch — it was
+  // measuring the MOUNT-time read, not the click. So the mount-time read is allowed to RESOLVE
+  // first, `loading` is asserted false, and only then is the hanging read installed. Now the true
+  // state is false and only the click can flip it, which is what the bug cannot do.
   test('the refresh button runs a LOUD read, not the poll path', async () => {
-    script.list = () => new Promise(() => {})
     const wrapper = mountInbox([1])
     await settled()
+    expect(wrapper.vm.loading).toBe(false)
 
+    script.list = () => new Promise(() => {})
     wrapper.find('[data-test="refresh"]').trigger('click')
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.loading).toBe(true)
+    // …and it says so, which is the half the merchant can actually see.
+    expect(wrapper.find('[data-test="refresh"]').text()).toBe('assistant_inbox_loading')
     wrapper.destroy()
   })
 })
