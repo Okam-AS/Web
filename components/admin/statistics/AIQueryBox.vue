@@ -46,22 +46,25 @@
 <script>
 // THE BOX NO LONGER ANSWERS — IT HANDS OVER.
 //
-// It used to call `_aiService.AskQuestion(query, storeIds, 'no')` and render `result.answer`, and
-// that had two defects, one of them silent and total:
+// It used to call `_aiService.AskQuestion(query, storeIds, 'no')` and render `result.answer`.
 //
-//  1. `result.answer` IS ALWAYS UNDEFINED. The API serialises with Newtonsoft and registers no
-//     contract resolver (`Helpers/ServiceCollectionExtensions.cs:167-171`), so ASP.NET Core's
-//     `DefaultContractResolver` preserves PascalCase and `ChatAskResponseModel.Answer` arrives as
-//     `Answer`. `RequestService.TryParseResponse` hands the body through untouched. So this box
-//     took the `else` branch on EVERY successful turn and showed "Kunne ikke få svar fra AI" for an
-//     answer it had actually received.
-//  2. The `'no'` was a hard-coded literal, so an English or German operator was answered in
-//     Norwegian regardless of the locale they had chosen in the sidebar.
+// ⚠️ CORRECTION, AND IT IS THE REASON THIS NOTE IS LONG. An earlier version of this comment claimed
+// `result.answer` was a live defect — that the wire is PascalCase, so the box showed "Kunne ikke få
+// svar fra AI" for every answer it received. THAT WAS FALSE and it was asserted here as fact. The
+// wire is camelCase: `AddNewtonsoftJson` with no explicit resolver still gets a `DefaultContractResolver`
+// carrying a `CamelCaseNamingStrategy`, installed by `JsonSerializerSettingsProvider.CreateSerializerSettings()`,
+// and the naming strategy is what renders the property name. `WebApi.Tests/Wire/GrowthConsentAdminWireTests.cs`
+// pins that against a live host and `docs/api/README.md` states it as law. `result.answer` was
+// CORRECT. See the header of `utils/assistant/api-client.js` for the full measurement.
 //
-// Both are fixed by not answering here. `/admin/assistant` owns the conversation, the store scope,
-// the basis drawer and the approval surface; this box is the doorway on the statistics page, and a
-// second half-implementation of the same call is exactly what went stale. The question rides over
-// in the query string and the page asks it.
+// THE ONE REAL DEFECT, which is enough on its own: the `'no'` was a hard-coded literal, so an
+// English or German operator was answered in Norwegian regardless of the locale they had chosen in
+// the sidebar.
+//
+// It is fixed by not answering here. `/admin/assistant` owns the conversation, the store scope, the
+// basis drawer and the approval surface; this box is the doorway on the statistics page, and a
+// second half-implementation of the same call is exactly what went stale. The question rides over in
+// the query string and the page asks it, with the operator's own locale.
 export default {
   name: 'AIQueryBox',
   props: {
@@ -153,11 +156,6 @@ export default {
   border-color: #667eea;
 }
 
-.query-input:disabled {
-  background: #f5f5f5;
-  cursor: not-allowed;
-}
-
 .submit-btn {
   padding: 12px 20px;
   background: #667eea;
@@ -179,20 +177,6 @@ export default {
 .submit-btn:disabled {
   background: #ccc;
   cursor: not-allowed;
-}
-
-.mini-spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top: 3px solid white;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 .example-queries {

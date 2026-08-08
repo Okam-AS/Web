@@ -51,10 +51,16 @@ describe('assistant-vocab-lint', () => {
 
   // Each of the four is proved to be caught. A forbidden-word list nobody has watched reject a word
   // is a list, not a guard.
+  //
+  // `compliance` is on this list as its own row and not as a remark in a comment: the list holds the
+  // STEM `complian` precisely because `'compliance'.includes('compliant')` is FALSE, so an entry
+  // spelling out the adjective would have passed the noun through while a comment claimed otherwise.
+  // The only way that claim stays true is if the noun is watched failing.
   describe.each([
     ['internkontroll', 'Dette er internkontroll for kjøkkenet.'],
     ['IK-mat', 'Fungerer som IK-mat for virksomheten.'],
     ['compliant', 'Your menu is compliant.'],
+    ['compliance', 'Your menu meets every compliance rule.'],
     ['lovlig', 'Denne prisendringen er lovlig.']
   ])('rejects %s', (word, sentence) => {
     test('anywhere in an assistant_* string', () => {

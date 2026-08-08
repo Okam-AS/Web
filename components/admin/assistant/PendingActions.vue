@@ -14,16 +14,35 @@
           {{ option.label }}
         </button>
       </div>
+      <!-- `load()`, not `load`. A bare method reference receives the click EVENT as its first
+           argument, which `load` reads as `quiet` — so this button used to run the silent POLL path:
+           no spinner, no clearing of a stale refusal, and a label that could never change. -->
       <button
         type="button"
         class="pending-actions__refresh"
         :disabled="loading"
         data-test="refresh"
-        @click="load"
+        @click="load()"
       >
         {{ loading ? $i('assistant_inbox_loading') : $i('assistant_inbox_refresh') }}
       </button>
     </div>
+
+    <!-- ── WHAT YOUR LAST DECISION DID ─────────────────────────────────────────────────────────────
+         Above the list, and deliberately NOT inside a row, because by the time there is anything to
+         say the row is usually gone: a successful approve moves the proposal out of the default
+         `Staged` filter and so does every non-kill-switch 409, and the re-read that follows a
+         decision then drops it. A message rendered per-row would be rendered nowhere at all — which
+         is exactly what used to happen, on the one screen where silence is least affordable.
+
+         It is also NOT the house toast (`pages/admin/growth-newsletter.vue`,
+         `pages/admin/workforce-rates.vue`), which auto-dismisses after five seconds. "The change has
+         been made" is a statement about money that is already live; it must not expire on a timer
+         while the merchant is reading the list underneath it. The next decision clears it. -->
+    <p v-if="decision" class="pending-actions__decision" :class="'is-' + decision.tone" data-test="decision">
+      <span class="pending-actions__decision-line">{{ decision.message }}</span>
+      <span v-if="decision.detail" class="pending-actions__decision-detail">{{ decision.detail }}</span>
+    </p>
 
     <p v-if="!storeIds.length" class="pending-actions__note" data-test="no-scope">
       {{ $i('assistant_inbox_noScope') }}
@@ -71,16 +90,17 @@
              applied and cannot be approved again." So the only honest affordance is composing a
              NEW ask, and that is what this offers.
 
-             ⚠️ AND THE REASON IS NOT AVAILABLE. `StagedAction.FailureReason` exists on the ENTITY
-             and is written by `StagedActionService` on the way to `Failed`, but it is not a member
-             of `StagedActionModel` and therefore reaches no response body. Saying "we don't know
-             why" is the truth; inventing a cause, or leaving a blank that reads as "no reason",
-             would not be. -->
+             ⚠️ THE REASON MAY OR MAY NOT BE ON THE WIRE. `StagedAction.FailureReason` exists on the
+             ENTITY and is written by `StagedActionService` on the way to `Failed`; a backend lane is
+             landing it on `StagedActionModel` now. Until it arrives this admits it does not know —
+             saying "we don't know why" is the truth, and a blank that reads as "no reason" is not.
+             The moment the field is on the wire the card below renders it (`cardFor` lays it over
+             the frozen detail card) and this line stops claiming ignorance. -->
         <div v-if="isFailed(row)" class="pending-actions__failed" data-test="failed-repair">
           <p class="pending-actions__failed-line">
             {{ $i('assistant_inbox_failedTitle') }}
           </p>
-          <p class="pending-actions__failed-reason">
+          <p v-if="!failureReasonOf(row)" class="pending-actions__failed-reason">
             {{ $i('assistant_inbox_failedReasonUnavailable') }}
           </p>
           <button
@@ -136,6 +156,12 @@ export default {
     busyId: null,
     conflict: null,
     conflictId: null,
+    // WHAT THE LAST DECISION DID: `{ message, detail, tone }` or null. Separate from `failure`, which
+    // is strictly the READ failure and which the template renders INSTEAD of the list — a decision
+    // outcome routed through `failure` would hide the very inbox the merchant just acted on. Held as
+    // resolved prose rather than a key because it can carry the server's own sentence as well as a
+    // translated one, which is the same shape the house toasts store (`growth-newsletter.vue`).
+    decision: null,
     timer: null,
     // id → the `card` half of `GET /staged-actions/{id}`. The list row alone carries only
     // `DryRunDiff`, `ChangeSet` and `AffectedCount`; the detail read adds the title, the plain
@@ -163,6 +189,8 @@ export default {
   },
   watch: {
     storeIds () {
+      // The outcome of a decision made against a different scope is not an outcome of this one.
+      this.decision = null;
       this.load();
     }
   },
@@ -203,11 +231,20 @@ export default {
       return Object.assign({}, card, {
         Id: this.idOf(row),
         Origin: pick(row, 'origin'),
-        StoreId: pick(row, 'storeId')
+        StoreId: pick(row, 'storeId'),
+        // Laid over for the same reason as the three above: it is a property of the LIVE row and the
+        // frozen card cannot carry it — a card stamped at stage time has by definition not failed
+        // yet. `pick` returns undefined when the backend does not send it, so the overlay is inert
+        // until the field lands rather than stamping a blank over anything.
+        FailureReason: pick(row, 'failureReason')
       });
     },
     isFailed (row) {
       return String(this.statusOf(row) || '').toLowerCase() === FAILED.toLowerCase();
+    },
+    /** The server's account of why a row failed, when it sent one. Never invented, never blank. */
+    failureReasonOf (row) {
+      return pick(row, 'failureReason') || null;
     },
     /**
      * Fetch the full card for rows this component has not seen before.
@@ -232,6 +269,7 @@ export default {
     },
     setStatus (value) {
       this.status = value;
+      this.decision = null;
       this.load();
     },
     // Clears before it sets. `beforeDestroy` holds ONE handle, so a second interval started over the
@@ -314,12 +352,20 @@ export default {
       this.busyId = id;
       this.conflict = null;
       this.conflictId = null;
+      this.decision = null;
       try {
         const result = await this.service.Approve(id);
         this.$emit('approved', result);
         await this.load();
+        // AFTER the reload, never before. `load()` opens by clearing `failure` and blanking `rows`,
+        // so anything said ahead of it lives for one microtask and is then erased by the very read
+        // it triggered. Every `this.decision =` in this component is on this side of an `await
+        // this.load()` for that reason.
+        this.say('ok', this.$i(pick(result, 'wasReplay')
+          ? 'assistant_card_approvedReplay'
+          : 'assistant_card_approved'));
       } catch (error) {
-        this.handleDecisionFailure(error, id);
+        await this.handleDecisionFailure(error, id);
       } finally {
         this.busyId = null;
       }
@@ -329,15 +375,21 @@ export default {
       this.busyId = id;
       this.conflict = null;
       this.conflictId = null;
+      this.decision = null;
       try {
         await this.service.Reject(id);
         this.$emit('rejected', id);
         await this.load();
+        this.say('ok', this.$i('assistant_card_rejected'));
       } catch (error) {
-        this.handleDecisionFailure(error, id);
+        await this.handleDecisionFailure(error, id);
       } finally {
         this.busyId = null;
       }
+    },
+    /** Record the outcome of a decision. See the `decision` field and the banner in the template. */
+    say (tone, message, detail) {
+      this.decision = { tone, message, detail: detail || null };
     },
     async handleDecisionFailure (error, id) {
       const conflict = describeConflict(error);
@@ -347,10 +399,16 @@ export default {
         // Re-read either way. A kill-switch refusal leaves the row Staged and it must stay on the
         // board; every other 409 has already moved it and the board must stop offering it.
         await this.load();
+        // And say so ABOVE the list, not only on the row — because for every 409 except the kill
+        // switch the re-read above has just removed that row from the default `Staged` filter, so
+        // the per-row binding matches nothing and the refusal would be rendered nowhere.
+        this.say('refused', this.$i(conflict.key), conflict.serverMessage);
         return;
       }
-      this.failure = this.messageFor(error);
+      // NOT `this.failure`: that is the read-failure slot and the template renders it INSTEAD of the
+      // list, so a failed decision would blank an inbox that is perfectly readable.
       await this.load();
+      this.say('refused', this.messageFor(error));
     }
   }
 };
@@ -420,6 +478,33 @@ export default {
   border-left: 4px solid #ef4444;
   border-radius: 8px;
   margin: 0;
+}
+
+.pending-actions__decision {
+  font-size: 0.95em;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border-left: 4px solid;
+  margin: 0 0 16px 0;
+
+  &.is-ok { background: #e8f7f1; border-left-color: #1bb776; }
+  &.is-refused { background: #FEF2F2; border-left-color: #ef4444; }
+}
+
+.pending-actions__decision-line {
+  display: block;
+  font-weight: 600;
+  color: #292c34;
+}
+
+/* The server's own English sentence, marked as the server's by being set apart from the translated
+   line above it. Shown verbatim and never parsed. */
+.pending-actions__decision-detail {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.9em;
+  color: #64748b;
+  font-style: italic;
 }
 
 .pending-actions__row { margin-bottom: 8px; }

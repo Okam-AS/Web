@@ -195,8 +195,9 @@ export default {
   name: 'ProposalCardView',
   props: {
     // The card as it arrives from `/chat/ask` (`Cards[i]`) OR a `StagedActionModel` row from
-    // `GET /staged-actions`. Both are read through `pick`, which is case-tolerant, because the two
-    // routes disagree about casing and the components must not have to know which one they got.
+    // `GET /staged-actions`. Both are read through `pick`, whose job here is the NULL rule: the two
+    // routes agree on casing (both camelCase) and disagree on nulls — Newtonsoft writes the ones
+    // System.Text.Json omits — so a field this card treats as absent may arrive either way.
     card: {
       type: Object,
       required: true

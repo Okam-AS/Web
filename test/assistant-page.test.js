@@ -288,6 +288,14 @@ describe('the basis drawer', () => {
 })
 
 // ── DECIDING ON A CARD ───────────────────────────────────────────────────────────────────────────
+//
+// ⚠️ THESE ASSERT THE DOM, NOT THE VIEW MODEL, AND THAT DISTINCTION IS THE WHOLE LESSON HERE.
+// An earlier version of this file checked `thread[0].decided` and `thread[0].cards` and was green
+// while the screen said NOTHING: the cards container was gated on `v-if="turn.cards.length"` and
+// deciding clears `cards`, so the container — and the confirmation line inside it — unrendered at the
+// exact moment there was something to confirm. A merchant approved two hundred price changes and
+// watched the card vanish in silence. The state was right; the screen was empty. Only a query
+// against rendered output can see that, so every assertion below goes through `find`.
 describe('approving and rejecting from the thread', () => {
   const staged = {
     Answer: 'Jeg har forberedt en prisendring.',
@@ -362,6 +370,112 @@ describe('approving and rejecting from the thread', () => {
 
     expect(wrapper.vm.thread[0].cards).toEqual([])
     expect(wrapper.vm.thread[0].conflict.key).toBe('assistant_conflict_unresolvable')
+  })
+
+  // ── WHAT THE MERCHANT ACTUALLY SEES ────────────────────────────────────────────────────────────
+  // Each of the three below fails against a container gated on `cards.length` alone.
+  async function decide (wrapper, method) {
+    await wrapper.vm[method](wrapper.vm.thread[0], 'p-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+  }
+
+  test('an approved card leaves a confirmation ON SCREEN, not just in the view model', async () => {
+    script.ask = () => Promise.resolve(staged)
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'øk prisene' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onApprove')
+
+    const decided = wrapper.find('[data-test="decided"]')
+    expect(decided.exists()).toBe(true)
+    expect(decided.text()).toBe('assistant_card_approved')
+    // The card is gone and the confirmation is not: the container outlives its cards.
+    expect(wrapper.find('proposalcardview-stub').exists()).toBe(false)
+  })
+
+  test('a rejected card says so on screen too', async () => {
+    script.ask = () => Promise.resolve(staged)
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onReject')
+
+    expect(wrapper.find('[data-test="decided"]').text()).toBe('assistant_card_rejected')
+  })
+
+  // The worst of the three: `applyDecisionFailure` sets the conflict and clears the cards, and the
+  // conflict used to render only INSIDE a card that no longer existed. Approving an expired proposal
+  // said nothing at all.
+  test('an unresolvable 409 renders the refusal and the server’s own words', async () => {
+    script.ask = () => Promise.resolve(staged)
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This proposal is already live and cannot be turned down.'
+    }))
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onApprove')
+
+    const conflict = wrapper.find('[data-test="conflict"]')
+    expect(conflict.exists()).toBe(true)
+    expect(conflict.text()).toContain('assistant_conflict_unresolvable')
+    // The server's sentence is the ONLY account of what really happened to the proposal, and the
+    // translated line above it now promises the reader it is here. It has to be.
+    expect(conflict.text()).toContain('This proposal is already live and cannot be turned down.')
+  })
+
+  // The kill switch keeps its card AND explains itself — the two are not alternatives.
+  test('a kill-switch refusal renders beside the card it kept', async () => {
+    script.ask = () => Promise.resolve(staged)
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This kind of change is switched off for this store…', code: CONFLICT_KIND_DISABLED
+    }))
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    await decide(wrapper, 'onApprove')
+
+    expect(wrapper.find('proposalcardview-stub').exists()).toBe(true)
+    expect(wrapper.find('[data-test="conflict"]').text()).toContain('assistant_conflict_kindDisabled')
+  })
+
+  // The live wire is camelCase (see `utils/assistant/api-client.js`). The fixtures above are
+  // PascalCase because they were written against a false reading of the wire; they still pass
+  // because `pick` is case-tolerant, which is exactly why the mistake survived. This one uses the
+  // casing the server actually sends, so the whole path is proven against the real shape at least
+  // once.
+  test('the same journey works on the casing the server actually sends', async () => {
+    script.ask = () => Promise.resolve({
+      answer: 'Jeg har forberedt en prisendring.',
+      status: 'proposal_staged',
+      storeIds: [1],
+      cards: [{ proposalId: 'p-1', title: 'Prisøkning', affectedCount: 3, changeSet: null }]
+    })
+    const wrapper = mountPage()
+    await settled()
+    wrapper.setData({ draft: 'q' })
+    wrapper.vm.submit()
+    await settled()
+
+    expect(wrapper.find('[data-test="answer"]').text()).toBe('Jeg har forberedt en prisendring.')
+    expect(wrapper.find('proposalcardview-stub').exists()).toBe(true)
+
+    await decide(wrapper, 'onApprove')
+
+    expect(wrapper.find('[data-test="decided"]').text()).toBe('assistant_card_approved')
   })
 })
 

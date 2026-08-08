@@ -129,17 +129,51 @@
                   </div>
                 </div>
 
-                <!-- Staged proposals, inline ------------------------------------------------- -->
-                <div v-if="turn.cards.length" class="assistant-cards" data-test="cards">
+                <!-- ── STAGED PROPOSALS, AND WHAT BECAME OF THEM ───────────────────────────────
+                     ⚠️ THE CONTAINER IS GATED ON THE OUTCOME AS WELL AS THE CARDS, AND THAT IS THE
+                     WHOLE POINT OF THIS BLOCK. Deciding CLEARS `turn.cards` — approve, reject and
+                     every non-kill-switch 409 all do — so a container gated on `cards.length` alone
+                     unrenders itself at the exact moment it has something to say, taking the
+                     confirmation down with the card it confirms. A merchant approved two hundred
+                     price changes and watched the card vanish in silence.
+
+                     The decided line and the conflict are rendered OUTSIDE the `v-for` because they
+                     belong to the TURN, not to any one card: a turn-level sentence repeated once per
+                     card would be N copies of it, and after a decision there are no cards left to
+                     repeat it into at all. -->
+                <div
+                  v-if="turn.cards.length || turn.decided || turn.conflict"
+                  class="assistant-cards"
+                  data-test="cards"
+                >
                   <ProposalCardView
                     v-for="card in turn.cards"
                     :key="card.ProposalId || card.proposalId"
                     :card="card"
                     :busy="busy"
-                    :conflict="turn.conflict"
                     @approve="onApprove(turn, $event)"
                     @reject="onReject(turn, $event)"
                   />
+
+                  <!-- A refusal. `serverMessage` is ALWAYS present — `AssistantApiError` falls back
+                       to "HTTP 409" when a body carries no message — so the translated line may
+                       safely promise that the server's own words are below it. They are shown
+                       verbatim and never parsed: matching on server prose is how a client silently
+                       stops recognising a case the day somebody rewords it. -->
+                  <div
+                    v-if="turn.conflict"
+                    class="assistant-cards__conflict"
+                    :class="{ 'is-recoverable': turn.conflict.keepCard }"
+                    data-test="conflict"
+                  >
+                    <p class="assistant-cards__conflict-line">
+                      {{ $i(turn.conflict.key) }}
+                    </p>
+                    <p v-if="turn.conflict.serverMessage" class="assistant-cards__conflict-server">
+                      {{ turn.conflict.serverMessage }}
+                    </p>
+                  </div>
+
                   <p v-if="turn.decided" class="assistant-cards__decided" data-test="decided">
                     {{ turn.decided }}
                   </p>
@@ -353,9 +387,16 @@ export default {
       const handoff = Array.isArray(query.q) ? query.q[0] : query.q;
 
       // An explicit selection ALWAYS wins, including this one. It is still intersected with the
-      // stores this admin actually administers, because a store id in a URL is not a grant — the
-      // server re-checks it too, and a scope naming a store they do not administer is refused
-      // wholesale rather than quietly narrowed.
+      // stores this admin actually administers, because a store id in a URL is not a grant.
+      //
+      // WHAT THIS DOES WITH A SCOPE IT CANNOT HONOUR, precisely: it NARROWS to the intersection when
+      // one exists (`?stores=1,99` for an admin of 1 and 2 selects store 1), and IGNORES the query
+      // entirely when the intersection is empty (`?stores=99` leaves the default full selection
+      // standing). Ignoring rather than selecting nothing is deliberate — an empty selection is sent
+      // as `null`, which asks for every store, so "narrow to nothing" would silently WIDEN the
+      // question. The server applies its own StoreAdmins intersection to whatever arrives; this is
+      // the client refusing to put a store the operator does not hold into its own state, not an
+      // authorisation check.
       const scope = Array.isArray(query.stores) ? query.stores[0] : query.stores;
       if (typeof scope === 'string' && scope) {
         const asked = scope.split(',').map(id => parseInt(id, 10)).filter(id => !isNaN(id));
@@ -786,6 +827,27 @@ export default {
 }
 
 .assistant-cards { margin-bottom: 16px; }
+
+.assistant-cards__conflict {
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: #FEF2F2;
+  border-left: 4px solid #ef4444;
+  border-radius: 8px;
+
+  /* The kill switch is the one refusal a later retry can clear with the merchant doing nothing, so
+     it is coloured as a wait rather than as a wall. */
+  &.is-recoverable {
+    background: #FFF3E0;
+    border-left-color: #FF9800;
+  }
+
+  p { margin: 0 0 6px 0; font-size: 0.9em; }
+  p:last-child { margin-bottom: 0; }
+}
+
+.assistant-cards__conflict-line { font-weight: 600; color: #292c34; }
+.assistant-cards__conflict-server { color: #64748b; font-style: italic; }
 
 .assistant-cards__decided {
   margin: 0;

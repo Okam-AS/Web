@@ -3,14 +3,17 @@ import AIQueryBox from '~/components/admin/statistics/AIQueryBox.vue'
 
 // The box on the statistics board no longer answers — it hands over to `/admin/assistant`.
 //
-// It used to call `_aiService.AskQuestion(query, storeIds, 'no')` and render `result.answer`, and
-// that was broken in a way nothing caught: the API preserves C# PascalCase (Newtonsoft, no contract
-// resolver), so the successful body carries `Answer` and `result.answer` was ALWAYS `undefined`.
-// The component therefore took its `else` branch on every successful turn and displayed
-// "Kunne ikke få svar fra AI" for answers it had actually received. The hard-coded `'no'` was the
-// second defect: an English or German operator was answered in Norwegian whatever the sidebar said.
+// It used to call `_aiService.AskQuestion(query, storeIds, 'no')` and render `result.answer`.
 //
-// Both die with the call. These tests pin the replacement so neither can come back.
+// ⚠️ `result.answer` WAS CORRECT. An earlier version of this note claimed the wire preserves C#
+// PascalCase and that the box therefore showed "Kunne ikke få svar fra AI" for every answer it
+// received. That was false. `AddNewtonsoftJson` with no explicit resolver still gets a
+// `CamelCaseNamingStrategy` from `JsonSerializerSettingsProvider.CreateSerializerSettings()`, which
+// is what renders the name; `WebApi.Tests/Wire/GrowthConsentAdminWireTests.cs` pins camelCase
+// against a live host. The measurement is recorded in `utils/assistant/api-client.js`.
+//
+// The REAL defect was the hard-coded `'no'`: an English or German operator was answered in Norwegian
+// whatever the sidebar said. It dies with the call, and these tests pin the replacement.
 describe('AIQueryBox hands the question over', () => {
   function mountBox (selectedStoreIds) {
     const pushed = []

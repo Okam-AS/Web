@@ -16,9 +16,11 @@
 //                    surface as their internal-control system, which it is not.
 //   IK-mat           The food-safety internal-control system specifically. Same failure, narrower and
 //                    worse: it names a regime with inspection consequences.
-//   compliant        An English claim of conformance with an unnamed standard. It is unfalsifiable as
-//                    written, so it can only mislead. (Also catches "compliance" — see the note on
-//                    substring matching below.)
+//   complian         An English claim of conformance with an unnamed standard. It is unfalsifiable as
+//                    written, so it can only mislead. Matched as the STEM, so it catches "compliant"
+//                    and "compliance" alike — the noun makes the same claim as the adjective, and
+//                    `'compliance'.includes('compliant')` is FALSE, so a list holding the adjective
+//                    would have waved the noun straight through.
 //   lovlig           "Lawful". The assistant cannot rule on legality, and the merchant must never read
 //                    a proposal card as legal advice. Matched as a substring ON PURPOSE, so it also
 //                    catches "ulovlig" ("unlawful") — a claim in the other direction is the same
@@ -64,7 +66,7 @@ const PREFIX = 'assistant_';
 const FORBIDDEN = [
   { word: 'internkontroll', why: 'names the statutory internal-control regime; Okam operates no part of it' },
   { word: 'ik-mat', why: 'names the food-safety internal-control system, which this surface is not' },
-  { word: 'compliant', why: 'claims conformance with an unnamed standard; unfalsifiable as written' },
+  { word: 'complian', why: 'claims conformance with an unnamed standard (matches "compliant" and "compliance"); unfalsifiable as written' },
   { word: 'lovlig', why: 'claims a ruling on legality (also matches "ulovlig")' }
 ];
 

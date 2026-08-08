@@ -148,10 +148,13 @@ Go to `/admin/statistics`, narrow the store filter, and type a question into the
 It no longer answers there — it **hands over** to `/admin/assistant`, carrying both the question and
 the store scope you had already narrowed to. Back returns you to the board.
 
-That box used to answer in place, and it was broken: it read `result.answer` (lower case) off a
-**PascalCase** wire, so it showed *"Kunne ikke få svar fra AI"* for every answer it successfully
-received, and it hard-coded `'no'` so an English or German operator got Norwegian regardless. Both
-are gone with the call.
+That box used to answer in place, and it hard-coded `'no'` — so an English or German operator got
+Norwegian regardless of the locale they had chosen. That is gone with the call.
+
+> **Correction.** An earlier draft of this runbook also claimed the box read `result.answer` off a
+> **PascalCase** wire and so showed *"Kunne ikke få svar fra AI"* for every successful answer. That
+> was wrong: the wire is **camelCase** and `result.answer` was correct. The measurement is in the
+> header of `utils/assistant/api-client.js`.
 
 ---
 

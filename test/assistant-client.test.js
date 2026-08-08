@@ -11,8 +11,8 @@ import {
 } from '~/utils/assistant/api-client'
 
 // Route-for-route with `ChatController` and `StagedActionController` on `feature/ask-okam`
-// @ b4f8fa817. These assert the wire contract: the exact paths, the request body's PascalCase
-// members, and the two DIFFERENT casings the two routes answer in.
+// @ b4f8fa817. These assert the wire contract: the exact paths, the request body's members, and the
+// way `pick` reads a response.
 describe('AssistantService', () => {
   const originalFetch = global.fetch
   const ID = '11111111-1111-1111-1111-111111111111'
@@ -30,7 +30,11 @@ describe('AssistantService', () => {
   afterEach(() => { global.fetch = originalFetch })
 
   describe('POST /chat/ask', () => {
-    test('the body is PascalCase, because the API preserves C# property names', async () => {
+    // The REQUEST body is PascalCase and that is a free choice, not a consequence of the wire's
+    // casing: Newtonsoft matches an incoming member to a C# property by exact name FIRST and
+    // case-insensitively after, so `Question` and `question` both bind `ChatRequestModel.Question`.
+    // Sent as the C# spelling because that is what the model declares.
+    test('the request body names the model’s own members', async () => {
       respondWith(200, { Answer: 'x' })
       await service().Ask('hvor mye solgte vi?', [7], 'no')
 
@@ -119,17 +123,25 @@ describe('AssistantService', () => {
   })
 })
 
-// ── THE CASING SEAM ──────────────────────────────────────────────────────────────────────────────
-// `ProposalCardModel` is serialised camelCase + omit-nulls over MCP (System.Text.Json) and
-// PascalCase + write-nulls over these two routes (Newtonsoft, which ignores the STJ `[JsonIgnore]`
-// attributes on the model entirely). Both shapes therefore reach a client, and neither is wrong.
-describe('pick — the two casings and the two spellings of absent', () => {
-  test('reads PascalCase, which is what /chat/ask and /staged-actions actually send', () => {
-    expect(pick({ AffectedCount: 120 }, 'affectedCount')).toBe(120)
+// ── THE NULL SEAM (there is no casing seam) ──────────────────────────────────────────────────────
+// `ProposalCardModel` is serialised camelCase + omit-nulls over MCP (System.Text.Json's Web
+// defaults) and camelCase + WRITE-nulls over these two routes (Newtonsoft, which ignores the STJ
+// `[JsonIgnore(WhenWritingNull)]` attributes on the model entirely). Same names, opposite treatment
+// of absent — which is the half that actually reaches a renderer.
+describe('pick — the null rule, and the casing insurance', () => {
+  // camelCase is what every route this client calls actually sends. See the measurement in
+  // `utils/assistant/api-client.js`: `AddNewtonsoftJson` with no explicit resolver still receives a
+  // `CamelCaseNamingStrategy` from ASP.NET Core, and the naming strategy renders the name.
+  test('reads camelCase, which is what the wire sends', () => {
+    expect(pick({ proposalId: 'p1' }, 'proposalId')).toBe('p1')
+    expect(pick({ affectedCount: 120 }, 'affectedCount')).toBe(120)
   })
 
-  test('reads camelCase, which is what the approve/reject bodies and MCP send', () => {
-    expect(pick({ proposalId: 'p1' }, 'proposalId')).toBe('p1')
+  // INSURANCE, not a live contract. Nothing sends this today. It is one line against a failure that
+  // is silent and total — swapping the API's naming strategy would serve `AffectedCount` and leave
+  // every card on this surface reading nothing.
+  test('reads PascalCase too, so a resolver change cannot silently blank the page', () => {
+    expect(pick({ AffectedCount: 120 }, 'affectedCount')).toBe(120)
   })
 
   // Newtonsoft WRITES the nulls that System.Text.Json omits, so the same server state arrives as

@@ -276,8 +276,9 @@ describe('a Failed row', () => {
     wrapper.destroy()
   })
 
-  // `FailureReason` is written to the row and is NOT a member of any response model, so it reaches
-  // no wire. Saying "we don't know" is the truth; a blank would read as "no reason".
+  // `FailureReason` is written to the row on the way to `Failed`. It is not yet a member of any
+  // response model, so today it reaches no wire — and saying "we don't know" is the truth, where a
+  // blank would read as "no reason".
   test('says the reason is unavailable rather than leaving a blank', async () => {
     script.list = () => Promise.resolve([row({ Status: 'Failed' })])
     const wrapper = mountInbox([1])
@@ -285,6 +286,42 @@ describe('a Failed row', () => {
 
     expect(wrapper.find('[data-test="failed-repair"]').text())
       .toContain('assistant_inbox_failedReasonUnavailable')
+    wrapper.destroy()
+  })
+
+  // ── READY FOR THE BACKEND LANE IN FLIGHT ───────────────────────────────────────────────────────
+  // The day `FailureReason` lands on `StagedActionModel` this screen must stop claiming ignorance
+  // without anybody remembering to come back for it.
+  test('a reason on the wire is shown, and the "unavailable" line stands down', async () => {
+    script.list = () => Promise.resolve([row({
+      Status: 'Failed', FailureReason: 'Menu item 4471 was deleted before the change was applied.'
+    })])
+    const wrapper = mountInbox([1])
+    await settled()
+
+    expect(wrapper.find('[data-test="failed-repair"]').text())
+      .not.toContain('assistant_inbox_failedReasonUnavailable')
+    // It reaches the CARD, which is where a reason belongs — beside the change it describes.
+    expect(wrapper.vm.cardFor(wrapper.vm.rows[0]).FailureReason)
+      .toBe('Menu item 4471 was deleted before the change was applied.')
+    wrapper.destroy()
+  })
+
+  // The frozen detail card cannot carry it — a card stamped at stage time has by definition not
+  // failed yet — so the overlay is the only way the reason survives the merge.
+  test('the reason survives the detail-card merge', async () => {
+    script.list = () => Promise.resolve([row({ Status: 'Failed', FailureReason: 'Price floor refused the write.' })])
+    script.detail = id => Promise.resolve({
+      action: { Id: id, Status: 'Failed' },
+      card: { ProposalId: id, Title: 'Prisøkning', NeedsApproval: true }
+    })
+    const wrapper = mountInbox([1])
+    await settled()
+    await settled()
+
+    const card = wrapper.vm.cardFor(wrapper.vm.rows[0])
+    expect(card.Title).toBe('Prisøkning')
+    expect(card.FailureReason).toBe('Price floor refused the write.')
     wrapper.destroy()
   })
 
@@ -352,6 +389,139 @@ describe('approve and reject', () => {
     await wrapper.vm.onApprove('a-1')
 
     expect(calls).toEqual([])
+    wrapper.destroy()
+  })
+})
+
+// ── THE OUTCOME OUTLIVES THE RE-READ ─────────────────────────────────────────────────────────────
+//
+// ⚠️ THE ORDER OF TWO STATEMENTS WAS THE WHOLE BUG. `handleDecisionFailure` set the message and THEN
+// called `load()`, which opens by clearing `failure` and blanking `rows` — so the sentence lived for
+// one microtask and was erased by the read it had just triggered. Compounding it, a successful
+// approve said nothing at all, and a non-kill-switch 409 moves the row out of the default `Staged`
+// filter, so the per-row conflict binding matched nothing either. Three ways to be silent on the one
+// screen where silence is least affordable. These assert the DOM, because that is where the
+// silence was.
+describe('what the inbox says about a decision', () => {
+  /** A list that answers `first` once and `then` on every later read. */
+  function listThen (first, then) {
+    let served = false
+    return () => {
+      const answer = served ? then : first
+      served = true
+      return Promise.resolve(answer)
+    }
+  }
+
+  test('a successful approve is confirmed above the list, after the reload that follows it', async () => {
+    script.list = listThen([row()], [])
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    const decision = wrapper.find('[data-test="decision"]')
+    expect(decision.exists()).toBe(true)
+    expect(decision.text()).toContain('assistant_card_approved')
+    // The row is gone from the re-read and the confirmation is not.
+    expect(wrapper.vm.rows).toEqual([])
+    wrapper.destroy()
+  })
+
+  test('a replay says so rather than claiming a second change', async () => {
+    script.list = listThen([row()], [])
+    script.approve = () => Promise.resolve({ proposalId: 'a-1', status: 'executed', wasReplay: true })
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-test="decision"]').text()).toContain('assistant_card_approvedReplay')
+    wrapper.destroy()
+  })
+
+  test('a successful reject is confirmed too', async () => {
+    script.list = listThen([row()], [])
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onReject('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-test="decision"]').text()).toContain('assistant_card_rejected')
+    wrapper.destroy()
+  })
+
+  // The row leaves the board on this path, so the banner is the ONLY place the refusal can be said.
+  test('a 409 whose row the re-read drops still reports the refusal, with the server’s words', async () => {
+    script.list = listThen([row()], [])
+    script.approve = () => Promise.reject(new AssistantApiError(409, {
+      message: 'This proposal is already live and cannot be turned down.'
+    }))
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.rows).toEqual([])
+    const decision = wrapper.find('[data-test="decision"]')
+    expect(decision.text()).toContain('assistant_conflict_unresolvable')
+    expect(decision.text()).toContain('This proposal is already live and cannot be turned down.')
+    wrapper.destroy()
+  })
+
+  // `failure` is the READ-failure slot and the template renders it INSTEAD of the list. A failed
+  // decision routed through it would blank an inbox that is perfectly readable.
+  test('a non-409 refusal is reported without blanking the list', async () => {
+    script.list = () => Promise.resolve([row()])
+    script.approve = () => Promise.reject(new AssistantApiError(500, { message: 'boom' }))
+    const wrapper = mountInbox([1])
+    await settled()
+
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.find('[data-test="decision"]').text()).toContain('boom')
+    expect(wrapper.vm.failure).toBe('')
+    expect(wrapper.find('[data-test="failure"]').exists()).toBe(false)
+    expect(wrapper.findAll('proposalcardview-stub').length).toBe(1)
+    wrapper.destroy()
+  })
+
+  test('the outcome of a decision made under a different filter is not kept', async () => {
+    script.list = listThen([row()], [])
+    const wrapper = mountInbox([1])
+    await settled()
+    await wrapper.vm.onApprove('a-1')
+    await settled()
+    expect(wrapper.vm.decision).not.toBeNull()
+
+    wrapper.vm.setStatus(null)
+    await settled()
+
+    expect(wrapper.vm.decision).toBeNull()
+    wrapper.destroy()
+  })
+
+  // A bare method reference in `@click` receives the EVENT as its first argument, which `load` reads
+  // as `quiet` — so this button used to run the silent poll path and could never show its own label.
+  test('the refresh button runs a LOUD read, not the poll path', async () => {
+    script.list = () => new Promise(() => {})
+    const wrapper = mountInbox([1])
+    await settled()
+
+    wrapper.find('[data-test="refresh"]').trigger('click')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.loading).toBe(true)
     wrapper.destroy()
   })
 })

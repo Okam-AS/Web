@@ -15,31 +15,57 @@
 //     this repo (this checkout did not carry the pinned `a6ae241` at all). That is a cross-repo
 //     landing for a file this lane could simply not touch.
 //
-// THE LIVE DEFECT THIS FILE ROUTES AROUND. `components/admin/statistics/AIQueryBox.vue` reads
-// `result.answer` — lower case. The API serialises with Newtonsoft and registers NO contract
-// resolver (`Helpers/ServiceCollectionExtensions.cs:167-171` adds only `StringEnumConverter` and
-// `ReferenceLoopHandling`), and ASP.NET Core's Newtonsoft default is `DefaultContractResolver`,
-// which preserves PascalCase. `ChatAskResponseModel.Answer` therefore arrives as `Answer`, and
-// `RequestService.TryParseResponse` hands the body through untouched (`response.data`, no key
-// rewriting). So `result.answer` is `undefined` on every successful turn and that box has been
-// showing "Kunne ikke få svar fra AI" for answers it actually received.
+// ── THE WIRE IS camelCase. THERE IS NO CASING SEAM; THERE IS A NULL SEAM. ──────────────────────
 //
-// ── THE CASING SEAM, which is the reason `pick` exists ─────────────────────────────────────────
+// ⚠️ THIS BLOCK ONCE SAID THE OPPOSITE, CONFIDENTLY AND WRONGLY, so the measurement is recorded
+// here rather than the conclusion alone. `Helpers/ServiceCollectionExtensions.cs:154-173` calls
+// `AddNewtonsoftJson` and adds only `StringEnumConverter` and `ReferenceLoopHandling` — it registers
+// NO contract resolver, which is true and is where the wrong inference started. Reading that as
+// PascalCase is the trap: ASP.NET Core does not leave the settings bare. `JsonSerializerSettingsProvider
+// .CreateSerializerSettings()` builds a `DefaultContractResolver` AND HANDS IT A
+// `CamelCaseNamingStrategy`. Resolving `IOptions<MvcNewtonsoftJsonOptions>` out of that exact
+// pipeline (Microsoft.AspNetCore.Mvc.NewtonsoftJson 8.0.11) measures:
 //
-// `ProposalCardModel` and `StagedActionModel` are serialised by TWO different pipelines:
+//     ContractResolver   Newtonsoft.Json.Serialization.DefaultContractResolver
+//     NamingStrategy     Newtonsoft.Json.Serialization.CamelCaseNamingStrategy   ← renders the name
+//     NullValueHandling  Include
 //
-//   • over MCP, by the MCP SDK's System.Text.Json Web defaults      → camelCase, nulls OMITTED
-//   • over `/chat/ask` and `/staged-actions`, by MVC's Newtonsoft   → PascalCase, nulls WRITTEN
+// The resolver TYPE is the PascalCase one; the naming strategy ON it is camelCase, and the naming
+// strategy is what writes the property name. So `ChatAskResponseModel.Answer` goes out as `answer`.
 //
-// The `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]` attributes on those models
-// are `System.Text.Json.Serialization` attributes (see the `using` at the top of
-// `Mcp/Models/McpStagingModels.cs`). Newtonsoft does not honour them — it has its own `JsonIgnore`
-// with no `Condition` — so over the two routes this client calls, the optional members arrive
-// PRESENT AND NULL rather than absent.
+// Three independent witnesses, none of them an inference:
 //
-// Both facts are load-bearing and neither is visible in the DTO. Reading a field case-insensitively
-// and treating `null` as "absent" is therefore not defensive clutter; it is the actual contract of
-// these two routes, and `test/assistant-client.test.js` pins both directions.
+//   • `WebApi.Tests/Wire/GrowthConsentAdminWireTests.cs:228-232` reads a LIVE host response with
+//     case-sensitive `GetProperty("dueAt")` and asserts `TryProperty("DueAt")` is FALSE. It passes.
+//   • `docs/api/README.md:43-46` states it as law: "The wire is camelCase."
+//   • `WebApi.Tests/Meals/MealsContractFixtureTests.cs` rebuilds this pipeline verbatim and its
+//     committed goldens under `docs/api/fixtures/` are camelCase.
+//
+// `ChatAskResponseModel` carries ZERO serialization attributes and both controllers return
+// `Ok(model)` through the ordinary MVC formatter — no `JsonConvert.SerializeObject`, no `Content(…)`,
+// no custom output formatter — so nothing bypasses the above.
+//
+// WHAT IS ACTUALLY TWO-VALUED IS NULLS, and that half matters. `ProposalCardModel` carries eight
+// `[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]` attributes, and the `using` at the
+// top of `Mcp/Models/McpStagingModels.cs` is `System.Text.Json.Serialization`. Newtonsoft honours
+// only its OWN `JsonIgnore`, which has no `Condition`, so:
+//
+//   • over MCP, by System.Text.Json's `JsonSerializerDefaults.Web`   → camelCase, nulls OMITTED
+//   • over `/chat/ask` and `/staged-actions`, by MVC's Newtonsoft    → camelCase, nulls WRITTEN
+//
+// Same casing, opposite null handling. `pick` treating `null` and absent as ONE answer is therefore
+// load-bearing: without it the same server state renders as "empty" from one pipeline and "absent"
+// from the other.
+//
+// WHY `pick` STILL READS BOTH CASINGS, stated honestly as insurance rather than as a live contract:
+// nothing this client calls sends PascalCase today. It is one line, and the failure it covers is
+// silent and total — `GrowthConsentAdminWireTests`' own comment names it: "a contract resolver
+// reverted to Newtonsoft's default would serve `DueAt` and leave the page reading nothing." A
+// resolver swap is a one-line change in a file this lane does not own.
+//
+// KNOWN GAP: no test anywhere pins the casing of `/chat/ask` ITSELF. The mechanism above is shared
+// and proven, but the route has no wire test of its own — the exact gap `GrowthConsentAdminWireTests`
+// was written to close for Growth. Worth closing on the backend side.
 
 import getEnv from '~/env';
 
@@ -114,10 +140,16 @@ export const EXECUTING = 'Executing';
 export const FAILED = 'Failed';
 
 /**
- * Read one logical field off a body that may be PascalCase or camelCase (see the casing seam at the
- * top). `null` and `undefined` are the SAME answer — absent — because Newtonsoft writes the nulls
- * that System.Text.Json omits, and a caller that distinguished them would render "empty" for one
- * pipeline and "absent" for the other from identical server state.
+ * Read one logical field off a response body.
+ *
+ * THE NULL RULE IS THE LOAD-BEARING HALF. `null` and `undefined` are the SAME answer — absent —
+ * because Newtonsoft WRITES the nulls that System.Text.Json omits (see the null seam at the top), so
+ * a caller that distinguished them would render "empty" for one pipeline and "absent" for the other
+ * from identical server state.
+ *
+ * The case tolerance is INSURANCE, not a live contract: every route this client calls answers
+ * camelCase today. It costs one line and covers a failure that is silent and total if the API's
+ * naming strategy is ever changed out from under this page.
  */
 export function pick (source, name) {
   if (!source || !name) { return undefined; }
