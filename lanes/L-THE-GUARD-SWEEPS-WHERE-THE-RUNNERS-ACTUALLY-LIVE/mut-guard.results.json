@@ -1,0 +1,229 @@
+{
+  "baseline": {
+    "test/mutation-runner-restore.test.js": {
+      "total": 23,
+      "namesAvailable": true,
+      "baselineRed": [],
+      "neverReddened": [
+        "the runner is built the way this defect requires ships the buffer restore, and the historical one still swaps cleanly into it",
+        "the runner is built the way this defect requires invokes git nowhere at all",
+        "the runner is built the way this defect requires keeps the verify-after-restore assertion",
+        "a mutation run over a lane's uncommitted work gives the lane its uncommitted edits back, byte for byte",
+        "a mutation run over a lane's uncommitted work is DESTROYED by the git-checkout restore — the defect, reproduced",
+        "a mutation run over a lane's uncommitted work leaves a clean tree exactly as it found it",
+        "a mutation run over a lane's uncommitted work restores between every mutation, not only at the end",
+        "a mutation run over a lane's uncommitted work puts the file back even when the suite command dies after the baseline",
+        "a mutation run over a lane's uncommitted work refuses to certify anything from a command that exits 0 having run nothing",
+        "a mutation run over a lane's uncommitted work refuses to certify anything from a command that exits 1 having run nothing",
+        "a mutation run over a lane's uncommitted work judges a suite that is not jest, from the counts it reports",
+        "a mutation run over a lane's uncommitted work never writes a file the spec did not name",
+        "a mutation run over a lane's uncommitted work reports an anchor it cannot place instead of counting it as a pass",
+        "a mutation run over a lane's uncommitted work writes its results beside the spec that asked for them",
+        "a mutation run over a lane's uncommitted work finds the same repository root from any depth a copier puts it at"
+      ]
+    }
+  },
+  "killedBy": {
+    "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: comment stripping is dropped",
+      "driver: run-browser-arm.sh goes back to restoring from git",
+      "guard: a python docstring stops counting as prose"
+    ],
+    "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: comment stripping is dropped",
+      "guard: the git-checkout pattern stops being an offence",
+      "driver: run-browser-arm.sh goes back to restoring from git",
+      "guard: a python docstring stops counting as prose"
+    ],
+    "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: the mutat-in-the-filename narrowing comes back",
+      "guard: the git-checkout pattern stops being an offence"
+    ],
+    "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: comment stripping is dropped",
+      "driver: run-browser-arm.sh goes back to restoring from git",
+      "guard: a python docstring stops counting as prose"
+    ],
+    "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: the git-checkout pattern stops being an offence",
+      "guard: quoted arguments are stripped like prose"
+    ],
+    "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: the git-checkout pattern stops being an offence",
+      "guard: every triple-quoted region is stripped, not just docstrings",
+      "guard: quoted arguments are stripped like prose"
+    ],
+    "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: comment stripping is dropped",
+      "driver: run-browser-arm.sh goes back to restoring from git",
+      "guard: a python docstring stops counting as prose",
+      "guard: block comments stop counting as prose"
+    ],
+    "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment": [
+      "guard: the repo-root lanes/ root is taken back out",
+      "guard: comment stripping is dropped",
+      "driver: run-browser-arm.sh goes back to restoring from git",
+      "guard: a python docstring stops counting as prose"
+    ]
+  },
+  "mutations": [
+    {
+      "name": "guard: the repo-root lanes/ root is taken back out",
+      "outcome": "RED",
+      "reddened": 8,
+      "newlyRed": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument",
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment",
+        "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation"
+      ],
+      "failedNow": 8,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: the mutat-in-the-filename narrowing comes back",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation"
+      ],
+      "failedNow": 1,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: comment stripping is dropped",
+      "outcome": "RED",
+      "reddened": 5,
+      "newlyRed": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring",
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment",
+        "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring"
+      ],
+      "failedNow": 5,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: the git-checkout pattern stops being an offence",
+      "outcome": "RED",
+      "reddened": 4,
+      "newlyRed": [
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git names a broken driver whose filename says nothing about mutation",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument"
+      ],
+      "failedNow": 4,
+      "failedBefore": 0
+    },
+    {
+      "name": "driver: run-browser-arm.sh goes back to restoring from git",
+      "outcome": "RED",
+      "reddened": 5,
+      "newlyRed": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring",
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment",
+        "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring"
+      ],
+      "failedNow": 5,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: a python docstring stops counting as prose",
+      "outcome": "RED",
+      "reddened": 5,
+      "newlyRed": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring",
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment",
+        "no script in the tree restores a source file from git does not accuse a script that only names git checkout in a comment"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git sweeps every script in the tree, and always has at least one to sweep",
+        "no script in the tree restores a source file from git names a broken copy placed under repo-root lanes/, and goes quiet when it is removed",
+        "no script in the tree restores a source file from git does not accuse a python driver that names git checkout only in its docstring"
+      ],
+      "failedNow": 5,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: every triple-quoted region is stripped, not just docstrings",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument"
+      ],
+      "failedNow": 1,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: quoted arguments are stripped like prose",
+      "outcome": "RED",
+      "reddened": 2,
+      "newlyRed": [
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a single-quoted argument",
+        "no script in the tree restores a source file from git still accuses an executed restore passed as a triple-quoted argument"
+      ],
+      "failedNow": 2,
+      "failedBefore": 0
+    },
+    {
+      "name": "guard: block comments stop counting as prose",
+      "outcome": "RED",
+      "reddened": 1,
+      "newlyRed": [
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment"
+      ],
+      "first": [
+        "no script in the tree restores a source file from git does not accuse a driver that names git checkout only in a block comment"
+      ],
+      "failedNow": 1,
+      "failedBefore": 0
+    }
+  ]
+}
