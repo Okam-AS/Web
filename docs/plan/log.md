@@ -4160,3 +4160,28 @@
 - 2026-08-08T16:08Z · agent:L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE · L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE returned built -> built-unverified, evidence docs/plan/artifacts/two-hundred-and-six-exits.md
 - 2026-08-08T16:08Z · agent:L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE · report L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE: 177 ACCEPTED by the tool, 0 still refused after an edit, 8 left alone as genuine disagreements, 21 left alone because the artifact is committed nowhere. 177+0+8+21 = the 206. Committed 40be8a2.; Lane verified 145 -> 322 and built-unverified 381 -> 205; the +177 is exactly this pass. No override, no 
 - 2026-08-08T16:08Z · @clerk · verified 57 -> 322 across two passes; built-unverified 469 -> 205, and no lane had a refusal reason move rather than clear
+- 2026-08-08T16:10Z · agent:L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED · started L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED
+- 2026-08-08T16:13Z · tool · L-FIXTURE-VOCABULARY-SWEEP built-unverified -> verified, evidence docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md
+- 2026-08-08T16:13Z · tool · L-FIXTURE-RENDERED-VALUES-FIX built-unverified -> verified, evidence docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md
+- 2026-08-08T16:13Z · tool · L-MEALS-ENROLMENT-HAS-A-BUTTON built-unverified -> verified, evidence docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png
+- 2026-08-08T16:13Z · tool · L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING built-unverified -> verified, evidence docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md
+- 2026-08-08T16:13Z · tool · L-EF-DECLARES-EVERY-TRIGGER built-unverified -> verified, evidence docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md
+- 2026-08-08T16:13Z · tool · L-SECRETS-READ-FROM-CONFIG built-unverified -> verified, evidence docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md
+- 2026-08-08T16:13Z · tool · L-CI-RUNS-THE-FAST-TIER built-unverified -> verified, evidence docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md
+- 2026-08-08T16:13Z · tool · L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT built-unverified -> verified, evidence docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch
+- 2026-08-08T16:13Z · tool · L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP built-unverified -> verified, evidence docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md
+- 2026-08-08T16:13Z · tool · L-LAND-THE-FRONTEND-ON-THE-TRUNK built-unverified -> verified, evidence lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md
+- 2026-08-08T16:13Z · tool · L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE built-unverified -> verified, evidence lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md
+- 2026-08-08T16:13Z · tool · L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS built-unverified -> verified, evidence docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md
+- 2026-08-08T16:13Z · tool · L-TRAIN-DEMO-SEED-COMPLETES built-unverified -> verified, evidence lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png
+- 2026-08-08T16:13Z · tool · L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK built-unverified -> verified, evidence docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md
+- 2026-08-08T16:13Z · tool · L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION built-unverified -> verified, evidence lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md
+- 2026-08-08T16:13Z · tool · L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK built-unverified -> verified, evidence lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt
+- 2026-08-08T16:13Z · tool · L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS built-unverified -> verified, evidence lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md
+- 2026-08-08T16:13Z · tool · L-THE-TESTED-WORK-REACHES-THE-TRUNK built-unverified -> verified, evidence docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md
+- 2026-08-08T16:13Z · tool · L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS built-unverified -> verified, evidence docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md
+- 2026-08-08T16:13Z · tool · L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN built-unverified -> verified, evidence docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md
+- 2026-08-08T16:16Z · agent:L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED · L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED returned built -> built-unverified, evidence docs/plan/artifacts/twenty-one-proofs-committed.md
+- 2026-08-08T16:16Z · agent:L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED · report L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED: COMMITTED AND ACCEPTED 20. COMMITTED BUT STILL REFUSED 0. UNRECOVERABLE 0. One left untouched by standing prohibition. Committed f80937d. Lane verified 322 -> 342.; NONE WERE LOST. The brief expected some of the four outside any repository to be gone; all four were still on disk in the session scrat
+- 2026-08-08T16:16Z · @clerk · 20 proofs committed and accepted, 0 unrecoverable; the committed-nowhere class was a recording failure, not destruction
+- 2026-08-08T16:17Z · agent:L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED · started L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED

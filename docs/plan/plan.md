@@ -23572,12 +23572,13 @@ body around it is authored text. **In zsh write `${ref}:path`.** **Two silent ig
 **Do not push.**
 
 ### Lane L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED — twenty-one proofs exist and live nowhere anyone else can read them
-state: running
+state: built-unverified
 class: node
 owner: agent
 dir: .
 exit: every artifact named by a built-unverified lane and currently committed nowhere is either committed and its lane accepted by plan verify, or recorded as unrecoverable with the reason, with the count of each stated
 agent: L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED
+evidence: docs/plan/artifacts/twenty-one-proofs-committed.md
 
 **The objective's bar is "an artifact a stranger can open", and twenty-one lanes fail it in the most
 avoidable way: the proof exists and is committed nowhere.** Measured with `git ls-files` rather than
@@ -23614,6 +23615,57 @@ disagreements rather than to this class.
 `git check-ignore -v` **before** assuming a plain `git add` worked, and verify with
 `git ls-files --error-unmatch` after. **In zsh write `${ref}:path`.** **Do not touch `web-livewalk`.** Do
 not create worktrees for this — the artifacts are already on disk. **Gate on `uptime` — hold below 13.**
+**Do not push.**
+
+### Lane L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED — a prose sentence in an evidence field, and a directory where an entry belongs
+state: running
+class: node
+owner: agent
+dir: .
+exit: every built-unverified lane refused for a malformed evidence field, a directory-instead-of-entry path, or an artifact recoverable from a git ref is either accepted by plan verify or recorded with the reason it is not, with the count of each stated
+agent: L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED
+
+**Two passes have taken `verified` from 57 to 342 and the remaining backlog is 187.** The measurement that
+made that possible named exactly what is left, and this lane takes the mechanical part of it — the classes
+where **the proof exists and the plan records it wrongly**, not where work is missing.
+
+**Read `docs/plan/artifacts/why-verification-is-refused.md` and its per-lane verdicts under
+`lanes/L-WHY-469/` first. Do not re-derive the classification.** Three classes are yours:
+
+1. **~60 lanes whose `evidence:` field holds a PROSE SENTENCE.** The tool takes the whole string as a path,
+   so it reports the sentence as missing — e.g. *"OkamAPI worktree /Users/…/wt-utlkvit, branch
+   lane/meals-utlkvit @ 1a03bc6c (local, not pushed) · SQL TIER …"*. **The artifact is on disk.** Record the
+   path alone and let the tool decide.
+2. **~15 lanes naming a DIRECTORY where the tool wants an entry.** Name the file inside it that actually
+   carries the proof — **not the first file you find**, the one the exit is about.
+3. **~7 lanes whose artifact is recoverable from a git ref.** Recover it, commit it where a stranger can
+   read it, then verify.
+
+**The rule that governs all three, and it is the whole risk of this lane: record what the evidence IS, never
+what would make the tool say yes.** A sibling pass earned its 177 by refusing eight lanes whose exit and
+artifact genuinely disagreed. **If recording the true path leaves a lane refused, that is the correct
+outcome — count it and name why.**
+
+**Check every file for secrets before committing anything recovered.** A sibling found two artifacts that
+tripped an estate-specific scan and cleared both **on evidence** — one names config keys only, the other
+cites a literal already tracked in `appsettings.json`. **A pattern's silence is not a clearance**; read the
+file.
+
+**One side effect a sibling measured, so you can expect it**: passing a committed repo-relative path to
+`plan verify` makes the tool **rewrite the lane's `evidence:` line itself**. That is how six lanes stopped
+recording an absolute machine-local path. **Let it do that** rather than hand-editing the field to match.
+
+**Never `--override` and never `plan accept`.** An override converts a measurable backlog into a claimed
+one.
+
+**Report three counts plainly** — accepted, still-refused-with-reason, and unrecoverable — and **name any
+lane whose refusal reason changed rather than cleared**, since that means the edit moved the problem.
+
+**Traps.** **Two silent ignore rules** — a bare `artifacts/` and a bare `*.log`; check with
+`git check-ignore -v` **before** assuming an add worked and verify with `git ls-files --error-unmatch`
+after. **L3 protects authored prose** — edit only `evidence:` and `exit:` lines, and **take a backup of
+`plan.md` first so your diff is provable**. **Do not touch `web-livewalk`** — one artifact lives there and
+is deliberately out of scope. **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.**
 **Do not push.**
 
 ## Decisions
