@@ -107,6 +107,13 @@ describe('storeAdminAccess — unknown is a state, not a refusal', () => {
 // set comparison, so a future reorder cannot quietly drop or add a path while looking like a reorder.
 const STORE_ADMIN_PATHS = [
   '/admin', '/admin/ongoing', '/admin/orders', '/admin/statistics',
+  // Ask Okam, directly after Statistikk. NOT a seventh module group, for the same reason the
+  // switchboard below is not: it reads ACROSS all six modules and the POS, and its inbox approves
+  // changes that land in whichever module the proposal names, so filing it inside any one of them
+  // would read as that module's own feature. It sits next to Statistikk because that is the screen
+  // it answers questions about — and because the AI box on that page now hands its question here
+  // rather than answering in place.
+  '/admin/assistant',
   // The switchboard, now last in Operations rather than last in the modules group. It is not a
   // module — it governs all six — so it cannot sit inside any one of them without reading as that
   // module's own setting, and a seventh group whose heading and only row say the same word earns

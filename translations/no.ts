@@ -5699,6 +5699,129 @@ export default {
   wfrl_toast_created: 'Funksjonen er lagt til.',
   wfrl_toast_saved: 'Funksjonen er lagret.',
   wfrl_toast_retired: 'Funksjonen er satt som utgått.',
-  wfrl_toast_reinstated: 'Funksjonen er tatt i bruk igjen.'
+  wfrl_toast_reinstated: 'Funksjonen er tatt i bruk igjen.',
+
+  // ---- Spør Okam (/admin/assistant) ------------------------------------------------------------
+  // The assistant answers questions and PROPOSES changes; it never makes one. Every sentence in this
+  // block has to keep that distinction, because the whole safety property of the surface is that a
+  // proposal is inert until a person approves it. Nothing here may say a change "is done", "is
+  // active" or "is applied" while a card is still on screen.
+  //
+  // TWO NUMBERS, AND THEY ARE NOT THE SAME NUMBER. `assistant_card_showingOf` and
+  // `assistant_card_confirmApproveCounted` are the two halves of the truncation guard: the card shows
+  // at most 50 change rows and `AffectedCount` is the real blast radius, so the notice says how many
+  // of how many, and the confirm button says the FULL count it is about to write. Translating either
+  // of them into a vaguer word ("noen", "flere") removes the guard.
+  //
+  // VOCABULARY: this block is checked by `scripts/assistant-vocab-lint.mjs`. The assistant makes no
+  // statutory claim of any kind, so the words it forbids must not appear here — see that file for
+  // the list and the reason each is on it.
+  assistant_title: 'Spør Okam',
+  assistant_subtitle: 'Still spørsmål om driften. Endringer skjer først når du godkjenner dem.',
+  assistant_tab_ask: 'Spør',
+  assistant_tab_inbox: 'Venter på deg',
+  assistant_stores: 'Butikker',
+  assistant_selectStores: 'Velg butikker',
+  assistant_allStores: 'Alle butikker',
+  assistant_searchStore: 'Søk etter butikk',
+  assistant_you: 'Du',
+  assistant_okam: 'Okam',
+  assistant_thinking: 'Tenker …',
+  assistant_placeholder: 'Skriv spørsmålet ditt her',
+  assistant_send: 'Send',
+  assistant_sending: 'Sender …',
+  // The honest note under the composer. Every turn is an independent request — the endpoint takes a
+  // question and nothing else — and a merchant who assumes otherwise will write a follow-up that
+  // reads as nonsense on its own.
+  assistant_noMemory: 'Assistenten husker ikke tidligere spørsmål ennå.',
+  assistant_askFailed: 'Vi fikk ikke svar. Prøv igjen.',
+  assistant_emptyTitle: 'Still det første spørsmålet',
+  assistant_emptyBody: 'Assistenten leser tallene dine, og kan foreslå endringer som du godkjenner selv.',
+  assistant_example1: 'Hvor mye solgte vi forrige uke?',
+  assistant_example2: 'Hvilke retter tjener vi minst på?',
+  assistant_example3: 'Øk prisen på alle pizzaer med 10 %',
+  assistant_pickVenue: 'Hvilken butikk gjelder det?',
+  // Offered, never applied: the stores the QUESTION named are not the stores the answer used, and
+  // the merchant decides which they meant.
+  assistant_suggestion: 'Spørsmålet nevner {stores}. Vil du bytte til det?',
+  assistant_suggestion_apply: 'Ja, bytt',
+  assistant_suggestion_dismiss: 'Nei, behold',
+  assistant_basis_show: 'Vis grunnlaget',
+  assistant_basis_hide: 'Skjul grunnlaget',
+  assistant_basis_assumptions: 'Forutsetninger',
+  assistant_basis_warnings: 'Forbehold',
+  assistant_basis_trace: 'Slik ble svaret laget',
+  assistant_basis_tools: 'Verktøy som ble brukt',
+  assistant_basis_period: 'Periode',
+  assistant_basis_scope: 'Butikker i svaret',
+  assistant_basis_rounds: 'Runder',
+  assistant_basis_stopReason: 'Stoppet fordi',
+  assistant_basis_model: 'Modell',
+  assistant_composeAgainDraft: 'Lag et nytt forslag: {diff}',
+
+  // ---- Spør Okam: forslagskortet ----------------------------------------------------------------
+  assistant_card_untitled: 'Forslag',
+  assistant_card_expiresIn: 'Utløper om',
+  assistant_card_expiredAlready: 'Utløpt',
+  // {shown} is the sample on screen, {total} is what approving actually writes. Both numbers stay.
+  assistant_card_showingOf: 'Viser {shown} av {total} endringer. Godkjenning skriver alle {total}.',
+  assistant_card_col_target: 'Gjelder',
+  assistant_card_col_field: 'Felt',
+  assistant_card_col_before: 'Før',
+  assistant_card_col_after: 'Etter',
+  assistant_card_storeScope: 'Butikk',
+  assistant_card_effectiveWindow: 'Gjelder',
+  assistant_card_sourceReceipt: 'Grunnlag',
+  assistant_card_openEnded: 'inntil videre',
+  assistant_card_approve: 'Godkjenn',
+  assistant_card_reject: 'Avslå',
+  assistant_card_confirmQuestion: 'Er du sikker? Endringen skjer med én gang.',
+  assistant_card_confirmQuestionCounted: 'Er du sikker? Dette endrer {count} rader med én gang.',
+  assistant_card_confirmApprove: 'Godkjenn — gjennomfør endringen',
+  // The count is the point of this label. It is the last thing read before the write.
+  assistant_card_confirmApproveCounted: 'Godkjenn — skriv disse {count} prisene',
+  assistant_card_approved: 'Godkjent. Endringen er gjennomført.',
+  assistant_card_approvedReplay: 'Dette forslaget var allerede gjennomført. Ingenting ble gjort på nytt.',
+  assistant_card_rejected: 'Forslaget er avslått.',
+  assistant_card_decisionFailed: 'Vi fikk ikke fullført. Prøv igjen.',
+
+  // ---- Spør Okam: avslag fra spinen -------------------------------------------------------------
+  // Only ONE of these is told apart by a code on the wire. The other covers seven server-side cases
+  // at once, so it must not name any of them — it says what is certainly true (it is no longer
+  // yours to decide, and nothing changed) and leaves the server's own sentence to say more.
+  assistant_conflict_kindDisabled: 'Denne handlingstypen er slått av for butikken nå. Forslaget står fortsatt, og kan godkjennes hvis den slås på igjen.',
+  assistant_conflict_unresolvable: 'Dette forslaget venter ikke lenger på deg. Klikket ditt endret ingenting nå — men forslaget kan allerede ha blitt gjennomført. Meldingen fra serveren under sier hva som faktisk skjedde.',
+  assistant_conflict_relist: 'Listen er hentet på nytt, så statusen du ser nå er den ferske.',
+
+  assistant_origin_okam: 'Fra Okam',
+  assistant_origin_socialchef: 'Fra SocialChef',
+  assistant_origin_chat: 'Fra Spør Okam',
+  assistant_origin_mcp: 'Fra en tilkoblet app',
+
+  assistant_status_staged: 'Venter på deg',
+  assistant_status_executed: 'Gjennomført',
+  assistant_status_rejected: 'Avslått',
+  assistant_status_expired: 'Utløpt',
+  assistant_status_executing: 'Utføres nå',
+  assistant_status_failed: 'Stoppet',
+
+  // ---- Spør Okam: innboksen ---------------------------------------------------------------------
+  assistant_inbox_loading: 'Laster …',
+  assistant_inbox_refresh: 'Oppdater',
+  assistant_inbox_filterAll: 'Alle',
+  assistant_inbox_noScope: 'Velg minst én butikk for å se forslag.',
+  // Unknown, not empty. A read that failed must never read as "ingenting venter".
+  assistant_inbox_unknown: 'Vi vet ikke hva som venter akkurat nå.',
+  assistant_inbox_emptyTitle: 'Ingenting venter på deg',
+  assistant_inbox_emptyBody: 'Forslag fra Spør Okam og fra tilkoblede apper dukker opp her.',
+  assistant_inbox_readFailed: 'Vi fikk ikke hentet listen.',
+  assistant_inbox_failedTitle: 'Dette forslaget stoppet mens det ble utført.',
+  // The reason genuinely is not on the wire: it is written to the row and never serialised. Saying
+  // so is the truth; a blank line here would read as "no reason", which is a different claim.
+  assistant_inbox_failedReasonUnavailable: 'Årsaken vises ikke her ennå. Forslaget kan ikke startes på nytt.',
+  assistant_inbox_failedCompose: 'Lag nytt forslag',
+
+  nav_assistant: 'Spør Okam',
+  aIQueryBox_handoff: 'Spørsmålet åpnes i Spør Okam.'
 
 }
