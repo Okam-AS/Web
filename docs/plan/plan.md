@@ -23720,11 +23720,13 @@ file for secrets before committing** — a pattern's silence is not a clearance;
 `web-livewalk`.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** **Do not push.**
 
 ### Lane L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK — statutory receipt work exists and the trunk has never had it
-state: open
+state: built-unverified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
 exit: each of the six lanes whose branch exists but is not an ancestor of its trunk is either landed with the tier green at the composed tip, or recorded as unlandable with the reason, with the count of each stated
+agent: L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK
+evidence: backend feature/restaurant-modules 7bf975572 -> d30c1c4d4 (4 merges, tier 5037/5048 green at the tip); frontend feature/restaurant-modules 914e593 -> de5e68c (184 suites/4484 green)
 
 **A verification pass went looking for statutory documents to render and found the code is not on the
 trunk.** `MealsDeliveryReceiptSqlServerTests`, `DeliveryReceiptComplianceTests` and `MealsXZCreditSaleTests`
@@ -36506,6 +36508,46 @@ state: open
 severity: blocker
 owner: @sven
 clears_when: each of the three suites is present on the backend trunk and green, shown by a tier run naming them
+
+**TWO OF THE THREE ARE ON THE TRUNK. THE CLERK RAISED THIS WRONG. Corrected 2026-08-08, verified
+independently by `git ls-tree` at the tip.**
+
+| suite | actually |
+|---|---|
+| `MealsDeliveryReceiptSqlServerTests` (3 tests) | **ON THE TRUNK** — arrived via `lane/meals-utlkvit`, which **is** an ancestor |
+| `DeliveryReceiptComplianceTests` (11 tests) | **ON THE TRUNK**, same route |
+| `MealsXZCreditSaleTests` | **genuinely absent** — lives on `lane/meals-xz-credit` @ `25586d86b`, unlanded |
+
+**The clerk took a verification pass's observation and widened it into a claim about all three without
+checking.** The pass had said the suites were absent *from the lanes it was reading*; the clerk wrote it as
+absent from the trunk. **A landing lane reproduced rather than trusted the brief and found two of the three
+already there.**
+
+**So this flag is narrowed to one suite, and that one has an odd shape worth naming**: `lane/meals-xz-credit`
+is unlanded while **its lane is already state `verified`** — so the plan records a capability as proven whose
+suite is not on the trunk. That is a different problem from the one this flag was raised for.
+
+**Two further corrections from the same lane**: `L-STATUTE-EVIDENCE-WORLD` is a **frontend** branch, filed
+as backend by keyword in an earlier artifact; and only **one** of the five backend branches was SQL-tier,
+not three as the brief said.
+### Flag F-A-LANE-IS-VERIFIED-WHILE-ITS-SUITE-IS-NOT-ON-THE-TRUNK — lane/meals-xz-credit is unlanded while its lane records state verified, so the plan claims a capability whose suite the trunk does not carry
+state: open
+severity: blocker
+owner: @sven
+clears_when: no lane is verified whose named suite is absent from its trunk, checked across every verified lane by git ls-tree at the tip
+### Flag F-A-CLEAN-MERGE-BROKE-THE-BUILD-BECAUSE-A-FLOOR-DID-NOT-KNOW-A-NEW-MODULE — census-floors-derived merged cleanly and broke the build: GrowthAudit was added after the fork and still passed floors the branch deletes
+state: open
+severity: warn
+owner: @sven
+clears_when: a module added after a floor branch forks cannot pass a floor that branch removes, shown by a test that reds when a new module is introduced
+### Flag F-THE-EXPIRY-SWEEP-WITHHELD-SITE-IS-UNFALSIFIED — wf-withheld-bound's second Withheld site reds under no mutation, so its two tests do not pin it
+state: open
+severity: warn
+owner: @sven
+clears_when: the expiry sweep Withheld site reds under an applied-and-restored mutation, with the mutation named
+
+
+
 
 
 
