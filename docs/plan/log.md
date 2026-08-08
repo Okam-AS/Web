@@ -4185,3 +4185,65 @@
 - 2026-08-08T16:16Z · agent:L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED · report L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED: COMMITTED AND ACCEPTED 20. COMMITTED BUT STILL REFUSED 0. UNRECOVERABLE 0. One left untouched by standing prohibition. Committed f80937d. Lane verified 322 -> 342.; NONE WERE LOST. The brief expected some of the four outside any repository to be gone; all four were still on disk in the session scrat
 - 2026-08-08T16:16Z · @clerk · 20 proofs committed and accepted, 0 unrecoverable; the committed-nowhere class was a recording failure, not destruction
 - 2026-08-08T16:17Z · agent:L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED · started L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED
+- 2026-08-08T16:19Z · tool · L-MENU-ALLERGEN-MATRIX built-unverified -> verified, evidence docs/plan/lanes/L-MENU-ALLERGEN-MATRIX/menu-allergen-matrix.playwright.json
+- 2026-08-08T16:19Z · tool · L-EV-EXTDEP-GUARDS built-unverified -> verified, evidence /Users/svendaneel/okam/wt-evextguards/artifacts/lanes/L-EV-EXTDEP-GUARDS/EVIDENCE.md
+- 2026-08-08T16:19Z · tool · L-CORE-ORE-LABEL built-unverified -> verified, evidence lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt
+- 2026-08-08T16:19Z · tool · L-EV-STALE-CAUSE built-unverified -> verified, evidence ../web-evstale/artifacts/journeys/events-stale-cause.playwright.json
+- 2026-08-08T16:19Z · tool · L-MEALS-RELEASE-RACE built-unverified -> verified, evidence lanes/L-MEALS-RELEASE-RACE/evidence.md
+- 2026-08-08T16:19Z · tool · L-MEALS-FLOOR-PINS built-unverified -> verified, evidence /Users/svendaneel/okam/OkamAPI-mealsfloor/lanes/L-MEALS-FLOOR-PINS/evidence.md
+- 2026-08-08T16:19Z · tool · L-MEALS-GRACE-PINS built-unverified -> verified, evidence /Users/svendaneel/okam/OkamAPI-modules/lanes/L-MEALS-GRACE-PINS/evidence.md
+- 2026-08-08T16:19Z · tool · L-MEALS-SWEEP-GUARD built-unverified -> verified, evidence /Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md
+- 2026-08-08T16:19Z · tool · L-PRICE-NULL-ZERO built-unverified -> verified, evidence lanes/L-PRICE-NULL-ZERO/before-after.txt
+- 2026-08-08T16:19Z · tool · L-MODAL-BROKEN-TWO built-unverified -> verified, evidence lanes/L-MODAL-BROKEN-TWO/detail.md
+- 2026-08-08T16:19Z · tool · L-GR-WITHDRAW-ORIGIN built-unverified -> verified, evidence lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md
+- 2026-08-08T16:19Z · tool · L-MRG-WASTE-RECEIPTS built-unverified -> verified, evidence /Users/svendaneel/okam/web-wastereceipts/lanes/L-MRG-WASTE-RECEIPTS/RUN.md
+- 2026-08-08T16:19Z · tool · L-FLAGS-JOURNEY-SWEEP built-unverified -> verified, evidence lanes/L-FLAGS-JOURNEY-SWEEP/census.md
+- 2026-08-08T16:19Z · tool · L-FLAGS-NOTE-FALSIFIABLE built-unverified -> verified, evidence docs/plan/lanes/L-FLAGS-NOTE-FALSIFIABLE/workforce-flag-lever.playwright.json
+- 2026-08-08T16:19Z · tool · L-GR-TESTSEND-ERRORCODE built-unverified -> verified, evidence lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md
+- 2026-08-08T16:19Z · tool · L-EV-REFUND-FAKE-ARG built-unverified -> verified, evidence lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx
+- 2026-08-08T16:19Z · tool · L-GR-DEADLINE-COPY built-unverified -> verified, evidence lanes/L-GR-DEADLINE-COPY/DETAIL.md
+- 2026-08-08T16:19Z · tool · L-MEALS-EIGHTH-PIN built-unverified -> verified, evidence /Users/svendaneel/okam/wt-mealseighth/lanes/L-MEALS-EIGHTH-PIN/evidence.md
+- 2026-08-08T16:19Z · tool · L-MEALS-SUPERSEDE-SQL built-unverified -> verified, evidence /Users/svendaneel/okam/wt-mealssupsql/lanes/L-MEALS-SUPERSEDE-SQL/evidence.md
+- 2026-08-08T16:19Z · tool · L-MEALS-QUOTE-RETRY built-unverified -> verified, evidence /Users/svendaneel/okam/wt-mealsqretry/lanes/L-MEALS-QUOTE-RETRY/evidence.md
+- 2026-08-08T16:19Z · tool · L-LIVE-WORLD-STAFF built-unverified -> verified, evidence lanes/L-LIVE-WORLD-STAFF/live-world-run.txt
+- 2026-08-08T16:19Z · tool · L-ARTIFACT-PROVENANCE built-unverified -> verified, evidence lanes/L-ARTIFACT-PROVENANCE/evidence.md
+- 2026-08-08T16:19Z · tool · L-LIVE-WORLD-RESTORE built-unverified -> verified, evidence lanes/L-LIVE-WORLD-RESTORE/live-world-reset-run.txt
+- 2026-08-08T16:19Z · tool · L-LIVE-SEED-VIA-PRODUCT built-unverified -> verified, evidence test/e2e/scripts/live-world.sh
+- 2026-08-08T16:19Z · tool · L-RESERVATION-LIMITER-MOVE built-unverified -> verified, evidence /Users/svendaneel/okam/OkamAPI-reslimiter/lanes/L-RESERVATION-LIMITER-MOVE/evidence.md
+- 2026-08-08T16:19Z · tool · L-JOURNEY-GUARD-FAIL built-unverified -> verified, evidence test/e2e/scripts/guard-proof.js
+- 2026-08-08T16:19Z · tool · L-FIXTURE-DIVERGENCE built-unverified -> verified, evidence lanes/L-FIXTURE-DIVERGENCE/receipts.txt
+- 2026-08-08T16:19Z · tool · L-ARTIFACT-RANK-KEY built-unverified -> verified, evidence lanes/L-ARTIFACT-RANK-KEY/evidence.md
+- 2026-08-08T16:19Z · tool · L-JOURNEY-GROWTH built-unverified -> verified, evidence docs/plan/lanes/L-JOURNEY-GROWTH/growth-guest-lifecycle.playwright.json
+- 2026-08-08T16:19Z · tool · L-LIVE-BUILD-EXPORT built-unverified -> verified, evidence lanes/L-LIVE-BUILD-EXPORT/evidence.md
+- 2026-08-08T16:19Z · tool · L-OFFER-PARTIAL-SUBTOTAL built-unverified -> verified, evidence lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md
+- 2026-08-08T16:19Z · tool · L-XZ-NEGATED-ABSENCE built-unverified -> verified, evidence lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md
+- 2026-08-08T16:19Z · tool · L-WF-INVITE-LIST-REVOKE built-unverified -> verified, evidence lanes/L-WF-INVITE-LIST-REVOKE/evidence.md
+- 2026-08-08T16:19Z · tool · L-WF-ONBOARD-DEMO-RUN built-unverified -> verified, evidence lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md
+- 2026-08-08T16:19Z · tool · L-COLLECTED-PATHS built-unverified -> verified, evidence lanes/L-COLLECTED-PATHS/collected.txt
+- 2026-08-08T16:19Z · tool · L-MONEY-FIELDS-SHOW-THEIR-ORE built-unverified -> verified, evidence lanes/L-MONEY-FIELDS-SHOW-THEIR-ORE/reachability-census.md
+- 2026-08-08T16:19Z · tool · L-MEALS-XZ-CREDIT built-unverified -> verified, evidence /Users/svendaneel/okam/wt-xzcredit/WebApi.Tests/Meals/Fixtures/zreport-kredittsalg.txt
+- 2026-08-08T16:20Z · tool · L-LIVE-WORLD-TWO-HUMANS-WALK built-unverified -> verified, evidence artifacts/journeys/workforce-week-run-two-humans.playwright.json
+- 2026-08-08T16:20Z · tool · L-REVIEW-THE-BACKEND-PATCH-TREE built-unverified -> verified, evidence docs/plan/reviews/L-REVIEW-THE-BACKEND-PATCH-TREE.md
+- 2026-08-08T16:20Z · tool · L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING built-unverified -> verified, evidence docs/plan/reviews/L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING.md
+- 2026-08-08T16:20Z · tool · L-THREE-RETURNS-THE-TOOL-REFUSED built-unverified -> verified, evidence docs/plan/reviews/L-THREE-RETURNS-THE-TOOL-REFUSED.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-TRUNK-AS-LANDED built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-TRUNK-AS-LANDED.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-BACKEND-TRUNK-AS-LANDED built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-BACKEND-TRUNK-AS-LANDED.md
+- 2026-08-08T16:20Z · tool · L-WHICH-JOURNEYS-ARE-REAL built-unverified -> verified, evidence docs/plan/reviews/L-WHICH-JOURNEYS-ARE-REAL.md
+- 2026-08-08T16:20Z · tool · L-THE-FLAG-BACKLOG-IS-A-WORK-LIST built-unverified -> verified, evidence docs/plan/reviews/L-THE-FLAG-BACKLOG-IS-A-WORK-LIST.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-UNREVIEWED-FRONTEND built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-UNREVIEWED-FRONTEND.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-UNREVIEWED-BACKEND built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-UNREVIEWED-BACKEND.md
+- 2026-08-08T16:20Z · tool · L-WHERE-THE-PLAN-STILL-HAS-GAPS built-unverified -> verified, evidence docs/plan/reviews/L-WHERE-THE-PLAN-STILL-HAS-GAPS.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-INSTRUMENT-AND-THE-UPSERT built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-INSTRUMENT-AND-THE-UPSERT.md
+- 2026-08-08T16:20Z · tool · L-READ-THE-TEST-WRITING-LANES built-unverified -> verified, evidence docs/plan/reviews/L-READ-THE-TEST-WRITING-LANES.md
+- 2026-08-08T16:20Z · tool · L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING built-unverified -> verified, evidence docs/plan/lanes/L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING/sweep.txt
+- 2026-08-08T16:20Z · tool · L-PLAN-ARTIFACTS-ARE-SCRUBBED built-unverified -> verified, evidence lanes/L-PLAN-ARTIFACTS-ARE-SCRUBBED/evidence.md
+- 2026-08-08T16:21Z · tool · L-MRG-WASTE-FRONTEND built-unverified -> verified, evidence lanes/L-MRG-WASTE-FRONTEND/evidence.md
+- 2026-08-08T16:21Z · tool · L-MEALS-ENROL-PRETICK built-unverified -> verified, evidence lanes/L-MEALS-ENROL-PRETICK/evidence.md
+- 2026-08-08T16:21Z · tool · L-MRG-PAGE-TEST-VACUOUS built-unverified -> verified, evidence lanes/L-MRG-PAGE-TEST-VACUOUS/mutation-log.md
+- 2026-08-08T16:21Z · tool · L-COERCION-WRITE-PATHS built-unverified -> verified, evidence lanes/L-COERCION-WRITE-PATHS/mutation-log.md
+- 2026-08-08T16:21Z · tool · L-XZ-RESIDUAL-SITES built-unverified -> verified, evidence lanes/L-XZ-RESIDUAL-SITES/mutation-log.md
+- 2026-08-08T16:21Z · tool · L-FIXTURE-SUPPRESSED-REFUSAL built-unverified -> verified, evidence lanes/L-FIXTURE-SUPPRESSED-REFUSAL/run.md
+- 2026-08-08T16:21Z · tool · L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED built-unverified -> verified, evidence docs/plan/artifacts/backend-landing-order.md
+- 2026-08-08T16:23Z · agent:L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED · L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED returned built -> built-unverified, evidence docs/plan/artifacts/eighty-two-mechanical-refusals.md
+- 2026-08-08T16:23Z · agent:L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED · report L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED: ACCEPTED 59. STILL REFUSED WITH REASON 23. UNRECOVERABLE 0. Refusal reasons that CHANGED rather than cleared: 0. Committed f349a6b. Lane verified 342 -> 401.; 37 of the prose class: the sentence wrapped a real artifact path, which was extracted and recorded. Three were untracked, secrets-scanned and
+- 2026-08-08T16:23Z · @clerk · verified 342 -> 401; 23 refused honestly because their only proof is a branch and a green suite, which C5 forbids

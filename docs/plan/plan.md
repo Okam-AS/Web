@@ -23618,12 +23618,13 @@ not create worktrees for this — the artifacts are already on disk. **Gate on `
 **Do not push.**
 
 ### Lane L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED — a prose sentence in an evidence field, and a directory where an entry belongs
-state: running
+state: built-unverified
 class: node
 owner: agent
 dir: .
 exit: every built-unverified lane refused for a malformed evidence field, a directory-instead-of-entry path, or an artifact recoverable from a git ref is either accepted by plan verify or recorded with the reason it is not, with the count of each stated
 agent: L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED
+evidence: docs/plan/artifacts/eighty-two-mechanical-refusals.md
 
 **Two passes have taken `verified` from 57 to 342 and the remaining backlog is 187.** The measurement that
 made that possible named exactly what is left, and this lane takes the mechanical part of it — the classes
