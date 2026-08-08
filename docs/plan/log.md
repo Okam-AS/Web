@@ -4273,3 +4273,8 @@
 - 2026-08-08T21:25Z · agent:L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK · L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK returned built -> built-unverified, evidence /Users/svendaneel/okam/Web-modules/lanes/L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK/asserting-tests.txt (34 trunk tests asserting the capability, all passing, extracted by name from trunk-non-sql-tier.trx beside it)
 - 2026-08-08T21:25Z · agent:L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK · report L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK: UNLANDABLE: lane/meals-xz-credit @ 25586d86b is superseded on X/Z, conflicts on two points, and reaches one surface the split did not. Trunk untouched at d30c1c4d4, nothing merged.; Checked against the decisions: L-MEALS-XZ-CREDIT carries no gate, and D-MEALS-CREDIT-ACCOUNT gates a Tripletex receiva
 - 2026-08-08T21:26Z · @clerk · credit-sale branch unlandable: cannot compile at the trunk, and its private label table would change words on a fiscal document
+- 2026-08-08T21:28Z · agent:L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED · started L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED
+- 2026-08-08T21:28Z · agent:L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH · started L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH
+- 2026-08-08T21:28Z · agent:L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY · started L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY
+- 2026-08-08T21:30Z · tool · raised F-THE-PUSH-CREDENTIAL-IS-IN-THE-PATH-ON-TWO-CONTROLLERS (blocker): ConsumerNotificationController.cs:31 and StoreNotificationController.cs:54 both take the handle in the path, so fixing the route fixes half of it
+- 2026-08-08T21:30Z · @clerk · append-not-insert caught a security regression: phone-in-path calls the 2-arg TransferGiftcard, so a stale call site breaks the build

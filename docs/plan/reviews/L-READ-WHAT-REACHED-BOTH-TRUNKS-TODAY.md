@@ -86,7 +86,33 @@ exists.**
   wrong repo returns "not found", which reads as absent for the wrong reason — checked with
   `cat-file -e` first in both repos.
 
-## 6. Tiers at the current tips
+## 6. The three findings other lanes reported — second-read verdicts
+
+- **GrowthAudit clean-merge-broke-build (census-floors landing): handled correctly, coverage
+  kept.** The landing lane removed the four hardcoded counts the fork's derivation replaces, and
+  GrowthAudit is present in the derived census at the tip (`ModuleActorStampPin.GrowthAudit`,
+  `WebApi.Tests/Modules/ModuleActorStampPin.cs:259`); the derived mechanism's own mutation reds on
+  losing a site (1/44 per the landing record). The module was not silently dropped. This is also
+  the fourth live instance of the clean-merge≠composing class this program has now measured.
+- **`wf-withheld-bound`'s unfalsified expiry-sweep arm: confirmed at the tip.** The site exists —
+  `WorkforceNotificationDispatcher.cs:236-255`, the `result.Withheld` branch writing
+  `WithheldWeekEnded:` into `LastError` — and the two backlog tests reference the reason string but
+  do not red under the site's mutation (the landing lane measured it; the tests touch the constant,
+  not the transition). **Exact change: a third arm in
+  `WorkforceNotificationBacklogBoundTests` that drives the sweep over a withheld row whose week has
+  ended and asserts the terminal transition and reason, mutation-backed on the
+  `Status == Withheld && NextAttemptUtc <= now` condition.** Until then the suite's name promises a
+  bound its arms only half-pin.
+- **Verified-on-an-unopenable-pointer: the successor evidence is sound; the exact change is a
+  re-point.** `L-WF-WITHHELD-BOUND` and the credit-sale item both carry worktree-path evidence
+  (`/Users/svendaneel/okam/wt-wfwithheld @ 74405b34`) that no longer opens.
+  `L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK` has already replaced the capability's proof:
+  `lanes/L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK/asserting-tests.txt` — **36 lines, 34 named
+  trunk tests, opens today, not gitignored** (checked with `check-ignore`). The exact change is
+  clerical: the original item's evidence field should cite the asserting-tests file and the trx
+  beside it, not the dead worktree.
+
+## 7. Tiers, measured
 
 <!-- TIPS -->
 

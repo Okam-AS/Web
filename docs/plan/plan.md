@@ -22801,11 +22801,12 @@ move** — compose on a detached HEAD. **Gate on `uptime` as a separate check yo
 Never `pkill`, never touch `okam-lwtwo-*`, never bind **:3971**/**:5971**. **Do not push.**
 
 ### Lane L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY — five landings, two trunks, no independent reading
-state: open
+state: running
 class: analysis
 owner: agent
 dir: .
 exit: a verdict on the frontend trunk from 3807e90 to 9d88101 and the backend trunk from 057c390ad to 7d0450a4b, naming any landing whose measurement does not reproduce and any behaviour a merge changed that its lane did not claim
+agent: L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY
 
 **Both trunks moved substantially today and every landing was made by an agent reading its own work.**
 
@@ -23815,11 +23816,12 @@ the open decisions before merging and say that you did.** **In zsh write `${ref}
 `uptime` — hold below 13.** Never `pkill`, never touch `okam-lwtwo-*`. **Do not push.**
 
 ### Lane L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH — redaction cannot reach a URL, and two of them carry a customer's identity
-state: open
+state: running
 class: node
 owner: agent
 dir: ../OkamAPI-modules
 exit: no route carries a phone number or a device token in its path, shown by tests that red when either is placed there, with the non-SQL tier green at the composed tip
+agent: L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH
 
 **A URL is seen by every reverse proxy, load balancer and access log between the caller and the process,
 and sink-level redaction never reaches it — because no log statement is involved.** Two routes carry a
@@ -23865,12 +23867,50 @@ pattern's silence** — this lane is about credentials, so an artifact quoting a
 defect in a new place. **Check every branch against the open decisions before merging and say that you
 did.** **In zsh write `${ref}:path`.** **Gate on `uptime` — hold below 13.** Never `pkill`. **Do not push.**
 
+---
+
+**MEASURED 2026-08-08 by the first attempt, which stopped where it was told. Do not re-derive any of this.**
+
+**Both defects reproduce at the trunk `d30c1c4d4`.** `GiftcardController.cs:245` is
+`[HttpPost("transfer/{giftcardId}/{newReceiverPhoneNumber}")]`. **And the push credential is in the path on
+TWO controllers, not one** — `ConsumerNotificationController.cs:31` and `StoreNotificationController.cs:54`,
+both `HttpGet {handle}`. **Anyone fixing "the" route fixes half of it.**
+
+**`lane/phone-in-path` conflicts with the gift-card ownership guard that landed today, and the conflict is
+the guard itself.** The branch calls the **two-argument** `TransferGiftcard(giftcardId, phone)` — no caller,
+no ownership check — so **taking it whole would delete the guard.** It **fails the build rather than
+compiling**, because `callerUserId` was *appended* rather than inserted at the estate's actor-second
+position: two adjacent strings would otherwise have swapped silently.
+
+**The recomposition, written out and not yet done:**
+
+> keep `[HttpPost("transfer/{giftcardId}")]` with `[FromBody] GiftcardTransferModel` from the branch; keep
+> the `ActorClaims` resolution and the shared `GiftcardNotFound` refusal from the trunk; call
+> `TransferGiftcard(giftcardId, model?.NewReceiverPhoneNumber, callerUserId)`.
+
+**That touches the guard's call site, so it needs its own tier and a mutation pass over the CALLER
+RESOLUTION specifically** — not only a combined mutation. The guard's three properties mask one another, as
+two survivors and a combined mutation showed, so **a resolution that looks right is exactly what reopens an
+id oracle quietly.**
+
+**Where the credential goes, settled with a reason rather than a preference: the BODY, on asymmetric
+recording rather than secrecy.** A proxy terminating TLS can read a body, so a body is **not confidential** —
+but a URL is **recorded** by every proxy, load balancer and access log as a matter of routine, with no log
+statement involved, which is why redaction cannot reach it. A claim would bind a value to the caller and be
+stronger for identity, **but the receiver's phone number is not the caller's identity**, so a claim cannot
+carry it.
+
+**No other route to a log was found, and the check is stated as non-exhaustive**: no log statement names the
+phone field or the push handle; the gift-card sites are generic `LogWarning(ex, ex.Message)` and would carry
+a value only if an exception message embedded one.
+
 ### Lane L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED — the same defect one surface over, and this one is live
-state: open
+state: running
 class: node
 owner: agent
 dir: ../OkamAPI-modules
 exit: no end-of-day close counts a company-account sale as received, shown by a test that reds when CompanyAccount falls into the default bucket, with the non-SQL tier green at the composed tip
+agent: L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED
 
 **The X/Z report was fixed today. The end-of-day close has the identical defect and nobody has touched it.**
 `EodService` buckets `PaymentType.CompanyAccount` into its **`default` arm**, so **the close counts a credit
@@ -36748,6 +36788,12 @@ substantive rather than stylistic:
 **A method note worth keeping**: five of the 34 live in a **second class** inside one test file, and an
 extraction filtering on the file's first class name nearly reported them absent. The trx was right; the
 filter was not.
+### Flag F-THE-PUSH-CREDENTIAL-IS-IN-THE-PATH-ON-TWO-CONTROLLERS — ConsumerNotificationController.cs:31 and StoreNotificationController.cs:54 both take the handle in the path, so fixing the route fixes half of it
+state: open
+severity: blocker
+owner: @sven
+clears_when: neither notification controller takes a device handle in its path, shown by tests that red when either is placed there
+
 
 
 
