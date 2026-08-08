@@ -262,12 +262,20 @@ describe('the SMS code', () => {
     expect(w.find('.btn-approve').exists()).toBe(true)
   })
 
+  // The two send failures now say the SAME thing, and that is the fix rather than a regression. This
+  // page used to distinguish a server that declined (`errorCouldNotSendCodeRetry`) from a request that
+  // threw (`errorCouldNotSendCode`, the short one) — a distinction drawn from the shape of the failure
+  // rather than from anything the guest can act on. Both mean "no code is coming, try later", so both
+  // now carry the sentence that says so. This arm's own claim, that the guest is left on the first
+  // step, is unchanged and still asserted.
   test('a send that failed outright also leaves the guest on the first step', async () => {
     answers.SendVerificationToken = () => Promise.reject(new Error(''))
     const w = await loaded()
     await reachCodeStep(w)
     expect(w.find('.verification-step').exists()).toBe(false)
-    expect(w.find('.error-message').text()).toBe('Kunne ikke sende verifiseringskode.')
+    expect(w.find('.error-message').text())
+      .toBe('Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.')
+    expect(w.find('.btn-approve').exists()).toBe(true)
   })
 
   // A DOUBLE TAP ON A PHONE, modelled honestly: both taps land before Vue can re-render the button
@@ -322,7 +330,12 @@ describe('confirming the order', () => {
     await w.vm.$nextTick()
     await press(w, '.btn-verify')
     expect(w.find('.verification-step').exists()).toBe(true)
-    expect(w.find('.verification-actions .error-message').text()).toBe('Feil verifiseringskode. Vennligst prøv igjen.')
+    // The wording moved with this lane and the reason is the lane's whole subject: the old sentence
+    // asserted the code was WRONG, which is a claim about the guest. It is also what a guest whose
+    // code was right was told when the request failed for any other reason. The replacement says what
+    // is known — the code was not accepted — and gives the two things she can do about it.
+    expect(w.find('.verification-actions .error-message').text())
+      .toBe('Koden ble ikke godtatt. Sjekk at den er riktig skrevet og prøv igjen. Kontakt oss med ordrenummeret ditt hvis det fortsetter.')
     expect(w.find('.acceptance-confirmed').exists()).toBe(false)
     expect(w.find('#verification-code').element.value).toBe('000000')
     expect(w.find('.btn-verify').attributes('disabled')).toBeFalsy()
@@ -395,48 +408,72 @@ describe('an offer the guest cannot open', () => {
     expect(w.find('.loading-stub').exists()).toBe(false)
   })
 
+  // THIS ARM USED TO ASSERT THE DEFECT. A server refusal is a load failure, not an expiry, and the
+  // page said "Tilbudet er utløpt" to both — the exact thing `THE DEFECT: every load failure tells the
+  // guest the offer EXPIRED` named one block below. The arm's own title is what gives it away: a page
+  // the guest can ACT ON is not one telling her to ask for a new offer she does not need. It now
+  // asserts the page that names the failure and offers the retry.
   test('an offer the server refuses puts up a page the guest can act on', async () => {
     answers.GetByCode = () => Promise.reject(new Error('Failed to get offer proposal'))
     const w = await loaded()
     expect(w.find('.error-container').exists()).toBe(true)
-    expect(w.find('.error-container h2').text()).toBe('Tilbudet er utløpt')
+    expect(w.find('.error-container h2').text()).toBe('Vi klarte ikke å laste tilbudet')
+    expect(w.find('.error-container').text()).toContain('Prøv igjen')
     expect(w.find('.offer-document-stub').exists()).toBe(false)
     expect(w.find('.loading-stub').exists()).toBe(false)
   })
 })
 
-// ---- FINDINGS, PINNED AS TESTS ----------------------------------------------------------------
+// ---- THE FIVE FINDINGS, NOW ASSERTING THE FIX --------------------------------------------------
 //
-// Each of these asserts the behaviour the page has TODAY. They are green on purpose: a red test in a
-// shared tier is a test the next person deletes. Each will red the moment the defect beside it is
-// fixed, which is the point at which somebody should be reading this block.
-describe('THE DEFECTS', () => {
-  // The page composes a diagnosis for every load failure — `errorCouldNotLoad`, and
-  // `errorNoOrderNumber` for a link with no code — assigns it to `error`, and then renders a
-  // DIFFERENT, unconditional sentence: "the offer has expired, contact us for a new one". A guest
-  // whose network dropped, or whose link lost its code, is told their offer expired; they ask the
-  // venue to reissue an offer that never expired, and the venue reissues it.
-  test('THE DEFECT: every load failure tells the guest the offer EXPIRED, whatever went wrong', async () => {
+// These five were written as `THE DEFECT:` pins asserting the behaviour the page had at the time. The
+// convention is that such a pin reds on the day the defect is fixed, and that day was `40ab62d` — so
+// each has been CONVERTED here rather than deleted, and now asserts the corrected behaviour. Each
+// keeps the description of what was wrong, because that is the part a reader needs to understand why
+// the assertion below it is worth having.
+//
+// The five reds were expected. Four other arms in this file also redded, and those were not defect
+// pins: two of them turned out to be asserting this same expired-for-everything defect from the
+// outside, and two pinned wording the fix deliberately replaced. Their rulings are recorded beside
+// them.
+describe('the five findings, now fixed', () => {
+  // WAS: the page composed a diagnosis for every load failure — `errorCouldNotLoad`, and
+  // `errorNoOrderNumber` for a link with no code — assigned it to `error`, then rendered a DIFFERENT,
+  // unconditional sentence: "the offer has expired, contact us for a new one". A guest whose network
+  // dropped was told her offer expired; she asked the venue to reissue an offer that never expired.
+  //
+  // NOW: the failure is named for what it was, the diagnosis the page built actually reaches a pixel,
+  // and the guest is offered the retry that is the only thing she can usefully do.
+  test('a load failure says the offer could not be loaded, and shows what went wrong', async () => {
     answers.GetByCode = () => Promise.reject(new Error('Network Error'))
     const w = await loaded()
-    expect(w.find('.error-container').text()).toContain('Tilbudet er utløpt')
-    // The diagnosis the page built for this exact case reaches no pixel.
+    expect(w.find('.error-container h2').text()).toBe('Vi klarte ikke å laste tilbudet')
+    expect(w.find('.error-container').text()).not.toContain('Tilbudet er utløpt')
+    // The diagnosis is no longer built and then thrown away — it is on screen.
     expect(w.vm.error).toBe('Network Error')
-    expect(w.text()).not.toContain('Kunne ikke laste ordren')
+    expect(w.find('.error-container').text()).toContain('Network Error')
+    expect(w.find('.error-container').text()).toContain('Prøv igjen')
   })
 
-  test('THE DEFECT: a link with no order number also reads as an expired offer', async () => {
+  // WAS: a link that had lost its code read as an expired offer, and the one sentence that said what
+  // had actually happened was withheld. NOW: the same load-failure page, with the reason shown.
+  test('a link with no order number says so instead of reading as an expired offer', async () => {
     const w = await loaded({ code: '' })
-    expect(w.find('.error-container h2').text()).toBe('Tilbudet er utløpt')
+    expect(w.find('.error-container h2').text()).toBe('Vi klarte ikke å laste tilbudet')
+    expect(w.find('.error-container').text()).not.toContain('Tilbudet er utløpt')
     expect(w.vm.error).toBe('Ingen ordrenummer oppgitt')
-    expect(w.text()).not.toContain('Ingen ordrenummer oppgitt')
+    expect(w.find('.error-container').text()).toContain('Ingen ordrenummer oppgitt')
   })
 
-  // `acceptOffer` assigns the accept response straight onto `offerProposal` with no guard. The
+  // WAS: `acceptOffer` assigned the accept response straight onto `offerProposal` with no guard. The
   // service only throws when the parsed body is `undefined`; a 200 whose body is empty parses to `''`
-  // and is returned. The guest has just confirmed a binding order, the server has recorded it, and
-  // the page renders NOTHING AT ALL — no confirmation, no error, no way back.
-  test('THE DEFECT: an acceptance answered with an empty body blanks the page after the order is placed', async () => {
+  // and was returned. The guest had just confirmed a binding order, the server had recorded it, and
+  // the page rendered NOTHING AT ALL — no confirmation, no error, no way back.
+  //
+  // NOW: the order is placed exactly once and the guest is shown the confirmation. This is the arm
+  // that matters most of the five — it is the only one where the guest is left not knowing whether
+  // she is committed to a binding order.
+  test('an acceptance answered with an empty body still confirms the order on screen', async () => {
     answers.AcceptOfferWithVerification = () => Promise.resolve('')
     const w = await loaded()
     await reachCodeStep(w)
@@ -444,33 +481,42 @@ describe('THE DEFECTS', () => {
     await w.vm.$nextTick()
     await press(w, '.btn-verify')
     expect(called('AcceptOfferWithVerification').length).toBe(1)
-    expect(w.find('.acceptance-confirmed').exists()).toBe(false)
+    expect(w.find('.acceptance-confirmed').exists()).toBe(true)
     expect(w.find('.error-message').exists()).toBe(false)
-    expect(w.find('.offer-document-stub').exists()).toBe(false)
     expect(w.find('.error-container').exists()).toBe(false)
     expect(w.find('.loading-stub').exists()).toBe(false)
-    expect(w.find('.offer-container').text()).toBe('')
+    expect(w.find('.offer-container').text()).not.toBe('')
   })
 
-  // `sendVerification` renders `error.message` verbatim when the send fails. Every message the
-  // service throws is untranslated English written for a developer, and it goes on screen in front
-  // of a Norwegian- or German-speaking guest in place of the localised sentence sitting right beside
-  // it in `copy`.
-  test('THE DEFECT: a failed send shows the guest the raw English exception text', async () => {
+  // WAS: `sendVerification` rendered `error.message` verbatim when the send failed. Every message the
+  // service throws is untranslated English written for a developer, and it went on screen in front of
+  // a Norwegian- or German-speaking guest, in place of the localised sentence sitting beside it in
+  // `copy`. NOW: the guest reads the localised sentence, and the English never appears.
+  test('a failed send shows the guest a localised sentence, not the exception text', async () => {
     answers.SendVerificationToken = () => Promise.reject(new Error('Failed to send verification token'))
     const w = await loaded()
     await reachCodeStep(w)
-    expect(w.find('.error-message').text()).toBe('Failed to send verification token')
-    expect(w.text()).not.toContain('Kunne ikke sende verifiseringskode.')
+    expect(w.find('.error-message').text())
+      .toBe('Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.')
+    expect(w.text()).not.toContain('Failed to send verification token')
   })
 
-  // A proposal whose phone number the API omitted faults inside the try, and the TypeError's message
-  // is handed to the guest by the same path.
-  test('THE DEFECT: an offer with no phone number shows the guest a JavaScript TypeError', async () => {
+  // WAS: a proposal whose phone number the API omitted faulted inside the try, and the TypeError's
+  // message was handed to the guest by the same path — the product blaming her for a blank field she
+  // has never seen and cannot fix.
+  //
+  // NOW: the page refuses BEFORE the guest invests anything. There is no terms box and no confirm
+  // button to press, so the fault is unreachable rather than merely caught, and she is told the one
+  // useful thing: this offer cannot be confirmed by SMS, contact us.
+  test('an offer with no phone number says it cannot be confirmed by SMS, and offers nothing to press', async () => {
     answers.GetByCode = () => Promise.resolve(proposal({ clientPhoneNumber: null }))
     const w = await loaded()
-    await reachCodeStep(w)
-    expect(w.find('.error-message').text()).toMatch(/Cannot read propert/)
+    expect(w.find('.no-phone').exists()).toBe(true)
+    expect(w.text()).toContain('Dette tilbudet kan ikke bekreftes med SMS')
+    expect(w.text()).not.toMatch(/Cannot read propert/)
+    // The guard is the absence of the controls, not a caught exception behind them.
+    expect(w.find('#accept-terms-confirm').exists()).toBe(false)
+    expect(w.find('.btn-approve').exists()).toBe(false)
     expect(called('SendVerificationToken').length).toBe(0)
   })
 })
@@ -518,9 +564,14 @@ describe('a guest on the Swiss market', () => {
     expect(w.find('.success-message h2').text()).toBe('Die Bestellung ist bestätigt!')
   })
 
+  // The claim in the title — told so IN GERMAN — never moved. What moved is what "so" is: this arm
+  // also carried the expired-for-everything defect, in German. The retry line is asserted with it,
+  // because a German page that names the failure and then offers no way forward would satisfy the
+  // title and still strand the guest.
   test('a Swiss guest whose offer will not load is told so in German', async () => {
     answers.GetByCode = () => Promise.reject(new Error('boom'))
     const w = await loaded({ isCh: true })
-    expect(w.find('.error-container h2').text()).toBe('Das Angebot ist abgelaufen')
+    expect(w.find('.error-container h2').text()).toBe('Das Angebot konnte nicht geladen werden')
+    expect(w.find('.error-container').text()).toContain('Erneut versuchen')
   })
 })

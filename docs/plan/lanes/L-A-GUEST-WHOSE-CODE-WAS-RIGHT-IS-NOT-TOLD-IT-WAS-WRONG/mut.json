@@ -1,0 +1,44 @@
+[
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "sendVerification loses the phone guard (the TypeError site)",
+    "from": "      if (!this.termsAccepted || this.isSubmitting) {\n        return;\n      }\n\n      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is\n      // absent `.replace` raised a TypeError straight into the catch below \u2014 which told her the code\n      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never\n      // seen and cannot fix. The template no longer offers these actions without a number, and this\n      // guard is what makes the TypeError impossible rather than merely unreached.\n      if (!this.canConfirmBySms) {\n        this.errorMessage = this.copy.noPhoneText;\n        this.showError = true;\n        return;\n      }\n\n",
+    "to": "      if (!this.termsAccepted || this.isSubmitting) {\n        return;\n      }\n\n"
+  },
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "acceptOffer loses the phone guard (the accusation site)",
+    "from": "      if (!this.verificationCode || this.isSubmitting) {\n        return;\n      }\n\n      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is\n      // absent `.replace` raised a TypeError straight into the catch below \u2014 which told her the code\n      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never\n      // seen and cannot fix. The template no longer offers these actions without a number, and this\n      // guard is what makes the TypeError impossible rather than merely unreached.\n      if (!this.canConfirmBySms) {\n        this.errorMessage = this.copy.noPhoneText;\n        this.showError = true;\n        return;\n      }\n\n",
+    "to": "      if (!this.verificationCode || this.isSubmitting) {\n        return;\n      }\n\n"
+  },
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "the failed send prints core\u2019s English exception again",
+    "from": "        this.errorMessage = this.copy.errorCouldNotSendCodeRetry;\n        this.showError = true;\n      } finally {",
+    "to": "        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;\n        this.showError = true;\n      } finally {"
+  },
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "the refusal accuses the guest again",
+    "from": "errorWrongCode: \"Koden ble ikke godtatt. Sjekk at den er riktig skrevet og pr\u00f8v igjen. Kontakt oss med ordrenummeret ditt hvis det fortsetter.\",",
+    "to": "errorWrongCode: \"Feil verifiseringskode. Vennligst pr\u00f8v igjen.\","
+  },
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "canConfirmBySms is always true, so the warning never shows",
+    "from": "      return Boolean(\n        this.offerProposal &&\n        typeof this.offerProposal.clientPhoneNumber === \"string\" &&\n        this.offerProposal.clientPhoneNumber.trim()\n      );",
+    "to": "      return true;"
+  },
+  {
+    "file": "pages/offer/_code.vue",
+    "test": "test/offer-page-tells-the-guest-the-truth.test.js",
+    "name": "a whitespace-only number counts as a real one",
+    "from": "        this.offerProposal.clientPhoneNumber.trim()\n      );",
+    "to": "        this.offerProposal.clientPhoneNumber\n      );"
+  }
+]

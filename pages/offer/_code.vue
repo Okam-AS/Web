@@ -3,14 +3,46 @@
     <div
       v-if="offerProposal"
       class="offer-proposal"
+      data-test="offer-document"
     >
+      <!-- Stated only where it can be proved: this offer LOADED and its own expiration has passed.
+           It is deliberately a banner and not a replacement for the document — an offer that lapses
+           while she is typing the SMS code must not swap the page out from under her. -->
+      <div
+        v-if="isExpired"
+        class="expired-banner"
+        data-test="offer-expired"
+      >
+        <h2>{{ copy.offerExpiredTitle }}</h2>
+        <p>{{ copy.offerExpiredText }}</p>
+      </div>
+
       <OfferDocument :offer-proposal="offerProposal">
         <div
           v-if="!offerProposal.accepted"
           class="document-section acceptance"
         >
+          <!-- The venue left the mobile number off this offer, so an SMS code cannot be sent and the
+               confirm button below could only ever fail. Said BEFORE she acts, because the failure is
+               knowable now: every other branch of this page waits for a request to come back, and this
+               one does not have to. This is the one absence the page can name with certainty. -->
           <div
-            v-if="!verificationSent"
+            v-if="!canConfirmBySms"
+            class="acceptance-container no-phone"
+            data-test="offer-no-phone"
+          >
+            <h3>{{ copy.noPhoneTitle }}</h3>
+            <p>{{ copy.noPhoneText }}</p>
+            <p
+              v-if="offerProposal.code"
+              class="no-phone-code"
+              data-test="offer-no-phone-code"
+            >
+              {{ copy.orderNumberLabel }} <strong>{{ offerProposal.code }}</strong>
+            </p>
+          </div>
+          <div
+            v-else-if="!verificationSent"
             class="acceptance-container"
           >
             <div class="acceptance-checkbox">
@@ -199,12 +231,34 @@
       <Loading />
     </div>
 
+    <!-- A failed load names no cause, because this page cannot know one. GET /offerproposals/{code}
+         answers 404 for an expired offer, an unknown code, a withdrawn one, and one accepted over an
+         hour ago (Services/OfferProposalService.cs:104-123), and core's TryParseResponse collapses
+         404, 500 and "the request never reached the server" into one untyped Error. Six causes, one
+         signal. Saying "utløpt" here sent a guest to the phone to have a LIVE offer reissued, and left
+         the venue with no way to know the offer had been fine all along. -->
     <div
       v-else-if="error"
       class="error-container"
+      data-test="offer-load-failed"
     >
-      <h2>{{ copy.offerExpiredTitle }}</h2>
-      <p>{{ copy.offerExpiredText }}</p>
+      <h2>{{ copy.loadFailedTitle }}</h2>
+      <p>{{ copy.loadFailedText }}</p>
+      <p
+        v-if="error"
+        class="error-detail"
+        data-test="offer-load-failed-detail"
+      >
+        {{ error }}
+      </p>
+      <button
+        class="btn-approve"
+        :disabled="loading"
+        data-test="offer-retry"
+        @click="loadOffer"
+      >
+        {{ copy.retryButton }}
+      </button>
     </div>
 
     <!-- Terms Modal -->
@@ -261,11 +315,17 @@ export default {
             orderConfirmedText: "Wir werden uns in Kürze bei Ihnen melden, um den Prozess zu starten.",
             offerExpiredTitle: "Das Angebot ist abgelaufen",
             offerExpiredText: "Bitte kontaktieren Sie uns, um ein neues Angebot zu erhalten.",
+            loadFailedTitle: "Das Angebot konnte nicht geladen werden",
+            loadFailedText: "Das kann an der Verbindung liegen, oder der Link ist nicht mehr gültig. Bitte versuchen Sie es erneut. Wenn es weiterhin nicht klappt, kontaktieren Sie uns mit Ihrer Bestellnummer.",
+            retryButton: "Erneut versuchen",
             errorNoOrderNumber: "Keine Bestellnummer angegeben",
             errorCouldNotLoad: "Bestellung konnte nicht geladen werden",
             errorCouldNotSendCodeRetry: "Bestätigungscode konnte nicht gesendet werden. Bitte versuchen Sie es später erneut.",
             errorCouldNotSendCode: "Bestätigungscode konnte nicht gesendet werden.",
-            errorWrongCode: "Falscher Bestätigungscode. Bitte versuchen Sie es erneut.",
+            errorWrongCode: "Der Code wurde nicht akzeptiert. Bitte prüfen Sie ihn und versuchen Sie es erneut. Wenn es weiterhin nicht klappt, kontaktieren Sie uns mit Ihrer Bestellnummer.",
+            noPhoneTitle: "Dieses Angebot kann nicht per SMS bestätigt werden",
+            noPhoneText: "Auf dem Angebot steht keine Mobilnummer, daher können wir Ihnen keinen Code senden. Bitte kontaktieren Sie uns — wir erledigen das für Sie.",
+            orderNumberLabel: "Bestellnummer:",
           }
         : {
             confirmReadIntro: "Jeg bekrefter at jeg har lest gjennom ordren og forstått",
@@ -284,11 +344,17 @@ export default {
             orderConfirmedText: "Vi vil kontakte deg snart for å starte prosessen.",
             offerExpiredTitle: "Tilbudet er utløpt",
             offerExpiredText: "Vennligst kontakt oss for å få et nytt tilbud.",
+            loadFailedTitle: "Vi klarte ikke å laste tilbudet",
+            loadFailedText: "Det kan skyldes nettforbindelsen, eller at lenken ikke lenger er gyldig. Prøv igjen. Hvis det fortsatt ikke går, kontakt oss med ordrenummeret ditt.",
+            retryButton: "Prøv igjen",
             errorNoOrderNumber: "Ingen ordrenummer oppgitt",
             errorCouldNotLoad: "Kunne ikke laste ordren",
             errorCouldNotSendCodeRetry: "Kunne ikke sende verifiseringskode. Vennligst prøv igjen senere.",
             errorCouldNotSendCode: "Kunne ikke sende verifiseringskode.",
-            errorWrongCode: "Feil verifiseringskode. Vennligst prøv igjen.",
+            errorWrongCode: "Koden ble ikke godtatt. Sjekk at den er riktig skrevet og prøv igjen. Kontakt oss med ordrenummeret ditt hvis det fortsetter.",
+            noPhoneTitle: "Dette tilbudet kan ikke bekreftes med SMS",
+            noPhoneText: "Det står ikke noe mobilnummer på tilbudet, så vi får ikke sendt deg en kode. Kontakt oss, så ordner vi det.",
+            orderNumberLabel: "Ordrenummer:",
           };
     },
     totalMonthlyFee() {
@@ -313,6 +379,27 @@ export default {
     hasOnetimeFees() {
       return this.totalOnetimeFee > 0;
     },
+    // The only expiry claim this page is entitled to make: an offer that LOADED, carrying its own
+    // expiration, which has passed. Reachable because the anonymous 404 is not the whole story — a
+    // KAM or PowerUser session is served an expired proposal, and an offer can lapse while the page
+    // is open. It is never inferred from a failure, which is what the defect did.
+    // Whether an SMS code can be sent at all. A trimmed check, because a whitespace-only field is an
+    // empty one for this purpose and `"  ".replace(/\s/g, "")` yields the empty string that the API
+    // would reject anyway. Both `sendVerification` and `acceptOffer` dereference this number, so this
+    // is also the guard that keeps a null out of `.replace`.
+    canConfirmBySms() {
+      return Boolean(
+        this.offerProposal &&
+        typeof this.offerProposal.clientPhoneNumber === "string" &&
+        this.offerProposal.clientPhoneNumber.trim()
+      );
+    },
+    isExpired() {
+      if (!this.offerProposal || !this.offerProposal.expiration) {
+        return false;
+      }
+      return new Date(this.offerProposal.expiration) < new Date();
+    },
     isExpiryClose() {
       if (!this.offerProposal || !this.offerProposal.expiration) {
         return false;
@@ -329,33 +416,39 @@ export default {
     if (this.offerProposal || this.error) {
       return;
     }
-
-    try {
-      // Get the code from the route params
-      const code = this.$route.params.code;
-
-      if (!code) {
-        this.error = this.copy.errorNoOrderNumber;
-        this.loading = false;
-        return;
-      }
-
-      // Fetch the offer proposal using the service from the global mixin
-      const response = await this._offerProposalService.GetByCode(code);
-      this.offerProposal = response;
-
-      // Mark the offer as read
-      if (response && response.offerProposalId) {
-        await this._offerProposalService.MarkAsRead(response.offerProposalId);
-      }
-    } catch (error) {
-      console.error("Error fetching offer proposal:", error);
-      this.error = error.message || this.copy.errorCouldNotLoad;
-    } finally {
-      this.loading = false;
-    }
+    await this.loadOffer();
   },
   methods: {
+    // Extracted from `mounted` so the failure state can offer a way out. A guest on this page cannot
+    // log in, cannot navigate anywhere useful and has nothing but the link she was sent, so a retry
+    // that costs one tap is the whole recovery path.
+    async loadOffer() {
+      this.error = false;
+      this.loading = true;
+      try {
+        // Get the code from the route params
+        const code = this.$route.params.code;
+
+        if (!code) {
+          this.error = this.copy.errorNoOrderNumber;
+          return;
+        }
+
+        // Fetch the offer proposal using the service from the global mixin
+        const response = await this._offerProposalService.GetByCode(code);
+        this.offerProposal = response;
+
+        // Mark the offer as read
+        if (response && response.offerProposalId) {
+          await this._offerProposalService.MarkAsRead(response.offerProposalId);
+        }
+      } catch (error) {
+        console.error("Error fetching offer proposal:", error);
+        this.error = error.message || this.copy.errorCouldNotLoad;
+      } finally {
+        this.loading = false;
+      }
+    },
     formatDate(date) {
       if (!date) {
         return "";
@@ -371,6 +464,17 @@ export default {
     },
     async sendVerification() {
       if (!this.termsAccepted || this.isSubmitting) {
+        return;
+      }
+
+      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is
+      // absent `.replace` raised a TypeError straight into the catch below — which told her the code
+      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never
+      // seen and cannot fix. The template no longer offers these actions without a number, and this
+      // guard is what makes the TypeError impossible rather than merely unreached.
+      if (!this.canConfirmBySms) {
+        this.errorMessage = this.copy.noPhoneText;
+        this.showError = true;
         return;
       }
 
@@ -390,7 +494,13 @@ export default {
           this.showError = true;
         }
       } catch (error) {
-        this.errorMessage = error.message || this.copy.errorCouldNotSendCode;
+        // NEVER error.message. Core throws English strings written for a developer reading a stack
+        // trace ("Failed to send verification token"), and a TypeError here printed its own internals
+        // at a guest. She cannot act on either, and the localised sentence was sitting beside it the
+        // whole time. The cause is not named because it cannot be known — core collapses a 4xx, a 5xx
+        // and a dead connection into one untyped Error — so this says what she can do next instead.
+        console.error("Error sending verification code:", error);
+        this.errorMessage = this.copy.errorCouldNotSendCodeRetry;
         this.showError = true;
       } finally {
         this.scrollToBottom();
@@ -410,6 +520,17 @@ export default {
         return;
       }
 
+      // The dereference that threw. `clientPhoneNumber` is a field the VENUE fills in, and when it is
+      // absent `.replace` raised a TypeError straight into the catch below — which told her the code
+      // was wrong. She had typed it correctly; the product blamed her for a blank field she has never
+      // seen and cannot fix. The template no longer offers these actions without a number, and this
+      // guard is what makes the TypeError impossible rather than merely unreached.
+      if (!this.canConfirmBySms) {
+        this.errorMessage = this.copy.noPhoneText;
+        this.showError = true;
+        return;
+      }
+
       this.isSubmitting = true;
       this.showError = false;
       try {
@@ -420,7 +541,21 @@ export default {
 
         const response = await this._offerProposalService.AcceptOfferWithVerification(this.offerProposal.offerProposalId, model);
 
-        this.offerProposal = response;
+        // The order is PLACED by the time this resolves: AcceptOfferWithVerification throws on
+        // anything but a 200 whose body parsed, so reaching here means the server accepted. A 200
+        // with an empty body parses to '', and assigning that erased the proposal and rendered
+        // nothing at all — no confirmation, no error, no way back, on the far side of the money.
+        //
+        // So an unusable body may not overwrite what is on screen. The acceptance still happened,
+        // and she is told so from the document already loaded.
+        if (response && typeof response === "object") {
+          this.offerProposal = response;
+        } else {
+          this.offerProposal = {
+            ...this.offerProposal,
+            accepted: new Date().toISOString(),
+          };
+        }
       } catch (error) {
         this.scrollToBottom();
         console.error("Error accepting offer:", error);
@@ -803,6 +938,63 @@ export default {
 
 .error-container {
   color: #e74c3c;
+  text-align: center;
+  padding: 40px 24px;
+}
+
+/* The one detail line that used to be computed and thrown away. It is secondary to the plain-language
+   heading above it, because a guest reading this has no use for a stack of jargon. */
+.error-detail {
+  color: #64748b;
+  font-size: 0.9em;
+  font-style: italic;
+  margin-bottom: 24px;
+}
+
+.no-phone {
+  background: #fff4e5;
+  border: 1px solid #f0c38a;
+  border-radius: 8px;
+  padding: 20px 24px;
+  color: #92400e;
+}
+
+.no-phone h3 {
+  color: #92400e;
+  margin: 0 0 8px 0;
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.no-phone p {
+  margin: 0 0 8px 0;
+}
+
+/* The order number, repeated because the sentence above asks her to quote it and it is otherwise
+   only in the URL she arrived from. */
+.no-phone-code {
+  margin: 0;
+  font-size: 0.95em;
+}
+
+.expired-banner {
+  background-color: #fff4e5;
+  border: 1px solid #f0c38a;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  color: #92400e;
+}
+
+.expired-banner h2 {
+  color: #92400e;
+  border-bottom: none;
+  margin: 0 0 4px 0;
+  font-size: 1.1em;
+}
+
+.expired-banner p {
+  margin: 0;
 }
 
 .success-message {
