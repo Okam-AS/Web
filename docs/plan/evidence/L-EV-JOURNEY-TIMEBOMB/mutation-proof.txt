@@ -1,0 +1,109 @@
+=== BASELINE : jest exit 0 ===
+    ['Tests:       42 passed, 42 total']
+=== A-date-literal-back : jest exit 1 ===
+    puts back : the offer expiry written down again, exactly as it stood before this lane
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : blanking removed the prose and kept the code, in the spec that quotes its own defect (1 ms); every date literal still in the future is in the ledger, with a reason (1 ms); carries no written-down calendar date at all, in any tense
+    by name   : YES -- carries no written-down calendar date at all, in any tense
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== B-constant-subject-name : jest exit 1 ===
+    puts back : the contact name back to a constant, so a second run makes a second row with it
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : GUEST.name is different on a second run (1 ms); every hasText: argument is either a per-run subject or recorded copy (2 ms)
+    by name   : YES -- GUEST.name is different on a second run (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== C-row-found-by-a-bare-string : jest exit 1 ===
+    puts back : the row located by a bare string instead of by this run's subject
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : every hasText: argument is either a per-run subject or recorded copy (2 ms)
+    by name   : YES -- every hasText: argument is either a per-run subject or recorded copy (2 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== D-run-token-made-constant : jest exit 1 ===
+    puts back : the run token replaced by a constant -- the subtlest revert, since every reference still reads
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : declares a run token, and two invocations of its own naming path disagree (3 ms); GUEST.name is different on a second run (1 ms); GUEST.email is different on a second run; GUEST.occasion is different on a second run (1 ms); INVOICE.reference is different on a second run; every hasText: argument is either a per-run subject or recorded copy (2 ms); both Events specs declare `RUN` identically
+    by name   : YES -- declares a run token, and two invocations of its own naming path disagree (3 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== E-convention-drift : jest exit 1 ===
+    puts back : one of the two Events specs re-spelling the shared helper, which is how two conventions start
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : both Events specs declare `daysFromNow` identically (1 ms)
+    by name   : YES -- both Events specs declare `daysFromNow` identically (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== F-past-date-literal : jest exit 1 ===
+    puts back : a date literal that is already PAST -- not a countdown today, and refused anyway, because a past literal in a journey that makes its own world is next year's countdown
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : carries no written-down calendar date at all, in any tense (2 ms); GUEST.date is a day derived from the clock, and it is ahead of today
+    by name   : YES -- carries no written-down calendar date at all, in any tense (2 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== G-guard-blanker-loses-its-place : jest exit 1 ===
+    puts back : the guard's own reader made regex-blind, so the lone quote inside /Navigation cancelled from "../ swallows the rest of the file it is reading
+    in        : test/journey-rerunnability.test.js
+    reds      : every comment-only line in every spec came out blank (4 ms); the blanker survives a regex literal carrying a quote — the shape this corpus contains (1 ms)
+    by name   : YES -- the blanker survives a regex literal carrying a quote — the shape this corpus contains (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== H-ledger-stops-matching-the-corpus : jest exit 1 ===
+    puts back : the ledger pointed at a date that is not in the tree, which is both an unaccounted countdown still in the corpus and a ledger entry naming nothing
+    in        : test/journey-rerunnability.test.js
+    reds      : every date literal still in the future is in the ledger, with a reason (1 ms); every ledger entry still names a literal that is really there (1 ms)
+    by name   : YES -- every date literal still in the future is in the ledger, with a reason (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== I-registered-spec-buys-an-exemption : jest exit 1 ===
+    puts back : a registered journey excusing its own countdown by writing itself into the ledger
+    in        : test/journey-rerunnability.test.js
+    reds      : every ledger entry still names a literal that is really there (2 ms); a registered journey cannot buy an exemption (1 ms)
+    by name   : YES -- a registered journey cannot buy an exemption (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== J-lever-restore-deleted : jest exit 1 ===
+    puts back : the walk ending with both Events levers still up, which is how it stood when run 2 died at the darkness assertion
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : a registered spec that asserts a gated refusal ends with no lever switched on (4 ms); every lever a registered spec leaves up is in the ledger, with a reason
+    by name   : YES -- a registered spec that asserts a gated refusal ends with no lever switched on (4 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== K-refusal-copy-rewritten-and-restore-deleted : jest exit 1 ===
+    puts back : the same fault WITH both Norwegian sentences rewritten -- the rename a rule keyed to one literal would have passed clean. Checked afterwards rather than assumed: what still finds the spec is the ENGLISH phrase in its own test title ("while the module is off") and the wire code EVENTS_DISABLED in its finding string. The prediction written here first -- that only the wire code would be left and the dialect self-check would red beside it -- was wrong, and the vocabulary held for a reason its author had not counted on
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : a registered spec that asserts a gated refusal ends with no lever switched on (2 ms); every lever a registered spec leaves up is in the ledger, with a reason
+    by name   : YES -- a registered spec that asserts a gated refusal ends with no lever switched on (2 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== L-restore-hidden-behind-a-loop-variable : jest exit 1 ===
+    puts back : the restore written through a loop variable -- it reads correctly, it would even work, and it makes the rule that requires it unable to see which lever was put back
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : a registered spec that asserts a gated refusal ends with no lever switched on (2 ms); every lever a registered spec leaves up is in the ledger, with a reason (1 ms); every lever a registered spec moves names a flag this reader can resolve (1 ms)
+    by name   : YES -- every lever a registered spec moves names a flag this reader can resolve (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== M-lever-ledger-goes-stale : jest exit 1 ===
+    puts back : the lever ledger pointed at a lever nothing leaves up, which is both an unaccounted lever in the corpus and a ledger entry naming nothing
+    in        : test/journey-rerunnability.test.js
+    reds      : every lever a registered spec leaves up is in the ledger, with a reason (2 ms); every ledger entry still names a lever that is really left up (1 ms)
+    by name   : YES -- every ledger entry still names a lever that is really left up (1 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== N-darkness-asserting-spec-buys-the-exemption : jest exit 1 ===
+    puts back : the cheapest way to make the restore rule green -- the journey that asserts darkness writing itself into the ledger instead of restoring anything
+    in        : test/journey-rerunnability.test.js
+    reds      : a spec that asserts a gated refusal cannot buy its way into the ledger (2 ms); every ledger entry still names a lever that is really left up (1 ms)
+    by name   : YES -- a spec that asserts a gated refusal cannot buy its way into the ledger (2 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== O-lever-reader-goes-blind : jest exit 1 ===
+    puts back : a lever call written in a shape the static reader cannot parse. It does not make the reader fail -- it makes it see one fewer lever, which is the failure mode this whole rule has
+    in        : test/e2e/journeys/events-enquiry-to-settlement.spec.js
+    reds      : no lever-looking call in a registered spec went unparsed (2 ms)
+    by name   : YES -- no lever-looking call in a registered spec went unparsed (2 ms)
+    restored  : jest exit 0 (['Tests:       42 passed, 42 total'])
+
+=== FINAL : jest exit 0 ===
+    ['Tests:       42 passed, 42 total']

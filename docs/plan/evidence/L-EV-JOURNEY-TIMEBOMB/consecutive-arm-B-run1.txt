@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:200:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture (12.7s)
+
+  1 passed (14.3s)

@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="1fc551f4-ff2c-42d4-959b-9b923ca5ab80" name="@Svens-MacBook-Pro 2026-08-09 17:51:59" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:51:59.6197610+02:00" queuing="2026-08-09T17:51:59.6197610+02:00" start="2026-08-09T17:51:53.9535150+02:00" finish="2026-08-09T17:51:59.6225250+02:00" />
+  <TestSettings name="default" id="de53614b-373f-48cd-8257-8cca5eee867a">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_51_59" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c2064db4-5a8c-4644-b4af-f0ab044f9965" testId="36183090-5683-097a-0160-c510d9edbf8f" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" computerName="Svens-MacBook-Pro" duration="00:00:00.0208230" startTime="2026-08-09T17:51:59.5618190+02:00" endTime="2026-08-09T17:51:59.5618190+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2064db4-5a8c-4644-b4af-f0ab044f9965" />
+    <UnitTestResult executionId="260049fc-480d-455b-bb4f-cf7fe5f59f0f" testId="d560628c-26d4-61bd-86bc-f51cf947f7bc" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_answers_only_an_operator_session_it_can_resolve" computerName="Svens-MacBook-Pro" duration="00:00:00.0104893" startTime="2026-08-09T17:51:59.5408360+02:00" endTime="2026-08-09T17:51:59.5408360+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="260049fc-480d-455b-bb4f-cf7fe5f59f0f" />
+    <UnitTestResult executionId="9cef0a15-5fe8-4437-b0fe-788d2961501f" testId="6e47af9f-905a-3fa6-b8e9-9f706a32a712" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" computerName="Svens-MacBook-Pro" duration="00:00:00.0079123" startTime="2026-08-09T17:51:59.5300680+02:00" endTime="2026-08-09T17:51:59.5300680+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9cef0a15-5fe8-4437-b0fe-788d2961501f" />
+    <UnitTestResult executionId="f51adff0-4309-42ce-aa1d-dd3058ecfbd4" testId="43f1981e-b0ed-af01-c1e0-487a31695d45" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" computerName="Svens-MacBook-Pro" duration="00:00:00.3619601" startTime="2026-08-09T17:51:59.4071500+02:00" endTime="2026-08-09T17:51:59.4071580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f51adff0-4309-42ce-aa1d-dd3058ecfbd4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+          ↓ (pos 0)
+Expected: None
+Actual:   Open
+          ↑ (pos 0)</Message>
+          <StackTrace>   at WebApi.Tests.Wire.WorkforcePosClockWireTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers&gt;b__0&gt;d.MoveNext() in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 79
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body) in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 345
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body) in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 354
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers() in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 59
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="68ffda85-dbb3-4828-8429-d151b910609b" testId="b86e80d3-76cf-4359-3a40-54595e06ef54" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_already_open_refusal_names_the_instant_the_accepted_punch_reported" computerName="Svens-MacBook-Pro" duration="00:00:00.0437036" startTime="2026-08-09T17:51:59.5223160+02:00" endTime="2026-08-09T17:51:59.5223160+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="68ffda85-dbb3-4828-8429-d151b910609b" />
+    <UnitTestResult executionId="a1778983-6a57-4b02-8a76-97a548e2f90f" testId="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" computerName="Svens-MacBook-Pro" duration="00:00:00.0718462" startTime="2026-08-09T17:51:59.4783630+02:00" endTime="2026-08-09T17:51:59.4783630+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1778983-6a57-4b02-8a76-97a548e2f90f">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+          ↓ (pos 0)
+Expected: None
+Actual:   Open
+          ↑ (pos 0)</Message>
+          <StackTrace>   at WebApi.Tests.Wire.WorkforcePosClockWireTests.&lt;&gt;c__DisplayClass4_0.&lt;&lt;A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp&gt;b__0&gt;d.MoveNext() in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 126
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body) in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 345
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body) in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 354
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp() in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 103
+   at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp() in /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs:line 145
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_answers_only_an_operator_session_it_can_resolve" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d560628c-26d4-61bd-86bc-f51cf947f7bc">
+      <Execution id="260049fc-480d-455b-bb4f-cf7fe5f59f0f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_clock_state_read_answers_only_an_operator_session_it_can_resolve" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7">
+      <Execution id="a1778983-6a57-4b02-8a76-97a548e2f90f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="36183090-5683-097a-0160-c510d9edbf8f">
+      <Execution id="c2064db4-5a8c-4644-b4af-f0ab044f9965" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_already_open_refusal_names_the_instant_the_accepted_punch_reported" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b86e80d3-76cf-4359-3a40-54595e06ef54">
+      <Execution id="68ffda85-dbb3-4828-8429-d151b910609b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_already_open_refusal_names_the_instant_the_accepted_punch_reported" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6e47af9f-905a-3fa6-b8e9-9f706a32a712">
+      <Execution id="9cef0a15-5fe8-4437-b0fe-788d2961501f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="43f1981e-b0ed-af01-c1e0-487a31695d45">
+      <Execution id="f51adff0-4309-42ce-aa1d-dd3058ecfbd4" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="36183090-5683-097a-0160-c510d9edbf8f" executionId="c2064db4-5a8c-4644-b4af-f0ab044f9965" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d560628c-26d4-61bd-86bc-f51cf947f7bc" executionId="260049fc-480d-455b-bb4f-cf7fe5f59f0f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e47af9f-905a-3fa6-b8e9-9f706a32a712" executionId="9cef0a15-5fe8-4437-b0fe-788d2961501f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43f1981e-b0ed-af01-c1e0-487a31695d45" executionId="f51adff0-4309-42ce-aa1d-dd3058ecfbd4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b86e80d3-76cf-4359-3a40-54595e06ef54" executionId="68ffda85-dbb3-4828-8429-d151b910609b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7" executionId="a1778983-6a57-4b02-8a76-97a548e2f90f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="6" executed="6" passed="4" failed="2" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.84]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.06]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.06]   Starting:    WebApi.Tests
+[xUnit.net 00:00:05.25]       Assert.Equal() Failure
+[xUnit.net 00:00:05.25]                 ↓ (pos 0)
+[xUnit.net 00:00:05.25]       Expected: None
+[xUnit.net 00:00:05.25]       Actual:   Open
+[xUnit.net 00:00:05.25]                 ↑ (pos 0)
+[xUnit.net 00:00:05.25]       Stack Trace:
+[xUnit.net 00:00:05.25]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(79,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.&lt;&gt;c__DisplayClass3_0.&lt;&lt;A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers&gt;b__0&gt;d.MoveNext()
+[xUnit.net 00:00:05.25]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.25]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(345,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body)
+[xUnit.net 00:00:05.25]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(354,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body)
+[xUnit.net 00:00:05.25]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(59,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers()
+[xUnit.net 00:00:05.25]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.32]       Assert.Equal() Failure
+[xUnit.net 00:00:05.32]                 ↓ (pos 0)
+[xUnit.net 00:00:05.32]       Expected: None
+[xUnit.net 00:00:05.32]       Actual:   Open
+[xUnit.net 00:00:05.32]                 ↑ (pos 0)
+[xUnit.net 00:00:05.32]       Stack Trace:
+[xUnit.net 00:00:05.32]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(126,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.&lt;&gt;c__DisplayClass4_0.&lt;&lt;A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp&gt;b__0&gt;d.MoveNext()
+[xUnit.net 00:00:05.32]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.32]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(345,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body)
+[xUnit.net 00:00:05.32]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(354,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.WithClockWriteEnabled(Func`1 body)
+[xUnit.net 00:00:05.32]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(103,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp()
+[xUnit.net 00:00:05.32]         /Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/Wire/WorkforcePosClockWireTests.cs(145,0): at WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp()
+[xUnit.net 00:00:05.32]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.42]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:51:59.4064090+02:00">
+        <Text>[xUnit.net 00:00:05.25]     WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:51:59.4783660+02:00">
+        <Text>[xUnit.net 00:00:05.32]     WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

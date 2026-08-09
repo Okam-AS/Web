@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f716587e-c230-4f74-a7cd-06ea441441ea" name="@Svens-MacBook-Pro 2026-08-09 17:51:33" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:51:33.2591000+02:00" queuing="2026-08-09T17:51:33.2591000+02:00" start="2026-08-09T17:51:27.3343860+02:00" finish="2026-08-09T17:51:33.2618910+02:00" />
+  <TestSettings name="default" id="bc983aed-ab3a-4b9b-9703-8904c0f378b5">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_51_33" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="8be8a5cb-d38b-41ca-bd9e-999617304cba" testId="36183090-5683-097a-0160-c510d9edbf8f" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" computerName="Svens-MacBook-Pro" duration="00:00:00.0441570" startTime="2026-08-09T17:51:33.1907900+02:00" endTime="2026-08-09T17:51:33.1907900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8be8a5cb-d38b-41ca-bd9e-999617304cba" />
+    <UnitTestResult executionId="7ce9a1a6-e587-492e-9676-b594c294ae31" testId="b86e80d3-76cf-4359-3a40-54595e06ef54" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_already_open_refusal_names_the_instant_the_accepted_punch_reported" computerName="Svens-MacBook-Pro" duration="00:00:00.0859999" startTime="2026-08-09T17:51:33.0534010+02:00" endTime="2026-08-09T17:51:33.0534010+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ce9a1a6-e587-492e-9676-b594c294ae31" />
+    <UnitTestResult executionId="8ee0c8b2-fa7e-4c10-a01a-e5e8777143e1" testId="6e47af9f-905a-3fa6-b8e9-9f706a32a712" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" computerName="Svens-MacBook-Pro" duration="00:00:00.0567972" startTime="2026-08-09T17:51:33.1019460+02:00" endTime="2026-08-09T17:51:33.1019460+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ee0c8b2-fa7e-4c10-a01a-e5e8777143e1" />
+    <UnitTestResult executionId="a88e83eb-3bf5-49db-862c-5226be4cbbd0" testId="43f1981e-b0ed-af01-c1e0-487a31695d45" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" computerName="Svens-MacBook-Pro" duration="00:00:00.3885169" startTime="2026-08-09T17:51:32.8779470+02:00" endTime="2026-08-09T17:51:32.8779560+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a88e83eb-3bf5-49db-862c-5226be4cbbd0" />
+    <UnitTestResult executionId="5862c89f-f722-4394-b078-6d9a977d56e0" testId="d560628c-26d4-61bd-86bc-f51cf947f7bc" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_answers_only_an_operator_session_it_can_resolve" computerName="Svens-MacBook-Pro" duration="00:00:00.0441874" startTime="2026-08-09T17:51:33.1464270+02:00" endTime="2026-08-09T17:51:33.1464280+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5862c89f-f722-4394-b078-6d9a977d56e0" />
+    <UnitTestResult executionId="cc9fdb7d-4c8b-407e-96b6-b7e2d170fc4b" testId="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7" testName="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" computerName="Svens-MacBook-Pro" duration="00:00:00.0690236" startTime="2026-08-09T17:51:32.9473070+02:00" endTime="2026-08-09T17:51:32.9473070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc9fdb7d-4c8b-407e-96b6-b7e2d170fc4b" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_answers_only_an_operator_session_it_can_resolve" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d560628c-26d4-61bd-86bc-f51cf947f7bc">
+      <Execution id="5862c89f-f722-4394-b078-6d9a977d56e0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_clock_state_read_answers_only_an_operator_session_it_can_resolve" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7">
+      <Execution id="cc9fdb7d-4c8b-407e-96b6-b7e2d170fc4b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="A_cross_employer_refusal_is_not_a_clean_clock_in_wearing_another_employers_timestamp" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="36183090-5683-097a-0160-c510d9edbf8f">
+      <Execution id="8be8a5cb-d38b-41ca-bd9e-999617304cba" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_register_can_ask_whether_this_operator_is_clocked_in_and_the_answer_moves" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_already_open_refusal_names_the_instant_the_accepted_punch_reported" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b86e80d3-76cf-4359-3a40-54595e06ef54">
+      <Execution id="7ce9a1a6-e587-492e-9676-b594c294ae31" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_already_open_refusal_names_the_instant_the_accepted_punch_reported" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6e47af9f-905a-3fa6-b8e9-9f706a32a712">
+      <Execution id="8ee0c8b2-fa7e-4c10-a01a-e5e8777143e1" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="The_clock_state_read_survives_the_kill_switch_that_stops_the_punch_beside_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforcePosClockWireTests.A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" storage="/users/svendaneel/okam/wt-wfclockwire/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="43f1981e-b0ed-af01-c1e0-487a31695d45">
+      <Execution id="a88e83eb-3bf5-49db-862c-5226be4cbbd0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfclockwire/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforcePosClockWireTests" name="A_clock_out_that_closed_nothing_does_not_answer_what_a_real_clock_out_answers" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="36183090-5683-097a-0160-c510d9edbf8f" executionId="8be8a5cb-d38b-41ca-bd9e-999617304cba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b86e80d3-76cf-4359-3a40-54595e06ef54" executionId="7ce9a1a6-e587-492e-9676-b594c294ae31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6e47af9f-905a-3fa6-b8e9-9f706a32a712" executionId="8ee0c8b2-fa7e-4c10-a01a-e5e8777143e1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43f1981e-b0ed-af01-c1e0-487a31695d45" executionId="a88e83eb-3bf5-49db-862c-5226be4cbbd0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d560628c-26d4-61bd-86bc-f51cf947f7bc" executionId="5862c89f-f722-4394-b078-6d9a977d56e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7f501fe3-0da0-ffa5-4482-e9df46e2e6c7" executionId="cc9fdb7d-4c8b-407e-96b6-b7e2d170fc4b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="6" executed="6" passed="6" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.86]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.08]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.09]   Starting:    WebApi.Tests
+[xUnit.net 00:00:05.69]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,0 +1,16 @@
+=== ARM A  per-run subject name, levers restored (what this lane ships) ===
+    world reset before this arm : HTTP 200
+    run 1 : exit 0  (1 passed, 0 failed)  expected pass, got pass
+    run 2 : exit 0  (1 passed, 0 failed)  expected pass, got pass
+
+=== ARM B  constant subject name (the control -- what it used to be) ===
+    world reset before this arm : HTTP 200
+    run 1 : exit 0  (1 passed, 0 failed)  expected pass, got pass
+    run 2 : exit 1  (0 passed, 1 failed)  expected fail, got fail
+            error    : Error: expect(locator).toHaveCount(expected) failed
+            locator  : locator('.ev-pipeline__row').filter({ hasText: 'Nina Nordmann' })
+            expected : 1
+            received : 2
+            at       : events-enquiry-to-settlement.spec.js:304
+
+spec restored to the shipped text
