@@ -32,7 +32,7 @@ import {
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
 import { formatString, setCurrencyFormat } from '~/core/helpers/tools'
 import { market } from '~/config/edition'
-import { formatAmount, splitAmount, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
+import { formatAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
 
 // Unified core formats prices via currencyInfo (consumer default "100,–").
 // Admin web keeps the legacy "kr 100" prefix format. Driven by the market this
@@ -143,6 +143,12 @@ const mixin = {
     },
     fractionAmount(amount) {
       return splitAmount(currencyFormatForStore(this.$store), amount).fraction
+    },
+    // Money assembled from whole/fraction parts a user typed, so a translation
+    // string can take one {price} token instead of hardcoding a symbol and a
+    // decimal separator into every language. Follows the RUNTIME market.
+    priceFromParts(whole, fraction) {
+      return formatMoneyFromParts(currencyFormatForStore(this.$store), whole, fraction)
     }
   },
   computed: {

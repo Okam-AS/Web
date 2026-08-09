@@ -227,7 +227,7 @@ export default {
   delivery_kmRequired: "Antall km er påkrevd",
   delivery_kroner: "Kroner",
   delivery_loadSettingsError: "Kunne ikke laste leveringsinnstillinger",
-  delivery_methodSummary: "For levering innenfor {minKm} til {maxKm} km fra butikken til kunden, vil et kjøretillegg på kr {wholeAmount},{fractionAmount} forekomme.",
+  delivery_methodSummary: "For levering innenfor {minKm} til {maxKm} km fra butikken til kunden, vil et kjøretillegg på {price} forekomme.",
   delivery_minimumOrderKroner: "Minimum bestilling i kroner",
   delivery_newShippingPrice: "Ny fraktpris",
   delivery_noShippingPrices: "Ingen fraktpriser er lagt til enda.",

@@ -704,11 +704,14 @@ export default {
       const maxKm = this.editorDeliveryMethod.km || "0";
       const wholeAmount = this.editorDeliveryMethod.wholeAmount || "0";
       const fractionAmount = this.editorDeliveryMethod.fractionAmount || "00";
+      // One pre-formatted token. The sentence used to carry "kr {wholeAmount},
+      // {fractionAmount}", which put a Norwegian symbol and separator inside
+      // the German string too; priceFromParts takes both from the runtime
+      // market's currencyFormat.
       this.deliveryMethodSummary = this.$i("delivery_methodSummary", {
         minKm,
         maxKm,
-        wholeAmount,
-        fractionAmount,
+        price: this.priceFromParts(wholeAmount, fractionAmount),
       });
     },
     numericInputValue(value) {

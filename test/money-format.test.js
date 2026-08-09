@@ -1,5 +1,5 @@
 import { market, markets, marketCodes, resolveMarket, runtimeMarketConfig } from '~/config/edition'
-import { formatAmount, formatMarketAmount, splitAmount, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
+import { formatAmount, formatMarketAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
 
 // ---------------------------------------------------------------------------
 // GOLDEN BYTES.
@@ -208,7 +208,11 @@ describe('a third market is a data entry, not a code edit', () => {
       country: 'AT',
       hostname: 'https://okam.example',
       shopUrl: 'https://shop.okam.example',
+      adminUrl: 'https://admin.okam.example',
       phonePrefix: '+43',
+      contactEmail: 'kontakt@okam.example',
+      legalEmail: 'recht@okam.example',
+      privacyEmail: 'datenschutz@okam.example',
       gaId: null,
       fbPixelId: null,
       sitemapExclude: ['/admin/**'],
@@ -231,7 +235,12 @@ describe('a third market is a data entry, not a code edit', () => {
       country: 'ZZ',
       hostname: 'https://okam.invalid',
       shopUrl: 'https://shop.okam.invalid',
+      adminUrl: 'https://admin.okam.invalid',
       phonePrefix: '+999',
+      contactEmail: 'contact@okam.invalid',
+      legalEmail: 'legal@okam.invalid',
+      // A market that publishes no data-protection mailbox at all.
+      privacyEmail: null,
       gaId: null,
       fbPixelId: null,
       sitemapExclude: ['/admin/**'],
@@ -322,7 +331,13 @@ describe('every shipped market carries a complete descriptor', () => {
   ]
   const REQUIRED_MARKET_FIELDS = [
     'code', 'locale', 'locales', 'currency', 'country', 'hostname',
-    'shopUrl', 'phonePrefix', 'gaId', 'fbPixelId', 'sitemapExclude', 'currencyFormat'
+    'shopUrl', 'adminUrl', 'phonePrefix', 'gaId', 'fbPixelId', 'sitemapExclude',
+    'currencyFormat',
+    // Mailboxes. Required (not optional-with-a-default) so market #3 cannot
+    // omit one and silently inherit Norway's or Switzerland's address.
+    // `privacyEmail` may be null -- a market that publishes none must say so --
+    // but the KEY has to be there, which is what hasOwnProperty checks below.
+    'contactEmail', 'legalEmail', 'privacyEmail'
   ]
 
   test.each(marketCodes)('%s', (code) => {
@@ -434,5 +449,85 @@ describe('the mixin money methods follow the RUNTIME market', () => {
     expect(currencyFormatForStore(undefined)).toBe(market.currencyFormat)
     expect(currencyFormatForStore({})).toBe(market.currencyFormat)
     expect(currencyFormatForStore({ getters: {} })).toBe(market.currencyFormat)
+  })
+})
+
+describe('the delivery-editor {price} token', () => {
+  // pages/admin/delivery.vue's summary sentence used to be assembled INSIDE the
+  // translation string: "kr {wholeAmount},{fractionAmount}". That baked a
+  // Norwegian symbol and a Norwegian decimal separator into de.ts and en.ts too,
+  // so the Swiss build printed Norwegian currency inside German copy. It now
+  // passes one pre-formatted {price}.
+  //
+  // The arguments are the raw digit strings from the editor's two inputs, which
+  // is why formatMoneyFromParts does not re-group the whole part: delivery.vue
+  // strips the group separator when it seeds the field, so grouping here would
+  // move Norway's deployed bytes from "kr 1234,50" to "kr 1 234,50".
+
+  // Every row is the EXACT string "kr {wholeAmount},{fractionAmount}" produced
+  // for the same inputs, read off the template this replaced.
+  const NO_GOLDEN = [
+    ['0', '00', 'kr 0,00'],
+    ['0', '50', 'kr 0,50'],
+    ['9', '99', 'kr 9,99'],
+    ['49', '00', 'kr 49,00'],
+    ['129', '90', 'kr 129,90'],
+    ['1234', '50', 'kr 1234,50'],
+    ['1000000', '00', 'kr 1000000,00']
+  ]
+
+  test.each(NO_GOLDEN)('no: (%p, %p) renders %p, byte for byte', (whole, fraction, expected) => {
+    expect(formatMoneyFromParts(markets.no.currencyFormat, whole, fraction)).toBe(expected)
+    // The template it replaces, evaluated on the same inputs.
+    expect(expected).toBe('kr ' + whole + ',' + fraction)
+  })
+
+  test('ch renders Swiss francs with a Swiss decimal separator', () => {
+    expect(formatMoneyFromParts(markets.ch.currencyFormat, '1234', '50')).toBe('CHF 1234.50')
+    expect(formatMoneyFromParts(markets.ch.currencyFormat, '0', '00')).toBe('CHF 0.00')
+  })
+
+  test('no Swiss output carries a Norwegian symbol or separator', () => {
+    const swiss = formatMoneyFromParts(markets.ch.currencyFormat, '129', '90')
+    expect(swiss).not.toContain('kr')
+    expect(swiss).not.toContain(',')
+  })
+
+  test('the symbol and separator follow the RUNTIME market', () => {
+    const storeFor = marketConfig => ({ getters: { marketConfig } })
+    expect(formatMoneyFromParts(currencyFormatForStore(storeFor(markets.no)), '129', '90')).toBe('kr 129,90')
+    expect(formatMoneyFromParts(currencyFormatForStore(storeFor(markets.ch)), '129', '90')).toBe('CHF 129.90')
+  })
+
+  test('a suffix-symbol market puts the symbol last, with no code edit', () => {
+    const euro = {
+      symbol: '€',
+      symbolPosition: 'suffix',
+      symbolSpace: ' ',
+      decimalSeparator: ',',
+      groupSeparator: '.',
+      fractionDigits: 2,
+      amountSplit: 'exact',
+      supportsHideFraction: true
+    }
+    expect(formatMoneyFromParts(euro, '129', '90')).toBe('129,90 €')
+  })
+
+  test('a zero-decimal market shows no fraction at all', () => {
+    const zeroDecimal = {
+      symbol: 'ZZK',
+      symbolPosition: 'prefix',
+      symbolSpace: ' ',
+      decimalSeparator: '.',
+      groupSeparator: ',',
+      fractionDigits: 0,
+      amountSplit: 'exact',
+      supportsHideFraction: true
+    }
+    expect(formatMoneyFromParts(zeroDecimal, '129', '90')).toBe('ZZK 129')
+  })
+
+  test('it refuses a missing descriptor rather than guessing Norwegian', () => {
+    expect(() => formatMoneyFromParts(undefined, '1', '00')).toThrow(/missing currencyFormat descriptor/)
   })
 })

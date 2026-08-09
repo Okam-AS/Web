@@ -88,6 +88,42 @@ export function formatAmount (currencyFormat, amountMinor, hideFractionIfZero) {
 }
 
 /**
+ * Compose one money string out of whole/fraction parts the USER TYPED, using a
+ * market's currencyFormat for the symbol and the decimal separator.
+ *
+ * Why this exists, and why it does NOT re-group the whole part:
+ *   pages/admin/delivery.vue's editor has two digit inputs -- kroner and øre --
+ *   and its summary sentence used to be assembled inside the translation
+ *   string as "kr {wholeAmount},{fractionAmount}". That hardcoded 'kr' and ','
+ *   into all three languages, so the Swiss build printed Norwegian currency in
+ *   German copy. The fix is one pre-formatted {price} token, built here.
+ *
+ *   The `whole` argument is the raw digit string from the input (delivery.vue
+ *   strips the group separator when it seeds the field), so routing it through
+ *   formatAmount would ADD grouping and move the deployed Norwegian bytes from
+ *   "kr 1234,50" to "kr 1 234,50". config/edition.js's standing rule is to keep
+ *   the Norwegian behaviour 100% intact, so this composes the parts as typed
+ *   and only the SYMBOL and SEPARATOR come from the market. Norwegian output is
+ *   therefore byte-identical to the old template for every input, by
+ *   construction -- pinned in test/money-format.test.js.
+ *
+ * @param {object} currencyFormat  a market's `currencyFormat` (config/edition.js)
+ * @param {string|number} whole    the whole part, already digits-only
+ * @param {string|number} fraction the fraction part, already digits-only
+ */
+export function formatMoneyFromParts (currencyFormat, whole, fraction) {
+  if (!currencyFormat) {
+    throw new Error('formatMoneyFromParts: missing currencyFormat descriptor')
+  }
+  const money = currencyFormat.fractionDigits > 0
+    ? String(whole) + currencyFormat.decimalSeparator + String(fraction)
+    : String(whole)
+  return currencyFormat.symbolPosition === 'suffix'
+    ? money + currencyFormat.symbolSpace + currencyFormat.symbol
+    : currencyFormat.symbol + currencyFormat.symbolSpace + money
+}
+
+/**
  * Format a minor-unit amount for a market code. Throws on an unknown code.
  */
 export function formatMarketAmount (marketCode, amountMinor, hideFractionIfZero) {

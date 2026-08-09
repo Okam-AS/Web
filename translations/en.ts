@@ -227,7 +227,7 @@ export default {
   delivery_kmRequired: "Number of km is required",
   delivery_kroner: "Kroner",
   delivery_loadSettingsError: "Could not load delivery settings",
-  delivery_methodSummary: "For delivery within {minKm} to {maxKm} km from the store to the customer, a driving surcharge of kr {wholeAmount},{fractionAmount} will apply.",
+  delivery_methodSummary: "For delivery within {minKm} to {maxKm} km from the store to the customer, a driving surcharge of {price} will apply.",
   delivery_minimumOrderKroner: "Minimum order in kroner",
   delivery_newShippingPrice: "New shipping price",
   delivery_noShippingPrices: "No shipping prices have been added yet.",

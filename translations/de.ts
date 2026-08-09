@@ -227,7 +227,7 @@ export default {
   delivery_kmRequired: "Anzahl der km ist erforderlich",
   delivery_kroner: "Kronen",
   delivery_loadSettingsError: "Lieferungseinstellungen konnten nicht geladen werden",
-  delivery_methodSummary: "Für die Lieferung innerhalb von {minKm} bis {maxKm} km von der Filiale zum Kunden fällt ein Fahraufschlag von kr {wholeAmount},{fractionAmount} an.",
+  delivery_methodSummary: "Für die Lieferung innerhalb von {minKm} bis {maxKm} km von der Filiale zum Kunden fällt ein Fahraufschlag von {price} an.",
   delivery_minimumOrderKroner: "Mindestbestellung in Kronen",
   delivery_newShippingPrice: "Neuer Versandpreis",
   delivery_noShippingPrices: "Es wurden noch keine Versandpreise hinzugefügt.",
