@@ -16,7 +16,38 @@
         </div>
       </transition>
 
-      <div v-if="blocker" class="ff-page__blocker">
+      <!-- WHICH VENUE THIS PAGE IS ABOUT. Every switch below writes to ONE store, and until this bar
+           existed the page named none of them anywhere: it read the globally selected store and, when
+           that was empty, silently fell back to the first store in `adminIn`. On a multi-store account
+           that is a kill switch that can arm a venue the operator is not looking at, with nothing on
+           screen to contradict them — and the conclusion they draw is "the switch does nothing".
+           The name is stated next to the controls rather than only in the nav chrome, because that is
+           where the click happens. -->
+      <div class="ff-page__store">
+        <span class="ff-page__store-label">{{ $i('ff_store_label') }}</span>
+        <select
+          v-if="adminStores.length > 1"
+          class="ff-page__store-select"
+          :value="storeId"
+          :disabled="busy"
+          data-store-select
+          @change="selectStore($event.target.value)"
+        >
+          <option v-for="store in adminStores" :key="store.id" :value="store.id">
+            {{ storeLabel(store) }}
+          </option>
+        </select>
+        <span v-else class="ff-page__store-name" data-store-name>{{ selectedStoreLabel }}</span>
+        <span class="ff-page__store-note">{{ $i('ff_store_note') }}</span>
+      </div>
+
+      <!-- No store chosen, so there is nothing this page could honestly write to. It asks rather than
+           picking one: a guessed venue is indistinguishable on screen from a chosen one. -->
+      <div v-if="!storeId" class="ff-page__blocker" data-store-unselected>
+        {{ $i('ff_store_unselected') }}
+      </div>
+
+      <div v-else-if="blocker" class="ff-page__blocker">
         {{ blocker }}
       </div>
 
@@ -266,11 +297,23 @@ export default {
     };
   },
   computed: {
+    /**
+     * The store every write on this page targets — the globally selected one, and nothing else.
+     *
+     * There used to be a `stores[0]` fallback here for when nothing was selected. It is gone: a
+     * fallback makes "the venue the operator chose" and "the first venue in the list" render
+     * identically, and this page's writes are the ones where that distinction is a kill switch armed
+     * on the wrong venue. Empty now means empty, and the template asks instead of guessing.
+     */
     storeId () {
-      const selected = this.$store.state.selectedAdminStore;
-      if (selected) { return selected; }
-      const stores = (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
-      return stores.length ? stores[0].id : '';
+      return this.$store.state.selectedAdminStore || '';
+    },
+    adminStores () {
+      return (this.$store.state.currentUser && this.$store.state.currentUser.adminIn) || [];
+    },
+    selectedStoreLabel () {
+      const store = this.adminStores.find(x => x && String(x.id) === String(this.storeId));
+      return store ? this.storeLabel(store) : this.$i('ff_store_unselected');
     },
     locale () {
       return this.$store.state.adminLocale || 'no';
@@ -404,6 +447,27 @@ export default {
       this.states = states;
     },
 
+    /**
+     * A store's name, or its id when `adminIn` carries no name for it. Never a blank: an unnamed venue
+     * rendering as empty is the same blindness this bar was added to remove.
+     */
+    storeLabel (store) {
+      if (!store) { return this.$i('ff_store_unselected'); }
+      return store.name || this.$i('ff_store_unnamed', { id: store.id });
+    },
+
+    /**
+     * Changing the venue from here moves the SAME global selection the nav's store picker moves, rather
+     * than holding a second one local to this page. Two sources of truth for "which store" would put
+     * the page and the header on different venues — a new instance of exactly the mismatch this bar
+     * exists to end.
+     */
+    selectStore (storeId) {
+      const store = this.adminStores.find(x => x && String(x.id) === String(storeId));
+      if (!store || String(store.id) === String(this.storeId)) { return; }
+      this.$store.dispatch('SetSelectedAdminStore', store.id);
+    },
+
     overruled (row) {
       return isOverruled(row);
     },
@@ -482,6 +546,17 @@ export default {
 
 .ff-page__blocker { padding: 18px 20px; border-radius: 12px; background: #fff; border: 1px solid #e2e8f0; color: #64748b; }
 .ff-page__controls { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+
+/* The venue bar. Deliberately the most prominent thing above the switches — a solid card rather than
+   the dashed notice the two caveats use — because it is not a caveat: it is the subject of every
+   control below it, and a reader who misses it reads the whole page about the wrong store. */
+.ff-page__store { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 14px 16px; margin-bottom: 14px; border: 1px solid #cbd5e0; border-left: 4px solid #1bb776; border-radius: 12px; background: #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); }
+.ff-page__store-label { font-size: 0.74rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: 0.03em; }
+.ff-page__store-name { font-size: 1.05rem; font-weight: 600; color: #292c34; }
+.ff-page__store-select { padding: 9px 12px; border: 2px solid #e2e8f0; border-radius: 8px; background: #fff; font-size: 0.95rem; font-weight: 600; color: #292c34; }
+.ff-page__store-select:focus { outline: none; border-color: #1bb776; box-shadow: 0 0 0 3px rgba(27, 183, 118, 0.1); }
+.ff-page__store-select:disabled { background: #f1f5f9; color: #94a3b8; cursor: not-allowed; }
+.ff-page__store-note { flex-basis: 100%; color: #64748b; font-size: 0.82rem; }
 
 .ff-page__notice { padding: 10px 16px; border-radius: 10px; background: #f8f9fa; border: 1px dashed #e2e8f0; color: #64748b; margin: 0 0 10px; font-size: 0.86rem; }
 .ff-page__notice--warn { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }

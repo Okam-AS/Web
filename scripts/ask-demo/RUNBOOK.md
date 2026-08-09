@@ -1,7 +1,8 @@
 # Ask Okam — the walk
 
-Ten minutes, one browser, one terminal. `demo.sh` builds the world and arms the flags; this
-document is what to do once it has.
+Quarter of an hour, one browser, one terminal. `demo.sh` builds the world and arms the flags; this
+document is what to do once it has. § 1–3 and § 5 are the ten-minute spine; § 4 is the closure case,
+and it is the one worth staying for.
 
 ```sh
 export AskModel__Gemini__ApiKey=...        # without this every question fails, see § 0
@@ -24,12 +25,22 @@ Four things, and the demo script names each one it cannot find rather than guess
 | `../OkamAPI-ask` on `feature/ask-okam` | it carries `Scripts/demo/demo-up.sh` | run the world yourself and re-run with `SKIP_WORLD=1` |
 | a populated `core/` | the admin web will not build without it | the script prints the exact submodule command |
 
-**The four flags are the point of the script.** `Assistant.Module`, `Assistant.Actions`,
-`Assistant.Actions.MenuPriceChange` and `Assistant.Actions.DiscountCreate` all ship **deny-closed**,
-and the gate ANDs them. With any one off, the assistant still answers questions perfectly well and
-simply never offers to change anything — which reads as *"this half was never built"* rather than
-*"it is switched off"*. Step 3 sets all four through the real operator lever and **reads them back**
-before claiming they are on.
+**The five flags are the point of the script.** `Assistant.Module`, `Assistant.Actions`,
+`Assistant.Actions.MenuPriceChange`, `Assistant.Actions.DiscountCreate` and
+`Assistant.Actions.StoreHoursChange` all ship **deny-closed**, and the gate ANDs them. With any one
+off, the assistant still answers questions perfectly well and simply never offers to change anything
+— which reads as *"this half was never built"* rather than *"it is switched off"*. Step 3 sets all
+five through the real operator lever and **reads them back** before claiming they are on.
+
+**Two things about the hours kind you need before § 4.**
+
+1. `store_hours_change` can be staged **only by asking in the chat box**. There is no MCP tool and no
+   HTTP route for it, unlike the discount and price kinds — so it cannot be hand-staged, and without
+   a live model key § 4 cannot be walked at all. Nothing else in this runbook depends on that.
+2. **Step 5 opens the store seven days a week, 11:00–22:00, and that is not decoration.** A store
+   with no opening-hours rows reads as *closed every day*, so asking to close Mondays would be
+   refused as a change that alters nothing — no card, and a walk that dead-ends looking exactly like
+   a broken feature. The script reads the seven open days back before claiming it seeded them.
 
 ---
 
@@ -113,7 +124,89 @@ Press **Avslå** on a different proposal instead and it is turned down, terminal
 
 ---
 
-## § 4. The inbox (2 min)
+## § 4. Closing a day — the walk that can hide a false success (5 min)
+
+This is the one journey where a card could historically have claimed success while changing nothing,
+so it gets its own section and its own ground truth. Read the card before you approve it; the whole
+point is what is *on* it.
+
+**Before you ask, write down what Monday is now.** Open `/admin/index` → **Åpningstider**. It lists
+all seven days; a shut day reads **Stengt**, never a blank. Straight after `demo.sh` every day reads
+**11:00 - 22:00**, Monday included — if Monday already says *Stengt*, step 5 did not take, and the
+ask below will be correctly refused as a no-op rather than producing the card this section is about.
+
+Then, with one store selected, ask:
+
+> **`Vi holder stengt på mandager fra nå av.`**
+
+### What has to be on the card
+
+**This card has no change table, and that is correct.** The price card's table is typed in *money*,
+and an opening time is not money — so this kind states its days in **prose** instead: the sentence
+under the title, and the same sentence repeated as the single bullet beneath it. Do not go looking
+for a table; the days are the thing to read.
+
+- **Tittel: `Closed on Monday`.** Day names on this card are **English by design** — the same voice
+  as the other two kinds. Norwegian tables elsewhere use a different day-name helper.
+- **The diff names every day the proposal touches, with the word `closed` spelled out**, e.g.
+  `Monday 11:00–22:00 → closed · Tuesday 11:00–22:00 (unchanged) — nothing is live yet.`
+  A day it leaves alone is marked `(unchanged)`. A closed day is **never** a blank or `00:00–00:00`:
+  an empty span is the one thing a reader takes for "unchanged".
+- **The confirm does not count rows here.** With no change table there is nothing to count, so the
+  two-step reads *"Er du sikker? Endringen skjer med én gang."* and **"Godkjenn — gjennomfør
+  endringen"** — not the *"skriv disse 3 prisene"* wording from § 3. A count of **0** anywhere would
+  be a defect; the absence of a count is not.
+
+> **THE CHECK THIS SECTION EXISTS FOR.** Monday must be named in the card's own words **before you
+> approve**, with `closed` as its after-value. The underlying writer only touches days its payload
+> names, so a day cannot be closed by being left out — the executor has to send Monday explicitly
+> shut. **If the card never names Monday and the approve then reports success, stop the walk: that
+> is a release blocker, not a cosmetic gap.**
+
+### After you approve
+
+1. **`/admin/index` → Åpningstider.** Monday reads **Stengt**. This is the page the storefront
+   obeys, so this is the verdict.
+2. **Genuinely shut, not merely absent.** A closure *keeps* the day's stored times — `Open=false`
+   alone closes it — so "closed on Mondays" never destroys the schedule you reopen to. A writer that
+   had zeroed them would look **identical** on that list, so the list cannot tell you. One read can:
+
+   ```sql
+   SELECT DayOfWeek, [Open], OpeningTime, ClosingTime FROM OpeningHours
+   WHERE StoreId = <id> AND DayOfWeek = 0;   -- 0 is Monday in this column
+   ```
+
+   Expect `Open = 0` with **OpeningTime and ClosingTime still populated**. Blank times there mean the
+   closure threw the hours away — a finding worth reporting even though the day is correctly shut.
+
+   ⚠️ **Do not check this by toggling Monday back on in the UI.** That switch has `@change` wired
+   straight to the save, so it writes the moment you touch it: you would reopen the day you just
+   closed and overwrite the very thing you were inspecting.
+3. **Ask the assistant.** `Har vi åpent på mandag?` — the weekly plan now reports Monday shut.
+
+### While you are on that page: dated closures are a different mechanism
+
+Below Åpningstider, `/admin/index` has **Spesielle dager** — dated overrides ("stengt 24. desember"),
+which beat the weekly plan on their date. `Vi holder stengt på mandager` is a *weekly* change and
+never touches them. Ask `Når har vi åpent denne uka?` and the answer now carries both: rows under
+**Kilde** marked `Ukeplan`, and any dated ones marked `Unntaksdag` with their date, plus a line
+stating how far ahead it looked. If no dated exception falls in that window the answer says so
+outright — the one thing it must never do is stay silent, because a merchant reading a weekly plan
+cannot tell the difference between "nothing is booked" and "this tool cannot see them".
+
+### Then the no-op probe
+
+Ask **exactly the same thing again**. Expect: **no card**. The executor refuses a change that "would
+leave every one of those days exactly as it is", so nothing is staged.
+
+**Be ready for what the answer does *not* say.** The refusal's own sentence is deliberately withheld
+from the model — executor prose is never quoted back into a turn — so the assistant tells you only
+that nothing was prepared, never that it was because Monday is already shut. That is the same silent
+refusal a nonsense discount gets. It is a deliberate trade, and § 7 lists it as one.
+
+---
+
+## § 5. The inbox (2 min)
 
 Open the **Venter på deg** tab.
 
@@ -137,11 +230,34 @@ not.
   machine-readable: *"Denne handlingstypen er slått av … Forslaget står fortsatt"* — and **the card
   stays on screen**, because turning the flag back on lets that same proposal approve. Every other
   409 removes the card, because the row has already moved.
+  **Check the venue while you are there.** The flags page names the store it is writing to, at the
+  top, above the switches — and on a multi-store account it is a picker, not a default. Flags are
+  per-store, so a switch flipped on the wrong venue looks exactly like a switch that does nothing.
 - **Let one expire.** `ExpiresAt` is `CreatedAt + 48h`, so this one needs patience or a clock.
+
+### If an approve dies mid-flight
+
+Kill the API between the claim and the write — a crash, a Ctrl-C at the wrong moment — and that row
+sits in `Executing` forever: approve and reject both 409 from then on. **Nothing local will rescue
+it.** The reaper that recovers abandoned claims is off in Development (`MaintenanceSettings:Enabled`
+is `false`), it leases through Redis, and it will not touch a claim younger than five minutes — so
+even switched on it is not a demo-speed recovery. Do not change the scheduling to find out.
+
+Stage a fresh proposal and carry on. If you want that row cleared, one statement does it:
+
+```sql
+UPDATE StagedActions SET Status = 'Failed', ResolvedAt = SYSDATETIME(),
+       FailureReason = 'Cleared by hand during a demo walk'
+WHERE Status = 'Executing';
+```
+
+Run it against the **demo** database only — via
+`docker exec <sql container> /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P <pw> -d <demo db> -Q "…"`.
+It is a local walk-around, not a repair: the real recovery path is the reaper, and it is production's.
 
 ---
 
-## § 5. The doorway from Statistikk (1 min)
+## § 6. The doorway from Statistikk (1 min)
 
 Go to `/admin/statistics`, narrow the store filter, and type a question into the AI box.
 
@@ -158,7 +274,7 @@ Norwegian regardless of the locale they had chosen. That is gone with the call.
 
 ---
 
-## § 6. What this walk cannot show you
+## § 7. What this walk cannot show you
 
 Named here so the walk is not read as covering more than it does:
 
@@ -172,6 +288,12 @@ Named here so the walk is not read as covering more than it does:
   every kind, and when it lands the branching gets simpler with nothing here thrown away.
 - **A margin read on the card.** There is no margin-enrichment block on the proposal card; nothing
   produces one. No UI was built for it.
+- **Why a proposal was refused before it became a card.** A discount outside 1–99 %, or an hours
+  change that would leave every named day as it is, is turned down at propose time — and the
+  executor's own sentence explaining which rule it broke is deliberately **not** handed to the model,
+  because executor prose must never be quoted back into a turn. So the merchant is told nothing was
+  staged and never why. Safe, and a real cost: § 4's no-op probe and any nonsense-discount probe both
+  land here, and whether that trade is acceptable is a ruling, not a bug report.
 - **Multi-turn memory.** Every turn is an independent request. The composer says so.
 
 ### One thing that looks like a bug and is not
