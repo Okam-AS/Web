@@ -1,5 +1,9 @@
 <template>
   <div class="terms-content">
+    <!-- Norway's merchant agreement. Gated on its OWN documentId, not on
+         `market !== 'ch'`: an inverted fork would hand market #3 Norwegian law
+         and Oslo tingrett as its venue without anyone editing a line. -->
+    <template v-if="terms.documentId === 'no-avtalevilkar-2025-04-12'">
     <h1>Avtalevilkår for Okam AS</h1>
     <p class="terms-date">Sist oppdatert: 12. april 2025</p>
     <h2>Generelle Avtalevilkår for Okam AS</h2>
@@ -27,12 +31,32 @@
       <li><strong>Drift:</strong> Okam AS garanterer 99% oppetid på månedsbasis. Dette gjelder ikke ved planlagt vedlikehold eller forhold utenfor Okam AS sin kontroll.</li>
       <li><strong>Lovvalg og tvister:</strong> Avtalen reguleres av norsk rett. Tvister løses i minnelighet eller ved Oslo tingrett.</li>
     </ul>
+    </template>
+
+    <!-- A market with no agreement of its own says so, and says who to ask. -->
+    <div
+      v-else
+      class="terms-unpublished"
+    >
+      <h1>{{ terms.title }}</h1>
+      <p>{{ terms.body }}</p>
+      <p>
+        <a :href="`mailto:${marketConfig.contactEmail}`">{{ marketConfig.contactEmail }}</a>
+      </p>
+    </div>
   </div>
 </template>
 
 <script>
+import { merchantTermsFor } from "~/utils/merchant-terms";
+
 export default {
   name: "TermsContent",
+  computed: {
+    terms() {
+      return merchantTermsFor(this.marketConfig);
+    },
+  },
 };
 </script>
 
