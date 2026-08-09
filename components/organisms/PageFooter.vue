@@ -5,7 +5,7 @@
   >
     <!-- Swiss edition footer (de-CH, legal links) -->
     <div
-      v-if="isCh"
+      v-if="marketConfig.code === 'ch'"
       class="wrapper"
     >
       <div class="page-footer__cols">
@@ -37,9 +37,12 @@
       </div>
     </div>
 
-    <!-- Norwegian edition footer -->
+    <!-- Norwegian edition footer. Gated on Norway's OWN code, not on `not
+         Switzerland`: every link below goes to a Norwegian-language page, and
+         the block names Okam AS and its Norwegian org number, so an inverted
+         fork would hand market #3 Norway's nav and Norway's company. -->
     <div
-      v-else
+      v-else-if="marketConfig.code === 'no'"
       class="wrapper"
     >
       <div class="page-footer__cols">
@@ -80,8 +83,35 @@
             <p>Org nr.: 925 024 414</p>
             <p>
               Tlf: 988 65 120<br>E-post:
-              <a href="mailto:kontakt@okam.no">kontakt@okam.no</a>
+              <a :href="`mailto:${marketConfig.contactEmail}`">{{ marketConfig.contactEmail }}</a>
             </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Any other market: the logo and its own contact address, and nothing
+         that belongs to Norway or to Switzerland. A market gets a real footer
+         by adding a branch above, not by falling into one. -->
+    <div
+      v-else
+      class="wrapper"
+    >
+      <div class="page-footer__cols">
+        <div class="page-footer__col">
+          <img
+            class="page-header__logo"
+            src="~/assets/UI/okam_logo_dark.svg"
+            alt=""
+          >
+        </div>
+        <div class="page-footer__col" />
+        <div class="page-footer__col">
+          <div class="page-footer__contact">
+            <p>
+              <a :href="`mailto:${marketConfig.contactEmail}`">{{ marketConfig.contactEmail }}</a>
+            </p>
+            <p>© Okam</p>
           </div>
         </div>
       </div>

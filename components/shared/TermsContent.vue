@@ -2,8 +2,10 @@
   <div class="terms-content">
     <!-- Norway's merchant agreement. Gated on its OWN documentId, not on
          `market !== 'ch'`: an inverted fork would hand market #3 Norwegian law
-         and Oslo tingrett as its venue without anyone editing a line. -->
-    <template v-if="terms.documentId === 'no-avtalevilkar-2025-04-12'">
+         and Oslo tingrett as its venue without anyone editing a line.
+         The id is READ FROM the registry rather than repeated as a literal, so
+         the two cannot drift apart and leave this block silently unreachable. -->
+    <template v-if="terms.documentId === norwegianDocumentId">
     <h1>Avtalevilkår for Okam AS</h1>
     <p class="terms-date">Sist oppdatert: 12. april 2025</p>
     <h2>Generelle Avtalevilkår for Okam AS</h2>
@@ -33,6 +35,23 @@
     </ul>
     </template>
 
+    <!-- A market whose row SAYS an agreement is published, for which this file
+         has no matching block. Whoever adds market #3's document adds its
+         markup above with its own v-else-if, ahead of this branch. Until then
+         this must be loud: pages/offer/_code.vue shows this component directly
+         above an acceptance tick-box, and a blank page under the heading
+         "Avtalevilkår for Okam AS" is a contract a merchant can accept. -->
+    <div
+      v-else-if="terms.published"
+      class="terms-unavailable"
+    >
+      <h1>{{ missing.title }}</h1>
+      <p>{{ missing.body }}</p>
+      <p>
+        <a :href="`mailto:${marketConfig.contactEmail}`">{{ marketConfig.contactEmail }}</a>
+      </p>
+    </div>
+
     <!-- A market with no agreement of its own says so, and says who to ask. -->
     <div
       v-else
@@ -48,13 +67,21 @@
 </template>
 
 <script>
-import { merchantTermsFor } from "~/utils/merchant-terms";
+import { MERCHANT_TERMS, merchantTermsFor, merchantTermsUnavailableCopy } from "~/utils/merchant-terms";
 
 export default {
   name: "TermsContent",
   computed: {
     terms() {
       return merchantTermsFor(this.marketConfig);
+    },
+    // Read from the registry, never retyped. A one-sided edit to either would
+    // otherwise leave `published: true` with no branch to render it.
+    norwegianDocumentId() {
+      return MERCHANT_TERMS.no.documentId;
+    },
+    missing() {
+      return merchantTermsUnavailableCopy(this.marketConfig);
     },
   },
 };

@@ -9,13 +9,31 @@ const fbPixelId = market.fbPixelId
 // Swiss-only legal pages so they're not discoverable on okam.no.
 const sitemapExclude = market.sitemapExclude
 
+// Routes this market does not BUILD -- another market's national legal
+// documents. Sitemap exclusion only hides a page from discovery; these were
+// still emitted as HTML, self-canonicalised by layouts/default.vue, and served
+// under `Allow: /`. Matching is anchored and tolerates a nuxt-i18n locale
+// prefix, so '/impressum' also removes '/en/impressum' whichever order the
+// route table is built in.
+const routeExcludeMatchers = market.routeExclude.map(
+  route => new RegExp('^/([a-z]{2}/)?' + route.replace(/^\//, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '/?$')
+)
+const routeIsExcluded = path => routeExcludeMatchers.some(matcher => matcher.test(path))
+
 export default {
   debug: true,
   // Target for static generation
   target: 'static',
   // Router configuration for GitHub Pages
   router: {
-    base: '/'
+    base: '/',
+    // Strips the routes outright. `generate.exclude` alone is not enough:
+    // `generate.fallback` below emits a 404.html SPA fallback, so a route that
+    // exists in the client router would still render client-side on a deep
+    // link even with no HTML file behind it.
+    extendRoutes (routes) {
+      return routes.filter(route => !routeIsExcluded(route.path))
+    }
   },
   // TypeScript configuration
   typescript: {
@@ -251,9 +269,16 @@ export default {
     // static/robots.txt is deleted: leaving it would re-inject the mangled rules.
     ['@nuxtjs/robots', {
       UserAgent: '*',
-      // The union of what the two old sources disallowed between them.
-      // '/admin/' is gone only because '/admin' already prefix-matches it.
-      Disallow: ['/admin', '/import/', '/offer/', '/offers/', '/helle.jpg', '/lang'],
+      // The union of what the two old sources disallowed between them, with
+      // '/admin/' folded into '/admin' because the latter already prefix-matches
+      // it. Both '/import/' and '/import' are listed because the two old sources
+      // each had one form and 'Disallow: /import/' does NOT match '/import'.
+      //
+      // '/en/admin' is NEW. `Disallow: /admin` does not reach across a
+      // nuxt-i18n locale prefix, so okam.no/en/admin/orders was crawlable --
+      // pre-existing, but this block claims to close the admin hole, so it
+      // closes it.
+      Disallow: ['/admin', '/en/admin', '/import', '/import/', '/offer/', '/offers/', '/helle.jpg', '/lang'],
       Allow: '/',
       Sitemap: market.hostname + '/sitemap.xml'
     }],
@@ -331,7 +356,9 @@ export default {
 
   // Generate configuration for GitHub Pages
   generate: {
-    fallback: true // This generates a 404.html for SPA fallback mode
+    fallback: true, // This generates a 404.html for SPA fallback mode
+    // The other half of the router filter above: no HTML is emitted either.
+    exclude: routeExcludeMatchers
   },
 
   // Legg til sitemap konfigurasjon

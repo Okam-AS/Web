@@ -117,14 +117,26 @@ const currencyFormats = {
 //                   publishes none; consumers must render an honest empty
 //                   state rather than borrow another market's address.
 //
-// !! OPEN QUESTION FOR SVEN -- DO NOT SILENTLY "FIX" THESE !!
-// Every Swiss value below is carried over BYTE-IDENTICAL from the page markup
-// it replaced, where each one is tagged <em>[Platzhalter]</em>, i.e. awaiting
-// legal review. Sven has ruled that the canonical Swiss SITE domain is
-// okam-swiss.ch (see `hostname` below), but that ruling says nothing about
-// which MAILBOX exists: @okam.ch and @okam-swiss.ch are different mail
-// domains and only Sven knows which one receives. The values stayed on
-// @okam.ch on purpose. Changing them is a data edit here, not a code change.
+// !! OPEN QUESTIONS FOR SVEN -- DO NOT SILENTLY "FIX" THESE !!
+//
+// 1. WHICH SWISS MAILBOX RECEIVES. Every Swiss address below is carried over
+//    BYTE-IDENTICAL from the page markup it replaced, where each one is tagged
+//    <em>[Platzhalter]</em>, i.e. awaiting legal review. Sven has ruled that
+//    the canonical Swiss SITE domain is okam-swiss.ch (see `hostname` below),
+//    but that ruling says nothing about which MAILBOX exists: @okam.ch and
+//    @okam-swiss.ch are different mail domains and only Sven knows which one
+//    receives. Measured 2026-08-09: okam.ch resolves (195.15.255.7,
+//    Infomaniak). The values stayed on @okam.ch on purpose.
+//
+// 2. WHETHER NORWAY PUBLISHES A DATA-PROTECTION ADDRESS AT ALL. `privacyEmail`
+//    is null for 'no' because nothing in THIS REPO names one -- pages/
+//    personvern.vue included. Whether Okam publishes one elsewhere (in-app, or
+//    in a Datatilsynet filing) decides whether that honest state is accurate or
+//    merely locally true. Only Sven can answer it.
+//
+// 3. WHERE THE SWISS SHOP AND ADMIN ACTUALLY LIVE. See markets.ch.shopUrl.
+//
+// All three are data edits here, not code changes.
 const markets = {
   no: {
     code: 'no',
@@ -141,7 +153,8 @@ const markets = {
     // market's is a subdomain of its own site.
     adminUrl: 'https://admin.okam.no',
     phonePrefix: '+47',
-    // -> pages/kontakt.vue, components/shared/TermsContent.vue
+    // -> pages/kontakt.vue, components/organisms/PageFooter.vue,
+    //    components/shared/TermsContent.vue
     contactEmail: 'kontakt@okam.no',
     // -> pages/impressum.vue, pages/agb.vue. Norway's own legal documents
     // (pages/vilkar.vue, components/shared/TermsContent.vue) keep hei@okam.no
@@ -159,10 +172,24 @@ const markets = {
     fbPixelId: '2834635726843367',
     // Routes kept out of this edition's sitemap. The Norwegian sitemap also
     // drops the Swiss-only legal pages so they're not discoverable on okam.no.
-    sitemapExclude: ['/admin/**', '/import',
+    // '/en/admin/**' is listed separately from '/admin/**': nuxt-i18n prefixes
+    // every non-default locale, and the glob does not reach across the prefix,
+    // so /en/admin/orders was sitemap-listed until this line existed.
+    sitemapExclude: ['/admin/**', '/en/admin/**', '/import',
       '/impressum', '/en/impressum',
       '/datenschutz', '/en/datenschutz',
-      '/agb', '/en/agb']
+      '/agb', '/en/agb'],
+    // Routes NOT BUILT for this market at all -- stripped from the router and
+    // from generate, not merely hidden from the sitemap.
+    //
+    // Sitemap exclusion is discovery; this is retrieval. /impressum,
+    // /datenschutz and /agb are Switzerland's national legal documents: a Swiss
+    // company form, a Zürich address, "ausschliesslich Schweizer Recht". They
+    // were emitted on the Norwegian build too, canonicalised to https://okam.no
+    // by layouts/default.vue and served under `Allow: /`. That is the exact
+    // mirror of the defect utils/merchant-terms.js exists to prevent, so it
+    // gets the same answer: a market does not ship another market's law.
+    routeExclude: ['/impressum', '/datenschutz', '/agb']
   },
   ch: {
     code: 'ch',
@@ -172,10 +199,31 @@ const markets = {
     currencyFormat: currencyFormats.CHF,
     country: 'CH',
     hostname: 'https://okam-swiss.ch',
-    // NOTE: the Swiss consumer shop domain is assumed to mirror the site domain.
-    // Update if the Swiss shop lives elsewhere.
-    shopUrl: 'https://shop.okam-swiss.ch',
-    adminUrl: 'https://admin.okam-swiss.ch',
+    // !! INTERIM VALUE -- BLOCKED ON DNS, SVEN TO ANSWER !!
+    //
+    // shop.okam-swiss.ch does not exist. Measured with dig on 2026-08-09:
+    //   shop.okam-swiss.ch   NXDOMAIN
+    //   admin.okam-swiss.ch  NXDOMAIN
+    //   okam-swiss.ch        NOERROR  216.198.79.1
+    //   shop.okam.no         NOERROR  (Heroku, serves the live shop)
+    //
+    // The consumer shop is a SEPARATE application that is not in this repo and
+    // has no Swiss deployment, so every plausible Swiss shop host is fiction
+    // today. This value is consumed by a hard `window.location.href` in
+    // components/organisms/RedirectToNewStore.vue and by the QR code a merchant
+    // PRINTS (pages/admin/index.vue), neither of which can fail soft, so it
+    // must resolve. Pointing it at a name that does not resolve would turn
+    // "wrong shop" into "DNS error" -- a regression, on the market this lane is
+    // named for.
+    //
+    // So it stays on the Norwegian shop, EXPLICITLY and visibly, until Sven
+    // says where the Swiss shop lives. This is one data edit away from correct,
+    // which is the whole point of the row.
+    shopUrl: 'https://shop.okam.no',
+    // The Swiss admin is this very application, served from the domain that
+    // does resolve. admin.okam-swiss.ch is NXDOMAIN (above); okam-swiss.ch/admin
+    // is generated and live.
+    adminUrl: 'https://okam-swiss.ch/admin',
     phonePrefix: '+41',
     // All three are [Platzhalter] values awaiting legal review -- see the
     // block comment above `markets`. Carried over verbatim from
@@ -186,11 +234,73 @@ const markets = {
     privacyEmail: 'datenschutz@okam.ch',
     gaId: null,
     fbPixelId: null,
-    sitemapExclude: ['/admin/**', '/import']
+    sitemapExclude: ['/admin/**', '/import'],
+    // Empty, and NOT because Switzerland has nothing to exclude. Norway's four
+    // national legal pages -- /vilkar, /vilkar-store, /personvern,
+    // /personvern-og-vilkar -- do ship on the Swiss build, and /vilkar binds a
+    // Swiss reader to "norsk kjøpslovgivning" and names Forbrukerrådet as the
+    // forum. They stay reachable only because two Swiss-visible links point
+    // straight at /vilkar -- pages/priser.vue's VAT note and
+    // pages/registrer.vue showTerms(), which opens it from the signup flow
+    // immediately before the acceptance tick-box. Excluding the route without
+    // first re-pointing those links would 404 a merchant mid-signup, which is
+    // worse than the wrong text. Re-point them, then fill this array.
+    routeExclude: []
   }
 }
 
 const marketCodes = Object.keys(markets)
+
+// A COMPLETE ROW IS ENFORCED HERE, NOT IN A TEST.
+//
+// resolveMarket used to check only that the CODE existed, so a row missing a
+// field built and generated cleanly and failed later, at the consumer:
+// registrert-ferdig.vue calls .replace() on adminUrl (TypeError mid-generate,
+// naming neither the field nor the market), and TermsContent.vue renders
+// <a href="mailto:undefined">undefined</a> for a missing contactEmail -- silent,
+// and on a page a merchant reads before signing.
+//
+// A field may hold null (gaId, fbPixelId and privacyEmail all legitimately do:
+// "this market has none"). What may not happen is the KEY being absent, which
+// is indistinguishable from a typo.
+const REQUIRED_MARKET_FIELDS = [
+  'code', 'locale', 'locales', 'currency', 'currencyFormat', 'country',
+  'hostname', 'shopUrl', 'adminUrl', 'phonePrefix',
+  'contactEmail', 'legalEmail', 'privacyEmail',
+  'gaId', 'fbPixelId', 'sitemapExclude', 'routeExclude'
+]
+
+const REQUIRED_CURRENCY_FORMAT_FIELDS = [
+  'symbol', 'symbolPosition', 'symbolSpace', 'decimalSeparator',
+  'groupSeparator', 'fractionDigits', 'amountSplit', 'supportsHideFraction'
+]
+
+function assertCompleteMarket (code, entry) {
+  const missing = REQUIRED_MARKET_FIELDS.filter(
+    field => !Object.prototype.hasOwnProperty.call(entry, field)
+  )
+  if (missing.length) {
+    throw new Error(
+      'Market "' + code + '" is missing required field(s): ' + missing.join(', ') +
+      '. Every market must carry all of: ' + REQUIRED_MARKET_FIELDS.join(', ') +
+      '. A field may be null, but it may not be absent.'
+    )
+  }
+  const missingFormat = REQUIRED_CURRENCY_FORMAT_FIELDS.filter(
+    field => !Object.prototype.hasOwnProperty.call(entry.currencyFormat || {}, field)
+  )
+  if (missingFormat.length) {
+    throw new Error(
+      'Market "' + code + '" has an incomplete currencyFormat, missing: ' + missingFormat.join(', ') + '.'
+    )
+  }
+  return entry
+}
+
+// Evaluated while the config is being READ, so an incomplete row fails the
+// build in the same breath as an unknown OKAM_EDITION -- before nuxt builds
+// anything, and naming the market and the field.
+marketCodes.forEach(code => assertCompleteMarket(code, markets[code]))
 
 // Strict lookup. Throws rather than falling back, so an unknown OKAM_EDITION
 // fails the build instead of shipping a market that silently looks Norwegian.
@@ -198,11 +308,14 @@ function resolveMarket (code) {
   const found = markets[code]
   if (!found) {
     throw new Error(
-      'Unknown market code "' + code + '". Known markets: ' + marketCodes.join(', ') +
+      'Unknown market code "' + code + '". Known markets: ' + Object.keys(markets).join(', ') +
       '. Add an entry to config/edition.js -- there is deliberately no fallback market.'
     )
   }
-  return found
+  // Also caught at module load for the shipped rows; repeated here so a row
+  // added to the registry at runtime (a test, a future dynamic market) gets the
+  // same guarantee rather than failing later at a consumer.
+  return assertCompleteMarket(code, found)
 }
 
 // Evaluated at module load: an unknown OKAM_EDITION throws while the config is
@@ -229,4 +342,7 @@ function runtimeMarketConfig (code) {
   return market
 }
 
-export { EDITION, isCh, market, markets, marketCodes, resolveMarket, runtimeMarketConfig }
+export {
+  EDITION, isCh, market, markets, marketCodes, resolveMarket, runtimeMarketConfig,
+  REQUIRED_MARKET_FIELDS, REQUIRED_CURRENCY_FORMAT_FIELDS, assertCompleteMarket
+}

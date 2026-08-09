@@ -57,7 +57,7 @@ describe("the 'no' build is unchanged", () => {
     expect(cfg.googleAnalytics.id).toBe(NO_GA_ID)
     expect(cfg.sitemap.hostname).toBe('https://okam.no')
     expect(cfg.sitemap.exclude).toEqual([
-      '/admin/**', '/import',
+      '/admin/**', '/en/admin/**', '/import',
       '/impressum', '/en/impressum',
       '/datenschutz', '/en/datenschutz',
       '/agb', '/en/agb'
@@ -108,10 +108,15 @@ describe('a third market inherits none of Norway', () => {
         country: 'AT',
         hostname: 'https://okam.example',
         shopUrl: 'https://shop.okam.example',
+        adminUrl: 'https://admin.okam.example',
         phonePrefix: '+43',
+        contactEmail: 'contact@okam.example',
+        legalEmail: 'legal@okam.example',
+        privacyEmail: null,
         gaId: null,
         fbPixelId,
-        sitemapExclude: ['/admin/**']
+        sitemapExclude: ['/admin/**'],
+        routeExclude: []
       }
       return {
         ...actual,

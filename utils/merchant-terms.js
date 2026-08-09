@@ -46,6 +46,36 @@ const UNPUBLISHED = {
   }
 }
 
+// What to say when a market's row CLAIMS a published agreement but the template
+// has no block for that documentId -- a one-sided edit to either side of the
+// coupling. Deliberately alarming rather than blank: the alternative is a page
+// headed "Avtalevilkår for Okam AS" with nothing under it, shown directly above
+// an acceptance tick-box.
+const UNAVAILABLE = {
+  no: {
+    title: 'Avtalevilkårene kunne ikke vises',
+    body: 'Denne siden skulle vist avtalevilkårene, men teksten mangler i denne versjonen. Ikke aksepter vilkår du ikke har lest. Ta kontakt med Okam:'
+  },
+  de: {
+    title: 'Die Vertragsbedingungen konnten nicht angezeigt werden',
+    body: 'Diese Seite sollte die Vertragsbedingungen anzeigen, doch der Text fehlt in dieser Version. Akzeptieren Sie keine Bedingungen, die Sie nicht gelesen haben. Bitte kontaktieren Sie Okam:'
+  },
+  en: {
+    title: 'The terms of agreement could not be shown',
+    body: 'This page should have shown the terms of agreement, but the text is missing from this build. Do not accept terms you have not read. Please contact Okam:'
+  }
+}
+
+/**
+ * Copy for the "a document is registered but this build cannot render it" state.
+ *
+ * @param {object} marketConfig  a row from config/edition.js `markets`
+ * @returns {{ title: string, body: string }}
+ */
+export function merchantTermsUnavailableCopy (marketConfig) {
+  return UNAVAILABLE[marketConfig.locale] || UNAVAILABLE.en
+}
+
 /**
  * Resolve the merchant agreement for a market descriptor.
  *

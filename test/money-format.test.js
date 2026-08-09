@@ -1,4 +1,7 @@
-import { market, markets, marketCodes, resolveMarket, runtimeMarketConfig } from '~/config/edition'
+import {
+  market, markets, marketCodes, resolveMarket, runtimeMarketConfig,
+  REQUIRED_MARKET_FIELDS, REQUIRED_CURRENCY_FORMAT_FIELDS
+} from '~/config/edition'
 import { formatAmount, formatMarketAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
 
 // ---------------------------------------------------------------------------
@@ -216,6 +219,7 @@ describe('a third market is a data entry, not a code edit', () => {
       gaId: null,
       fbPixelId: null,
       sitemapExclude: ['/admin/**'],
+      routeExclude: [],
       currencyFormat: {
         symbol: '€',
         symbolPosition: 'suffix',
@@ -244,6 +248,7 @@ describe('a third market is a data entry, not a code edit', () => {
       gaId: null,
       fbPixelId: null,
       sitemapExclude: ['/admin/**'],
+      routeExclude: [],
       currencyFormat: {
         // A zero-decimal currency: minor unit == major unit.
         symbol: 'ZZK',
@@ -325,20 +330,12 @@ describe('an unknown market fails loudly', () => {
 })
 
 describe('every shipped market carries a complete descriptor', () => {
-  const REQUIRED_FORMAT_FIELDS = [
-    'symbol', 'symbolPosition', 'symbolSpace', 'decimalSeparator',
-    'groupSeparator', 'fractionDigits', 'amountSplit', 'supportsHideFraction'
-  ]
-  const REQUIRED_MARKET_FIELDS = [
-    'code', 'locale', 'locales', 'currency', 'country', 'hostname',
-    'shopUrl', 'adminUrl', 'phonePrefix', 'gaId', 'fbPixelId', 'sitemapExclude',
-    'currencyFormat',
-    // Mailboxes. Required (not optional-with-a-default) so market #3 cannot
-    // omit one and silently inherit Norway's or Switzerland's address.
-    // `privacyEmail` may be null -- a market that publishes none must say so --
-    // but the KEY has to be there, which is what hasOwnProperty checks below.
-    'contactEmail', 'legalEmail', 'privacyEmail'
-  ]
+  // The field lists are IMPORTED, not restated. When they lived only here they
+  // were decoration: config/edition.js validated nothing, so an incomplete row
+  // built and generated cleanly and failed at a consumer -- a TypeError inside
+  // registrert-ferdig.vue's .replace(), or a silent
+  // <a href="mailto:undefined"> on the page a merchant reads before signing.
+  // They are now enforced at module load; these tests pin that guard.
 
   test.each(marketCodes)('%s', (code) => {
     const entry = markets[code]
@@ -346,7 +343,7 @@ describe('every shipped market carries a complete descriptor', () => {
     REQUIRED_MARKET_FIELDS.forEach((field) => {
       expect(Object.prototype.hasOwnProperty.call(entry, field)).toBe(true)
     })
-    REQUIRED_FORMAT_FIELDS.forEach((field) => {
+    REQUIRED_CURRENCY_FORMAT_FIELDS.forEach((field) => {
       expect(Object.prototype.hasOwnProperty.call(entry.currencyFormat, field)).toBe(true)
     })
     expect(['prefix', 'suffix']).toContain(entry.currencyFormat.symbolPosition)
@@ -361,7 +358,7 @@ describe('the build-time market data still matches the literals nuxt.config.js u
     expect(markets.no.locale).toBe('no')
     expect(markets.no.locales).toEqual(['en', 'no'])
     expect(markets.no.sitemapExclude).toEqual([
-      '/admin/**', '/import',
+      '/admin/**', '/en/admin/**', '/import',
       '/impressum', '/en/impressum',
       '/datenschutz', '/en/datenschutz',
       '/agb', '/en/agb'
@@ -464,22 +461,32 @@ describe('the delivery-editor {price} token', () => {
   // strips the group separator when it seeds the field, so grouping here would
   // move Norway's deployed bytes from "kr 1234,50" to "kr 1 234,50".
 
-  // Every row is the EXACT string "kr {wholeAmount},{fractionAmount}" produced
-  // for the same inputs, read off the template this replaced.
-  const NO_GOLDEN = [
-    ['0', '00', 'kr 0,00'],
-    ['0', '50', 'kr 0,50'],
-    ['9', '99', 'kr 9,99'],
-    ['49', '00', 'kr 49,00'],
-    ['129', '90', 'kr 129,90'],
-    ['1234', '50', 'kr 1234,50'],
-    ['1000000', '00', 'kr 1000000,00']
+  // The exact Norwegian template at 8059e200:translations/no.ts:230, copied
+  // once. The expected bytes are DERIVED from it by the same substitution
+  // plugins/i18n.js does, rather than hand-typed beside it -- a hand-typed
+  // golden and a hand-typed cross-check in the same file can be wrong together.
+  const OLD_NO_TEMPLATE = 'kr {wholeAmount},{fractionAmount}'
+  const renderOldTemplate = (whole, fraction) => OLD_NO_TEMPLATE
+    .replace('{wholeAmount}', whole)
+    .replace('{fractionAmount}', fraction)
+
+  const NO_INPUTS = [
+    ['0', '00'], ['0', '50'], ['9', '99'], ['49', '00'],
+    ['129', '90'], ['1234', '50'], ['1000000', '00']
   ]
 
-  test.each(NO_GOLDEN)('no: (%p, %p) renders %p, byte for byte', (whole, fraction, expected) => {
-    expect(formatMoneyFromParts(markets.no.currencyFormat, whole, fraction)).toBe(expected)
-    // The template it replaces, evaluated on the same inputs.
-    expect(expected).toBe('kr ' + whole + ',' + fraction)
+  test.each(NO_INPUTS)('no: (%p, %p) renders what the old template rendered', (whole, fraction) => {
+    expect(formatMoneyFromParts(markets.no.currencyFormat, whole, fraction))
+      .toBe(renderOldTemplate(whole, fraction))
+  })
+
+  test('the substitution helper really is the old template', () => {
+    // Guards the derivation above: if renderOldTemplate stopped substituting,
+    // every row would compare a constant against itself.
+    expect(OLD_NO_TEMPLATE).toContain('{wholeAmount}')
+    expect(OLD_NO_TEMPLATE).toContain('{fractionAmount}')
+    expect(renderOldTemplate('1234', '50')).toBe('kr 1234,50')
+    expect(renderOldTemplate('0', '00')).toBe('kr 0,00')
   })
 
   test('ch renders Swiss francs with a Swiss decimal separator', () => {
