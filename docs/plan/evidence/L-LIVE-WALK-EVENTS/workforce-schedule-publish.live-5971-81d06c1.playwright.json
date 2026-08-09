@@ -1,0 +1,88 @@
+{
+  "journey": "workforce-schedule-publish",
+  "title": "A manager creates a draft week, staffs a shift, validates it and publishes it",
+  "status": "failed",
+  "startedAtUtc": "2026-08-09T08:58:11.062Z",
+  "finishedAtUtc": "2026-08-09T08:58:27.791Z",
+  "durationMs": 16729,
+  "capabilities": [
+    "workforce.schedule.read",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "6cd3bccac6157df47a760dc7b109d352877d359f",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@81d06c10a8b7e6b9861a871dad0db1806d5109c9",
+    "source": "process:127.0.0.1:5971",
+    "short": "81d06c1",
+    "detail": "branch HEAD"
+  },
+  "backendServed": 4,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5971/user/login -> 200",
+    "GET http://127.0.0.1:5971/user -> 200",
+    "GET http://127.0.0.1:5971/user -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the schedule page as an anonymous visitor",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T08:58:11.082Z",
+      "durationMs": 853,
+      "detail": "redirected to ?redirect=%2Fadmin%2Fworkforce-schedule",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T08:58:11.935Z",
+      "durationMs": 145,
+      "detail": "landed back on /admin/workforce-schedule",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "turn the schedule publication switch on for this store",
+      "status": "failed",
+      "startedAtUtc": "2026-08-09T08:58:12.080Z",
+      "durationMs": 15680,
+      "detail": null,
+      "error": "locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-flag-on=\"workforce.publication\"]')\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-flag-on=\"workforce.publication\"]')\u001b[22m\n",
+  "artifact": {
+    "key": "live-5971-81d06c1",
+    "file": "artifacts/journeys/runs/workforce-schedule-publish.live-5971-81d06c1.playwright.json",
+    "canonical": false,
+    "canonicalHeldBy": "live-5961-unidentified",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

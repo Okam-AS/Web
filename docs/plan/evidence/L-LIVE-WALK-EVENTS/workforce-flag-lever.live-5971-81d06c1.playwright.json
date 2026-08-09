@@ -1,0 +1,76 @@
+{
+  "journey": "workforce-flag-lever",
+  "title": "an operator turns the schedule publication switch off and the publish becomes its typed refusal",
+  "status": "failed",
+  "startedAtUtc": "2026-08-09T08:57:59.294Z",
+  "finishedAtUtc": "2026-08-09T08:58:10.437Z",
+  "durationMs": 11143,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "workforce.schedule.publish"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "6cd3bccac6157df47a760dc7b109d352877d359f",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@81d06c10a8b7e6b9861a871dad0db1806d5109c9",
+    "source": "process:127.0.0.1:5971",
+    "short": "81d06c1",
+    "detail": "branch HEAD"
+  },
+  "backendServed": 3,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5971/user/login -> 200",
+    "GET http://127.0.0.1:5971/user -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T08:57:59.313Z",
+      "durationMs": 1057,
+      "detail": "landed on /admin/feature-flags as b719056b-e99e-4d49-824e-189e1473a566",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the switchboard lists every module's flags, deny-closed",
+      "status": "failed",
+      "startedAtUtc": "2026-08-09T08:58:00.370Z",
+      "durationMs": 10030,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ff-row').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').first()\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ff-row').first()\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').first()\u001b[22m\n",
+  "artifact": {
+    "key": "live-5971-81d06c1",
+    "file": "artifacts/journeys/runs/workforce-flag-lever.live-5971-81d06c1.playwright.json",
+    "canonical": false,
+    "canonicalHeldBy": "live-5961-3579bbb",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

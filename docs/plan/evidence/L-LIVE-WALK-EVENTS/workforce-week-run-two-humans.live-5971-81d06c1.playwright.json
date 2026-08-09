@@ -1,0 +1,60 @@
+{
+  "journey": "workforce-week-run-two-humans",
+  "title": "A manager publishes a week and a second human acknowledges it, in one live world",
+  "status": "failed",
+  "startedAtUtc": "2026-08-09T08:58:28.516Z",
+  "finishedAtUtc": "2026-08-09T08:58:28.545Z",
+  "durationMs": 29,
+  "capabilities": [
+    "workforce.staff.invite",
+    "workforce.me.invitation-claim",
+    "workforce.schedule.draft",
+    "workforce.schedule.author",
+    "workforce.schedule.validate",
+    "workforce.schedule.publish",
+    "workforce.me.schedule",
+    "workforce.me.publication-acknowledge",
+    "workforce.publication.history",
+    "workforce.publication.recipients"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "6cd3bccac6157df47a760dc7b109d352877d359f",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@81d06c10a8b7e6b9861a871dad0db1806d5109c9",
+    "source": "process:127.0.0.1:5971",
+    "short": "81d06c1",
+    "detail": "branch HEAD"
+  },
+  "backendServed": 0,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [],
+  "browser": "chromium",
+  "steps": [],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "Error: E2E_MANAGER_PHONE and E2E_MANAGER_CODE are not set, so this journey has only ONE identity.\nThey are the national part and the code of the power-user door the world was launched with (AppSettings__AdminUserPhoneNumber / AppSettings__PowerUserVerificationCode). Without them the manager and the worker would be the same account and the run would prove nothing it claims.",
+  "artifact": {
+    "key": "live-5971-81d06c1",
+    "file": "artifacts/journeys/runs/workforce-week-run-two-humans.live-5971-81d06c1.playwright.json",
+    "canonical": false,
+    "canonicalHeldBy": "live-5971-8e2b57d",
+    "canonicalTracked": true,
+    "provisional": false,
+    "supersedes": null
+  }
+}
