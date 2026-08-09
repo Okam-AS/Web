@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c0b5664b-7591-45dc-ab3e-5346b43f8c9e" name="@Svens-MacBook-Pro 2026-08-04 10:57:12" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-04T10:57:12.2182610+02:00" queuing="2026-08-04T10:57:12.2182620+02:00" start="2026-08-04T10:57:08.2468090+02:00" finish="2026-08-04T10:57:12.4622290+02:00" />
+  <TestSettings name="default" id="4b686ac6-f64b-4df5-a91c-71a1ed507bcf">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-04_10_57_12" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="35ea368a-c57b-4601-b4fa-6e1ca30aa772" testId="80360c5d-5c70-55f1-abac-cedbe3921c2b" testName="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.A_withheld_command_whose_week_is_still_ahead_is_kept_and_still_re_polled" computerName="Svens-MacBook-Pro" duration="00:00:02.7769309" startTime="2026-08-04T10:57:12.2033840+02:00" endTime="2026-08-04T10:57:12.2033930+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35ea368a-c57b-4601-b4fa-6e1ca30aa772" />
+    <UnitTestResult executionId="15e042de-fdac-4b21-86e6-e9d795a0a154" testId="0b2b7d8c-7b61-afca-bfe1-a4f48f4e9ce4" testName="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires" computerName="Svens-MacBook-Pro" duration="00:00:00.2205702" startTime="2026-08-04T10:57:12.4300860+02:00" endTime="2026-08-04T10:57:12.4300860+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15e042de-fdac-4b21-86e6-e9d795a0a154">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Superseded
+Actual:   Withheld</Message>
+          <StackTrace>   at WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires() in /Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs:line 79
+   at WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires() in /Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs:line 153
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires" storage="/users/svendaneel/okam/wt-wfwithheld/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0b2b7d8c-7b61-afca-bfe1-a4f48f4e9ce4">
+      <Execution id="15e042de-fdac-4b21-86e6-e9d795a0a154" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests" name="Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.A_withheld_command_whose_week_is_still_ahead_is_kept_and_still_re_polled" storage="/users/svendaneel/okam/wt-wfwithheld/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="80360c5d-5c70-55f1-abac-cedbe3921c2b">
+      <Execution id="35ea368a-c57b-4601-b4fa-6e1ca30aa772" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests" name="A_withheld_command_whose_week_is_still_ahead_is_kept_and_still_re_polled" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="80360c5d-5c70-55f1-abac-cedbe3921c2b" executionId="35ea368a-c57b-4601-b4fa-6e1ca30aa772" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b2b7d8c-7b61-afca-bfe1-a4f48f4e9ce4" executionId="15e042de-fdac-4b21-86e6-e9d795a0a154" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="2" executed="2" passed="1" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.72]   Discovering: WebApi.Tests
+[xUnit.net 00:00:00.97]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:00.98]   Starting:    WebApi.Tests
+[xUnit.net 00:00:04.00]       Assert.Equal() Failure
+[xUnit.net 00:00:04.00]       Expected: Superseded
+[xUnit.net 00:00:04.00]       Actual:   Withheld
+[xUnit.net 00:00:04.00]       Stack Trace:
+[xUnit.net 00:00:04.00]         /Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs(79,0): at WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires()
+[xUnit.net 00:00:04.00]         /Users/svendaneel/okam/wt-wfwithheld/WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs(153,0): at WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires()
+[xUnit.net 00:00:04.00]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:04.00]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-04T10:57:12.4295840+02:00">
+        <Text>[xUnit.net 00:00:04.00]     WebApi.Tests.Workforce.WorkforceNotificationBacklogBoundTests.Superseding_cancels_the_week_it_replaced_and_a_withheld_week_that_has_ended_expires [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

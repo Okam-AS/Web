@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="d4071fdc-892d-4bfa-a5c9-15e5acd50f89" name="@Svens-MacBook-Pro 2026-08-09 17:41:05" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:41:05.7309620+02:00" queuing="2026-08-09T17:41:05.7309620+02:00" start="2026-08-09T17:40:59.9191980+02:00" finish="2026-08-09T17:41:07.1053980+02:00" />
+  <TestSettings name="default" id="978e732c-cdf9-463b-b643-7ff81c2b9d21">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_41_05" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9801e2e5-5fa2-4f3c-88d3-a153d4861638" testId="6eebf08e-84f7-9686-75c1-ab177a8cf50e" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: &quot;&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:03.0299710" startTime="2026-08-09T17:41:05.7159880+02:00" endTime="2026-08-09T17:41:05.7159960+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9801e2e5-5fa2-4f3c-88d3-a153d4861638" />
+    <UnitTestResult executionId="812a7260-4ec6-48a7-b0c1-9bae04ad1d38" testId="40ff657c-7556-12ae-8fac-faf6484caa5b" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.An_actor_with_no_account_address_on_file_cannot_test_send_at_all" computerName="Svens-MacBook-Pro" duration="00:00:00.2052219" startTime="2026-08-09T17:41:06.6494640+02:00" endTime="2026-08-09T17:41:06.6494640+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="812a7260-4ec6-48a7-b0c1-9bae04ad1d38" />
+    <UnitTestResult executionId="5653c5e7-4454-40a4-bc98-533d0139300f" testId="493cd85c-cfa9-8041-394c-079848297090" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: null)" computerName="Svens-MacBook-Pro" duration="00:00:00.2099168" startTime="2026-08-09T17:41:05.9257060+02:00" endTime="2026-08-09T17:41:05.9257060+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5653c5e7-4454-40a4-bc98-533d0139300f" />
+    <UnitTestResult executionId="eda94dab-4c0c-471e-a5ef-73e40f1747b5" testId="2d4ae52f-185d-4788-f365-9163037e0044" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: &quot;   &quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.1964715" startTime="2026-08-09T17:41:06.1222190+02:00" endTime="2026-08-09T17:41:06.1222200+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="eda94dab-4c0c-471e-a5ef-73e40f1747b5" />
+    <UnitTestResult executionId="31349d22-cee5-4e68-b0a5-35e67cda3be2" testId="ac1cdc22-c8d5-6bcb-8583-9a5b2bc47d89" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_to_an_address_that_is_not_the_admins_own_is_refused_and_composes_nothing" computerName="Svens-MacBook-Pro" duration="00:00:00.1948942" startTime="2026-08-09T17:41:07.0639340+02:00" endTime="2026-08-09T17:41:07.0639340+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31349d22-cee5-4e68-b0a5-35e67cda3be2" />
+    <UnitTestResult executionId="17c29ebb-ab5b-434a-bcf1-421f711ec2e7" testId="cf4ff303-0cdd-0ed7-f03a-967d94512a4f" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.An_address_the_account_holds_but_has_never_confirmed_is_not_a_provable_own_address" computerName="Svens-MacBook-Pro" duration="00:00:00.2193931" startTime="2026-08-09T17:41:06.8689540+02:00" endTime="2026-08-09T17:41:06.8689540+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="17c29ebb-ab5b-434a-bcf1-421f711ec2e7" />
+    <UnitTestResult executionId="e7b3c3d0-e897-4c8f-8bf2-7ab139698828" testId="b70c6ab6-406b-ad43-1169-63cf6a8c7d5e" testName="WebApi.Tests.Growth.GrowthTestSendBindingTests.The_bound_address_follows_the_acting_admin_and_not_the_store" computerName="Svens-MacBook-Pro" duration="00:00:00.3217695" startTime="2026-08-09T17:41:06.4441740+02:00" endTime="2026-08-09T17:41:06.4441740+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e7b3c3d0-e897-4c8f-8bf2-7ab139698828" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_to_an_address_that_is_not_the_admins_own_is_refused_and_composes_nothing" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ac1cdc22-c8d5-6bcb-8583-9a5b2bc47d89">
+      <Execution id="31349d22-cee5-4e68-b0a5-35e67cda3be2" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="A_test_send_to_an_address_that_is_not_the_admins_own_is_refused_and_composes_nothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.An_actor_with_no_account_address_on_file_cannot_test_send_at_all" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="40ff657c-7556-12ae-8fac-faf6484caa5b">
+      <Execution id="812a7260-4ec6-48a7-b0c1-9bae04ad1d38" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="An_actor_with_no_account_address_on_file_cannot_test_send_at_all" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.An_address_the_account_holds_but_has_never_confirmed_is_not_a_provable_own_address" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="cf4ff303-0cdd-0ed7-f03a-967d94512a4f">
+      <Execution id="17c29ebb-ab5b-434a-bcf1-421f711ec2e7" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="An_address_the_account_holds_but_has_never_confirmed_is_not_a_provable_own_address" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: &quot;&quot;)" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6eebf08e-84f7-9686-75c1-ab177a8cf50e">
+      <Execution id="9801e2e5-5fa2-4f3c-88d3-a153d4861638" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: &quot;   &quot;)" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2d4ae52f-185d-4788-f365-9163037e0044">
+      <Execution id="eda94dab-4c0c-471e-a5ef-73e40f1747b5" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed(userId: null)" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="493cd85c-cfa9-8041-394c-079848297090">
+      <Execution id="5653c5e7-4454-40a4-bc98-533d0139300f" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="A_test_send_that_cannot_name_its_actor_is_refused_before_anything_is_composed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthTestSendBindingTests.The_bound_address_follows_the_acting_admin_and_not_the_store" storage="/private/tmp/claude-501/-users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b70c6ab6-406b-ad43-1169-63cf6a8c7d5e">
+      <Execution id="e7b3c3d0-e897-4c8f-8bf2-7ab139698828" />
+      <TestMethod codeBase="/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-confirmed/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthTestSendBindingTests" name="The_bound_address_follows_the_acting_admin_and_not_the_store" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="6eebf08e-84f7-9686-75c1-ab177a8cf50e" executionId="9801e2e5-5fa2-4f3c-88d3-a153d4861638" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40ff657c-7556-12ae-8fac-faf6484caa5b" executionId="812a7260-4ec6-48a7-b0c1-9bae04ad1d38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="493cd85c-cfa9-8041-394c-079848297090" executionId="5653c5e7-4454-40a4-bc98-533d0139300f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2d4ae52f-185d-4788-f365-9163037e0044" executionId="eda94dab-4c0c-471e-a5ef-73e40f1747b5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ac1cdc22-c8d5-6bcb-8583-9a5b2bc47d89" executionId="31349d22-cee5-4e68-b0a5-35e67cda3be2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cf4ff303-0cdd-0ed7-f03a-967d94512a4f" executionId="17c29ebb-ab5b-434a-bcf1-421f711ec2e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b70c6ab6-406b-ad43-1169-63cf6a8c7d5e" executionId="e7b3c3d0-e897-4c8f-8bf2-7ab139698828" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="7" executed="7" passed="7" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.71]   Discovering: WebApi.Tests
+[xUnit.net 00:00:02.31]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:02.32]   Starting:    WebApi.Tests
+[xUnit.net 00:00:06.72]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

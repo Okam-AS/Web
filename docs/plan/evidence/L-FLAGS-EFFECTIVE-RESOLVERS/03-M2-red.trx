@@ -1,0 +1,495 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="0513e5a1-05e1-4dcc-b0ee-44e10e28dfae" name="@Svens-MacBook-Pro 2026-08-09 17:37:28" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:37:28.3371460+02:00" queuing="2026-08-09T17:37:28.3371460+02:00" start="2026-08-09T17:37:21.6681950+02:00" finish="2026-08-09T17:37:31.3013020+02:00" />
+  <TestSettings name="default" id="c4b89b22-ccd5-4bba-8b8b-9e820863349a">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_37_28" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="0e0c2383-a91e-4329-a2c5-1cc87ac313fc" testId="ef01a335-d35f-3d0a-3654-8c63eaab4c96" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" computerName="Svens-MacBook-Pro" duration="00:00:00.0007395" startTime="2026-08-09T17:37:31.0609340+02:00" endTime="2026-08-09T17:37:31.0609350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0e0c2383-a91e-4329-a2c5-1cc87ac313fc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.All() Failure: 2 out of 2 items in the collection did not pass.
+[1]: Item: growth.dispatch
+     Xunit.Sdk.TrueException: growth.dispatch is claimed by no resolver
+     Expected: True
+     Actual:   False
+        at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+        at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+        at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 181
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[0]: Item: growth.module
+     Xunit.Sdk.TrueException: growth.module is claimed by no resolver
+     Expected: True
+     Actual:   False
+        at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+        at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+        at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 181
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 179
+   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 184
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="95c46148-31fe-474f-8a07-42311bb8b680" testId="78165d31-803f-28a8-8709-36dab7a7571a" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" computerName="Svens-MacBook-Pro" duration="00:00:00.0015031" startTime="2026-08-09T17:37:29.6280860+02:00" endTime="2026-08-09T17:37:29.6280860+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95c46148-31fe-474f-8a07-42311bb8b680">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 177
+   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 177
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3ee46796-ec41-401f-8c1e-4b7981e71073" testId="044ef7bb-d41d-170d-e245-36b4a19e4d03" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" computerName="Svens-MacBook-Pro" duration="00:00:00.0352437" startTime="2026-08-09T17:37:28.6427740+02:00" endTime="2026-08-09T17:37:28.6427740+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3ee46796-ec41-401f-8c1e-4b7981e71073">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 157
+   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 157
+   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 157
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e2501c8a-b1e7-44be-96d4-9e87f5be126c" testId="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" computerName="Svens-MacBook-Pro" duration="00:00:00.0015888" startTime="2026-08-09T17:37:29.4345990+02:00" endTime="2026-08-09T17:37:29.4345990+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e2501c8a-b1e7-44be-96d4-9e87f5be126c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 142
+   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 142
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ae03e9f8-8d2c-4e27-bb7e-90fbd3aa0e40" testId="998c059d-176e-b2b7-574b-293786df2a57" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" computerName="Svens-MacBook-Pro" duration="00:00:00.0026681" startTime="2026-08-09T17:37:28.4346370+02:00" endTime="2026-08-09T17:37:28.4346370+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ae03e9f8-8d2c-4e27-bb7e-90fbd3aa0e40">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 194
+   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 199
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="80b9159d-d41f-4b36-91be-5bc3e75f3452" testId="dca0d893-afcb-6816-55b8-ecde2bea338c" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.0038924" startTime="2026-08-09T17:37:29.0380590+02:00" endTime="2026-08-09T17:37:29.0380590+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80b9159d-d41f-4b36-91be-5bc3e75f3452" />
+    <UnitTestResult executionId="c6e33e2b-e665-4970-960a-1f578bd58432" testId="78c631a3-cdf5-de14-b89a-90de3f9cdc87" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" computerName="Svens-MacBook-Pro" duration="00:00:00.0033211" startTime="2026-08-09T17:37:30.9904220+02:00" endTime="2026-08-09T17:37:30.9904220+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c6e33e2b-e665-4970-960a-1f578bd58432">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 122
+   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 122
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cc2e4f05-8a24-473b-8718-7eccee4c3e1d" testId="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" computerName="Svens-MacBook-Pro" duration="00:00:00.0007616" startTime="2026-08-09T17:37:26.8103580+02:00" endTime="2026-08-09T17:37:26.8103580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc2e4f05-8a24-473b-8718-7eccee4c3e1d">
+      <Output>
+        <ErrorInfo>
+          <Message>These catalog flags reach GET /stores/{id}/feature-flags with no effective-value resolver registered, so the endpoint answers `override ?? advertised default` for them: Events.Core (Events), Events.Deposits (Events), Events.Settlement (Events), growth.dispatch (Growth), growth.module (Growth), meals.module (Meals). If the owning gate resolves exactly that expression, add its module to GatesThatDoNotDiverge with the reason. If it resolves anything else — a config fallback, an outer deployment switch, a data probe, an AND under a master — the endpoint is reporting a value the runtime does not agree with, and the module owes a resolver registered in the composition root.
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs:line 100
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ecf45d5c-648e-4dbc-8289-8aabc7a023cc" testId="bed8c8f1-10cf-4646-b8a4-1b6852585e29" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too" computerName="Svens-MacBook-Pro" duration="00:00:00.0015204" startTime="2026-08-09T17:37:31.1958720+02:00" endTime="2026-08-09T17:37:31.1958720+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecf45d5c-648e-4dbc-8289-8aabc7a023cc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 139
+   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 139
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1031a638-b31e-4ed9-afdb-f472aa82b648" testId="a0670104-104a-b709-c42a-e357d863aef0" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.7759724" startTime="2026-08-09T17:37:30.7925320+02:00" endTime="2026-08-09T17:37:30.7925320+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1031a638-b31e-4ed9-afdb-f472aa82b648" />
+    <UnitTestResult executionId="d1abf20c-ac1a-4215-95b8-5033c398d122" testId="2c8727ff-5b88-e360-5274-2edc9fd4ea0b" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" computerName="Svens-MacBook-Pro" duration="00:00:00.0039224" startTime="2026-08-09T17:37:29.2385910+02:00" endTime="2026-08-09T17:37:29.2385910+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d1abf20c-ac1a-4215-95b8-5033c398d122">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 162
+   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 154
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cb9c17b5-2147-4ae2-9b17-a24881b21bec" testId="ecb98ead-b286-e161-ecb2-80766192933d" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag" computerName="Svens-MacBook-Pro" duration="00:00:00.0095318" startTime="2026-08-09T17:37:26.8029250+02:00" endTime="2026-08-09T17:37:26.8029330+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cb9c17b5-2147-4ae2-9b17-a24881b21bec" />
+    <UnitTestResult executionId="df995f3e-62a5-457a-a2d5-281fb56a5a5a" testId="7e5d8649-04de-28bf-b2cf-dd88e362f139" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" computerName="Svens-MacBook-Pro" duration="00:00:00.0020726" startTime="2026-08-09T17:37:28.8217300+02:00" endTime="2026-08-09T17:37:28.8217300+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="df995f3e-62a5-457a-a2d5-281fb56a5a5a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 135
+   at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs:line 135
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c507ede2-e103-4e0a-aeae-f7135a368607" testId="1bf88967-9a3d-41e5-bda8-267f50f83543" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" computerName="Svens-MacBook-Pro" duration="00:00:00.0011659" startTime="2026-08-09T17:37:26.8079220+02:00" endTime="2026-08-09T17:37:26.8079220+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c507ede2-e103-4e0a-aeae-f7135a368607">
+      <Output>
+        <ErrorInfo>
+          <Message>Registered but never consulted, because no catalog flag matches Handles(): GrowthModuleFlagEffectiveResolver, MealsModuleFlagEffectiveResolver, EventsModuleFlagEffectiveResolver
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs:line 171
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="543b18bc-2495-4b85-9e7a-81f1625f42e4" testId="280f7624-6074-ed27-33d1-e2f5fd363d8e" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.0019365" startTime="2026-08-09T17:37:31.2637620+02:00" endTime="2026-08-09T17:37:31.2637620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="543b18bc-2495-4b85-9e7a-81f1625f42e4" />
+    <UnitTestResult executionId="00888bbc-c99b-4cd3-9ba7-3a2c8135c299" testId="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" computerName="Svens-MacBook-Pro" duration="00:00:00.0021300" startTime="2026-08-09T17:37:31.1308210+02:00" endTime="2026-08-09T17:37:31.1308210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="00888bbc-c99b-4cd3-9ba7-3a2c8135c299">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.False() Failure
+Expected: False
+Actual:   True</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 152
+   at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 152
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="57dac6bc-6a4c-46d3-8cf5-0c52c373d3b7" testId="41f173e5-84cd-f608-a16d-33830fd11001" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" computerName="Svens-MacBook-Pro" duration="00:00:00.0013592" startTime="2026-08-09T17:37:29.8220540+02:00" endTime="2026-08-09T17:37:29.8220540+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57dac6bc-6a4c-46d3-8cf5-0c52c373d3b7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.All() Failure: 3 out of 3 items in the collection did not pass.
+[2]: Item: Events.Settlement
+     Xunit.Sdk.TrueException: Events.Settlement is claimed by no resolver
+     Expected: True
+     Actual:   False
+        at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+        at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+        at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[1]: Item: Events.Deposits
+     Xunit.Sdk.TrueException: Events.Deposits is claimed by no resolver
+     Expected: True
+     Actual:   False
+        at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+        at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+        at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[0]: Item: Events.Core
+     Xunit.Sdk.TrueException: Events.Core is claimed by no resolver
+     Expected: True
+     Actual:   False
+        at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+        at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+        at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises() in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 206
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a67969ab-a3b5-4332-af93-f32a4dc54d91" testId="394bb80d-946d-21c7-1935-7a4455ef1bca" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_module_still_has_an_unclaimed_catalog_flag" computerName="Svens-MacBook-Pro" duration="00:00:00.0029290" startTime="2026-08-09T17:37:26.8093480+02:00" endTime="2026-08-09T17:37:26.8093480+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a67969ab-a3b5-4332-af93-f32a4dc54d91" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="41f173e5-84cd-f608-a16d-33830fd11001">
+      <Execution id="57dac6bc-6a4c-46d3-8cf5-0c52c373d3b7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="The_resolver_claims_every_key_the_module_advertises" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_module_still_has_an_unclaimed_catalog_flag" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="394bb80d-946d-21c7-1935-7a4455ef1bca">
+      <Execution id="a67969ab-a3b5-4332-af93-f32a4dc54d91" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_excused_module_still_has_an_unclaimed_catalog_flag" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824">
+      <Execution id="00888bbc-c99b-4cd3-9ba7-3a2c8135c299" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ef01a335-d35f-3d0a-3654-8c63eaab4c96">
+      <Execution id="0e0c2383-a91e-4329-a2c5-1cc87ac313fc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_resolver_claims_every_key_the_module_advertises" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78165d31-803f-28a8-8709-36dab7a7571a">
+      <Execution id="95c46148-31fe-474f-8a07-42311bb8b680" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f">
+      <Execution id="cc2e4f05-8a24-473b-8718-7eccee4c3e1d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26">
+      <Execution id="e2501c8a-b1e7-44be-96d4-9e87f5be126c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="A_row_flipped_on_under_an_undeployed_module_is_reported_dark" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="998c059d-176e-b2b7-574b-293786df2a57">
+      <Execution id="ae03e9f8-8d2c-4e27-bb7e-90fbd3aa0e40" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="280f7624-6074-ed27-33d1-e2f5fd363d8e">
+      <Execution id="543b18bc-2495-4b85-9e7a-81f1625f42e4" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="On_a_deployed_module_the_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1bf88967-9a3d-41e5-bda8-267f50f83543">
+      <Execution id="c507ede2-e103-4e0a-aeae-f7135a368607" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="044ef7bb-d41d-170d-e245-36b4a19e4d03">
+      <Execution id="3ee46796-ec41-401f-8c1e-4b7981e71073" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a0670104-104a-b709-c42a-e357d863aef0">
+      <Execution id="1031a638-b31e-4ed9-afdb-f472aa82b648" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="On_a_deployed_module_the_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ecb98ead-b286-e161-ecb2-80766192933d">
+      <Execution id="cb9c17b5-2147-4ae2-9b17-a24881b21bec" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="No_two_registered_resolvers_claim_the_same_flag" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2c8727ff-5b88-e360-5274-2edc9fd4ea0b">
+      <Execution id="d1abf20c-ac1a-4215-95b8-5033c398d122" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78c631a3-cdf5-de14-b89a-90de3f9cdc87">
+      <Execution id="c6e33e2b-e665-4970-960a-1f578bd58432" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="A_row_flipped_on_under_an_undeployed_module_is_reported_dark" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7e5d8649-04de-28bf-b2cf-dd88e362f139">
+      <Execution id="df995f3e-62a5-457a-a2d5-281fb56a5a5a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dca0d893-afcb-6816-55b8-ecde2bea338c">
+      <Execution id="80b9159d-d41f-4b36-91be-5bc3e75f3452" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="An_explicit_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bed8c8f1-10cf-4646-b8a4-1b6852585e29">
+      <Execution id="ecf45d5c-648e-4dbc-8289-8aabc7a023cc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_dispatch_kill_switch_answers_for_the_undeployed_case_too" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="ef01a335-d35f-3d0a-3654-8c63eaab4c96" executionId="0e0c2383-a91e-4329-a2c5-1cc87ac313fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78165d31-803f-28a8-8709-36dab7a7571a" executionId="95c46148-31fe-474f-8a07-42311bb8b680" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="044ef7bb-d41d-170d-e245-36b4a19e4d03" executionId="3ee46796-ec41-401f-8c1e-4b7981e71073" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26" executionId="e2501c8a-b1e7-44be-96d4-9e87f5be126c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="998c059d-176e-b2b7-574b-293786df2a57" executionId="ae03e9f8-8d2c-4e27-bb7e-90fbd3aa0e40" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dca0d893-afcb-6816-55b8-ecde2bea338c" executionId="80b9159d-d41f-4b36-91be-5bc3e75f3452" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78c631a3-cdf5-de14-b89a-90de3f9cdc87" executionId="c6e33e2b-e665-4970-960a-1f578bd58432" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f" executionId="cc2e4f05-8a24-473b-8718-7eccee4c3e1d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bed8c8f1-10cf-4646-b8a4-1b6852585e29" executionId="ecf45d5c-648e-4dbc-8289-8aabc7a023cc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0670104-104a-b709-c42a-e357d863aef0" executionId="1031a638-b31e-4ed9-afdb-f472aa82b648" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c8727ff-5b88-e360-5274-2edc9fd4ea0b" executionId="d1abf20c-ac1a-4215-95b8-5033c398d122" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ecb98ead-b286-e161-ecb2-80766192933d" executionId="cb9c17b5-2147-4ae2-9b17-a24881b21bec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7e5d8649-04de-28bf-b2cf-dd88e362f139" executionId="df995f3e-62a5-457a-a2d5-281fb56a5a5a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bf88967-9a3d-41e5-bda8-267f50f83543" executionId="c507ede2-e103-4e0a-aeae-f7135a368607" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="280f7624-6074-ed27-33d1-e2f5fd363d8e" executionId="543b18bc-2495-4b85-9e7a-81f1625f42e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824" executionId="00888bbc-c99b-4cd3-9ba7-3a2c8135c299" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41f173e5-84cd-f608-a16d-33830fd11001" executionId="57dac6bc-6a4c-46d3-8cf5-0c52c373d3b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="394bb80d-946d-21c7-1935-7a4455ef1bca" executionId="a67969ab-a3b5-4332-af93-f32a4dc54d91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="18" executed="18" passed="5" failed="13" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.90]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.13]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.14]   Starting:    WebApi.Tests
+[xUnit.net 00:00:04.92]       Registered but never consulted, because no catalog flag matches Handles(): GrowthModuleFlagEffectiveResolver, MealsModuleFlagEffectiveResolver, EventsModuleFlagEffectiveResolver
+[xUnit.net 00:00:04.92]       Expected: True
+[xUnit.net 00:00:04.92]       Actual:   False
+[xUnit.net 00:00:04.92]       Stack Trace:
+[xUnit.net 00:00:04.92]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs(171,0): at WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key()
+[xUnit.net 00:00:04.92]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:04.92]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:04.93]       These catalog flags reach GET /stores/{id}/feature-flags with no effective-value resolver registered, so the endpoint answers `override ?? advertised default` for them: Events.Core (Events), Events.Deposits (Events), Events.Settlement (Events), growth.dispatch (Growth), growth.module (Growth), meals.module (Meals). If the owning gate resolves exactly that expression, add its module to GatesThatDoNotDiverge with the reason. If it resolves anything else — a config fallback, an outer deployment switch, a data probe, an AND under a master — the endpoint is reporting a value the runtime does not agree with, and the module owes a resolver registered in the composition root.
+[xUnit.net 00:00:04.93]       Expected: True
+[xUnit.net 00:00:04.93]       Actual:   False
+[xUnit.net 00:00:04.93]       Stack Trace:
+[xUnit.net 00:00:04.93]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Wire/FlagEffectiveResolverWireTests.cs(100,0): at WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason()
+[xUnit.net 00:00:04.93]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:04.93]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:06.55]       Assert.True() Failure
+[xUnit.net 00:00:06.55]       Expected: True
+[xUnit.net 00:00:06.55]       Actual:   False
+[xUnit.net 00:00:06.55]       Stack Trace:
+[xUnit.net 00:00:06.55]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(194,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key()
+[xUnit.net 00:00:06.55]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(199,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key()
+[xUnit.net 00:00:06.55]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:06.76]       Assert.True() Failure
+[xUnit.net 00:00:06.76]       Expected: True
+[xUnit.net 00:00:06.76]       Actual:   False
+[xUnit.net 00:00:06.76]       Stack Trace:
+[xUnit.net 00:00:06.76]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(157,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default()
+[xUnit.net 00:00:06.76]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(157,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default()
+[xUnit.net 00:00:06.76]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(157,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default()
+[xUnit.net 00:00:06.76]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:06.94]       Assert.True() Failure
+[xUnit.net 00:00:06.94]       Expected: True
+[xUnit.net 00:00:06.94]       Actual:   False
+[xUnit.net 00:00:06.94]       Stack Trace:
+[xUnit.net 00:00:06.94]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(135,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden()
+[xUnit.net 00:00:06.94]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Meals/MealsFeatureFlagEffectiveTests.cs(135,0): at WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden()
+[xUnit.net 00:00:06.94]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.36]       Assert.False() Failure
+[xUnit.net 00:00:07.36]       Expected: False
+[xUnit.net 00:00:07.36]       Actual:   True
+[xUnit.net 00:00:07.36]       Stack Trace:
+[xUnit.net 00:00:07.36]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(162,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one()
+[xUnit.net 00:00:07.36]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(154,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one()
+[xUnit.net 00:00:07.36]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.55]       Assert.False() Failure
+[xUnit.net 00:00:07.55]       Expected: False
+[xUnit.net 00:00:07.55]       Actual:   True
+[xUnit.net 00:00:07.55]       Stack Trace:
+[xUnit.net 00:00:07.55]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(142,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark()
+[xUnit.net 00:00:07.55]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(142,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark()
+[xUnit.net 00:00:07.55]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.74]       Assert.False() Failure
+[xUnit.net 00:00:07.74]       Expected: False
+[xUnit.net 00:00:07.74]       Actual:   True
+[xUnit.net 00:00:07.74]       Stack Trace:
+[xUnit.net 00:00:07.74]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(177,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on()
+[xUnit.net 00:00:07.74]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(177,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on()
+[xUnit.net 00:00:07.74]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:07.94]       Assert.All() Failure: 3 out of 3 items in the collection did not pass.
+[xUnit.net 00:00:07.94]       [2]: Item: Events.Settlement
+[xUnit.net 00:00:07.94]            Xunit.Sdk.TrueException: Events.Settlement is claimed by no resolver
+[xUnit.net 00:00:07.94]            Expected: True
+[xUnit.net 00:00:07.94]            Actual:   False
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+[xUnit.net 00:00:07.94]               at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+[xUnit.net 00:00:07.94]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:07.94]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:07.94]       [1]: Item: Events.Deposits
+[xUnit.net 00:00:07.94]            Xunit.Sdk.TrueException: Events.Deposits is claimed by no resolver
+[xUnit.net 00:00:07.94]            Expected: True
+[xUnit.net 00:00:07.94]            Actual:   False
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+[xUnit.net 00:00:07.94]               at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+[xUnit.net 00:00:07.94]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:07.94]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:07.94]       [0]: Item: Events.Core
+[xUnit.net 00:00:07.94]            Xunit.Sdk.TrueException: Events.Core is claimed by no resolver
+[xUnit.net 00:00:07.94]            Expected: True
+[xUnit.net 00:00:07.94]            Actual:   False
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+[xUnit.net 00:00:07.94]               at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+[xUnit.net 00:00:07.94]               at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs:line 208
+[xUnit.net 00:00:07.94]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:07.94]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:07.94]       Stack Trace:
+[xUnit.net 00:00:07.94]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Events/EventsFeatureFlagEffectiveTests.cs(206,0): at WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises()
+[xUnit.net 00:00:07.94]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:07.94]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:09.11]       Assert.False() Failure
+[xUnit.net 00:00:09.11]       Expected: False
+[xUnit.net 00:00:09.11]       Actual:   True
+[xUnit.net 00:00:09.11]       Stack Trace:
+[xUnit.net 00:00:09.11]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(122,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark()
+[xUnit.net 00:00:09.11]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(122,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark()
+[xUnit.net 00:00:09.11]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.18]       Assert.All() Failure: 2 out of 2 items in the collection did not pass.
+[xUnit.net 00:00:09.18]       [1]: Item: growth.dispatch
+[xUnit.net 00:00:09.18]            Xunit.Sdk.TrueException: growth.dispatch is claimed by no resolver
+[xUnit.net 00:00:09.18]            Expected: True
+[xUnit.net 00:00:09.18]            Actual:   False
+[xUnit.net 00:00:09.18]               at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+[xUnit.net 00:00:09.18]               at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+[xUnit.net 00:00:09.18]               at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 181
+[xUnit.net 00:00:09.18]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:09.18]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:09.18]       [0]: Item: growth.module
+[xUnit.net 00:00:09.18]            Xunit.Sdk.TrueException: growth.module is claimed by no resolver
+[xUnit.net 00:00:09.18]            Expected: True
+[xUnit.net 00:00:09.18]            Actual:   False
+[xUnit.net 00:00:09.18]               at Xunit.Assert.True(Nullable`1 condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 132
+[xUnit.net 00:00:09.18]               at Xunit.Assert.True(Boolean condition, String userMessage) in /_/src/xunit.assert/Asserts/BooleanAsserts.cs:line 116
+[xUnit.net 00:00:09.18]               at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.&lt;&gt;c__DisplayClass15_0.&lt;The_resolver_claims_every_key_the_module_advertises&gt;b__1(String key) in /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs:line 181
+[xUnit.net 00:00:09.18]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:09.18]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:09.18]       Stack Trace:
+[xUnit.net 00:00:09.18]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(179,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises()
+[xUnit.net 00:00:09.18]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(184,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises()
+[xUnit.net 00:00:09.18]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.25]       Assert.False() Failure
+[xUnit.net 00:00:09.25]       Expected: False
+[xUnit.net 00:00:09.25]       Actual:   True
+[xUnit.net 00:00:09.25]       Stack Trace:
+[xUnit.net 00:00:09.25]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(152,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on()
+[xUnit.net 00:00:09.25]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(152,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on()
+[xUnit.net 00:00:09.25]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.31]       Assert.False() Failure
+[xUnit.net 00:00:09.31]       Expected: False
+[xUnit.net 00:00:09.31]       Actual:   True
+[xUnit.net 00:00:09.31]       Stack Trace:
+[xUnit.net 00:00:09.31]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(139,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too()
+[xUnit.net 00:00:09.31]         /Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/Growth/GrowthFeatureFlagEffectiveTests.cs(139,0): at WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too()
+[xUnit.net 00:00:09.31]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.38]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:26.8073820+02:00">
+        <Text>[xUnit.net 00:00:04.92]     WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:26.8104760+02:00">
+        <Text>[xUnit.net 00:00:04.93]     WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:28.4345790+02:00">
+        <Text>[xUnit.net 00:00:06.55]     WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:28.6428570+02:00">
+        <Text>[xUnit.net 00:00:06.76]     WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:28.8217170+02:00">
+        <Text>[xUnit.net 00:00:06.94]     WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:29.2386540+02:00">
+        <Text>[xUnit.net 00:00:07.36]     WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:29.4346400+02:00">
+        <Text>[xUnit.net 00:00:07.55]     WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:29.6281240+02:00">
+        <Text>[xUnit.net 00:00:07.74]     WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:29.8217190+02:00">
+        <Text>[xUnit.net 00:00:07.94]     WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:30.9904060+02:00">
+        <Text>[xUnit.net 00:00:09.11]     WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:31.0605130+02:00">
+        <Text>[xUnit.net 00:00:09.18]     WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:31.1307360+02:00">
+        <Text>[xUnit.net 00:00:09.25]     WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:37:31.1958100+02:00">
+        <Text>[xUnit.net 00:00:09.31]     WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

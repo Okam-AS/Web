@@ -1,0 +1,193 @@
+{
+ "killed_by": {
+  "GetWoltDriveInvoice carries the status, so a caller can tell 401 from 403 from 500": [
+   "core: GetWoltDriveInvoice throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "an expired session with an empty body is still named, not reduced to a code": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status",
+   "page: the raw error message is printed again",
+   "page: an expired session loses its own sentence"
+  ],
+  "GetHeatmapData carries the status, so a caller can tell 401 from 403 from 500": [
+   "core: GetHeatmapData throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "GetPendingSettlements surfaces the backend reason instead of a sentence of its own": [
+   "core: GetPendingSettlements throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from"
+  ],
+  "GetWoltDriveInvoice surfaces the backend reason instead of a sentence of its own": [
+   "core: GetWoltDriveInvoice throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from"
+  ],
+  "GetPendingSettlements leaves the status undefined when the request never reached the server": [
+   "core: GetPendingSettlements throws its own sentence again"
+  ],
+  "a failed read is said out loud instead of leaving an empty page": [
+   "page: an unrecognised throw is dressed up as a transport failure"
+  ],
+  "GetHeatmapData leaves the status undefined when the request never reached the server": [
+   "core: GetHeatmapData throws its own sentence again"
+  ],
+  "a refusal reaches the operator as the reason the backend gave": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason"
+  ],
+  "Get still resolves a good response": [
+   "core: a 200 stops being treated as success"
+  ],
+  "GetPlatformGrowth still resolves a good response": [
+   "core: a 200 stops being treated as success"
+  ],
+  "GetPlatformGrowth falls back to its own sentence only when the body carried no reason": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "a non-2xx reaches the service instead of escaping it as an axios error": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "Get falls back to its own sentence only when the body carried no reason": [
+   "core: Get throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "GetHeatmapData still resolves a good response": [
+   "core: a 200 stops being treated as success"
+  ],
+  "GetWoltDriveInvoice leaves the status undefined when the request never reached the server": [
+   "core: GetWoltDriveInvoice throws its own sentence again"
+  ],
+  "Get leaves the status undefined when the request never reached the server": [
+   "core: Get throws its own sentence again"
+  ],
+  "a crashed report engine with an empty body names the code it answered with": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status",
+   "page: the raw error message is printed again",
+   "page: a server error loses its own sentence"
+  ],
+  "GetWoltDriveInvoice falls back to its own sentence only when the body carried no reason": [
+   "core: GetWoltDriveInvoice throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "GetPlatformGrowth carries the status, so a caller can tell 401 from 403 from 500": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "GetPendingSettlements carries the status, so a caller can tell 401 from 403 from 500": [
+   "core: GetPendingSettlements throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "the four failures do not read alike": [
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status",
+   "page: the raw error message is printed again",
+   "page: 401 and 403 are collapsed into one sentence"
+  ],
+  "being offline is told apart from the server refusing": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "page: the raw error message is printed again",
+   "page: being offline loses its own sentence"
+  ],
+  "GetPlatformGrowth leaves the status undefined when the request never reached the server": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again"
+  ],
+  "GetHeatmapData falls back to its own sentence only when the body carried no reason": [
+   "core: GetHeatmapData throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "Get carries the status, so a caller can tell 401 from 403 from 500": [
+   "core: Get throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "GetPendingSettlements falls back to its own sentence only when the body carried no reason": [
+   "core: GetPendingSettlements throws its own sentence again",
+   "core: BuildError stops attaching the status"
+  ],
+  "Get surfaces the backend reason instead of a sentence of its own": [
+   "core: Get throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from"
+  ],
+  "an expired session reaches the operator as the reason the backend gave": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from",
+   "page: a backend reason is no longer preferred"
+  ],
+  "GetPendingSettlements still resolves a good response": [
+   "core: a 200 stops being treated as success"
+  ],
+  "GetHeatmapData surfaces the backend reason instead of a sentence of its own": [
+   "core: GetHeatmapData throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from"
+  ],
+  "a crashed report engine reaches the operator as the reason the backend gave": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from",
+   "page: a backend reason is no longer preferred"
+  ],
+  "GetPlatformGrowth surfaces the backend reason instead of a sentence of its own": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops preferring the backend's reason",
+   "core: BuildError stops recording where the message came from"
+  ],
+  "a failure that carries no message at all still says something": [
+   "page: an unrecognised throw is dressed up as a transport failure"
+  ],
+  "GetWoltDriveInvoice still resolves a good response": [
+   "core: a 200 stops being treated as success"
+  ],
+  "the fallback sentence on that read had never run before, and runs now": [
+   "core: the platform-growth read goes back to the unsafe GetRequest"
+  ],
+  "a refusal with an empty body is still named, not reduced to a code": [
+   "core: the platform-growth read goes back to the unsafe GetRequest",
+   "core: GetPlatformGrowth throws its own sentence again",
+   "core: BuildError stops attaching the status",
+   "page: the raw error message is printed again",
+   "page: a refusal loses its own sentence",
+   "page: 401 and 403 are collapsed into one sentence"
+  ]
+ },
+ "survivors": [],
+ "unused_mutations": [],
+ "collateral_prior_lane_arms": [],
+ "mutations": [
+  "core: the platform-growth read goes back to the unsafe GetRequest",
+  "core: Get throws its own sentence again",
+  "core: GetPendingSettlements throws its own sentence again",
+  "core: GetWoltDriveInvoice throws its own sentence again",
+  "core: GetHeatmapData throws its own sentence again",
+  "core: GetPlatformGrowth throws its own sentence again",
+  "core: BuildError stops preferring the backend's reason",
+  "core: BuildError stops attaching the status",
+  "core: BuildError stops recording where the message came from",
+  "page: the raw error message is printed again",
+  "page: a backend reason is no longer preferred",
+  "page: an expired session loses its own sentence",
+  "page: a refusal loses its own sentence",
+  "page: being offline loses its own sentence",
+  "page: a server error loses its own sentence",
+  "page: an unrecognised throw is dressed up as a transport failure",
+  "page: 401 and 403 are collapsed into one sentence",
+  "core: a 200 stops being treated as success"
+ ]
+}

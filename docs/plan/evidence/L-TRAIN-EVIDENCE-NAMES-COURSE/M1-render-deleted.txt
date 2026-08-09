@@ -1,0 +1,231 @@
+$ npx jest test/training-components.test.js --coverage=false --verbose
+(cwd /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/b4-train-wt, detached HEAD cff41c85)
+
+FAIL test/training-components.test.js
+  TrainingContextPanel — what the server said, not what we inferred
+    ✓ the flag list is the SERVER'S map, so a flag it did not report is simply not shown (53 ms)
+    ✓ a flag whose value is not a boolean is UNKNOWN, never off (3 ms)
+    ✓ THE DISTINCTION, varied: on, off and unknown render three different words (1 ms)
+    ✓ an unreported flag family renders no flags at all rather than seven fabricated OFFs (2 ms)
+    ✓ the competency seam is three-valued too (2 ms)
+    ✓ a zone the server declared a FALLBACK is marked as one (2 ms)
+  TrainingCourseList — unknown, refused and empty are three screens
+    ✓ THE DISTINCTION, varied: the three states render three different notices (4 ms)
+    ✓ neither an unknown nor a refused read renders a table, so neither can read as "no courses" (12 ms)
+    ✓ a course with zero versions shows 0, not a dash (2 ms)
+    ✓ a course carrying no competency key shows a dash with the reason, not an empty cell (1 ms)
+    ✓ the write is blocked only when the server SAID the flag is off (3 ms)
+    ✓ creating a course emits the trimmed body, with an empty competency key sent as null (2 ms)
+    ✓ a course with no title cannot be submitted — the server refuses it with a 400 (2 ms)
+  TrainingVersionPanel — publishing is the hinge, and only a draft can be published
+    ✓ no course selected is its own screen, not an unknown read
+    ✓ the publish button appears on the draft row and on no other (3 ms)
+    ✓ publishing emits the version NUMBER, which is what the route binds (1 ms)
+    ✓ the version's OWN authored threshold is shown on the version (1 ms)
+    ✓ a threshold outside 0-100 cannot be submitted (8 ms)
+    ✓ THE UNTAKEABLE FIELD IS GONE, and its absence is stated rather than left to be noticed (5 ms)
+    ✓ the draft body sends an explicit null quiz, which hashes identically to the empty box it replaces (8 ms)
+  TrainingAssignmentPanel — only a published version is offered
+    ✓ with no published version the form explains itself instead of offering an empty picker (4 ms)
+    ✓ a row shows the reference its own scope names (2 ms)
+    ✓ a due date is the authored day, and an absent one is a dash (1 ms)
+    ✓ the by-value warning STAYS on this form, because this write really does validate nothing (1 ms)
+    ✓ the emitted body sets exactly the reference the scope names and nulls the other (2 ms)
+    ✓ switching the scope REMOUNTS the field, so a role id cannot be sent as a person reference (2 ms)
+    ✓ a reference that is not a GUID cannot be submitted — the server could not bind it (3 ms)
+    ✓ a row's reference is named from the directory ITS OWN SCOPE points at (1 ms)
+  TrainingCompletionPanel — the ledger, and the grading it leaves to the server
+    ✕ EVERY row names the course and the version the attempt was stamped to (3 ms)
+    ✕ the version shown is the one on the ROW, never the one the form happens to offer (5 ms)
+    ✕ a row the server could not name prints a dash and no version flag, rather than disappearing (3 ms)
+    ✓ the column heading is a defined Norwegian word in all three locales, not a raw key (2 ms)
+    ✕ a 0% score renders as 0%, not as a dash (3 ms)
+    ✕ a score the server did not give is a dash, which is a different cell from 0% (1 ms)
+    ✓ THE DEAD CONTROL IS GONE: there is no pass box, because the server never read one (2 ms)
+    ✓ the form states the rule and the SELECTED version's own threshold, so 55-against-80 is no surprise (2 ms)
+    ✕ a row is shown exactly as the server graded it, and the panel recomputes nothing (2 ms)
+    ✕ a Quiz-sourced row is labelled plainly and titled with what this build knows (2 ms)
+    ✓ the person hint says a KNOWN person is required, which is what the server now checks (1 ms)
+    ✓ a reference that is not a GUID is refused here, where the cause is known (2 ms)
+    ✕ passed and not-passed are two different words, and an absent flag is a dash (3 ms)
+    ✓ with no frozen version the form explains itself instead of offering an empty picker (1 ms)
+    ✓ THE WIRE BODY CARRIES NO VERDICT — the score is the whole assertion (2 ms)
+  TrainingCertificatePanel — dated evidence
+    ✓ both dates are the authored day, unconverted (29 ms)
+    ✓ no expiry is a dash carrying the reason, and it is not the same as a missing value (2 ms)
+    ✓ the server's derived status is shown as given, and the moment it was derived is printed with it (2 ms)
+    ✓ THE DISTINCTION, varied: the three statuses render three different words (1 ms)
+    ✓ a status the server did not give is a dash, never assumed valid (1 ms)
+    ✓ with no asOf on the answer the note says the moment is unknown rather than using the browser clock (1 ms)
+    ✓ the form states that a KNOWN person is required — the check the server actually runs now (1 ms)
+    ✓ an expiry before the issue date is refused here, so it never becomes an unexplained 400 (3 ms)
+    ✓ a person reference that is not a GUID cannot be submitted (8 ms)
+    ✓ an empty expiry is emitted as null — a certificate that never expires, not an unknown one (20 ms)
+  TrainingHoldingsPanel — four states, and none of them is a verdict
+    ✓ THE DISTINCTION, varied: idle, unknown, refused and answered-empty are four screens (4 ms)
+    ✓ an answered-empty holding says nothing is on record, and says it is not a judgement (1 ms)
+    ✓ held keys and valid certificates are both rendered (2 ms)
+    ✓ a refused lookup renders no key list at all, so absence cannot be read off it (3 ms)
+    ✓ the lookup emits the trimmed reference (3 ms)
+    ✓ a reference that could not bind is refused before the query is built (1 ms)
+  TrainingReferenceField — a picker that assists typing and never replaces it
+    ✓ THE INPUT SURVIVES EVERY STATE OF THE DIRECTORY — including the one where it answered (2 ms)
+    ✓ THE DISTINCTION, varied: unknown, refused, answered-empty and answered give four sentences (28 ms)
+    ✓ the picker appears ONLY when the directory answered with somebody (2 ms)
+    ✓ picking somebody emits their id, so the text field stays the single source of truth
+    ✓ re-selecting the placeholder does NOT wipe a reference that is already typed (1 ms)
+    ✓ the picker reflects the TYPED value, so it doubles as confirmation that a pasted id names somebody (1 ms)
+    ✓ an unrecognised id says it may still be accepted, because the server's check is estate-wide
+    ✓ a half-typed id does not fire the unrecognised warning on every keystroke (1 ms)
+    ✓ an ended engagement is MARKED rather than dropped — the person is still real (1 ms)
+    ✓ an ABSENT directory reads as unknown, never as refused — refused is a positive claim
+    ✓ the role variant says something different from the person variant in every state (2 ms)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › EVERY row names the course and the version the attempt was stamped to
+
+    expect(received).toHaveLength(expected)
+
+    Expected length: 2
+    Received length: 0
+    Received object: {"selector": "[data-test=\"completion-course\"]"}
+
+      351 |     ]))
+      352 |     const cells = wrapper.findAll('[data-test="completion-course"]')
+    > 353 |     expect(cells).toHaveLength(2)
+          |                   ^
+      354 |     // Two DIFFERENT courses, so a panel printing one course over the whole table fails here.
+      355 |     expect(cells.at(0).text()).toContain('Ansvarlig alkoholservering')
+      356 |     expect(cells.at(0).text()).toContain('v1')
+
+      at Object.<anonymous> (test/training-components.test.js:353:19)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › the version shown is the one on the ROW, never the one the form happens to offer
+
+    [vue-test-utils]: find did not return [data-test="completion-course"], cannot call text() on empty Wrapper
+
+      365 |       { completionId: 'x-1', personRef: PERSON, courseTitle: 'Ansvarlig alkoholservering', versionNo: 1, scorePercent: 90, passed: true, source: 'ManagerRecorded' }
+      366 |     ]))
+    > 367 |     expect(wrapper.find('[data-test="completion-course"]').text()).toContain('v1')
+          |                                                            ^
+      368 |     expect(wrapper.find('[data-test="completion-course"]').text()).not.toContain('v2')
+      369 |   })
+      370 |
+
+      at throwError (../../../../../../../Users/svendaneel/okam/Web-modules/node_modules/@vue/test-utils/dist/vue-test-utils.js:1700:9)
+      at ErrorWrapper.text (../../../../../../../Users/svendaneel/okam/Web-modules/node_modules/@vue/test-utils/dist/vue-test-utils.js:8941:3)
+      at Object.<anonymous> (test/training-components.test.js:367:60)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a row the server could not name prints a dash and no version flag, rather than disappearing
+
+    [vue-test-utils]: find did not return [data-test="completion-course"], cannot call text() on empty Wrapper
+
+      376 |     ]))
+      377 |     expect(wrapper.findAll('[data-test="completion-row"]')).toHaveLength(1)
+    > 378 |     expect(wrapper.find('[data-test="completion-course"]').text()).toBe('—')
+          |                                                            ^
+      379 |     expect(wrapper.find('[data-test="completion-course"]').find('.trn-flag').exists()).toBe(false)
+      380 |   })
+      381 |
+
+      at throwError (../../../../../../../Users/svendaneel/okam/Web-modules/node_modules/@vue/test-utils/dist/vue-test-utils.js:1700:9)
+      at ErrorWrapper.text (../../../../../../../Users/svendaneel/okam/Web-modules/node_modules/@vue/test-utils/dist/vue-test-utils.js:8941:3)
+      at Object.<anonymous> (test/training-components.test.js:378:60)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a 0% score renders as 0%, not as a dash
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "0%"
+    Received: "Ikke bestått"
+
+      399 |       { completionId: 'x-1', personRef: PERSON, scorePercent: 0, passed: false, source: 'ManagerRecorded', versionContentHash: 'abc', completedAtUtc: '2026-07-01T09:00:00' }
+      400 |     ]))
+    > 401 |     expect(wrapper.find('[data-test="completion-row"]').findAll('td').at(2).text()).toBe('0%')
+          |                                                                                     ^
+      402 |   })
+      403 |
+      404 |   test('a score the server did not give is a dash, which is a different cell from 0%', () => {
+
+      at Object.<anonymous> (test/training-components.test.js:401:85)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a score the server did not give is a dash, which is a different cell from 0%
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "—"
+    Received: "Bestått"
+
+      408 |     ]))
+      409 |     const rows = wrapper.findAll('[data-test="completion-row"]')
+    > 410 |     expect(rows.at(0).findAll('td').at(2).text()).toBe('—')
+          |                                                   ^
+      411 |     expect(rows.at(1).findAll('td').at(2).text()).toBe('0%')
+      412 |   })
+      413 |
+
+      at Object.<anonymous> (test/training-components.test.js:410:51)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a row is shown exactly as the server graded it, and the panel recomputes nothing
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Bestått"
+    Received: "Ført av leder"
+
+      451 |     ]))
+      452 |     const rows = wrapper.findAll('[data-test="completion-row"]')
+    > 453 |     expect(rows.at(0).findAll('td').at(3).text()).toBe(translations.no.trn_result_passed)
+          |                                                   ^
+      454 |     expect(rows.at(1).findAll('td').at(3).text()).toBe(translations.no.trn_result_failed)
+      455 |   })
+      456 |
+
+      at Object.<anonymous> (test/training-components.test.js:453:51)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a Quiz-sourced row is labelled plainly and titled with what this build knows
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Quiz"
+    Received: "—"
+
+      461 |     ]))
+      462 |     const cell = wrapper.find('[data-test="completion-row"]').findAll('td').at(4)
+    > 463 |     expect(cell.text()).toBe(translations.no.trn_source_quiz)
+          |                         ^
+      464 |     expect(cell.find('span').attributes('title')).toBe(translations.no.trn_source_quiz_note)
+      465 |     // POSITIVE CONTROL: the source this surface actually produces carries no such title.
+      466 |     const manager = mountPanel(answered('completions', [
+
+      at Object.<anonymous> (test/training-components.test.js:463:25)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › passed and not-passed are two different words, and an absent flag is a dash
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 2
+    + Received  + 2
+
+      Array [
+    -   "Bestått",
+    -   "Ikke bestått",
+    +   "—",
+    +   "—",
+        "—",
+      ]
+
+      498 |     ]))
+      499 |     const results = wrapper.findAll('[data-test="completion-row"]').wrappers.map(r => r.findAll('td').at(3).text())
+    > 500 |     expect(results).toEqual([translations.no.trn_result_passed, translations.no.trn_result_failed, '—'])
+          |                     ^
+      501 |   })
+      502 |
+      503 |   test('with no frozen version the form explains itself instead of offering an empty picker', () => {
+
+      at Object.<anonymous> (test/training-components.test.js:500:21)
+
+Test Suites: 1 failed, 1 total
+Tests:       8 failed, 62 passed, 70 total
+Snapshots:   0 total
+Time:        1.236 s, estimated 2 s
+Ran all test suites matching /test\/training-components.test.js/i.

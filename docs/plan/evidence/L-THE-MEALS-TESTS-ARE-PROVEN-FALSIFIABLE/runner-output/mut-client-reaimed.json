@@ -1,0 +1,23 @@
+[
+ {
+  "name": "client: the read fetches a different run than the one asked for",
+  "file": "utils/meals/statement-client.js",
+  "test": "test/meals-statement-client.test.js",
+  "from": "return this._request('GET', statementPath(statementId));",
+  "to": "return this._request('GET', statementPath('some-other-run'));"
+ },
+ {
+  "name": "client: the server's signature on the export is dropped",
+  "file": "utils/meals/statement-client.js",
+  "test": "test/meals-statement-client.test.js",
+  "from": "response.headers.get('X-Meals-Content-Hash')",
+  "to": "null"
+ },
+ {
+  "name": "client: a signature the browser could not read is invented locally",
+  "file": "utils/meals/statement-client.js",
+  "test": "test/meals-statement-client.test.js",
+  "from": "response.headers.get('X-Meals-Content-Hash')",
+  "to": "response.headers.get('X-Meals-Content-Hash') || 'sha256:recomputed-here'"
+ }
+]

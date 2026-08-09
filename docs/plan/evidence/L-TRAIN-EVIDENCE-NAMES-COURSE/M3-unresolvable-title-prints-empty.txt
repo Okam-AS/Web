@@ -1,0 +1,105 @@
+$ npx jest test/training-components.test.js --coverage=false --verbose
+(cwd /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/b4-train-wt, detached HEAD cff41c85)
+
+FAIL test/training-components.test.js
+  TrainingContextPanel — what the server said, not what we inferred
+    ✓ the flag list is the SERVER'S map, so a flag it did not report is simply not shown (73 ms)
+    ✓ a flag whose value is not a boolean is UNKNOWN, never off (2 ms)
+    ✓ THE DISTINCTION, varied: on, off and unknown render three different words (1 ms)
+    ✓ an unreported flag family renders no flags at all rather than seven fabricated OFFs (2 ms)
+    ✓ the competency seam is three-valued too (47 ms)
+    ✓ a zone the server declared a FALLBACK is marked as one (9 ms)
+  TrainingCourseList — unknown, refused and empty are three screens
+    ✓ THE DISTINCTION, varied: the three states render three different notices (6 ms)
+    ✓ neither an unknown nor a refused read renders a table, so neither can read as "no courses" (153 ms)
+    ✓ a course with zero versions shows 0, not a dash (2 ms)
+    ✓ a course carrying no competency key shows a dash with the reason, not an empty cell (2 ms)
+    ✓ the write is blocked only when the server SAID the flag is off (2 ms)
+    ✓ creating a course emits the trimmed body, with an empty competency key sent as null (50 ms)
+    ✓ a course with no title cannot be submitted — the server refuses it with a 400 (2 ms)
+  TrainingVersionPanel — publishing is the hinge, and only a draft can be published
+    ✓ no course selected is its own screen, not an unknown read (1 ms)
+    ✓ the publish button appears on the draft row and on no other (2 ms)
+    ✓ publishing emits the version NUMBER, which is what the route binds (109 ms)
+    ✓ the version's OWN authored threshold is shown on the version (1 ms)
+    ✓ a threshold outside 0-100 cannot be submitted (2 ms)
+    ✓ THE UNTAKEABLE FIELD IS GONE, and its absence is stated rather than left to be noticed (1 ms)
+    ✓ the draft body sends an explicit null quiz, which hashes identically to the empty box it replaces (2 ms)
+  TrainingAssignmentPanel — only a published version is offered
+    ✓ with no published version the form explains itself instead of offering an empty picker (30 ms)
+    ✓ a row shows the reference its own scope names (2 ms)
+    ✓ a due date is the authored day, and an absent one is a dash (1 ms)
+    ✓ the by-value warning STAYS on this form, because this write really does validate nothing (2 ms)
+    ✓ the emitted body sets exactly the reference the scope names and nulls the other (2 ms)
+    ✓ switching the scope REMOUNTS the field, so a role id cannot be sent as a person reference (2 ms)
+    ✓ a reference that is not a GUID cannot be submitted — the server could not bind it (2 ms)
+    ✓ a row's reference is named from the directory ITS OWN SCOPE points at (2 ms)
+  TrainingCompletionPanel — the ledger, and the grading it leaves to the server
+    ✓ EVERY row names the course and the version the attempt was stamped to (69 ms)
+    ✓ the version shown is the one on the ROW, never the one the form happens to offer (2 ms)
+    ✕ a row the server could not name prints a dash and no version flag, rather than disappearing (3 ms)
+    ✓ the column heading is a defined Norwegian word in all three locales, not a raw key (3 ms)
+    ✓ a 0% score renders as 0%, not as a dash (60 ms)
+    ✓ a score the server did not give is a dash, which is a different cell from 0% (2 ms)
+    ✓ THE DEAD CONTROL IS GONE: there is no pass box, because the server never read one (2 ms)
+    ✓ the form states the rule and the SELECTED version's own threshold, so 55-against-80 is no surprise (2 ms)
+    ✓ a row is shown exactly as the server graded it, and the panel recomputes nothing (2 ms)
+    ✓ a Quiz-sourced row is labelled plainly and titled with what this build knows (64 ms)
+    ✓ the person hint says a KNOWN person is required, which is what the server now checks (3 ms)
+    ✓ a reference that is not a GUID is refused here, where the cause is known (9 ms)
+    ✓ passed and not-passed are two different words, and an absent flag is a dash (36 ms)
+    ✓ with no frozen version the form explains itself instead of offering an empty picker (42 ms)
+    ✓ THE WIRE BODY CARRIES NO VERDICT — the score is the whole assertion (3 ms)
+  TrainingCertificatePanel — dated evidence
+    ✓ both dates are the authored day, unconverted (36 ms)
+    ✓ no expiry is a dash carrying the reason, and it is not the same as a missing value (9 ms)
+    ✓ the server's derived status is shown as given, and the moment it was derived is printed with it (4 ms)
+    ✓ THE DISTINCTION, varied: the three statuses render three different words (2 ms)
+    ✓ a status the server did not give is a dash, never assumed valid (2 ms)
+    ✓ with no asOf on the answer the note says the moment is unknown rather than using the browser clock (11 ms)
+    ✓ the form states that a KNOWN person is required — the check the server actually runs now (2 ms)
+    ✓ an expiry before the issue date is refused here, so it never becomes an unexplained 400 (3 ms)
+    ✓ a person reference that is not a GUID cannot be submitted (2 ms)
+    ✓ an empty expiry is emitted as null — a certificate that never expires, not an unknown one (47 ms)
+  TrainingHoldingsPanel — four states, and none of them is a verdict
+    ✓ THE DISTINCTION, varied: idle, unknown, refused and answered-empty are four screens (3 ms)
+    ✓ an answered-empty holding says nothing is on record, and says it is not a judgement (1 ms)
+    ✓ held keys and valid certificates are both rendered (2 ms)
+    ✓ a refused lookup renders no key list at all, so absence cannot be read off it (1 ms)
+    ✓ the lookup emits the trimmed reference (78 ms)
+    ✓ a reference that could not bind is refused before the query is built (19 ms)
+  TrainingReferenceField — a picker that assists typing and never replaces it
+    ✓ THE INPUT SURVIVES EVERY STATE OF THE DIRECTORY — including the one where it answered (3 ms)
+    ✓ THE DISTINCTION, varied: unknown, refused, answered-empty and answered give four sentences (2 ms)
+    ✓ the picker appears ONLY when the directory answered with somebody (71 ms)
+    ✓ picking somebody emits their id, so the text field stays the single source of truth (1 ms)
+    ✓ re-selecting the placeholder does NOT wipe a reference that is already typed
+    ✓ the picker reflects the TYPED value, so it doubles as confirmation that a pasted id names somebody (1 ms)
+    ✓ an unrecognised id says it may still be accepted, because the server's check is estate-wide (1 ms)
+    ✓ a half-typed id does not fire the unrecognised warning on every keystroke
+    ✓ an ended engagement is MARKED rather than dropped — the person is still real (1 ms)
+    ✓ an ABSENT directory reads as unknown, never as refused — refused is a positive claim (1 ms)
+    ✓ the role variant says something different from the person variant in every state (1 ms)
+
+  ● TrainingCompletionPanel — the ledger, and the grading it leaves to the server › a row the server could not name prints a dash and no version flag, rather than disappearing
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "—"
+    Received: ""
+
+      376 |     ]))
+      377 |     expect(wrapper.findAll('[data-test="completion-row"]')).toHaveLength(1)
+    > 378 |     expect(wrapper.find('[data-test="completion-course"]').text()).toBe('—')
+          |                                                                    ^
+      379 |     expect(wrapper.find('[data-test="completion-course"]').find('.trn-flag').exists()).toBe(false)
+      380 |   })
+      381 |
+
+      at Object.<anonymous> (test/training-components.test.js:378:68)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 69 passed, 70 total
+Snapshots:   0 total
+Time:        3.863 s
+Ran all test suites matching /test\/training-components.test.js/i.

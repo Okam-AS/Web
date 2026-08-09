@@ -1,0 +1,115 @@
+using System;
+using WebApi.Enums.Growth;
+
+namespace WebApi.Services.Growth
+{
+    /// <summary>
+    /// What art. 12 obliges this controller to do about one privacy request: WHETHER it still owes the data
+    /// subject an answer, and BY WHEN.
+    ///
+    /// <para>Both are properties of the OBLIGATION, not of any screen that draws it. They live here — server
+    /// side, computed once — rather than in the client, because a deadline recomputed by every reader is a
+    /// deadline every reader may compute differently, and the one that matters is the one the venue is held
+    /// to. The admin queue used to derive it in the browser; it renders this instead.</para>
+    /// </summary>
+    public static class GrowthPrivacyObligation
+    {
+        /// <summary>
+        /// GDPR art. 12(3): the controller answers "without undue delay and in any event within one month of
+        /// receipt of the request".
+        ///
+        /// <para>One month is the BASE period, not the whole of art. 12(3). The same paragraph lets the
+        /// controller extend it by two further months where the complexity or number of requests requires it,
+        /// provided the data subject is told within the first month that it has been extended and why.
+        /// Nothing in this module records such an extension, so every request is counted on the base period.
+        /// That is a missing capability rather than a rule that does not apply: the direction is safe — the
+        /// queue never shows more time than art. 12 certainly grants — but a venue that has lawfully extended
+        /// has no way to say so here and will read its own screen as overdue.</para>
+        /// </summary>
+        public const int ResponseWindowMonths = 1;
+
+        /// <summary>
+        /// The due DAY, one CALENDAR month from receipt and not thirty days.
+        ///
+        /// <para>Reg. (EEC, Euratom) No 1182/71 art. 3(2)(c) puts a period expressed in months at the same
+        /// day-number of the last month, and where that day-number does not exist there, on that month's LAST
+        /// day. <see cref="DateTimeOffset.AddMonths"/> clamps exactly that way, so 31 January + one month is
+        /// 28 February (29 in a leap year) and never the 2 March a thirty-day window gives. That is not an
+        /// incidental property of the framework call: it is the whole reason this is a named method with
+        /// tests on the end-of-month cases, where a naive thirty-day window and the calendar-month rule give
+        /// different answers and the difference is two days of statutory headroom the venue does not have.</para>
+        ///
+        /// <para>Normalized to UTC first so one request has ONE deadline. Receipt is written from the
+        /// injected <c>TimeProvider</c>'s <c>GetUtcNow()</c>, so in practice the offset is already zero; the
+        /// conversion is here so a row that ever arrives carrying a non-zero offset cannot shift the
+        /// day-number the month-clamp is applied to.</para>
+        ///
+        /// <para>WHAT IT COUNTS, AND WHAT IT DOES NOT. The mapping above is the whole of this method: a
+        /// receipt date to a due DATE under art. 3(2)(c). Three further rules of that same article are not
+        /// applied, and they are named here rather than left implicit because this value is printed to a
+        /// venue as its legal exposure. Citing art. 3(2)(c) as the counting rule and then not applying
+        /// art. 3(4) is not a defensible position — they are one article of one regulation — so what follows
+        /// is a list of known gaps, not a reading under which the arithmetic is complete.</para>
+        ///
+        /// <para>(1) ART. 3(4), THE WORKING-DAY EXTENSION — NOT IMPLEMENTED. "Where the last day of a period
+        /// expressed otherwise than in hours is a public holiday, Sunday or Saturday, the period shall end
+        /// with the expiry of the last hour of the following working day." This returns the unextended day,
+        /// so the date it yields can be up to two days earlier than the one the venue is entitled to, and the
+        /// queue's overdue banner is then a statement about the law that is FALSE for that long. The
+        /// direction is conservative — the venue is pressed early, never shown headroom it does not have —
+        /// which is why this ships as it is. It is not a rare corner: three of the six clamp cases in
+        /// <c>GrowthPrivacyDeadlineTests</c> land on a day art. 3(4) would move (Sat 28 Feb 2026, Sun
+        /// 15 Feb 2026, Sun 31 Jan 2027). Implementing it needs a public-holiday calendar for the venue's own
+        /// jurisdiction — art. 2(1) defines public holidays as the days designated as such in "the Member
+        /// State ... in which action is to be taken", so it is per-market data, the product holds none in any
+        /// market, and the Norwegian set alone is half movable feasts computed off Easter. Inventing one
+        /// would be worse than the omission, because a wrong holiday list moves deadlines in BOTH directions.
+        /// The weekend half needs no data, but cannot be asked before (3) is answered: "is the due day a
+        /// Saturday" has no answer until the calendar the due day is read on has been ruled.</para>
+        ///
+        /// <para>(2) ART. 3(2)(c), EXPIRY AT THE END OF THE LAST DAY — NOT IMPLEMENTED. The period "shall end
+        /// with the expiry of the last hour" of the due day, not at the receipt's clock time on it. The value
+        /// here carries the time of day it was received from, so an instant comparison against it — the
+        /// queue's <c>isOverdue</c>, in the admin web's <c>utils/growth/privacy-queue.js</c> — flags a request
+        /// overdue up to a full day early. Conservative again, and the printed DATE is unaffected because
+        /// only the time component is wrong. It is deliberately not fixed on its own, because end of WHICH
+        /// day is (3): rounding this up to the last tick of the UTC day would move the date the queue PRINTS
+        /// forward by one for every row rendered east of UTC — Oslo shows 23:59Z as 01:59 the next morning —
+        /// which is the dangerous direction applied to every request instead of a handful.</para>
+        ///
+        /// <para>(3) WHICH CALENDAR THE DAY-NUMBER IS READ ON — OPEN, AND THE ONLY GAP THAT BREAKS THE
+        /// DANGEROUS WAY. The clamp is applied to the UTC day-number, per the normalization above; the admin
+        /// queue formats the resulting instant with <c>Intl.DateTimeFormat</c> and no <c>timeZone</c>, i.e. in
+        /// the VIEWER's zone. The UTC reading is defensible and was chosen deliberately; what opens the gap is
+        /// computing on one calendar and rendering on another. Worked, and pinned in
+        /// <c>GrowthPrivacyDeadlineTests</c>: a request filed 31 March 2026 at 01:30 Oslo time is 30 March in
+        /// UTC, so this returns 30 April 23:30Z and an Oslo screen prints Fri 1 MAY — while reading the
+        /// receipt on the venue's own calendar gives Thu 30 APRIL. One day of headroom that may not exist.
+        /// It bites only where the two calendars clamp differently, which for a UTC+1/+2 venue means a receipt
+        /// between local midnight and the offset on the 29th, 30th or 31st of January or the 31st of March,
+        /// May, August or October: a one-to-two-hour window on a handful of days a year. WHICH READING IS
+        /// OPERATIVE IS A QUESTION OF LAW AND NOTHING HERE RULES IT — it needs an answer from counsel, and
+        /// until then the three gaps compound: that same 31 March 2026 receipt is Thu 30 April on the venue's
+        /// calendar, Fri 1 May on its screen, and Mon 4 May once art. 3(4) is applied to a 1 May that is a
+        /// Norwegian public holiday. Three answers, four days apart.</para>
+        ///
+        /// <para>RECOMMENDATION, NOT A CHANGE. Carrying the deadline as a venue-local DATE rather than an
+        /// instant dissolves all three questions at once: a date has no time of day for (2) to be wrong about
+        /// and no zone for (3) to disagree with, and a date is what art. 3(2)(c) maps to in the first place.
+        /// That is a wire change, and it needs the legal reading in (3) before it can be made.</para>
+        /// </summary>
+        public static DateTimeOffset DueAt(DateTimeOffset receivedAt) =>
+            receivedAt.ToUniversalTime().AddMonths(ResponseWindowMonths);
+
+        /// <summary>
+        /// True while the request still owes an answer — the two non-terminal members of
+        /// <see cref="GrowthPrivacyRequestState"/>.
+        ///
+        /// <para>Written as the positive test of the two OPEN states rather than as the negation of the two
+        /// terminal ones: a member added to the enum later is then not silently treated as settled, which is
+        /// the direction that would drop a live obligation off the top of the queue.</para>
+        /// </summary>
+        public static bool IsOpen(GrowthPrivacyRequestState state) =>
+            state == GrowthPrivacyRequestState.Received || state == GrowthPrivacyRequestState.InProgress;
+    }
+}

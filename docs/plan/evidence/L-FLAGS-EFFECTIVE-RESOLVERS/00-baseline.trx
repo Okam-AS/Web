@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="fc33113b-3ee6-421a-8d06-6c6892bb125c" name="@Svens-MacBook-Pro 2026-08-09 17:35:37" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:35:37.3766790+02:00" queuing="2026-08-09T17:35:37.3766790+02:00" start="2026-08-09T17:35:33.9486720+02:00" finish="2026-08-09T17:35:44.7775280+02:00" />
+  <TestSettings name="default" id="dd01a1b4-6a44-4368-9798-3f61797903a1">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_35_37" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="4ef656a8-87f0-423f-b450-7bcc93952715" testId="7e5d8649-04de-28bf-b2cf-dd88e362f139" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" computerName="Svens-MacBook-Pro" duration="00:00:00.0017641" startTime="2026-08-09T17:35:37.8546300+02:00" endTime="2026-08-09T17:35:37.8546300+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4ef656a8-87f0-423f-b450-7bcc93952715" />
+    <UnitTestResult executionId="a42c6fc3-f461-4036-92be-bd54754aa3be" testId="ecb98ead-b286-e161-ecb2-80766192933d" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag" computerName="Svens-MacBook-Pro" duration="00:00:00.0033500" startTime="2026-08-09T17:35:41.9667330+02:00" endTime="2026-08-09T17:35:41.9667330+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a42c6fc3-f461-4036-92be-bd54754aa3be" />
+    <UnitTestResult executionId="bbd6a8bc-d97a-455e-b576-d94b12b8a4d3" testId="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" computerName="Svens-MacBook-Pro" duration="00:00:00.0012571" startTime="2026-08-09T17:35:42.8921820+02:00" endTime="2026-08-09T17:35:42.8921820+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbd6a8bc-d97a-455e-b576-d94b12b8a4d3" />
+    <UnitTestResult executionId="02bef41d-d691-4587-b1d9-733d73c0e7ab" testId="394bb80d-946d-21c7-1935-7a4455ef1bca" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_module_still_has_an_unclaimed_catalog_flag" computerName="Svens-MacBook-Pro" duration="00:00:00.0004951" startTime="2026-08-09T17:35:41.9682330+02:00" endTime="2026-08-09T17:35:41.9682330+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="02bef41d-d691-4587-b1d9-733d73c0e7ab" />
+    <UnitTestResult executionId="f9c77531-5d50-4166-90f2-7ae57c4b5f72" testId="998c059d-176e-b2b7-574b-293786df2a57" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" computerName="Svens-MacBook-Pro" duration="00:00:00.0060203" startTime="2026-08-09T17:35:37.3623510+02:00" endTime="2026-08-09T17:35:37.3623590+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9c77531-5d50-4166-90f2-7ae57c4b5f72" />
+    <UnitTestResult executionId="dd9b3734-7db1-4ba6-9877-40f16d27de4f" testId="bed8c8f1-10cf-4646-b8a4-1b6852585e29" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too" computerName="Svens-MacBook-Pro" duration="00:00:00.0013314" startTime="2026-08-09T17:35:42.9596870+02:00" endTime="2026-08-09T17:35:42.9596870+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd9b3734-7db1-4ba6-9877-40f16d27de4f" />
+    <UnitTestResult executionId="6ba22b02-b6bd-46fe-80af-3107035dafab" testId="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" computerName="Svens-MacBook-Pro" duration="00:00:00.0003958" startTime="2026-08-09T17:35:41.9686620+02:00" endTime="2026-08-09T17:35:41.9686620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ba22b02-b6bd-46fe-80af-3107035dafab" />
+    <UnitTestResult executionId="4b80c7ea-4204-4be8-b05b-645af83c38ae" testId="ef01a335-d35f-3d0a-3654-8c63eaab4c96" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" computerName="Svens-MacBook-Pro" duration="00:00:00.0009383" startTime="2026-08-09T17:35:42.8237570+02:00" endTime="2026-08-09T17:35:42.8237570+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b80c7ea-4204-4be8-b05b-645af83c38ae" />
+    <UnitTestResult executionId="9f3c959d-e428-4c9f-9ec9-bd748d7d2158" testId="78165d31-803f-28a8-8709-36dab7a7571a" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" computerName="Svens-MacBook-Pro" duration="00:00:00.0011677" startTime="2026-08-09T17:35:43.5334090+02:00" endTime="2026-08-09T17:35:43.5334090+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9f3c959d-e428-4c9f-9ec9-bd748d7d2158" />
+    <UnitTestResult executionId="d66d216f-7dd2-4a41-8093-298fc7de1950" testId="a0670104-104a-b709-c42a-e357d863aef0" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.8038786" startTime="2026-08-09T17:35:44.7354900+02:00" endTime="2026-08-09T17:35:44.7354900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d66d216f-7dd2-4a41-8093-298fc7de1950" />
+    <UnitTestResult executionId="86248bb0-1402-43cd-9f7e-4f92c1d17db1" testId="78c631a3-cdf5-de14-b89a-90de3f9cdc87" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" computerName="Svens-MacBook-Pro" duration="00:00:00.0037102" startTime="2026-08-09T17:35:42.5091530+02:00" endTime="2026-08-09T17:35:42.5091530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86248bb0-1402-43cd-9f7e-4f92c1d17db1" />
+    <UnitTestResult executionId="436afef5-410c-4ae7-8a90-00e8226f37ca" testId="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" computerName="Svens-MacBook-Pro" duration="00:00:00.0015010" startTime="2026-08-09T17:35:43.2606670+02:00" endTime="2026-08-09T17:35:43.2606670+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="436afef5-410c-4ae7-8a90-00e8226f37ca" />
+    <UnitTestResult executionId="7c20a138-8cca-42ef-b039-cecc02966545" testId="2c8727ff-5b88-e360-5274-2edc9fd4ea0b" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" computerName="Svens-MacBook-Pro" duration="00:00:00.0035600" startTime="2026-08-09T17:35:43.1272110+02:00" endTime="2026-08-09T17:35:43.1272110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c20a138-8cca-42ef-b039-cecc02966545" />
+    <UnitTestResult executionId="e8ac97b6-e708-42aa-9c94-fdfbd3eed655" testId="1bf88967-9a3d-41e5-bda8-267f50f83543" testName="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" computerName="Svens-MacBook-Pro" duration="00:00:00.0009039" startTime="2026-08-09T17:35:41.9677130+02:00" endTime="2026-08-09T17:35:41.9677130+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8ac97b6-e708-42aa-9c94-fdfbd3eed655" />
+    <UnitTestResult executionId="121e0d5f-f76d-49d5-bb64-f1f1c1596fdb" testId="dca0d893-afcb-6816-55b8-ecde2bea338c" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.0042655" startTime="2026-08-09T17:35:38.0275250+02:00" endTime="2026-08-09T17:35:38.0275260+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="121e0d5f-f76d-49d5-bb64-f1f1c1596fdb" />
+    <UnitTestResult executionId="55ead721-a15b-4982-97fe-7ec4bea09840" testId="280f7624-6074-ed27-33d1-e2f5fd363d8e" testName="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" computerName="Svens-MacBook-Pro" duration="00:00:00.0022301" startTime="2026-08-09T17:35:43.0323570+02:00" endTime="2026-08-09T17:35:43.0323570+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="55ead721-a15b-4982-97fe-7ec4bea09840" />
+    <UnitTestResult executionId="872e71f1-342a-4cea-9208-25cbcf7719a6" testId="41f173e5-84cd-f608-a16d-33830fd11001" testName="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" computerName="Svens-MacBook-Pro" duration="00:00:00.0002298" startTime="2026-08-09T17:35:43.6497630+02:00" endTime="2026-08-09T17:35:43.6497630+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="872e71f1-342a-4cea-9208-25cbcf7719a6" />
+    <UnitTestResult executionId="49c7f9cc-7d7e-41d9-8535-afe0fb2d0549" testId="044ef7bb-d41d-170d-e245-36b4a19e4d03" testName="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" computerName="Svens-MacBook-Pro" duration="00:00:00.1587277" startTime="2026-08-09T17:35:37.6964620+02:00" endTime="2026-08-09T17:35:37.6964620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49c7f9cc-7d7e-41d9-8535-afe0fb2d0549" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="41f173e5-84cd-f608-a16d-33830fd11001">
+      <Execution id="872e71f1-342a-4cea-9208-25cbcf7719a6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="The_resolver_claims_every_key_the_module_advertises" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_module_still_has_an_unclaimed_catalog_flag" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="394bb80d-946d-21c7-1935-7a4455ef1bca">
+      <Execution id="02bef41d-d691-4587-b1d9-733d73c0e7ab" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_excused_module_still_has_an_unclaimed_catalog_flag" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824">
+      <Execution id="bbd6a8bc-d97a-455e-b576-d94b12b8a4d3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ef01a335-d35f-3d0a-3654-8c63eaab4c96">
+      <Execution id="4b80c7ea-4204-4be8-b05b-645af83c38ae" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_resolver_claims_every_key_the_module_advertises" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78165d31-803f-28a8-8709-36dab7a7571a">
+      <Execution id="9f3c959d-e428-4c9f-9ec9-bd748d7d2158" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f">
+      <Execution id="6ba22b02-b6bd-46fe-80af-3107035dafab" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_with_a_reason" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26">
+      <Execution id="436afef5-410c-4ae7-8a90-00e8226f37ca" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="A_row_flipped_on_under_an_undeployed_module_is_reported_dark" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="998c059d-176e-b2b7-574b-293786df2a57">
+      <Execution id="f9c77531-5d50-4166-90f2-7ae57c4b5f72" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="280f7624-6074-ed27-33d1-e2f5fd363d8e">
+      <Execution id="55ead721-a15b-4982-97fe-7ec4bea09840" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="On_a_deployed_module_the_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1bf88967-9a3d-41e5-bda8-267f50f83543">
+      <Execution id="e8ac97b6-e708-42aa-9c94-fdfbd3eed655" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="044ef7bb-d41d-170d-e245-36b4a19e4d03">
+      <Execution id="49c7f9cc-7d7e-41d9-8535-afe0fb2d0549" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a0670104-104a-b709-c42a-e357d863aef0">
+      <Execution id="d66d216f-7dd2-4a41-8093-298fc7de1950" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="On_a_deployed_module_the_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ecb98ead-b286-e161-ecb2-80766192933d">
+      <Execution id="a42c6fc3-f461-4036-92be-bd54754aa3be" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.FlagEffectiveResolverWireTests" name="No_two_registered_resolvers_claim_the_same_flag" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2c8727ff-5b88-e360-5274-2edc9fd4ea0b">
+      <Execution id="7c20a138-8cca-42ef-b039-cecc02966545" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsFeatureFlagEffectiveTests" name="Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78c631a3-cdf5-de14-b89a-90de3f9cdc87">
+      <Execution id="86248bb0-1402-43cd-9f7e-4f92c1d17db1" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="A_row_flipped_on_under_an_undeployed_module_is_reported_dark" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7e5d8649-04de-28bf-b2cf-dd88e362f139">
+      <Execution id="4ef656a8-87f0-423f-b450-7bcc93952715" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="A_store_enabled_only_by_configuration_is_reported_effective_not_hidden" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dca0d893-afcb-6816-55b8-ecde2bea338c">
+      <Execution id="121e0d5f-f76d-49d5-bb64-f1f1c1596fdb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests" name="An_explicit_row_still_decides_in_both_directions" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too" storage="/users/svendaneel/okam/okamapi-flagseff/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bed8c8f1-10cf-4646-b8a4-1b6852585e29">
+      <Execution id="dd9b3734-7db1-4ba6-9877-40f16d27de4f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/OkamAPI-flagseff/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests" name="The_dispatch_kill_switch_answers_for_the_undeployed_case_too" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="7e5d8649-04de-28bf-b2cf-dd88e362f139" executionId="4ef656a8-87f0-423f-b450-7bcc93952715" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ecb98ead-b286-e161-ecb2-80766192933d" executionId="a42c6fc3-f461-4036-92be-bd54754aa3be" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5e7db6e3-a6b1-010d-f2cc-4c3b5bf5b824" executionId="bbd6a8bc-d97a-455e-b576-d94b12b8a4d3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="394bb80d-946d-21c7-1935-7a4455ef1bca" executionId="02bef41d-d691-4587-b1d9-733d73c0e7ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="998c059d-176e-b2b7-574b-293786df2a57" executionId="f9c77531-5d50-4166-90f2-7ae57c4b5f72" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bed8c8f1-10cf-4646-b8a4-1b6852585e29" executionId="dd9b3734-7db1-4ba6-9877-40f16d27de4f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9d7b2c5c-54d3-c9b9-f82f-7b5d4eb4d59f" executionId="6ba22b02-b6bd-46fe-80af-3107035dafab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ef01a335-d35f-3d0a-3654-8c63eaab4c96" executionId="4b80c7ea-4204-4be8-b05b-645af83c38ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78165d31-803f-28a8-8709-36dab7a7571a" executionId="9f3c959d-e428-4c9f-9ec9-bd748d7d2158" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0670104-104a-b709-c42a-e357d863aef0" executionId="d66d216f-7dd2-4a41-8093-298fc7de1950" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78c631a3-cdf5-de14-b89a-90de3f9cdc87" executionId="86248bb0-1402-43cd-9f7e-4f92c1d17db1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe4cdb6e-0dc5-3f1a-af1e-c2da0ff57b26" executionId="436afef5-410c-4ae7-8a90-00e8226f37ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2c8727ff-5b88-e360-5274-2edc9fd4ea0b" executionId="7c20a138-8cca-42ef-b039-cecc02966545" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1bf88967-9a3d-41e5-bda8-267f50f83543" executionId="e8ac97b6-e708-42aa-9c94-fdfbd3eed655" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dca0d893-afcb-6816-55b8-ecde2bea338c" executionId="121e0d5f-f76d-49d5-bb64-f1f1c1596fdb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="280f7624-6074-ed27-33d1-e2f5fd363d8e" executionId="55ead721-a15b-4982-97fe-7ec4bea09840" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41f173e5-84cd-f608-a16d-33830fd11001" executionId="872e71f1-342a-4cea-9208-25cbcf7719a6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="044ef7bb-d41d-170d-e245-36b4a19e4d03" executionId="49c7f9cc-7d7e-41d9-8535-afe0fb2d0549" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="18" executed="18" passed="18" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.96]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.18]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.19]   Starting:    WebApi.Tests
+[xUnit.net 00:00:10.59]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

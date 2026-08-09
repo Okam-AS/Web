@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3a24ed2c-1ab8-4d42-9965-8758f824a782" name="@Svens-MacBook-Pro 2026-08-09 00:44:27" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T00:44:27.7204670+02:00" queuing="2026-08-09T00:44:27.7204670+02:00" start="2026-08-09T00:44:24.0436150+02:00" finish="2026-08-09T00:44:27.9318320+02:00" />
+  <TestSettings name="default" id="fa9d0e42-ac3e-4fee-b18d-53e74377b981">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_00_44_27" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="f1267db5-c506-4827-93c7-d0653d966178" testId="72da21dc-c119-8a94-ec82-edf29d229eba" testName="WebApi.Tests.OrderCancellationAttributionTests.A_customer_cancelling_their_own_order_is_not_recorded_as_the_store_cancelling_it" computerName="Svens-MacBook-Pro" duration="00:00:00.1942256" startTime="2026-08-09T00:44:27.8982140+02:00" endTime="2026-08-09T00:44:27.8982140+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f1267db5-c506-4827-93c7-d0653d966178" />
+    <UnitTestResult executionId="b6e3a930-1f63-4c57-97d8-ba2cd5dc6d4a" testId="a6ecf56d-dff1-9ea8-7ab7-ae7fc3931bef" testName="WebApi.Tests.OrderCancellationAttributionTests.A_caller_who_is_not_the_orders_customer_is_recorded_as_the_store" computerName="Svens-MacBook-Pro" duration="00:00:02.4195764" startTime="2026-08-09T00:44:27.7041980+02:00" endTime="2026-08-09T00:44:27.7042060+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6e3a930-1f63-4c57-97d8-ba2cd5dc6d4a" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.OrderCancellationAttributionTests.A_customer_cancelling_their_own_order_is_not_recorded_as_the_store_cancelling_it" storage="/users/svendaneel/okam/wt-cancelattr/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="72da21dc-c119-8a94-ec82-edf29d229eba">
+      <Execution id="f1267db5-c506-4827-93c7-d0653d966178" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-cancelattr/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.OrderCancellationAttributionTests" name="A_customer_cancelling_their_own_order_is_not_recorded_as_the_store_cancelling_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.OrderCancellationAttributionTests.A_caller_who_is_not_the_orders_customer_is_recorded_as_the_store" storage="/users/svendaneel/okam/wt-cancelattr/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a6ecf56d-dff1-9ea8-7ab7-ae7fc3931bef">
+      <Execution id="b6e3a930-1f63-4c57-97d8-ba2cd5dc6d4a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-cancelattr/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.OrderCancellationAttributionTests" name="A_caller_who_is_not_the_orders_customer_is_recorded_as_the_store" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="72da21dc-c119-8a94-ec82-edf29d229eba" executionId="f1267db5-c506-4827-93c7-d0653d966178" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a6ecf56d-dff1-9ea8-7ab7-ae7fc3931bef" executionId="b6e3a930-1f63-4c57-97d8-ba2cd5dc6d4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="2" executed="2" passed="2" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.72]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.03]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.03]   Starting:    WebApi.Tests
+[xUnit.net 00:00:03.66]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

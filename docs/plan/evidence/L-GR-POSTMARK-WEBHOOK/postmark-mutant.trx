@@ -1,0 +1,739 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c3ff7600-ad6f-4082-89cf-9824952d2405" name="@Svens-MacBook-Pro 2026-08-09 17:43:23" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:43:23.2749280+02:00" queuing="2026-08-09T17:43:23.2749280+02:00" start="2026-08-09T17:43:21.9434630+02:00" finish="2026-08-09T17:43:27.3762770+02:00" />
+  <TestSettings name="default" id="7223b919-721f-4de8-87ad-25418bc31145">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_43_23" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="6c779ec0-203b-4316-a78a-e74893c35286" testId="5fd98feb-5bd1-6510-5d96-7ed19ba57991" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.Two_opens_of_one_message_are_two_events_and_a_redelivered_open_is_one" computerName="Svens-MacBook-Pro" duration="00:00:00.0006052" startTime="2026-08-09T17:43:23.2658110+02:00" endTime="2026-08-09T17:43:23.2658110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6c779ec0-203b-4316-a78a-e74893c35286" />
+    <UnitTestResult executionId="bbdaa281-4e8c-4ec6-bf0b-371696af06a3" testId="09c6f771-714e-f8fa-e4c6-22dbbc2dd561" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.The_postmark_shape_is_read_only_for_a_postmark_account" computerName="Svens-MacBook-Pro" duration="00:00:00.0119545" startTime="2026-08-09T17:43:27.3028230+02:00" endTime="2026-08-09T17:43:27.3028230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bbdaa281-4e8c-4ec6-bf0b-371696af06a3" />
+    <UnitTestResult executionId="f4a8be8e-803e-4d25-9e15-255e94a054c6" testId="2aa77b8b-ccd8-d28a-2e47-b1b22b965d35" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamNotification&quot;, typeCode: 512, expected: Complained)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000635" startTime="2026-08-09T17:43:23.2651560+02:00" endTime="2026-08-09T17:43:23.2651560+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f4a8be8e-803e-4d25-9e15-255e94a054c6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cd43342f-fadc-4a78-ac64-113ca7fb81b6" testId="62801e3c-e183-8619-8336-acde5f37a19c" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody" computerName="Svens-MacBook-Pro" duration="00:00:00.2048780" startTime="2026-08-09T17:43:27.1971280+02:00" endTime="2026-08-09T17:43:27.1971280+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd43342f-fadc-4a78-ac64-113ca7fb81b6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Deferred
+Actual:   ProviderAccepted</Message>
+          <StackTrace>   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 185
+   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 188
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6b67b301-8989-4c66-9968-3d535ae6ec03" testId="7235e24e-070d-5ab4-0fd5-4595f163a70d" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Blocked&quot;, typeCode: 100006, expected: Deferred)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000656" startTime="2026-08-09T17:43:23.2650570+02:00" endTime="2026-08-09T17:43:23.2650570+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b67b301-8989-4c66-9968-3d535ae6ec03">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5a24ada0-8410-4e06-b0a1-f50d20775e10" testId="279ddd98-f4cf-318c-4ef5-e1bc00de0359" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_spam_complaint_marks_the_delivery_complained_and_suppresses_channel_globally" computerName="Svens-MacBook-Pro" duration="00:00:00.0155944" startTime="2026-08-09T17:43:27.2907150+02:00" endTime="2026-08-09T17:43:27.2907150+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a24ada0-8410-4e06-b0a1-f50d20775e10" />
+    <UnitTestResult executionId="49c4af71-b079-4804-adee-ea38843f3ef8" testId="7b760fde-54b1-5233-e5cc-6863cb9e8c0a" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Admin&quot;, suppressSending: True, suppressionReason: &quot;ManualSuppression&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000995" startTime="2026-08-09T17:43:23.2504350+02:00" endTime="2026-08-09T17:43:23.2504350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="49c4af71-b079-4804-adee-ea38843f3ef8" />
+    <UnitTestResult executionId="1238b6dc-c21f-4894-af76-9ecf4a13a26b" testId="ea3072a2-79d2-be3a-fd41-5a9890acd8f9" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally" computerName="Svens-MacBook-Pro" duration="00:00:00.0052512" startTime="2026-08-09T17:43:27.3087140+02:00" endTime="2026-08-09T17:43:27.3087140+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1238b6dc-c21f-4894-af76-9ecf4a13a26b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Bounced
+Actual:   ProviderAccepted</Message>
+          <StackTrace>   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 126
+   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 139
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6e23cb1e-62ec-43b6-a05c-d12af523391a" testId="d84f11cd-d311-d5a3-896b-1cfb611da2b9" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;Postmark&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000965" startTime="2026-08-09T17:43:23.2604110+02:00" endTime="2026-08-09T17:43:23.2604110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6e23cb1e-62ec-43b6-a05c-d12af523391a">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 38
+   at InvokeStub_GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="10b2a69e-9b0e-45b8-9b89-b2d455624ed5" testId="4ff2ea7c-d0d1-96ec-7ceb-d82b4c47cc4d" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;Subscribe&quot;, typeCode: 32)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000073" startTime="2026-08-09T17:43:23.2655720+02:00" endTime="2026-08-09T17:43:23.2655720+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10b2a69e-9b0e-45b8-9b89-b2d455624ed5" />
+    <UnitTestResult executionId="bf278c67-7018-4971-a079-2aa9b9e27999" testId="e0600813-cb6b-5957-3d29-ea7ab04bc1d9" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamComplaint&quot;, typeCode: 512, expected: Complained)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001961" startTime="2026-08-09T17:43:23.2605210+02:00" endTime="2026-08-09T17:43:23.2605210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bf278c67-7018-4971-a079-2aa9b9e27999">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c8c3bef0-e75f-43d4-bba5-bb7e3d27ba96" testId="0c83f652-c7d9-91bb-bed9-9422130f5857" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;BadEmailAddress&quot;, typeCode: 100000, expected: Bounced)" computerName="Svens-MacBook-Pro" duration="00:00:00.0002300" startTime="2026-08-09T17:43:23.2641270+02:00" endTime="2026-08-09T17:43:23.2641270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8c3bef0-e75f-43d4-bba5-bb7e3d27ba96">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2d489750-9072-4bb7-80fe-1173a135e052" testId="29b1a3a5-a27a-1926-8f7e-a811a4db397f" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_record_type_this_module_does_not_measure_is_acknowledged(recordType: &quot;Inbound&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000347" startTime="2026-08-09T17:43:23.2599520+02:00" endTime="2026-08-09T17:43:23.2599520+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2d489750-9072-4bb7-80fe-1173a135e052" />
+    <UnitTestResult executionId="80ac19ef-d629-4455-83c9-a3ce643df116" testId="29a55bba-84af-1e17-a2f7-d8937e27cb55" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;HardBounce&quot;, typeCode: 1, expected: Bounced)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000635" startTime="2026-08-09T17:43:23.2652530+02:00" endTime="2026-08-09T17:43:23.2652530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80ac19ef-d629-4455-83c9-a3ce643df116">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="db7c126d-4cb9-4283-941f-9bb2eab568fa" testId="ec60ce87-fcc0-742a-edb0-88ecae30bb70" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamComplaint&quot;, typeCode: 100001, expected: Complained)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000678" startTime="2026-08-09T17:43:23.2647560+02:00" endTime="2026-08-09T17:43:23.2647560+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db7c126d-4cb9-4283-941f-9bb2eab568fa">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="72176a8d-cedc-4212-a678-b7e79f399904" testId="96bd3b67-17fb-76a9-70e7-518b72987d04" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SoftBounce&quot;, typeCode: 4096, expected: Deferred)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000646" startTime="2026-08-09T17:43:23.2649570+02:00" endTime="2026-08-09T17:43:23.2649570+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72176a8d-cedc-4212-a678-b7e79f399904">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="215106d5-f885-4210-ad50-cf748b5fbe2c" testId="7c2a8f6b-62c4-b5f9-5285-541b386caeec" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Delivery\&quot;}&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001011" startTime="2026-08-09T17:43:23.2496030+02:00" endTime="2026-08-09T17:43:23.2496030+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="215106d5-f885-4210-ad50-cf748b5fbe2c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Malformed
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(String json) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 189
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="be0febaf-ffa8-4338-8bd0-14da2d6bc72b" testId="2324509d-8783-e872-843a-d02de0df4379" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;AutoResponder&quot;, typeCode: 64)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000405" startTime="2026-08-09T17:43:23.2653670+02:00" endTime="2026-08-09T17:43:23.2653670+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be0febaf-ffa8-4338-8bd0-14da2d6bc72b" />
+    <UnitTestResult executionId="366d5419-c52c-4fea-a136-50dbe79983da" testId="306c8723-6d77-cabe-967f-77970b7b1433" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;TemplateRenderingFailed&quot;, typeCode: 100010)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000056" startTime="2026-08-09T17:43:23.2655400+02:00" endTime="2026-08-09T17:43:23.2655400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="366d5419-c52c-4fea-a136-50dbe79983da" />
+    <UnitTestResult executionId="dcc306b2-3647-43a7-8b1f-8d7f1c1dff60" testId="32a82b21-17e7-885a-b2d1-ce1caac7a62c" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;AddressChange&quot;, typeCode: 128)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000629" startTime="2026-08-09T17:43:23.2655130+02:00" endTime="2026-08-09T17:43:23.2655130+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dcc306b2-3647-43a7-8b1f-8d7f1c1dff60" />
+    <UnitTestResult executionId="e6a6d786-74b5-4f02-bd0b-e9648697a703" testId="0fd6236e-ff60-6277-4e6e-d2f5174b8aa1" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_provider_that_is_not_postmark_still_reads_the_canonical_envelope_and_only_that" computerName="Svens-MacBook-Pro" duration="00:00:00.0002642" startTime="2026-08-09T17:43:23.2656970+02:00" endTime="2026-08-09T17:43:23.2656970+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e6a6d786-74b5-4f02-bd0b-e9648697a703" />
+    <UnitTestResult executionId="2af0db33-7ae7-4adb-b556-36a4ec758da2" testId="150a04e9-5a7d-c325-098c-f42cb5fecc12" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Open\&quot;,\&quot;MessageID\&quot;:\&quot;m1\&quot;}&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0036706" startTime="2026-08-09T17:43:23.2434650+02:00" endTime="2026-08-09T17:43:23.2434730+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2af0db33-7ae7-4adb-b556-36a4ec758da2" />
+    <UnitTestResult executionId="3f873e67-e889-487f-9b56-fddf535c9254" testId="eba0d0d2-7286-fce2-a10e-4441c84a27c1" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;DnsError&quot;, typeCode: 256, expected: Deferred)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000710" startTime="2026-08-09T17:43:23.2646470+02:00" endTime="2026-08-09T17:43:23.2646470+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f873e67-e889-487f-9b56-fddf535c9254">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8c394c4d-5603-4bda-8425-2b9a81b3aad1" testId="38c12c65-24dd-bb74-a40d-2e6c45aa9b12" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_bounce_is_keyed_on_postmarks_own_id_at_full_width" computerName="Svens-MacBook-Pro" duration="00:00:00.0001843" startTime="2026-08-09T17:43:23.2656680+02:00" endTime="2026-08-09T17:43:23.2656680+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c394c4d-5603-4bda-8425-2b9a81b3aad1">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NullReferenceException : Object reference not set to an instance of an object.</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_bounce_is_keyed_on_postmarks_own_id_at_full_width() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 94
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f799248f-f595-486b-99f6-3790cf4e5380" testId="e02c2316-71dd-df92-b6b6-f766cd164a40" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;MessageID\&quot;:\&quot;m1\&quot;}&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000841" startTime="2026-08-09T17:43:23.2447020+02:00" endTime="2026-08-09T17:43:23.2447020+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f799248f-f595-486b-99f6-3790cf4e5380" />
+    <UnitTestResult executionId="7f205970-1a64-47ff-b98c-16e0cb607014" testId="bfb32844-6f05-4802-1642-d894c1baa8db" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: True, suppressionReason: &quot;HardBounce&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0002997" startTime="2026-08-09T17:43:23.2503210+02:00" endTime="2026-08-09T17:43:23.2503210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7f205970-1a64-47ff-b98c-16e0cb607014" />
+    <UnitTestResult executionId="3e72a1f7-5e32-4042-9738-ecfa6d76c0ca" testId="a7deb329-406d-38ff-5075-363fddc614f5" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events" computerName="Svens-MacBook-Pro" duration="00:00:00.0001910" startTime="2026-08-09T17:43:23.2659050+02:00" endTime="2026-08-09T17:43:23.2659050+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e72a1f7-5e32-4042-9738-ecfa6d76c0ca">
+      <Output>
+        <ErrorInfo>
+          <Message>System.NullReferenceException : Object reference not set to an instance of an object.</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 69
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="674f2317-1b4e-40c1-874f-b9e052bd1cd3" testId="f33ffcb4-ecff-1acf-394b-11da4f22d476" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Customer&quot;, suppressSending: True, suppressionReason: &quot;ManualSuppression&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000052" startTime="2026-08-09T17:43:23.2598640+02:00" endTime="2026-08-09T17:43:23.2598640+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="674f2317-1b4e-40c1-874f-b9e052bd1cd3" />
+    <UnitTestResult executionId="7c1fdf60-b7a5-49a9-9769-33e3d728ae26" testId="d9309865-9717-a5c7-fa96-b965719f567c" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing" computerName="Svens-MacBook-Pro" duration="00:00:00.0075117" startTime="2026-08-09T17:43:27.3232120+02:00" endTime="2026-08-09T17:43:27.3232120+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c1fdf60-b7a5-49a9-9769-33e3d728ae26">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: 1
+Actual:   0</Message>
+          <StackTrace>   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 318
+   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 319
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="15ff2fad-8601-41dc-be7c-dbf48d9479eb" testId="4a706353-2f09-91a9-64c2-1a880efaefd3" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_one_subscription_change_no_other_webhook_reports_is_the_recipients_own_withdrawal" computerName="Svens-MacBook-Pro" duration="00:00:00.0007744" startTime="2026-08-09T17:43:23.2656840+02:00" endTime="2026-08-09T17:43:23.2656840+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15ff2fad-8601-41dc-be7c-dbf48d9479eb" />
+    <UnitTestResult executionId="a028412b-67c3-4cc3-907d-ed809c4e620e" testId="bd56a982-ad8b-70db-5e0f-737768557612" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;SomethingPostmarkAddsLater&quot;, typeCode: 999999)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000113" startTime="2026-08-09T17:43:23.2655250+02:00" endTime="2026-08-09T17:43:23.2655250+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a028412b-67c3-4cc3-907d-ed809c4e620e" />
+    <UnitTestResult executionId="58101f0a-5052-4010-9484-b124551b2510" testId="e30f5e52-c425-4727-6caf-fd7b745c1dcf" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: True, suppressionReason: &quot;SpamComplaint&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000068" startTime="2026-08-09T17:43:23.2504520+02:00" endTime="2026-08-09T17:43:23.2504520+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="58101f0a-5052-4010-9484-b124551b2510" />
+    <UnitTestResult executionId="6b894623-82a2-4440-81f7-4e03dc9a29d2" testId="403e5c34-6ae3-8014-f84b-76e0f0eb0c88" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.Only_a_subscription_change_the_recipient_originated_suppresses_anyone" computerName="Svens-MacBook-Pro" duration="00:00:00.0774654" startTime="2026-08-09T17:43:27.2749410+02:00" endTime="2026-08-09T17:43:27.2749410+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b894623-82a2-4440-81f7-4e03dc9a29d2" />
+    <UnitTestResult executionId="9640aed4-ed09-4e95-b0b6-1d3b2bab7dd9" testId="cde2f741-8a00-0940-f791-ff40cfe49e5f" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;DMARCPolicy&quot;, typeCode: 100009)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000051" startTime="2026-08-09T17:43:23.2655510+02:00" endTime="2026-08-09T17:43:23.2655510+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9640aed4-ed09-4e95-b0b6-1d3b2bab7dd9" />
+    <UnitTestResult executionId="5ac13f14-ffd3-4b10-83e0-beff7f2c4bbc" testId="f5eda2d3-8238-20c3-0fd7-60eaf7f40ce0" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Transient&quot;, typeCode: 2, expected: Deferred)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000647" startTime="2026-08-09T17:43:23.2648620+02:00" endTime="2026-08-09T17:43:23.2648620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5ac13f14-ffd3-4b10-83e0-beff7f2c4bbc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="42a64382-bb00-4731-b727-719327e8a007" testId="4923f944-9444-83bd-ccd8-01088fe0d514" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once" computerName="Svens-MacBook-Pro" duration="00:00:00.0064027" startTime="2026-08-09T17:43:27.3153490+02:00" endTime="2026-08-09T17:43:27.3153490+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42a64382-bb00-4731-b727-719327e8a007">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Delivered
+Actual:   ProviderAccepted</Message>
+          <StackTrace>   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 79
+   at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once() in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs:line 93
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4e3d3fe1-a7b0-46c0-9988-7d5404855b29" testId="4b0cfccc-a22c-7744-4b9c-7e37362ba731" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;  postmark  &quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001836" startTime="2026-08-09T17:43:23.2602940+02:00" endTime="2026-08-09T17:43:23.2602940+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4e3d3fe1-a7b0-46c0-9988-7d5404855b29">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 38
+   at InvokeStub_GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="86c3bfac-54ca-4fd8-8667-7f09caf5fc57" testId="c1a7139e-d815-cbf2-de4f-31588fafe888" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Unsubscribe&quot;, typeCode: 16, expected: Unsubscribed)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000649" startTime="2026-08-09T17:43:23.2653500+02:00" endTime="2026-08-09T17:43:23.2653510+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86c3bfac-54ca-4fd8-8667-7f09caf5fc57">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 120
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="186c72a1-a352-4771-8220-da0a49467d83" testId="50be1d8a-7663-0b7a-7dfb-53b57da74d86" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;postmark&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001664" startTime="2026-08-09T17:43:23.2601480+02:00" endTime="2026-08-09T17:43:23.2601480+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="186c72a1-a352-4771-8220-da0a49467d83">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Mapped
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 38
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="35a227a2-85fc-4b30-93f7-810d44669feb" testId="c2c35fd4-4c25-b15e-0570-92b70dd204cd" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: False, suppressionReason: null)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000047" startTime="2026-08-09T17:43:23.2599230+02:00" endTime="2026-08-09T17:43:23.2599230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35a227a2-85fc-4b30-93f7-810d44669feb" />
+    <UnitTestResult executionId="e12d0888-f9de-4cd5-84de-1015a9cff881" testId="9cab507f-2641-dd7f-ef0d-10334d9a3aeb" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;ChallengeVerification&quot;, typeCode: 16384)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000072" startTime="2026-08-09T17:43:23.2655620+02:00" endTime="2026-08-09T17:43:23.2655620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e12d0888-f9de-4cd5-84de-1015a9cff881" />
+    <UnitTestResult executionId="494082fa-1109-4c34-9661-0bdf7e16cf81" testId="67091f87-b24c-a13d-9951-99c5bf7c60fb" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Bounce\&quot;,\&quot;Type\&quot;:\&quot;HardBounce\&quot;&quot;...)" computerName="Svens-MacBook-Pro" duration="00:00:00.0007800" startTime="2026-08-09T17:43:23.2493900+02:00" endTime="2026-08-09T17:43:23.2493900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="494082fa-1109-4c34-9661-0bdf7e16cf81">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+Expected: Malformed
+Actual:   Ignored</Message>
+          <StackTrace>   at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(String json) in /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs:line 189
+   at InvokeStub_GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1068d32a-402c-4cf0-9c6f-d6f30f9b26f2" testId="02523fb5-44e6-9a1e-0e4e-c94874739d98" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_record_type_this_module_does_not_measure_is_acknowledged(recordType: &quot;Click&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000391" startTime="2026-08-09T17:43:23.2599400+02:00" endTime="2026-08-09T17:43:23.2599400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1068d32a-402c-4cf0-9c6f-d6f30f9b26f2" />
+    <UnitTestResult executionId="6a6353ad-bc81-4839-a3ba-d150a97ae403" testId="266345ea-42cf-44a8-e4cc-c05c21aa57f4" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;[]&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000238" startTime="2026-08-09T17:43:23.2499350+02:00" endTime="2026-08-09T17:43:23.2499350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6a6353ad-bc81-4839-a3ba-d150a97ae403" />
+    <UnitTestResult executionId="482a4df6-91aa-4959-b370-f2af273d5eac" testId="7189a059-be6d-de7f-aae1-5180f0c77370" testName="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.An_auto_responder_bounce_is_acknowledged_and_moves_nothing" computerName="Svens-MacBook-Pro" duration="00:00:00.0047979" startTime="2026-08-09T17:43:27.3279650+02:00" endTime="2026-08-09T17:43:27.3279650+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="482a4df6-91aa-4959-b370-f2af273d5eac" />
+    <UnitTestResult executionId="8f51dbac-36eb-4031-b659-0aff0808b7ff" testId="aaa0c8a8-e8ab-3940-006a-fbb7e5ae120e" testName="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;this is not json&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0019569" startTime="2026-08-09T17:43:23.2498780+02:00" endTime="2026-08-09T17:43:23.2498780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f51dbac-36eb-4031-b659-0aff0808b7ff" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;TemplateRenderingFailed&quot;, typeCode: 100010)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="306c8723-6d77-cabe-967f-77970b7b1433">
+      <Execution id="366d5419-c52c-4fea-a136-50dbe79983da" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.An_auto_responder_bounce_is_acknowledged_and_moves_nothing" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7189a059-be6d-de7f-aae1-5180f0c77370">
+      <Execution id="482a4df6-91aa-4959-b370-f2af273d5eac" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="An_auto_responder_bounce_is_acknowledged_and_moves_nothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Admin&quot;, suppressSending: True, suppressionReason: &quot;ManualSuppression&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7b760fde-54b1-5233-e5cc-6863cb9e8c0a">
+      <Execution id="49c4af71-b079-4804-adee-ea38843f3ef8" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_spam_complaint_marks_the_delivery_complained_and_suppresses_channel_globally" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="279ddd98-f4cf-318c-4ef5-e1bc00de0359">
+      <Execution id="5a24ada0-8410-4e06-b0a1-f50d20775e10" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="A_genuine_postmark_spam_complaint_marks_the_delivery_complained_and_suppresses_channel_globally" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Transient&quot;, typeCode: 2, expected: Deferred)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f5eda2d3-8238-20c3-0fd7-60eaf7f40ce0">
+      <Execution id="5ac13f14-ffd3-4b10-83e0-beff7f2c4bbc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Bounce\&quot;,\&quot;Type\&quot;:\&quot;HardBounce\&quot;&quot;...)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="67091f87-b24c-a13d-9951-99c5bf7c60fb">
+      <Execution id="494082fa-1109-4c34-9661-0bdf7e16cf81" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamComplaint&quot;, typeCode: 512, expected: Complained)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e0600813-cb6b-5957-3d29-ea7ab04bc1d9">
+      <Execution id="bf278c67-7018-4971-a079-2aa9b9e27999" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;SomethingPostmarkAddsLater&quot;, typeCode: 999999)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bd56a982-ad8b-70db-5e0f-737768557612">
+      <Execution id="a028412b-67c3-4cc3-907d-ed809c4e620e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;postmark&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="50be1d8a-7663-0b7a-7dfb-53b57da74d86">
+      <Execution id="186c72a1-a352-4771-8220-da0a49467d83" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.The_postmark_shape_is_read_only_for_a_postmark_account" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="09c6f771-714e-f8fa-e4c6-22dbbc2dd561">
+      <Execution id="bbdaa281-4e8c-4ec6-bf0b-371696af06a3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="The_postmark_shape_is_read_only_for_a_postmark_account" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.Only_a_subscription_change_the_recipient_originated_suppresses_anyone" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="403e5c34-6ae3-8014-f84b-76e0f0eb0c88">
+      <Execution id="6b894623-82a2-4440-81f7-4e03dc9a29d2" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="Only_a_subscription_change_the_recipient_originated_suppresses_anyone" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="62801e3c-e183-8619-8336-acde5f37a19c">
+      <Execution id="cd43342f-fadc-4a78-ac64-113ca7fb81b6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;Subscribe&quot;, typeCode: 32)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4ff2ea7c-d0d1-96ec-7ceb-d82b4c47cc4d">
+      <Execution id="10b2a69e-9b0e-45b8-9b89-b2d455624ed5" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;Postmark&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d84f11cd-d311-d5a3-896b-1cfb611da2b9">
+      <Execution id="6e23cb1e-62ec-43b6-a05c-d12af523391a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_provider_that_is_not_postmark_still_reads_the_canonical_envelope_and_only_that" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0fd6236e-ff60-6277-4e6e-d2f5174b8aa1">
+      <Execution id="e6a6d786-74b5-4f02-bd0b-e9648697a703" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_provider_that_is_not_postmark_still_reads_the_canonical_envelope_and_only_that" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;AutoResponder&quot;, typeCode: 64)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2324509d-8783-e872-843a-d02de0df4379">
+      <Execution id="be0febaf-ffa8-4338-8bd0-14da2d6bc72b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SoftBounce&quot;, typeCode: 4096, expected: Deferred)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="96bd3b67-17fb-76a9-70e7-518b72987d04">
+      <Execution id="72176a8d-cedc-4212-a678-b7e79f399904" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: True, suppressionReason: &quot;HardBounce&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bfb32844-6f05-4802-1642-d894c1baa8db">
+      <Execution id="7f205970-1a64-47ff-b98c-16e0cb607014" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;DMARCPolicy&quot;, typeCode: 100009)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="cde2f741-8a00-0940-f791-ff40cfe49e5f">
+      <Execution id="9640aed4-ed09-4e95-b0b6-1d3b2bab7dd9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ea3072a2-79d2-be3a-fd41-5a9890acd8f9">
+      <Execution id="1238b6dc-c21f-4894-af76-9ecf4a13a26b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4923f944-9444-83bd-ccd8-01088fe0d514">
+      <Execution id="42a64382-bb00-4731-b727-719327e8a007" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: False, suppressionReason: null)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c2c35fd4-4c25-b15e-0570-92b70dd204cd">
+      <Execution id="35a227a2-85fc-4b30-93f7-810d44669feb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;AddressChange&quot;, typeCode: 128)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="32a82b21-17e7-885a-b2d1-ce1caac7a62c">
+      <Execution id="dcc306b2-3647-43a7-8b1f-8d7f1c1dff60" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Open\&quot;,\&quot;MessageID\&quot;:\&quot;m1\&quot;}&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="150a04e9-5a7d-c325-098c-f42cb5fecc12">
+      <Execution id="2af0db33-7ae7-4adb-b556-36a4ec758da2" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_record_type_this_module_does_not_measure_is_acknowledged(recordType: &quot;Inbound&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="29b1a3a5-a27a-1926-8f7e-a811a4db397f">
+      <Execution id="2d489750-9072-4bb7-80fe-1173a135e052" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_record_type_this_module_does_not_measure_is_acknowledged" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;[]&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="266345ea-42cf-44a8-e4cc-c05c21aa57f4">
+      <Execution id="6a6353ad-bc81-4839-a3ba-d150a97ae403" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a7deb329-406d-38ff-5075-363fddc614f5">
+      <Execution id="3e72a1f7-5e32-4042-9738-ecfa6d76c0ca" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.Two_opens_of_one_message_are_two_events_and_a_redelivered_open_is_one" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5fd98feb-5bd1-6510-5d96-7ed19ba57991">
+      <Execution id="6c779ec0-203b-4316-a78a-e74893c35286" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="Two_opens_of_one_message_are_two_events_and_a_redelivered_open_is_one" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;BadEmailAddress&quot;, typeCode: 100000, expected: Bounced)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0c83f652-c7d9-91bb-bed9-9422130f5857">
+      <Execution id="c8c3bef0-e75f-43d4-bba5-bb7e3d27ba96" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamComplaint&quot;, typeCode: 100001, expected: Complained)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ec60ce87-fcc0-742a-edb0-88ecae30bb70">
+      <Execution id="db7c126d-4cb9-4283-941f-9bb2eab568fa" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Recipient&quot;, suppressSending: True, suppressionReason: &quot;SpamComplaint&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e30f5e52-c425-4727-6caf-fd7b745c1dcf">
+      <Execution id="58101f0a-5052-4010-9484-b124551b2510" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_record_type_this_module_does_not_measure_is_acknowledged(recordType: &quot;Click&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="02523fb5-44e6-9a1e-0e4e-c94874739d98">
+      <Execution id="1068d32a-402c-4cf0-9c6f-d6f30f9b26f2" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_record_type_this_module_does_not_measure_is_acknowledged" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: &quot;  postmark  &quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4b0cfccc-a22c-7744-4b9c-7e37362ba731">
+      <Execution id="4e3d3fe1-a7b0-46c0-9988-7d5404855b29" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_one_subscription_change_no_other_webhook_reports_is_the_recipients_own_withdrawal" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4a706353-2f09-91a9-64c2-1a880efaefd3">
+      <Execution id="15ff2fad-8601-41dc-be7c-dbf48d9479eb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="The_one_subscription_change_no_other_webhook_reports_is_the_recipients_own_withdrawal" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;MessageID\&quot;:\&quot;m1\&quot;}&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e02c2316-71dd-df92-b6b6-f766cd164a40">
+      <Execution id="f799248f-f595-486b-99f6-3790cf4e5380" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_bounce_is_keyed_on_postmarks_own_id_at_full_width" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="38c12c65-24dd-bb74-a40d-2e6c45aa9b12">
+      <Execution id="8c394c4d-5603-4bda-8425-2b9a81b3aad1" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_bounce_is_keyed_on_postmarks_own_id_at_full_width" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;{\&quot;RecordType\&quot;:\&quot;Delivery\&quot;}&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7c2a8f6b-62c4-b5f9-5285-541b386caeec">
+      <Execution id="215106d5-f885-4210-ad50-cf748b5fbe2c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;DnsError&quot;, typeCode: 256, expected: Deferred)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="eba0d0d2-7286-fce2-a10e-4441c84a27c1">
+      <Execution id="3f873e67-e889-487f-9b56-fddf535c9254" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored(origin: &quot;Customer&quot;, suppressSending: True, suppressionReason: &quot;ManualSuppression&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f33ffcb4-ecff-1acf-394b-11da4f22d476">
+      <Execution id="674f2317-1b4e-40c1-874f-b9e052bd1cd3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_subscription_change_nobody_asked_for_is_acknowledged_and_ignored" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;HardBounce&quot;, typeCode: 1, expected: Bounced)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="29a55bba-84af-1e17-a2f7-d8937e27cb55">
+      <Execution id="80ac19ef-d629-4455-83c9-a3ce643df116" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: &quot;this is not json&quot;)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="aaa0c8a8-e8ab-3940-006a-fbb7e5ae120e">
+      <Execution id="8f51dbac-36eb-4031-b659-0aff0808b7ff" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_body_postmark_would_never_send_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.An_unclassified_bounce_moves_nothing_rather_than_guessing(type: &quot;ChallengeVerification&quot;, typeCode: 16384)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9cab507f-2641-dd7f-ef0d-10334d9a3aeb">
+      <Execution id="e12d0888-f9de-4cd5-84de-1015a9cff881" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="An_unclassified_bounce_moves_nothing_rather_than_guessing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Blocked&quot;, typeCode: 100006, expected: Deferred)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7235e24e-070d-5ab4-0fd5-4595f163a70d">
+      <Execution id="6b67b301-8989-4c66-9968-3d535ae6ec03" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d9309865-9717-a5c7-fa96-b965719f567c">
+      <Execution id="7c1fdf60-b7a5-49a9-9769-33e3d728ae26" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests" name="A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;Unsubscribe&quot;, typeCode: 16, expected: Unsubscribed)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c1a7139e-d815-cbf2-de4f-31588fafe888">
+      <Execution id="86c3bfac-54ca-4fd8-8667-7f09caf5fc57" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: &quot;SpamNotification&quot;, typeCode: 512, expected: Complained)" storage="/users/svendaneel/okam/wt-gr-postmark/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2aa77b8b-ccd8-d28a-2e47-b1b22b965d35">
+      <Execution id="f4a8be8e-803e-4d25-9e15-255e94a054c6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Growth.GrowthPostmarkEventReaderTests" name="A_classified_bounce_maps_to_its_effect" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5fd98feb-5bd1-6510-5d96-7ed19ba57991" executionId="6c779ec0-203b-4316-a78a-e74893c35286" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09c6f771-714e-f8fa-e4c6-22dbbc2dd561" executionId="bbdaa281-4e8c-4ec6-bf0b-371696af06a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2aa77b8b-ccd8-d28a-2e47-b1b22b965d35" executionId="f4a8be8e-803e-4d25-9e15-255e94a054c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="62801e3c-e183-8619-8336-acde5f37a19c" executionId="cd43342f-fadc-4a78-ac64-113ca7fb81b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7235e24e-070d-5ab4-0fd5-4595f163a70d" executionId="6b67b301-8989-4c66-9968-3d535ae6ec03" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="279ddd98-f4cf-318c-4ef5-e1bc00de0359" executionId="5a24ada0-8410-4e06-b0a1-f50d20775e10" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7b760fde-54b1-5233-e5cc-6863cb9e8c0a" executionId="49c4af71-b079-4804-adee-ea38843f3ef8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea3072a2-79d2-be3a-fd41-5a9890acd8f9" executionId="1238b6dc-c21f-4894-af76-9ecf4a13a26b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d84f11cd-d311-d5a3-896b-1cfb611da2b9" executionId="6e23cb1e-62ec-43b6-a05c-d12af523391a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ff2ea7c-d0d1-96ec-7ceb-d82b4c47cc4d" executionId="10b2a69e-9b0e-45b8-9b89-b2d455624ed5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e0600813-cb6b-5957-3d29-ea7ab04bc1d9" executionId="bf278c67-7018-4971-a079-2aa9b9e27999" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c83f652-c7d9-91bb-bed9-9422130f5857" executionId="c8c3bef0-e75f-43d4-bba5-bb7e3d27ba96" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="29b1a3a5-a27a-1926-8f7e-a811a4db397f" executionId="2d489750-9072-4bb7-80fe-1173a135e052" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="29a55bba-84af-1e17-a2f7-d8937e27cb55" executionId="80ac19ef-d629-4455-83c9-a3ce643df116" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec60ce87-fcc0-742a-edb0-88ecae30bb70" executionId="db7c126d-4cb9-4283-941f-9bb2eab568fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="96bd3b67-17fb-76a9-70e7-518b72987d04" executionId="72176a8d-cedc-4212-a678-b7e79f399904" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7c2a8f6b-62c4-b5f9-5285-541b386caeec" executionId="215106d5-f885-4210-ad50-cf748b5fbe2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2324509d-8783-e872-843a-d02de0df4379" executionId="be0febaf-ffa8-4338-8bd0-14da2d6bc72b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="306c8723-6d77-cabe-967f-77970b7b1433" executionId="366d5419-c52c-4fea-a136-50dbe79983da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="32a82b21-17e7-885a-b2d1-ce1caac7a62c" executionId="dcc306b2-3647-43a7-8b1f-8d7f1c1dff60" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0fd6236e-ff60-6277-4e6e-d2f5174b8aa1" executionId="e6a6d786-74b5-4f02-bd0b-e9648697a703" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="150a04e9-5a7d-c325-098c-f42cb5fecc12" executionId="2af0db33-7ae7-4adb-b556-36a4ec758da2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eba0d0d2-7286-fce2-a10e-4441c84a27c1" executionId="3f873e67-e889-487f-9b56-fddf535c9254" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38c12c65-24dd-bb74-a40d-2e6c45aa9b12" executionId="8c394c4d-5603-4bda-8425-2b9a81b3aad1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e02c2316-71dd-df92-b6b6-f766cd164a40" executionId="f799248f-f595-486b-99f6-3790cf4e5380" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bfb32844-6f05-4802-1642-d894c1baa8db" executionId="7f205970-1a64-47ff-b98c-16e0cb607014" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a7deb329-406d-38ff-5075-363fddc614f5" executionId="3e72a1f7-5e32-4042-9738-ecfa6d76c0ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f33ffcb4-ecff-1acf-394b-11da4f22d476" executionId="674f2317-1b4e-40c1-874f-b9e052bd1cd3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9309865-9717-a5c7-fa96-b965719f567c" executionId="7c1fdf60-b7a5-49a9-9769-33e3d728ae26" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4a706353-2f09-91a9-64c2-1a880efaefd3" executionId="15ff2fad-8601-41dc-be7c-dbf48d9479eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd56a982-ad8b-70db-5e0f-737768557612" executionId="a028412b-67c3-4cc3-907d-ed809c4e620e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e30f5e52-c425-4727-6caf-fd7b745c1dcf" executionId="58101f0a-5052-4010-9484-b124551b2510" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="403e5c34-6ae3-8014-f84b-76e0f0eb0c88" executionId="6b894623-82a2-4440-81f7-4e03dc9a29d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cde2f741-8a00-0940-f791-ff40cfe49e5f" executionId="9640aed4-ed09-4e95-b0b6-1d3b2bab7dd9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f5eda2d3-8238-20c3-0fd7-60eaf7f40ce0" executionId="5ac13f14-ffd3-4b10-83e0-beff7f2c4bbc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4923f944-9444-83bd-ccd8-01088fe0d514" executionId="42a64382-bb00-4731-b727-719327e8a007" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4b0cfccc-a22c-7744-4b9c-7e37362ba731" executionId="4e3d3fe1-a7b0-46c0-9988-7d5404855b29" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1a7139e-d815-cbf2-de4f-31588fafe888" executionId="86c3bfac-54ca-4fd8-8667-7f09caf5fc57" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="50be1d8a-7663-0b7a-7dfb-53b57da74d86" executionId="186c72a1-a352-4771-8220-da0a49467d83" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c2c35fd4-4c25-b15e-0570-92b70dd204cd" executionId="35a227a2-85fc-4b30-93f7-810d44669feb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cab507f-2641-dd7f-ef0d-10334d9a3aeb" executionId="e12d0888-f9de-4cd5-84de-1015a9cff881" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="67091f87-b24c-a13d-9951-99c5bf7c60fb" executionId="494082fa-1109-4c34-9661-0bdf7e16cf81" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02523fb5-44e6-9a1e-0e4e-c94874739d98" executionId="1068d32a-402c-4cf0-9c6f-d6f30f9b26f2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="266345ea-42cf-44a8-e4cc-c05c21aa57f4" executionId="6a6353ad-bc81-4839-a3ba-d150a97ae403" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7189a059-be6d-de7f-aae1-5180f0c77370" executionId="482a4df6-91aa-4959-b370-f2af273d5eac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aaa0c8a8-e8ab-3940-006a-fbb7e5ae120e" executionId="8f51dbac-36eb-4031-b659-0aff0808b7ff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="46" executed="46" passed="25" failed="21" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.85]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.07]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.07]   Starting:    WebApi.Tests
+[xUnit.net 00:00:01.10]       Assert.Equal() Failure
+[xUnit.net 00:00:01.10]       Expected: Malformed
+[xUnit.net 00:00:01.10]       Actual:   Ignored
+[xUnit.net 00:00:01.10]       Stack Trace:
+[xUnit.net 00:00:01.10]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(189,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(String json)
+[xUnit.net 00:00:01.10]            at InvokeStub_GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(Object, Span`1)
+[xUnit.net 00:00:01.10]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.10]       Assert.Equal() Failure
+[xUnit.net 00:00:01.10]       Expected: Malformed
+[xUnit.net 00:00:01.10]       Actual:   Ignored
+[xUnit.net 00:00:01.10]       Stack Trace:
+[xUnit.net 00:00:01.10]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(189,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(String json)
+[xUnit.net 00:00:01.10]            at InvokeStub_GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(Object, Span`1)
+[xUnit.net 00:00:01.10]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(38,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey)
+[xUnit.net 00:00:01.11]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(38,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(38,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(String providerKey)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       Assert.Equal() Failure
+[xUnit.net 00:00:01.11]       Expected: Mapped
+[xUnit.net 00:00:01.11]       Actual:   Ignored
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(120,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(String type, Int32 typeCode, GrowthProviderEventType expected)
+[xUnit.net 00:00:01.11]            at InvokeStub_GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(Object, Span`1)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:01.11]       System.NullReferenceException : Object reference not set to an instance of an object.
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(94,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_bounce_is_keyed_on_postmarks_own_id_at_full_width()
+[xUnit.net 00:00:01.11]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:01.11]       System.NullReferenceException : Object reference not set to an instance of an object.
+[xUnit.net 00:00:01.11]       Stack Trace:
+[xUnit.net 00:00:01.11]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Growth/GrowthPostmarkEventReaderTests.cs(69,0): at WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events()
+[xUnit.net 00:00:01.11]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:01.11]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:05.05]       Assert.Equal() Failure
+[xUnit.net 00:00:05.05]       Expected: Deferred
+[xUnit.net 00:00:05.05]       Actual:   ProviderAccepted
+[xUnit.net 00:00:05.05]       Stack Trace:
+[xUnit.net 00:00:05.05]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(185,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody()
+[xUnit.net 00:00:05.05]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(188,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody()
+[xUnit.net 00:00:05.05]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.16]       Assert.Equal() Failure
+[xUnit.net 00:00:05.16]       Expected: Bounced
+[xUnit.net 00:00:05.16]       Actual:   ProviderAccepted
+[xUnit.net 00:00:05.16]       Stack Trace:
+[xUnit.net 00:00:05.16]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(126,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally()
+[xUnit.net 00:00:05.16]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(139,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally()
+[xUnit.net 00:00:05.16]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.16]       Assert.Equal() Failure
+[xUnit.net 00:00:05.16]       Expected: Delivered
+[xUnit.net 00:00:05.16]       Actual:   ProviderAccepted
+[xUnit.net 00:00:05.16]       Stack Trace:
+[xUnit.net 00:00:05.16]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(79,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once()
+[xUnit.net 00:00:05.16]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(93,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once()
+[xUnit.net 00:00:05.16]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.17]       Assert.Equal() Failure
+[xUnit.net 00:00:05.17]       Expected: 1
+[xUnit.net 00:00:05.17]       Actual:   0
+[xUnit.net 00:00:05.17]       Stack Trace:
+[xUnit.net 00:00:05.17]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(318,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing()
+[xUnit.net 00:00:05.17]         /Users/svendaneel/okam/wt-gr-postmark/WebApi.Tests/Wire/GrowthPostmarkWebhookWireTests.cs(319,0): at WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing()
+[xUnit.net 00:00:05.17]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:05.19]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2490380+02:00">
+        <Text>[xUnit.net 00:00:01.10]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: "{\"RecordType\":\"Bounce\",\"Type\":\"HardBounce\""...) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2495800+02:00">
+        <Text>[xUnit.net 00:00:01.10]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_body_postmark_would_never_send_is_refused(json: "{\"RecordType\":\"Delivery\"}") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2779600+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: "postmark") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2779810+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: "  postmark  ") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2779990+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_postmark_reader_answers_for_the_provider_key_however_an_operator_typed_it(providerKey: "Postmark") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2780110+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "SpamComplaint", typeCode: 512, expected: Complained) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2780210+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "BadEmailAddress", typeCode: 100000, expected: Bounced) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2786570+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "DnsError", typeCode: 256, expected: Deferred) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2786670+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "SpamComplaint", typeCode: 100001, expected: Complained) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2786770+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "Transient", typeCode: 2, expected: Deferred) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2786880+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "SoftBounce", typeCode: 4096, expected: Deferred) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2786970+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "Blocked", typeCode: 100006, expected: Deferred) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2787110+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "SpamNotification", typeCode: 512, expected: Complained) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2787210+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "HardBounce", typeCode: 1, expected: Bounced) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2787320+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_classified_bounce_maps_to_its_effect(type: "Unsubscribe", typeCode: 16, expected: Unsubscribed) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2790040+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.A_bounce_is_keyed_on_postmarks_own_id_at_full_width [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:23.2791220+02:00">
+        <Text>[xUnit.net 00:00:01.11]     WebApi.Tests.Growth.GrowthPostmarkEventReaderTests.The_derived_event_id_keeps_a_delivery_and_an_open_of_one_message_two_distinct_events [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:27.1970910+02:00">
+        <Text>[xUnit.net 00:00:05.05]     WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_postmark_soft_bounce_defers_the_delivery_and_silences_nobody [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:27.3088020+02:00">
+        <Text>[xUnit.net 00:00:05.16]     WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_hard_bounce_fails_the_delivery_and_suppresses_the_guest_channel_globally [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:27.3153900+02:00">
+        <Text>[xUnit.net 00:00:05.16]     WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_delivery_payload_moves_the_delivery_to_delivered_and_counts_it_once [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-09T17:43:27.3232160+02:00">
+        <Text>[xUnit.net 00:00:05.17]     WebApi.Tests.Wire.GrowthPostmarkWebhookWireTests.A_genuine_postmark_payload_without_a_credential_is_refused_and_writes_nothing [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>
