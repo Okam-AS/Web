@@ -159,11 +159,18 @@
                     @reject="onReject(turn, $event)"
                   />
 
-                  <!-- A refusal. `serverMessage` is ALWAYS present — `AssistantApiError` falls back
-                       to "HTTP 409" when a body carries no message — so the translated line may
-                       safely promise that the server's own words are below it. They are shown
-                       verbatim and never parsed: matching on server prose is how a client silently
-                       stops recognising a case the day somebody rewords it. -->
+                  <!-- A refusal, in one of nine lines rather than the one generic sentence this
+                       used to have for seven of the eight conflict kinds. `serverMessage` is ALWAYS
+                       present — `AssistantApiError` falls back to "HTTP 409" when a body carries no
+                       message — so the translated line may safely promise that the server's own
+                       words are below it. They are shown verbatim and never parsed: matching on
+                       server prose is how a client silently stops recognising a case the day
+                       somebody rewords it.
+
+                       NO `assistant_conflict_relist` HERE, and none passed down to the card: there
+                       is no list on this tab and nothing was re-read, so the reassurance the inbox
+                       prints would be a lie here. That is why the card takes `relisted` as an
+                       explicit promise from its caller. -->
                   <div
                     v-if="turn.conflict"
                     class="assistant-cards__conflict"
@@ -176,6 +183,25 @@
                     <p v-if="turn.conflict.serverMessage" class="assistant-cards__conflict-server">
                       {{ turn.conflict.serverMessage }}
                     </p>
+                    <!-- ── THE ONE REFUSAL THAT HAS A NEXT STEP ──────────────────────────────────
+                         `stale` means the basis moved: the prices on that card were computed against
+                         a menu that has since changed, so there is nothing to retry — only something
+                         to ask again. `expired` is the same shape (the ask was fine, this instance
+                         of it ran out). Both are recoverable BY RE-ASKING, which is a different
+                         thing from `keepCard`, and neither is served by a dead end.
+
+                         It refills the composer rather than re-submitting: the question is put back
+                         in the merchant's hands so they can adjust it, which is the point — the
+                         world changed under the last one. -->
+                    <button
+                      v-if="turn.conflict.canRepropose"
+                      type="button"
+                      class="assistant-cards__conflict-btn"
+                      data-test="repropose"
+                      @click="repropose(turn)"
+                    >
+                      {{ $i('assistant_conflict_repropose') }}
+                    </button>
                   </div>
 
                   <!-- ⚠️ THE TONE IS LOAD-BEARING HERE, NOT DECORATION. This one line carries BOTH
@@ -451,6 +477,23 @@ export default {
       this.draft = this.$i('assistant_composeAgainDraft', { diff: pick(row, 'dryRunDiff') || '' });
     },
     /**
+     * Ask the same question again after a refusal that only re-asking can clear.
+     *
+     * The turn's OWN question, verbatim — not a sentence built out of the dead proposal's diff, the
+     * way `composeAgain` has to build one for an inbox row that carries no question. Here the
+     * original wording is right there, and it is what the merchant meant; rephrasing it for them
+     * would be this screen guessing at an intent it already has.
+     *
+     * Deliberately NOT auto-submitted. Both codes that reach this button mean the world moved
+     * (`stale`) or time passed (`expired`), so re-asking blind is how you get a second proposal
+     * against a basis the merchant still has not looked at. The composer is left loaded and the
+     * decision to send stays theirs.
+     */
+    repropose (turn) {
+      this.draft = turn.question;
+      turn.conflict = null;
+    },
+    /**
      * One turn.
      *
      * The turn is pushed BEFORE the request so the thread shows the question immediately and the
@@ -490,6 +533,18 @@ export default {
         const response = await this.service.Ask(question, scope, this.locale);
         this.fillTurn(turn, response);
       } catch (error) {
+        // ⚠️ THIS IS WHERE A CHAT REFUSAL LANDS, AND IT USED TO RENDER AS "HTTP 403".
+        //
+        // `ChatController` answers 400/401/403/500 with a whole `ChatAskResponseModel` whose reason
+        // is in **`Answer`** — no `message`, no `detail`, no `title`. `AssistantApiError` built its
+        // message from exactly those three and fell back to `'HTTP ' + status`, so a merchant asking
+        // about a store they do not administer was shown a status line where the server had written
+        // them a sentence. The fix is in the error's fallback chain (`api-client.js`), which is why
+        // nothing here reads the body: every caller of every route gets the same repair.
+        //
+        // It is rendered in the FAILURE slot rather than as an answer. A refusal is not an answer —
+        // the server set `Success: false` — and the styling is the only thing on screen that says
+        // so once the sentence itself is merchant-facing prose.
         turn.failure = isAssistantApiError(error) && error.message
           ? error.message
           : this.$i('assistant_askFailed');
@@ -499,8 +554,11 @@ export default {
       }
     },
     fillTurn (turn, response) {
-      // A refusal body also arrives as a ChatAskResponseModel — 400/401/403 carry `Success: false`
-      // and put the reason in `Answer`. It is shown as the answer it is, not as a crash.
+      // ⚠️ THIS ONLY EVER SEES A 2xx, AND A COMMENT HERE USED TO CLAIM OTHERWISE. It said a refusal
+      // body "also arrives as a ChatAskResponseModel … shown as the answer it is, not as a crash" —
+      // describing an intent the code cannot reach, because `_request` throws on `!response.ok` and
+      // a 400/401/403/500 never gets here at all. The refusal is handled in `ask`'s catch, where the
+      // server's sentence now travels on `error.message`; see the note there.
       turn.answer = pick(response, 'answer') || '';
       turn.metrics = pickList(response, 'metrics').map(metric => ({
         id: pick(metric, 'id'),
@@ -890,6 +948,24 @@ export default {
 
 .assistant-cards__conflict-line { font-weight: 600; color: #292c34; }
 .assistant-cards__conflict-server { color: #64748b; font-style: italic; }
+
+/* The house secondary button (CLAUDE.md), at the compact size the inbox's own repair button uses.
+   Deliberately not the green primary: re-asking is an offer, and the merchant has just had a
+   proposal refused — a CTA here would be pushing them back into the flow that just failed. */
+.assistant-cards__conflict-btn {
+  margin-top: 8px;
+  padding: 10px 18px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #292c34;
+  font-weight: 600;
+  font-size: 0.9em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover { background: #f8f9fa; border-color: #cbd5e0; }
+}
 
 /* Two tones because this line carries two opposite outcomes. `is-ok` is the house success green
    (`CLAUDE.md`: #1bb776 / #159f63); `is-refused` mirrors the inbox banner's refused row

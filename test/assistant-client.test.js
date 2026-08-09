@@ -7,6 +7,7 @@ import {
   pick,
   pickList,
   oreOf,
+  parseServerDate,
   CONFLICT_KIND_DISABLED
 } from '~/utils/assistant/api-client'
 
@@ -184,37 +185,177 @@ describe('oreOf', () => {
   })
 })
 
+// ── ALL EIGHT CONFLICT CODES ─────────────────────────────────────────────────────────────────────
+// `ConflictBody` (`StagedActionController.cs:99-107`) emits `code` on EVERY conflict and the row's
+// real `status` beside it. These tests replace a pair that asserted the opposite — that only the
+// kill switch carried a code and "every other 409 is indistinguishable" — which was true of
+// `b4f8fa817` and false of `880c24e46`.
 describe('describeConflict', () => {
-  // `StagedActionController.ConflictBody` emits `code` for this refusal and for no other.
-  test('the kill switch is the one refusal that keeps the card on screen', () => {
-    const error = new AssistantApiError(409, {
-      message: 'This kind of change is switched off for this store…',
-      code: CONFLICT_KIND_DISABLED
-    })
+  const conflict = (code, status, message) =>
+    new AssistantApiError(409, { message: message || 'server prose', code, status })
 
-    expect(describeConflict(error)).toEqual({
+  test('the kill switch is the one refusal that keeps the card on screen', () => {
+    expect(describeConflict(conflict(CONFLICT_KIND_DISABLED, 'staged',
+      'This kind of change is switched off for this store…'))).toEqual({
       key: 'assistant_conflict_kindDisabled',
       keepCard: true,
+      canRepropose: false,
+      code: 'assistant.kind_disabled',
+      status: 'staged',
       serverMessage: 'This kind of change is switched off for this store…'
     })
   })
 
-  // Seven server-side conflict kinds and the row's real CurrentStatus are dropped before the
-  // response is written, so a client genuinely cannot tell them apart. The renderer says only what
-  // is certainly true and shows the server's own sentence beside it.
-  test('every other 409 is indistinguishable, and the card goes', () => {
-    const error = new AssistantApiError(409, { message: 'This proposal has expired — nothing was created.' })
+  // The eight, each with its own line. A table rather than eight tests because the assertion IS
+  // that they are all different: a mapping that collapsed two of them would still pass eight
+  // individually-written tests that each only checked their own key.
+  test('every code gets its own line, and only the kill switch keeps the card', () => {
+    const cases = [
+      ['already-resolved', null, 'assistant_conflict_alreadyResolved'],
+      ['expired', 'expired', 'assistant_conflict_expired'],
+      ['lost-the-claim', 'executing', 'assistant_conflict_lostTheClaim'],
+      ['missing-approver', 'executing', 'assistant_conflict_missingApprover'],
+      ['contract-moved', 'executing', 'assistant_conflict_contractMoved'],
+      ['stale', 'executing', 'assistant_conflict_stale'],
+      ['terminal-write-refused', null, 'assistant_conflict_terminalWriteRefused'],
+      ['assistant.kind_disabled', 'staged', 'assistant_conflict_kindDisabled']
+    ]
 
-    expect(describeConflict(error)).toEqual({
+    const keys = cases.map(([code, status, key]) => {
+      const described = describeConflict(conflict(code, status))
+      expect(described.key).toBe(key)
+      expect(described.code).toBe(code)
+      expect(described.keepCard).toBe(code === 'assistant.kind_disabled')
+      return described.key
+    })
+
+    expect(new Set(keys).size).toBe(8)
+  })
+
+  // ⚠️ THE BEHAVIOURAL BIT, AND THE ONE THAT MUST NOT DRIFT. Only the kill switch leaves the row
+  // Staged; stale / contract-moved / missing-approver settle it to Failed inside the claimed
+  // transaction, so their cards are offers that can only 409 again.
+  test('keepCard is true for the kill switch and for nothing else', () => {
+    const codes = ['already-resolved', 'expired', 'lost-the-claim', 'missing-approver',
+      'contract-moved', 'stale', 'terminal-write-refused']
+    codes.forEach((code) => {
+      expect(describeConflict(conflict(code, 'failed')).keepCard).toBe(false)
+    })
+    expect(describeConflict(conflict('assistant.kind_disabled', 'staged')).keepCard).toBe(true)
+  })
+
+  // `already-resolved` is the one code that says nothing on its own — the row is settled, but as
+  // what? `status` is the answer, and the difference between "your price change is live" and
+  // "someone turned this down" is the whole of what the merchant came to find out.
+  test('already-resolved names what the row actually became', () => {
+    expect(describeConflict(conflict('already-resolved', 'executed')).key)
+      .toBe('assistant_conflict_alreadyExecuted')
+    expect(describeConflict(conflict('already-resolved', 'rejected')).key)
+      .toBe('assistant_conflict_alreadyRejected')
+    expect(describeConflict(conflict('already-resolved', 'failed')).key)
+      .toBe('assistant_conflict_alreadyFailed')
+  })
+
+  test('already-resolved without a status falls back to the hedged line', () => {
+    expect(describeConflict(conflict('already-resolved', null)).key)
+      .toBe('assistant_conflict_alreadyResolved')
+    expect(describeConflict(new AssistantApiError(409, { message: 'x', code: 'already-resolved' })).key)
+      .toBe('assistant_conflict_alreadyResolved')
+  })
+
+  // Re-asking helps only where the ask itself is still good. It is NOT offered for an executed row
+  // (re-proposing a live change would apply it twice) nor for a claim someone else is holding.
+  test('only stale and expired offer a re-propose', () => {
+    expect(describeConflict(conflict('stale', 'executing')).canRepropose).toBe(true)
+    expect(describeConflict(conflict('expired', 'expired')).canRepropose).toBe(true)
+
+    const noRepropose = ['already-resolved', 'lost-the-claim', 'missing-approver',
+      'contract-moved', 'terminal-write-refused', 'assistant.kind_disabled']
+    noRepropose.forEach((code) => {
+      expect(describeConflict(conflict(code, 'executed')).canRepropose).toBe(false)
+    })
+  })
+
+  // `terminal-write-refused` is the one refusal whose `status` is null BY CONTRACT — the write was
+  // rolled back, so the row is whatever it was before and the server refuses to name it.
+  test('a null status survives as null rather than as a string', () => {
+    expect(describeConflict(conflict('terminal-write-refused', null)).status).toBeNull()
+  })
+
+  // The list route spells the same statuses Pascal-case. Normalising on the way in means no caller
+  // has to remember which of the two shapes it is holding.
+  test('the status is lower-cased on the way in', () => {
+    expect(describeConflict(conflict('already-resolved', 'Executed')).key)
+      .toBe('assistant_conflict_alreadyExecuted')
+  })
+
+  // A ninth kind shipping to a browser holding this bundle must read as a sentence, not as nothing.
+  test('an unrecognised code falls through to the generic line', () => {
+    expect(describeConflict(conflict('assistant.something_new', 'staged'))).toMatchObject({
       key: 'assistant_conflict_unresolvable',
       keepCard: false,
-      serverMessage: 'This proposal has expired — nothing was created.'
+      code: 'assistant.something_new'
     })
   })
 
   test('a non-409 is not a conflict', () => {
     expect(describeConflict(new AssistantApiError(400, { message: 'x' }))).toBeNull()
     expect(describeConflict(new Error('x'))).toBeNull()
+  })
+})
+
+// ── THE CHAT REFUSAL THAT RENDERED AS "HTTP 403" ─────────────────────────────────────────────────
+// `ChatController` returns 400/401/403/500 as a whole `ChatAskResponseModel` and puts the reason in
+// `Answer` (`:40-57`, `Refusal` at `:124-131`). The error's message chain read `message`/`detail`/
+// `title` — none of which are on that body — and fell back to `'HTTP ' + status`, so a merchant
+// asking about a store they do not administer was shown a status line instead of the sentence the
+// server had written for exactly that moment.
+describe('a chat refusal carries its reason in `answer`', () => {
+  test('the 403 the merchant actually sees is the server’s sentence', () => {
+    const error = new AssistantApiError(403, {
+      question: 'hva solgte Torget?',
+      answer: 'You don\'t have access to the requested stores.',
+      success: false
+    })
+
+    expect(error.message).toBe('You don\'t have access to the requested stores.')
+    expect(error.message).not.toContain('HTTP')
+  })
+
+  test('every refusal status on that route, not just the 403', () => {
+    const of = status => new AssistantApiError(status, { answer: 'the reason', success: false }).message
+    expect(of(400)).toBe('the reason')
+    expect(of(401)).toBe('the reason')
+    expect(of(500)).toBe('the reason')
+  })
+
+  // `errorMessage` is deliberately NOT read: on the 500 path it is the developer-facing "Internal
+  // server error" sitting beside a Norwegian sentence written for the merchant.
+  test('the merchant’s sentence wins over the developer’s', () => {
+    const error = new AssistantApiError(500, {
+      answer: 'Beklager, det oppstod en teknisk feil. Prøv igjen senere.',
+      errorMessage: 'Internal server error',
+      success: false
+    })
+
+    expect(error.message).toBe('Beklager, det oppstod en teknisk feil. Prøv igjen senere.')
+  })
+
+  // The staged-action routes are unaffected: `message` still wins wherever a `message` exists.
+  test('a staged-action refusal still reads its own `message`', () => {
+    const error = new AssistantApiError(409, {
+      message: 'This proposal was already turned down.',
+      answer: 'should never be read'
+    })
+
+    expect(error.message).toBe('This proposal was already turned down.')
+  })
+
+  // The null seam: Newtonsoft WRITES the nulls System.Text.Json omits, so a null `answer` must read
+  // as absent rather than swallowing the chain and producing an empty message.
+  test('a written null does not swallow the fallback', () => {
+    expect(new AssistantApiError(503, { message: null, answer: null }).message).toBe('HTTP 503')
+    expect(new AssistantApiError(503, null).message).toBe('HTTP 503')
   })
 })
 
@@ -249,5 +390,88 @@ describe('needsStoreChoice', () => {
   test('an ordinary answer is not a picker', () => {
     expect(needsStoreChoice({ Status: 'answered', Answer: 'Dere solgte for kr 42 000.', StoreIds: [1, 2] })).toBe(false)
     expect(needsStoreChoice(null)).toBe(false)
+  })
+})
+
+// ── AN OFFSET-LESS TIMESTAMP MEANS OSLO ──────────────────────────────────────────
+// The same `ExpiresAt` reaches this client two ways: `/chat/ask` builds its card in-process from a
+// `DateTime` with `Kind = Local` and serialises `…+02:00`, while a row read back out of `datetime2`
+// is `Kind = Unspecified` and serialises with no offset at all. ES2015 parses that second form as
+// BROWSER-local, so one stored value meant two different instants depending on where the merchant
+// was standing — and since the card now withholds the approve button on an elapsed countdown, that
+// skew decides whether an affordance exists.
+//
+// ⚠️ WHAT THESE TESTS CAN AND CANNOT PROVE, STATED HONESTLY RATHER THAN IMPLIED.
+//
+// The obvious test is "run it from New York and check it still says Oslo". It cannot be written
+// here: `process.env.TZ` mutated inside a jest test file does NOT reach the Date implementation
+// (plain node honours a late TZ change; the jest sandbox does not), so the timezone never moves and
+// such a test asserts nothing while LOOKING like a world tour. A first draft of this block did
+// exactly that and passed — not because the helper works, but because this machine sits in
+// Europe/Zurich, which shares Oslo’s offsets to the minute.
+//
+// So these assert ABSOLUTE INSTANTS instead. Those are true statements about the contract from any
+// timezone, and they are what fails on a naive `new Date` — on CI, or on any host that is not
+// already at Oslo’s offset. On a CET/CEST developer machine they are correct but not
+// discriminating, and that is a property of the machine, not of the assertion.
+describe('parseServerDate', () => {
+  // Summer: Oslo is CEST, +02:00. 16:12 in Oslo is 14:12 UTC.
+  test('an offset-less summer timestamp is read as CEST (+02:00)', () => {
+    expect(parseServerDate('2026-08-09T16:12:00').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+  })
+
+  // Winter: Oslo is CET, +01:00. The offset is COMPUTED per instant, not hard-coded — which is the
+  // whole reason this goes through `Intl` with an explicit `timeZone` rather than adding two hours.
+  test('an offset-less winter timestamp is read as CET (+01:00)', () => {
+    expect(parseServerDate('2026-01-09T16:12:00').toISOString()).toBe('2026-01-09T15:12:00.000Z')
+  })
+
+  // The contract in one line: an offset-less value means exactly what the same value with Oslo’s
+  // offset spelled on it would mean. This holds in every timezone, which is what makes it the real
+  // assertion rather than the two above.
+  test('offset-less is equivalent to the same value carrying Oslo’s own offset', () => {
+    expect(parseServerDate('2026-08-09T16:12:00').getTime())
+      .toBe(new Date('2026-08-09T16:12:00+02:00').getTime())
+    expect(parseServerDate('2026-01-09T16:12:00').getTime())
+      .toBe(new Date('2026-01-09T16:12:00+01:00').getTime())
+  })
+
+  // Anything carrying a zone is already unambiguous and must be left alone — the `/chat/ask` card’s
+  // own form, which was never broken.
+  test('a timestamp that states its own offset is untouched', () => {
+    expect(parseServerDate('2026-08-09T16:12:00+02:00').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+    expect(parseServerDate('2026-08-09T14:12:00Z').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+    expect(parseServerDate('2026-08-09T09:12:00-05:00').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+  })
+
+  test('a Date instance passes through unharmed', () => {
+    const when = new Date('2026-08-09T14:12:00Z')
+    expect(parseServerDate(when).getTime()).toBe(when.getTime())
+  })
+
+  // ⚠️ THE FRACTION IS NOT PART OF THE OFFSET. The Oslo reading is only accurate to the second, so
+  // sub-second digits left on the value being corrected are counted as offset — once per pass, and
+  // there are two passes. This exact input came back `.369`: 123 ms applied three times.
+  test('sub-second precision survives the offset correction instead of tripling', () => {
+    expect(parseServerDate('2026-08-09T16:12:00.1234567').toISOString())
+      .toBe('2026-08-09T14:12:00.123Z')
+    expect(parseServerDate('2026-08-09T16:12:00.5').toISOString())
+      .toBe('2026-08-09T14:12:00.500Z')
+  })
+
+  test('a space-separated timestamp is read the same way', () => {
+    expect(parseServerDate('2026-08-09 16:12:00').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+  })
+
+  test('seconds are optional', () => {
+    expect(parseServerDate('2026-08-09T16:12').toISOString()).toBe('2026-08-09T14:12:00.000Z')
+  })
+
+  // Absent and unparseable both answer null, so no caller ever has to hold an Invalid Date.
+  test('absent and unparseable are both null', () => {
+    expect(parseServerDate(null)).toBeNull()
+    expect(parseServerDate(undefined)).toBeNull()
+    expect(parseServerDate('')).toBeNull()
+    expect(parseServerDate('not a date')).toBeNull()
   })
 })

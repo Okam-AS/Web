@@ -73,21 +73,50 @@ import getEnv from '~/env';
  * A typed Ask Okam failure.
  *
  * NOTE THAT THIS SURFACE IS **NOT** RFC 9457 problem+json, unlike `~/utils/margin/api-client`.
- * `StagedActionController` answers `{ message }` on every refusal and `{ message, code }` on
- * exactly one (see `CONFLICT_KIND_DISABLED`). There is no `type`, no `title`, no `status` member in
- * the body. Rendering that keys on a problem+json shape here would key on fields that never arrive.
+ * There is no `type` and no `title` anywhere on it. Rendering that keys on a problem+json shape
+ * would key on fields that never arrive.
+ *
+ * ── TWO CONTROLLERS, TWO REFUSAL SHAPES, AND ONE OF THEM NAMES THE REASON SOMEWHERE ELSE ────────
+ *
+ * `StagedActionController` answers `{ message }`, and a 409 additionally carries `{ code, status }`
+ * (see `describeConflict`). `message` is the reason.
+ *
+ * `ChatController` DOES NOT. Its 400/401/403/500 all return a whole `ChatAskResponseModel` and put
+ * the merchant-facing sentence in **`Answer`** — `Controllers/ChatController.cs:40-57`, built by
+ * `Refusal` at `:124-131`, which sets `Question`, `Success = false` and `Answer` and NOTHING else.
+ * There is no `message`, no `detail` and no `title` on that body at all.
+ *
+ * ⚠️ SO THIS CHAIN USED TO END AT `'HTTP ' + status` FOR EVERY CHAT REFUSAL. A merchant who asked
+ * about a store they do not administer was shown the literal string **"HTTP 403"** in place of the
+ * sentence the server had written for exactly that moment ("You don't have access to the requested
+ * stores."). The fallback did not fail — it succeeded, at rendering a status line as prose.
+ *
+ * `answer` is therefore in the chain, LAST: `message` still wins wherever a `message` exists, so
+ * nothing about the staged-action refusals changes, and the chat body's own field is read only when
+ * the shapes that carry a reason are absent. `errorMessage` is deliberately NOT read — on the 500
+ * path it is the developer-facing `"Internal server error"` sitting beside a Norwegian sentence in
+ * `Answer`, and preferring it would swap a sentence written for the merchant for one written for us.
+ *
+ * Read through `pick`, so the null-vs-absent rule at the top of this file applies here too: a
+ * Newtonsoft-written `"answer": null` is absent, not an empty message that would swallow the chain.
  */
 export class AssistantApiError extends Error {
   constructor (status, body) {
     const payload = body || {};
-    super(payload.message || payload.detail || payload.title || ('HTTP ' + status));
+    super(pick(payload, 'message') || pick(payload, 'detail') || pick(payload, 'title') ||
+      pick(payload, 'answer') || ('HTTP ' + status));
     this.name = 'AssistantApiError';
     // `instanceof` against a subclassed Error does not survive this repo's ES5 transpile, so callers
     // discriminate on this flag. The margin and workforce clients both carry the same note; getting
     // it wrong fails SILENTLY, by the typed error simply ceasing to be recognised.
     this.isAssistantApiError = true;
+    // ⚠️ `status` HERE IS THE HTTP STATUS. The ROW's status — what the proposal actually became —
+    // arrives on the SAME body under the SAME word, and the two are different facts: `409` versus
+    // `"executed"`. It is deliberately not lifted onto this object, because one of the two would
+    // have to be renamed and a reader of `error.status` would then have to know which. It is read
+    // off `body` where the server put it; `describeConflict` is the only thing that does so.
     this.status = status;
-    this.code = payload.code || null;
+    this.code = pick(payload, 'code') || null;
     this.body = payload;
   }
 }
@@ -98,21 +127,40 @@ export function isAssistantApiError (error) {
 }
 
 /**
- * THE ONLY conflict code this API puts on the wire.
+ * THE EIGHT CONFLICT CODES, ALL OF WHICH ARE NOW ON THE WIRE.
  *
- * `StagedActionController.ConflictBody` emits `code` for this one refusal and for no other:
+ * ⚠️ THIS BLOCK PREVIOUSLY SAID THE OPPOSITE — "the only conflict code this API puts on the wire",
+ * "seven of the eight, and the status, are DROPPED", "the 409 body carries no status member". That
+ * was true of the backend this surface was written against (`b4f8fa817`) and is FALSE at
+ * `880c24e46`, which is what deploys. The measurement is recorded here rather than the conclusion
+ * alone, because a comment that describes a wire the server no longer speaks is the reason a client
+ * keeps handling a case that cannot happen and keeps missing seven that can.
  *
- *     return string.Equals(ex.ConflictKind, StagedActionConflictKinds.KindDisabled, …)
- *         ? new { message = ex.Message, code = StagedActionConflictKinds.KindDisabled }
- *         : (object)new { message = ex.Message };
+ * `StagedActionController.ConflictBody` (`Controllers/StagedActionController.cs:99-107`) now emits,
+ * for EVERY conflict kind:
  *
- * The server distinguishes eight conflict kinds internally (`StagedActionConflictKinds`:
- * already-resolved, expired, lost-the-claim, missing-approver, contract-moved, stale,
- * terminal-write-refused, and this one) and `StagedActionConflictException` even carries the row's
- * actual `CurrentStatus` — but seven of the eight, and the status, are DROPPED before the response
- * is written. A client cannot tell them apart today. `describeConflict` below says exactly that
- * rather than guessing, and `docs`-worthy detail is in the lane report.
+ *     new { message = ex.Message, code = ex.ConflictKind, status = ex.CurrentStatus?.ToString().ToLowerInvariant() }
+ *
+ *   • `code`   — always present, always one of the eight below (`StagedActionConflictKinds`,
+ *                `Services/SocialChef/StagedActionConflictException.cs:30-44`). The exception has a
+ *                single constructor and it cannot be built without a kind, so a `code: null` cannot
+ *                be reached from a throw site.
+ *   • `status` — WHAT THE ROW ACTUALLY IS NOW, lower-cased, which the compare-and-set knew and used
+ *                to throw away. The key is always present so a client reads one shape; the VALUE is
+ *                null for `terminal-write-refused` alone, whose write was rolled back and which
+ *                therefore names no row state.
+ *
+ * ⚠️ THE CASING IS NOT THE LIST ROUTE'S. `status` here is `"executed"`; `GET /staged-actions`
+ * spells the same status `"Executed"`, because that is the shape SocialChef already reads. Compare
+ * them only after normalising — every comparison in this file lower-cases first.
  */
+export const CONFLICT_ALREADY_RESOLVED = 'already-resolved';
+export const CONFLICT_EXPIRED = 'expired';
+export const CONFLICT_LOST_THE_CLAIM = 'lost-the-claim';
+export const CONFLICT_MISSING_APPROVER = 'missing-approver';
+export const CONFLICT_CONTRACT_MOVED = 'contract-moved';
+export const CONFLICT_STALE = 'stale';
+export const CONFLICT_TERMINAL_WRITE_REFUSED = 'terminal-write-refused';
 export const CONFLICT_KIND_DISABLED = 'assistant.kind_disabled';
 
 /**
@@ -182,6 +230,141 @@ export function oreOf (money) {
   if (money === undefined || money === null) { return null; }
   const amount = pick(money, 'amount');
   return typeof amount === 'number' ? amount : null;
+}
+
+/**
+ * ── AN OFFSET-LESS TIMESTAMP MEANS OSLO, AND `new Date()` READS IT AS THE BROWSER ────────────────
+ *
+ * THE MEASUREMENT. `ExpiresAt` reaches this client two ways and they do not agree:
+ *
+ *   • from `POST /chat/ask` — the card is built in-process from a `DateTime` with `Kind = Local`,
+ *     which Newtonsoft serialises WITH an offset: `"2026-08-09T16:12:00+02:00"`. Unambiguous, and
+ *     `new Date(raw)` gets it right in every timezone on earth.
+ *   • from `GET /staged-actions` — the row was read back out of SQL, where `datetime2` carries no
+ *     zone, so the materialised `DateTime` has `Kind = Unspecified` and serialises with NO offset:
+ *     `"2026-08-09T16:12:00"`.
+ *
+ * ⚠️ AND ES2015 SAYS THAT SECOND FORM IS **BROWSER-LOCAL**. A date-time form with no offset is
+ * parsed as local time (a date-ONLY form is parsed as UTC — the two halves of the same grammar
+ * disagree, which is why nobody remembers this rule). So the same proposal's expiry is read as
+ * 16:12 Oslo by a merchant in Oslo and as 16:12 New York — four hours late — by the same merchant
+ * on a trip, off ONE serialised string that meant Oslo both times.
+ *
+ * WHY IT IS FIXED HERE AND NOT LEFT COSMETIC. It stopped being a cosmetic skew the moment the card
+ * withheld the approve button on an elapsed countdown (see `isExpired` in `ProposalCardView`): west
+ * of Oslo the clock runs late and the button stays live past the server's own deadline, so the
+ * merchant's click lands on a 409; east of Oslo it runs early and the button is withheld from a
+ * proposal that is still perfectly approvable. The second is the worse one — it removes a real
+ * affordance and there is no error to explain it.
+ *
+ * ⚠️ THE REAL FIX IS THE BACKEND'S, AND THIS DOES NOT REPLACE IT. Every client of
+ * `/staged-actions` inherits this ambiguity — SocialChef reads that route in production — and one
+ * Vue component parsing around it fixes one of N readers while the wire stays unreadable. The
+ * backend fix is to give the materialised value `DateTimeKind.Utc` (or project it through a
+ * converter) so the route serialises `Z`, at which point this helper's regex simply stops matching
+ * and the code below becomes inert without being touched. Filed as backend work in the lane report;
+ * this is the client refusing to be wrong in the meantime, not the repair.
+ *
+ * Applied to `ExpiresAt` ONLY — the one field differenced against `Date.now()`. Deliberately NOT to
+ * the effective window or the receipt date: those are RENDERED as wall-clock digits, and a venue's
+ * "gjelder fra 14:00" means 14:00 at the venue to a merchant reading it from anywhere.
+ */
+const OSLO_TIME_ZONE = 'Europe/Oslo';
+
+// ISO-8601 date-time with NO trailing `Z` and no `±hh:mm`. Anything carrying a zone is already
+// unambiguous and must be left to `new Date`, which is why this is anchored at both ends.
+const OFFSETLESS_TIMESTAMP =
+  /^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?(?:\.(\d{1,7}))?$/;
+
+let osloFormatter;
+
+/**
+ * The wall clock Europe/Oslo shows at `instantMs`, expressed as a UTC-based millisecond count so it
+ * can be subtracted. Null when this runtime has no Europe/Oslo — an ICU-less build throws
+ * `RangeError` from the constructor, and the caller then leaves the value to `new Date` rather than
+ * guessing an offset.
+ */
+function osloWallClockAt (instantMs) {
+  if (osloFormatter === undefined) {
+    try {
+      osloFormatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: OSLO_TIME_ZONE,
+        hour12: false,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      });
+    } catch (e) {
+      osloFormatter = null;
+    }
+  }
+  if (!osloFormatter) { return null; }
+
+  const fields = {};
+  osloFormatter.formatToParts(new Date(instantMs)).forEach((part) => {
+    fields[part.type] = part.value;
+  });
+  // Some ICU versions render midnight as hour "24" under `hour12: false`.
+  const hour = fields.hour === '24' ? 0 : Number(fields.hour);
+  return Date.UTC(
+    Number(fields.year), Number(fields.month) - 1, Number(fields.day),
+    hour, Number(fields.minute), Number(fields.second)
+  );
+}
+
+/**
+ * The instant at which Oslo's wall clock reads `wallMs`.
+ *
+ * Two passes, and the second is not belt-and-braces. The first correction is computed at the WRONG
+ * instant (the wall-clock reading treated as UTC), which lands on the other side of a DST boundary
+ * for readings within an hour of one; re-measuring at the corrected instant converges. A reading
+ * inside the spring-forward gap names an hour Oslo never showed, and resolves to the instant
+ * immediately after the jump, which is the only real time it can mean.
+ *
+ * ⚠️ `wallMs` MUST BE WHOLE SECONDS. `osloWallClockAt` reads back a formatter whose finest field is
+ * the second, so any sub-second part of the input is absent from the reading and is therefore
+ * counted as part of the OFFSET — once per pass, which the two passes then compound. A test with
+ * `.1234567` on it came back `.369`: the 123 ms had been added three times. The caller splits the
+ * fraction off and adds it to the result, which is sound because no timezone offset has ever had a
+ * sub-second component.
+ */
+function osloWallClockToInstant (wallMs) {
+  const firstReading = osloWallClockAt(wallMs);
+  if (firstReading === null) { return null; }
+  const firstGuess = wallMs - (firstReading - wallMs);
+  const secondReading = osloWallClockAt(firstGuess);
+  if (secondReading === null) { return null; }
+  return wallMs - (secondReading - firstGuess);
+}
+
+/**
+ * A server timestamp as an instant. Offset-less values are read as Oslo; everything else is left
+ * exactly as `new Date` reads it. Returns null for absent and for unparseable, so a caller never
+ * has to hold an Invalid Date.
+ */
+export function parseServerDate (raw) {
+  if (raw === undefined || raw === null || raw === '') { return null; }
+
+  if (typeof raw === 'string') {
+    const match = OFFSETLESS_TIMESTAMP.exec(raw.trim());
+    if (match) {
+      // WHOLE SECONDS through the offset maths, fraction added back afterwards — see the warning on
+      // `osloWallClockToInstant`. .NET writes up to seven fractional digits and `Date` takes three.
+      const milliseconds = match[7] ? Number(match[7].slice(0, 3).padEnd(3, '0')) : 0;
+      const wallSeconds = Date.UTC(
+        Number(match[1]), Number(match[2]) - 1, Number(match[3]),
+        Number(match[4]), Number(match[5]), Number(match[6] || 0)
+      );
+      const instant = isNaN(wallSeconds) ? null : osloWallClockToInstant(wallSeconds);
+      if (instant !== null && !isNaN(instant)) { return new Date(instant + milliseconds); }
+    }
+  }
+
+  const parsed = new Date(raw);
+  return isNaN(parsed.getTime()) ? null : parsed;
 }
 
 /**
@@ -309,27 +492,100 @@ export class AssistantService extends AssistantClientBase {
 }
 
 /**
- * What a 409 from the approve/reject routes actually permits us to say.
+ * ONE LINE PER CONFLICT CODE. Keys, never prose.
  *
- * Returns a translation KEY, never prose. Only two outcomes are distinguishable on the wire:
+ * `keepCard` is the ONLY behavioural bit here and it is unchanged from when this recognised a
+ * single code, because it was already right: `assistant.kind_disabled` is the one refusal that
+ * leaves the row **Staged** and approvable later — it refuses the KIND, not this proposal, and the
+ * merchant does nothing to make the next attempt succeed. Every other code has already settled the
+ * row inside the claimed transaction (`stale`, `contract-moved` and `missing-approver` settle it to
+ * Failed; the rest find it already settled), so its card is an offer that can only 409 again.
  *
- *   • `assistant.kind_disabled` — carries `code`. The row is still valid and still staged; an
- *     operator switched the kind off. Retrying later can succeed with the merchant doing nothing,
- *     which is why the card must stay on screen.
- *   • everything else — carries `{ message }` only. Seven server-side conflict kinds and the row's
- *     real `CurrentStatus` collapse into one indistinguishable case here.
+ * `canRepropose` is the affordance bit, and it is narrower than "this failed". It is true only
+ * where a NEW proposal over the SAME question would plausibly succeed:
  *
- * The server's `message` is ENGLISH prose ("This proposal was already turned down.", "already
- * live", …) built by `StagedActionService.Describe`. It is surfaced verbatim beside the translated
- * line rather than parsed: matching on server prose is how a client silently stops recognising a
- * case the day somebody rewords it.
+ *   • `stale`   — the basis moved under the proposal. The numbers on the card were computed against
+ *                 a menu that has since changed, so re-asking is not a retry, it is the only way to
+ *                 get a proposal whose arithmetic is about the current prices.
+ *   • `expired` — the TTL ran out. Nothing is wrong with the ask, only with this instance of it.
+ *
+ * It is NOT set for `lost-the-claim` (someone is mid-execution; the right move is to wait and look),
+ * nor for `already-resolved/executed` (the change is live — re-proposing it would apply it twice),
+ * nor for `terminal-write-refused`, `contract-moved` or `missing-approver`, which are operator- or
+ * integration-side and do not improve by being asked again.
+ */
+const CONFLICT_LINES = {
+  [CONFLICT_KIND_DISABLED]: { key: 'assistant_conflict_kindDisabled', keepCard: true },
+  [CONFLICT_ALREADY_RESOLVED]: { key: 'assistant_conflict_alreadyResolved' },
+  [CONFLICT_EXPIRED]: { key: 'assistant_conflict_expired', canRepropose: true },
+  [CONFLICT_LOST_THE_CLAIM]: { key: 'assistant_conflict_lostTheClaim' },
+  [CONFLICT_MISSING_APPROVER]: { key: 'assistant_conflict_missingApprover' },
+  [CONFLICT_CONTRACT_MOVED]: { key: 'assistant_conflict_contractMoved' },
+  [CONFLICT_STALE]: { key: 'assistant_conflict_stale', canRepropose: true },
+  [CONFLICT_TERMINAL_WRITE_REFUSED]: { key: 'assistant_conflict_terminalWriteRefused' }
+};
+
+/**
+ * `already-resolved` NAMED BY WHAT THE ROW ACTUALLY BECAME.
+ *
+ * The generic line has to hedge — "this may already have been carried out" — because without the
+ * status it genuinely does not know. `status` removes the hedge, and the difference between "your
+ * price change is live" and "someone turned this down" is the whole of what the merchant came to
+ * find out. An unlisted or absent status falls back to the hedged line rather than inventing one.
+ *
+ * THREE ENTRIES BECAUSE THE SERVER CAN ONLY SEND THREE. `StagedActionService` throws this code from
+ * exactly three places — approve on a Rejected row, approve on a Failed row, reject on an Executed
+ * row (`:160-164`, `:218-219`) — so Executed, Rejected and Failed are the whole reachable set.
+ *
+ * There is deliberately NO `expired` entry, even though Expired is a status a row can hold: expiry
+ * is refused under its own code (`StagedActionConflictKinds.Expired`, thrown at `:173-174` with a
+ * literal `StagedActionStatus.Expired`) and never reaches this table. Writing a line for it would
+ * be translating a case the server cannot produce, and would quietly rank as the more specific
+ * answer if it ever did.
+ */
+const ALREADY_RESOLVED_LINES = {
+  executed: { key: 'assistant_conflict_alreadyExecuted' },
+  rejected: { key: 'assistant_conflict_alreadyRejected' },
+  failed: { key: 'assistant_conflict_alreadyFailed' }
+};
+
+/**
+ * What a 409 from the approve/reject routes says.
+ *
+ * Returns `{ key, keepCard, canRepropose, code, status, serverMessage }` — a translation KEY and
+ * the two machine facts the body carries, never prose of its own.
+ *
+ * The server's `message` travels alongside as `serverMessage` and is ENGLISH prose built by
+ * `StagedActionService`. It is surfaced verbatim beside the translated line and never parsed:
+ * matching on server prose is how a client silently stops recognising a case the day somebody
+ * rewords it — which is precisely the fragility `code` was added to remove.
+ *
+ * An UNRECOGNISED code falls through to the generic line rather than to nothing. The eight are the
+ * eight at `880c24e46`, and a ninth shipping to a browser holding this bundle must read as "this is
+ * no longer waiting for you, here is what the server said", not as an empty box.
  */
 export function describeConflict (error) {
   if (!isAssistantApiError(error)) { return null; }
   if (error.status !== 409) { return null; }
-  return error.code === CONFLICT_KIND_DISABLED
-    ? { key: 'assistant_conflict_kindDisabled', keepCard: true, serverMessage: error.message }
-    : { key: 'assistant_conflict_unresolvable', keepCard: false, serverMessage: error.message };
+
+  const code = error.code || null;
+  // Lower-cased on the way in. The 409 already writes it lower-case, but the list route spells the
+  // same statuses Pascal-case and both reach this file, so normalising here means neither caller
+  // has to remember which one it is holding.
+  const status = String(pick(error.body, 'status') || '').toLowerCase() || null;
+
+  const line = (code === CONFLICT_ALREADY_RESOLVED && ALREADY_RESOLVED_LINES[status]) ||
+    CONFLICT_LINES[code] ||
+    { key: 'assistant_conflict_unresolvable' };
+
+  return {
+    key: line.key,
+    keepCard: !!line.keepCard,
+    canRepropose: !!line.canRepropose,
+    code,
+    status,
+    serverMessage: error.message
+  };
 }
 
 /**
