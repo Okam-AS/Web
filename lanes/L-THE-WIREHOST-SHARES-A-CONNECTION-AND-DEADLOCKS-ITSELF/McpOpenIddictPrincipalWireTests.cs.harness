@@ -1,0 +1,335 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using OpenIddict.Abstractions;
+using WebApi.Entities;
+using WebApi.Helpers;
+using WebApi.Models.AppSettings;
+using WebApi.Services.Mcp;
+using Xunit;
+
+namespace WebApi.Tests.Wire
+{
+    /// <summary>
+    /// THE HARNESS THE ABORTED LANE COSTED OUT. No test in the suite mints or validates an OpenIddict token;
+    /// the one test reaching <c>RequirePrincipal</c> hand-builds a principal already carrying a long-URI
+    /// <c>ClaimTypes.Name</c>, so the fire branch never runs and the green suite agrees with a chosen shape.
+    ///
+    /// <para>This drives the REAL flow end to end — a seeded public client, the demo-code login bypass, the
+    /// consent POST, the PKCE authorization-code exchange — to a genuine access token, then reads the claim
+    /// types the app's own OpenIddict <b>validation</b> (<c>McpAuthenticationScheme</c> =
+    /// <c>OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme</c>) produces at an MCP-authenticated
+    /// endpoint. Nothing here constructs a principal by hand; the probe only READS what the real pipeline
+    /// built.</para>
+    ///
+    /// <para>The demo-code bypass changes only HOW the login cookie is obtained (a static code instead of an
+    /// SMS round-trip). The access token's claims come from <c>AddUserClaimsAsync</c> reading the
+    /// <c>ApplicationUser</c> and from OpenIddict, not from the login method — so the measured principal shape
+    /// is the real one, not an artefact of the bypass.</para>
+    /// </summary>
+    [Collection(McpPrincipalWireCollection.Name)]
+    public sealed class McpOpenIddictPrincipalWireTests
+    {
+        private readonly McpPrincipalWireFixture _wire;
+
+        public McpOpenIddictPrincipalWireTests(McpPrincipalWireFixture wire) => _wire = wire;
+
+        [Fact]
+        public void Diag_the_running_host_resolves_the_fixture_shared_cache_connection_not_the_wirehost_single_connection()
+        {
+            // Boots the host (no OAuth flow, so it cannot block) and reports which connection string the
+            // request-scoped ApplicationDbContext actually resolves. If this is WireHost's ":memory:", the
+            // override never took effect and the connection theory is untested; if it is the shared-cache
+            // string, the override took effect and an identical block proves the connection was not the cause.
+            var resolved = _wire.ResolvedConnectionString();
+            Assert.Contains("cache=shared", resolved);
+        }
+
+        [Fact]
+        public async Task A_validated_OpenIddict_principal_carries_the_short_name_claim_and_no_long_uri_name()
+        {
+            var types = await _wire.DriveFlowAndReadValidatedClaimTypesAsync();
+
+            // The stable subject is present under the short OAuth name.
+            Assert.Contains(OpenIddictConstants.Claims.Subject, types);
+
+            // THE MEASURED BIT. This app's OpenIddict validation exposes the token's name as the short
+            // "name"; it does NOT map it to the long-URI ClaimTypes.Name. That is why the repair at
+            // McpShoppingService.RequirePrincipal — `!claims.Any(x => x.Type == ClaimTypes.Name)` — FIRES for
+            // a genuine MCP principal and rewrites Identity.Name to the stable subject.
+            Assert.Contains(OpenIddictConstants.Claims.Name, types);          // short "name"
+            Assert.DoesNotContain(ClaimTypes.Name, types);                     // NOT the long XML URI
+
+            // The mutation that reds this arm (named in the return): change the issuer's claim mapping at
+            // OAuthAuthorizationController AddUserClaimsAsync from SetClaim(Claims.Name, ...) to
+            // SetClaim(ClaimTypes.Name, ...). The token then carries the long-URI name, validation surfaces
+            // it, ClaimTypes.Name appears here, and DoesNotContain reds — proving this arm reflects the real
+            // name-claim mapping reaching the endpoint rather than merely that the harness runs.
+        }
+    }
+
+    [CollectionDefinition(Name)]
+    public sealed class McpPrincipalWireCollection : ICollectionFixture<McpPrincipalWireFixture>
+    {
+        public const string Name = "mcp-principal-wire";
+    }
+
+    /// <summary>
+    /// Boots the real wire host with one added seam: a terminal middleware at <c>/wiretest/mcp-principal</c>
+    /// that authenticates the bearer with the real <c>McpAuthenticationScheme</c> and serialises the resulting
+    /// principal's claim types. It reads the pipeline's output; it does not fabricate it.
+    /// </summary>
+    public sealed class McpPrincipalWireFixture : IDisposable
+    {
+        private const string DemoPhone = "+4799999999";
+        private const string DemoCode = "123123";
+        private const string ClientId = "wiretest-mcp-client";
+        private const string RedirectUri = "https://localhost/wiretest/callback";
+        private const string ProbePath = "/wiretest/mcp-principal";
+
+        private readonly WireHost _root;
+        private readonly WebApplicationFactory<WebApi.Program> _host;
+        private readonly SqliteConnection _keepAlive;
+
+        public McpPrincipalWireFixture()
+        {
+            _root = new WireHost();
+
+            // THE FIX THIS LANE EXISTS FOR. WireHost backs the DbContext with ONE kept-open
+            // DataSource=:memory: connection shared by every request and store. OpenIddict's authorization
+            // response issues a further DB operation while the code-insert command still holds that single
+            // connection, and SQLite serialises it into a silent block — which is why the predecessor lane
+            // reached an issued code and then hung before /oauth/token.
+            //
+            // A SHARED-CACHE in-memory database persists across connections, so the DbContext can be given a
+            // connection STRING and let EF open a fresh pooled connection per operation — no single-connection
+            // serialisation. One keepalive connection keeps the in-memory database alive for the fixture's
+            // life. This is scoped to this fixture's own ConfigureTestServices; WireHost is not edited, so the
+            // ~5100 tests on the shared host are untouched.
+            var connectionString = "DataSource=file:mcpwire-" + Guid.NewGuid().ToString("N") +
+                "?mode=memory&cache=shared";
+            _keepAlive = new SqliteConnection(connectionString);
+            _keepAlive.Open();
+
+            using (var schema = new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseSqlite(connectionString).UseOpenIddict().Options))
+            {
+                schema.Database.EnsureCreated();
+            }
+
+            _host = _root.WithWebHostBuilder(builder =>
+                builder.ConfigureTestServices(services =>
+                {
+                    services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
+                    services.RemoveAll<DbContextOptions>();
+                    services.RemoveAll<ApplicationDbContext>();
+                    services.AddDbContext<ApplicationDbContext>(options => options
+                        .UseSqlite(connectionString).UseOpenIddict());
+                    services.AddSingleton<Microsoft.AspNetCore.Hosting.IStartupFilter, McpPrincipalProbeStartupFilter>();
+                }));
+
+            // Touching Services boots Program.Main. Seed the demo user (with a non-empty DisplayName, which is
+            // the value the name claim carries) and the OpenIddict public client before driving the flow.
+            using var scope = _host.Services.CreateScope();
+            var sp = scope.ServiceProvider;
+
+            var context = sp.GetRequiredService<ApplicationDbContext>();
+            if (!context.Users.Any(u => u.PhoneNumber == DemoPhone))
+            {
+                context.Users.Add(new ApplicationUser(DemoPhone)
+                {
+                    Id = "wiretest-demo-user",
+                    // DisplayName is computed from FirstName+LastName (falling back to UserName), and it is the
+                    // value the token's Claims.Name carries — the census's non-unique, non-stable field.
+                    FirstName = "Demo",
+                    LastName = "Display",
+                    PhoneNumber = DemoPhone,
+                    PhoneNumberConfirmed = true,
+                    NormalizedUserName = DemoPhone,
+                    SecurityStamp = Guid.NewGuid().ToString(),
+                    ConcurrencyStamp = Guid.NewGuid().ToString(),
+                });
+                context.SaveChanges();
+            }
+
+            var applications = sp.GetRequiredService<IOpenIddictApplicationManager>();
+            var settings = sp.GetRequiredService<IOptions<McpSettings>>().Value;
+            if (applications.FindByClientIdAsync(ClientId).AsTask().GetAwaiter().GetResult() == null)
+            {
+                var descriptor = McpOpenIddictDescriptors.CreatePublicClient(
+                    ClientId, "Wire Test MCP Client", new[] { RedirectUri }, settings);
+                applications.CreateAsync(descriptor, CancellationToken.None).AsTask().GetAwaiter().GetResult();
+            }
+        }
+
+        /// <summary>The connection string the request-scoped ApplicationDbContext resolves in the running
+        /// host — the ground truth for whether the fixture's DbContext override took effect.</summary>
+        public string ResolvedConnectionString()
+        {
+            using var scope = _host.Services.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<ApplicationDbContext>()
+                .Database.GetConnectionString() ?? "(null)";
+        }
+
+        private HttpClient NewClient() => _host.CreateClient(new WebApplicationFactoryClientOptions
+        {
+            AllowAutoRedirect = false,
+            HandleCookies = true,
+        });
+
+        /// <summary>Drives login → consent → token → an MCP-authenticated read, returning the claim types the
+        /// validated principal carries at the endpoint. Each step asserts its own HTTP outcome so a refusal
+        /// names the step.</summary>
+        public async Task<IReadOnlyCollection<string>> DriveFlowAndReadValidatedClaimTypesAsync()
+        {
+            var client = NewClient();
+
+            var (verifier, challenge) = Pkce();
+            const string scope = "okam:mcp.read offline_access";
+            var authorizeQuery =
+                "/oauth/authorize?response_type=code&client_id=" + Uri.EscapeDataString(ClientId) +
+                "&redirect_uri=" + Uri.EscapeDataString(RedirectUri) +
+                "&scope=" + Uri.EscapeDataString(scope) +
+                "&code_challenge=" + Uri.EscapeDataString(challenge) +
+                "&code_challenge_method=S256&state=xyz";
+
+            // 1. Demo-code login → OAuthLoginCookie. No SMS: the verify handler accepts the static demo code.
+            var login = await client.PostAsync("/oauth/login/verify", Form(new()
+            {
+                ["phoneNumber"] = DemoPhone,
+                ["token"] = DemoCode,
+                ["returnUrl"] = authorizeQuery,
+            }));
+            AssertStep("login/verify", login, HttpStatusCode.Redirect, HttpStatusCode.Found);
+            Assert.Contains(login.Headers.GetValues("Set-Cookie"), c => c.Contains("OkamOAuthLogin"));
+
+            // 2. Consent POST (decision=accept) with the cookie → 302 to redirect_uri?code=...
+            var consent = await client.PostAsync("/oauth/authorize", Form(new()
+            {
+                ["response_type"] = "code",
+                ["client_id"] = ClientId,
+                ["redirect_uri"] = RedirectUri,
+                ["scope"] = scope,
+                ["code_challenge"] = challenge,
+                ["code_challenge_method"] = "S256",
+                ["state"] = "xyz",
+                ["decision"] = "accept",
+            }));
+            AssertStep("authorize/consent", consent, HttpStatusCode.Redirect, HttpStatusCode.Found);
+            var location = consent.Headers.Location
+                ?? throw new Xunit.Sdk.XunitException("authorize/consent returned no Location header");
+            var code = System.Web.HttpUtility.ParseQueryString(location.Query)["code"];
+            Assert.False(string.IsNullOrEmpty(code), "authorize/consent Location carried no ?code");
+
+            // 3. PKCE code exchange → access_token.
+            var token = await client.PostAsync("/oauth/token", Form(new()
+            {
+                ["grant_type"] = "authorization_code",
+                ["code"] = code,
+                ["redirect_uri"] = RedirectUri,
+                ["client_id"] = ClientId,
+                ["code_verifier"] = verifier,
+            }));
+            AssertStep("token", token, HttpStatusCode.OK);
+            using var tokenDoc = JsonDocument.Parse(await token.Content.ReadAsStringAsync());
+            var accessToken = tokenDoc.RootElement.GetProperty("access_token").GetString();
+            Assert.False(string.IsNullOrEmpty(accessToken), "token endpoint returned no access_token");
+
+            // 4. Read the validated principal at an MCP-authenticated endpoint.
+            using var probeRequest = new HttpRequestMessage(HttpMethod.Get, ProbePath);
+            probeRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var probe = await client.SendAsync(probeRequest);
+            AssertStep("mcp-principal probe", probe, HttpStatusCode.OK);
+            var claimTypes = JsonSerializer.Deserialize<string[]>(await probe.Content.ReadAsStringAsync());
+            return claimTypes ?? Array.Empty<string>();
+        }
+
+        private static (string verifier, string challenge) Pkce()
+        {
+            var bytes = RandomNumberGenerator.GetBytes(32);
+            var verifier = Base64Url(bytes);
+            using var sha = SHA256.Create();
+            var challenge = Base64Url(sha.ComputeHash(Encoding.ASCII.GetBytes(verifier)));
+            return (verifier, challenge);
+        }
+
+        private static string Base64Url(byte[] bytes) =>
+            Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+
+        private static FormUrlEncodedContent Form(Dictionary<string, string> values) => new(values);
+
+        private static void AssertStep(string step, HttpResponseMessage response, params HttpStatusCode[] allowed)
+        {
+            if (!allowed.Contains(response.StatusCode))
+            {
+                var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                throw new Xunit.Sdk.XunitException(
+                    $"OpenIddict flow refused at step '{step}': expected {string.Join("/", allowed)}, got " +
+                    $"{(int)response.StatusCode} {response.StatusCode}. Body: {Trim(body)}");
+            }
+        }
+
+        private static string Trim(string body) => string.IsNullOrEmpty(body)
+            ? "(empty)"
+            : (body.Length > 600 ? body.Substring(0, 600) + "…" : body);
+
+        public void Dispose()
+        {
+            _host.Dispose();
+            _root.Dispose();
+            _keepAlive.Dispose();
+        }
+    }
+
+    /// <summary>Inserts the read-only probe endpoint into the real pipeline. It authenticates the bearer with
+    /// the genuine MCP scheme and reports the principal's claim types; it never builds a principal.</summary>
+    internal sealed class McpPrincipalProbeStartupFilter : Microsoft.AspNetCore.Hosting.IStartupFilter
+    {
+        public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next) => app =>
+        {
+            app.Use(async (context, continuation) =>
+            {
+                if (context.Request.Path == "/wiretest/mcp-principal")
+                {
+                    var result = await context.AuthenticateAsync(ClaimConstants.McpAuthenticationScheme);
+                    context.Response.ContentType = "application/json";
+                    if (!result.Succeeded)
+                    {
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        await context.Response.WriteAsync("[]");
+                        return;
+                    }
+
+                    context.Response.StatusCode = StatusCodes.Status200OK;
+                    var types = result.Principal.Claims.Select(c => c.Type).Distinct().ToArray();
+                    await context.Response.WriteAsync(JsonSerializer.Serialize(types));
+                    return;
+                }
+
+                await continuation();
+            });
+
+            next(app);
+        };
+    }
+}

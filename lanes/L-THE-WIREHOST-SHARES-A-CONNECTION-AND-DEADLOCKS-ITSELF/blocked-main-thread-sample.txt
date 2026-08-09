@@ -1,0 +1,12 @@
+    1492 Thread_70500937   DispatchQueue_1: com.apple.main-thread  (serial)
+    + 1492 start  (in dyld) + 6992  [0x184e87e00]
+    +   1492 main  (in dotnet) + 184  [0x1024b0be4]
+    +     1492 exe_start(int, char const**)  (in dotnet) + 1152  [0x1024b0978]
+    +       1492 hostfxr_main_startupinfo  (in libhostfxr.dylib) + 128  [0x106dfaff0]
+    +         1492 fx_muxer_t::execute(std::basic_string<char>, int, char const**, host_startup_info_t const&, char*, int, int*)  (in libhostfxr.dylib) + 968  [0x106dfe1dc]
+    +           1492 fx_muxer_t::handle_exec_host_command(std::basic_string<char> const&, host_startup_info_t const&, std::basic_string<char> const&, std::unordered_map<known_options, std::vector<std::basic_string<char>>, known_options_hash> const&, int, char const**, int, host_mode_t, bool, char*, int, int*)  (in libhostfxr.dylib) + 1268  [0x106dfeedc]
+    +             1492 corehost_main  (in libhostpolicy.dylib) + 348  [0x106edccec]
+    +               1492 run_app_for_context(hostpolicy_context_t const&, int, char const**)  (in libhostpolicy.dylib) + 1068  [0x106edbedc]
+    +                 1492 coreclr_execute_assembly  (in libcoreclr.dylib) + 232  [0x107587cf8]
+    +                   1492 CorHost2::ExecuteAssembly(unsigned int, char16_t const*, int, char16_t const**, unsigned int*)  (in libcoreclr.dylib) + 648  [0x1075c1344]
+    +                     1492 Assembly::ExecuteMainMethod(PtrArray**, int)  (in libcoreclr.dylib) + 264  [0x107599fd8]
