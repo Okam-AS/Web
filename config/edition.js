@@ -4,6 +4,14 @@
 //   'ch'           -> Swiss site (CHF, de-CH locale)
 // Keep the Norwegian behaviour 100% intact; only add 'ch' behind isCh checks.
 //
+// THIS WHOLE TABLE SHIPS IN THE CLIENT BUNDLE. The runtime market switcher needs
+// every market's row, so store/index.js imports `markets` and webpack inlines all
+// of it into the JS of EVERY market's build. Verified: a Swiss build's JS
+// contains Norway's hostname, gaId and fbPixelId as inert strings (the Swiss
+// build emits no fbq call and no connect.facebook.net reference at all).
+// Consequence: a market row may only ever hold PUBLIC values. Never put a secret,
+// an API key or a token in one.
+//
 // MARKET SELECTION IS A LOOKUP, NOT A FORK.
 // Everything a market changes -- money formatting, locales, hostnames, sitemap
 // exclusions -- is a field on the entry below. Adding market #3 is a new entry
