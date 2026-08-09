@@ -1,9 +1,9 @@
 #!/bin/sh
-# The Ask Okam demo: a seeded world, the four flags on, and a browser pointed at the page.
+# The Ask Okam demo: a seeded world, the five flags on, and a browser pointed at the page.
 #
 # What it is FOR: making the walk in RUNBOOK.md a ten-minute act instead of an archaeology dig. The
 # assistant is only interesting against a store that has products to reprice and flags that let it
-# propose, and neither of those is the default — all four Assistant flags ship DENY-CLOSED, so a
+# propose, and neither of those is the default — all five Assistant flags ship DENY-CLOSED, so a
 # plain `demo-up.sh` gives you a working chat box that can never stage anything.
 #
 # Rules it holds itself to, inherited from scripts/drift-demo/demo.sh:
@@ -100,7 +100,7 @@ ABSENT=0
 absent() { ABSENT=$((ABSENT+1)); printf '\n  NOT IN THIS CHECKOUT: %s\n' "$1"; printf '    %s\n' "$2"; }
 [ "$HAS_CURL" = 1 ] || absent "curl (on PATH)" "every API call is made with it."
 [ "$HAS_JQ"   = 1 ] || absent "jq (on PATH)"   "the responses are read with it. brew install jq"
-[ "$HAS_NPM"  = 1 ] || absent "npm (on PATH)"  "STEP 5 starts the admin web with it."
+[ "$HAS_NPM"  = 1 ] || absent "npm (on PATH)"  "STEP 6 starts the admin web with it."
 [ "$HAS_BACKEND" = 1 ] || absent "${BACKEND:-../OkamAPI-ask}/Scripts/demo/demo-up.sh" \
   "the world builder. It lives in the OkamAPI checkout on feature/ask-okam, which is a SIBLING repo
     and not part of this one. Point ASK_DEMO_BACKEND at it, or run it yourself and re-run with
@@ -185,8 +185,8 @@ if [ -z "$STORE_ID" ]; then
 fi
 ok "signed in as $MANAGER_PHONE, store '$STORE_NAME' is id $STORE_ID"
 
-# ==================================================================== STEP 3: the four flags =====
-act "STEP 3  arm the assistant (four flags, all deny-closed by default)"
+# ==================================================================== STEP 3: the five flags =====
+act "STEP 3  arm the assistant (five flags, all deny-closed by default)"
 # THIS IS THE STEP THE DEMO EXISTS FOR. Every one of these ships false, and the gate ANDs them:
 #   MayStage   = Assistant.Module AND Assistant.Actions AND the per-kind flag
 #   MayApprove =                      Assistant.Actions AND the per-kind flag
@@ -196,8 +196,15 @@ act "STEP 3  arm the assistant (four flags, all deny-closed by default)"
 # Set through the REAL OPERATOR LEVER (PUT /stores/{id}/feature-flags), not a SQL insert: that
 # endpoint is deny-closed on the shared catalog, so a typo'd or withheld key is REFUSED here rather
 # than silently persisted as a switch that does nothing.
+#
+# StoreHoursChange is armed here with the other two kinds, and it is the one that most needs to be:
+# it is the only kind with NO staging path except live chat — no MCP tool and no HTTP route stages
+# it — so a walker who has to arm it by hand discovers that at the point where the closure case was
+# supposed to happen. Its flag is a declared catalog entry
+# (`AssistantActionFlags.Declared`, module "Assistant"), so the deny-closed PUT accepts it and the
+# read-back below is a real measurement rather than an assumption.
 FLAG_FAIL=0
-for FLAG in Assistant.Module Assistant.Actions Assistant.Actions.MenuPriceChange Assistant.Actions.DiscountCreate; do
+for FLAG in Assistant.Module Assistant.Actions Assistant.Actions.MenuPriceChange Assistant.Actions.DiscountCreate Assistant.Actions.StoreHoursChange; do
   OUT=$(api PUT "/stores/$STORE_ID/feature-flags" \
     "$(jq -nc --arg k "$FLAG" '{flagKey:$k, enabled:true, note:"ask-demo"}')")
   EFFECTIVE=$(printf '%s' "$OUT" | jq -r '.effective // empty' 2>/dev/null)
@@ -209,7 +216,7 @@ for FLAG in Assistant.Module Assistant.Actions Assistant.Actions.MenuPriceChange
   fi
 done
 if [ "$FLAG_FAIL" = 0 ]; then
-  ok "all four flags report effective=true (read back from the server, not assumed)"
+  ok "all five flags report effective=true (read back from the server, not assumed)"
 else
   bad "at least one flag did not resolve on -- the assistant will answer but never propose"
 fi
@@ -244,8 +251,27 @@ else
   bad "at least one dish was not created -- the reprice walk will be thinner than the runbook says"
 fi
 
-# ==================================================================== STEP 5: the admin web ======
-act "STEP 5  the admin web"
+# ==================================================================== STEP 5: a week to close ====
+act "STEP 5  give the assistant a week it can actually change"
+# RUNBOOK § 4 closes Mondays, and a closure is only a CHANGE if the day is open to begin with. A store
+# with no OpeningHour rows reads as closed on every weekday -- the hours executor treats a missing
+# weekday as closed -- so "vi holder stengt på mandager" would be refused as a no-op, no card would
+# appear, and the most important walk in the runbook would dead-end looking like a broken feature.
+# Nothing else seeds these: the world builder does not, and neither did this script until it had a
+# walk that needed them.
+HOURS=$(jq -nc '{openingHours: [range(0;7) | {dayOfWeek: ., open: true, openingTime: "11:00", closingTime: "22:00"}]}')
+api PUT "/stores/$STORE_ID/openinghours" "$HOURS" >/dev/null 2>&1
+OPEN_DAYS=$(api GET "/stores/$STORE_ID" | jq '[.openingHours[]? | select(.open == true)] | length' 2>/dev/null)
+if [ "$OPEN_DAYS" = "7" ]; then
+  ok "seven days open 11:00-22:00 (read back), so closing Monday is a real change"
+else
+  bad "opening hours did not read back as seven open days (got: ${OPEN_DAYS:-nothing}).
+         RUNBOOK § 4 would be refused as a no-op, because a store with no hours is already
+         closed every day -- which looks identical to the feature being broken."
+fi
+
+# ==================================================================== STEP 6: the admin web ======
+act "STEP 6  the admin web"
 if [ -n "${NO_WEB:-}" ]; then
   skip "not starting the web (NO_WEB is set)" "nothing; this was asked for"
 elif [ "$HAS_NPM" = 1 ] && [ "$HAS_NODE_MODULES" = 1 ] && [ "$HAS_CORE" = 1 ]; then

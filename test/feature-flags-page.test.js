@@ -111,13 +111,21 @@ const rowFor = (wrapper, flagKey) =>
 const refusal = (status, message) =>
   Object.assign(new Error(message), { isPlatformApiError: true, status })
 
-function mountPage () {
+// Dispatches the page made, so "which store the page changed" is asserted against the global
+// selection it moved rather than against a second one held locally.
+const dispatched = []
+
+function mountPage (state) {
   return shallowMount(FeatureFlagsPage, {
     mocks: {
       $i: (key, params) => (params ? key + ':' + JSON.stringify(params) : key),
       $store: {
         getters: { userIsLoggedIn: true },
-        state: { selectedAdminStore: 42, adminLocale: 'no', currentUser: { id: 1, adminIn: [{ id: 42 }] } }
+        dispatch: (name, payload) => { dispatched.push([name, payload]) },
+        state: Object.assign(
+          { selectedAdminStore: 42, adminLocale: 'no', currentUser: { id: 1, adminIn: [{ id: 42 }] } },
+          state || {}
+        )
       },
       // The Core initializer the global mixin normally supplies. `core/` is an uninitialised
       // submodule by design, so plugins/global-mixin.js can never load in a test; only
@@ -130,7 +138,72 @@ function mountPage () {
 
 beforeEach(() => {
   calls.length = 0
+  dispatched.length = 0
   Object.keys(behaviour).forEach(key => delete behaviour[key])
+})
+
+// THE KILL SWITCH HAS TO NAME ITS VENUE. Every switch on this page writes to one store, and the page
+// used to name none of them: it read the global selection and, failing that, silently took the first
+// entry in `adminIn`. On a multi-store account that arms a venue the operator is not looking at, and
+// the only evidence is on a page they are not reading — so the symptom is "the switch does nothing"
+// and the conclusion drawn is the opposite of the truth.
+describe('the page says which store it is acting on', () => {
+  const TWO_STORES = {
+    selectedAdminStore: 42,
+    currentUser: { id: 1, adminIn: [{ id: 42, name: 'Bryggen Bistro' }, { id: 77, name: 'Torget Kafé' }] }
+  }
+
+  test('the selected store is named on the page, not only in the nav chrome', async () => {
+    const wrapper = mountPage({ currentUser: { id: 1, adminIn: [{ id: 42, name: 'Bryggen Bistro' }] } })
+    await settled()
+    expect(wrapper.find('[data-store-name]').text()).toBe('Bryggen Bistro')
+  })
+
+  // A venue `adminIn` carries no name for still has to render as something a reader can match against
+  // the store they meant. Blank is the failure mode this whole bar exists to remove.
+  test('a store with no name renders as its id rather than as nothing', async () => {
+    const wrapper = mountPage()
+    await settled()
+    expect(wrapper.find('[data-store-name]').text()).toBe('ff_store_unnamed:{"id":42}')
+  })
+
+  test('more than one administered store gets an explicit picker listing them all', async () => {
+    const wrapper = mountPage(TWO_STORES)
+    await settled()
+    const options = wrapper.find('[data-store-select]').findAll('option')
+    expect(options).toHaveLength(2)
+    expect(options.at(0).text()).toBe('Bryggen Bistro')
+    expect(options.at(1).text()).toBe('Torget Kafé')
+  })
+
+  // No fallback. The page used to answer "which store?" with `adminIn[0]`, which renders identically
+  // to a store the operator chose — so the write went somewhere plausible and nothing said where.
+  test('with no store selected the page refuses to guess one and reads nothing', async () => {
+    const wrapper = mountPage({ selectedAdminStore: null })
+    await settled()
+    expect(wrapper.find('[data-store-unselected]').exists()).toBe(true)
+    expect(callsTo('GetStoreFlags')).toEqual([])
+    expect(wrapper.findAll('.ff-row')).toHaveLength(0)
+  })
+
+  // Changing the venue here moves the SAME global selection the nav picker moves. A second, local
+  // selection would let the page and the header sit on different stores, which is the mismatch this
+  // bar was added to end rather than to reproduce.
+  test('picking a store moves the global selection rather than a private one', async () => {
+    const wrapper = mountPage(TWO_STORES)
+    await settled()
+    wrapper.find('[data-store-select]').setValue('77')
+    await settled()
+    expect(dispatched).toEqual([['SetSelectedAdminStore', 77]])
+  })
+
+  test('re-picking the store already shown changes nothing', async () => {
+    const wrapper = mountPage(TWO_STORES)
+    await settled()
+    wrapper.find('[data-store-select]').setValue('42')
+    await settled()
+    expect(dispatched).toEqual([])
+  })
 })
 
 describe('the lever exists and reaches the routes', () => {
@@ -687,6 +760,7 @@ describe('every key this page prints exists in all three locales', () => {
   // key during an incident is the worst possible time to find one.
   const KEYS = [
     'nav_feature_flags', 'ff_page_title', 'ff_page_intro', 'ff_reload', 'ff_effective_note',
+    'ff_store_label', 'ff_store_note', 'ff_store_unnamed', 'ff_store_unselected',
     'ff_withheld_note', 'ff_catalog_unknown', 'ff_read_failed', 'ff_forbidden', 'ff_module_unknown',
     'ff_state_on', 'ff_state_off', 'ff_state_unknown', 'ff_default_on', 'ff_default_off',
     'ff_overridden', 'ff_not_overridden', 'ff_override_unknown', 'ff_effective_on', 'ff_effective_off',
@@ -707,6 +781,7 @@ describe('every key this page prints exists in all three locales', () => {
   test('the interpolated keys keep their placeholders in every locale', () => {
     ['no', 'en', 'de'].forEach((locale) => {
       expect(translations[locale].ff_updated_by).toContain('{actor}')
+      expect(translations[locale].ff_store_unnamed).toContain('{id}')
       expect(translations[locale].ff_saved_on).toContain('{flag}')
       expect(translations[locale].ff_saved_off).toContain('{flag}')
       expect(translations[locale].ff_cleared).toContain('{flag}')
