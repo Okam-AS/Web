@@ -229,13 +229,34 @@ export default {
     // Reading richt text
     '@nuxtjs/markdownit',
 
+    // robots.txt is EMITTED per build, not shipped as a static file, because a
+    // static file cannot carry a per-market Sitemap host.
+    //
+    // MEASURED at 8059e200, in dist/ after `OKAM_EDITION=no npm run generate`:
+    // `static/robots.txt` was never served verbatim. @nuxtjs/robots@2.5.0 reads
+    // it at build:before and parses it with `item.split(':')`, keeping only
+    // ar[1] (parseFile, node_modules/@nuxtjs/robots/dist/module.js). So
+    //     Sitemap: https://okam.no/sitemap.xml
+    // reached dist/robots.txt as
+    //     Sitemap: https
+    // -- a broken directive, live on okam.no today, and identically broken on
+    // the Swiss domain. The module then appended a SECOND `User-agent: *` block
+    // from its own options, and the third element of the old module tuple
+    // ({ UserAgent: '*', Disallow: '/import' }) was silently dropped, because
+    // nuxt reads a module entry as [src, options] and ignores the rest.
+    //
+    // Declaring the whole file here fixes all three at once and puts the
+    // Sitemap on the same `market.hostname` the sitemap module below already
+    // uses, so the two can no longer disagree on a Swiss build.
+    // static/robots.txt is deleted: leaving it would re-inject the mangled rules.
     ['@nuxtjs/robots', {
       UserAgent: '*',
-      Disallow: ['/lang', '/admin']
-    }, {
-        UserAgent: '*',
-        Disallow: '/import'
-      }],
+      // The union of what the two old sources disallowed between them.
+      // '/admin/' is gone only because '/admin' already prefix-matches it.
+      Disallow: ['/admin', '/import/', '/offer/', '/offers/', '/helle.jpg', '/lang'],
+      Allow: '/',
+      Sitemap: market.hostname + '/sitemap.xml'
+    }],
     ['@nuxtjs/sitemap', {
       hostname: market.hostname,
       gzip: true,
