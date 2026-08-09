@@ -4,7 +4,7 @@ import redirectSSL from 'redirect-ssl'
 // before it builds anything -- instead of shipping a market that looks Norwegian.
 import { market } from './config/edition'
 
-const isCh = market.code === 'ch'
+const fbPixelId = market.fbPixelId
 // Routes kept out of this edition's sitemap. The Norwegian sitemap also drops the
 // Swiss-only legal pages so they're not discoverable on okam.no.
 const sitemapExclude = market.sitemapExclude
@@ -63,10 +63,15 @@ export default {
       { name: 'twitter:card', content: '/og-image.png' },
       { name: 'twitter:site', content: '@sharghi_a' }
     ],
-    script: isCh ? [] : [
-      {
-        hid: 'fb-pixel',
-        innerHTML: `
+    // Driven by the market's own pixel id, NOT by `not Switzerland`: an
+    // isCh-style fork hands market #3 the NORWEGIAN pixel and quietly bills its
+    // conversions to the Norwegian ad account. A market without a pixel sets
+    // fbPixelId: null and emits nothing.
+    script: fbPixelId
+      ? [
+          {
+            hid: 'fb-pixel',
+            innerHTML: `
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
           n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -75,23 +80,28 @@ export default {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '2834635726843367');
+          fbq('init', '${fbPixelId}');
           fbq('track', 'PageView');
         `,
-        type: 'text/javascript',
-        charset: 'utf-8'
-      }
-    ],
-    noscript: isCh ? [] : [
-      {
-        hid: 'fb-pixel-noscript',
-        innerHTML: '<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2834635726843367&ev=PageView&noscript=1" />'
-      }
-    ],
-    __dangerouslyDisableSanitizersByTagID: isCh ? {} : {
-      'fb-pixel': ['innerHTML'],
-      'fb-pixel-noscript': ['innerHTML']
-    },
+            type: 'text/javascript',
+            charset: 'utf-8'
+          }
+        ]
+      : [],
+    noscript: fbPixelId
+      ? [
+          {
+            hid: 'fb-pixel-noscript',
+            innerHTML: `<img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=${fbPixelId}&ev=PageView&noscript=1" />`
+          }
+        ]
+      : [],
+    __dangerouslyDisableSanitizersByTagID: fbPixelId
+      ? {
+          'fb-pixel': ['innerHTML'],
+          'fb-pixel-noscript': ['innerHTML']
+        }
+      : {},
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       // Preload fonts

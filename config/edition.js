@@ -11,6 +11,35 @@
 // fallback anywhere on the build path, because a silent fallback is exactly how
 // a third market ships looking Norwegian.
 
+// KNOWN GAPS -- money and locale that this lookup does NOT yet reach.
+// Whoever adds market #3 must clear these; each one renders Norwegian output on
+// any market. Left alone here only because fixing them moves already-deployed
+// Norwegian bytes, which the "keep the Norwegian behaviour 100% intact" rule
+// above forbids this change from doing.
+//
+// Hardcoded nb-NO/NOK Intl formatters, bypassing the mixin's priceLabel:
+//   components/molecules/CustomerInfoModal.vue:332   (own priceLabel, NOK)
+//   pages/admin/kravia-invoice.vue:582               (own priceLabel, NOK)
+//   pages/admin/settlements.vue:385                  (NOK)
+//   pages/admin/wolt-drive-invoice.vue:412           (NOK)
+//   pages/admin/wolt-drive-invoice.vue:422           (nb-NO number)
+//   pages/admin/poweruser-growth.vue:864             (nb-NO compact number)
+// Hardcoded 'kr ' string prefixes:
+//   components/molecules/StatisticsChart.vue:183,197,236
+//   components/wrapped/slides/SlideOverview.vue:52   (seed value 'kr 0')
+//   components/atoms/OtherPriceItem.vue:55           -- and this one also DOUBLES
+//     the symbol today: '(Ordinær pris kr ' + priceLabel(x) renders
+//     "(Ordinær pris kr kr 1 234,50)". Pre-existing, Norwegian-only.
+//
+// REQUIRED FOLLOW-UP, not "someday": translations/de.ts:230 renders
+// "kr {wholeAmount},{fractionAmount}" -- a live WRONG-CURRENCY string on the
+// Swiss build. (no.ts / en.ts line 230 carry the same literal, correctly.)
+//
+// Deferred by ruling: the 'digits' amountSplit warts below (5 øre -> "kr 0,00",
+// -50 -> "kr -,50") are defects in core/helpers/tools, a submodule shared by
+// four checkouts. Out of scope here, and pinned as labelled data so they cannot
+// reach market #3.
+
 const EDITION = process.env.OKAM_EDITION || process.env.EDITION || 'no'
 
 // Currency-format descriptors.
@@ -79,6 +108,10 @@ const markets = {
     shopUrl: 'https://shop.okam.no',
     phonePrefix: '+47',
     gaId: 'UA-167439729-2',
+    // Meta/Facebook pixel. MUST be per market: a shared id bills conversions to
+    // the wrong ad account, which is worse than a wrong-looking screen because it
+    // is invisible from the app. null = no pixel for this market.
+    fbPixelId: '2834635726843367',
     // Routes kept out of this edition's sitemap. The Norwegian sitemap also
     // drops the Swiss-only legal pages so they're not discoverable on okam.no.
     sitemapExclude: ['/admin/**', '/import',
@@ -99,6 +132,7 @@ const markets = {
     shopUrl: 'https://shop.okam-swiss.ch',
     phonePrefix: '+41',
     gaId: null,
+    fbPixelId: null,
     sitemapExclude: ['/admin/**', '/import']
   }
 }

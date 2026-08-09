@@ -43,7 +43,9 @@ const NO_GOLDEN = [
   [-100, 'kr -1,00'],
   [-123450, 'kr -1 234,50'],
   [null, 'kr 0,00'],
-  [undefined, 'kr 0,00']
+  [undefined, 'kr 0,00'],
+  [NaN, 'kr 0,00'],
+  ['', 'kr 0,00']
 ]
 
 const NO_GOLDEN_HIDE_FRACTION = [
@@ -74,7 +76,9 @@ const NO_GOLDEN_HIDE_FRACTION = [
   [-100, 'kr -1'],
   [-123450, 'kr -1 234,50'],
   [null, 'kr 0'],
-  [undefined, 'kr 0']
+  [undefined, 'kr 0'],
+  [NaN, 'kr 0'],
+  ['', 'kr 0']
 ]
 
 const NO_SPLIT_GOLDEN = [
@@ -86,7 +90,9 @@ const NO_SPLIT_GOLDEN = [
   [1234567890, '12 345 678', '90'],
   [-123450, '-1 234', '50'],
   [null, '0', '00'],
-  [undefined, '0', '00']
+  [undefined, '0', '00'],
+  [NaN, '0', '00'],
+  ['', '0', '00']
 ]
 
 const CH_GOLDEN = [
@@ -117,7 +123,9 @@ const CH_GOLDEN = [
   [-100, 'CHF -1.00'],
   [-123450, "CHF -1'234.50"],
   [null, 'CHF 0.00'],
-  [undefined, 'CHF 0.00']
+  [undefined, 'CHF 0.00'],
+  [NaN, 'CHF 0.00'],
+  ['', 'CHF 0.00']
 ]
 
 describe("'no' parity: every byte identical to core priceLabel + setCurrencyFormat({ prefix: 'kr ', suffix: '' })", () => {
@@ -202,6 +210,7 @@ describe('a third market is a data entry, not a code edit', () => {
       shopUrl: 'https://shop.okam.example',
       phonePrefix: '+43',
       gaId: null,
+      fbPixelId: null,
       sitemapExclude: ['/admin/**'],
       currencyFormat: {
         symbol: '€',
@@ -224,6 +233,7 @@ describe('a third market is a data entry, not a code edit', () => {
       shopUrl: 'https://shop.okam.invalid',
       phonePrefix: '+999',
       gaId: null,
+      fbPixelId: null,
       sitemapExclude: ['/admin/**'],
       currencyFormat: {
         // A zero-decimal currency: minor unit == major unit.
@@ -312,7 +322,7 @@ describe('every shipped market carries a complete descriptor', () => {
   ]
   const REQUIRED_MARKET_FIELDS = [
     'code', 'locale', 'locales', 'currency', 'country', 'hostname',
-    'shopUrl', 'phonePrefix', 'sitemapExclude', 'currencyFormat'
+    'shopUrl', 'phonePrefix', 'gaId', 'fbPixelId', 'sitemapExclude', 'currencyFormat'
   ]
 
   test.each(marketCodes)('%s', (code) => {
