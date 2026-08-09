@@ -681,7 +681,9 @@ export default {
     },
     openDeliveryMethodEditor(deliveryMethod, createNew) {
       const local = JSON.parse(JSON.stringify(deliveryMethod));
-      local.wholeAmount = createNew ? "" : this.wholeAmount(local.amount).replace(/\s/g, "");
+      // Strip the market's group separator (a space in 'no', an apostrophe in
+      // 'ch', a dot elsewhere) -- this field is a plain numeric input.
+      local.wholeAmount = createNew ? "" : this.wholeAmount(local.amount).replace(/\D/g, "");
       local.fractionAmount = createNew ? "" : this.fractionAmount(local.amount);
       local.km = createNew ? "" : Math.round((local.maxDistance || 0) / 1000);
       this.editorDeliveryMethod = local;

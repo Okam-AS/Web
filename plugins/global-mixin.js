@@ -30,12 +30,15 @@ import {
   BankAccountService
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
-import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
-import { formatChf } from '~/utils/price'
+import { formatString, setCurrencyFormat } from '~/core/helpers/tools'
+import { market } from '~/config/edition'
+import { formatAmount, splitAmount, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
 
 // Unified core formats prices via currencyInfo (consumer default "100,–").
-// Admin web keeps the legacy "kr 100" prefix format.
-setCurrencyFormat({ prefix: 'kr ', suffix: '' })
+// Admin web keeps the legacy "kr 100" prefix format. Driven by the market this
+// bundle was built for, so a new market needs no edit here: for 'no' this is
+// still exactly { prefix: 'kr ', suffix: '' } (plus core's own defaults).
+setCurrencyFormat(coreCurrencyFormat(market.currencyFormat))
 
 const mixin = {
   data() {
@@ -133,16 +136,13 @@ const mixin = {
       return (!dateTime) ? '' : dayjs(dateTime).format('DD.MM.YY HH:mm')
     },
     priceLabel(totalPrice, hideFractionIfZero) {
-      if (this.isCh) {
-        return formatChf(totalPrice)
-      }
-      return priceLabel(totalPrice, hideFractionIfZero)
+      return formatAmount(currencyFormatForStore(this.$store), totalPrice, hideFractionIfZero)
     },
     wholeAmount(amount) {
-      return wholeAmount(amount)
+      return splitAmount(currencyFormatForStore(this.$store), amount).whole
     },
     fractionAmount(amount) {
-      return fractionAmount(amount)
+      return splitAmount(currencyFormatForStore(this.$store), amount).fraction
     }
   },
   computed: {

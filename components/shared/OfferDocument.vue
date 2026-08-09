@@ -147,7 +147,10 @@
 </template>
 
 <script>
-import { priceLabel } from "~/core/helpers/tools";
+// No money import here on purpose: the template's `priceLabel` resolves to the
+// market-driven mixin method in plugins/global-mixin.js. Importing core's
+// priceLabel directly would pin this document to whatever market the global
+// currency format happened to be set to.
 
 export default {
   name: "OfferDocument",

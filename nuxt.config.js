@@ -1,15 +1,13 @@
 import redirectSSL from 'redirect-ssl'
+// Single source for everything the build flag OKAM_EDITION selects. Importing it
+// here also means an unknown OKAM_EDITION throws while nuxt reads this config --
+// before it builds anything -- instead of shipping a market that looks Norwegian.
+import { market } from './config/edition'
 
-const OKAM_EDITION = process.env.OKAM_EDITION || 'no'
-const isCh = OKAM_EDITION === 'ch'
-// Swiss-only routes: keep them out of the Norwegian sitemap so they're not
-// discoverable on okam.no (they're only relevant to the Swiss edition).
-const sitemapExclude = isCh
-  ? ['/admin/**', '/import']
-  : ['/admin/**', '/import',
-     '/impressum', '/en/impressum',
-     '/datenschutz', '/en/datenschutz',
-     '/agb', '/en/agb']
+const isCh = market.code === 'ch'
+// Routes kept out of this edition's sitemap. The Norwegian sitemap also drops the
+// Swiss-only legal pages so they're not discoverable on okam.no.
+const sitemapExclude = market.sitemapExclude
 
 export default {
   debug: true,
@@ -25,7 +23,7 @@ export default {
   },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   env: {
-    EDITION: OKAM_EDITION,
+    EDITION: market.code,
     STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || '',
     IS_PRODUCTION: process.env.NODE_ENV === 'production',
     API_BASE_URL: process.env.NODE_ENV === 'production' ? 'https://okamapi.azurewebsites.net' : 'https://okamapi.azurewebsites.net', // 'http://localhost:5000',
@@ -133,10 +131,10 @@ export default {
   ],
 
   i18n: {
-    locales: isCh ? ['de'] : ['en', 'no'],
-    defaultLocale: isCh ? 'de' : 'no',
+    locales: market.locales,
+    defaultLocale: market.locale,
     vueI18n: {
-      fallbackLocale: isCh ? 'de' : 'no',
+      fallbackLocale: market.locale,
       messages: {
         en: {
           back: 'Back',
@@ -229,7 +227,7 @@ export default {
         Disallow: '/import'
       }],
     ['@nuxtjs/sitemap', {
-      hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no',
+      hostname: market.hostname,
       gzip: true,
       exclude: sitemapExclude
     }]
@@ -241,7 +239,7 @@ export default {
   },
 
   googleAnalytics: {
-    id: isCh ? undefined : 'UA-167439729-2'
+    id: market.gaId || undefined
   },
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
@@ -307,7 +305,7 @@ export default {
 
   // Legg til sitemap konfigurasjon
   sitemap: {
-    hostname: isCh ? 'https://okam-swiss.ch' : 'https://okam.no', // Endre til din faktiske URL
+    hostname: market.hostname, // Endre til din faktiske URL
     gzip: true,
     exclude: sitemapExclude
   },
@@ -323,7 +321,7 @@ export default {
     manifest: {
       name: 'Okam App',
       short_name: 'Okam',
-      lang: isCh ? 'de' : 'no',
+      lang: market.locale,
       display: 'standalone'
     }
   },
