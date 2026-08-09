@@ -305,7 +305,7 @@ export default {
       return this.$store.state.selectedAdminStore;
     },
     generatedUrl() {
-      return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : "";
+      return this.selectedStore ? `${this.marketConfig.shopUrl}/shop?id=${this.selectedStore}` : "";
     },
     getOpeningHoursSummary() {
       const today = new Date().getDay();

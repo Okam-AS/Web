@@ -299,7 +299,7 @@
                   <a
                     v-if="store.storeId && store.approved"
                     style="text-decoration: underline"
-                    :href="`https://shop.okam.no/store?id=${store.storeId}`"
+                    :href="`${marketConfig.shopUrl}/store?id=${store.storeId}`"
                     target="_blank"
                     >{{ store.name }}
                   </a>

@@ -39,9 +39,11 @@
 //     the symbol today: '(Ordinær pris kr ' + priceLabel(x) renders
 //     "(Ordinær pris kr kr 1 234,50)". Pre-existing, Norwegian-only.
 //
-// REQUIRED FOLLOW-UP, not "someday": translations/de.ts:230 renders
+// CLEARED 2026-08-09: translations/*.ts:230 used to render
 // "kr {wholeAmount},{fractionAmount}" -- a live WRONG-CURRENCY string on the
-// Swiss build. (no.ts / en.ts line 230 carry the same literal, correctly.)
+// Swiss build. All three files now take one pre-formatted {price} token, built
+// by utils/price.js formatMoneyFromParts from the runtime market's
+// currencyFormat. See pages/admin/delivery.vue updateDeliveryMethodSummary.
 //
 // Deferred by ruling: the 'digits' amountSplit warts below (5 øre -> "kr 0,00",
 // -50 -> "kr -,50") are defects in core/helpers/tools, a submodule shared by
@@ -103,6 +105,26 @@ const currencyFormats = {
   }
 }
 
+// PUBLIC MAILBOXES PER MARKET.
+//
+// Three distinct addresses, because the pages that print them are three
+// distinct documents:
+//   contactEmail -- the "write to us" address on /kontakt and in the footer.
+//   legalEmail   -- the address printed IN a legal document (imprint, T&C
+//                   contact clause). Norway and Switzerland publish different
+//                   ones, so this is not a synonym for contactEmail.
+//   privacyEmail -- the data-protection address. `null` for a market that
+//                   publishes none; consumers must render an honest empty
+//                   state rather than borrow another market's address.
+//
+// !! OPEN QUESTION FOR SVEN -- DO NOT SILENTLY "FIX" THESE !!
+// Every Swiss value below is carried over BYTE-IDENTICAL from the page markup
+// it replaced, where each one is tagged <em>[Platzhalter]</em>, i.e. awaiting
+// legal review. Sven has ruled that the canonical Swiss SITE domain is
+// okam-swiss.ch (see `hostname` below), but that ruling says nothing about
+// which MAILBOX exists: @okam.ch and @okam-swiss.ch are different mail
+// domains and only Sven knows which one receives. The values stayed on
+// @okam.ch on purpose. Changing them is a data edit here, not a code change.
 const markets = {
   no: {
     code: 'no',
@@ -114,7 +136,22 @@ const markets = {
     country: 'NO',
     hostname: 'https://okam.no',
     shopUrl: 'https://shop.okam.no',
+    // -> pages/registrert-ferdig.vue. Cannot be derived from `hostname`:
+    // Norway's admin is a subdomain of okam.no, and nothing guarantees the next
+    // market's is a subdomain of its own site.
+    adminUrl: 'https://admin.okam.no',
     phonePrefix: '+47',
+    // -> pages/kontakt.vue, components/shared/TermsContent.vue
+    contactEmail: 'kontakt@okam.no',
+    // -> pages/impressum.vue, pages/agb.vue. Norway's own legal documents
+    // (pages/vilkar.vue, components/shared/TermsContent.vue) keep hei@okam.no
+    // inline: an address inside signed legal copy is part of the document, not
+    // a configurable, and must not silently follow a data edit here.
+    legalEmail: 'hei@okam.no',
+    // Norway publishes no separate data-protection mailbox anywhere in this
+    // repo (pages/personvern.vue names none). Inventing one would be worse
+    // than saying so, so this is null and the pages that print it say so.
+    privacyEmail: null,
     gaId: 'UA-167439729-2',
     // Meta/Facebook pixel. MUST be per market: a shared id bills conversions to
     // the wrong ad account, which is worse than a wrong-looking screen because it
@@ -138,7 +175,15 @@ const markets = {
     // NOTE: the Swiss consumer shop domain is assumed to mirror the site domain.
     // Update if the Swiss shop lives elsewhere.
     shopUrl: 'https://shop.okam-swiss.ch',
+    adminUrl: 'https://admin.okam-swiss.ch',
     phonePrefix: '+41',
+    // All three are [Platzhalter] values awaiting legal review -- see the
+    // block comment above `markets`. Carried over verbatim from
+    // pages/kontakt.vue, pages/impressum.vue + pages/agb.vue, and
+    // pages/datenschutz.vue respectively.
+    contactEmail: 'kontakt@okam.ch',
+    legalEmail: 'hallo@okam.ch',
+    privacyEmail: 'datenschutz@okam.ch',
     gaId: null,
     fbPixelId: null,
     sitemapExclude: ['/admin/**', '/import']

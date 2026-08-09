@@ -23,7 +23,8 @@
                 <p>
                   Okam AG <em>[Platzhalter]</em><br>
                   Musterstrasse 1, 8000 Zürich <em>[Platzhalter]</em><br>
-                  E-Mail: datenschutz@okam.ch <em>[Platzhalter]</em>
+                  <template v-if="privacyEmail">E-Mail: {{ privacyEmail }} <em>[Platzhalter]</em></template>
+                  <em v-else>[Für diesen Markt ist keine Datenschutz-Adresse veröffentlicht]</em>
                 </p>
 
                 <h2>Welche Daten wir bearbeiten</h2>
@@ -67,7 +68,8 @@
                 <p>Viele dieser Angaben können Sie direkt in der App einsehen und verwalten. Zur Ausübung Ihrer weiteren Rechte können Sie uns jederzeit kontaktieren.</p>
 
                 <h2>Kontakt</h2>
-                <p>Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte erreichen Sie uns unter datenschutz@okam.ch <em>[Platzhalter]</em>.</p>
+                <p v-if="privacyEmail">Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte erreichen Sie uns unter {{ privacyEmail }} <em>[Platzhalter]</em>.</p>
+                <p v-else>Bei Fragen zum Datenschutz oder zur Ausübung Ihrer Rechte erreichen Sie uns unter {{ marketConfig.contactEmail }}.</p>
               </div>
             </article>
           </div>
@@ -84,6 +86,16 @@ import PageFooter from '~/components/organisms/PageFooter.vue'
 
 export default {
   components: { PageHeader, PageFooter },
+  computed: {
+    // The market's own data-protection mailbox, or null. config/edition.js
+    // records Norway as publishing none, and a null must NOT quietly borrow
+    // Switzerland's address -- this page would then tell a Norwegian visitor to
+    // write to a Swiss controller. Null renders an honest marker instead, and
+    // the closing paragraph falls back to the market's general contact address.
+    privacyEmail () {
+      return this.marketConfig.privacyEmail
+    }
+  },
   head () {
     return {
       title: 'Datenschutzerklärung - Okam',
