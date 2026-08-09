@@ -5711,9 +5711,27 @@ export default {
   assistant_card_decisionFailed: 'Wir konnten das nicht abschliessen. Bitte erneut versuchen.',
 
   // ---- Okam fragen: Ablehnungen aus der Staging-Spine -------------------------------------------
+  // Eine Zeile pro Konfliktcode. `unresolvable` ist der Rückfall für einen Code, den dieses Bundle
+  // nicht kennt. Die Regel dahinter steht in `no.ts`.
   assistant_conflict_kindDisabled: 'Diese Art von Änderung ist für die Filiale gerade abgeschaltet. Der Vorschlag bleibt bestehen und kann genehmigt werden, sobald sie wieder eingeschaltet ist.',
   assistant_conflict_unresolvable: 'Dieser Vorschlag wartet nicht mehr auf Sie. Ihr Klick hat gerade nichts geändert — der Vorschlag kann aber bereits durchgeführt worden sein. Die Meldung des Servers unten sagt, was tatsächlich geschehen ist.',
+  assistant_conflict_alreadyResolved: 'Dieser Vorschlag ist bereits entschieden, Ihr Klick hat gerade nichts geändert. Die Meldung des Servers unten sagt, was geschehen ist.',
+  assistant_conflict_alreadyExecuted: 'Dieser Vorschlag wurde bereits durchgeführt. Die Änderung ist aktiv, und Ihr Klick hat gerade nichts geändert.',
+  assistant_conflict_alreadyRejected: 'Dieser Vorschlag wurde bereits abgelehnt. Eine Ablehnung lässt sich nicht rückgängig machen, er kann also nachträglich nicht genehmigt werden.',
+  assistant_conflict_alreadyFailed: 'Dieser Vorschlag wurde während der Ausführung gestoppt und kann nicht erneut genehmigt werden.',
+  assistant_conflict_expired: 'Der Vorschlag ist abgelaufen, bevor er genehmigt wurde. Es wurde nichts geändert.',
+  assistant_conflict_lostTheClaim: 'Jemand anderes führt diesen Vorschlag gerade aus. Warten Sie einen Moment und sehen Sie in der Liste nach dem Ergebnis.',
+  assistant_conflict_missingApprover: 'Wir konnten nicht erfassen, wer genehmigt hat, deshalb wurde der Vorschlag gestoppt. Es wurde nichts geändert.',
+  assistant_conflict_contractMoved: 'Dieser Vorschlag wurde gegen eine ältere Version der Aktion erstellt und kann nicht ausgeführt werden. Es wurde nichts geändert.',
+  assistant_conflict_stale: 'Die Grundlage hat sich seit der Erstellung des Vorschlags geändert, die Zahlen passen nicht mehr zur Filiale. Es wurde nichts geändert — bitten Sie um einen neuen Vorschlag.',
+  assistant_conflict_terminalWriteRefused: 'Wir konnten nicht bestätigen, dass die Änderung durchgeführt wurde, deshalb wurde alles zurückgesetzt. Es wurde nichts geändert.',
+  assistant_conflict_repropose: 'Neuen Vorschlag anfordern',
   assistant_conflict_relist: 'Die Liste wurde neu gelesen, der angezeigte Status ist also der aktuelle.',
+
+  // ---- Okam fragen: die Aktionsarten ------------------------------------------------------------
+  assistant_kind_menu_price_change: 'Preisänderung in der Speisekarte',
+  assistant_kind_discount_create: 'Neuer Rabatt',
+  assistant_kind_store_hours_change: 'Änderung der Öffnungszeiten',
 
   assistant_origin_okam: 'Von Okam',
   assistant_origin_socialchef: 'Von SocialChef',

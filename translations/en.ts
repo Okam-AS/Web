@@ -5701,9 +5701,27 @@ export default {
   assistant_card_decisionFailed: 'We could not complete that. Try again.',
 
   // ---- Ask Okam: refusals from the staging spine ------------------------------------------------
+  // One line per conflict code. `unresolvable` is the fallback for a code this bundle does not know.
+  // See the note in `no.ts` for the rule these follow.
   assistant_conflict_kindDisabled: 'This kind of change is switched off for the store right now. The proposal is still here, and can be approved if it is switched back on.',
   assistant_conflict_unresolvable: 'This proposal is no longer waiting for you. Your click just now changed nothing — but the proposal may already have been carried out. The message from the server below says what actually happened.',
+  assistant_conflict_alreadyResolved: 'This proposal has already been settled, so your click just now changed nothing. The message from the server below says what happened.',
+  assistant_conflict_alreadyExecuted: 'This proposal has already been carried out. The change is live, and your click just now changed nothing.',
+  assistant_conflict_alreadyRejected: 'This proposal was already turned down. A rejection cannot be undone, so it cannot be approved afterwards.',
+  assistant_conflict_alreadyFailed: 'This proposal stopped while it was being applied, and cannot be approved again.',
+  assistant_conflict_expired: 'The proposal ran out before it was approved. Nothing was changed.',
+  assistant_conflict_lostTheClaim: 'Someone else is carrying out this proposal right now. Wait a moment, and look for the result in the list.',
+  assistant_conflict_missingApprover: 'We could not record who approved this, so the proposal was stopped. Nothing was changed.',
+  assistant_conflict_contractMoved: 'This proposal was made against an older version of the action, and cannot be carried out. Nothing was changed.',
+  assistant_conflict_stale: 'The basis has changed since the proposal was made, so the numbers no longer match the store. Nothing was changed — ask for a new proposal.',
+  assistant_conflict_terminalWriteRefused: 'We could not confirm that the change went through, so everything was rolled back. Nothing was changed.',
+  assistant_conflict_repropose: 'Ask for a new proposal',
   assistant_conflict_relist: 'The list has been read again, so the status you see now is the current one.',
+
+  // ---- Ask Okam: the action kinds ---------------------------------------------------------------
+  assistant_kind_menu_price_change: 'Menu price change',
+  assistant_kind_discount_create: 'New discount',
+  assistant_kind_store_hours_change: 'Opening hours change',
 
   assistant_origin_okam: 'From Okam',
   assistant_origin_socialchef: 'From SocialChef',

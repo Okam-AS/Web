@@ -6,7 +6,9 @@
           {{ title || $i('assistant_card_untitled') }}
         </h3>
         <div class="proposal-card__stamps">
-          <span v-if="kind" class="proposal-card__stamp">{{ kind }}</span>
+          <!-- The KIND, in the merchant's language. It used to render the wire identifier, so a
+               Norwegian restaurateur read `menu_price_change` on a card about their own prices. -->
+          <span v-if="kind" class="proposal-card__stamp">{{ kindLabel }}</span>
           <!-- The origin is a SOURCE LABEL and nothing more. A SocialChef-staged row and a
                chat-staged row are the same spine, the same approval and the same card; giving one
                of them its own chrome would teach a merchant that the two are different kinds of
@@ -14,7 +16,18 @@
           <span v-if="origin" class="proposal-card__stamp proposal-card__stamp--origin">
             {{ originLabel }}
           </span>
-          <span v-if="statusLabel" class="proposal-card__stamp proposal-card__stamp--status">
+          <!-- ⚠️ THE STAMP IS TONED BY STATUS, AND IT WAS NOT. One green style served every status,
+               so under the inbox's "All" filter a Failed row's "Stoppet" and a Rejected row's
+               "Avvist" wore the SAME success green as "Gjennomført" — the failure-in-success-green
+               class already fixed one selector away, on the decided line. The merchant reads colour
+               before words; a stopped price change that looks like a completed one is the version
+               of this screen that gets believed. -->
+          <span
+            v-if="statusLabel"
+            class="proposal-card__stamp proposal-card__stamp--status"
+            :class="'is-' + statusTone"
+            data-test="status-stamp"
+          >
             {{ statusLabel }}
           </span>
         </div>
@@ -107,13 +120,20 @@
       <p class="proposal-card__conflict-line">
         {{ $i(conflict.key) }}
       </p>
-      <!-- The server's own words, verbatim and marked as the server's. They are English prose built
-           by `StagedActionService.Describe` and they are the ONLY place the row's real status is
-           named — the 409 body carries no status member. Shown rather than parsed. -->
+      <!-- The server's own words, verbatim and marked as the server's. English prose built by
+           `StagedActionService`. It is no longer the only place the row's real status is named —
+           the 409 now carries `status`, and the translated line above already reads it — but it is
+           still the only place the server EXPLAINS itself, so it is shown rather than parsed. -->
       <p v-if="conflict.serverMessage" class="proposal-card__conflict-server">
         {{ conflict.serverMessage }}
       </p>
-      <p class="proposal-card__conflict-hint">
+      <!-- ⚠️ ONLY WHERE A LIST WAS ACTUALLY RE-READ. This sentence says "the list has been read
+           again, so the status you see now is the current one" — which is true on the inbox, where
+           `PendingActions` awaits `load()` before it renders any refusal, and FALSE anywhere else.
+           It used to be unconditional, so the moment a second caller passed a `conflict` (the chat
+           thread now does) the card would have reassured a merchant about a re-read that never
+           happened, next to a decision about money. A caller states it or does not get it. -->
+      <p v-if="relisted" class="proposal-card__conflict-hint">
         {{ $i('assistant_conflict_relist') }}
       </p>
     </div>
@@ -177,7 +197,7 @@
 </template>
 
 <script>
-import { pick, pickList, oreOf, STAGED } from '~/utils/assistant/api-client';
+import { pick, pickList, oreOf, parseServerDate, STAGED } from '~/utils/assistant/api-client';
 
 // Recomputed on a timer so the countdown is a countdown rather than a value that was true when the
 // page loaded. One second is the smallest unit the label shows.
@@ -190,6 +210,40 @@ const TICK_MS = 1000;
 // vocabularies live here.
 const KNOWN_ORIGINS = ['okam', 'socialchef', 'mcp', 'chat'];
 const KNOWN_STATUSES = ['staged', 'executed', 'rejected', 'expired', 'executing', 'failed'];
+
+// THE KINDS THIS SCREEN HAS WORDS FOR — the three okam actually executes, registered at
+// `StagedActionServiceCollectionExtensions.cs:17-19` and each proved to resolve back to its own
+// executor by `StagedActionKindRegistry`'s constructor.
+//
+// ⚠️ AN UNKNOWN KIND MUST DEGRADE TO UGLY, NEVER TO EMPTY, which is why this enumerates rather than
+// mapping through a dictionary lookup. More kinds are coming (a Margin lane is building two), and
+// the okam↔SocialChef card schema already admits four more that this spine does not execute
+// (`post_approval`, `campaign_approval`, `ad_spend_change`, `idea`). Every one of them renders here
+// as its raw wire identifier — visibly untranslated, which is the honest rendering of "the server
+// sent something newer than this screen" — and a card that arrived with a kind on it never loses
+// the stamp. A blank would read as "no kind", which is a different and false claim.
+const KNOWN_KINDS = ['menu_price_change', 'discount_create', 'store_hours_change'];
+
+// The stamp's tone per status, in the SAME vocabulary as the decided line and the inbox banner
+// (`is-ok` / `is-refused`), because they are three renderings of one fact and a merchant should not
+// have to learn two colour languages on one screen.
+//
+//   ok        Executed   — the change is live. The one status that has earned the success green.
+//   refused   Failed     — it stopped mid-flight and the prices may be half-written.
+//   neutral   Rejected, Expired — nothing happened and nothing went wrong. Neither green nor red:
+//             a turned-down proposal is not a failure, and painting it red would invent an alarm.
+//   waiting   Staged, Executing — still in motion, nothing settled yet.
+//
+// A status this screen does not know tones NEUTRAL, refusing-by-default in the same spirit as
+// `isTerminal`: an unrecognised word must never be able to arrive wearing success green.
+const STATUS_TONES = {
+  executed: 'ok',
+  failed: 'refused',
+  rejected: 'neutral',
+  expired: 'neutral',
+  staged: 'waiting',
+  executing: 'waiting'
+};
 
 export default {
   name: 'ProposalCardView',
@@ -226,6 +280,20 @@ export default {
     conflict: {
       type: Object,
       default: null
+    },
+    /**
+     * Did the caller RE-READ the list before rendering that conflict?
+     *
+     * Gates one sentence — "the list has been read again, so the status you see now is the current
+     * one" — and it exists because that sentence is a claim about the CALLER's behaviour that this
+     * component cannot observe. `PendingActions` awaits `load()` on every decision failure, so it
+     * says true; the chat thread has no list to re-read, so it does not. Defaulting to false means
+     * a caller that has not thought about it makes no promise, which is the only safe default for a
+     * reassurance printed beside a money decision.
+     */
+    relisted: {
+      type: Boolean,
+      default: false
     },
     busy: {
       type: Boolean,
@@ -329,6 +397,18 @@ export default {
       const status = String(this.liveStatus).toLowerCase();
       return !KNOWN_STATUSES.includes(status) ? this.liveStatus : this.$i('assistant_status_' + status);
     },
+    // Same enumerated rule as `originLabel` and `statusLabel`, for the same two reasons: a lookup
+    // MISS is a property of the dictionary rather than of the value, and the house test mock
+    // (`$i: key => key`) makes every key look missing — so an echo test would invert under it and
+    // silently render every kind raw in tests while looking translated in the browser.
+    kindLabel () {
+      const kind = String(this.kind || '').toLowerCase();
+      return !KNOWN_KINDS.includes(kind) ? this.kind : this.$i('assistant_kind_' + kind);
+    },
+    statusTone () {
+      if (!this.liveStatus) { return null; }
+      return STATUS_TONES[String(this.liveStatus).toLowerCase()] || 'neutral';
+    },
     // Everything except `Staged` is terminal for the merchant's purposes: `Executing` is a CLAIMED
     // row that this person can no longer approve or turn down either, and it is the one non-final
     // state, so listing the four finals would leave it decidable. Stated as "not Staged" so a status
@@ -336,8 +416,36 @@ export default {
     isTerminal () {
       return String(this.liveStatus || STAGED).toLowerCase() !== STAGED.toLowerCase();
     },
+    /**
+     * ⚠️ AN ELAPSED COUNTDOWN IS A REFUSAL THE CLIENT CAN SEE COMING.
+     *
+     * `ApproveAsync` refuses a proposal whose `ExpiresAt` has passed — `if (action.Status ==
+     * Expired || action.ExpiresAt < DateTime.Now)` at `StagedActionService.cs:170-174` — and it
+     * refuses it whether or not the sweeper has moved the row's status yet. So the row can still
+     * READ `Staged` while every approve of it is already a 409.
+     *
+     * The chat thread is where this bit: a card there has no live status at all (the frozen card
+     * carries none — `ProposalCardModel` has no `Status` member, deliberately), so it stayed
+     * decidable for as long as the tab was open, and a merchant returning to a two-day-old thread
+     * got a live "Godkjenn" that bounced off a generic conflict. "This expired" is mundane; the
+     * generic sentence is not, and the merchant was handed the frightening version of a boring fact.
+     *
+     * FIXED WITH THE CLOCK, NOT WITH A POLL, and that is a deliberate choice. The alternative was to
+     * give thread cards a live status the way the inbox has one, which means `GET /staged-actions/
+     * {id}` per card per tick — a second poller over the same rows as `PendingActions`, able to
+     * disagree with it, for a state change that in practice only ever arrives by expiry or by the
+     * merchant acting on the inbox tab. The TTL is 48 hours and is already on the card; the
+     * countdown is already recomputed every second for the label. This reads the value that is
+     * there instead of fetching one that is already there.
+     *
+     * It corrects the INBOX too, where a row can sit at `Staged` past its expiry until the sweeper
+     * runs, and the same button was equally dead.
+     */
+    isExpired () {
+      return this.remainingMs !== null && this.remainingMs <= 0;
+    },
     canDecide () {
-      return this.decidable && !this.isTerminal;
+      return this.decidable && !this.isTerminal && !this.isExpired;
     },
     // The count the confirm speaks with. `AffectedCount` when the server sent one; otherwise the
     // sample length, which for a card with no truncation IS the whole set. Never invented.
@@ -355,15 +463,28 @@ export default {
         ? this.$i('assistant_card_confirmApproveCounted', { count: this.decisionCount })
         : this.$i('assistant_card_confirmApprove');
     },
+    /**
+     * ⚠️ `parseServerDate`, NOT `new Date`. The two routes that feed this card serialise the SAME
+     * field differently — `/chat/ask` with an offset (`Kind = Local`), everything read back out of
+     * SQL with none (`Kind = Unspecified`) — and ES2015 parses an offset-less date-time as
+     * BROWSER-local, so an inbox row's expiry silently shifted by the merchant's distance from Oslo.
+     * The helper reads the offset-less form as Oslo, which is what it has always meant. See its
+     * comment in `api-client.js` for the measurement and for why the real fix is the backend's.
+     *
+     * This is the ONE field parsed that way, because it is the one differenced against `Date.now()`
+     * — and, since `isExpired`, the one that decides whether a button exists.
+     */
     expiresAt () {
-      const raw = pick(this.card, 'expiresAt');
-      if (!raw) { return null; }
-      const parsed = new Date(raw);
-      return isNaN(parsed.getTime()) ? null : parsed;
+      return parseServerDate(pick(this.card, 'expiresAt'));
+    },
+    // Derived ONCE. The countdown, its colour and `isExpired` are three readings of one number, and
+    // computing it three times is three chances for them to disagree about whether it has run out.
+    remainingMs () {
+      return this.expiresAt ? this.expiresAt.getTime() - this.now : null;
     },
     expiry () {
-      if (!this.expiresAt) { return null; }
-      const remaining = this.expiresAt.getTime() - this.now;
+      if (this.remainingMs === null) { return null; }
+      const remaining = this.remainingMs;
       if (remaining <= 0) { return this.$i('assistant_card_expiredAlready'); }
       const totalMinutes = Math.floor(remaining / 60000);
       const hours = Math.floor(totalMinutes / 60);
@@ -373,10 +494,9 @@ export default {
       return minutes + ' min ' + seconds + ' s';
     },
     expiryClass () {
-      if (!this.expiresAt) { return null; }
-      const remaining = this.expiresAt.getTime() - this.now;
-      if (remaining <= 0) { return 'is-gone'; }
-      return remaining < 3600000 ? 'is-soon' : null;
+      if (this.remainingMs === null) { return null; }
+      if (this.remainingMs <= 0) { return 'is-gone'; }
+      return this.remainingMs < 3600000 ? 'is-soon' : null;
     }
   },
   mounted () {
@@ -466,9 +586,20 @@ export default {
   color: #4338ca;
 }
 
+/* ⚠️ THIS SELECTOR WAS A SINGLE SUCCESS GREEN FOR ALL SIX STATUSES. The tones below are the ones
+   already in use on this surface, not new colours: `is-ok` is the decided line's green, `is-refused`
+   is its red and the inbox banner's, `is-waiting` is the amber the truncation notice and the
+   recoverable conflict already wear. The base declaration is the neutral, so a stamp that somehow
+   arrives without a tone class is grey rather than green — the failure mode of this rule must not
+   be the colour that means "it worked". */
 .proposal-card__stamp--status {
-  background: #ecfdf5;
-  color: #159f63;
+  background: #f1f5f9;
+  color: #64748b;
+
+  &.is-ok { background: #ecfdf5; color: #159f63; }
+  &.is-refused { background: #FEF2F2; color: #ef4444; }
+  &.is-waiting { background: #FFF3E0; color: #92400e; }
+  &.is-neutral { background: #f1f5f9; color: #64748b; }
 }
 
 .proposal-card__expiry {

@@ -80,6 +80,7 @@
           :busy="busyId === idOf(row)"
           :conflict="conflictId === idOf(row) ? conflict : null"
           :decidable="true"
+          :relisted="true"
           @approve="onApprove"
           @reject="onReject"
         />
@@ -90,12 +91,17 @@
              applied and cannot be approved again." So the only honest affordance is composing a
              NEW ask, and that is what this offers.
 
-             ⚠️ THE REASON MAY OR MAY NOT BE ON THE WIRE. `StagedAction.FailureReason` exists on the
-             ENTITY and is written by `StagedActionService` on the way to `Failed`; a backend lane is
-             landing it on `StagedActionModel` now. Until it arrives this admits it does not know —
-             saying "we don't know why" is the truth, and a blank that reads as "no reason" is not.
-             The moment the field is on the wire the card below renders it (`cardFor` lays it over
-             the frozen detail card) and this line stops claiming ignorance. -->
+             ⚠️ THE REASON IS ON THE WIRE — THIS COMMENT USED TO SAY IT WAS "LANDING NOW". It
+             landed: `StagedActionModel.FailureReason` (`Mcp/Models/McpStagingModels.cs:164-173`) is
+             emitted on the LIST row, not merely on the single-GET, precisely so the inbox can state
+             it without a round trip. `cardFor` lays it over the frozen card and the card renders it.
+
+             The ignorance line below is therefore no longer the ordinary case; it is the fallback
+             for a row that failed without a reason the server was willing to publish. The model's
+             own comment is explicit that this is NOT the `StagedAction.FailureReason` COLUMN, which
+             holds an exception message: `StagedActionFailureReasons` is the allow-list of sentences
+             that may reach a merchant, and anything else is withheld rather than leaked. So a blank
+             here means "the server declined to say", which is exactly what the line claims. -->
         <div v-if="isFailed(row)" class="pending-actions__failed" data-test="failed-repair">
           <p class="pending-actions__failed-line">
             {{ $i('assistant_inbox_failedTitle') }}
@@ -234,8 +240,8 @@ export default {
         StoreId: pick(row, 'storeId'),
         // Laid over for the same reason as the three above: it is a property of the LIVE row and the
         // frozen card cannot carry it — a card stamped at stage time has by definition not failed
-        // yet. `pick` returns undefined when the backend does not send it, so the overlay is inert
-        // until the field lands rather than stamping a blank over anything.
+        // yet. `pick` returns undefined when the row carries no reason, so a row that has not failed
+        // (or whose reason the server withheld) stamps nothing over anything.
         FailureReason: pick(row, 'failureReason')
       });
     },
@@ -343,9 +349,15 @@ export default {
      * Approve.
      *
      * The re-entrancy guard is here and not only in the button's `disabled`, because a disabled
-     * attribute is a rendering and this call writes prices. After ANY outcome the list is re-read
-     * rather than patched in place: a 409 does not say what the row's status now is (the body
-     * carries no status member), so the only way to learn it is to ask.
+     * attribute is a rendering and this call writes prices.
+     *
+     * After ANY outcome the list is re-read rather than patched in place. The 409 DOES now name the
+     * row's status (`status` on the body — this comment used to say the opposite), and
+     * `describeConflict` reads it to tell the merchant what their proposal became. But knowing one
+     * row's status is not knowing the list's: a decision that removes a row from the `Staged` filter
+     * changes what the board should show, and patching the one row this client happens to hold would
+     * leave every other row as stale as it was. The status makes the SENTENCE accurate; the re-read
+     * is what makes the LIST accurate, and they are different jobs.
      */
     async onApprove (id) {
       if (this.busyId) { return; }

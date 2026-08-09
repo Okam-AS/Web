@@ -266,6 +266,143 @@ describe('ProposalCardView', () => {
     })
   })
 
+  // ── THE STATUS STAMP WAS GREEN FOR EVERY STATUS ────────────────────────────────────────────────
+  // One `.proposal-card__stamp--status` style, `#ecfdf5`/`#159f63`, on all six. Under the inbox's
+  // "All" filter a Failed row's "Stoppet" and a Rejected row's "Avvist" therefore wore the same
+  // success green as "Gjennomført" — the failure-in-success-green class already fixed one selector
+  // away, on the decided line. A merchant reads colour before words.
+  describe('the status stamp is toned by status', () => {
+    const stampOf = status => mountCard({ Title: 't', ProposalId: 'x' }, { status })
+      .find('[data-test="status-stamp"]')
+
+    // ⚠️ THE ONE THIS EXISTS FOR.
+    test('a Failed stamp does NOT wear the success tone', () => {
+      const stamp = stampOf('Failed')
+
+      expect(stamp.exists()).toBe(true)
+      expect(stamp.classes()).not.toContain('is-ok')
+      expect(stamp.classes()).toContain('is-refused')
+    })
+
+    test('executed is the only status that earns the success tone', () => {
+      expect(stampOf('Executed').classes()).toContain('is-ok');
+      ['Failed', 'Rejected', 'Expired', 'Staged', 'Executing'].forEach((status) => {
+        expect(stampOf(status).classes()).not.toContain('is-ok')
+      })
+    })
+
+    // Rejected and Expired are NOT failures — nothing went wrong and nothing was written — so they
+    // are neither green nor red. Painting them red would invent an alarm.
+    test('a turned-down or lapsed proposal is neutral, not an alarm', () => {
+      expect(stampOf('Rejected').classes()).toContain('is-neutral')
+      expect(stampOf('Expired').classes()).toContain('is-neutral')
+      expect(stampOf('Rejected').classes()).not.toContain('is-refused')
+    })
+
+    test('still-in-motion statuses wear the waiting amber', () => {
+      expect(stampOf('Staged').classes()).toContain('is-waiting')
+      expect(stampOf('Executing').classes()).toContain('is-waiting')
+    })
+
+    // Refusing by default, in the same spirit as `isTerminal`: a status word newer than this screen
+    // must never be able to arrive wearing the colour that means "it worked".
+    test('an unknown status tones neutral rather than green', () => {
+      const stamp = stampOf('Quarantined')
+      expect(stamp.classes()).toContain('is-neutral')
+      expect(stamp.classes()).not.toContain('is-ok')
+    })
+  })
+
+  // ── AN ELAPSED COUNTDOWN IS A REFUSAL THE CLIENT CAN SEE COMING ────────────────────────────────
+  // `ApproveAsync` refuses a proposal whose `ExpiresAt` has passed whether or not the sweeper has
+  // moved the row's status yet (`StagedActionService.cs:170-174`), so a row can READ `Staged` while
+  // every approve of it is already a 409. The chat thread is where this bit: a card there has no
+  // live status at all — `ProposalCardModel` carries no `Status` member — so it stayed decidable
+  // for as long as the tab was open, and the merchant's click bounced off a generic conflict.
+  describe('an expired card stops offering a decision', () => {
+    const ago = ms => new Date(Date.now() - ms).toISOString()
+    const ahead = ms => new Date(Date.now() + ms).toISOString()
+
+    test('a lapsed card withholds both buttons even with no live status', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x', ExpiresAt: ago(60000) })
+
+      expect(wrapper.find('[data-test="approve-open"]').exists()).toBe(false)
+      expect(wrapper.find('[data-test="reject"]').exists()).toBe(false)
+    })
+
+    test('and says so where the countdown was', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x', ExpiresAt: ago(60000) })
+      expect(wrapper.text()).toContain('assistant_card_expiredAlready')
+    })
+
+    // The guard is the CLOCK, not the status: a row still reading `Staged` past its expiry is
+    // exactly the case the sweeper has not caught up with yet.
+    test('a Staged row past its expiry is still refused', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x', ExpiresAt: ago(1) }, { status: 'Staged' })
+      expect(wrapper.find('[data-test="approve-open"]').exists()).toBe(false)
+    })
+
+    test('a card still within its TTL is untouched', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x', ExpiresAt: ahead(3600000) })
+      expect(wrapper.find('[data-test="approve-open"]').exists()).toBe(true)
+    })
+
+    // A card with no expiry at all must not be treated as expired — absent is not zero.
+    test('a card carrying no expiry is decidable', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x' })
+      expect(wrapper.find('[data-test="approve-open"]').exists()).toBe(true)
+    })
+  })
+
+  // ── THE KIND STAMP RENDERED THE WIRE IDENTIFIER ────────────────────────────────────────────────
+  describe('the kind stamp', () => {
+    test('the three kinds okam executes are translated', () => {
+      expect(mountCard({ Title: 't', Kind: 'menu_price_change' }).text())
+        .toContain('assistant_kind_menu_price_change')
+      expect(mountCard({ Title: 't', Kind: 'discount_create' }).text())
+        .toContain('assistant_kind_discount_create')
+      expect(mountCard({ Title: 't', Kind: 'store_hours_change' }).text())
+        .toContain('assistant_kind_store_hours_change')
+    })
+
+    // ⚠️ A MISSING LABEL MUST DEGRADE TO UGLY, NEVER TO EMPTY. Two Margin kinds are being built in a
+    // parallel lane and the card schema already admits four SocialChef-side ones this spine does not
+    // execute. Every one of them must still name itself on the card.
+    test('a kind this screen has no word for is shown raw, never blank', () => {
+      const wrapper = mountCard({ Title: 't', Kind: 'margin_add_supplier_price' })
+      const stamp = wrapper.find('.proposal-card__stamp')
+
+      expect(stamp.text()).toBe('margin_add_supplier_price')
+      expect(wrapper.text()).not.toContain('assistant_kind_margin_add_supplier_price')
+    })
+
+    test('a card with no kind grows no stamp at all', () => {
+      expect(mountCard({ Title: 't' }).find('.proposal-card__stamp').exists()).toBe(false)
+    })
+  })
+
+  // ── A REASSURANCE IS ONLY PRINTED WHERE IT IS TRUE ─────────────────────────────────────────────
+  // "The list has been read again, so the status you see now is the current one" is a claim about
+  // the CALLER's behaviour. `PendingActions` awaits `load()` before rendering any refusal, so it is
+  // true there. The chat thread has no list, so it is not — and this sentence used to be printed
+  // unconditionally by the component, which is a false reassurance beside a money decision.
+  describe('the re-read reassurance', () => {
+    const conflict = { key: 'assistant_conflict_stale', keepCard: false, serverMessage: 'the basis moved' }
+
+    test('is withheld from a caller that did not re-read', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x' }, { conflict })
+
+      expect(wrapper.text()).toContain('assistant_conflict_stale')
+      expect(wrapper.text()).toContain('the basis moved')
+      expect(wrapper.text()).not.toContain('assistant_conflict_relist')
+    })
+
+    test('is printed for a caller that promises it', () => {
+      const wrapper = mountCard({ Title: 't', ProposalId: 'x' }, { conflict, relisted: true })
+      expect(wrapper.text()).toContain('assistant_conflict_relist')
+    })
+  })
+
   test('the expiry countdown is cleared when the card goes away', () => {
     const clear = jest.spyOn(global, 'clearInterval')
     const wrapper = mountCard({ Title: 't', ProposalId: 'x', ExpiresAt: new Date(Date.now() + 3600000).toISOString() })
