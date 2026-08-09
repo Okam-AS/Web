@@ -1,0 +1,92 @@
+{
+  "journey": "events-stale-cause",
+  "title": "the run sheet names the cause that fired, and only that one",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T14:55:04.859Z",
+  "finishedAtUtc": "2026-08-01T14:55:06.875Z",
+  "durationMs": 2016,
+  "capabilities": [
+    "events.run-sheet.stale-cause"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3010",
+  "apiBaseUrl": "http://127.0.0.1:4010",
+  "commit": "2bc18da418fdd9a64d9011f1cdf4b33d5b2887fe",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:05.663Z",
+      "durationMs": 141,
+      "detail": "signed in as Marit",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the pipeline lists the venue's enquiries",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:05.804Z",
+      "durationMs": 10,
+      "detail": "two enquiries",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "a sheet whose proposal version moved gets the sentence it always had",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:05.814Z",
+      "durationMs": 78,
+      "detail": "Denne kjøreplanen er ikke laget fra den gjeldende tilbudsversjonen. Lag den på nytt før service.",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "an allergy recorded after composition names itself, and NOT the version",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:05.975Z",
+      "durationMs": 72,
+      "detail": "Det ble ført en opplysning om allergi eller kosthold på denne bestillingen 1. des. 2026, 12:20 — ett…",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the sheet came off the version that is still operative",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:06.047Z",
+      "durationMs": 9,
+      "detail": "Laget fra tilbudsversjon1, operative 1",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a staleness cause this screen cannot name is still a warning",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:55:06.134Z",
+      "durationMs": 651,
+      "detail": "Denne kjøreplanen er utdatert, og denne skjermen kan ikke si hvilken av opplysningene som er endret.…",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the client still derives the DIETARY cause from two published stamps",
+      "detail": "The dietary line keeps `readDietaryDrift` rather than switching to the server's cause name, because it says more than the name does: WHEN the statement was recorded, and whether it was a statement or only a note in the log. The server's `DietaryRecordedAfterComposition` is the backstop for a screen holding no event detail to compare against — without it, that case would render nothing. The version causes are NOT derived here: a mistake in that derivation shows a stale sheet as current, which is the failure this surface exists to avoid."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fevents-pipeline\" to \"/admin?redirect=%2Fadmin%2Fevents-pipeline&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fevents-pipeline\" to \"/admin?redirect=%2Fadmin%2Fevents-pipeline&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "events-stale-cause/01-the-version-sentence-on-the-sheet-it-is-true-of.png",
+    "events-stale-cause/02-the-allergy-named-as-the-cause-with-the-version-.png",
+    "events-stale-cause/03-stale-for-a-reason-this-build-cannot-name.png"
+  ],
+  "error": null
+}
