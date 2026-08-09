@@ -4458,3 +4458,5 @@
 - 2026-08-09T08:59Z · tool · raised F-THE-STANDING-LIVE-WORLD-CANNOT-READ-ITS-OWN-FLAGS (blocker): all four live-eligible journeys fail at the flag switchboard against the standing world; feature-flags/catalog and stores/1/feature-flags both answer 401 while login and GET /user answer 200
 - 2026-08-09T08:59Z · @clerk · ran the four live-eligible journeys against the standing world at api 5971: all four failed, each at the flag switchboard, artifacts committed at 1ae13f8b
 - 2026-08-09T08:59Z · @clerk · measured cause candidate: feature-flags/catalog and stores/1/feature-flags both 401 under the same bearer that got 200 from user and stores/1
+- 2026-08-09T09:02Z · @clerk · fodselsnummer finding widened: 3 checksum-valid values across 21 files, 16 already committed on wip, 5 untracked, none on the pushed trunk
+- 2026-08-09T09:02Z · @clerk · held the 5 untracked lane evidence dirs out of the commit pending the ruling; the plan and returns are committed at 3c8caee2
