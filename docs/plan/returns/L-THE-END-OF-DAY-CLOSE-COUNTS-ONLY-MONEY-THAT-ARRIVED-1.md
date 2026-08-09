@@ -1,6 +1,6 @@
 ```
 RETURN: L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED
-brief: (read in full)
+brief: cdb4f07b
 verdict: built
 evidence: backend feature/restaurant-modules d30c1c4d4 -> bcfe0d893; lanes/L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED/{before-arm.trx,tier.trx,after-arm-by-name.txt}
 log:

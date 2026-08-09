@@ -21,7 +21,16 @@ named it.
 Claim: `4967 / 2 FAILED` → `4971 / 1` → `4974 / 0`, skips **11 throughout** — the constancy of the
 skip count being what proves nothing was skipped into green.
 
-<!-- BE-ARC -->
+| arc step | claimed | measured |
+|---|---|---|
+| `8f817cbd9` (pins landed, defects live) | 4967 / 2 FAILED / 11 skipped | **Failed: 2, Passed: 4967, Skipped: 11** (Total 4980, 6 m 7 s) |
+| `7d0450a4b` (both fixes landed) | 4974 / 0 / 11 | **Passed: 4974, Failed: 0, Skipped: 11** (Total 4985, 6 m 27 s) |
+
+**Skips held at 11 at both ends — and at the tip (§7) — so nothing was skipped into green.** The
+two reds at the first step are the pins my money-fixes review handled directly pre-landing: the
+gift-card balance pin (`GiftcardBalanceTests.Passing_a_gift_card_on…`, red by design until
+`71ac73af1`) and the year-spanning invoice pin (red until `a9d408bfb`); their identities are
+corroborated by that review's own runs rather than re-extracted from this tier's log.
 
 The two reds at the arc's first step are the named pins (the gift-card copy defect and the
 year-spanning invoice), landed red by `8f817cbd9` (pos-coverage-opened) and turned green by the two
@@ -114,7 +123,15 @@ exists.**
 
 ## 7. Tiers, measured
 
-<!-- TIPS -->
+| tip | measured |
+|---|---|
+| frontend `de5e68c` | **184 suites / 4484 / 0**, `npx jest --ci`, core `a6ae241` = gitlink |
+| backend `d30c1c4d4` | **Passed: 5037, Failed: 0, Skipped: 11** (Total 5048, 6 m 39 s), from `WebApi.Tests/` with the SQL filter |
+
+Every run was preceded by its own load gate (the host oscillated to 80 twice during this lane; the
+measured phase carried per-run gates, recorded in its log: 10.21 / 10.77 / 11.43 / 10.03). The
+brief's frontend figure (183/4445 at `9d88101`) is consistent as an intermediate state; the tip has
+moved past it, and 184/4484/0 is the number a next landing should expect.
 
 ## Constraints
 

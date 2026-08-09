@@ -1,0 +1,412 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/OkamAPI-prefcookie/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/OkamAPI-prefcookie/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/OkamAPI-prefcookie/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.12]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.42]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.43]   Starting:    WebApi.Tests
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Order' has a global query filter defined and is the required end of a relationship with the entity 'CheckSplit'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Order' has a global query filter defined and is the required end of a relationship with the entity 'OrderPayment'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Order' has a global query filter defined and is the required end of a relationship with the entity 'PosSettlement'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Order' has a global query filter defined and is the required end of a relationship with the entity 'RegularDiscountUsage'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[10622]
+      Entity 'Order' has a global query filter defined and is the required end of a relationship with the entity 'WoltDeliveryInfo'. This may lead to unexpected results when the required entity is filtered out. Either configure the navigation as optional, or define matching query filters for both entities in the navigation. See https://go.microsoft.com/fwlink/?linkid=2131316 for more information.
+warn: Microsoft.EntityFrameworkCore.Model.Validation[20601]
+      The 'TerminalProvider' property 'TerminalProvider' on entity type 'Store' is configured with a database-generated default, but has no configured sentinel value. The database-generated default will always be used for inserts when the property has the value 'Auto', since this is the CLR default for the 'TerminalProvider' type. Consider using a nullable type, using a nullable backing field, or setting the sentinel value for the property to ensure the database default is used when, and only when, appropriate. See https://aka.ms/efcore-docs-default-values for more information.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (2ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 67), @p3='?', @p4='?' (Size = 38), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 73), @p3='?', @p4='?' (Size = 16), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 87), @p3='?', @p4='?' (Size = 32), @p5='?', @p6='?' (Size = 17), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 106), @p3='?', @p4='?' (Size = 19), @p5='?', @p6='?' (Size = 20), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 13), @p3='?', @p4='?' (Size = 6), @p5='?' (Size = 36), @p6='?' (Size = 8), @p7='?' (Size = 13), @p8='?', @p9='?', @p10='?' (Size = 232), @p11='?', @p12='?', @p13='?' (Size = 145), @p14='?' (Size = 11), @p15='?' (Size = 55)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictApplications" ("Id", "ApplicationType", "ClientId", "ClientSecret", "ClientType", "ConcurrencyToken", "ConsentType", "DisplayName", "DisplayNames", "JsonWebKeySet", "Permissions", "PostLogoutRedirectUris", "Properties", "RedirectUris", "Requirements", "Settings")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[62]
+      User profile is available. Using '/Users/svendaneel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+      FROM "AspNetRoles" AS "a"
+      WHERE "a"."NormalizedName" = @__normalizedName_0
+      LIMIT 1
+crit: WebApi.Program[0]
+      AppSettings:AdminUserPhoneNumber cannot name an account: it is empty or holds characters outside the set Identity allows in an account name (+0123456789), so the lookup can never match and NOBODY will ever hold PowerUserRole in this deployment. Every [Authorize(Roles = PowerUserRole)] endpoint refuses every caller and StoreAdminPolicy admits store admins only. Committed appsettings.json ships the "Set in Azure" placeholder, so an environment that does not override the value lands here: set it in Azure configuration or user secrets to the administrator's phone number in the exact form the account is registered with.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."DecisionTablesJson"
+      FROM "WorkforceRuleSetVersions" AS "w"
+      WHERE "w"."Jurisdiction" = 'NO' AND "w"."PackName" = 'NO-AML-2026-07' AND "w"."Version" = 2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (Size = 5065), @p6='?' (DbType = DateTime), @p7='?' (DbType = DateTime), @p8='?' (Size = 6), @p9='?' (Size = 2), @p10='?' (Size = 14), @p11='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "WorkforceRuleSetVersions" ("Id", "CounselSignatureRef", "CounselSignedAtUtc", "CounselSignedBy", "CreatedAtUtc", "DecisionTablesJson", "EffectiveFromUtc", "EffectiveToUtc", "EnforcementMode", "Jurisdiction", "PackName", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "GrowthConsentTextVersions" AS "g"
+          WHERE "g"."Locale" = 'nb-NO')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@p0='?' (DbType = Boolean), @p1='?' (DbType = DateTimeOffset), @p2='?' (Size = 5), @p3='?' (Size = 152), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthConsentTextVersions" ("CoversOpenMeasurement", "EffectiveAt", "Locale", "Text", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4)
+      RETURNING "Id";
+warn: WebApi[0]
+      Seeded the SHIPPED BASELINE Growth consent text for locale nb-NO as v1. This wording is COUNSEL-UNSIGNED: guests are now being shown, and recorded as agreeing to, copy no human has signed off. Publish reviewed wording via POST /v1/growth/consent-texts (PowerUser) — it becomes a NEW version and v1 stays byte-unchanged, because live receipts pin it.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+warn: WebApi.Services.Growth.GrowthAddressProtector[0]
+      GROWTH ROOT SECRET FALLBACK: Growth:RootSecret is not set; deriving the Growth crypto root from AppSettings:Secret (the JWT signing secret). This is a DEV/DARK-ONLY fallback — a JWT-secret rotation would break Growth HMAC lookup + decryption and RE-OPEN suppressed addresses (GDPR §13.4). Before enabling Growth for pilot, set Growth:RootSecret to the current AppSettings:Secret value and freeze it.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 5), @p1='?' (DbType = Int64), @p2='?' (DbType = DateTimeOffset), @p3='?' (Size = 10), @p4='?' (DbType = Int32), @p5='?' (Size = 71), @p6='?' (DbType = DateTimeOffset)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthPreferenceTokens" ("Channel", "ContactPointId", "ExpiresAt", "Purpose", "StoreId", "TokenHash", "UsedAt")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+      RETURNING "Id";
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - application/json;+charset=utf-8 55
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "OpenSession", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] OpenSession(WebApi.Models.Growth.GrowthPreferenceSessionRequest) on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__hash_0='?' (Size = 71)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."Channel", "g"."ContactPointId", "g"."ExpiresAt", "g"."Purpose", "g"."StoreId", "g"."TokenHash", "g"."UsedAt"
+      FROM "GrowthPreferenceTokens" AS "g"
+      WHERE "g"."TokenHash" = @__hash_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__now_1='?' (DbType = DateTimeOffset), @__record_Id_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+      UPDATE "GrowthPreferenceTokens" AS "g"
+      SET "UsedAt" = @__now_1
+      WHERE "g"."Id" = @__record_Id_0 AND "g"."UsedAt" IS NULL
+warn: Microsoft.AspNetCore.Http.ResponseCookies[1]
+      The cookie 'growth_pref_session' has set 'SameSite=None' and must also set 'Secure'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 19.6649ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Growth.GrowthPreferenceSessionResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) in 46.0992ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - 200 141 application/json;+charset=utf-8 142.8950ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetPreferences", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPreferences() on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) - Validation state: Valid
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 1.3453ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'WebApi.Models.Growth.GrowthErrorEnvelope'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) in 4.7331ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - 401 121 application/json;+charset=utf-8 13.4572ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetPreferences", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPreferences() on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) - Validation state: Valid
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.4288ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'WebApi.Models.Growth.GrowthErrorEnvelope'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) in 2.0879ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - 401 121 application/json;+charset=utf-8 5.2200ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - - -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetPreferences", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPreferences() on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__contactPointId_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."AddressVersion", "g"."Channel", "g"."CreatedAt", "g"."EncryptedAddress", "g"."HmacKeyVersion", "g"."LookupHmac", "g"."Provenance", "g"."VerificationState"
+      FROM "GrowthContactPoints" AS "g"
+      WHERE "g"."Id" = @__contactPointId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__contactPointId_0='?' (DbType = Int64), @__storeId_1='?' (DbType = Int32), @__channel_2='?' (Size = 5), @__purpose_3='?' (Size = 10)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."Action", "g"."CaptureSource", "g"."Channel", "g"."ConsentTextVersionId", "g"."ContactPointId", "g"."EvidenceJson", "g"."LawfulBasis", "g"."OccurredAt", "g"."Purpose", "g"."StoreId"
+      FROM "GrowthConsentReceipts" AS "g"
+      WHERE "g"."ContactPointId" = @__contactPointId_0 AND "g"."StoreId" = @__storeId_1 AND "g"."Channel" = @__channel_2 AND "g"."Purpose" = @__purpose_3
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__contact_Channel_0='?' (Size = 5), @__candidateHmacs_1='?' (Size = 68)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id"
+      FROM "GrowthContactPoints" AS "g"
+      WHERE "g"."Channel" = @__contact_Channel_0 AND "g"."LookupHmac" IN (
+          SELECT "c"."value"
+          FROM json_each(@__candidateHmacs_1) AS "c"
+      )
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__siblingIds_0='?' (Size = 3)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."ContactPointId", "g"."OccurredAt", "g"."Reason", "g"."Scope", "g"."Source", "g"."StoreId"
+      FROM "GrowthSuppressions" AS "g"
+      WHERE "g"."ContactPointId" IN (
+          SELECT "s"."value"
+          FROM json_each(@__siblingIds_0) AS "s"
+      )
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__contactPointId_0='?' (DbType = Int64), @__storeId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."CreatedAt"
+      FROM "GrowthSendIntents" AS "g"
+      INNER JOIN "GrowthDispatchRuns" AS "g0" ON "g"."DispatchRunId" = "g0"."Id"
+      INNER JOIN "GrowthNewsletterVersions" AS "g1" ON "g0"."NewsletterVersionId" = "g1"."Id"
+      INNER JOIN "GrowthNewsletters" AS "g2" ON "g1"."NewsletterId" = "g2"."Id"
+      WHERE "g"."ContactPointId" = @__contactPointId_0 AND "g2"."StoreId" = @__storeId_1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 56.8498ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Growth.GrowthPreferenceStateResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi) in 58.9113ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.GetPreferences (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/growth/preference-session/preferences - 200 95 application/json;+charset=utf-8 59.4721ms
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 5), @p1='?' (DbType = Int64), @p2='?' (DbType = DateTimeOffset), @p3='?' (Size = 10), @p4='?' (DbType = Int32), @p5='?' (Size = 71), @p6='?' (DbType = DateTimeOffset)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthPreferenceTokens" ("Channel", "ContactPointId", "ExpiresAt", "Purpose", "StoreId", "TokenHash", "UsedAt")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+      RETURNING "Id";
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - application/json;+charset=utf-8 55
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "OpenSession", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] OpenSession(WebApi.Models.Growth.GrowthPreferenceSessionRequest) on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__hash_0='?' (Size = 71)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."Channel", "g"."ContactPointId", "g"."ExpiresAt", "g"."Purpose", "g"."StoreId", "g"."TokenHash", "g"."UsedAt"
+      FROM "GrowthPreferenceTokens" AS "g"
+      WHERE "g"."TokenHash" = @__hash_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__now_1='?' (DbType = DateTimeOffset), @__record_Id_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+      UPDATE "GrowthPreferenceTokens" AS "g"
+      SET "UsedAt" = @__now_1
+      WHERE "g"."Id" = @__record_Id_0 AND "g"."UsedAt" IS NULL
+warn: Microsoft.AspNetCore.Http.ResponseCookies[1]
+      The cookie 'growth_pref_session' has set 'SameSite=None' and must also set 'Secure'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.943ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Growth.GrowthPreferenceSessionResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) in 3.5795ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - 200 141 application/json;+charset=utf-8 4.0085ms
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 5), @p1='?' (DbType = Int64), @p2='?' (DbType = DateTimeOffset), @p3='?' (Size = 10), @p4='?' (DbType = Int32), @p5='?' (Size = 71), @p6='?' (DbType = DateTimeOffset)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthPreferenceTokens" ("Channel", "ContactPointId", "ExpiresAt", "Purpose", "StoreId", "TokenHash", "UsedAt")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6)
+      RETURNING "Id";
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - application/json;+charset=utf-8 55
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "OpenSession", controller = "GrowthPreference"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] OpenSession(WebApi.Models.Growth.GrowthPreferenceSessionRequest) on controller WebApi.Controllers.GrowthPreferenceController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__hash_0='?' (Size = 71)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."Id", "g"."Channel", "g"."ContactPointId", "g"."ExpiresAt", "g"."Purpose", "g"."StoreId", "g"."TokenHash", "g"."UsedAt"
+      FROM "GrowthPreferenceTokens" AS "g"
+      WHERE "g"."TokenHash" = @__hash_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__now_1='?' (DbType = DateTimeOffset), @__record_Id_0='?' (DbType = Int64)], CommandType='Text', CommandTimeout='30']
+      UPDATE "GrowthPreferenceTokens" AS "g"
+      SET "UsedAt" = @__now_1
+      WHERE "g"."Id" = @__record_Id_0 AND "g"."UsedAt" IS NULL
+warn: Microsoft.AspNetCore.Http.ResponseCookies[1]
+      The cookie 'growth_pref_session' has set 'SameSite=None' and must also set 'Secure'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.177ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Growth.GrowthPreferenceSessionResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi) in 2.452ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GrowthPreferenceController.OpenSession (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/growth/preference-sessions - 200 141 application/json;+charset=utf-8 3.3838ms
+[xUnit.net 00:00:06.84]     WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_cross_site_cookie_keeps_every_other_protection_the_strict_one_had [FAIL]
+[xUnit.net 00:00:06.84]       SameSite=None is discarded by a browser unless the cookie is Secure
+[xUnit.net 00:00:06.84]       Expected: True
+[xUnit.net 00:00:06.84]       Actual:   False
+[xUnit.net 00:00:06.84]       Stack Trace:
+[xUnit.net 00:00:06.84]         /Users/svendaneel/okam/OkamAPI-prefcookie/WebApi.Tests/Wire/GrowthPreferenceSessionCookieWireTests.cs(95,0): at WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_cross_site_cookie_keeps_every_other_protection_the_strict_one_had()
+[xUnit.net 00:00:06.84]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:06.87]   Finished:    WebApi.Tests
+  Passed WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_signed_double_submit_token_is_what_authorizes_a_session_call_now_that_the_browser_does_not [321 ms]
+  Passed WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_session_cookie_a_guest_receives_can_be_sent_from_another_site [10 ms]
+  Failed WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_cross_site_cookie_keeps_every_other_protection_the_strict_one_had [9 ms]
+  Error Message:
+   SameSite=None is discarded by a browser unless the cookie is Secure
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Wire.GrowthPreferenceSessionCookieWireTests.The_cross_site_cookie_keeps_every_other_protection_the_strict_one_had() in /Users/svendaneel/okam/OkamAPI-prefcookie/WebApi.Tests/Wire/GrowthPreferenceSessionCookieWireTests.cs:line 95
+--- End of stack trace from previous location ---
+
+Test Run Failed.
+Total tests: 3
+     Passed: 2
+     Failed: 1
+ Total time: 7.3319 Seconds

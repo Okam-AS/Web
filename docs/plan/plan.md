@@ -15537,7 +15537,6 @@ class: node
 owner: agent
 exit: a journey artifact for a chef enters an ingredient and a supplier price records backend live and status passed, and its build stamp names a commit, so the walk is a person's path through the shipped code rather than a rehearsal against a stand-in
 agent: live-margin
-needs: F-SQL-HEADROOM
 
 **Thirty-five of the estate's thirty-eight captures drive a fixture.** Three drive the real backend. **That
 is the gap between a module that tests green and a module somebody can use** — and it is what C5 was written
@@ -15593,12 +15592,11 @@ The lane claimed nothing about memory it could not re-read, and named **the slot
 block.
 
 ### Lane L-LIVE-WALK-EVENTS — the booking to the settlement runs against the real backend, not a fixture
-state: open
+state: running
 class: node
 owner: agent
 exit: a journey artifact for a host takes a public enquiry through a deposit to a settled statement records backend live and status passed, and its build stamp names a commit, so the walk is a person's path through the shipped code rather than a rehearsal against a stand-in
-agent: live-events
-needs: F-SQL-HEADROOM
+agent: clerk-browser
 
 **Thirty-five of the estate's thirty-eight captures drive a fixture.** Three drive the real backend. **That
 is the gap between a module that tests green and a module somebody can use** — and it is what C5 was written
@@ -23913,12 +23911,13 @@ phone field or the push handle; the gift-card sites are generic `LogWarning(ex, 
 a value only if an exception message embedded one.
 
 ### Lane L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED — the same defect one surface over, and this one is live
-state: running
+state: built-unverified
 class: node
 owner: agent
 dir: ../OkamAPI-modules
 exit: no end-of-day close counts a company-account sale as received, shown by a test that reds when CompanyAccount falls into the default bucket, with the non-SQL tier green at the composed tip
 agent: L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED
+evidence: backend feature/restaurant-modules d30c1c4d4 -> bcfe0d893; lanes/L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED/{before-arm.trx,tier.trx,after-arm-by-name.txt}
 
 **The X/Z report was fixed today. The end-of-day close has the identical defect and nobody has touched it.**
 `EodService` buckets `PaymentType.CompanyAccount` into its **`default` arm**, so **the close counts a credit
@@ -24214,11 +24213,13 @@ guard if it lands** — re-read the trunk in the same command as the `git branch
 `--detach`.** Never `pkill`. **Do not push.** Backend trunk is `ada218783`.
 
 ### Lane L-THE-EVENTS-OUTBOX-BACKLOG-HAS-NO-CEILING — a deliberate retention choice, measured rather than assumed
-state: open
+state: verified
 class: analysis
 owner: agent
 dir: ../OkamAPI-modules
 exit: docs/plan/artifacts/events-outbox-retention.md states what bounds the withheld backlog, what it costs at a named store count and duration, and whether any arm reds when a ceiling is broken
+agent: a400093a
+evidence: docs/plan/artifacts/events-outbox-retention.md
 
 **The counter is bounded; the backlog it counts is not.** A lane measured `StoresWithheld` as bounded by
 fleet size by construction — and found, separately, that a withheld store's rows are **left exactly as
@@ -24250,7 +24251,8 @@ not repair.** **Gate on `uptime` — hold below 13.** **Do not move the trunk. D
 is `ada218783`.
 
 ### Lane L-THE-WIREHOST-CAN-MINT-AN-OPENIDDICT-PRINCIPAL — the harness the aborted lane costed out
-state: running
+state: open
+needs: L-THE-WIREHOST-SHARES-A-CONNECTION-AND-DEADLOCKS-ITSELF
 class: node
 owner: agent
 dir: ../OkamAPI-modules
@@ -24298,12 +24300,13 @@ in the same command as the `git branch -f`; **worktree `--detach`.** Never `pkil
 Backend trunk is `ada218783`.
 
 ### Lane L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED — 133 lanes hold evidence the tool cannot read
-state: running
+state: verified
 class: analysis
 owner: agent
 dir: .
 exit: docs/plan/artifacts/exits-that-name-their-file.md states, per built-unverified lane, whether its exit was amended to name an artifact the lane body designated BEFORE the work, or was left alone with the reason, with the count of each and the count plan verify then accepted
 agent: a400093a
+evidence: docs/plan/artifacts/exits-that-name-their-file.md
 
 **133 lanes sit at `built-unverified` and the measurement of why is already done — by me, not by you.** Run
 `plan verify` against each lane's recorded evidence and the refusals sort into five classes:
@@ -24350,6 +24353,665 @@ same unproven claim in a new place. **State the count accepted and the count sti
 **Boundaries.** You may edit `## Lanes` exit lines and your artifact — **nothing else in `plan.md`**, no
 lane bodies, no `state:` lines, no decisions, no flags. **Never `plan accept`.** **Do not move any trunk. Do
 not push.** Backend trunk is `28e60e6b8`.
+
+### Lane L-A-MONTH-OLD-PROPOSAL-LINK-SAYS-WHY-IT-REFUSED — a refusal with no reason is a support call
+state: verified
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/artifacts/superseded-link-refusal.md records what the guest sees when a superseded proposal link is opened, and an arm reds if that refusal stops naming its reason, with the mutation named and an executed-test count
+agent: a400093a
+evidence: docs/plan/artifacts/superseded-link-refusal.md
+
+**A lane measured the Events backlog and found the guest cost is confusion, not money.** A withheld
+proposal link delivered a month late lands on a **refusal, not a stale price** —
+`EventsProposalService.cs:415` throws `ProposalSuperseded()`. **That is the system working**, and it is why
+this is a small lane rather than an alarm.
+
+**But nobody has read what the guest actually sees.** A throw is a server fact. **Read the surface**: what
+reaches the browser when that exception fires — a status code, a page, a sentence in Norwegian, or a stack
+of nothing. **Write the sentence the guest reads, verbatim, in the artifact.** If there is no sentence, say
+that plainly; *"the guest sees an untranslated 500"* is a finding worth more than an arm.
+
+**Then pin the reason, not the refusal.** An arm asserting only that the link fails would stay green if the
+message degraded to a bare error — **the refusal is already safe; the reason is what is unprotected.**
+Mutate whatever carries the reason and watch an arm red.
+
+**Do not add an expiry, a cleanup job, or a ceiling.** A sibling measured the accrual — **~650 rows in a
+month at 50 bookings a week, cleared in about a minute and three quarters at 15 s × 100** — and ruled the
+retention defensible on volume. **This lane does not reopen that.**
+
+**Do not widen into the drain or the adapter.** Neither checks a row's age and neither should; the question
+here is the guest-facing text on one refusal path.
+
+**If the refusal already names its reason and an arm already pins it, say so and stop.** A lane that
+measures an existing guard and reports it intact is a result — this program retired a false finding tonight
+that a five-minute reproduction would have killed at birth.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert by name from a `--logger trx` and carry the executed count** — a
+mutation that reds nothing means your run executed nothing until you disprove it. **Assert `WebApi.dll`'s
+mtime MOVES.** **Gate on `uptime` — hold below 13, re-read before each run.** **Restore `run-sheet.json`
+and `run-sheet.md`; never `git add -A`.** **The trunk is checked out in `../OkamAPI-modules`, so
+`git branch -f` refuses** — fast-forward that checkout with `--ff-only`, which is itself the guard, after
+re-reading the ref in the same command. Never `pkill`. **Do not push.** Backend trunk is **`28e60e6b8`**.
+
+### Lane L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK — fifteen proofs a stranger cannot open
+state: verified
+class: node
+owner: agent
+dir: .
+exit: docs/plan/artifacts/evidence-recovered-to-the-trunk.md names each of the twenty-one nowhere-path lanes as recovered onto a trunk with the commit, or as destroyed with the reason, with the count of each and the count plan verify then accepted
+agent: a400093a
+retracted: brief predates the correction folded into the lane body
+evidence: docs/plan/artifacts/evidence-recovered-to-the-trunk.md
+
+**Twenty-one lanes name an evidence path that resolves nowhere.** They are enumerated in
+`docs/plan/artifacts/exits-that-name-their-file.md` — take the list from there rather than re-deriving it;
+a sibling already paid for it.
+
+**CORRECTED BEFORE YOU START, by the lane that refused to run without a brief.** The census in
+`exits-that-name-their-file.md` extracted paths with a regex that **ate the leading slash**, so absolute
+paths were tested as relative and filed as nowhere. **Six of the twenty-two are on disk right now**:
+`L-CANONICAL-SLOT-SURVIVES-A-RERUN`, `L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK`,
+`L-THE-EVIDENCE-RECORD-CAN-BE-HANDED-OVER`, both `L-THE-LIVE-WORLD-*` lanes, and the 22nd.
+
+**The corrected split is 6 on disk · 15 recoverable from a git ref (12 backend, 3 frontend) · ONE
+genuinely nowhere — `L-WF-OPLINK`.** The artifact still says seven destroyed; **it is wrong and you may
+not rely on it.** Say in your return that you used this corrected list.
+
+**The 22nd lane's evidence line uses brace expansion** — `lanes/X/{a.trx,b.trx,c.txt}` — **which no path
+regex parses**, which is why it read as pathless. Its files exist uncommitted on no ref, so it is
+**recoverable by committing, not destroyed**. **Any future sweep will misread that form**; note it rather
+than fixing every line.
+
+**A measurement said roughly sixteen are recoverable from a backend git ref and three from a frontend one**
+— that measurement is **mine and it is stale**, taken before three landings. **Re-derive per lane with
+`git log --all -- <path>`** in the right repo and treat any disagreement with those numbers as the numbers
+being wrong, not the repo.
+
+**Recovering a file onto a trunk is a landing.** It races every other landing, and tonight one merge ended
+up reachable from no ref for exactly this reason. **One at a time**, each with its own re-read of the trunk
+in the same command as the move.
+
+**The trunk is checked out in both repos, so `git branch -f` refuses** — that refusal is correct and a
+sibling handled it right: fast-forward the checkout with **`--ff-only`**, which is itself the guard because
+it refuses if the trunk moved. **Do not reset anyone's checkout, and never with uncommitted work present.**
+
+**Read every file before you commit it.** These are evidence records from lanes about credentials, money
+and personal data. **A recovered artifact quoting a real token would be the defect in a new place** — and a
+sibling found a 40-hex string that turned out to be a content hash only because it recomputed it rather
+than trusting a pattern's silence. **Scan is not read.**
+
+**Recovering the file is not the point; making the lane verifiable is.** After each recovery, run
+`plan verify` against the recovered path and **record what it said.** If the exit does not name the path,
+**leave the exit alone and record that** — amending exits is a sibling lane's authority and its rule was
+that an exit may be amended only where the lane body designated the artifact before the work.
+
+**Some are destroyed and must stay destroyed.** If a path exists on no ref, **say so and stop for that
+lane.** Re-manufacturing evidence for a lane that lost it is the worst act available in this program — it
+produces a record that looks like proof and is a reconstruction.
+
+**Report a per-lane table**: lane id, path, ref it came from or `nowhere`, what `plan verify` said.
+
+**Traps.** **In zsh write `${ref}:path`** — the `:t` modifier applies even inside double quotes. **`git
+fetch <path> <sha>` needs the full 40-char SHA.** **Two silent ignore rules — bare `artifacts/` and bare
+`*.log` — swallow evidence**, so force-add and then confirm with `git ls-files --error-unmatch`. **An empty
+`git diff` proves nothing: two absent files also diff to zero** — use blob identity. **Never `git add -A`**;
+a test run dirties `run-sheet.json` and `run-sheet.md` and they have swept into a commit before. **Gate on
+`uptime` — hold below 13.** Never `pkill`. **Do not push.** Backend trunk is **`28e60e6b8`**.
+
+### Lane L-THE-WIREHOST-SHARES-A-CONNECTION-AND-DEADLOCKS-ITSELF — one named infra step short of a measurement
+state: open
+needs: D-DOES-ONE-MEASUREMENT-EARN-A-KESTREL-HARNESS
+class: node
+owner: agent
+dir: ../OkamAPI-modules
+exit: the preserved OpenIddict harness reaches /oauth/token and asserts which name-claim shape reaches the endpoint, red under a mutation of the claim mapping, named from a trx with an executed-test count
+agent: ad133d03
+
+**A lane built the expensive half and stopped one infrastructure step short — deliberately.** It drove the
+**real** OpenIddict flow: a public client seeded via `IOpenIddictApplicationManager`, the demo-code login
+(`+4799999999`/`123123`) to a real cookie, a consent POST with `decision=accept`, and the app persisted an
+**issued, encrypted authorization code** — `SignInResult` → ad-hoc authorization → `INSERT INTO
+OpenIddictTokens`. **Nothing in the ~5100-test suite had ever reached that.**
+
+**Then the consent response blocked silently.** `/oauth/token` was never reached (grep count 0), no
+exception, the worker idle with **no CPU-time growth**. Cause by elimination, each step ruled out by
+evidence rather than by guess: not the OAuth flow (login, consent and code issuance all succeeded), not the
+certificate (**the code was encrypted before the hang**), not the lane's own logic.
+
+**What remains is the WireHost's single kept-open `DataSource=:memory:` SQLite connection**, shared by
+every request and store; OpenIddict issues a further DB operation after the code insert and SQLite
+serializes it into a silent block.
+
+**The fix is named and was deliberately not applied**: a **shared-cache in-memory SQLite plus a keepalive
+connection, overridden in the fixture's own `ConfigureTestServices`** — **no `WireHost` edit.** That
+restraint is the point: `WireHost` is shared by the whole suite, and a lane that edits it to unblock itself
+changes ~5100 tests to measure one bit.
+
+**Start from the preserved harness, do not rebuild it**:
+`lanes/L-THE-WIREHOST-CAN-MINT-AN-OPENIDDICT-PRINCIPAL/McpOpenIddictPrincipalWireTests.cs.harness`, with a
+test-only `IStartupFilter` probe that reads the validated principal via `AuthenticateAsync`. Read
+`evidence.md` beside it first.
+
+**Already settled, do not re-derive**: the demo bypass does **not** change the principal's shape — token
+claims come from `AddUserClaimsAsync` reading the user and OpenIddict, not from the login method, so a real
+login yields the same shape.
+
+**The one bit is still unmeasured and must stay that way until it executes.** Does validation expose the
+name claim as short `"name"` or map it to long-URI `ClaimTypes.Name`? **Assert it, then mutate the mapping
+and watch the arm red.** The predecessor wrote the assertion and its self-proof mutation and **refused to
+report them because they never ran** — do not inherit that claim, execute it.
+
+**If the connection change does not unblock it, abort and name the next step.** Two lanes have now stopped
+honestly on this question and each left the next one better placed. **A third honest abort beats a first
+false green.**
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert by name from a `--logger trx` and carry the executed count.** **Assert
+`WebApi.dll`'s mtime MOVES.** **A silent block looks like a slow tier** — check worker CPU-time growth
+before concluding either. **Stop your own hung PIDs with a targeted `kill`; never `pkill`**, and never a
+process you did not start. **Gate on `uptime` — hold below 13.** **Restore `run-sheet.json` and
+`run-sheet.md`; never `git add -A`.** **The trunk is checked out, so `git branch -f` refuses** —
+fast-forward with `--ff-only` after re-reading the ref in the same command. **Do not push.** Backend trunk
+is **`28e60e6b8`**.
+
+### Lane L-AN-EVIDENCE-LINE-IS-ONE-PATH-A-SWEEP-CAN-OPEN — the brace that hid a lane from every census
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/evidence-lines-a-sweep-can-read.md names every RETURN evidence line no path sweep can parse, states the form that defeated it, and says how many lanes each form hides
+agent: a400093a
+evidence: docs/plan/artifacts/evidence-lines-a-sweep-can-read.md
+
+**Two censuses tonight put a lane in the wrong class because of how its evidence line was written, not
+because of what it proved.** `L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED` writes
+`lanes/X/{before-arm.trx,tier.trx,after-arm-by-name.txt}` — **brace expansion, which no path regex
+parses** — so it read as naming no path at all while its four files sat on disk uncommitted.
+
+**A second form did the same damage from the other side**: a classifier that **ate a leading slash** filed
+six lanes as destroyed when they were on disk. **Between them, two independent censuses reported a
+destroyed count of seven when the true count is one.**
+
+**So the question is not "which lanes are stuck" — it is "which evidence lines cannot be read by the
+instrument that sorts them."** That is a smaller question and a permanent one; every future sweep pays this
+tax until the forms are known.
+
+**Enumerate the forms, not the lanes.** Read every `evidence:` line in `docs/plan/returns/` and in the
+`## Lanes` blocks, and classify **what shape defeats a parser**: brace expansion, a bare directory with no
+entry, a comma list, a path with a `·` separator glued to it, a worktree path that exists on one machine, a
+`fact:` key mixed with prose, an absolute path, a path relative to a lane's workdir rather than the plan
+repo. **Say how many lanes each form hides.**
+
+**Rank by how many lanes each form costs**, because that is what decides whether a fix is worth writing.
+**One form hiding twelve lanes matters; five forms hiding one each do not.**
+
+**Do not fix any evidence line.** They are agent RETURNs and part of the audit chain — rewriting one to
+suit a parser is editing the record to fit the instrument. **Recommend the rule instead**, in one sentence a
+brief can carry: what shape a RETURN's `evidence:` must take so a sweep can open it.
+
+**Say what your own classifier cannot read.** Every sweep tonight was wrong in a way its author had to
+catch by eye — the basename match, the eaten slash. **State the forms you know you mis-handle**; a census of
+parse failures that hides its own is worth nothing.
+
+**Do not run a tier and do not move a trunk.** This is a read of text files. **Never `git add -A`.** Force-add
+your artifact past `.gitignore` and confirm with `git ls-files --error-unmatch`. **Do not push.** Backend
+trunk is **`28e60e6b8`**.
+
+### Lane L-THE-EVIDENCE-INSIDE-A-WORKTREE-IS-MOVED-BEFORE-IT-IS-PRUNED — forty-eight proofs one command from gone
+state: verified
+class: node
+owner: agent
+dir: .
+exit: docs/plan/artifacts/evidence-off-the-worktrees.md names each of the 53 worktree-resident evidence lines as copied to a durable path with the commit, or as already gone with the reason, with the count of each stated
+agent: a400093a
+evidence: docs/plan/artifacts/evidence-off-the-worktrees.md
+
+**Fifty-three evidence lines point inside ephemeral `wt-*` worktrees. Forty-eight of those directories
+exist right now. Five are already gone.** A sweep that asks only *does this path exist* calls the 48
+healthy — **and they become destroyed the instant anyone runs `git worktree prune`.**
+
+**This is the same failure that produced a seven-versus-one destroyed count tonight, already loaded and
+waiting.** The lane that found it said so plainly: *"that is the next seven-versus-one."* The difference is
+that this one is preventable by copying files, and the window is however long before someone tidies.
+
+**Copy, do not move, and do not prune anything.** The worktrees belong to other lanes and to a Docker-era
+host convention; **a lane that cleans up while rescuing is a lane that destroyed what it came to save.**
+Never remove a worktree you did not create.
+
+**Take the list from `docs/plan/artifacts/evidence-lines-a-sweep-can-read.md`** — it is committed at
+`f277a72` and its author measured the 53 and the 48. **Do not re-derive it**, but **do re-check existence
+per file at the moment you copy**, because that number decays.
+
+**Read every file before you commit it.** A sibling held two `.trx` back tonight because they carry
+`01010112377`, **eleven digits passing the MOD-11 fødselsnummer checksum** — that ruling is open as
+`F-A-CHECKSUM-VALID-FODSELSNUMMER-SITS-IN-TWO-TRX`, and **if a file you are copying carries a
+checksum-valid identity number, a credential or a token, hold it and name it rather than committing it.**
+Compute, do not eyeball: a sibling proved `00000000000` passes the arithmetic and is not an identifier.
+
+**Where they land matters more than that they land.** A durable path is one a stranger can open from a
+clean clone — inside the repo, committed, not a worktree and not an absolute path into this machine. **Say
+the convention you chose and why**, because 547 evidence lines will follow it.
+
+**Do not amend any exit.** That is a sibling lane's authority and its rule is that an exit may be amended
+only where the lane body designated the artifact before the work. **Recovery and admissibility are
+different jobs; this is the first.**
+
+**Report a per-file table**: lane id, worktree path, durable path or `gone`, and whether you held it.
+
+**Traps.** **In zsh write `${ref}:path`** — the `:t` modifier applies even inside double quotes. **Never
+name a shell variable `path`** — zsh ties it to `PATH` and a sibling watched `git` vanish mid-loop tonight.
+**Two silent ignore rules — bare `artifacts/` and bare `*.log` — swallow evidence**, so force-add and
+confirm with `git ls-files --error-unmatch`. **Never `git add -A`.** **Gate on `uptime` — hold below 13.**
+**The trunk is checked out, so `git branch -f` refuses** — `--ff-only` after re-reading the ref in the same
+command. Never `pkill`. **Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-A-LANE-CITES-THE-EVIDENCE-THAT-SURVIVES-IT — the files are safe and the citations are not
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/citations-that-outlive-a-worktree.md pairs each rescued file with the lane citing it and the durable path, states whether the exit or the evidence line would have to change to cite it, and names who holds that authority for each
+agent: a400093a
+evidence: docs/plan/artifacts/citations-that-outlive-a-worktree.md
+
+**Twenty-one evidence files were copied out of ephemeral worktrees to
+`docs/plan/evidence/<LANE-ID>/<filename>` before anyone pruned them. Not one lane cites the copy.** The
+lane that rescued them said so rather than letting the number read as repaired: **the files are safe; the
+citations are not.** A sweep tomorrow still reads a worktree path and still calls a vanished one destroyed.
+
+**Nobody may fix that by editing a RETURN.** An `evidence:` line is an agent's own record and part of the
+audit chain — rewriting one to suit a parser is editing the record to fit the instrument, and this program
+has ruled against it twice tonight. **This lane does not edit one either.**
+
+**What it produces is the pairing nobody has**: for each of the 21 rescued files, which lane cites it, what
+its durable path now is, and **whether reaching it would require the `exit:` to change, the `evidence:`
+line to change, or neither.** Those three answers have three different owners, and no one has separated
+them.
+
+**Say who holds each.** Exit amendments are a sibling lane's authority under a rule you must state: an exit
+may be amended only where the lane body designated the artifact **before** the work. An `evidence:` line is
+the returning agent's. **Anything left over is the owner's**, and naming which is which is the deliverable
+— **an artifact that says "someone should fix this" is worth nothing.**
+
+**Read the 27 that are not files before you count them.** They name a worktree **directory**, and the
+rescue lane refused to copy them because the real evidence is **the branch git already holds**. **Say
+whether a citation naming a branch and a SHA is durable** — it is a different question from a path, and if
+the answer is yes, those 27 need nothing and must not be swept up with the 21.
+
+**Do not assume the copies are what the lane produced.** The rescue lane flagged it: these are the bytes in
+those worktrees **today**, not provably the bytes a lane first wrote — an edited worktree preserves the
+edited file. **Where a branch also holds the file, say whether the two agree**, because that is the only
+provenance available and it is cheap.
+
+**Do not copy, move, prune or commit any evidence file.** That work is done. **Do not amend an exit.**
+**Never `pkill`. Do not move any trunk. Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-EIGHT-LANE-BRANCHES-EXIST-ONLY-ON-THIS-MACHINE — evidence one disk failure from gone
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/branches-only-on-this-machine.md names every lane branch cited as evidence that no remote holds, and every cited SHA that resolves nowhere, with the count of each and what each branch's loss would cost
+agent: a400093a
+evidence: docs/plan/artifacts/branches-only-on-this-machine.md
+
+**A lane sampled twenty branches cited as evidence and found eight that exist only locally.** It also
+found that **five of forty cited SHAs resolve nowhere at all** — already gone, today, not hypothetically.
+
+**That sample is the whole finding and it is a sample.** Twenty of how many? **Enumerate every branch and
+every SHA cited as evidence anywhere in the plan**, and say which no remote holds. **A count taken from a
+sample is a hypothesis; this lane's job is the census.**
+
+**The distinction that matters is not push-versus-unpushed, it is what its loss costs.** A branch whose
+work is already merged to a trunk loses nothing if it vanishes — the code is on the trunk and the branch is
+a pointer. A branch carrying **unmerged** work, or the only copy of a test that proved something, is
+different. **Say which for each**, and rank by that, not by count.
+
+**Do not push anything.** Pushing is the obvious repair and it is the owner's call — a lane branch reaching
+a remote is visible to everyone with access, and some of these carry evidence held tonight on an open
+fødselsnummer ruling. **Name the repair; do not perform it.**
+
+**The five dead SHAs are the sharpest part.** For each, say **what cited it and whether that lane's claim
+survives without it** — a lane whose only proof is a SHA nobody can resolve has, in effect, no proof, and
+that is a verification finding rather than a git one.
+
+**Do not confuse a worktree with a branch.** A sibling established that a worktree path dies on
+`git worktree prune` while a branch survives it — **these are the branches, and their hazard is the machine,
+not the tidying.** Say that difference plainly so the two families are never merged again.
+
+**Do not create, delete, move, prune or fetch any ref.** This is a read. **Never `git add -A`.** Force-add
+your artifact past `.gitignore` and confirm with `git ls-files --error-unmatch`. **Gate on `uptime` — hold
+below 13.** Never `pkill`. **Do not move any trunk. Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-FORTY-FOUR-BRANCHES-ARE-ASKED-WHETHER-ANYONE-STILL-WANTS-THEM — reachability is not intent
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/branches-still-wanted.md classifies every one of the 47 local-only branches as superseded, wanted-and-unmerged, or undecidable, each with the measurement that decided it, and states the count per class
+agent: a400093a
+evidence: docs/plan/artifacts/branches-still-wanted.md
+
+**A census measured that 47 lane branches exist only on this machine and that NONE is a merged pointer.**
+Its author then named the limit of its own instrument: **it measured reachability, not intent.** *"A
+superseded branch costs nothing to lose."* Three lanes tonight found branches that could not even compile
+at the trunk.
+
+**So the question this lane answers is the one that decides whether the 47 matter at all**: is the work
+still wanted? **A branch nobody wants is not a loss, and 47 losses and 3 losses are different problems.**
+
+**Take the list from `docs/plan/artifacts/branches-only-on-this-machine.md`** — committed at `17cc90f`,
+including the tier-1 three whose branch is the **only** place a cited artifact lives. **Do not re-derive
+the census.**
+
+**Measure supersession, do not judge it.** Concrete tests, cheapest first: does `git cherry` report the
+patch already upstream? Does the file it changes still exist on the trunk? Does the branch's own diff apply?
+**Does it compile at the trunk** — a sibling found three that do not, which is strong evidence the world
+moved. **Name the test that decided each, and where two tests disagree, say so rather than picking.**
+
+**`undecidable` is a real class and you will need it.** A branch whose work is neither upstream nor
+obviously dead is exactly what a human must look at, and **guessing produces a list that reads decided and
+is not.** This program retired a false finding tonight that was a guess wearing a measurement's clothes.
+
+**Rank the wanted ones by what their loss costs**, reusing the tiers already measured: the **3** where the
+branch is the only home of a cited artifact are the ones that matter tonight; the rest lose work, not the
+record.
+
+**Do not push, fetch, create, delete, move or prune any ref, and do not merge anything.** This is a read.
+A branch reaching a remote is the owner's call, and **some of these carry the two `.trx` held on the open
+fødselsnummer ruling** — pushing one would make that ruling by accident.
+
+**Say what your own method cannot see.** Every sweep tonight was wrong in the same direction — a pattern
+matching more than it should — and each was caught by re-reading output, not by the sweep failing. **State
+which of your tests could report a branch superseded when it is not**, because that is the error that
+throws work away.
+
+**Traps.** **Never name a shell variable `path`** — zsh ties it to `PATH`. **In zsh write `${ref}:path`.**
+**An empty `git diff` proves nothing: two absent files also diff to zero** — use blob identity. **`git
+cherry` calls a branch live when its patch is not upstream, which is true and misleading if the ground
+moved.** **Gate on `uptime` — hold below 13.** **Never `git add -A`.** Never `pkill`. **Do not move any
+trunk. Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-THIRTY-THREE-BRANCHES-ARE-BUILT-AT-THE-TRUNK — ~~the one test that decides them, and it is a build~~
+state: retracted
+needs: D-HOW-A-BUILD-CAMPAIGN-GATES-ON-A-HOST-IT-SATURATES
+class: suite
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/artifacts/branches-built-at-the-trunk.md records, for each of the 33 undecidable branches, whether it compiles at the trunk and what the failure was, and reclassifies each as superseded or wanted with that evidence
+agent: a400093a
+retracted: the gate procedure cannot converge on this host; blocked on D-HOW-A-BUILD-CAMPAIGN-GATES-ON-A-HOST-IT-SATURATES
+
+**A lane classified 47 local-only branches and left 33 `undecidable` — deliberately, and it named the one
+test that would settle them.** A refusing diff is **the same observation** whether the trunk already holds
+the change or has merely moved around it, so `git cherry` and diff-apply are not silent by disagreement;
+they are **silent in the same way.**
+
+**The deciding test is whether the branch compiles at the trunk.** Three lanes tonight found branches that
+do not — **one because a method signature had gained an argument, which is exactly the shape a stale-but-
+WANTED branch has and a superseded one does not.** That distinction is the lane.
+
+**It was left undone for an honest reason, not an unwilling one**: 33 builds at one to two minutes each on
+a host that spent the night above its own gate. **The cost is 33 builds — a measurement somebody can
+schedule, not a judgement somebody must make.** The host is quiet now.
+
+**Take the list from `docs/plan/artifacts/branches-still-wanted.md`** (`7b19eb3e`). **Do not re-derive the
+classification** — the 13 wanted and the 1 superseded are settled; **only the 33 are yours.**
+
+**Build, do not test.** A compile is the whole instrument here and a tier is thirty times the cost. **Say
+what a build costs in wall-clock so the next reader can plan the same work.**
+
+**Read the failure, do not just record it.** A branch that fails to build is not automatically superseded —
+**say which kind of failure it is**: a signature that gained an argument (the world moved, the work is
+probably still wanted), a symbol that no longer exists at all (probably superseded), a namespace or file
+that moved (clerical). **A count of red branches decides nothing; the reason does.**
+
+**Do not fix a single branch.** Not a rename, not a using, not a signature. **A branch you repair is a
+branch you can no longer classify** — the failure IS the measurement.
+
+**Carry the revert warning forward.** The single `superseded` verdict rests on `git cherry` matching by
+patch-id, which **still reports a patch upstream after it was reverted** — so a branch could be the only
+copy of a change the trunk no longer holds. **Run `git log --all --grep=revert` and say what you found**,
+because that is the one error in this family that throws work away.
+
+**Traps.** **Build each branch in its own detached worktree** — never check one out over another lane's
+work. **Serialize the builds; do not fan out** — this host stalled for two hours on a stampede, and
+`uptime` must be re-read **below 13 before each build**, not once at the start. **Never `pkill`; stop only
+PIDs you started.** **Never `git add -A`** — a build dirties tracked artifacts. **Do not create, delete,
+move or push any ref.** **Do not move the trunk.** Backend trunk is **`6d5328004`**.
+
+### Lane L-THE-FOURTEEN-FRONTEND-BRANCHES-NEED-AN-INSTRUMENT-THAT-EXISTS — no compiler fails on a moved signature
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/frontend-branch-instrument.md names what test can decide whether a frontend lane branch is superseded, states what it would cost per branch, and classifies as many of the 14 as that instrument decides
+agent: a400093a
+evidence: docs/plan/artifacts/frontend-branch-instrument.md
+
+**A build campaign split 33 undecidable branches into 19 backend and 14 frontend, and stopped at the
+frontend half rather than inventing a test for it.** Its reason is exact: **a Vue/JS tree has no compiler
+that fails on a signature that gained an argument.** The instrument that decides the backend 19 does not
+exist here.
+
+**Do not reach for the tier by reflex.** A frontend suite at a branch tip proves the branch is internally
+consistent; it does **not** say whether the trunk already holds the change. **Say what each candidate
+instrument actually decides** — typecheck, lint against the trunk's rules, an import-resolution pass, a
+render of the changed component, the diff applying — and **which of them can distinguish superseded from
+merely stale.** That distinction is the whole question.
+
+**Cost matters as much as power.** The backend half is stalled on a decision about a host it saturates.
+**Say what your instrument costs per branch in wall-clock**, and if the honest answer is that the powerful
+one is unaffordable and the cheap one is weak, **say that** — a named tradeoff beats a recommendation with
+no number.
+
+**Classify what you can and leave the rest `undecidable`.** A sibling made `undecidable` the largest class
+and that was the correct answer, not a failure. **Guessing produces a list that reads decided and is not.**
+
+**Do not fix, rebase, merge or repair any branch** — a branch you repair is a branch you can no longer
+classify. **Do not push, fetch, create, delete, move or prune any ref.**
+
+**Traps.** **A fresh worktree leaves `core` empty**, so ~15 jest suites fail to RESOLVE while jest exits 0 —
+**a green frontend run in a fresh checkout is not evidence.** **Never name a shell variable `path`** — zsh
+ties it to `PATH`. **Gate on `uptime` — hold below 13**, and prefer instruments that need no build at all.
+**Never `git add -A`.** Never `pkill`. **Do not move any trunk. Do not push.**
+
+### Lane L-THREE-BRANCHES-HAVE-MOVED-FILES-NOT-DELETED-ONES — the clerical kind, told apart from the dead kind
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/moved-not-deleted.md names, for each unresolved import in the four decided frontend branches, whether the target moved on the trunk and where to, or no longer exists at all, and reclassifies each branch on that basis
+agent: a400093a
+evidence: docs/plan/artifacts/moved-not-deleted.md
+
+**An import-resolution pass decided four of fourteen frontend branches, and inside three of them found a
+distinction the count hides.** `fe-wf-blind-bind-name` and `fe-wf-link-deadend` carry **10 unresolved
+imports each**, `fe-wf-oplink` **8** — **but each of those three also carries 3 imports whose basename
+still exists elsewhere on the trunk.**
+
+**A file that moved and a file that was deleted are opposite findings wearing the same red.** A moved file
+means the branch is **stale and probably still wanted** — the work has nowhere to land only because
+somebody reorganised. A deleted symbol means the world genuinely dropped it. **The instrument reports both
+as "unresolved", and that is the gap this lane closes.**
+
+**Resolve each unresolved import by hand, and say which kind it is.** For a moved file, **name the new
+path** — that is what makes the finding actionable rather than a category. For a deleted one, say whether
+anything on the trunk plays its part now.
+
+**A basename match is not a move.** Two files can share a name and share nothing else. **Compare content,
+not names** — a sibling nearly reported five tests missing on a name match tonight, and another matched a
+different lane's `evidence.md` by basename and caught itself. **Say how you established each move**, and
+where you cannot establish it, mark it undecided rather than assuming.
+
+**Then say what it changes.** If three branches are stale-but-wanted rather than superseded, that moves
+them into the class whose loss costs work — and the standing finding is that **47 local-only branches
+carry work no trunk holds and none is a merged pointer.** **Say plainly whether your reading raises or
+lowers the number of branches worth keeping**, because that is what the owner is deciding.
+
+**Do not fix an import, rebase a branch or move a file.** A branch you repair is a branch you can no longer
+classify. **The fourth branch, `price-crosscurrency` at 3 unresolved, gets the same treatment** — three is
+small enough to settle completely, so settle it rather than sampling.
+
+**Do not run a build, a tier or jest.** This is a read of two trees. **A fresh worktree leaves `core`
+empty** and jest exits **0** while ~15 suites fail to resolve, so a green run here would prove nothing
+anyway. **Never name a shell variable `path`** — zsh ties it to `PATH`. **Never `git add -A`.** Never
+`pkill`. **Do not move any trunk. Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-EVERY-SWEEP-TONIGHT-WAS-WRONG-THE-SAME-WAY — six pattern errors, one shape, no rule written
+state: verified
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/how-a-sweep-lies.md names every measurement retracted or corrected tonight, states the pattern mechanism that produced each, and gives the check that would have caught it before it was reported
+agent: a400093a
+evidence: docs/plan/artifacts/how-a-sweep-lies.md
+
+**Six measurements were retracted or corrected tonight and their author called the shape before I did:**
+*"the fourth sweep of mine tonight wrong in the same direction — a pattern matching more than it should."*
+**Then a fifth and a sixth followed.** Nobody has written the rule, so a seventh is due.
+
+**The known six, each with its mechanism — verify each rather than trusting this list:**
+1. **basename match** accepted a *different* lane's `evidence.md`, cited as prior reading.
+2. **an unanchored regex ate a leading `/`**, so absolute paths were tested as relative — **104 of 116
+   mis-sorted evidence lines**, and the whole seven-versus-one destroyed count.
+3. **a hex regex read two halves of a session UUID as commit ids**, inventing five dead SHAs that never
+   existed.
+4. **brace expansion** `{a,b,c}` parsed as no path at all, hiding a lane from two censuses.
+5. **`.count()` of a basename against a joined tree listing** — a substring count is not a match — invented
+   three moved files.
+6. **`ls-tree -r` lists zero files under a submodule** (`core`, mode `160000`), so every import into it
+   reads unresolved, which retired an instrument that had "decided" four branches.
+
+**Find the shape, do not just list them.** Five of the six **over-matched** and one **under-matched**, and
+they failed in opposite directions with opposite costs: an over-match invents a finding, an under-match
+hides one. **Say which failure direction each had and which is more dangerous here** — this program's
+answer has been that under-reporting looks safe and gets quoted, so say whether the evidence supports that.
+
+**Every one was caught by a human re-reading output, never by the sweep failing.** That is the property
+worth naming: **each sweep exited 0 and produced plausible numbers.** So the rule cannot be "be careful" —
+**it has to be a check that runs.**
+
+**Give the check, not the caution.** For each mechanism, the one command or assertion that would have
+caught it before it was reported — a count that must equal a known total, a spot-check of N samples read by
+hand, an invariant like *every path in the output must start with `/` or be relative to a named root*.
+**A rule nobody can run is a rule nobody will run.**
+
+**Say which of the six a single check would have caught**, because that is what decides whether this is one
+rule or six.
+
+**Look for a seventh nobody has caught.** Every artifact committed tonight rests on a sweep. **Name any
+number in them you cannot reproduce**, and mark it rather than fixing it.
+
+**Do not correct any artifact.** Their authors own them and several are already superseded by their own
+retractions. **Do not run a build, a tier or jest. Do not move any trunk. Do not push.** Backend trunk is
+**`6d5328004`**.
+
+### Lane L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND — 547 came from the family under audit
+state: running
+class: analysis
+owner: agent
+dir: .
+exit: docs/plan/artifacts/the-second-parse.md states how many evidence lines plan.md holds, derived by a parse that shares no code or method with the first, names every lane block the first parse omitted, and says whether 116 and 104 survive the corrected denominator
+agent: a400093a
+
+**A lane auditing sweep failures named a seventh it deliberately would not touch: the 547.** Every
+per-form count tonight — 116 mis-sorted, 104 from one form, 63 on disk, 40 pathless — is a numerator over
+that denominator, and **547 came from the same family under audit.** It counts a header-then-evidence
+shape, so **a differently shaped lane block is silently omitted.**
+
+**Its author was right to leave it.** *"Correcting a denominator inside the lane auditing denominators is
+how an audit stops being independent."* **You are the second hand, and independence is the deliverable —
+not the number.**
+
+**Do not read the first parser before you write yours.** Derive the count from `plan.md` your own way, then
+compare. **If you read the original first you are checking its arithmetic, not its assumptions**, and the
+assumption is where all six of tonight's errors lived.
+
+**Apply the rule the audit produced**, which is the point of having one:
+
+> **Round-trip every verdict through the tool that owns the namespace — positives AND negatives** —
+> asserting `matched + rejected == N` with both counts printed.
+
+**Negatives are the half nobody does** and precisely the half that hid three of six findings. **Print what
+your parse rejected**, not only what it accepted.
+
+**Name the omitted blocks individually.** *"The denominator is higher"* changes nothing; **which lanes were
+invisible** is what a reader can act on. And for each, say whether it would have landed in a class that
+matters — an omitted lane with evidence on disk is a different loss from an omitted retracted one.
+
+**Then say whether 116 and 104 survive.** Their author argued they are safer, having been measured by
+comparing a naive extractor against a careful one — **test that claim rather than repeating it**; a
+comparison of two parsers is only as good as the population both were run over.
+
+**The 47 is claimed as the night's most trustworthy number** because it rests on `branch -r --contains`, an
+authority lookup rather than a pattern. **Check that claim too** — it costs one command and it is the
+number an owner decision currently rests on.
+
+**Report a number you can defend, or report that you cannot derive one.** A second parse that quietly
+agrees is worth nothing unless you can say what it would have caught.
+
+**Do not correct any artifact and do not edit plan.md.** **No build, no tier, no jest.** **Never name a
+shell variable `path`** — zsh ties it to `PATH`. **Never `git add -A`.** Never `pkill`. **Do not move any
+trunk. Do not push.** Backend trunk is **`6d5328004`**.
+
+### Lane L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK — four behaviour changes and nine evidence commits, unreviewed
+state: running
+class: analysis
+owner: agent
+dir: ../OkamAPI-modules
+exit: docs/plan/reviews/L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK.md gives a verdict on d30c1c4d4..6d5328004, naming any landing whose measurement does not reproduce and any behaviour a merge changed that its lane did not claim
+agent: ad133d03
+
+**Seventeen commits reached the backend trunk since the last bounded review ended at `d30c1c4d4`, and
+none has been read by anyone who did not write it.** The standing law is that every landed lane gets a
+dedicated reviewer with fresh context before it is trusted. **These four changed behaviour:**
+
+- **`bcfe0d893`** — the end-of-day close counts only money that arrived. **Money path.** `IsReceived`
+  delegates rather than restates; credit returns net against `CreditTotal` rather than takings.
+- **`e640608e5`** — a phone number stops travelling in a URL path; the gift-card transfer route is
+  recomposed **around the ownership guard that landed the same day.**
+- **`ada218783`** — a device push token stops travelling in a URL path, on **two** controllers.
+- **`28e60e6b8`** — who cancelled an order is pinned, at a site that decides by **inequality** and
+  therefore fails **open**.
+
+**The remaining thirteen are evidence recoveries and lane commits.** Read them for one thing only:
+**whether anything other than evidence rode along.** A recovery commit that touches a `.cs` file is not a
+recovery.
+
+**Reproduce, do not read.** The tier is claimed at **5108/0/11** at `28e60e6b8` — run it at
+**`6d5328004`** and say whether it reproduces, **and whether the skip count is still 11.** A skip count
+that moves is how a red becomes a green without anyone deciding to skip it.
+
+**The four claims most worth falsifying, because each was made by the lane that wanted it true:**
+1. the credential routes' **falsifiability clause** — putting the phone back into
+   `transfer/{giftcardId}/{newReceiverPhoneNumber}` and the handle back into `registrationid/{handle}`
+   **reds 4**. Re-run it.
+2. the cancellation arms — **2 executed, 2 failed** under inversion, **executed count unchanged**.
+   Unchanged execution is what makes it a kill rather than a void run; check that, not just the failure.
+3. **`IsReceived` delegating rather than restating** — a restatement that happens to agree today is the
+   defect the fix was for.
+4. the gift-card recomposition **not weakening the guard** — its three properties mask one another, and
+   **mutating the caller resolution alone survives**, which is a known open gap, not a regression. **Say
+   whether it is still exactly that and no worse.**
+
+**Bound your verdict explicitly.** The last review's most useful line was that it did **not** read a tip the
+trunk had since moved to. **Name the range you read and refuse the rest.**
+
+**Say what you did not read.** A verdict silent about its own coverage is worth less than a narrow one that
+states it.
+
+**Do not fix anything.** Rule and name the exact change; **edit no file.** If a landing is wrong, that is a
+lane, and the reviewer who writes the fix is no longer the reviewer.
+
+**Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
+having run **zero** tests. **Assert by name from a `--logger trx` and carry the executed count.** **Assert
+`WebApi.dll`'s mtime MOVES.** **An empty `git diff` proves nothing: two absent files also diff to zero.**
+**Gate on `uptime` — hold below 13, re-read before each run.** **Restore `run-sheet.json` and
+`run-sheet.md`; never `git add -A`.** Never `pkill`. **Do not move any trunk. Do not push.**
 
 ## Decisions
 
@@ -29036,9 +29698,86 @@ options:
 default_if_unruled: none
 
 The dispatch says "the census is in the brief", but docs/plan/briefs/L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED.md does not exist - so the census, the exit criteria and the constraints exist only in the dispatch message
+### Decision D-SPEC-L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK — the plan contradicts what L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK observed
+state: open
+owner: @sven
+blocks: L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK
+options:
+| amend — change the brief/intent so the lane can be built as specified
+| respec — rewrite the lane's exit criterion around what was observed
+default_if_unruled: none
+
+The dispatch names a brief at docs/plan/briefs/L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK.md; no such file exists, and the newest brief in that directory is 01:12, the lane before this one
 
 
 
+
+
+### Decision D-MAY-AN-EXIT-CITE-A-RESCUED-COPY — twenty-one durable files no authority can point at
+state: open
+owner: @sven
+blocks: L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED
+options:
+| rescue-counts — an exit MAY be amended to name a rescued copy of the artifact its exit already names by filename, because the artifact was designated, only its location was not — pro: unlocks 21 lanes with no judgement call per lane, and the filename match is mechanical rather than interpretive ; con: it widens a rule written narrowly on purpose, and every widening of that rule is a step toward editing exits until evidence fits
+| leave-them-uncited — the files stay durable and unreachable, recorded as rescued-but-uncitable — pro: the body-designation rule survives untouched, and the evidence is not lost, only uncited ; con: 21 lanes can never verify no matter what they proved, and the record says unverified where the work exists
+| body-rule-holds-but-owner-cites — you name the 21 exits yourself, case by case, outside the lane rule — pro: no rule changes and each is a human act ; con: it is 21 of your sittings, which is the scarcest thing here
+default_if_unruled: none
+
+**Measured, not argued.** All 21 rescued files have the same shape: the `exit:` **already names the
+artifact by filename**, at a location that dies with the worktree; **no lane body designates it**; and
+rewriting the `evidence:` line would not help because **`plan verify` reads the exit.**
+
+**So the deadlock is structural.** The exits lane may amend only where the body designated the artifact
+before the work — none of these do. The evidence line belongs to the returning agent and is part of the
+audit chain. **No existing authority can cite these files.** They are durable, paired, and unreachable
+under the rules as they stand.
+
+**The narrow question you are actually being asked**: when an exit already names an artifact **by
+filename** and only its **location** has changed, is naming the new location an amendment or a correction?
+
+### Decision D-HOW-A-BUILD-CAMPAIGN-GATES-ON-A-HOST-IT-SATURATES — the gate closes behind the first build
+state: open
+owner: @sven
+blocks: L-THIRTY-THREE-BRANCHES-ARE-BUILT-AT-THE-TRUNK
+options:
+| budget-in-builds — replace the load threshold with a count: N builds per pass, serialized, regardless of load — pro: it converges, and the cost is knowable in advance ; con: it can run the host hot with no brake, which is what the two-hour stall was
+| gate-on-the-five-minute — keep a threshold but read the 5-minute average, which a single build does not move — pro: keeps a real brake and still converges ; con: it reacts slowly, so a genuine stampede is admitted for minutes before the gate notices
+| host-to-itself — the campaign runs when nothing else does, gate unchanged — pro: nothing changes and no brake is weakened ; con: it needs a quiet window nobody has scheduled, and this host has not had one all night
+default_if_unruled: none
+
+**Measured, not pleaded.** Load read **10.2 at dispatch**, 10.22 at the first build, **16 after two**, and
+**20.26** on the third pass, where all 19 backend branches were refused.
+
+**The procedure is self-defeating on this host.** *"Serialize and re-read `uptime` below 13 before each
+build"* cannot converge, because **a single `dotnet build` drives the one-minute average over the gate by
+itself** — so the gate closes behind the first build and every later branch is refused by the cost of its
+predecessor. **The lane reported this rather than quietly ignoring the gate**, which is why it is a
+decision and not an incident.
+
+### Decision D-DOES-ONE-MEASUREMENT-EARN-A-KESTREL-HARNESS — three lanes, one unmeasured bit
+state: open
+owner: @sven
+blocks: L-THE-WIREHOST-CAN-MINT-AN-OPENIDDICT-PRINCIPAL
+options:
+| build-the-kestrel-harness — drive the proven login-consent-code flow against a real Kestrel loopback server instead of TestServer — pro: the harness's flow is reusable verbatim, only the hosting layer changes, and it unlocks any future OpenIddict measurement not just this one ; con: a second host fixture is a permanent thing to maintain, and nobody has costed it
+| leave-the-bit-unmeasured — record McpShoppingService's principal repair as unmeasurable in this suite and move on — pro: three lanes have already been spent and the site is not a known live defect ; con: the claim stays open forever and the next reader re-derives the whole chain
+| read-it-in-production-config — settle the claim mapping from OpenIddict's own version behaviour rather than from a running principal — pro: cheap ; con: it is the static reading two lanes already refused as unable to decide it
+default_if_unruled: none
+
+**Three lanes have now stopped honestly on one bit** — does validation expose the name claim as short
+`"name"` or map it to long-URI `ClaimTypes.Name`. **Each stop was a real result**: the first named the
+blocking chain, the second reached an issued encrypted authorization code, the third **disproved the
+theory the first two carried.**
+
+**The connection was never the cause.** A native thread sample of the blocked worker showed the main
+thread parked in a managed `Monitor.Wait` and every thread-pool thread idle in `WaitOne`, with **zero
+threads executing SQLite, EF, OpenIddict or a certificate.** A database lock would show a thread inside
+SQLite; nothing is inside anything. The block is **a deadlocked async continuation in OpenIddict's
+`SignInResult` path under `Microsoft.AspNetCore.TestHost`** — which is why the plain `LocalRedirect` login
+step never hung and the OpenIddict path does.
+
+**The question is no longer technical.** The next step is named and credible; what is not decided is
+whether one claim is worth a second hosting fixture.
 
 ## Flags
 
@@ -29095,7 +29834,7 @@ cleared_by: L-JOURNEY-HARNESS
 clears_when: fact:journeys.browser is present
 
 ### Flag F-ACCT-DUP — AccountingSummaries has no unique index in the migration chain
-state: open
+state: cleared
 severity: blocker
 owner: @sven
 cleared_by: L-ACCT-UIDX
@@ -29222,7 +29961,7 @@ cleared_by: L-BE-RECEIPT
 clears_when: fact:be.tests is ok
 
 ### Flag F-TRAIN-IK — Training carries no internal-control surface, so the word cannot be printed
-state: open
+state: cleared
 severity: info
 owner: @sven
 clears_when: fact:train.checklists is present
@@ -37230,6 +37969,36 @@ state: open
 severity: warn
 owner: @sven
 clears_when: a dedicated detached checkout serves the probes, or a written ruling says fast-forwarding the probe checkout is the landing method
+### Flag F-A-CHECKSUM-VALID-FODSELSNUMMER-SITS-IN-TWO-TRX — two .trx files hold 01010112377 twice, eleven digits passing the MOD-11 fodselsnummer checksum with a plausible birth date; recovering them onto the trunk widens its reach
+state: open
+severity: blocker
+owner: @sven
+clears_when: the owner rules whether a checksum-valid identity number may be carried in committed test evidence, and the two files are recovered or left on their branches accordingly
+### Flag F-FIFTY-THREE-EVIDENCE-LINES-POINT-INTO-EPHEMERAL-WORKTREES — 53 evidence lines point inside wt-* worktrees; 48 of those directories exist today and read as destroyed the moment anyone runs git worktree prune
+state: open
+severity: blocker
+owner: @sven
+clears_when: each of the 53 lanes has its evidence at a durable path or is recorded as evidence-on-a-worktree with the reason, with the count of each stated
+### Flag F-NINE-RESCUED-FILES-HAVE-NO-WITNESS — 9 of 21 rescued evidence files match no blob in any commit; they existed only as working files in a worktree, so the copy is the record and provenance cannot be established
+state: open
+severity: warn
+owner: @sven
+clears_when: each of the nine is either matched to a commit blob or recorded as copy-is-the-record with the reason, with the count of each stated
+### Flag F-FORTY-SEVEN-BRANCHES-CARRY-UNMERGED-WORK-NO-REMOTE-HOLDS — 47 lane branches cited as evidence exist only on this machine and NONE is a merged pointer; 3 are the only place a cited artifact lives
+state: open
+severity: blocker
+owner: @sven
+clears_when: each of the 47 is pushed, or recorded as superseded with the reason, with the count of each stated and the fodselsnummer-bearing branches ruled separately
+### Flag F-THE-STANDING-LIVE-WORLD-CANNOT-READ-ITS-OWN-FLAGS — all four live-eligible journeys fail at the flag switchboard against the standing world; feature-flags/catalog and stores/1/feature-flags both answer 401 while login and GET /user answer 200
+state: open
+severity: blocker
+owner: @sven
+clears_when: a live journey run against the standing world reaches its flag switchboard and records status passed
+
+
+
+
+
 
 
 
