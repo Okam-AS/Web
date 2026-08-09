@@ -5786,12 +5786,40 @@ export default {
   assistant_card_decisionFailed: 'Vi fikk ikke fullført. Prøv igjen.',
 
   // ---- Spør Okam: avslag fra spinen -------------------------------------------------------------
-  // Only ONE of these is told apart by a code on the wire. The other covers seven server-side cases
-  // at once, so it must not name any of them — it says what is certainly true (it is no longer
-  // yours to decide, and nothing changed) and leaves the server's own sentence to say more.
+  // ⚠️ THE COMMENT HERE USED TO SAY "only ONE of these is told apart by a code on the wire". That
+  // was true of the backend this screen was written against and is FALSE of the one that deploys:
+  // `ConflictBody` puts `code` on EVERY conflict and adds the row's real `status` beside it. So
+  // there is now a line per case, and each one may name what actually happened.
+  //
+  // THE RULE THEY ALL FOLLOW: say what was CHANGED before saying what went wrong. "Ingenting ble
+  // endret" is the fact a merchant staring at a refused price change actually needs, and it is the
+  // one the server's own English sentence tends to bury. The two refusals that leave real doubt —
+  // `unresolvable` (an unknown code) and `alreadyResolved` (no status) — are the only ones that
+  // hedge, and they hedge because they genuinely do not know.
+  //
+  // `unresolvable` survives as the fallback for a code this bundle has never heard of. A ninth kind
+  // shipping to a browser holding this dictionary must read as a sentence, not as a raw key.
   assistant_conflict_kindDisabled: 'Denne handlingstypen er slått av for butikken nå. Forslaget står fortsatt, og kan godkjennes hvis den slås på igjen.',
   assistant_conflict_unresolvable: 'Dette forslaget venter ikke lenger på deg. Klikket ditt endret ingenting nå — men forslaget kan allerede ha blitt gjennomført. Meldingen fra serveren under sier hva som faktisk skjedde.',
+  assistant_conflict_alreadyResolved: 'Dette forslaget er allerede avgjort, så klikket ditt endret ingenting nå. Meldingen fra serveren under sier hva som skjedde.',
+  assistant_conflict_alreadyExecuted: 'Dette forslaget er allerede gjennomført. Endringen er live, og klikket ditt endret ingenting nå.',
+  assistant_conflict_alreadyRejected: 'Dette forslaget er allerede avslått. Et avslag kan ikke gjøres om, så det kan ikke godkjennes etterpå.',
+  assistant_conflict_alreadyFailed: 'Dette forslaget stoppet mens det ble utført, og kan ikke godkjennes på nytt.',
+  assistant_conflict_expired: 'Forslaget utløp før det ble godkjent. Ingenting ble endret.',
+  assistant_conflict_lostTheClaim: 'Noen andre holder på å gjennomføre dette forslaget akkurat nå. Vent litt, og se etter resultatet i listen.',
+  assistant_conflict_missingApprover: 'Vi fikk ikke registrert hvem som godkjente, så forslaget ble stoppet. Ingenting ble endret.',
+  assistant_conflict_contractMoved: 'Forslaget ble laget mot en eldre versjon av denne handlingen, og kan ikke gjennomføres. Ingenting ble endret.',
+  assistant_conflict_stale: 'Grunnlaget har endret seg siden forslaget ble laget, så tallene stemmer ikke lenger med butikken. Ingenting ble endret — be om et nytt forslag.',
+  assistant_conflict_terminalWriteRefused: 'Vi fikk ikke bekreftet at endringen ble gjennomført, så alt ble rullet tilbake. Ingenting ble endret.',
+  assistant_conflict_repropose: 'Be om nytt forslag',
   assistant_conflict_relist: 'Listen er hentet på nytt, så statusen du ser nå er den ferske.',
+
+  // ---- Spør Okam: handlingstypene -----------------------------------------------------------------
+  // The three kinds okam executes. A kind with no line here renders as its raw wire identifier
+  // (`margin_add_supplier_price`), which is ugly and honest; a blank would read as "no kind".
+  assistant_kind_menu_price_change: 'Prisendring i menyen',
+  assistant_kind_discount_create: 'Ny rabatt',
+  assistant_kind_store_hours_change: 'Endring av åpningstider',
 
   assistant_origin_okam: 'Fra Okam',
   assistant_origin_socialchef: 'Fra SocialChef',
