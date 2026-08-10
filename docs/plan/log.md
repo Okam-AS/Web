@@ -4631,3 +4631,5 @@
 - 2026-08-09T16:08Z · tool · L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION built-unverified -> verified, evidence docs/plan/artifacts/forty-seven-remainder.md
 - 2026-08-10T15:22Z · tool · raised F-THE-COMPETENCY-SEAM-VIOLATES-THE-ONE-EVIDENCE-READ-CENSUS (blocker): the competency seam makes WorkforceSchedulesController.Validate a second handler reaching Training evidence rows, which TrainingInspectorEvidencePackTests' IL census forbids; parked on lane/competency-seam-warn-only at 720ac88e0 rather than weakening the guard
 - 2026-08-10T15:22Z · @clerk · parked the competency seam at 720ac88e0: it reds two guards, one deliberate, so the trunk is restored clean at 6d5328004 rather than a guard weakened
+- 2026-08-10T15:52Z · @clerk · pushed: plan branch b3cc5604 to 95206609 and backend lane/competency-seam-warn-only at 720ac88e0; both trunks were already identical to origin
+- 2026-08-10T15:52Z · @clerk · backend origin has moved 109 commits ahead of our trunk with feature/ask-okam work merged in; our 6d5328004 is 0 ahead so nothing of ours is unpushed
