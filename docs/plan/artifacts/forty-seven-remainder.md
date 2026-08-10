@@ -467,3 +467,441 @@ were read straight out of the prose of the change they test (`OrderService.cs:78
 `EmailConfirmed` clause, the `Delivery`/`Bounce` record types, `StateOf`'s exception outcomes). The
 expensive part was never finding the mutation; it was having a warm build and a filter narrow enough to run
 it three times.
+
+## Batch 2
+
+Eight lanes, worked one at a time against the declines already recorded in `instrumentless-exits.md` — the
+reason each failed was read there and acted on, not re-derived. **Five closed, two declined again with a
+written finding, one closed with a disagreement recorded for an owner.** Backend trunk `6d5328004`,
+unmoved; nothing pushed; no container started; `:5091` and `:5941` left alone. Every artifact is under
+`docs/plan/evidence/<LANE-ID>/`, force-added past the bare `artifacts/` ignore rule and confirmed with
+`git ls-files --error-unmatch`. Each lane's original `evidence:` line is copied verbatim into its artifact,
+because `plan verify` overwrites it.
+
+**Nine new runs were produced for this batch, thirteen `.trx` committed, and eight mutations applied and
+restored.** Two of the eight lanes needed no run and got a written finding instead; two got a temporary
+probe that was applied, measured and **removed**, leaving both worktrees clean.
+
+### The count
+
+| outcome | n | lanes |
+|---|---|---|
+| **closed** (`plan verify` accepted) | **6** | `L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ`, `L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE`, `L-WF-IDEMPOTENCY-REFUSAL-REST`, `L-WF-BOOTSTRAP`, `L-MIG-COMPANY-RECEIVABLE`, `L-VIPPS-REDACT-404` |
+| **needs an owner ruling** | **1** | `L-EV-URI-RELATIVE` — *on every platform* is unmeasurable from this host; either a Windows run, an invariance pin, or a ruling |
+| **cannot be closed without work outside this lane** | **1** | `L-GR-TESTSEND-GUARD` — the wire pin needs two rows added to the shared `WireHostFixture`, which is a landing decision |
+
+One of the six closures, `L-VIPPS-REDACT-404`, carries a **recorded disagreement** with the prior pass and
+is flagged below rather than presented as a clean win.
+
+### Closed — what was missing, and what was produced
+
+| lane | reason-shape | what was produced | `plan verify`, verbatim |
+|---|---|---|---|
+| `L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ` | **missing write-up** — the exit's object is a *written finding*; the evidence was two `.trx`, and a trx names no bound and no mutation | `evidence/…/FINDING.md`: the bound (`StoresWithheld = dueStores.Count − dispatchableStores.Count` at `EventsNotificationDrainService.cs:122`, `dispatchableStores` a subset by construction, `dueStores` a DISTINCT over StoreId ⇒ bounded by **fleet size**), MUT-A named (subtraction → constant `0`), executed=9 in both runs, 9/0 then **4/5**, the five red arms by name with `Expected: 1 / Actual: 0`, and **why five and not six** (line 59 asserts `Equal(0,…)` and the mutant satisfies it). Both trx copied in. | `L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ built-unverified -> verified` (EXIT_CODE=0) |
+| `L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE` | **missing write-up** — content sound, no single artifact carried it, and `plan verify` had already refused the lane directory | `evidence/…/SUMMARY.md`, every figure **recomputed from the runner JSON**: three `neverReddened: []` over 29 + 37 + 49 = **115**, 102 mutations / 101 RED / 1 STILL-GREEN (the sound equivalence), killers-per-test min 1 in all three maps, the **32** previously-unproven listed by name (11 + 3 + 18), and the five `THE DEFECT` pins shown to be **inside** the 115 with killers. All 17 runner files copied to `runner-output/`. | `L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE built-unverified -> verified` (EXIT_CODE=0) |
+| `L-WF-IDEMPOTENCY-REFUSAL-REST` | **a green where a red was demanded** — the three `RefuseAsync` sites were on the trunk, the "reds if the recording is removed" clause was a sentence in a RETURN | **the red, three times.** `evidence/…/MUTATION-RECORD.md` + 5 trx: baseline 38/38, M1 import (`…ImportService.cs:246`) 37/**1**, M2 issue (`…InvitationService.cs:178`) 37/**1**, M3 claim (`:401`) 37/**1**, restored 38/38 — **executed=38 in all five**. Each reds **only its own** site, with the body code in the message (`Expected: workforce.import-conflict / Actual: workforce.idempotency-in-progress`, and the two siblings). Fourth clause read at the trunk: `Assert.Equal("Refused", …)` at `WorkforceD1RaceSqlServerTests.cs:105` and `:207`, **not executed** (no SQL slot) and said so. | `L-WF-IDEMPOTENCY-REFUSAL-REST built-unverified -> verified` (EXIT_CODE=0) |
+| `L-WF-BOOTSTRAP` | **half of a two-part exit** — the seed half held; the wire half had a source file and **no recorded run** | `evidence/…/RUN.md` + 3 trx. Half one: baseline 4/4, **M1** (`WorkforceManager` dropped from `BootstrapGrants`) 3/**1** redding exactly `A_fresh_stores_administrator_opens_workforce_over_http_and_the_engagement_manages` with `Assert.Contains() … Not found: WorkforceManager / In value: ["WorkforceSelf","WorkforceScheduler"]`, restored 4/4, mtime moved every arm. Half two re-measured: **zero** `INSERT INTO WorkforceStaffMembers` at `9d1719df` (four hits are prose and one `SELECT`), **line 167 at base `3579bbbc`**, and `git show --stat` puts the seed and the wire test in **one commit**. | `L-WF-BOOTSTRAP built-unverified -> verified` (EXIT_CODE=0) |
+| `L-MIG-COMPANY-RECEIVABLE` | **one half in each candidate file** — the migration file said nothing about the export, and the export files were never named | `evidence/…/BOTH-HALVES.md` + 3 trx, one file carrying both. Migration half, C2 measured on the chain rather than argued: **exactly one** migration in all 51 mentions the column; the **preceding** Designer has 0 occurrences and both **following** Designers have 1; snapshot lines 8635 / 8638 / 8665 put it beside its two siblings. Export half as a red: baseline 9/9, **M1** (the `case PaymentType.CompanyAccount:` branch disabled so the tender falls to `AccountNumberReceivables`) 6/**3**, restored 9/9 — including `…RefusesInsteadOfPostingToReceivables` failing `Assert.Throws()` with *"(No exception was thrown)"*, i.e. **a blank account silently posts** under the mutant. | `L-MIG-COMPANY-RECEIVABLE built-unverified -> verified` (EXIT_CODE=0) |
+| `L-VIPPS-REDACT-404` | **no artifact + the RETURN retracts half the premise** | `evidence/…/RUN-AND-FINDING.md` + 5 trx. baseline 15/15; **M1** (unrouted branch removed) 9/**6**; **M2** (M1 + `Survives(…)` fail-closed check disabled) 8/**7** — **the leak reproduced**: `Found: 6f1b0c9e-…-2a5c8d3e41ff / In value: https://api.okam.no/events/deposits/6f1b0c9e-…-2a5c8d3e41ff.`, the trailing-dot case the exit names; **M3** (routed replacement disabled) 10/**5**, redding all three percent-encoded cases; restored 15/15, executed=15 throughout. **See the disagreement below.** | `L-VIPPS-REDACT-404 built-unverified -> verified` (EXIT_CODE=0) |
+
+### The two that stay open, which is the part that matters
+
+**`L-EV-URI-RELATIVE` — declined again; the exit overclaims, and I measured how far short it falls.**
+Clause two holds on a real run: `m1-mutant.trx` reads `executed="79" passed="70" failed="9"`, the nine reds
+named, three of them the **mail path returning `Delivered == true`** — the guest actually sent the `file://`
+link. Clause one, *on every platform*, is measured **nowhere**; `RUN.md`'s own header says
+*"Host: darwin (Unix)"*. What I added: the refusal is a **disjunction of two arms**, and those two arms are
+exactly the two ways a platform's parser can classify a relative origin. A temporary probe (applied,
+measured, **removed** — tree clean) drove 14 origins through the real `EventsGuestLink.DepositPagePrefix`:
+**7 take arm A** (`TryCreate` succeeds, scheme `file`/`javascript` — including the Windows-shaped
+`C:\wwwroot\guest` and `\\server\share`), **5 take arm B** (`TryCreate` fails), and **only the two genuine
+http(s) origins are accepted** (`platform-arms.txt`). So both arms are *executed* here rather than merely
+argued — and it still is not the exit, for two reasons stated in the finding: it is one host, and the probe
+is gone, so **no platform-invariance pin exists in the tree**. Named remedies: a theory asserting the
+refusal whichever arm fires, or a Windows CI trx, or an owner ruling that the phrase was never a
+measurement. The four committed receipts were also **rescued off the worktree** into
+`docs/plan/evidence/L-EV-URI-RELATIVE/`.
+
+**`L-GR-TESTSEND-GUARD` — declined again, and the reason in the RETURN turns out to be the wrong reason.**
+The exit names a **wire test**; what exists is a controller invocation
+(`var refused = (ObjectResult)await owner.TestSend(…)`). The RETURN explains this with *"A 401 wire pin is
+undriveable, so I wrote none"* — but the exit never asks for a 401. So I drove the real route through
+`WireHostFixture` with a temporary probe (applied, measured, **removed**; tree clean) and the wire answers
+`404 growth.not_found` to **every** arm, including AdminB's (`wire-probe.txt`). Two facts nobody had
+recorded: the wire seed carries **no newsletter row**, so the ownership load 404s before
+`RequireOwnAccountAddressAsync` is reached; and every wire admin is a phone-signup user with **no `Email`**
+(`WireHostFixture:407-410`), so even with a newsletter the refusal would fire for the *wrong reason* — a
+confounded refusal, worse than no pin. **The obstacle is the wire world's seed, not the tier**, and closing
+it means adding two rows to a fixture every wire suite shares. That is a landing decision this lane may not
+take; the finding names the exact two changes and the shape of the resulting test.
+
+### The disagreement, recorded rather than smoothed over
+
+`instrumentless-exits.md` declined `L-VIPPS-REDACT-404` on the ground that its second clause *"asks for a
+fix to something the lane proved was never broken, so it needs re-ruling before any evidence could satisfy
+it"*. **I verified it anyway, and a reader should know why and be able to reverse me.** The exit's sentence
+is an observable — *both reach telemetry with the credential replaced, shown by fast-tier theory cases
+including a trailing-dot deposit link* — and it says nothing about which of the two was previously broken.
+Read that way it is now measured, with a falsifiability proof for each half. Read as a claim that both were
+holes this lane closed, the second half is false and no evidence could make it true. **The artifact carries
+the H2 retraction in full, above the verification**, including what was actually repaired on that half (the
+unchanged-URL check was **fail-open**; it now verifies the output against what it removed, and M2 is that
+check's proof). If the owner takes the second reading, `plan unverify` is the correct answer and the
+artifact is still the record.
+
+Also worth an owner's minute: `plan.md` carries a blocker `cleared_by: L-VIPPS-REDACT-404` whose note says
+**step two was owed** — *"prove the green is real rather than vacuous, the way the callback lane did by
+mutating its suite both ways"*. M1/M2/M3 are that step, both paths reopened and both red. **This lane may
+not clear a flag**, so it is named here for whoever can.
+
+### Three things this batch learned that generalise
+
+**`plan verify` refuses evidence the `exit:` line does not name — that is `§6.1`, not a path bug.** A
+correct, committed, tracked artifact at `docs/plan/evidence/<LANE-ID>/FINDING.md` still exits 6 with
+*"exit: … does not name …"*. Closing a lane therefore has two parts: produce the instrument **and** append
+`, recorded in <path>` to the exit. Appending a path is not softening a claim; every clause in all six
+amended exits is unchanged.
+
+**A mutation can be killed by a *different* safeguard than the one you aimed at, and the count will not tell
+you.** `L-VIPPS-REDACT-404` M1 reds six arms — all on `Assert.NotNull()`, because with redaction gone the
+fail-closed check *drops the URL* rather than publishing it. Only M2, disabling both, reproduces the actual
+leak. A single mutation there would have produced six honest reds and a wrong story about what protects the
+guest.
+
+**Two of these lanes were closable only because the work already sat on the trunk unnoticed**
+(`L-WF-IDEMPOTENCY-REFUSAL-REST`, `L-MIG-COMPANY-RECEIVABLE`), and two more needed nothing but a run in a
+worktree that was still on disk and still built. The instrument problem and the landing problem are
+different problems; this batch is the first, and it did not move a branch.
+
+## Batch 5
+
+Seven lanes, each taken at the decline already recorded in `instrumentless-exits.md` and **worked rather
+than re-argued**. **4 closed · 2 need an owner ruling · 1 cannot close without work outside this lane.**
+Backend trunk `6d5328004` unmoved; frontend `feature/restaurant-modules` `5296dca8` unmoved. Nothing pushed.
+The demo APIs on `:5091` and `:5941` were left running and untouched, and no container was started or
+stopped.
+
+Every artifact is under `docs/plan/evidence/<LANE-ID>/`, force-added and confirmed with
+`git ls-files --error-unmatch`. Each carries the lane's **original `evidence:` line copied verbatim into its
+text** before `plan verify` overwrote it — and it did overwrite it: all four closed lanes' `evidence:` lines
+now read as a single path, with the branch, SHA and counts surviving only inside the artifact.
+
+**Nothing was measured in a shared checkout.** Both repositories' working trees carry other agents'
+uncommitted work, so every run below happened in a private `git worktree add --detach`, removed afterwards.
+That was not hygiene for its own sake — it changed a result: the plan repo's working tree is **behind the
+frontend trunk on three of the nine files `L-PRICE-BYPASS-FIVE` touches**, so an in-place run would have
+measured an older tree and reported it as the estate.
+
+### Closed — 4
+
+| lane | reason shape | what was produced |
+|---|---|---|
+| `L-WF-WITHHELD-BOUND` | **(1) the run happened, nobody wrote it down** | the four-state mutation record written, and the six `.trx` rescued out of `wt-wfwithheld` to a durable path |
+| `L-PRICE-BYPASS-FIVE` | **(1) no openable record of the pins** | the 40 pins run at the frontend trunk, plus two mutations — 22 red and 6 red — and a rotted citation corrected |
+| `L-GR-CONFIRMED-PIN-FIX` | **(5) one of three clauses shown** | clauses 2 and 3 measured against the estate at the trunk and at the pre-fix base |
+| `L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK` | **(1) the refusal existed only as RETURN prose** | the record with both counts, every ancestry re-measured, **plus the tier run at the composed tip** |
+
+**Verbatim, in the order run:**
+
+```
+$ plan verify L-WF-WITHHELD-BOUND --evidence docs/plan/evidence/L-WF-WITHHELD-BOUND/mutation-record.md
+plan: evidence inadmissible — exit: “a superseded publication's outbox rows reach a terminal state and a
+withheld row whose week has ended stops being re-polled, pinned by a test that reds if either transition is
+removed” does not name docs/plan/evidence/L-WF-WITHHELD-BOUND/mutation-record.md
+EXIT=6
+
+$ plan verify L-WF-WITHHELD-BOUND --evidence docs/plan/evidence/L-WF-WITHHELD-BOUND/mutation-record.md
+L-WF-WITHHELD-BOUND built-unverified -> verified
+EXIT=0
+
+$ plan verify L-PRICE-BYPASS-FIVE --evidence docs/plan/evidence/L-PRICE-BYPASS-FIVE/mutation-record.md
+L-PRICE-BYPASS-FIVE built-unverified -> verified
+EXIT=0
+
+$ plan verify L-GR-CONFIRMED-PIN-FIX --evidence docs/plan/evidence/L-GR-CONFIRMED-PIN-FIX/three-clauses.md
+L-GR-CONFIRMED-PIN-FIX built-unverified -> verified
+EXIT=0
+
+$ plan verify L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK --evidence docs/plan/evidence/L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK/six-branches.md
+L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK built-unverified -> verified
+EXIT=0
+```
+
+**The exit-6 is worth carrying**: `plan verify` refuses until the `exit:` line **names the path**, so each
+close required appending `, recorded in <path>` to the exit by exact-string match — re-read immediately
+before the edit, because six siblings were writing `plan.md` throughout. No `--override` was used and none
+was needed.
+
+**`L-WF-WITHHELD-BOUND`.** Six `.trx` and a runner existed inside `wt-wfwithheld`; a `.trx` names no mutation
+and a runner carries no outcome. **No new run was needed**, and two checks make the old one a claim about the
+trunk rather than about a branch: the pin file is the **same blob**
+(`289c10e2c9d632010e718e549c356350a7bf34c1`) at `74405b34d` and at `6d5328004`, so the trx's `line 79` and
+`line 106` index the trunk's own file; and both mutated production blocks are verbatim at the trunk
+(`WorkforceSchedulePublishService.cs:407`, `WorkforceNotificationDispatcher.cs:72,251-259`). One test carries
+both transitions and reds under either mutation — M1 `Expected: Superseded / Actual: Withheld`, M2
+`Expected: 1 / Actual: 0` — with `executed="2"` in all five states and the sibling control green throughout.
+
+**`L-PRICE-BYPASS-FIVE`, and the citation had rotted underneath it.** The evidence was
+`refs/lanes/L-PRICE-BYPASS-FIVE = 8c6e91fa`, a **local movable ref**, and it has moved: it resolves today to
+`c4a4fa44`. `8c6e91fa` is **not an ancestor of `feature/restaurant-modules`** — it survives only on a
+candidate branch and some unmerged lanes; `c4a4fa44` is the version that landed. **The disputed count is
+settled: 40, not 39** — the plan said `39/39`, the RETURN said `40/40`, and `Tests: 40 passed, 40 total` at
+the trunk says the RETURN was right. The suite's own shape is the exit: one describe block per formatter
+family, each with *an amount that never arrived is withheld* / *a genuine zero is still printed as a figure*
+/ *a stated amount is unchanged* — null, zero, stated. **M1b** (the absence gate removed) reds **22 of 40**,
+hitting the absence arm of all five formatters **while every zero arm stays green**, with the defect as the
+message: `Expected: "—" / Received: "0,00 kr"`. **M2** (the arithmetic coercing instead of propagating) reds
+a **disjoint six**, all on the sum path.
+
+**`L-GR-CONFIRMED-PIN-FIX`.** Clause 1 was already discharged by a receipt tracked at the trunk; clauses 2
+and 3 were measured against the estate. **Clause 2**: at the pre-fix base `801d36a3` the seed carried
+`bool emailConfirmed = true`, **15 call sites, not one passing the argument**, and the pin its own `<param>`
+doc named sets the column on the entity instead (`GrowthTestSendBindingTests.cs:110,126`); at the trunk the
+parameter is gone. **Clause 3**: the false sentence — *"the distinction would tell a caller which addresses
+another account holds"* — returns **0 hits at the trunk**, and the replacement's two factual claims were each
+checked rather than trusted (the guard reads one row, `Where(u => u.Id == userId)`; `GET /user` does return
+the caller their own `Email` and `EmailConfirmed`, `UserController.cs:311-314` → `ApplicationUserModel.cs:38-39`).
+The new text also covers **four** refusal reasons where the old covered two, matching the guard's actual
+disjunction.
+
+**`L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK`, where the missing half was worth running.** The counts —
+**5 landed, 1 unlandable** — are now stated with every ancestry re-measured today rather than inherited: the
+four backend branches are each an ancestor of the trunk via the four named `Land …` merges in
+`7bf975572..d30c1c4d4`, the frontend `lane/statute-evidence-world` is an ancestor of
+`feature/restaurant-modules`, and `lane/wf-demo-presence` is **not**, deliberately. Its four refusal reasons
+were each re-derived: the diff is **two seed-script files and no test**, `adopt` occurs **27 times at the
+trunk and 0 on the branch and 0 at their merge base** (so adopt mode arrived after the fork), the trunk
+**prints to the operator** that *"an adopted world carries NO clock punches"* — which the branch's whole
+change would falsify — and `git merge-tree` reports **4 changed-in-both regions**. And the tier half, which
+the prior pass named as resting on bare counts, was **run**: no `artifacts/tests/` receipt exists for any of
+those five SHAs, so the fast tier was executed at `d30c1c4d4` in a detached worktree —
+**`total="5048" executed="5037" passed="5037" failed="0"`, exit 0, 7 m 33 s** — reproducing the evidence
+line's *5037/5048* exactly. Asserted by name rather than by the green line: `CapabilityRouteTelemetryTests`
+**15/15** and `WorkforceNotificationBacklogBoundTests` **2/2**, matching the RETURN's own per-lane `+15` and
+`+2`. **The frontend tier was not re-measured** and its *184 suites / 4484 green* remains unbacked, which the
+artifact says in those words.
+
+### Needs an owner ruling — 2
+
+| lane | reason shape | why it must not be closed |
+|---|---|---|
+| `L-GR-DISPATCH-ACTOR` | **(4) the exit names something not in the estate** | of three named subjects one is proven, one is **test-only**, and one **cannot be tested at all** |
+| `L-WF-VIOLATION-EXACT` | **(1) → produced, then (4)** | the red now exists at the trunk, but the exit's nouns name a **different code path** from the one the pin measures |
+
+**`L-GR-DISPATCH-ACTOR`.** `Entities/Margin/MarginPeriodStatement.cs` has 22 columns and **none is an
+actor**; `MarginPurchaseSpendEntry` likewise; `Services/Margin/MarginStatementService.cs` contains **zero**
+occurrences of `userId`/`actor`/`CreatedBy` and its four writes take no caller; `MarginStatementsController`
+resolves the principal for the access gate and then discards it; and `git grep -l "MarginAudit"` returns
+nothing, so there is no ledger to write into the way Growth had. The estate declares this deliberate —
+`ModuleActorStampPin.cs:180-192`: *"Margin's whole human-attribution surface is one column: who uploaded the
+price-import batch."* **There is nothing on disk a wire test could assert by value**, so closing that subject
+is a schema change plus a write path plus a migration — **C2** territory, outside a verification lane. The
+third subject is the opposite shape: the actor is already resolved and persisted
+(`WorkforceSchedulePublication.PublishedByActorReference`, written at `WorkforceSchedulePublishService.cs:299`
+from a caller resolved at `:75` out of `CurrentUserId()`), but **no wire test drives the publish route at
+all** — the four occurrences of that column under `WebApi.Tests/` are seed literals. **The owner's question
+is whether a Margin period statement is a C4 money-path write.** If it is, this is a build lane, and the exit
+should be split: one exit conjoining a done subject, a test-only subject and an unbuilt one can never be
+honestly verified whole.
+
+**`L-WF-VIOLATION-EXACT`.** The missing write-up was produced and is the strongest artifact in the batch:
+baseline **4/4 green**, the mutation (bare `SQLITE_CONSTRAINT` 19 restored) **2 failed / 2 passed**, restored
+**4/4**, run **twice**, with the production `WebApi.dll` mtime moving at every step and its sha256 returning
+**byte-identical** to the clean assembly (`58ecc33a` → `a1a77626` → `58ecc33a`). The red is the defect in
+words: `Expected: Not "workforce.award-taken" / Actual: "workforce.award-taken"` — a NOT NULL failure, a
+programming error, answered to the caller as *someone beat you to it*. It was run **at the trunk rather than
+the lane branch**, the stronger claim: the trunk's copy of the predicate has since gained two more consumers
+that delegate to it.
+
+**And then the exit does not describe it.** The exit says *a revision-numbering write* and *the retryable
+publish-your-successor refusal*. Measured: `workforce.award-taken` carries **`["retryable"] = false`**; the
+publish-your-successor refusal is a different code from a state check
+(`WorkforceScheduleProblems.cs:96-100`); and the revision-numbering write **is not classified at all** — the
+unique index exists (`ApplicationDbContext.cs:2939`) but `WorkforceScheduleService.cs`, its only writer, has
+**no `DbUpdateException` catch and no `IsUniqueViolation` call**, so a failure there propagates as a fault
+and the exit's sentence was already true, vacuously, before the lane ran. The lane fixed the **shared
+predicate** and pinned it where it is load-bearing — the right call; the exit kept its opening sentence's
+nouns. **Renaming the exit to fit the pin is precisely the rewrite this program forbids**, so the wording
+goes to an owner and the red is banked in the meantime.
+
+### Cannot close without work outside this lane — 1
+
+**`L-WF-ADJUST-ADDRESS` — reason (5), and worse than the decline recorded.** The prior pass said the two
+halves sit in two unpushed worktrees. Measured, they also sit **on no trunk**: `f3887f9a1` is not an ancestor
+of `6d5328004` and `e9ba89e2` is not an ancestor of `feature/restaurant-modules` or of the session branch;
+neither is on any remote; at the trunk `WorkforceAttendanceDaySession` **does not exist** and
+`WorkforceAttendanceCorrectionWireTests.cs` is **absent**. So at the trunk the adjustment endpoint is still
+exactly what the lane body describes — live and undrivable by a person. The plan already knew:
+`docs/plan/log.md:1066` records *"THE CORRECTION SURFACE IS NOT ON THIS BRANCH."*
+
+The work is good and is now written down for whoever lands it: the read half is genuinely wire-pinned
+(`The_manager_attendance_grid_names_the_clock_session_a_correction_addresses`, plus three correction facts
+including a C1 append-only check on the raw punch and a by-value C4 assertion), and the page half is a real
+control — a button, a form, a client binding onto `POST …/attendance/adjustments`, and a guard that throws
+before the wire — landing **service, binding, control and page in one commit**, so C3 holds inside it. **The
+unshown clause is the conjunction**: *"the rates page … pinned by a wire test"* cannot be true of a Vue page
+from a backend suite, and no single test or repository covers both halves. Three things are owed — two
+landings, an artifact (every count in the RETURN is a bare number with no file behind it), and a ruling on
+what that last clause can mean.
+
+### What this batch says about the remainder
+
+**Three of the seven were about where the proof was put; four were about the exit's own sentence.** That is
+a different mix from the earlier batches and it is the more expensive half: a misplaced artifact is a copy,
+while an exit that misdescribes its estate needs an owner and cannot be fixed by any amount of running.
+
+**Two citations had rotted since they were written, in two different ways.** `L-PRICE-BYPASS-FIVE` named a
+**movable local ref** that has since moved to a different commit; `L-WF-ADJUST-ADDRESS` and
+`L-WF-VIOLATION-EXACT` named **branch SHAs whose relationship to the trunk changed underneath them** — one
+landed, one still has not. A SHA in an evidence line records where work *was*, never where it *is*, and
+nothing in the plan re-checks it. **Every artifact in this batch therefore states its own ancestry
+measurement**, so a later reader can tell whether it still describes the estate.
+
+**A mutation that reds nothing is not always a weak pin.** `L-PRICE-BYPASS-FIVE`'s first mutation left all 40
+tests green, and the count — 40 executed, same as baseline — ruled out a void run. The real cause was that
+**the deleted line was redundant**: `null` and `undefined` already fell through to the function's trailing
+`return false`, proven directly rather than argued. The recorded negative is worth as much as the red that
+followed it, because the tempting conclusion — *these pins do not falsify* — was wrong.
+
+**Three of the four closes needed no new run at all**, only a reading of the estate careful enough to be
+written down: two blob comparisons for `L-WF-WITHHELD-BOUND`, two `git show`s at two revisions for
+`L-GR-CONFIRMED-PIN-FIX`, and a handful of `merge-base --is-ancestor` calls for the six branches. The
+expensive instrument — a 7½-minute tier at a historical tip — was needed for exactly one clause, and it
+returned the number the RETURN had already claimed.
+
+## Batch 1
+
+Eight lanes, one at a time, starting from the decline already recorded in `instrumentless-exits.md` rather
+than re-deriving it. Per lane: **which reason-shape it hit**, the missing thing produced, and `plan verify`'s
+exact words.
+
+**6 closed · 2 need an owner ruling · 0 that could not be attempted.**
+Backend trunk `6d5328004`, unmoved. Nothing pushed, no branch moved, no container started or touched,
+`:5091` and `:5941` left alone. Every tree I mutated was restored by **writing the bytes back** and shown
+`git diff | wc -c` → **0** before the green re-run; `WebApi.dll`'s mtime was asserted to move on all
+fourteen builds, so no `--no-build` run measured a stale assembly.
+
+### The count, per lane
+
+| lane | reason-shape hit | what was produced | outcome |
+|---|---|---|---|
+| `L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED` | **(2) a green run where the exit demands a red** | the red: `CompanyAccount` back in the `default` arm → **2 red of 14**, by name, `Expected 25000 / Actual 0` | **closed** |
+| `L-CONFIRM-POSTMERGE-PIN` | **(1) the run happened and nobody wrote it down** | Mutations A and B re-performed **at the trunk** → **2 red of 10** and **9 red of 10** | **closed** |
+| `L-GR-TESTSEND-RECORD` | **(1) the RETURN named no instrument at all** | four mutations, three red sets and **one that reds nothing** | **closed, with a named gap** |
+| `L-GR-APPROVAL-STATE` | **(1) proven in a place that dies** | the four captures rescued off `wt-gr-approval` onto a durable path | **closed** |
+| `L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR` | **(1) + (5)** — artifacts on an unmerged branch, tier half prose | artifacts rescued, driver **re-run**, tier **re-measured**: 171/4103/0 | **closed** |
+| `L-EV-INQUIRY-GATE` | **(5) two branch SHAs, two suite counts, second half a render** | both halves run: backend **4 red of 632**, frontend **2 red** and **1 red** of 30 | **closed** |
+| `L-STATUTE-HONESTY` | **(4) proves a different window** + **(5) half in no capture** | a written finding; the exit was **not** built toward | **owner ruling** |
+| `L-EV-OUTBOX-FLAKE` | **(4) the exit names what is not in the estate** | a written finding, plus a third-fix discovery | **owner ruling** |
+
+### `plan verify`, verbatim, in the order run
+
+```
+$ plan verify L-GR-APPROVAL-STATE --evidence docs/plan/evidence/L-GR-APPROVAL-STATE/evidence.md
+plan: evidence inadmissible — exit: “the detail read distinguishes never-approved from approval-revoked-by-edit, shown at the wire tier” does not name docs/plan/evidence/L-GR-APPROVAL-STATE/evidence.md
+EXIT=6
+
+  (the exit was then amended to name the artifact — the append-a-path amendment the citation pass used —
+   and nothing else about it was changed)
+
+$ plan verify L-GR-APPROVAL-STATE --evidence docs/plan/evidence/L-GR-APPROVAL-STATE/evidence.md
+L-GR-APPROVAL-STATE built-unverified -> verified
+EXIT=0
+
+$ plan verify L-CONFIRM-POSTMERGE-PIN --evidence docs/plan/evidence/L-CONFIRM-POSTMERGE-PIN/mutation-record.md
+L-CONFIRM-POSTMERGE-PIN built-unverified -> verified
+EXIT=0
+
+$ plan verify L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED --evidence docs/plan/evidence/L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED/mutation-record.md
+L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED built-unverified -> verified
+EXIT=0
+
+$ plan verify L-GR-TESTSEND-RECORD --evidence docs/plan/evidence/L-GR-TESTSEND-RECORD/mutation-record.md
+L-GR-TESTSEND-RECORD built-unverified -> verified
+EXIT=0
+
+$ plan verify L-EV-INQUIRY-GATE --evidence docs/plan/evidence/L-EV-INQUIRY-GATE/mutation-record.md
+L-EV-INQUIRY-GATE built-unverified -> verified
+EXIT=0
+
+$ plan verify L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR --evidence docs/plan/evidence/L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR/evidence.md
+L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR built-unverified -> verified
+EXIT=0
+```
+
+`plan verify` was **not** run for `L-STATUTE-HONESTY` or `L-EV-OUTBOX-FLAKE`. Their `exit:`, `state:` and
+`evidence:` lines are exactly as they were.
+
+**A refusal worth carrying to the other batches, beside Batch 6's "a directory is not an instrument":
+`plan verify` also refuses an artifact the `exit:` line does not NAME** (exit 6, message above). The
+amendment is the same append-a-path the citation pass made forty-four times; the artifact must exist first.
+And the warning in the brief is exact — **every one of the six evidence lines was overwritten** with the
+single path passed. Each original is preserved verbatim inside its own artifact under a heading that says
+so, which is the only reason the branches, SHAs and counts the original agents recorded still exist.
+
+### The three findings this batch produced that are not "a lane closed"
+
+**1. `L-GR-TESTSEND-RECORD`: the exit names three facts and only two are pinned.** The mutation that drops
+the record reds 3 of 36; the mutation that swaps the caller for an ambient `"system"` actor reds 3 with
+`Expected: growth-iso-admin-a / Actual: system`; the mutation that drops `newsletterId` from the delta reds
+1 with a `KeyNotFoundException`. **The mutation that destroys the timestamp reds nothing** —
+`GrowthAuditWriter`'s `OccurredAt = _timeProvider.GetUtcNow()` replaced by `OccurredAt = default` leaves
+36 of 36 green on the audit filter and, widened, **603 of 607 Growth tests green with 0 failed**. So *its
+actor* and *its newsletter* are falsifiable and *its time* is a column nothing asserts. The exit's own
+falsifiability clause ("reds if the record is dropped") **is** met, which is why the lane is closed rather
+than declined — but an owner should decide whether the time deserves its own pin. The cheapest form is one
+`Assert.Equal(harness.Clock.GetUtcNow(), recorded.OccurredAt)`; the injectable clock already allows it.
+This lane deliberately did not write it: adding the assertion inside the pass that is measuring it is how
+a guard stops meaning anything.
+
+**2. `L-EV-OUTBOX-FLAKE`: three fixes exist for one defect and the estate shipped the weakest.**
+`L-EV-OUTBOX-FLAKE` (`59a1d607`, unlanded) pins a token that *contains* both needles so the historical
+failure reproduces on demand, and replaces the needles with a digit inventory. `L-EV-OUTBOX-GUID-SUBSTRING`
+(`79f9dd7d`, unlanded) masks the token **by exact value** and deliberately does **not** cut the link out, so
+an amount leaking inside the URL still fails, and adds a stray-identifier guard and a negative-control
+theory. **The trunk carries neither**: it does `body.Replace(link, "")` — removing the whole URL — keeps a
+random `Guid.NewGuid()` token and keeps the two bare needles `"250"` / `"2000"`, which do not match
+`2 000,00`. Its comment states the alias rate as *"about once in every 130 runs"*; the guid-substring lane
+**measured 1,012 hits in 200,000 composed bodies = 1 in 197.6** and recorded the briefed figure as an
+overstatement. So the exit's sentence is false of the class it names, and the estate is carrying a
+corrected-away number in a code comment. Detail in
+`docs/plan/evidence/L-EV-OUTBOX-FLAKE/finding.md`.
+
+**3. `L-CONFIRM-POSTMERGE-PIN`: one doc block next door is now measurably wrong.** The block above
+`The_reservation_limiter_still_resolves_after_the_failure` says *"Putting the registration back there reds
+this test **and no other in this file**."* Mutation A reds **two** tests in that file. It is not the doc
+block the exit names, so it did not block the close, but it is the same defect shape one file over.
+Recorded, not fixed — this lane does not edit the backend.
+
+### Two landing facts that came out of the measurement
+
+**`bd3a840f` (`L-GR-TESTSEND-RECORD`) is an ancestor of the trunk.** The Growth audit ledger, its writer,
+its allowlist and its three suites are **on `6d5328004`** while the lane read `built-unverified` and its
+evidence line pointed at `wt-gr-ledger`. That is a fourth instance of the family Batch 6 spotted: a lane
+can be un-verifiable and already shipped. `02c077cb` and `bcfe0d893` are ancestors too, which is why both
+of those lanes' mutations were run **at the trunk** rather than on their branches — the stronger place to
+measure.
+
+**`8ecb47df`, `f7695bc`, `6d43520`, `3ea531f5` and `59a1d607` are ancestors of nothing.** Five of these
+eight lanes' work still lives only on unmerged branches. Every one of them resolves today, and the four
+that needed running were run by checking the ref out into a throwaway worktree — which is the method, and
+it is cheap:
+
+- a backend worktree at a branch SHA builds and tiers with no further setup;
+- a **frontend** worktree needs two things a `git worktree add` does not give it: `core` is a **gitlink**
+  and comes up empty, so it must be materialised at the tree's own pin (`a6ae241` for `6d43520`,
+  `4f31003` for `f7695bc`) as a real directory — **a symlink breaks it**, because `core/helpers` reaches
+  `../../env` and a symlinked `core` resolves that outside the worktree — and `node_modules` can simply be
+  symlinked from the main checkout once `git diff HEAD <ref> -- package.json` is shown empty.
+
+That recipe is what turned two "nothing openable today" declines into measured runs, and any sibling
+holding a frontend lane on an unmerged branch can use it.
+
+### What none of the six closes claim
+
+Not one of them is C5. `L-EV-INQUIRY-GATE`'s own RETURN still ends **"OWED: C5 human acceptance"**, and a
+component test that mounts the enquiry page is still a suite. No operator has read a `Revoked` approval
+state, a `Kredittsalg (faktureres)` row on a printed close, a Growth audit row, or a failure panel on a
+real statistics page. And no SQL tier ran in this batch at all: `--filter "Database!=SqlServer"` throughout,
+no container started, so `GrowthAuditLedgerAppendOnlySqlServerTests` and the append-only trigger question
+are exactly where their lanes left them.

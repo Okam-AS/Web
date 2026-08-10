@@ -1,0 +1,128 @@
+=== M1 latest-not-first: chain order reversed
+    mutation: orderby approval.Id descending
+          ->: orderby approval.Id ascending
+    Failed!  - Failed:     1, Passed:    20, Skipped:     0, Total:    21, Duration: 10 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.The_revocation_reported_is_the_most_recent_one_and_not_the_first [19 ms]
+         Assert.Equal() Failure
+      Expected: wire-admin-a
+      Actual:   wire-power-user
+
+=== M2 the two actors swapped
+    mutation: ApproverUserId = latest?.Approval.ApproverUserId,
+                    ContentHash = latest?.Approval.ContentHash,
+          ->: ApproverUserId = latest?.Approval.InvalidatedByUserId,
+                    ContentHash = latest?.Approval.ContentHash,
+    Failed!  - Failed:     4, Passed:    17, Skipped:     0, Total:    21, Duration: 6 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [282 ms]
+         Assert.Equal() Failure
+      Expected: approver-1
+      Actual:   author-1
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [335 ms]
+         Assert.Equal() Failure
+      Expected: wire-power-user
+      Actual:   wire-admin-a
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.A_standing_sign_off_names_its_approver_and_the_wording_it_bound [14 ms]
+         Assert.Equal() Failure
+
+=== M3 Revoked collapsed back into None
+    mutation: : latest.Approval.InvalidatedAt == null ? "Live" : "Revoked";
+          ->: : latest.Approval.InvalidatedAt == null ? "Live" : "None";
+    Failed!  - Failed:     4, Passed:    17, Skipped:     0, Total:    21, Duration: 5 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [338 ms]
+         Assert.Equal() Failure
+      Expected: Revoked
+      Actual:   None
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.The_revocation_reported_is_the_most_recent_one_and_not_the_first [22 ms]
+         Assert.Equal() Failure
+      Expected: Revoked
+      Actual:   None
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [228 ms]
+         Assert.Equal() Failure
+
+=== M4 Live collapsed into Revoked
+    mutation: : latest.Approval.InvalidatedAt == null ? "Live" : "Revoked";
+          ->: : "Revoked";
+    Failed!  - Failed:     2, Passed:    19, Skipped:     0, Total:    21, Duration: 6 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.Approve_binds_the_current_version_and_flips_state_to_approved [223 ms]
+         Assert.Equal() Failure
+      Expected: Live
+      Actual:   Revoked
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.A_standing_sign_off_names_its_approver_and_the_wording_it_bound [18 ms]
+         Assert.Equal() Failure
+      Expected: Live
+      Actual:   Revoked
+
+=== M5 approved version reported as the current one
+    mutation: NewsletterVersionNo = latest?.VersionNo,
+          ->: NewsletterVersionNo = version.VersionNo,
+    Failed!  - Failed:     3, Passed:    18, Skipped:     0, Total:    21, Duration: 7 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [203 ms]
+         Assert.Equal() Failure
+      Expected: 1
+      Actual:   2
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [234 ms]
+         Assert.Equal() Failure
+      Expected: 1
+      Actual:   2
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.The_revocation_reported_is_the_most_recent_one_and_not_the_first [17 ms]
+         Assert.Equal() Failure
+
+=== M6 approved wording reported as the current wording
+    mutation: ContentHash = latest?.Approval.ContentHash,
+          ->: ContentHash = version.ContentHash,
+    Failed!  - Failed:     3, Passed:    18, Skipped:     0, Total:    21, Duration: 7 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [195 ms]
+         Assert.Equal() Failure
+      Expected: sha256:8768f793965c01251216c8a27e8b461d17ffc6e04···
+      Actual:   sha256:d42ce63f653590a16b31fb2ae9ee1fd26bf2cb40f···
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [246 ms]
+         Assert.Null() Failure
+      Expected: (null)
+      Actual:   sha256:00f54bfaa00cab9f6fab384590fb180cdec78b61a78eb2c045e339c1e50644c4
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.The_revocation_reported_is_the_most_recent_one_and_not_the_first [22 ms]
+         Assert.Equal() Failure
+
+=== M7 the original scoping restored (approval history read against the CURRENT version)
+    mutation: where approvedVersion.NewsletterId == newsletter.Id
+          ->: where approvedVersion.Id == version.Id
+    Failed!  - Failed:     4, Passed:    17, Skipped:     0, Total:    21, Duration: 7 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Growth.GrowthIntegrationJourneyTests.GRW_IJ03_author_reapprove_dispatch_and_webhook_reconcile_reports_truthful_delivery_counts [202 ms]
+         Assert.Equal() Failure
+      Expected: Revoked
+      Actual:   None
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [266 ms]
+         Assert.Equal() Failure
+      Expected: Revoked
+      Actual:   None
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [280 ms]
+         Assert.NotEqual() Failure
+
+=== M8 revocation time dropped (the field that was dead before this lane)
+    mutation: InvalidatedAt = latest?.Approval.InvalidatedAt,
+          ->: InvalidatedAt = null,
+    Failed!  - Failed:     3, Passed:    18, Skipped:     0, Total:    21, Duration: 5 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [354 ms]
+         Assert.NotNull() Failure
+        Failed WebApi.Tests.Growth.GrowthIntegrationJourneyTests.GRW_IJ03_author_reapprove_dispatch_and_webhook_reconcile_reports_truthful_delivery_counts [250 ms]
+         Assert.NotNull() Failure
+        Failed WebApi.Tests.Growth.GrowthNewsletterLifecycleTests.GRW_VERSION_001_edit_mints_a_new_immutable_version_and_invalidates_the_approval [100 ms]
+         Assert.NotNull() Failure
+
+=== M9 a standing approval given a withdrawal TIME it never had
+    mutation: InvalidatedAt = latest?.Approval.InvalidatedAt,
+          ->: InvalidatedAt = latest?.Approval.InvalidatedAt ?? latest?.Approval.ApprovedAt,
+    Failed!  - Failed:     1, Passed:    20, Skipped:     0, Total:    21, Duration: 7 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.A_standing_sign_off_names_its_approver_and_the_wording_it_bound [20 ms]
+         Assert.Null() Failure
+      Expected: (null)
+      Actual:   2026-08-01T17:02:11.8502540+00:00
+
+=== M10 a standing approval given a REVOKER it never had
+    mutation: InvalidatedByUserId = latest?.Approval.InvalidatedByUserId,
+          ->: InvalidatedByUserId = latest?.Approval.InvalidatedByUserId ?? latest?.Approval.ApproverUserId,
+    Failed!  - Failed:     1, Passed:    20, Skipped:     0, Total:    21, Duration: 4 s - WebApi.Tests.dll (net8.0)
+        Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.A_standing_sign_off_names_its_approver_and_the_wording_it_bound [14 ms]
+         Assert.Null() Failure
+      Expected: (null)
+      Actual:   wire-power-user
+

@@ -1,4 +1,4 @@
-<!-- GENERATED brief 2728c08a for L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK · intent 7c84435b072ff7fe · 2026-08-09T00:36Z -->
+<!-- GENERATED brief 75042f10 for L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK · intent 7c84435b072ff7fe · 2026-08-09T11:07Z -->
 # Brief — L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK
 
 export PLAN_ACTOR=agent:L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK
@@ -50,7 +50,7 @@ lane, and the reviewer who writes the fix is no longer the reviewer.
 **Traps.** Tier from **`WebApi.Tests/`** with `--filter "Database!=SqlServer"` — the repo root exits 0
 having run **zero** tests. **Assert by name from a `--logger trx` and carry the executed count.** **Assert
 `WebApi.dll`'s mtime MOVES.** **An empty `git diff` proves nothing: two absent files also diff to zero.**
-**Gate on `uptime` — hold below 13, re-read before each run.** **Restore `run-sheet.json` and
+**Gate on `uptime` — hold below 30, re-read before each run.** **Restore `run-sheet.json` and
 `run-sheet.md`; never `git add -A`.** Never `pkill`. **Do not move any trunk. Do not push.**
 
 ## Exit criteria
@@ -81,7 +81,7 @@ docs/plan/reviews/L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK.md gives a
 
 ## Resources
 class: analysis · pts: 0.5 · workdir: ../OkamAPI-modules
-caps in force: sql=2 suite=4 node=6 analysis=6 global=12
+caps in force: sql=2 suite=8 node=12 analysis=12 global=24
 
 ## Boundaries
 You may not run `plan accept` or `plan decide`.
@@ -97,7 +97,7 @@ Write this block to docs/plan/returns/L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACK
 
 ```
 RETURN: L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK
-brief: 2728c08a
+brief: 75042f10
 verdict: built | fail-spec | blocked | aborted
 evidence: <path or fact:key>        # required for built
 spec_gap: <brief sentence, contradicted by what observation>  # required for fail-spec

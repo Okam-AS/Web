@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="7f674cc9-e39d-4ace-9c4f-df77b7a885de" name="@Svens-MacBook-Pro 2026-08-09 17:51:52" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:51:52.0486140+02:00" queuing="2026-08-09T17:51:52.0486140+02:00" start="2026-08-09T17:51:45.2187660+02:00" finish="2026-08-09T17:51:53.5895310+02:00" />
+  <TestSettings name="default" id="874a14df-2276-4e91-aa61-377335af236f">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_51_52" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="b6d916b1-8b27-46d5-9c7a-f976827232fd" testId="f538e3c8-8f46-a21f-d639-f9053a7a9a6e" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CompanyAccountTenderWithNoInterimAccount_RefusesInsteadOfPostingToReceivables" computerName="Svens-MacBook-Pro" duration="00:00:00.2082898" startTime="2026-08-09T17:51:52.2420160+02:00" endTime="2026-08-09T17:51:52.2420160+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6d916b1-8b27-46d5-9c7a-f976827232fd" />
+    <UnitTestResult executionId="3eadd9d6-642c-472c-b9c8-5976dcc4ec35" testId="0c0c01b9-bb50-5f95-01ee-1f545b79cceb" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CompanyAccountAndCardTenders_SettleOnSeparateAccounts" computerName="Svens-MacBook-Pro" duration="00:00:00.1817579" startTime="2026-08-09T17:51:52.6306200+02:00" endTime="2026-08-09T17:51:52.6306200+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3eadd9d6-642c-472c-b9c8-5976dcc4ec35" />
+    <UnitTestResult executionId="18ff6212-94a6-4634-9aa5-e780e5258c7f" testId="bec0b7f2-84ba-374a-6edd-693a689bb215" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportPending_MissingSalesAccountForRate_FailsThatZ_IsolatesOthers" computerName="Svens-MacBook-Pro" duration="00:00:00.2431340" startTime="2026-08-09T17:51:53.3059980+02:00" endTime="2026-08-09T17:51:53.3059980+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="18ff6212-94a6-4634-9aa5-e780e5258c7f" />
+    <UnitTestResult executionId="84f2a49d-3dd8-4c6c-9897-709394662ca5" testId="3a4610ca-6c98-e3dc-036c-11db869d92d9" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesCompanyAccountTenderToItsOwnInterimAccount_NotSharedReceivables" computerName="Svens-MacBook-Pro" duration="00:00:00.2067166" startTime="2026-08-09T17:51:52.4488000+02:00" endTime="2026-08-09T17:51:52.4488000+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84f2a49d-3dd8-4c6c-9897-709394662ca5" />
+    <UnitTestResult executionId="75655ea9-2b16-4b68-8b04-ec34fd780479" testId="205ca270-d553-492f-02c0-8a9cb5b40c2b" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ZeroRatedSalesAreCredited_NotDropped" computerName="Svens-MacBook-Pro" duration="00:00:04.2894886" startTime="2026-08-09T17:51:52.0337910+02:00" endTime="2026-08-09T17:51:52.0337990+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75655ea9-2b16-4b68-8b04-ec34fd780479" />
+    <UnitTestResult executionId="e72b0196-cc27-49ae-8498-bedd8de145f3" testId="91f891f2-715d-92b9-706e-42ffe75aae88" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CreditsGrossPerVatRate_NotVatOnlyAmount" computerName="Svens-MacBook-Pro" duration="00:00:00.1122421" startTime="2026-08-09T17:51:53.4183090+02:00" endTime="2026-08-09T17:51:53.4183090+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e72b0196-cc27-49ae-8498-bedd8de145f3" />
+    <UnitTestResult executionId="8ed1d7b1-3f3f-4980-8fb1-dee3551335d9" testId="ba41ca47-ac38-b7cc-4d7b-f971d998820c" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_Twice_IsIdempotent_SingleVoucher" computerName="Svens-MacBook-Pro" duration="00:00:00.1277876" startTime="2026-08-09T17:51:53.5462070+02:00" endTime="2026-08-09T17:51:53.5462070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8ed1d7b1-3f3f-4980-8fb1-dee3551335d9" />
+    <UnitTestResult executionId="f757ca29-496c-4c80-a340-b255476ffc7b" testId="9cfb3a7e-a97d-55fb-6166-68d9f3101940" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesTerminalPaymentToSurfboardIntermediary" computerName="Svens-MacBook-Pro" duration="00:00:00.2117591" startTime="2026-08-09T17:51:53.0627680+02:00" endTime="2026-08-09T17:51:53.0627680+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f757ca29-496c-4c80-a340-b255476ffc7b" />
+    <UnitTestResult executionId="d25bdde5-98ee-4b3c-ae6d-113731a8f4c0" testId="69eb1ba6-11e7-2ba0-035b-e5cf4529236f" testName="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesTerminalPaymentToDinteroIntermediary" computerName="Svens-MacBook-Pro" duration="00:00:00.2202307" startTime="2026-08-09T17:51:52.8509240+02:00" endTime="2026-08-09T17:51:52.8509240+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d25bdde5-98ee-4b3c-ae6d-113731a8f4c0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportPending_MissingSalesAccountForRate_FailsThatZ_IsolatesOthers" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bec0b7f2-84ba-374a-6edd-693a689bb215">
+      <Execution id="18ff6212-94a6-4634-9aa5-e780e5258c7f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportPending_MissingSalesAccountForRate_FailsThatZ_IsolatesOthers" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ZeroRatedSalesAreCredited_NotDropped" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="205ca270-d553-492f-02c0-8a9cb5b40c2b">
+      <Execution id="75655ea9-2b16-4b68-8b04-ec34fd780479" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_ZeroRatedSalesAreCredited_NotDropped" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesTerminalPaymentToSurfboardIntermediary" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9cfb3a7e-a97d-55fb-6166-68d9f3101940">
+      <Execution id="f757ca29-496c-4c80-a340-b255476ffc7b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_ClassifiesTerminalPaymentToSurfboardIntermediary" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CompanyAccountTenderWithNoInterimAccount_RefusesInsteadOfPostingToReceivables" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f538e3c8-8f46-a21f-d639-f9053a7a9a6e">
+      <Execution id="b6d916b1-8b27-46d5-9c7a-f976827232fd" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_CompanyAccountTenderWithNoInterimAccount_RefusesInsteadOfPostingToReceivables" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesCompanyAccountTenderToItsOwnInterimAccount_NotSharedReceivables" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="3a4610ca-6c98-e3dc-036c-11db869d92d9">
+      <Execution id="84f2a49d-3dd8-4c6c-9897-709394662ca5" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_ClassifiesCompanyAccountTenderToItsOwnInterimAccount_NotSharedReceivables" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_Twice_IsIdempotent_SingleVoucher" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ba41ca47-ac38-b7cc-4d7b-f971d998820c">
+      <Execution id="8ed1d7b1-3f3f-4980-8fb1-dee3551335d9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_Twice_IsIdempotent_SingleVoucher" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CreditsGrossPerVatRate_NotVatOnlyAmount" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="91f891f2-715d-92b9-706e-42ffe75aae88">
+      <Execution id="e72b0196-cc27-49ae-8498-bedd8de145f3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_CreditsGrossPerVatRate_NotVatOnlyAmount" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_ClassifiesTerminalPaymentToDinteroIntermediary" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="69eb1ba6-11e7-2ba0-035b-e5cf4529236f">
+      <Execution id="d25bdde5-98ee-4b3c-ae6d-113731a8f4c0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_ClassifiesTerminalPaymentToDinteroIntermediary" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.Cov_TripletexPosExportTests.ExportZReport_CompanyAccountAndCardTenders_SettleOnSeparateAccounts" storage="/users/svendaneel/okam/wt-migcompanyrecv/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0c0c01b9-bb50-5f95-01ee-1f545b79cceb">
+      <Execution id="3eadd9d6-642c-472c-b9c8-5976dcc4ec35" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-migcompanyrecv/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.Cov_TripletexPosExportTests" name="ExportZReport_CompanyAccountAndCardTenders_SettleOnSeparateAccounts" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="f538e3c8-8f46-a21f-d639-f9053a7a9a6e" executionId="b6d916b1-8b27-46d5-9c7a-f976827232fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c0c01b9-bb50-5f95-01ee-1f545b79cceb" executionId="3eadd9d6-642c-472c-b9c8-5976dcc4ec35" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bec0b7f2-84ba-374a-6edd-693a689bb215" executionId="18ff6212-94a6-4634-9aa5-e780e5258c7f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3a4610ca-6c98-e3dc-036c-11db869d92d9" executionId="84f2a49d-3dd8-4c6c-9897-709394662ca5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="205ca270-d553-492f-02c0-8a9cb5b40c2b" executionId="75655ea9-2b16-4b68-8b04-ec34fd780479" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="91f891f2-715d-92b9-706e-42ffe75aae88" executionId="e72b0196-cc27-49ae-8498-bedd8de145f3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba41ca47-ac38-b7cc-4d7b-f971d998820c" executionId="8ed1d7b1-3f3f-4980-8fb1-dee3551335d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9cfb3a7e-a97d-55fb-6166-68d9f3101940" executionId="f757ca29-496c-4c80-a340-b255476ffc7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69eb1ba6-11e7-2ba0-035b-e5cf4529236f" executionId="d25bdde5-98ee-4b3c-ae6d-113731a8f4c0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.72]   Discovering: WebApi.Tests
+[xUnit.net 00:00:02.11]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:02.12]   Starting:    WebApi.Tests
+[xUnit.net 00:00:07.98]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

@@ -1,4 +1,4 @@
-<!-- GENERATED brief 19b10ab3 for L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND · intent 7c84435b072ff7fe · 2026-08-09T00:32Z -->
+<!-- GENERATED brief bf131a72 for L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND · intent 7c84435b072ff7fe · 2026-08-09T11:07Z -->
 # Brief — L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND
 
 export PLAN_ACTOR=agent:L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND
@@ -74,7 +74,7 @@ docs/plan/artifacts/the-second-parse.md states how many evidence lines plan.md h
 
 ## Resources
 class: analysis · pts: 0.5 · workdir: .
-caps in force: sql=2 suite=4 node=6 analysis=6 global=12
+caps in force: sql=2 suite=8 node=12 analysis=12 global=24
 
 ## Boundaries
 You may not run `plan accept` or `plan decide`.
@@ -90,7 +90,7 @@ Write this block to docs/plan/returns/L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-
 
 ```
 RETURN: L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND
-brief: 19b10ab3
+brief: bf131a72
 verdict: built | fail-spec | blocked | aborted
 evidence: <path or fact:key>        # required for built
 spec_gap: <brief sentence, contradicted by what observation>  # required for fail-spec

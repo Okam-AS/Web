@@ -1,4 +1,4 @@
-<!-- GENERATED brief 5c7fb373 for L-LIVE-WALK-MARGIN · intent 7c84435b072ff7fe · 2026-08-09T00:43Z -->
+<!-- GENERATED brief 4a0358f1 for L-LIVE-WALK-MARGIN · intent 7c84435b072ff7fe · 2026-08-09T10:43Z -->
 # Brief — L-LIVE-WALK-MARGIN
 
 export PLAN_ACTOR=agent:L-LIVE-WALK-MARGIN
@@ -87,7 +87,7 @@ a journey artifact for a chef enters an ingredient and a supplier price records 
 
 ## Resources
 class: node · pts: 1 · workdir: lanes/L-LIVE-WALK-MARGIN/
-caps in force: sql=2 suite=4 node=6 analysis=6 global=12
+caps in force: sql=2 suite=8 node=12 analysis=12 global=24
 
 ## Boundaries
 You may not run `plan accept` or `plan decide`.
@@ -103,7 +103,7 @@ Write this block to docs/plan/returns/L-LIVE-WALK-MARGIN-<n>.md and hand it back
 
 ```
 RETURN: L-LIVE-WALK-MARGIN
-brief: 5c7fb373
+brief: 4a0358f1
 verdict: built | fail-spec | blocked | aborted
 evidence: <path or fact:key>        # required for built
 spec_gap: <brief sentence, contradicted by what observation>  # required for fail-spec

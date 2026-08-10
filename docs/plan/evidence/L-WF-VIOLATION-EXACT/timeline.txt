@@ -1,0 +1,14 @@
+SRC sha at start: d5bee423bcaf1522
+### baseline  dll-mtime-BEFORE: WebApi.dll absent
+    exit=0 dll-mtime-AFTER: WebApi.dll absent
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 606 ms - WebApi.Tests.dll (net8.0)
+SRC sha mutated: 36af368053e73f90
+### mutant  dll-mtime-BEFORE: WebApi.dll absent
+    exit=1 dll-mtime-AFTER: WebApi.dll absent
+Failed!  - Failed:     2, Passed:     2, Skipped:     0, Total:     4, Duration: 592 ms - WebApi.Tests.dll (net8.0)
+SRC sha restored: d5bee423bcaf1522  (clean blob = e9299863f5af15a72bf4904c889f45c72062df64)
+git-status-after-restore: 0 modified
+### restored  dll-mtime-BEFORE: WebApi.dll absent
+    exit=0 dll-mtime-AFTER: WebApi.dll absent
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 627 ms - WebApi.Tests.dll (net8.0)
+DONE

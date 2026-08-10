@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="30278637-3769-4128-adb8-38bd1725cdf6" name="@Svens-MacBook-Pro 2026-08-09 17:56:24" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:56:24.4260800+02:00" queuing="2026-08-09T17:56:24.4260800+02:00" start="2026-08-09T17:56:22.8555610+02:00" finish="2026-08-09T17:56:24.9107890+02:00" />
+  <TestSettings name="default" id="c6cfa9b8-f5d0-45c5-971a-a0c67d08b2ab">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_56_24" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="c7711739-63f8-49b5-82cc-686f52d5b734" testId="a3bfa9c4-7130-05b0-6243-5d80dcad4021" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.Anonymous_by_omission_endpoints_exist_in_this_assembly_today" computerName="Svens-MacBook-Pro" duration="00:00:00.4608703" startTime="2026-08-09T17:56:24.8429080+02:00" endTime="2026-08-09T17:56:24.8429080+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c7711739-63f8-49b5-82cc-686f52d5b734" />
+    <UnitTestResult executionId="bdc3beae-d73b-4456-9d89-1b6b66a38be7" testId="5007e884-ea3c-1c08-5282-f3f452813a4c" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;%2b4791234500&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0017515" startTime="2026-08-09T17:56:24.3957940+02:00" endTime="2026-08-09T17:56:24.3957950+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bdc3beae-d73b-4456-9d89-1b6b66a38be7" />
+    <UnitTestResult executionId="535fb470-31dc-42c1-a1ed-f858a348aa6e" testId="30fbfb66-4d33-eef4-051e-1433654685f3" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_value_no_rule_removed_costs_the_url_rather_than_being_published" computerName="Svens-MacBook-Pro" duration="00:00:00.0002436" startTime="2026-08-09T17:56:24.3960440+02:00" endTime="2026-08-09T17:56:24.3960440+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="535fb470-31dc-42c1-a1ed-f858a348aa6e" />
+    <UnitTestResult executionId="5f21e717-ab8c-4a8b-9848-18fb965dce35" testId="15aca1df-c1f9-1dc6-ca20-8c8c42ddd7a3" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_endpoint_that_omits_authorization_is_anonymous_for_the_value_shape_trigger" computerName="Svens-MacBook-Pro" duration="00:00:00.0135914" startTime="2026-08-09T17:56:24.3757950+02:00" endTime="2026-08-09T17:56:24.3758200+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5f21e717-ab8c-4a8b-9848-18fb965dce35" />
+    <UnitTestResult executionId="0c758a2c-1662-4103-8b0f-875011155839" testId="dbe8daea-1089-a9de-78c6-922f7d31e2aa" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;.&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001918" startTime="2026-08-09T17:56:24.3789270+02:00" endTime="2026-08-09T17:56:24.3789270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c758a2c-1662-4103-8b0f-875011155839" />
+    <UnitTestResult executionId="a999a973-1b3c-432a-a7c0-ab338393535d" testId="fe9d0d7f-b99a-ec87-6ec6-6967e1ced55b" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_unrouted_redaction_still_correlates_two_requests_carrying_one_capability" computerName="Svens-MacBook-Pro" duration="00:00:00.0029439" startTime="2026-08-09T17:56:24.3788560+02:00" endTime="2026-08-09T17:56:24.3788560+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a999a973-1b3c-432a-a7c0-ab338393535d" />
+    <UnitTestResult executionId="8571b021-3ca3-45c3-ad1a-f29681610a09" testId="8d8ed74a-b9f9-963d-e4eb-74340c53c61f" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;+4791234500&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000250" startTime="2026-08-09T17:56:24.3960090+02:00" endTime="2026-08-09T17:56:24.3960090+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8571b021-3ca3-45c3-ad1a-f29681610a09" />
+    <UnitTestResult executionId="6d49e609-210f-47e4-b1f8-13b3fc204e05" testId="0b500ed6-a44d-e7d9-7771-e7a1567c2740" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_authorized_endpoint_keeps_the_entity_id_in_its_url" computerName="Svens-MacBook-Pro" duration="00:00:00.0003311" startTime="2026-08-09T17:56:24.3785870+02:00" endTime="2026-08-09T17:56:24.3785870+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d49e609-210f-47e4-b1f8-13b3fc204e05" />
+    <UnitTestResult executionId="313e980e-dadf-440c-a022-c94127d6766a" testId="f9b2be16-a1eb-7faf-46d0-68bcf8314b17" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;]&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000205" startTime="2026-08-09T17:56:24.3791230+02:00" endTime="2026-08-09T17:56:24.3791230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="313e980e-dadf-440c-a022-c94127d6766a" />
+    <UnitTestResult executionId="c86c6d5a-dee0-40f6-8076-a3a635d49b2c" testId="32b08a52-2a47-f118-5358-c37ccb25a414" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;%5D&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001038" startTime="2026-08-09T17:56:24.3790160+02:00" endTime="2026-08-09T17:56:24.3790160+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c86c6d5a-dee0-40f6-8076-a3a635d49b2c" />
+    <UnitTestResult executionId="35bc2f04-1b97-4344-be6b-5c9226aeb94f" testId="19de3202-4fc7-4da6-8c31-30336da0056f" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_allow_anonymous_action_on_an_authorized_controller_is_anonymous" computerName="Svens-MacBook-Pro" duration="00:00:00.0000593" startTime="2026-08-09T17:56:24.8430000+02:00" endTime="2026-08-09T17:56:24.8430000+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35bc2f04-1b97-4344-be6b-5c9226aeb94f" />
+    <UnitTestResult executionId="c349145a-f9f3-476a-9a82-d7487e8751e7" testId="41a6df79-340e-fae2-94c0-44bd01804a80" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;&gt;&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0000263" startTime="2026-08-09T17:56:24.3790830+02:00" endTime="2026-08-09T17:56:24.3790830+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c349145a-f9f3-476a-9a82-d7487e8751e7" />
+    <UnitTestResult executionId="274e5cbd-d28d-44f4-85ad-b24cbb3c6449" testId="57cd2892-394f-0ed3-177b-f6b830772e1f" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;%2B4791234500&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0001847" startTime="2026-08-09T17:56:24.3959740+02:00" endTime="2026-08-09T17:56:24.3959740+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="274e5cbd-d28d-44f4-85ad-b24cbb3c6449" />
+    <UnitTestResult executionId="4607aad4-7567-4461-8b61-b172f37eb8fc" testId="7a0b47d6-ad6c-f6cf-70f0-12b46416893f" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;,&quot;)" computerName="Svens-MacBook-Pro" duration="00:00:00.0005264" startTime="2026-08-09T17:56:24.3788970+02:00" endTime="2026-08-09T17:56:24.3788970+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4607aad4-7567-4461-8b61-b172f37eb8fc" />
+    <UnitTestResult executionId="8c98de8a-56aa-441e-b0ea-c3b3f533580c" testId="09c97d50-d516-15ae-c5a3-83fe44ff44bf" testName="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_method_mismatch_reaches_telemetry_without_the_phone_number_in_its_path" computerName="Svens-MacBook-Pro" duration="00:00:00.0003131" startTime="2026-08-09T17:56:24.3795530+02:00" endTime="2026-08-09T17:56:24.3795530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c98de8a-56aa-441e-b0ea-c3b3f533580c" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;%2b4791234500&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5007e884-ea3c-1c08-5282-f3f452813a4c">
+      <Execution id="bdc3beae-d73b-4456-9d89-1b6b66a38be7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_percent_encoded_route_value_reaches_telemetry_redacted" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;%2B4791234500&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="57cd2892-394f-0ed3-177b-f6b830772e1f">
+      <Execution id="274e5cbd-d28d-44f4-85ad-b24cbb3c6449" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_percent_encoded_route_value_reaches_telemetry_redacted" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_percent_encoded_route_value_reaches_telemetry_redacted(asWritten: &quot;+4791234500&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="8d8ed74a-b9f9-963d-e4eb-74340c53c61f">
+      <Execution id="8571b021-3ca3-45c3-ad1a-f29681610a09" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_percent_encoded_route_value_reaches_telemetry_redacted" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_unrouted_redaction_still_correlates_two_requests_carrying_one_capability" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="fe9d0d7f-b99a-ec87-6ec6-6967e1ced55b">
+      <Execution id="a999a973-1b3c-432a-a7c0-ab338393535d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="An_unrouted_redaction_still_correlates_two_requests_carrying_one_capability" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_endpoint_that_omits_authorization_is_anonymous_for_the_value_shape_trigger" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="15aca1df-c1f9-1dc6-ca20-8c8c42ddd7a3">
+      <Execution id="5f21e717-ab8c-4a8b-9848-18fb965dce35" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="An_endpoint_that_omits_authorization_is_anonymous_for_the_value_shape_trigger" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;]&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f9b2be16-a1eb-7faf-46d0-68bcf8314b17">
+      <Execution id="313e980e-dadf-440c-a022-c94127d6766a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;&gt;&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="41a6df79-340e-fae2-94c0-44bd01804a80">
+      <Execution id="c349145a-f9f3-476a-9a82-d7487e8751e7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;%5D&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="32b08a52-2a47-f118-5358-c37ccb25a414">
+      <Execution id="c86c6d5a-dee0-40f6-8076-a3a635d49b2c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;.&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dbe8daea-1089-a9de-78c6-922f7d31e2aa">
+      <Execution id="0c758a2c-1662-4103-8b0f-875011155839" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_method_mismatch_reaches_telemetry_without_the_phone_number_in_its_path" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="09c97d50-d516-15ae-c5a3-83fe44ff44bf">
+      <Execution id="8c98de8a-56aa-441e-b0ea-c3b3f533580c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_method_mismatch_reaches_telemetry_without_the_phone_number_in_its_path" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_value_no_rule_removed_costs_the_url_rather_than_being_published" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="30fbfb66-4d33-eef4-051e-1433654685f3">
+      <Execution id="535fb470-31dc-42c1-a1ed-f858a348aa6e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_value_no_rule_removed_costs_the_url_rather_than_being_published" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_allow_anonymous_action_on_an_authorized_controller_is_anonymous" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="19de3202-4fc7-4da6-8c31-30336da0056f">
+      <Execution id="35bc2f04-1b97-4344-be6b-5c9226aeb94f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="An_allow_anonymous_action_on_an_authorized_controller_is_anonymous" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token(glued: &quot;,&quot;)" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7a0b47d6-ad6c-f6cf-70f0-12b46416893f">
+      <Execution id="4607aad4-7567-4461-8b61-b172f37eb8fc" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="A_deposit_link_an_email_client_mangled_reaches_telemetry_without_its_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.An_authorized_endpoint_keeps_the_entity_id_in_its_url" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0b500ed6-a44d-e7d9-7771-e7a1567c2740">
+      <Execution id="6d49e609-210f-47e4-b1f8-13b3fc204e05" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="An_authorized_endpoint_keeps_the_entity_id_in_its_url" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CapabilityRouteTelemetryTests.Anonymous_by_omission_endpoints_exist_in_this_assembly_today" storage="/users/svendaneel/okam/wt-vippsredact/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a3bfa9c4-7130-05b0-6243-5d80dcad4021">
+      <Execution id="c7711739-63f8-49b5-82cc-686f52d5b734" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-vippsredact/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CapabilityRouteTelemetryTests" name="Anonymous_by_omission_endpoints_exist_in_this_assembly_today" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a3bfa9c4-7130-05b0-6243-5d80dcad4021" executionId="c7711739-63f8-49b5-82cc-686f52d5b734" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5007e884-ea3c-1c08-5282-f3f452813a4c" executionId="bdc3beae-d73b-4456-9d89-1b6b66a38be7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="30fbfb66-4d33-eef4-051e-1433654685f3" executionId="535fb470-31dc-42c1-a1ed-f858a348aa6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="15aca1df-c1f9-1dc6-ca20-8c8c42ddd7a3" executionId="5f21e717-ab8c-4a8b-9848-18fb965dce35" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dbe8daea-1089-a9de-78c6-922f7d31e2aa" executionId="0c758a2c-1662-4103-8b0f-875011155839" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fe9d0d7f-b99a-ec87-6ec6-6967e1ced55b" executionId="a999a973-1b3c-432a-a7c0-ab338393535d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d8ed74a-b9f9-963d-e4eb-74340c53c61f" executionId="8571b021-3ca3-45c3-ad1a-f29681610a09" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0b500ed6-a44d-e7d9-7771-e7a1567c2740" executionId="6d49e609-210f-47e4-b1f8-13b3fc204e05" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f9b2be16-a1eb-7faf-46d0-68bcf8314b17" executionId="313e980e-dadf-440c-a022-c94127d6766a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="32b08a52-2a47-f118-5358-c37ccb25a414" executionId="c86c6d5a-dee0-40f6-8076-a3a635d49b2c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19de3202-4fc7-4da6-8c31-30336da0056f" executionId="35bc2f04-1b97-4344-be6b-5c9226aeb94f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41a6df79-340e-fae2-94c0-44bd01804a80" executionId="c349145a-f9f3-476a-9a82-d7487e8751e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57cd2892-394f-0ed3-177b-f6b830772e1f" executionId="274e5cbd-d28d-44f4-85ad-b24cbb3c6449" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7a0b47d6-ad6c-f6cf-70f0-12b46416893f" executionId="4607aad4-7567-4461-8b61-b172f37eb8fc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="09c97d50-d516-15ae-c5a3-83fe44ff44bf" executionId="8c98de8a-56aa-441e-b0ea-c3b3f533580c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="15" executed="15" passed="15" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.96]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.28]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.29]   Starting:    WebApi.Tests
+[xUnit.net 00:00:01.81]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

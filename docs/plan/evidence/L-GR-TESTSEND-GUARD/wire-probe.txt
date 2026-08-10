@@ -1,0 +1,8 @@
+AdminA testAddress="stranger@somewhere.test" -> 404 NotFound
+    {"error":{"code":"growth.not_found","message":"The requested Growth resource was not found.","traceId":"0HNNM5U61PB5D"}}
+AdminA testAddress="" -> 400 BadRequest
+    {"error":{"code":"growth.test_address_required","message":"A test recipient address is required.","traceId":"0HNNM5U61PB5E"}}
+AdminA testAddress="wire-admin-a@example.test" -> 404 NotFound
+    {"error":{"code":"growth.not_found","message":"The requested Growth resource was not found.","traceId":"0HNNM5U61PB5F"}}
+AdminB (does not administer StoreA) -> 404 NotFound
+    {"error":{"code":"growth.not_found","message":"The requested Growth resource was not found.","traceId":"0HNNM5U61PB5G"}}

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="2212474d-fe0d-43df-9ebe-4c5736495fa1" name="@Svens-MacBook-Pro 2026-08-09 17:47:10" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-09T17:47:10.5372010+02:00" queuing="2026-08-09T17:47:10.5372010+02:00" start="2026-08-09T17:47:05.1314010+02:00" finish="2026-08-09T17:47:10.5400060+02:00" />
+  <TestSettings name="default" id="9ba51f29-b1db-47f7-bb2b-67bf5a0a1620">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-09_17_47_10" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="ca719d2a-7b9b-42da-898e-2e48066994ea" testId="4cb5eb7e-55b2-cc91-07ee-9ec5ad211e75" testName="WebApi.Tests.Wire.WorkforceBootstrapWireTests.A_real_power_user_cannot_open_workforce_in_a_store_they_do_not_administer" computerName="Svens-MacBook-Pro" duration="00:00:00.0065635" startTime="2026-08-09T17:47:10.4804090+02:00" endTime="2026-08-09T17:47:10.4804090+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ca719d2a-7b9b-42da-898e-2e48066994ea" />
+    <UnitTestResult executionId="b8c31e6d-bf92-4bbf-8646-4f38929182fd" testId="0c229333-5adf-1490-493e-9a472ea30872" testName="WebApi.Tests.Wire.WorkforceBootstrapWireTests.A_fresh_stores_administrator_opens_workforce_over_http_and_the_engagement_manages" computerName="Svens-MacBook-Pro" duration="00:00:00.3438907" startTime="2026-08-09T17:47:10.4539730+02:00" endTime="2026-08-09T17:47:10.4539810+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8c31e6d-bf92-4bbf-8646-4f38929182fd" />
+    <UnitTestResult executionId="d35575e2-be95-41bc-85b4-9483994486c5" testId="f26a1c4a-cf91-88de-9673-727c002cb05a" testName="WebApi.Tests.Wire.WorkforceBootstrapWireTests.An_admin_of_another_store_cannot_open_workforce_in_it_while_its_own_admin_can" computerName="Svens-MacBook-Pro" duration="00:00:00.0118342" startTime="2026-08-09T17:47:10.4736840+02:00" endTime="2026-08-09T17:47:10.4736840+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d35575e2-be95-41bc-85b4-9483994486c5" />
+    <UnitTestResult executionId="8c9a9762-e84d-4398-9e7e-d7f7d145bf67" testId="966b608c-dd5c-5410-342a-139b74fbb42c" testName="WebApi.Tests.Wire.WorkforceBootstrapWireTests.The_door_shuts_once_a_store_has_a_workforce" computerName="Svens-MacBook-Pro" duration="00:00:00.0072863" startTime="2026-08-09T17:47:10.4616600+02:00" endTime="2026-08-09T17:47:10.4616600+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c9a9762-e84d-4398-9e7e-d7f7d145bf67" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Wire.WorkforceBootstrapWireTests.The_door_shuts_once_a_store_has_a_workforce" storage="/users/svendaneel/okam/wt-wfboot/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="966b608c-dd5c-5410-342a-139b74fbb42c">
+      <Execution id="8c9a9762-e84d-4398-9e7e-d7f7d145bf67" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfboot/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforceBootstrapWireTests" name="The_door_shuts_once_a_store_has_a_workforce" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforceBootstrapWireTests.An_admin_of_another_store_cannot_open_workforce_in_it_while_its_own_admin_can" storage="/users/svendaneel/okam/wt-wfboot/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f26a1c4a-cf91-88de-9673-727c002cb05a">
+      <Execution id="d35575e2-be95-41bc-85b4-9483994486c5" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfboot/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforceBootstrapWireTests" name="An_admin_of_another_store_cannot_open_workforce_in_it_while_its_own_admin_can" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforceBootstrapWireTests.A_real_power_user_cannot_open_workforce_in_a_store_they_do_not_administer" storage="/users/svendaneel/okam/wt-wfboot/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4cb5eb7e-55b2-cc91-07ee-9ec5ad211e75">
+      <Execution id="ca719d2a-7b9b-42da-898e-2e48066994ea" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfboot/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforceBootstrapWireTests" name="A_real_power_user_cannot_open_workforce_in_a_store_they_do_not_administer" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.WorkforceBootstrapWireTests.A_fresh_stores_administrator_opens_workforce_over_http_and_the_engagement_manages" storage="/users/svendaneel/okam/wt-wfboot/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0c229333-5adf-1490-493e-9a472ea30872">
+      <Execution id="b8c31e6d-bf92-4bbf-8646-4f38929182fd" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-wfboot/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.WorkforceBootstrapWireTests" name="A_fresh_stores_administrator_opens_workforce_over_http_and_the_engagement_manages" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="4cb5eb7e-55b2-cc91-07ee-9ec5ad211e75" executionId="ca719d2a-7b9b-42da-898e-2e48066994ea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0c229333-5adf-1490-493e-9a472ea30872" executionId="b8c31e6d-bf92-4bbf-8646-4f38929182fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f26a1c4a-cf91-88de-9673-727c002cb05a" executionId="d35575e2-be95-41bc-85b4-9483994486c5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="966b608c-dd5c-5410-342a-139b74fbb42c" executionId="8c9a9762-e84d-4398-9e7e-d7f7d145bf67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.88]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.09]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.09]   Starting:    WebApi.Tests
+[xUnit.net 00:00:05.17]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

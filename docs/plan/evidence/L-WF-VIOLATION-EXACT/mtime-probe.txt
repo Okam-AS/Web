@@ -1,0 +1,8 @@
+MTIME PROBE (WebApi.dll = /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/wt-b5-violexact/bin/Debug/net8.0/WebApi.dll)
+before-mutation      : 2026-08-09T17:43:05  sha256=58ecc33a321d8195
+mutated
+Failed!  - Failed:     2, Passed:     2, Skipped:     0, Total:     4, Duration: 599 ms - WebApi.Tests.dll (net8.0)
+after-mutant-build   : 2026-08-09T17:45:24  sha256=a1a776266bd65d45
+Passed!  - Failed:     0, Passed:     4, Skipped:     0, Total:     4, Duration: 610 ms - WebApi.Tests.dll (net8.0)
+after-restore-build  : 2026-08-09T17:45:45  sha256=58ecc33a321d8195
+git status clean?    : 0 modified

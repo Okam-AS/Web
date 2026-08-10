@@ -1,0 +1,34 @@
+RED 1 — the defect, measured at the wire tier (before any production change)
+
+Command:
+  dotnet test WebApi.Tests/WebApi.Tests.csproj --no-build \
+    --filter "FullyQualifiedName~GrowthApprovalStateWireTests"
+
+  Failed WebApi.Tests.Wire.GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed [294 ms]
+  Error Message:
+   Assert.NotEqual() Failure
+  Expected: Not "{\"state\":\"None\",\"approvalId\":null,\"newslett"...
+  Actual:   "{\"state\":\"None\",\"approvalId\":null,\"newslett"...
+     at ...GrowthApprovalStateWireTests.An_edit_revoked_sign_off_is_not_the_answer_given_for_one_that_never_existed() line 63
+
+The approval block served for a newsletter whose sign-off an edit had just revoked is byte-for-byte
+the block served for a newsletter nobody ever approved:
+
+  {"state":"None","approvalId":null,"newsletterVersionId":null,"approvedAt":null,"invalidatedAt":null}
+
+The other two facts fail with KeyNotFoundException on `newsletterVersionNo` — the auditor's fields
+(approver, content hash, revoker, approved version) are not on the contract at all.
+
+  Failed:     3, Passed:     0, Skipped:     0, Total:     3
+
+CAUSE, confirmed from the EF command log in the same run — BuildDetailAsync issues both approval
+queries against the CURRENT version's id:
+
+  SELECT ... FROM "GrowthNewsletterApprovals" WHERE "NewsletterVersionId" = @__version_Id_0
+    AND "InvalidatedAt" IS NULL LIMIT 1                      -- the live lookup
+  SELECT ... FROM "GrowthNewsletterApprovals" WHERE "NewsletterVersionId" = @__version_Id_0
+    ORDER BY "Id" DESC LIMIT 1                               -- the "last invalidated" lookup
+
+An edit APPENDS the version this second query then looks in, and invalidates approvals that bind the
+version it left behind — so the second query can never return a row. `invalidatedAt` was dead on the
+wire, not merely wrong after an edit.

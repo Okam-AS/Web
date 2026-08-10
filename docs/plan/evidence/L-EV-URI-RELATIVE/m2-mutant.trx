@@ -1,0 +1,661 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="53f2b8f1-2572-4e04-895f-a0921f042a61" name="@svens-macbook-pro 2026-08-02 10:06:07" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-02T10:06:07.5933780+02:00" queuing="2026-08-02T10:06:07.5933780+02:00" start="2026-08-02T10:06:03.5058680+02:00" finish="2026-08-02T10:06:12.9933940+02:00" />
+  <TestSettings name="default" id="5de00dd8-d564-4dfe-ada9-382337054190">
+    <Deployment runDeploymentRoot="_svens-macbook-pro_2026-08-02_10_06_07" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="1da427d9-a955-40d1-aeed-26cb27d17b57" testId="715c5929-6ac5-b98d-9b4b-f4cb81e4e6e4" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;/events&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000610" startTime="2026-08-02T10:06:12.9534620+02:00" endTime="2026-08-02T10:06:12.9534620+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1da427d9-a955-40d1-aeed-26cb27d17b57" />
+    <UnitTestResult executionId="6106a2a2-0737-416c-aa2e-c262511c0f9c" testId="ba4833c0-88e2-7fdd-7bbf-db06b664ac32" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_scanner_reaches_the_statements_it_claims_to_sweep" computerName="svens-macbook-pro" duration="00:00:00.4371174" startTime="2026-08-02T10:06:11.4354560+02:00" endTime="2026-08-02T10:06:11.4354560+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6106a2a2-0737-416c-aa2e-c262511c0f9c" />
+    <UnitTestResult executionId="a50b6eb3-7c1a-496c-a148-54e28f3de788" testId="c07df630-e84a-e497-9254-be58eb7a332e" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var url = $\&quot;https://example.test/x?key={_appSetti&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000048" startTime="2026-08-02T10:06:10.4991710+02:00" endTime="2026-08-02T10:06:10.4991710+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a50b6eb3-7c1a-496c-a148-54e28f3de788" />
+    <UnitTestResult executionId="dae05c54-2471-4df5-a7d9-007cb9640db4" testId="83f3b990-e060-4930-b16d-ddab3e81d864" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000860" startTime="2026-08-02T10:06:12.9486970+02:00" endTime="2026-08-02T10:06:12.9486970+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dae05c54-2471-4df5-a7d9-007cb9640db4" />
+    <UnitTestResult executionId="1dde2c1d-14bc-47ea-826c-24ba4770e2d0" testId="c9d57669-3b57-e202-d7a7-90243fcc4824" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeue_preserves_the_token_the_address_the_budget_and_the_record_of_the_failure" computerName="svens-macbook-pro" duration="00:00:00.1084350" startTime="2026-08-02T10:06:12.3779480+02:00" endTime="2026-08-02T10:06:12.3779480+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1dde2c1d-14bc-47ea-826c-24ba4770e2d0" />
+    <UnitTestResult executionId="5843242c-5817-4ec4-a257-d098ab3dcd8e" testId="680bd876-54dd-b298-2538-f6d94c27b583" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_failed_delivery_is_retried_with_backoff_rather_than_lost" computerName="svens-macbook-pro" duration="00:00:00.1986306" startTime="2026-08-02T10:06:08.5788780+02:00" endTime="2026-08-02T10:06:08.5788780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5843242c-5817-4ec4-a257-d098ab3dcd8e" />
+    <UnitTestResult executionId="15b9c47b-10d4-41f6-a56e-11cea50b6392" testId="79b9ee5f-bcb0-7726-5976-584911988ddd" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_replayed_command_does_not_queue_a_second_copy_of_a_live_link" computerName="svens-macbook-pro" duration="00:00:00.2393270" startTime="2026-08-02T10:06:09.3626650+02:00" endTime="2026-08-02T10:06:09.3626650+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="15b9c47b-10d4-41f6-a56e-11cea50b6392" />
+    <UnitTestResult executionId="861e2916-acb2-4460-acde-a33e8fd59f45" testId="a3381337-3117-dd9e-d971-3a881b24f64f" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.Every_exemption_still_matches_real_code" computerName="svens-macbook-pro" duration="00:00:00.3077064" startTime="2026-08-02T10:06:10.8071660+02:00" endTime="2026-08-02T10:06:10.8071660+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="861e2916-acb2-4460-acde-a33e8fd59f45" />
+    <UnitTestResult executionId="4930e361-c3bd-4f1a-a026-95fc087d9b90" testId="e6c8171c-fe34-e52a-a2dc-046dcc37ee41" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_that_died_on_an_unconfigured_origin_delivers_it_once_the_origin_is_set" computerName="svens-macbook-pro" duration="00:00:00.0751373" startTime="2026-08-02T10:06:12.6165030+02:00" endTime="2026-08-02T10:06:12.6165030+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4930e361-c3bd-4f1a-a026-95fc087d9b90" />
+    <UnitTestResult executionId="b53a9992-3ade-46ba-8031-68a43a7ea89a" testId="072988a5-820d-f26f-5ca1-66a27311dc98" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;http://localhost:3000&quot;, expected: &quot;http://localhost:3000/events/deposit/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000139" startTime="2026-08-02T10:06:12.9488020+02:00" endTime="2026-08-02T10:06:12.9488020+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b53a9992-3ade-46ba-8031-68a43a7ea89a" />
+    <UnitTestResult executionId="293705fb-5393-41ac-9a8f-40638221ee2e" testId="bab4e4ee-5c8f-1fda-c671-2a046d413aff" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; \&quot;events-deposit-\&quot; + deposit.PublicToken.ToStr&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000113" startTime="2026-08-02T10:06:10.4991530+02:00" endTime="2026-08-02T10:06:10.4991530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="293705fb-5393-41ac-9a8f-40638221ee2e" />
+    <UnitTestResult executionId="c05ab26d-4435-4b5d-be35-81456c244cf6" testId="9f5b65a3-17bd-9d15-0058-5924f420c767" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data" computerName="svens-macbook-pro" duration="00:00:00.1968659" startTime="2026-08-02T10:06:08.3801850+02:00" endTime="2026-08-02T10:06:08.3801850+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c05ab26d-4435-4b5d-be35-81456c244cf6" />
+    <UnitTestResult executionId="0a3937b9-5199-4840-b830-acde66f7ef21" testId="b64112b0-0988-4daa-6e37-1fdf4890dfd3" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called" computerName="svens-macbook-pro" duration="00:00:00.1863149" startTime="2026-08-02T10:06:11.0001080+02:00" endTime="2026-08-02T10:06:11.0001080+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a3937b9-5199-4840-b830-acde66f7ef21">
+      <Output>
+        <ErrorInfo>
+          <Message>A log call is handed a credential. Application Insights keeps it for the retention period and the placeholder it was logged under is irrelevant — a reader holds the credential either way. Log a derived fact, or add the statement to LogAllowed in this file with the reason:
+  Services/Events/EventsEmailNotificationDelivery.cs:95: PublicToken   in: _logger.LogWarning("Malformed guest link {Link}", _settings.PublicBaseUrl + "/events/deposit/" + row.PublicToken.ToString("D"));
+Expected: True
+Actual:   False</Message>
+          <StackTrace>   at WebApi.Tests.Observability.CredentialCompositionSweepTests.A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called() in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Observability/CredentialCompositionSweepTests.cs:line 233
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="104933de-a8d1-4d31-8524-ee8804d2c760" testId="551f6670-a677-6466-4477-c96c4adc4cc2" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_drain_delivers_a_pending_row_as_email_and_marks_it_sent" computerName="svens-macbook-pro" duration="00:00:02.5564968" startTime="2026-08-02T10:06:07.5777710+02:00" endTime="2026-08-02T10:06:07.5777790+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="104933de-a8d1-4d31-8524-ee8804d2c760" />
+    <UnitTestResult executionId="1e603c9a-975d-4cf0-b10b-250f8c7780e9" testId="78349b5d-c675-16fb-1e03-09ae9b1dc779" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; \&quot;events-deposit-\&quot; + CapabilityReference.Deriv&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000047" startTime="2026-08-02T10:06:10.4992340+02:00" endTime="2026-08-02T10:06:10.4992340+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e603c9a-975d-4cf0-b10b-250f8c7780e9" />
+    <UnitTestResult executionId="75db9245-d548-42a0-8dc3-3a155c0b3405" testId="83069b8d-9007-2265-62b1-c5362d165187" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(e, \&quot;Error processing Vipps callb&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0002330" startTime="2026-08-02T10:06:10.4979420+02:00" endTime="2026-08-02T10:06:10.4979420+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="75db9245-d548-42a0-8dc3-3a155c0b3405" />
+    <UnitTestResult executionId="cd7f3b14-11ae-4bdd-a880-b772bd84fa67" testId="bee6d158-15b1-9ca2-ce41-9fd6ce13e45a" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.An_unconfigured_guest_origin_sends_nothing_and_stays_retryable" computerName="svens-macbook-pro" duration="00:00:00.2201655" startTime="2026-08-02T10:06:10.0137230+02:00" endTime="2026-08-02T10:06:10.0137230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cd7f3b14-11ae-4bdd-a880-b772bd84fa67" />
+    <UnitTestResult executionId="54880a47-a475-478e-a356-ba0325a7ce85" testId="92e49903-2f30-34ab-5fe8-362d4a3971bb" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;Exchange failed for {Grant}\&quot;, &quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000045" startTime="2026-08-02T10:06:10.4985900+02:00" endTime="2026-08-02T10:06:10.4985900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="54880a47-a475-478e-a356-ba0325a7ce85" />
+    <UnitTestResult executionId="c9fc4661-15b2-4d83-9a70-c43bcc8d6188" testId="b06920a1-d845-7445-dab4-00c98c20d2c6" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogWarning(\&quot;Incomplete. AccessToken={E}\&quot;&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000066" startTime="2026-08-02T10:06:10.4985400+02:00" endTime="2026-08-02T10:06:10.4985400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c9fc4661-15b2-4d83-9a70-c43bcc8d6188" />
+    <UnitTestResult executionId="40d5b407-7887-4cc7-9512-7844bc4dc41a" testId="78bafb3f-0130-7b6b-a313-45cb2975c0fe" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.Enqueue_stages_the_row_into_the_callers_transaction_and_does_not_save_it_itself" computerName="svens-macbook-pro" duration="00:00:00.2225531" startTime="2026-08-02T10:06:10.2363700+02:00" endTime="2026-08-02T10:06:10.2363700+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="40d5b407-7887-4cc7-9512-7844bc4dc41a" />
+    <UnitTestResult executionId="a2c923bd-2fb8-4f89-91d8-cd02f9fe28a3" testId="02efb52a-4d3e-530e-e791-e0f83b5236ce" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test///&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000620" startTime="2026-08-02T10:06:12.9487690+02:00" endTime="2026-08-02T10:06:12.9487690+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a2c923bd-2fb8-4f89-91d8-cd02f9fe28a3" />
+    <UnitTestResult executionId="104ed0e2-3085-403e-8aba-371c393ca6cf" testId="9313c9fe-2cba-e4ab-5979-c7d8b30cd996" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;//guest.example.test&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000312" startTime="2026-08-02T10:06:12.9534780+02:00" endTime="2026-08-02T10:06:12.9534780+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="104ed0e2-3085-403e-8aba-371c393ca6cf" />
+    <UnitTestResult executionId="5820d0fb-e68e-463c-8ee3-f9efc104d929" testId="45bcd5e6-26d0-510c-d73e-0062cd782ef1" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(e, \&quot;Error processing Vipps callb&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000062" startTime="2026-08-02T10:06:10.4984700+02:00" endTime="2026-08-02T10:06:10.4984700+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5820d0fb-e68e-463c-8ee3-f9efc104d929" />
+    <UnitTestResult executionId="9c4f3a90-36aa-4630-8380-07cb7280b10d" testId="5fd63143-5861-b794-89c2-f373f1bdb243" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000255" startTime="2026-08-02T10:06:12.9536090+02:00" endTime="2026-08-02T10:06:12.9536100+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9c4f3a90-36aa-4630-8380-07cb7280b10d" />
+    <UnitTestResult executionId="e67aff0d-0a5c-413e-b5f8-6c6e5d03ea11" testId="b19a825a-c0a4-5b7f-f688-4831e75f8555" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var live = rows.Where(c =&gt; c.IsActive &amp;&amp; c.ApiToke&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000130" startTime="2026-08-02T10:06:10.4993210+02:00" endTime="2026-08-02T10:06:10.4993210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e67aff0d-0a5c-413e-b5f8-6c6e5d03ea11" />
+    <UnitTestResult executionId="aba34e39-c60d-43c0-a386-21bc60f5da91" testId="8320f45c-4550-3fcd-66c8-d96ab5ce97d5" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;WoltSettings.CallbackSecret is &quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000129" startTime="2026-08-02T10:06:10.4985750+02:00" endTime="2026-08-02T10:06:10.4985750+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aba34e39-c60d-43c0-a386-21bc60f5da91" />
+    <UnitTestResult executionId="76e90391-48e9-4501-a1b8-7990766ab3bb" testId="c7a60f42-5cdc-2bda-ab17-5a06cc0c6099" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000274" startTime="2026-08-02T10:06:12.9536020+02:00" endTime="2026-08-02T10:06:12.9536020+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="76e90391-48e9-4501-a1b8-7990766ab3bb" />
+    <UnitTestResult executionId="db37abc0-2b1b-4991-be32-44ccced9df34" testId="955a4917-858e-f10c-6218-1970afa262f4" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0014124" startTime="2026-08-02T10:06:12.9528940+02:00" endTime="2026-08-02T10:06:12.9528940+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="db37abc0-2b1b-4991-be32-44ccced9df34">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+                                 ↓ (pos 22)
+Expected: ···blicBaseUrlMalformed
+Actual:   ···blicBaseUrlMalformed: //events/deposit/f963e8e4-4913-48db-a4b···
+                                 ↑ (pos 22)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl) in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 60
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8c2071e5-91cd-414c-b5a1-8affbb63cc2a" testId="4eaf810b-88c3-c9fb-ab5e-3cff648c87de" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;javascript:alert(1)&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0002117" startTime="2026-08-02T10:06:12.9534530+02:00" endTime="2026-08-02T10:06:12.9534530+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8c2071e5-91cd-414c-b5a1-8affbb63cc2a" />
+    <UnitTestResult executionId="b93edb22-1ce1-4ac2-a2d1-46511fed2419" testId="d9343986-9065-f580-a7ea-30003aa24590" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var k = \&quot;events.deposit-link:\&quot; + ev.PublicId.ToS&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000060" startTime="2026-08-02T10:06:10.4995290+02:00" endTime="2026-08-02T10:06:10.4995290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b93edb22-1ce1-4ac2-a2d1-46511fed2419" />
+    <UnitTestResult executionId="aaf2019b-cbd9-4bce-b4d0-469dcbe24fed" testId="a5984244-a0d6-5762-e926-bd83dcfbe559" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_another_stores_notification_answers_exactly_as_an_absent_one_and_moves_nothing" computerName="svens-macbook-pro" duration="00:00:00.0762423" startTime="2026-08-02T10:06:12.7681750+02:00" endTime="2026-08-02T10:06:12.7681750+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="aaf2019b-cbd9-4bce-b4d0-469dcbe24fed" />
+    <UnitTestResult executionId="b6f5aa9d-e48a-49e1-9aeb-9276363b528b" testId="02ed5b57-7b41-fad9-5f58-0694e8c8c76b" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link" computerName="svens-macbook-pro" duration="00:00:00.0007161" startTime="2026-08-02T10:06:12.9547640+02:00" endTime="2026-08-02T10:06:12.9547640+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b6f5aa9d-e48a-49e1-9aeb-9276363b528b">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.DoesNotContain() Failure
+Found:    4bc73939-09df-43ce-94a9-34ffc1751dd8
+In value: PublicBaseUrlMalformed: /events/events/deposit/4bc73939-09df-43ce-94a9-34ffc1751dd8</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link() in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 100
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3fe76bb8-ed20-4ea3-bc59-2b639fb04037" testId="034d99e2-eb70-816e-3d62-495f44df4a59" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;file:///srv/guest-web&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000596" startTime="2026-08-02T10:06:12.9532700+02:00" endTime="2026-08-02T10:06:12.9532700+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fe76bb8-ed20-4ea3-bc59-2b639fb04037">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+                                 ↓ (pos 22)
+Expected: ···blicBaseUrlMalformed
+Actual:   ···blicBaseUrlMalformed: file:///srv/guest-web/events/deposit/2f···
+                                 ↑ (pos 22)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl) in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 60
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="7ff83474-1463-4589-b713-33e7697a6348" testId="020ff49a-d9f2-8871-89a8-d969870da6f7" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var k = \&quot;events.deposit-link:\&quot; + ev.PublicId.ToS&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000128" startTime="2026-08-02T10:06:10.4994920+02:00" endTime="2026-08-02T10:06:10.4994920+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ff83474-1463-4589-b713-33e7697a6348" />
+    <UnitTestResult executionId="cab57ada-0ea7-40f2-9d0d-9227f7416927" testId="caba7a77-a573-1c5d-d4db-162d8b92e8a9" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.Re_sending_an_already_sent_proposal_queues_no_second_link" computerName="svens-macbook-pro" duration="00:00:00.1764924" startTime="2026-08-02T10:06:08.9298770+02:00" endTime="2026-08-02T10:06:08.9298770+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cab57ada-0ea7-40f2-9d0d-9227f7416927" />
+    <UnitTestResult executionId="c674bb8c-8516-4d38-9f79-e61a42d19d00" testId="b06f7e55-8cda-f959-4162-15e26c653ec7" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;/events&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000532" startTime="2026-08-02T10:06:12.9533510+02:00" endTime="2026-08-02T10:06:12.9533510+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c674bb8c-8516-4d38-9f79-e61a42d19d00">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+                                 ↓ (pos 22)
+Expected: ···blicBaseUrlMalformed
+Actual:   ···blicBaseUrlMalformed: /events/events/deposit/bd2a98f3-17e2-49···
+                                 ↑ (pos 22)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl) in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 60
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="32b47cc7-2481-43b0-a607-16ec126fbea2" testId="2114dd9e-9c1b-d98a-a745-c71f31ec13c8" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;ftp://guest.example.test&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000284" startTime="2026-08-02T10:06:12.9536170+02:00" endTime="2026-08-02T10:06:12.9536170+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32b47cc7-2481-43b0-a607-16ec126fbea2" />
+    <UnitTestResult executionId="c94d5035-e6c0-476b-9748-64dfcd3f4223" testId="94b720ba-48e5-f23d-1ede-a6c550a5b58d" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; VippsOrderIdPrefix + CapabilityReference.Derive&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000053" startTime="2026-08-02T10:06:10.4991900+02:00" endTime="2026-08-02T10:06:10.4991900+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c94d5035-e6c0-476b-9748-64dfcd3f4223" />
+    <UnitTestResult executionId="0d2d3028-5565-46aa-9e91-8feab65cb11a" testId="d46fb444-2b17-252c-f725-fe6daf6ce73d" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_while_dispatch_is_off_is_accepted_and_reports_that_nothing_is_delivering" computerName="svens-macbook-pro" duration="00:00:00.0807458" startTime="2026-08-02T10:06:12.5412850+02:00" endTime="2026-08-02T10:06:12.5412850+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d2d3028-5565-46aa-9e91-8feab65cb11a" />
+    <UnitTestResult executionId="f75e20d1-3136-4cee-a78b-41fead54b3d6" testId="3198db39-09f5-c505-488b-edca17bbe1ed" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_two_guest_pages_are_composed_from_the_same_origin_and_differ_in_one_segment" computerName="svens-macbook-pro" duration="00:00:00.0000377" startTime="2026-08-02T10:06:12.9536260+02:00" endTime="2026-08-02T10:06:12.9536260+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f75e20d1-3136-4cee-a78b-41fead54b3d6" />
+    <UnitTestResult executionId="011fe0b2-71e1-480d-8430-4c00fc1be881" testId="0df7d5f6-9f91-657d-dbc7-bac9d0968d79" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_deposit_link_points_at_the_deposit_page_not_the_proposal_page" computerName="svens-macbook-pro" duration="00:00:00.2186102" startTime="2026-08-02T10:06:08.1832160+02:00" endTime="2026-08-02T10:06:08.1832160+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="011fe0b2-71e1-480d-8430-4c00fc1be881" />
+    <UnitTestResult executionId="fdf20184-2406-4de6-877b-0c7defb01bcd" testId="a5cfe7ac-e4eb-386d-b339-e9abb424bd83" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.The_health_read_carries_neither_the_link_token_nor_the_guests_address" computerName="svens-macbook-pro" duration="00:00:00.1033580" startTime="2026-08-02T10:06:11.9970270+02:00" endTime="2026-08-02T10:06:11.9970270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fdf20184-2406-4de6-877b-0c7defb01bcd" />
+    <UnitTestResult executionId="727c3369-5f20-4cc5-a87b-3553ee160451" testId="dfff60cf-1123-4252-2d0d-bc47af53c103" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.One_stores_health_read_never_shows_another_stores_dead_letters" computerName="svens-macbook-pro" duration="00:00:00.0877001" startTime="2026-08-02T10:06:12.9484800+02:00" endTime="2026-08-02T10:06:12.9484800+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="727c3369-5f20-4cc5-a87b-3553ee160451" />
+    <UnitTestResult executionId="85e868d6-6624-4c14-99f8-0e27a7a2133b" testId="5aab4120-5b03-1d26-ded6-3d1166ef7917" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_row_that_never_delivers_is_dead_lettered_once_its_attempt_budget_is_spent" computerName="svens-macbook-pro" duration="00:00:00.1823131" startTime="2026-08-02T10:06:07.9645000+02:00" endTime="2026-08-02T10:06:07.9645000+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="85e868d6-6624-4c14-99f8-0e27a7a2133b" />
+    <UnitTestResult executionId="ffa5e27a-e1ec-447d-9ed0-22c439efbf23" testId="701e6f9c-8a89-ddd1-0c8b-038ed6961f76" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;not a url&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000556" startTime="2026-08-02T10:06:12.9534400+02:00" endTime="2026-08-02T10:06:12.9534400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ffa5e27a-e1ec-447d-9ed0-22c439efbf23">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+                                 ↓ (pos 22)
+Expected: ···blicBaseUrlMalformed
+Actual:   ···blicBaseUrlMalformed: not a url/events/deposit/f4f70432-c555-···
+                                 ↑ (pos 22)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl) in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 60
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bb5a0f01-041b-47d3-8acb-85275d5930ac" testId="56f527e5-78d4-a5a6-c8c7-169eeae4f28f" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var clientSecret = config?.ClientSecret ?? \&quot;fallb&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000719" startTime="2026-08-02T10:06:10.4991370+02:00" endTime="2026-08-02T10:06:10.4991370+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb5a0f01-041b-47d3-8acb-85275d5930ac" />
+    <UnitTestResult executionId="13864b09-16fa-4521-b546-3b822c5b6758" testId="5a92cc31-73b5-e91c-4fcb-ab5f0af23f87" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_throwing_adapter_is_a_recorded_attempt_not_a_lost_row" computerName="svens-macbook-pro" duration="00:00:00.1743580" startTime="2026-08-02T10:06:08.7533350+02:00" endTime="2026-08-02T10:06:08.7533350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="13864b09-16fa-4521-b546-3b822c5b6758" />
+    <UnitTestResult executionId="42dcfe62-b5a9-40cd-9134-e772fd9df387" testId="091c3e23-64fd-77d7-7f3d-0a21c2868901" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;Minted {Correlation}\&quot;, c&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000105" startTime="2026-08-02T10:06:10.4985050+02:00" endTime="2026-08-02T10:06:10.4985050+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="42dcfe62-b5a9-40cd-9134-e772fd9df387" />
+    <UnitTestResult executionId="24a7ecbd-ebb3-4ed8-96a5-f8e1c88b83af" testId="65bf5acf-d88f-d677-66ee-3c1f506f03fb" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test/&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000019" startTime="2026-08-02T10:06:12.9487810+02:00" endTime="2026-08-02T10:06:12.9487810+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24a7ecbd-ebb3-4ed8-96a5-f8e1c88b83af" />
+    <UnitTestResult executionId="95ee21f8-6f68-4e61-b608-b4ee523a1e69" testId="97ff04bb-dd64-79f3-1390-14a29b8f6e03" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.A_credential_is_not_composed_into_a_string_that_travels_under_another_name" computerName="svens-macbook-pro" duration="00:00:00.2260563" startTime="2026-08-02T10:06:11.6628740+02:00" endTime="2026-08-02T10:06:11.6628740+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="95ee21f8-6f68-4e61-b608-b4ee523a1e69" />
+    <UnitTestResult executionId="cfc87bc8-a4f1-4c2e-b576-41a6c546db8d" testId="e35138ce-c08b-5a93-5eea-7c84ad5f9c6b" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.Sending_a_proposal_persists_a_pending_outbox_row_carrying_the_link_token" computerName="svens-macbook-pro" duration="00:00:00.2135865" startTime="2026-08-02T10:06:09.5763250+02:00" endTime="2026-08-02T10:06:09.5763250+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cfc87bc8-a4f1-4c2e-b576-41a6c546db8d" />
+    <UnitTestResult executionId="80228d01-e01e-4ec1-86be-d3f557b74329" testId="9f1ebe32-a249-2fe8-b130-1b3347cfbe63" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var command = Build(ev, kind, deposit.PublicToken,&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0001689" startTime="2026-08-02T10:06:10.4993020+02:00" endTime="2026-08-02T10:06:10.4993020+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="80228d01-e01e-4ec1-86be-d3f557b74329" />
+    <UnitTestResult executionId="081ed5cb-224c-45fe-9a92-12475d842c1f" testId="b1fdecb7-311d-9cbb-0579-8817f179d107" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var note = \&quot;len:\&quot; + config.RefreshToken.Length;&quot;, expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000061" startTime="2026-08-02T10:06:10.4995110+02:00" endTime="2026-08-02T10:06:10.4995110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="081ed5cb-224c-45fe-9a92-12475d842c1f" />
+    <UnitTestResult executionId="cfdd08b3-fbd5-4001-a12a-53c644ecdf67" testId="37978bbc-2b09-a5f6-798b-d07b2e7291a7" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_guest_who_was_never_reached_appears_on_the_stores_notification_health" computerName="svens-macbook-pro" duration="00:00:00.1029611" startTime="2026-08-02T10:06:12.1000460+02:00" endTime="2026-08-02T10:06:12.1000460+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cfdd08b3-fbd5-4001-a12a-53c644ecdf67" />
+    <UnitTestResult executionId="cbd7109e-78de-4a1c-a120-898d3e48c8a5" testId="b0001d14-b451-514d-1c66-0699a175ff86" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_delivered_link_and_a_link_still_in_flight_are_counted_but_not_reported_as_dead" computerName="svens-macbook-pro" duration="00:00:00.0924613" startTime="2026-08-02T10:06:12.8606950+02:00" endTime="2026-08-02T10:06:12.8606950+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cbd7109e-78de-4a1c-a120-898d3e48c8a5" />
+    <UnitTestResult executionId="986e1d30-56d4-4809-885c-db1628b00a38" testId="a015669d-5643-8901-9096-eae089286ee8" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogWarning($\&quot;Refresh failed for {config.R&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000072" startTime="2026-08-02T10:06:10.4985220+02:00" endTime="2026-08-02T10:06:10.4985220+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="986e1d30-56d4-4809-885c-db1628b00a38" />
+    <UnitTestResult executionId="21e6fa4b-ee2c-4d21-812a-ec6fb4623156" testId="a421609b-4da5-4022-7536-3f3563158f56" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_delivery_that_never_succeeds_does_not_disturb_the_lifecycle_transition" computerName="svens-macbook-pro" duration="00:00:00.2045354" startTime="2026-08-02T10:06:07.7821290+02:00" endTime="2026-08-02T10:06:07.7821290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="21e6fa4b-ee2c-4d21-812a-ec6fb4623156" />
+    <UnitTestResult executionId="29035f7f-c2c7-44f9-8aa2-3219fbb96788" testId="95037424-080d-5625-ac38-71c0d51c309c" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;file:///srv/guest-web&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000282" startTime="2026-08-02T10:06:12.9535850+02:00" endTime="2026-08-02T10:06:12.9535850+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="29035f7f-c2c7-44f9-8aa2-3219fbb96788" />
+    <UnitTestResult executionId="46b21656-4aeb-4a98-a62d-41c33e7d8394" testId="f11d71c7-f7f1-5ca2-0a21-9381e581a74a" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: null)" computerName="svens-macbook-pro" duration="00:00:00.0000294" startTime="2026-08-02T10:06:12.9534700+02:00" endTime="2026-08-02T10:06:12.9534700+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46b21656-4aeb-4a98-a62d-41c33e7d8394" />
+    <UnitTestResult executionId="0c67aaad-6416-4c6c-b672-fb92b2fa01fa" testId="6ed6923f-045b-3043-d20d-5fce6699c007" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; VippsOrderIdPrefix + deposit.PublicToken.ToStri&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0008591" startTime="2026-08-02T10:06:10.4989480+02:00" endTime="2026-08-02T10:06:10.4989480+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c67aaad-6416-4c6c-b672-fb92b2fa01fa" />
+    <UnitTestResult executionId="17a9751f-8e4e-4ba5-ad6a-a41ccc58837d" testId="b2b71d32-db08-8b36-5135-939636adbf8b" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;Refreshed {Present}\&quot;, Se&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0516582" startTime="2026-08-02T10:06:10.4976750+02:00" endTime="2026-08-02T10:06:10.4976750+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="17a9751f-8e4e-4ba5-ad6a-a41ccc58837d" />
+    <UnitTestResult executionId="7e20fc82-7ea7-4611-b73c-bb9c842b340a" testId="f71df1b2-7685-830a-c026-ffae19b0bcb6" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;guest.example.test&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000279" startTime="2026-08-02T10:06:12.9534850+02:00" endTime="2026-08-02T10:06:12.9534850+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7e20fc82-7ea7-4611-b73c-bb9c842b340a" />
+    <UnitTestResult executionId="f975097f-9c61-4dd3-b41e-c854b4d861f6" testId="7307ea0c-67bf-08e7-501b-9ea09dcfd8b7" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;guest.example.test&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0001414" startTime="2026-08-02T10:06:12.9531730+02:00" endTime="2026-08-02T10:06:12.9531730+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f975097f-9c61-4dd3-b41e-c854b4d861f6">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure
+                                 ↓ (pos 22)
+Expected: ···blicBaseUrlMalformed
+Actual:   ···blicBaseUrlMalformed: guest.example.test/events/deposit/80606···
+                                 ↑ (pos 22)</Message>
+          <StackTrace>   at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl) in /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs:line 60
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="30b6143a-8bdc-4db0-b21c-76bf7860713d" testId="ab9bedc5-9471-8e87-431e-02335adfe8af" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_registry_is_derived_from_the_model_and_still_finds_the_credentials" computerName="svens-macbook-pro" duration="00:00:00.0011810" startTime="2026-08-02T10:06:11.4367200+02:00" endTime="2026-08-02T10:06:11.4367200+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30b6143a-8bdc-4db0-b21c-76bf7860713d" />
+    <UnitTestResult executionId="611709a8-034a-4d15-ad07-d0b79da72d1c" testId="d1087c02-3ae8-b0a9-0b97-306478b0ebc6" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_row_whose_event_is_not_readable_is_still_reported_without_its_title" computerName="svens-macbook-pro" duration="00:00:00.0770854" startTime="2026-08-02T10:06:12.2694340+02:00" endTime="2026-08-02T10:06:12.2694340+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="611709a8-034a-4d15-ad07-d0b79da72d1c" />
+    <UnitTestResult executionId="57bda41d-9a16-442e-b279-185e22597dcd" testId="db113603-3b21-81ed-2556-9d84f9f5a900" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;../guest&quot;)" computerName="svens-macbook-pro" duration="00:00:00.0000296" startTime="2026-08-02T10:06:12.9535940+02:00" endTime="2026-08-02T10:06:12.9535940+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="57bda41d-9a16-442e-b279-185e22597dcd" />
+    <UnitTestResult executionId="78fcba10-2974-4c4f-8f3d-4b46eb0c2cae" testId="a8adeafe-6175-e005-1cd7-93446f3da148" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_that_is_merely_awaiting_a_retry_changes_nothing" computerName="svens-macbook-pro" duration="00:00:00.0921261" startTime="2026-08-02T10:06:12.1922580+02:00" endTime="2026-08-02T10:06:12.1922580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="78fcba10-2974-4c4f-8f3d-4b46eb0c2cae" />
+    <UnitTestResult executionId="b8322ed8-b596-48d6-846f-7d117ffe9620" testId="2bddedea-b5b9-8b92-ee12-d071ee2e6d91" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;key ending {Tail}\&quot;, goog&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000096" startTime="2026-08-02T10:06:10.4985580+02:00" endTime="2026-08-02T10:06:10.4985580+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b8322ed8-b596-48d6-846f-7d117ffe9620" />
+    <UnitTestResult executionId="256ca29d-bd06-4408-844a-7eaf32265187" testId="1b4beca5-fc76-812a-9ddb-e3276936f494" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;Refresh failed. RefreshTokenLen&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000079" startTime="2026-08-02T10:06:10.4984890+02:00" endTime="2026-08-02T10:06:10.4984890+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="256ca29d-bd06-4408-844a-7eaf32265187" />
+    <UnitTestResult executionId="6088cae8-0fab-469d-994b-5dd10eabbc1e" testId="69181d7a-12f8-b1c5-f5e0-541a1180c29f" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_rolled_back_transition_leaves_no_queued_link" computerName="svens-macbook-pro" duration="00:00:00.2082526" startTime="2026-08-02T10:06:10.4447070+02:00" endTime="2026-08-02T10:06:10.4447070+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6088cae8-0fab-469d-994b-5dd10eabbc1e" />
+    <UnitTestResult executionId="af4f129e-9662-4be5-8e34-d584760bd9ca" testId="4ed34ebf-8d26-6961-9645-5f562660977c" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.With_dispatch_off_the_read_says_so_and_counts_the_backlog_nobody_is_delivering" computerName="svens-macbook-pro" duration="00:00:00.0824453" startTime="2026-08-02T10:06:12.4604660+02:00" endTime="2026-08-02T10:06:12.4604660+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="af4f129e-9662-4be5-8e34-d584760bd9ca" />
+    <UnitTestResult executionId="106bad1d-9a5b-46db-abc7-5f3e54337c56" testId="b40f99da-9a6e-e54d-933a-1693ad9ef552" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_requeue_that_arrives_after_delivery_is_refused_and_sends_no_second_copy" computerName="svens-macbook-pro" duration="00:00:00.1159708" startTime="2026-08-02T10:06:11.7791320+02:00" endTime="2026-08-02T10:06:11.7791320+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="106bad1d-9a5b-46db-abc7-5f3e54337c56" />
+    <UnitTestResult executionId="4b9b9a32-db3e-4838-9435-3b4bfa2edac8" testId="dc0c48dc-6d1f-1ba3-1409-346ab5ab4d55" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var url = \&quot;/x?consumerToken=\&quot; + Uri.EscapeDataSt&quot;..., expectedOffender: True)" computerName="svens-macbook-pro" duration="00:00:00.0000063" startTime="2026-08-02T10:06:10.4993390+02:00" endTime="2026-08-02T10:06:10.4993390+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4b9b9a32-db3e-4838-9435-3b4bfa2edac8" />
+    <UnitTestResult executionId="d979838d-6155-496a-b418-17e345cab84a" testId="ff7dc51c-413a-ce61-a857-04e8ecd6248b" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.Issuing_a_deposit_persists_a_pending_outbox_row_carrying_the_deposit_token" computerName="svens-macbook-pro" duration="00:00:00.1933139" startTime="2026-08-02T10:06:09.1232720+02:00" endTime="2026-08-02T10:06:09.1232720+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d979838d-6155-496a-b418-17e345cab84a" />
+    <UnitTestResult executionId="482878b7-66dc-4426-b7fa-4618a7677b2e" testId="1cacb2c1-62aa-6ba3-60ba-40c0a014e5af" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_the_drain_is_holding_leaves_the_lease_and_the_attempt_count_alone" computerName="svens-macbook-pro" duration="00:00:00.0752575" startTime="2026-08-02T10:06:12.6920010+02:00" endTime="2026-08-02T10:06:12.6920010+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="482878b7-66dc-4426-b7fa-4618a7677b2e" />
+    <UnitTestResult executionId="162e6700-931b-43ad-b3e1-6ee848d6bb0d" testId="bafcb35e-2879-24f9-a107-d8f6708cfce9" testName="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_drain_is_inert_while_dispatch_is_disabled_and_drains_the_backlog_once_enabled" computerName="svens-macbook-pro" duration="00:00:00.2170750" startTime="2026-08-02T10:06:09.7934840+02:00" endTime="2026-08-02T10:06:09.7934840+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="162e6700-931b-43ad-b3e1-6ee848d6bb0d" />
+    <UnitTestResult executionId="84a3d9af-d4d4-4a22-af98-ca63fbdb0d18" testId="931ed203-1fab-7024-b298-d6b9ebda7760" testName="WebApi.Tests.Events.EventsGuestLinkOriginTests.A_configured_absolute_origin_still_mails_the_guest_the_page_it_addresses" computerName="svens-macbook-pro" duration="00:00:00.0003041" startTime="2026-08-02T10:06:12.9537540+02:00" endTime="2026-08-02T10:06:12.9537540+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="84a3d9af-d4d4-4a22-af98-ca63fbdb0d18" />
+    <UnitTestResult executionId="7490d212-29f0-4d60-acf1-40289fe63520" testId="394d21df-01f1-1e0a-c957-97bc62747085" testName="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_backlog_larger_than_the_page_reports_the_full_count_beside_the_capped_list" computerName="svens-macbook-pro" duration="00:00:00.1143785" startTime="2026-08-02T10:06:11.8935720+02:00" endTime="2026-08-02T10:06:11.8935720+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7490d212-29f0-4d60-acf1-40289fe63520" />
+    <UnitTestResult executionId="5c331905-26cd-445c-820a-327b1effd7ab" testId="c4387b46-b8d9-44f0-97db-c64f4aecf247" testName="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var key = \&quot;session:\&quot; + credentials.TokenType + \&quot;..., expectedOffender: False)" computerName="svens-macbook-pro" duration="00:00:00.0000066" startTime="2026-08-02T10:06:10.4992110+02:00" endTime="2026-08-02T10:06:10.4992110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c331905-26cd-445c-820a-327b1effd7ab" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.Sending_a_proposal_persists_a_pending_outbox_row_carrying_the_link_token" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e35138ce-c08b-5a93-5eea-7c84ad5f9c6b">
+      <Execution id="cfc87bc8-a4f1-4c2e-b576-41a6c546db8d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="Sending_a_proposal_persists_a_pending_outbox_row_carrying_the_link_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_failed_delivery_is_retried_with_backoff_rather_than_lost" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="680bd876-54dd-b298-2538-f6d94c27b583">
+      <Execution id="5843242c-5817-4ec4-a257-d098ab3dcd8e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_failed_delivery_is_retried_with_backoff_rather_than_lost" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test/&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="65bf5acf-d88f-d677-66ee-3c1f506f03fb">
+      <Execution id="24a7ecbd-ebb3-4ed8-96a5-f8e1c88b83af" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_absolute_http_origin_composes_the_deposit_page_prefix" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_another_stores_notification_answers_exactly_as_an_absent_one_and_moves_nothing" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a5984244-a0d6-5762-e926-bd83dcfbe559">
+      <Execution id="aaf2019b-cbd9-4bce-b4d0-469dcbe24fed" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeueing_another_stores_notification_answers_exactly_as_an_absent_one_and_moves_nothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;/events&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="715c5929-6ac5-b98d-9b4b-f4cb81e4e6e4">
+      <Execution id="1da427d9-a955-40d1-aeed-26cb27d17b57" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;WoltSettings.CallbackSecret is &quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="8320f45c-4550-3fcd-66c8-d96ab5ce97d5">
+      <Execution id="aba34e39-c60d-43c0-a386-21bc60f5da91" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_guest_who_was_never_reached_appears_on_the_stores_notification_health" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="37978bbc-2b09-a5f6-798b-d07b2e7291a7">
+      <Execution id="cfdd08b3-fbd5-4001-a12a-53c644ecdf67" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="A_guest_who_was_never_reached_appears_on_the_stores_notification_health" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;/events&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b06f7e55-8cda-f959-4162-15e26c653ec7">
+      <Execution id="c674bb8c-8516-4d38-9f79-e61a42d19d00" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_rolled_back_transition_leaves_no_queued_link" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="69181d7a-12f8-b1c5-f5e0-541a1180c29f">
+      <Execution id="6088cae8-0fab-469d-994b-5dd10eabbc1e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_rolled_back_transition_leaves_no_queued_link" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="83f3b990-e060-4930-b16d-ddab3e81d864">
+      <Execution id="dae05c54-2471-4df5-a7d9-007cb9640db4" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_absolute_http_origin_composes_the_deposit_page_prefix" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_that_is_merely_awaiting_a_retry_changes_nothing" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a8adeafe-6175-e005-1cd7-93446f3da148">
+      <Execution id="78fcba10-2974-4c4f-8f3d-4b46eb0c2cae" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeueing_a_row_that_is_merely_awaiting_a_retry_changes_nothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.One_stores_health_read_never_shows_another_stores_dead_letters" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dfff60cf-1123-4252-2d0d-bc47af53c103">
+      <Execution id="727c3369-5f20-4cc5-a87b-3553ee160451" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="One_stores_health_read_never_shows_another_stores_dead_letters" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b64112b0-0988-4daa-6e37-1fdf4890dfd3">
+      <Execution id="0a3937b9-5199-4840-b830-acde66f7ef21" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var k = \&quot;events.deposit-link:\&quot; + ev.PublicId.ToS&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="020ff49a-d9f2-8871-89a8-d969870da6f7">
+      <Execution id="7ff83474-1463-4589-b713-33e7697a6348" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var url = $\&quot;https://example.test/x?key={_appSetti&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c07df630-e84a-e497-9254-be58eb7a332e">
+      <Execution id="a50b6eb3-7c1a-496c-a148-54e28f3de788" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_drain_delivers_a_pending_row_as_email_and_marks_it_sent" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="551f6670-a677-6466-4477-c96c4adc4cc2">
+      <Execution id="104933de-a8d1-4d31-8524-ee8804d2c760" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="The_drain_delivers_a_pending_row_as_email_and_marks_it_sent" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;not a url&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="701e6f9c-8a89-ddd1-0c8b-038ed6961f76">
+      <Execution id="ffa5e27a-e1ec-447d-9ed0-22c439efbf23" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_requeue_that_arrives_after_delivery_is_refused_and_sends_no_second_copy" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b40f99da-9a6e-e54d-933a-1693ad9ef552">
+      <Execution id="106bad1d-9a5b-46db-abc7-5f3e54337c56" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="A_requeue_that_arrives_after_delivery_is_refused_and_sends_no_second_copy" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_while_dispatch_is_off_is_accepted_and_reports_that_nothing_is_delivering" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d46fb444-2b17-252c-f725-fe6daf6ce73d">
+      <Execution id="0d2d3028-5565-46aa-9e91-8feab65cb11a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeueing_while_dispatch_is_off_is_accepted_and_reports_that_nothing_is_delivering" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogWarning($\&quot;Refresh failed for {config.R&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a015669d-5643-8901-9096-eae089286ee8">
+      <Execution id="986e1d30-56d4-4809-885c-db1628b00a38" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; \&quot;events-deposit-\&quot; + deposit.PublicToken.ToStr&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bab4e4ee-5c8f-1fda-c671-2a046d413aff">
+      <Execution id="293705fb-5393-41ac-9a8f-40638221ee2e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.Every_exemption_still_matches_real_code" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a3381337-3117-dd9e-d971-3a881b24f64f">
+      <Execution id="861e2916-acb2-4460-acde-a33e8fd59f45" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="Every_exemption_still_matches_real_code" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="02ed5b57-7b41-fad9-5f58-0694e8c8c76b">
+      <Execution id="b6f5aa9d-e48a-49e1-9aeb-9276363b528b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;Refresh failed. RefreshTokenLen&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1b4beca5-fc76-812a-9ddb-e3276936f494">
+      <Execution id="256ca29d-bd06-4408-844a-7eaf32265187" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;key ending {Tail}\&quot;, goog&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2bddedea-b5b9-8b92-ee12-d071ee2e6d91">
+      <Execution id="b8322ed8-b596-48d6-846f-7d117ffe9620" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.Enqueue_stages_the_row_into_the_callers_transaction_and_does_not_save_it_itself" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78bafb3f-0130-7b6b-a313-45cb2975c0fe">
+      <Execution id="40d5b407-7887-4cc7-9512-7844bc4dc41a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="Enqueue_stages_the_row_into_the_callers_transaction_and_does_not_save_it_itself" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(e, \&quot;Error processing Vipps callb&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="83069b8d-9007-2265-62b1-c5362d165187">
+      <Execution id="75db9245-d548-42a0-8dc3-3a155c0b3405" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.Issuing_a_deposit_persists_a_pending_outbox_row_carrying_the_deposit_token" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ff7dc51c-413a-ce61-a857-04e8ecd6248b">
+      <Execution id="d979838d-6155-496a-b418-17e345cab84a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="Issuing_a_deposit_persists_a_pending_outbox_row_carrying_the_deposit_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; \&quot;events-deposit-\&quot; + CapabilityReference.Deriv&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78349b5d-c675-16fb-1e03-09ae9b1dc779">
+      <Execution id="1e603c9a-975d-4cf0-b10b-250f8c7780e9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_replayed_command_does_not_queue_a_second_copy_of_a_live_link" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="79b9ee5f-bcb0-7726-5976-584911988ddd">
+      <Execution id="15b9c47b-10d4-41f6-a56e-11cea50b6392" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_replayed_command_does_not_queue_a_second_copy_of_a_live_link" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_two_guest_pages_are_composed_from_the_same_origin_and_differ_in_one_segment" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="3198db39-09f5-c505-488b-edca17bbe1ed">
+      <Execution id="f75e20d1-3136-4cee-a78b-41fead54b3d6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_two_guest_pages_are_composed_from_the_same_origin_and_differ_in_one_segment" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogWarning(\&quot;Incomplete. AccessToken={E}\&quot;&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b06920a1-d845-7445-dab4-00c98c20d2c6">
+      <Execution id="c9fc4661-15b2-4d83-9a70-c43bcc8d6188" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var live = rows.Where(c =&gt; c.IsActive &amp;&amp; c.ApiToke&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b19a825a-c0a4-5b7f-f688-4831e75f8555">
+      <Execution id="e67aff0d-0a5c-413e-b5f8-6c6e5d03ea11" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_row_whose_event_is_not_readable_is_still_reported_without_its_title" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d1087c02-3ae8-b0a9-0b97-306478b0ebc6">
+      <Execution id="611709a8-034a-4d15-ad07-d0b79da72d1c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="A_row_whose_event_is_not_readable_is_still_reported_without_its_title" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.A_credential_is_not_composed_into_a_string_that_travels_under_another_name" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="97ff04bb-dd64-79f3-1390-14a29b8f6e03">
+      <Execution id="95ee21f8-6f68-4e61-b608-b4ee523a1e69" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="A_credential_is_not_composed_into_a_string_that_travels_under_another_name" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.An_unconfigured_guest_origin_sends_nothing_and_stays_retryable" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bee6d158-15b1-9ca2-ce41-9fd6ce13e45a">
+      <Execution id="cd7f3b14-11ae-4bdd-a880-b772bd84fa67" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="An_unconfigured_guest_origin_sends_nothing_and_stays_retryable" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var clientSecret = config?.ClientSecret ?? \&quot;fallb&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="56f527e5-78d4-a5a6-c8c7-169eeae4f28f">
+      <Execution id="bb5a0f01-041b-47d3-8acb-85275d5930ac" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5fd63143-5861-b794-89c2-f373f1bdb243">
+      <Execution id="9c4f3a90-36aa-4630-8380-07cb7280b10d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; VippsOrderIdPrefix + CapabilityReference.Derive&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="94b720ba-48e5-f23d-1ede-a6c550a5b58d">
+      <Execution id="c94d5035-e6c0-476b-9748-64dfcd3f4223" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c7a60f42-5cdc-2bda-ab17-5a06cc0c6099">
+      <Execution id="76e90391-48e9-4501-a1b8-7990766ab3bb" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_registry_is_derived_from_the_model_and_still_finds_the_credentials" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ab9bedc5-9471-8e87-431e-02335adfe8af">
+      <Execution id="30b6143a-8bdc-4db0-b21c-76bf7860713d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_registry_is_derived_from_the_model_and_still_finds_the_credentials" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var url = \&quot;/x?consumerToken=\&quot; + Uri.EscapeDataSt&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dc0c48dc-6d1f-1ba3-1409-346ab5ab4d55">
+      <Execution id="4b9b9a32-db3e-4838-9435-3b4bfa2edac8" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.Re_sending_an_already_sent_proposal_queues_no_second_link" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="caba7a77-a573-1c5d-d4db-162d8b92e8a9">
+      <Execution id="cab57ada-0ea7-40f2-9d0d-9227f7416927" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="Re_sending_an_already_sent_proposal_queues_no_second_link" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;http://localhost:3000&quot;, expected: &quot;http://localhost:3000/events/deposit/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="072988a5-820d-f26f-5ca1-66a27311dc98">
+      <Execution id="b53a9992-3ade-46ba-8031-68a43a7ea89a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_absolute_http_origin_composes_the_deposit_page_prefix" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9f5b65a3-17bd-9d15-0058-5924f420c767">
+      <Execution id="c05ab26d-4435-4b5d-be35-81456c244cf6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="The_message_carries_the_link_and_no_other_guest_data" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_backlog_larger_than_the_page_reports_the_full_count_beside_the_capped_list" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="394d21df-01f1-1e0a-c957-97bc62747085">
+      <Execution id="7490d212-29f0-4d60-acf1-40289fe63520" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="A_backlog_larger_than_the_page_reports_the_full_count_beside_the_capped_list" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var k = \&quot;events.deposit-link:\&quot; + ev.PublicId.ToS&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d9343986-9065-f580-a7ea-30003aa24590">
+      <Execution id="b93edb22-1ce1-4ac2-a2d1-46511fed2419" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_scanner_reaches_the_statements_it_claims_to_sweep" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ba4833c0-88e2-7fdd-7bbf-db06b664ac32">
+      <Execution id="6106a2a2-0737-416c-aa2e-c262511c0f9c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_scanner_reaches_the_statements_it_claims_to_sweep" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;//guest.example.test&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9313c9fe-2cba-e4ab-5979-c7d8b30cd996">
+      <Execution id="104ed0e2-3085-403e-8aba-371c393ca6cf" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;../guest&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="db113603-3b21-81ed-2556-9d84f9f5a900">
+      <Execution id="57bda41d-9a16-442e-b279-185e22597dcd" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;=&gt; VippsOrderIdPrefix + deposit.PublicToken.ToStri&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="6ed6923f-045b-3043-d20d-5fce6699c007">
+      <Execution id="0c67aaad-6416-4c6c-b672-fb92b2fa01fa" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;file:///srv/guest-web&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="95037424-080d-5625-ac38-71c0d51c309c">
+      <Execution id="29035f7f-c2c7-44f9-8aa2-3219fbb96788" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;javascript:alert(1)&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4eaf810b-88c3-c9fb-ab5e-3cff648c87de">
+      <Execution id="8c2071e5-91cd-414c-b5a1-8affbb63cc2a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var note = \&quot;len:\&quot; + config.RefreshToken.Length;&quot;, expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b1fdecb7-311d-9cbb-0579-8817f179d107">
+      <Execution id="081ed5cb-224c-45fe-9a92-12475d842c1f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_that_died_on_an_unconfigured_origin_delivers_it_once_the_origin_is_set" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e6c8171c-fe34-e52a-a2dc-046dcc37ee41">
+      <Execution id="4930e361-c3bd-4f1a-a026-95fc087d9b90" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeueing_a_row_that_died_on_an_unconfigured_origin_delivers_it_once_the_origin_is_set" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_throwing_adapter_is_a_recorded_attempt_not_a_lost_row" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5a92cc31-73b5-e91c-4fcb-ab5f0af23f87">
+      <Execution id="13864b09-16fa-4521-b546-3b822c5b6758" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_throwing_adapter_is_a_recorded_attempt_not_a_lost_row" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.With_dispatch_off_the_read_says_so_and_counts_the_backlog_nobody_is_delivering" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="4ed34ebf-8d26-6961-9645-5f562660977c">
+      <Execution id="af4f129e-9662-4be5-8e34-d584760bd9ca" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="With_dispatch_off_the_read_says_so_and_counts_the_backlog_nobody_is_delivering" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var key = \&quot;session:\&quot; + credentials.TokenType + \&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c4387b46-b8d9-44f0-97db-c64f4aecf247">
+      <Execution id="5c331905-26cd-445c-820a-327b1effd7ab" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeueing_a_row_the_drain_is_holding_leaves_the_lease_and_the_attempt_count_alone" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="1cacb2c1-62aa-6ba3-60ba-40c0a014e5af">
+      <Execution id="482878b7-66dc-4426-b7fa-4618a7677b2e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeueing_a_row_the_drain_is_holding_leaves_the_lease_and_the_attempt_count_alone" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_delivery_that_never_succeeds_does_not_disturb_the_lifecycle_transition" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a421609b-4da5-4022-7536-3f3563158f56">
+      <Execution id="21e6fa4b-ee2c-4d21-812a-ec6fb4623156" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_delivery_that_never_succeeds_does_not_disturb_the_lifecycle_transition" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.The_drain_is_inert_while_dispatch_is_disabled_and_drains_the_backlog_once_enabled" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bafcb35e-2879-24f9-a107-d8f6708cfce9">
+      <Execution id="162e6700-931b-43ad-b3e1-6ee848d6bb0d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="The_drain_is_inert_while_dispatch_is_disabled_and_drains_the_backlog_once_enabled" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: null)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f11d71c7-f7f1-5ca2-0a21-9381e581a74a">
+      <Execution id="46b21656-4aeb-4a98-a62d-41c33e7d8394" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_absolute_http_origin_composes_the_deposit_page_prefix(publicBaseUrl: &quot;https://guest.example.test///&quot;, expected: &quot;https://guest.example.test/events/deposit/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="02efb52a-4d3e-530e-e791-e0f83b5236ce">
+      <Execution id="a2c923bd-2fb8-4f89-91d8-cd02f9fe28a3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_absolute_http_origin_composes_the_deposit_page_prefix" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.The_health_read_carries_neither_the_link_token_nor_the_guests_address" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a5cfe7ac-e4eb-386d-b339-e9abb424bd83">
+      <Execution id="fdf20184-2406-4de6-877b-0c7defb01bcd" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="The_health_read_carries_neither_the_link_token_nor_the_guests_address" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(e, \&quot;Error processing Vipps callb&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="45bcd5e6-26d0-510c-d73e-0062cd782ef1">
+      <Execution id="5820d0fb-e68e-463c-8ee3-f9efc104d929" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;Refreshed {Present}\&quot;, Se&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b2b71d32-db08-8b36-5135-939636adbf8b">
+      <Execution id="17a9751f-8e4e-4ba5-ad6a-a41ccc58837d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogInformation(\&quot;Minted {Correlation}\&quot;, c&quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="091c3e23-64fd-77d7-7f3d-0a21c2868901">
+      <Execution id="42dcfe62-b5a9-40cd-9134-e772fd9df387" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.Requeue_preserves_the_token_the_address_the_budget_and_the_record_of_the_failure" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c9d57669-3b57-e202-d7a7-90243fcc4824">
+      <Execution id="1dde2c1d-14bc-47ea-826c-24ba4770e2d0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="Requeue_preserves_the_token_the_address_the_budget_and_the_record_of_the_failure" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;guest.example.test&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f71df1b2-7685-830a-c026-ffae19b0bcb6">
+      <Execution id="7e20fc82-7ea7-4611-b73c-bb9c842b340a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsDeadLetterSurfaceTests.A_delivered_link_and_a_link_still_in_flight_are_counted_but_not_reported_as_dead" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="b0001d14-b451-514d-1c66-0699a175ff86">
+      <Execution id="cbd7109e-78de-4a1c-a120-898d3e48c8a5" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsDeadLetterSurfaceTests" name="A_delivered_link_and_a_link_still_in_flight_are_counted_but_not_reported_as_dead" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.A_configured_absolute_origin_still_mails_the_guest_the_page_it_addresses" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="931ed203-1fab-7024-b298-d6b9ebda7760">
+      <Execution id="84a3d9af-d4d4-4a22-af98-ca63fbdb0d18" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="A_configured_absolute_origin_still_mails_the_guest_the_page_it_addresses" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_row_that_never_delivers_is_dead_lettered_once_its_attempt_budget_is_spent" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5aab4120-5b03-1d26-ded6-3d1166ef7917">
+      <Execution id="85e868d6-6624-4c14-99f8-0e27a7a2133b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_row_that_never_delivers_is_dead_lettered_once_its_attempt_budget_is_spent" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsOutboxDeliveryTests.A_deposit_link_points_at_the_deposit_page_not_the_proposal_page" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0df7d5f6-9f91-657d-dbc7-bac9d0968d79">
+      <Execution id="011fe0b2-71e1-480d-8430-4c00fc1be881" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsOutboxDeliveryTests" name="A_deposit_link_points_at_the_deposit_page_not_the_proposal_page" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_composition_rule_can_fail(statement: &quot;var command = Build(ev, kind, deposit.PublicToken,&quot;..., expectedOffender: False)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9f1ebe32-a249-2fe8-b130-1b3347cfbe63">
+      <Execution id="80228d01-e01e-4ec1-86be-d3f557b74329" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_composition_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;/&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="955a4917-858e-f10c-6218-1970afa262f4">
+      <Execution id="db37abc0-2b1b-4991-be32-44ccced9df34" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.The_composer_refuses_every_origin_that_is_not_absolute_http(publicBaseUrl: &quot;ftp://guest.example.test&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2114dd9e-9c1b-d98a-a745-c71f31ec13c8">
+      <Execution id="32b47cc7-2481-43b0-a607-16ec126fbea2" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="The_composer_refuses_every_origin_that_is_not_absolute_http" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Observability.CredentialCompositionSweepTests.The_log_rule_can_fail(statement: &quot;_logger.LogError(\&quot;Exchange failed for {Grant}\&quot;, &quot;..., expectedOffender: True)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="92e49903-2f30-34ab-5fe8-362d4a3971bb">
+      <Execution id="54880a47-a475-478e-a356-ba0325a7ce85" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Observability.CredentialCompositionSweepTests" name="The_log_rule_can_fail" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;guest.example.test&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="7307ea0c-67bf-08e7-501b-9ea09dcfd8b7">
+      <Execution id="f975097f-9c61-4dd3-b41e-c854b4d861f6" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: &quot;file:///srv/guest-web&quot;)" storage="/users/svendaneel/okam/wt-evuri/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="034d99e2-eb70-816e-3d62-495f44df4a59">
+      <Execution id="3fe76bb8-ed20-4ea3-bc59-2b639fb04037" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-evuri/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Events.EventsGuestLinkOriginTests" name="An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="715c5929-6ac5-b98d-9b4b-f4cb81e4e6e4" executionId="1da427d9-a955-40d1-aeed-26cb27d17b57" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba4833c0-88e2-7fdd-7bbf-db06b664ac32" executionId="6106a2a2-0737-416c-aa2e-c262511c0f9c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c07df630-e84a-e497-9254-be58eb7a332e" executionId="a50b6eb3-7c1a-496c-a148-54e28f3de788" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83f3b990-e060-4930-b16d-ddab3e81d864" executionId="dae05c54-2471-4df5-a7d9-007cb9640db4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9d57669-3b57-e202-d7a7-90243fcc4824" executionId="1dde2c1d-14bc-47ea-826c-24ba4770e2d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="680bd876-54dd-b298-2538-f6d94c27b583" executionId="5843242c-5817-4ec4-a257-d098ab3dcd8e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="79b9ee5f-bcb0-7726-5976-584911988ddd" executionId="15b9c47b-10d4-41f6-a56e-11cea50b6392" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a3381337-3117-dd9e-d971-3a881b24f64f" executionId="861e2916-acb2-4460-acde-a33e8fd59f45" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e6c8171c-fe34-e52a-a2dc-046dcc37ee41" executionId="4930e361-c3bd-4f1a-a026-95fc087d9b90" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="072988a5-820d-f26f-5ca1-66a27311dc98" executionId="b53a9992-3ade-46ba-8031-68a43a7ea89a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bab4e4ee-5c8f-1fda-c671-2a046d413aff" executionId="293705fb-5393-41ac-9a8f-40638221ee2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f5b65a3-17bd-9d15-0058-5924f420c767" executionId="c05ab26d-4435-4b5d-be35-81456c244cf6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b64112b0-0988-4daa-6e37-1fdf4890dfd3" executionId="0a3937b9-5199-4840-b830-acde66f7ef21" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="551f6670-a677-6466-4477-c96c4adc4cc2" executionId="104933de-a8d1-4d31-8524-ee8804d2c760" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78349b5d-c675-16fb-1e03-09ae9b1dc779" executionId="1e603c9a-975d-4cf0-b10b-250f8c7780e9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83069b8d-9007-2265-62b1-c5362d165187" executionId="75db9245-d548-42a0-8dc3-3a155c0b3405" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bee6d158-15b1-9ca2-ce41-9fd6ce13e45a" executionId="cd7f3b14-11ae-4bdd-a880-b772bd84fa67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92e49903-2f30-34ab-5fe8-362d4a3971bb" executionId="54880a47-a475-478e-a356-ba0325a7ce85" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b06920a1-d845-7445-dab4-00c98c20d2c6" executionId="c9fc4661-15b2-4d83-9a70-c43bcc8d6188" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78bafb3f-0130-7b6b-a313-45cb2975c0fe" executionId="40d5b407-7887-4cc7-9512-7844bc4dc41a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02efb52a-4d3e-530e-e791-e0f83b5236ce" executionId="a2c923bd-2fb8-4f89-91d8-cd02f9fe28a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9313c9fe-2cba-e4ab-5979-c7d8b30cd996" executionId="104ed0e2-3085-403e-8aba-371c393ca6cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="45bcd5e6-26d0-510c-d73e-0062cd782ef1" executionId="5820d0fb-e68e-463c-8ee3-f9efc104d929" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5fd63143-5861-b794-89c2-f373f1bdb243" executionId="9c4f3a90-36aa-4630-8380-07cb7280b10d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b19a825a-c0a4-5b7f-f688-4831e75f8555" executionId="e67aff0d-0a5c-413e-b5f8-6c6e5d03ea11" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8320f45c-4550-3fcd-66c8-d96ab5ce97d5" executionId="aba34e39-c60d-43c0-a386-21bc60f5da91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c7a60f42-5cdc-2bda-ab17-5a06cc0c6099" executionId="76e90391-48e9-4501-a1b8-7990766ab3bb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="955a4917-858e-f10c-6218-1970afa262f4" executionId="db37abc0-2b1b-4991-be32-44ccced9df34" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4eaf810b-88c3-c9fb-ab5e-3cff648c87de" executionId="8c2071e5-91cd-414c-b5a1-8affbb63cc2a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d9343986-9065-f580-a7ea-30003aa24590" executionId="b93edb22-1ce1-4ac2-a2d1-46511fed2419" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5984244-a0d6-5762-e926-bd83dcfbe559" executionId="aaf2019b-cbd9-4bce-b4d0-469dcbe24fed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="02ed5b57-7b41-fad9-5f58-0694e8c8c76b" executionId="b6f5aa9d-e48a-49e1-9aeb-9276363b528b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="034d99e2-eb70-816e-3d62-495f44df4a59" executionId="3fe76bb8-ed20-4ea3-bc59-2b639fb04037" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="020ff49a-d9f2-8871-89a8-d969870da6f7" executionId="7ff83474-1463-4589-b713-33e7697a6348" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="caba7a77-a573-1c5d-d4db-162d8b92e8a9" executionId="cab57ada-0ea7-40f2-9d0d-9227f7416927" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b06f7e55-8cda-f959-4162-15e26c653ec7" executionId="c674bb8c-8516-4d38-9f79-e61a42d19d00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2114dd9e-9c1b-d98a-a745-c71f31ec13c8" executionId="32b47cc7-2481-43b0-a607-16ec126fbea2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="94b720ba-48e5-f23d-1ede-a6c550a5b58d" executionId="c94d5035-e6c0-476b-9748-64dfcd3f4223" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d46fb444-2b17-252c-f725-fe6daf6ce73d" executionId="0d2d3028-5565-46aa-9e91-8feab65cb11a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3198db39-09f5-c505-488b-edca17bbe1ed" executionId="f75e20d1-3136-4cee-a78b-41fead54b3d6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0df7d5f6-9f91-657d-dbc7-bac9d0968d79" executionId="011fe0b2-71e1-480d-8430-4c00fc1be881" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5cfe7ac-e4eb-386d-b339-e9abb424bd83" executionId="fdf20184-2406-4de6-877b-0c7defb01bcd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dfff60cf-1123-4252-2d0d-bc47af53c103" executionId="727c3369-5f20-4cc5-a87b-3553ee160451" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5aab4120-5b03-1d26-ded6-3d1166ef7917" executionId="85e868d6-6624-4c14-99f8-0e27a7a2133b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="701e6f9c-8a89-ddd1-0c8b-038ed6961f76" executionId="ffa5e27a-e1ec-447d-9ed0-22c439efbf23" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="56f527e5-78d4-a5a6-c8c7-169eeae4f28f" executionId="bb5a0f01-041b-47d3-8acb-85275d5930ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5a92cc31-73b5-e91c-4fcb-ab5f0af23f87" executionId="13864b09-16fa-4521-b546-3b822c5b6758" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="091c3e23-64fd-77d7-7f3d-0a21c2868901" executionId="42dcfe62-b5a9-40cd-9134-e772fd9df387" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="65bf5acf-d88f-d677-66ee-3c1f506f03fb" executionId="24a7ecbd-ebb3-4ed8-96a5-f8e1c88b83af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="97ff04bb-dd64-79f3-1390-14a29b8f6e03" executionId="95ee21f8-6f68-4e61-b608-b4ee523a1e69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e35138ce-c08b-5a93-5eea-7c84ad5f9c6b" executionId="cfc87bc8-a4f1-4c2e-b576-41a6c546db8d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9f1ebe32-a249-2fe8-b130-1b3347cfbe63" executionId="80228d01-e01e-4ec1-86be-d3f557b74329" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b1fdecb7-311d-9cbb-0579-8817f179d107" executionId="081ed5cb-224c-45fe-9a92-12475d842c1f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37978bbc-2b09-a5f6-798b-d07b2e7291a7" executionId="cfdd08b3-fbd5-4001-a12a-53c644ecdf67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b0001d14-b451-514d-1c66-0699a175ff86" executionId="cbd7109e-78de-4a1c-a120-898d3e48c8a5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a015669d-5643-8901-9096-eae089286ee8" executionId="986e1d30-56d4-4809-885c-db1628b00a38" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a421609b-4da5-4022-7536-3f3563158f56" executionId="21e6fa4b-ee2c-4d21-812a-ec6fb4623156" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95037424-080d-5625-ac38-71c0d51c309c" executionId="29035f7f-c2c7-44f9-8aa2-3219fbb96788" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f11d71c7-f7f1-5ca2-0a21-9381e581a74a" executionId="46b21656-4aeb-4a98-a62d-41c33e7d8394" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ed6923f-045b-3043-d20d-5fce6699c007" executionId="0c67aaad-6416-4c6c-b672-fb92b2fa01fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b2b71d32-db08-8b36-5135-939636adbf8b" executionId="17a9751f-8e4e-4ba5-ad6a-a41ccc58837d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f71df1b2-7685-830a-c026-ffae19b0bcb6" executionId="7e20fc82-7ea7-4611-b73c-bb9c842b340a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7307ea0c-67bf-08e7-501b-9ea09dcfd8b7" executionId="f975097f-9c61-4dd3-b41e-c854b4d861f6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ab9bedc5-9471-8e87-431e-02335adfe8af" executionId="30b6143a-8bdc-4db0-b21c-76bf7860713d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1087c02-3ae8-b0a9-0b97-306478b0ebc6" executionId="611709a8-034a-4d15-ad07-d0b79da72d1c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db113603-3b21-81ed-2556-9d84f9f5a900" executionId="57bda41d-9a16-442e-b279-185e22597dcd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a8adeafe-6175-e005-1cd7-93446f3da148" executionId="78fcba10-2974-4c4f-8f3d-4b46eb0c2cae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2bddedea-b5b9-8b92-ee12-d071ee2e6d91" executionId="b8322ed8-b596-48d6-846f-7d117ffe9620" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b4beca5-fc76-812a-9ddb-e3276936f494" executionId="256ca29d-bd06-4408-844a-7eaf32265187" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69181d7a-12f8-b1c5-f5e0-541a1180c29f" executionId="6088cae8-0fab-469d-994b-5dd10eabbc1e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4ed34ebf-8d26-6961-9645-5f562660977c" executionId="af4f129e-9662-4be5-8e34-d584760bd9ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b40f99da-9a6e-e54d-933a-1693ad9ef552" executionId="106bad1d-9a5b-46db-abc7-5f3e54337c56" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc0c48dc-6d1f-1ba3-1409-346ab5ab4d55" executionId="4b9b9a32-db3e-4838-9435-3b4bfa2edac8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ff7dc51c-413a-ce61-a857-04e8ecd6248b" executionId="d979838d-6155-496a-b418-17e345cab84a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1cacb2c1-62aa-6ba3-60ba-40c0a014e5af" executionId="482878b7-66dc-4426-b7fa-4618a7677b2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bafcb35e-2879-24f9-a107-d8f6708cfce9" executionId="162e6700-931b-43ad-b3e1-6ee848d6bb0d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="931ed203-1fab-7024-b298-d6b9ebda7760" executionId="84a3d9af-d4d4-4a22-af98-ca63fbdb0d18" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="394d21df-01f1-1e0a-c957-97bc62747085" executionId="7490d212-29f0-4d60-acf1-40289fe63520" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c4387b46-b8d9-44f0-97db-c64f4aecf247" executionId="5c331905-26cd-445c-820a-327b1effd7ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="79" executed="79" passed="72" failed="7" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:01.03]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.27]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.28]   Starting:    WebApi.Tests
+[xUnit.net 00:00:07.27]       A log call is handed a credential. Application Insights keeps it for the retention period and the placeholder it was logged under is irrelevant — a reader holds the credential either way. Log a derived fact, or add the statement to LogAllowed in this file with the reason:
+[xUnit.net 00:00:07.27]         Services/Events/EventsEmailNotificationDelivery.cs:95: PublicToken   in: _logger.LogWarning("Malformed guest link {Link}", _settings.PublicBaseUrl + "/events/deposit/" + row.PublicToken.ToString("D"));
+[xUnit.net 00:00:07.27]       Expected: True
+[xUnit.net 00:00:07.27]       Actual:   False
+[xUnit.net 00:00:07.27]       Stack Trace:
+[xUnit.net 00:00:07.27]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Observability/CredentialCompositionSweepTests.cs(233,0): at WebApi.Tests.Observability.CredentialCompositionSweepTests.A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called()
+[xUnit.net 00:00:07.27]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:07.27]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:09.23]       Assert.Equal() Failure
+[xUnit.net 00:00:09.23]                                        ↓ (pos 22)
+[xUnit.net 00:00:09.23]       Expected: ···blicBaseUrlMalformed
+[xUnit.net 00:00:09.23]       Actual:   ···blicBaseUrlMalformed: //events/deposit/f963e8e4-4913-48db-a4b···
+[xUnit.net 00:00:09.23]                                        ↑ (pos 22)
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(60,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl)
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]       Assert.Equal() Failure
+[xUnit.net 00:00:09.23]                                        ↓ (pos 22)
+[xUnit.net 00:00:09.23]       Expected: ···blicBaseUrlMalformed
+[xUnit.net 00:00:09.23]       Actual:   ···blicBaseUrlMalformed: guest.example.test/events/deposit/80606···
+[xUnit.net 00:00:09.23]                                        ↑ (pos 22)
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(60,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl)
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]       Assert.Equal() Failure
+[xUnit.net 00:00:09.23]                                        ↓ (pos 22)
+[xUnit.net 00:00:09.23]       Expected: ···blicBaseUrlMalformed
+[xUnit.net 00:00:09.23]       Actual:   ···blicBaseUrlMalformed: file:///srv/guest-web/events/deposit/2f···
+[xUnit.net 00:00:09.23]                                        ↑ (pos 22)
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(60,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl)
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]       Assert.Equal() Failure
+[xUnit.net 00:00:09.23]                                        ↓ (pos 22)
+[xUnit.net 00:00:09.23]       Expected: ···blicBaseUrlMalformed
+[xUnit.net 00:00:09.23]       Actual:   ···blicBaseUrlMalformed: /events/events/deposit/bd2a98f3-17e2-49···
+[xUnit.net 00:00:09.23]                                        ↑ (pos 22)
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(60,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl)
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]       Assert.Equal() Failure
+[xUnit.net 00:00:09.23]                                        ↓ (pos 22)
+[xUnit.net 00:00:09.23]       Expected: ···blicBaseUrlMalformed
+[xUnit.net 00:00:09.23]       Actual:   ···blicBaseUrlMalformed: not a url/events/deposit/f4f70432-c555-···
+[xUnit.net 00:00:09.23]                                        ↑ (pos 22)
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(60,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(String publicBaseUrl)
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]       Assert.DoesNotContain() Failure
+[xUnit.net 00:00:09.23]       Found:    4bc73939-09df-43ce-94a9-34ffc1751dd8
+[xUnit.net 00:00:09.23]       In value: PublicBaseUrlMalformed: /events/events/deposit/4bc73939-09df-43ce-94a9-34ffc1751dd8
+[xUnit.net 00:00:09.23]       Stack Trace:
+[xUnit.net 00:00:09.23]         /Users/svendaneel/okam/wt-evuri/WebApi.Tests/Events/EventsGuestLinkOriginTests.cs(100,0): at WebApi.Tests.Events.EventsGuestLinkOriginTests.The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link()
+[xUnit.net 00:00:09.23]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:09.23]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:10.9994890+02:00">
+        <Text>[xUnit.net 00:00:07.27]     WebApi.Tests.Observability.CredentialCompositionSweepTests.A_log_statement_never_reads_a_credential_whatever_the_placeholder_is_called [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9526940+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "/") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9534480+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "guest.example.test") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9534720+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "file:///srv/guest-web") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9535430+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "/events") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9536140+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "not a url") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="svens-macbook-pro" outcome="Error" timestamp="2026-08-02T10:06:12.9547460+02:00">
+        <Text>[xUnit.net 00:00:09.23]     WebApi.Tests.Events.EventsGuestLinkOriginTests.The_refusal_reaches_neither_an_operator_nor_a_log_sink_carrying_the_link [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

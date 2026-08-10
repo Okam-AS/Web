@@ -4460,3 +4460,174 @@
 - 2026-08-09T08:59Z · @clerk · measured cause candidate: feature-flags/catalog and stores/1/feature-flags both 401 under the same bearer that got 200 from user and stores/1
 - 2026-08-09T09:02Z · @clerk · fodselsnummer finding widened: 3 checksum-valid values across 21 files, 16 already committed on wip, 5 untracked, none on the pushed trunk
 - 2026-08-09T09:02Z · @clerk · held the 5 untracked lane evidence dirs out of the commit pending the ruling; the plan and returns are committed at 3c8caee2
+- 2026-08-09T09:03Z · @clerk · backend trunk pushed: ada218783 to 6d5328004, 10 commits, scanned first and carrying zero checksum-valid identity values
+- 2026-08-09T09:03Z · @clerk · frontend wip NOT pushed: 16 already-committed lane trx on it carry three checksum-valid values, so pushing it would make the open ruling by accident
+- 2026-08-09T09:07Z · @clerk · measured inside the Docker VM: 6114 MB available of 7837, two standing containers using 871 MB; the host swap figure was not the VM's constraint
+- 2026-08-09T09:20Z · agent:a400093a · started L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN
+- 2026-08-09T09:20Z · agent:ad133d03 · started L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING
+- 2026-08-09T09:20Z · @clerk · meals was dark because demo-up.sh says Features:Meals is bound NOWHERE; the binding is at Program.cs:887 and the seed passes with Features__Meals__Module=true
+- 2026-08-09T09:24Z · agent:L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN · returned L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN verdict=fail-spec -> open; D-SPEC-L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN appended
+- 2026-08-09T09:24Z · agent:L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN · report L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-GROWTH-AND-MARGIN: FAIL-SPEC ON THE TWO ROWS THAT MATTER MOST, and I built nothing rather than build against them. You said four premises moved tonight; two of my seven had moved before I touched a file.; GB1 IS NOT VERIFIED-RED. The row says a guest cannot subscribe at all and a fresh database is the oracle. But Serv
+- 2026-08-09T09:24Z · @clerk · PROOF-BENCHMARKS is stale: GB1 has a consent-text seed at Program.cs:394 and GB2 has 17 List-Unsubscribe hits across 9 files, so two of three singled-out rows had moved
+- 2026-08-09T09:26Z · agent:a400093a · started L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY
+- 2026-08-09T09:28Z · agent:L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY · returned L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY verdict=fail-spec -> open; D-SPEC-L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY appended
+- 2026-08-09T09:28Z · agent:L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY · report L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY: FAIL-SPEC: the brief was never generated. Third time tonight, and as before I built nothing rather than improvise against a dispatch message.; This one is a clerical block rather than a substantive one, and I can say that because I verified your premises instead of only reporting the absence. All th
+- 2026-08-09T09:29Z · @clerk · third clerical miss of the night: dispatched L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY before tick generated its brief; the agent refused and verified all three premises anyway
+- 2026-08-09T09:29Z · @clerk · measured third case: WorkforceShiftAssignment.RoleId is Guid? so a staffed shift may carry no role, which is nobody asked rather than earned nothing
+- 2026-08-09T09:30Z · agent:L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING · returned L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING verdict=fail-spec -> open; D-SPEC-L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING appended
+- 2026-08-09T09:30Z · agent:L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING · report L-THE-SAFE-BENCHMARK-ROWS-ARE-BUILT-WORKFORCE-AND-TRAINING: Verified every row's premise at the tip before touching anything, as the brief demanded; four moved, matching its "four have tonight" warning. Edited no production source.; TR-B1 fail-spec: TrainingCompletionService.cs:202 now derives Passed = TrainingGrading.IsPass(ScorePercent, PassThresholdPercen
+- 2026-08-09T09:30Z · @clerk · second stale-triage fail-spec: 4 of 6 workforce and training rows already moved, TR-B1 and TR-B3 both fixed by e8f06833f, WB4 pinned 4/4, WB5 endpoints live at WorkforceMeController.cs:293-361
+- 2026-08-09T09:32Z · @clerk · six of thirteen benchmark rows re-checked tonight had already moved; the two survivors WB3 and TR-B4 are now specified from the trunk rather than from the stale document
+- 2026-08-09T09:32Z · @clerk · holding all build dispatch on the host gate: load 39.4 against the tool ceiling 21 and the lanes own gate of 13, with CAP-WAIT(6) queued
+- 2026-08-09T09:46Z · agent:a400093a · started L-THE-COMPETENCY-SEAM-FIRES-WARN-ONLY
+- 2026-08-09T09:46Z · agent:ad133d03 · started L-WB3-AND-TRB4-ARE-BUILT-FROM-A-SPECIFICATION-NOT-A-TRIAGE
+- 2026-08-09T09:48Z · tool · raised F-THE-CONTEXT-BUDGET-IS-A-CAPACITY-LIMIT-THE-PLAN-CANNOT-SEE (blocker): an agent handed back a build it could start but not finish, because remaining context is a capacity the tool models nowhere; the spawn ceiling means no fresh agent can replace it
+- 2026-08-09T09:48Z · @clerk · an agent handed back a build rather than half-do it: gate shut at 22.49 and its own remaining context could not carry a 119-line brief to the lane standard
+- 2026-08-09T10:13Z · tool · L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND running -> retracted: its agent was re-tasked to a build lane before it returned; my clerical error, resume point is the brief
+- 2026-08-09T10:13Z · tool · L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK running -> retracted: its agent was re-tasked to a build lane before it returned; my clerical error, resume point is the brief
+- 2026-08-09T10:13Z · tool · L-LIVE-WALK-EVENTS running -> retracted: I ran the four live-eligible journeys myself and they all fail at the flag switchboard; the finding is recorded as F-THE-STANDING-LIVE-WORLD-CANNOT-READ-ITS-OWN-FLAGS
+- 2026-08-09T10:13Z · @clerk · corrected three stale running states: two lanes whose agents I re-tasked before they returned, and the events walk I ran myself
+- 2026-08-09T10:19Z · @clerk · refill debt 4 is unpayable, not forgotten: one agent holds a tier, the other is out of context, and the spawn ceiling at 1000/1000 forbids a replacement
+- 2026-08-09T10:44Z · @clerk · owner raised the caps: suite 4->8, node 6->12, analysis 6->12, global 12->24, cpu_points 0.75->1.0, load_gate 1.5->3.0 so 42 on 14 cores
+- 2026-08-09T10:44Z · @clerk · the 13 gate in lane briefs was my convention, not the tool; raised to 30 since a single dotnet build alone put the average over 13
+- 2026-08-09T11:08Z · agent:a2afe8bc · started L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK
+- 2026-08-09T11:08Z · agent:abbc74f6 · started L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND
+- 2026-08-09T11:08Z · agent:a22e9475 · started L-READ-THE-SEVENTEEN-THAT-REACHED-THE-BACKEND-TRUNK
+- 2026-08-09T11:08Z · @clerk · subagent ceiling raised 1000 to 20000 in ~/.claude/settings.json and proven live by a spawn; three fresh-context lanes dispatched
+- 2026-08-09T11:08Z · agent:aa487312 · started L-LIVE-WALK-MARGIN
+- 2026-08-09T11:19Z · agent:L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK · L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK returned built -> built-unverified, evidence docs/plan/artifacts/benchmarks-re-triaged.md
+- 2026-08-09T11:19Z · agent:L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK · report L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK: Re-triaged all 28 §3 rows + 8 standing benchmarks + the §9 ledger against trunk 6d5328004 (528 commits past the doc's last stamp), file:line per verdict, positives and negatives both counted.; THE HOLES FIRST, per the brief's rule: (1) EB2 — Events.Deposits/Settlement are now IN the generic catalog 
+- 2026-08-09T11:19Z · tool · L-THE-BENCHMARK-TRIAGE-IS-RE-RUN-AGAINST-THE-TRUNK built-unverified -> verified, evidence docs/plan/artifacts/benchmarks-re-triaged.md
+- 2026-08-09T11:20Z · tool · raised F-A-DEPOSIT-LEVER-IS-REACHABLE-FOR-A-STORE-THAT-NEVER-TOOK-A-PAYMENT (blocker): Events.Deposits and Events.Settlement are in the generic toggle catalog; the proven-merchant-config precondition the benchmark called a money-safety invariant is unenforced, and the code's own comment concedes it
+- 2026-08-09T11:20Z · tool · raised F-SIX-INTERNKONTROLL-TABLES-HAVE-NO-READER (blocker): migration 20260801113131_Training_W3_ChecklistsAndDeviations creates six tables that no controller or route reaches; only a StoreMarketService existence probe touches one
+- 2026-08-09T11:20Z · @clerk · re-triage measured PROOF-BENCHMARKS 528 commits behind the trunk: 19 rows stale-to-built, 14 still holding, 4 holes where a settled row's guard is gone
+- 2026-08-09T11:24Z · agent:L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND · L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND returned built -> built-unverified, evidence docs/plan/artifacts/the-second-parse.md
+- 2026-08-09T11:24Z · agent:L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND · report L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND: Second parse, written before reading the first: state machine over all 38,658 lines, 574 accepted + 21 rejected == 595 candidates, asserted and printed.; Round-trip through the plan tool on a mirrored copy: 553 attributed + 42 rejected == 595. The corrected denominator is 553, not 547.; The first pa
+- 2026-08-09T11:24Z · tool · L-THE-DENOMINATOR-IS-PARSED-A-SECOND-TIME-BY-A-DIFFERENT-HAND built-unverified -> verified, evidence docs/plan/artifacts/the-second-parse.md
+- 2026-08-09T11:24Z · tool · raised F-NINE-STRAY-PASTE-SITES-DESTROYED-HOST-PROSE (blocker): 21 residue evidence lines at 9 stray-paste corruption sites duplicate 19 review lanes defined elsewhere, and host prose is destroyed mid-sentence at all nine; only L-WF-PIVOT-DEFECTS quarantined its paste
+- 2026-08-09T11:24Z · @clerk · second parse: the denominator is 553 not 547, six real lane blocks omitted, five of them living inside the Flags section where no lane sweep looks
+- 2026-08-09T11:24Z · @clerk · the 21 residue lines are NOT invisible lanes: the negatives round-trip refused that reading, which would have been the seventh sweep error
+- 2026-08-09T11:26Z · @clerk · load 42.9 is real work saturating the raised ceiling, not idle throttling: two tiers burning CPU for 21 and 31 minutes
+- 2026-08-09T11:26Z · @clerk · one lane held at CAP-WAIT with load 48.8 over the raised 42 ceiling; not a refill debt to waive, the host is genuinely full
+- 2026-08-09T11:46Z · agent:L-LIVE-WALK-MARGIN · L-LIVE-WALK-MARGIN returned built -> built-unverified, evidence lanes/L-LIVE-WALK-MARGIN/live-pass/margin-supplier-to-plate.live-5941-6d53280.playwright.json
+- 2026-08-09T11:46Z · agent:L-LIVE-WALK-MARGIN · report L-LIVE-WALK-MARGIN: PASSED LIVE, 29.3s: the artifact records backend:"live", status:"passed", backendBuild OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004 — the restaurant-modules TIP, via the pid-verified world stamp. 5 step screenshots. It also took the canonical slot: live outranks every fixture capture.; THE WORLD: live-wo
+- 2026-08-09T11:47Z · tool · raised F-THE-MARGIN-PAGE-COULD-NOT-LINK-A-RECIPE-TO-A-DISH (blocker): SetProductLinks sent no If-Match while the shipped controller requires it, so the live page answered 400 margin.revision-required; the controller comment already recorded that its one caller sends nothing
+- 2026-08-09T11:47Z · @clerk · live margin walk PASSED against a real backend at 6d5328004: 110 backend calls, artifact stamped with the trunk commit, API left standing on 5941 for Sven
+- 2026-08-09T11:47Z · @clerk · the fixture was lying three ways and one lie hid a live defect: the shipped page could not link a recipe to a dish at all
+- 2026-08-09T11:47Z · @clerk · F-THE-STANDING-LIVE-WORLD-CANNOT-READ-ITS-OWN-FLAGS did not reproduce under a fresh bearer; catalog answers 200 and the residual 403 is membership not auth
+- 2026-08-09T11:47Z · tool · L-LIVE-WALK-MARGIN built-unverified -> verified, evidence lanes/L-LIVE-WALK-MARGIN/live-pass/margin-supplier-to-plate.live-5941-6d53280.playwright.json
+- 2026-08-09T11:47Z · @clerk · amended the margin walk exit to name its artifact: the lane body designated artifacts/journeys before the work, so naming the path is the clerical half of that designation
+- 2026-08-09T11:49Z · tool · L-WOLT-SYNC built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-WOLT-SYNC/evidence.md
+- 2026-08-09T11:49Z · tool · L-MEALS-MEMBERS-READ built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-MEALS-MEMBERS-READ/mutation-log.md
+- 2026-08-09T11:49Z · tool · L-TELEMETRY-INITIALIZER-FLOOR built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-TELEMETRY-INITIALIZER-FLOOR/mutation-log.md
+- 2026-08-09T11:49Z · tool · L-HOSTED-SERVICE-FLOOR built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md
+- 2026-08-09T11:49Z · tool · L-LANES-OUT-OF-THE-ASSEMBLY built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-LANES-OUT-OF-THE-ASSEMBLY/mutation-log.md
+- 2026-08-09T11:49Z · tool · L-JOURNEY-COVERAGE-THREE built-unverified -> verified, evidence docs/plan/reviews/L-UTLKVIT-REVIEW.md
+- 2026-08-09T11:50Z · @clerk · closed six the honest way: five exits named their artifact in a form the tool cannot open and one lane body designated it; only the prefix changed, no exit substance
+- 2026-08-09T11:50Z · tool · L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED built-unverified -> verified, evidence pages/admin/poweruser-growth.vue
+- 2026-08-09T11:55Z · agent:batch-fanout · started L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT
+- 2026-08-09T11:57Z · @clerk · model policy changed by Sven: Fable is exhausted, so every new agent runs on Opus; the eight exit-ruling agents already in flight are alive and left to finish
+- 2026-08-09T12:05Z · tool · L-WF-PUSH-SILENT built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs
+- 2026-08-09T12:05Z · tool · L-UTLKVIT-REPLAY-SOURCE built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Kassa/DeliveryReceiptComplianceTests.cs
+- 2026-08-09T12:06Z · tool · L-WF-DIGEST-TAUTOLOGY built-unverified -> verified, evidence lanes/L-WF-DIGEST-TAUTOLOGY/evidence.md
+- 2026-08-09T12:06Z · tool · L-CONFIRM-SERVER-HALVES built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-CONFIRM-SERVER-HALVES/evidence.md
+- 2026-08-09T12:06Z · tool · L-WF-CONTACT-IMPORTED built-unverified -> verified, evidence lanes/L-WF-CONTACT-IMPORTED/DETAIL.md
+- 2026-08-09T12:06Z · tool · L-WF-BLIND-BIND-NAME built-unverified -> verified, evidence lanes/L-WF-BLIND-BIND-NAME/detail.md
+- 2026-08-09T12:06Z · tool · L-MEALS-RELEASE built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-MEALS-RELEASE/evidence.md
+- 2026-08-09T12:06Z · tool · L-WF-LINK-DEADEND built-unverified -> verified, evidence lanes/L-WF-LINK-DEADEND/detail.md
+- 2026-08-09T12:07Z · tool · L-PRICE-CROSSCURRENCY built-unverified -> verified, evidence lanes/L-PRICE-CROSSCURRENCY/mutation-proof.txt
+- 2026-08-09T12:07Z · tool · L-CANONICAL-SLOT-SURVIVES-A-RERUN built-unverified -> verified, evidence lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/proof-hashes.txt
+- 2026-08-09T12:07Z · tool · L-AN-INVOICE-LISTS-EACH-ORDER-ONCE built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-AN-INVOICE-LISTS-EACH-ORDER-ONCE/evidence.md
+- 2026-08-09T12:07Z · tool · L-FE-JOURNEYS-MERGE built-unverified -> verified, evidence lanes/L-FE-JOURNEYS-MERGE/bookkeeping.md
+- 2026-08-09T12:07Z · tool · L-LIVE-WORLD-SEED built-unverified -> verified, evidence lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json
+- 2026-08-09T12:07Z · tool · L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED built-unverified -> verified, evidence docs/plan/artifacts/eighty-two-mechanical-refusals.md
+- 2026-08-09T12:07Z · tool · L-CONFIRM-CONAT-RETIRE built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-CONFIRM-CONAT-RETIRE/evidence.md
+- 2026-08-09T12:07Z · tool · L-INVOICE-AUTHORIZE built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-INVOICE-AUTHORIZE/evidence.md
+- 2026-08-09T12:07Z · tool · L-GROWTH-HEALTH-HONEST built-unverified -> verified, evidence ../wt-growth-health/.lane/L-GROWTH-HEALTH-HONEST-detail.md
+- 2026-08-09T12:07Z · tool · L-GROWTH-NEWSLETTER-WIRE built-unverified -> verified, evidence ../wt-gr-nlwire/.lane/L-GROWTH-NEWSLETTER-WIRE-detail.md
+- 2026-08-09T12:07Z · tool · L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN built-unverified -> verified, evidence docs/plan/artifacts/twenty-three-branches.md
+- 2026-08-09T12:08Z · tool · L-INVOICE-RETRY-RETIREMENT built-unverified -> verified, evidence ../wt-invretire/artifacts/tests/f18ffeda58137e9d2b58e109466d380d0847364c/RUN.md
+- 2026-08-09T12:08Z · tool · L-STATUTE-EVIDENCE-WORLD built-unverified -> verified, evidence ../web-statute-world/lanes/L-STATUTE-EVIDENCE-WORLD/EVIDENCE.md
+- 2026-08-09T12:08Z · tool · L-WF-TIMESHEET-RACE built-unverified -> verified, evidence ../wt-wftsrace/lanes/L-WF-TIMESHEET-RACE/evidence.md
+- 2026-08-09T12:08Z · tool · L-FLAGS-IMPOSSIBLE-COMMENT built-unverified -> verified, evidence lanes/L-FLAGS-IMPOSSIBLE-COMMENT/notes.md
+- 2026-08-09T12:08Z · tool · L-WF-W5-TIMESHEET built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-WF-W5-TIMESHEET/evidence.md
+- 2026-08-09T12:08Z · tool · L-CRYPTO-PIN-BYFORM built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-CRYPTO-PIN-BYFORM/evidence.md
+- 2026-08-09T12:08Z · tool · L-EV-ACCEPT-GATE built-unverified -> verified, evidence ../OkamAPI-ev-acceptgate/WebApi.Tests/Events/EventsPublicProposalWriteGateTests.cs
+- 2026-08-09T12:08Z · tool · L-MEALS-FOURWAY-TIER built-unverified -> verified, evidence ../wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/f72c7a81-fourway-fast-tier.trx
+- 2026-08-09T12:09Z · tool · L-AI-MIDDLEWARE-DELETE built-unverified -> verified, evidence lanes/L-AI-MIDDLEWARE-DELETE/mutations.txt
+- 2026-08-09T12:09Z · tool · L-UTLKVIT-REPRINT-KIND built-unverified -> verified, evidence lanes/L-UTLKVIT-REPRINT-KIND/mutation-red-8.txt
+- 2026-08-09T12:09Z · tool · L-WF-IDEMPOTENCY-REFUSAL built-unverified -> verified, evidence ../OkamAPI-wfidemref/WebApi.Tests/Workforce/WorkforceIdempotencyTests.cs
+- 2026-08-09T12:09Z · tool · L-EF-INDEX-SHADOW-SWEEP built-unverified -> verified, evidence lanes/L-EF-INDEX-SHADOW-SWEEP/evidence.md
+- 2026-08-09T12:09Z · tool · L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE built-unverified -> verified, evidence docs/plan/artifacts/two-hundred-and-six-exits.md
+- 2026-08-09T12:09Z · tool · L-PDF-NULLDEREF built-unverified -> verified, evidence lanes/L-PDF-NULLDEREF/red.txt
+- 2026-08-09T12:10Z · @clerk · batch 6 ruled: 5 amended and verified, 6 declined with a distinct reason each; plan verify refuses a directory, which several evidence lines name
+- 2026-08-09T12:10Z · tool · L-ROUTE-GUARD-GAPS built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-ROUTE-GUARD-GAPS/mutation-log.md
+- 2026-08-09T12:10Z · tool · L-WF-CORRECTION-PATH built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Wire/WorkforceWireTests.cs
+- 2026-08-09T12:10Z · tool · L-GR-CONFIRM-STALE built-unverified -> verified, evidence ../OkamAPI-modules/artifacts/tests/771c0fc0a6504971fb1cfdab5eed4ab878582ab5/RUN.md
+- 2026-08-09T12:10Z · tool · L-COMPROOT-PIN-OVERDETERMINED built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs
+- 2026-08-09T12:10Z · tool · L-GR-TESTSEND-RATELIMIT built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Wire/ArbitraryAddressMailRateLimitWireTests.cs
+- 2026-08-09T12:10Z · tool · L-CENSUS-FLOORS-DERIVED built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Modules/ModuleActorStampPin.cs
+- 2026-08-09T12:11Z · tool · L-DOWNLOAD-PDF-WIRE built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Wire/PdfDownloadWireTests.cs
+- 2026-08-09T12:11Z · tool · L-UTLKVIT-SALE-ROW built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Kassa/CreditSaleDocumentRoutingTests.cs
+- 2026-08-09T12:11Z · tool · L-WF-EXPORT-DUPLICATE built-unverified -> verified, evidence ../OkamAPI-modules/lanes/L-WF-EXPORT-DUPLICATE/evidence.md
+- 2026-08-09T12:11Z · @clerk · rescued three evidence files from wt-growth-health, wt-gr-nlwire and wt-invretire into docs/plan/evidence before any prune; all three branches are unpushed so a clone would not find them
+- 2026-08-09T12:11Z · tool · L-TRAIN-READONLY-VISIBLE built-unverified -> verified, evidence lanes/L-TRAIN-READONLY-VISIBLE/shots/after-setup-row.png
+- 2026-08-09T12:11Z · tool · raised F-VERIFY-OVERWRITES-THE-EVIDENCE-LINE-IT-WAS-GIVEN (blocker): plan verify replaces a lane's whole evidence: line with the single path passed, so branch, SHA and suite counts recorded by the returning agent are destroyed and survive only in docs/plan/returns
+- 2026-08-09T12:11Z · tool · L-MEALS-POS-TENDER-WIRE built-unverified -> verified, evidence ../OkamAPI-modules/WebApi.Tests/Meals/MealsPosCreditTenderReachabilityTests.cs
+- 2026-08-09T12:12Z · tool · raised F-A-VERIFIED-LANE-CITES-A-TRX-WHOSE-OWN-COUNTER-READS-FAILED-1 (blocker): L-COMPOSITION-ROOT-CHECK evidence disproves its exit: the cited trx reads Failed 1 and the failure is The_reservation_limiter_still_resolves_after_the_failure, so every-limiter-resolving is contradicted by its own record
+- 2026-08-09T12:12Z · @clerk · batch 7: 2 amended, 9 declined; one agent WITHDREW an amendment after plan verify refused a directory and restored the exit byte-identical
+- 2026-08-09T12:12Z · tool · raised F-A-SHARED-SCRATCH-PATH-DESTROYED-A-LANES-ONLY-EVIDENCE (blocker): L-WF-DEMO-PRESENCE's only openable instrument, a scratchpad final-run.txt quoting four seeded punch windows, now holds a different lane's Jest sweep; a sibling wrote the same shared scratch path and the original is irrecoverable
+- 2026-08-09T12:12Z · @clerk · batch 1: 5 amended, 7 declined; five of the seven declines turn on where the proof was put rather than whether the work happened
+- 2026-08-09T12:13Z · tool · raised F-VERIFY-ACCEPTS-A-WORKTREE-PATH-IT-CANNOT-KEEP (blocker): plan verify checks resolvability, not durability: it accepted worktree-resident evidence for at least five lanes, the exact citation class evidence-off-the-worktrees ruled inadmissible
+- 2026-08-09T12:13Z · @clerk · rescued five more evidence files that plan verify had accepted from worktrees; the bytes are committed on refs that resolve today so only the citation dies on a prune
+- 2026-08-09T12:13Z · @clerk · correction from batch 4 to the twenty-three-branches artifact: lane/confirm-postmerge-pin resolves at 02c077cb, so the branch is not gone, the receipt is what is missing
+- 2026-08-09T12:13Z · @clerk · batch 2: 7 amended, 5 declined; five of the seven now point at a file on the backend trunk so a stranger can open them today
+- 2026-08-09T12:14Z · agent:L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT · L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT returned built -> built-unverified, evidence docs/plan/artifacts/instrumentless-exits.md § "Batch 0"
+- 2026-08-09T12:14Z · agent:L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT · report L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT: - Batch 0, the twelve lanes in batch0.json and no other. AMENDED 5, DECLINED 7. Every amendment appends only `, recorded in <path>`; not one exit was softened.; - plan verify said, verbatim and exit 0 each time: `L-MEALS-RELEASE built-unverified -> verified`; `L-PRICE-CROSSCURRENCY built-unverified 
+- 2026-08-09T12:14Z · tool · L-NINETY-ONE-EXITS-NAME-NO-INSTRUMENT built-unverified -> verified, evidence docs/plan/artifacts/instrumentless-exits.md
+- 2026-08-09T12:15Z · tool · raised F-CITATION-DURABILITY-WAS-RULED-TWO-WAYS-IN-ONE-PASS (blocker): batch 5 cited only paths that open from the plan repo or the backend trunk, while batches 6, 7 and 4 verified lanes against wt-* worktree paths; three of batch 5's declines would have been amendments under the sibling rule
+- 2026-08-09T12:15Z · @clerk · batch 5 named a cross-batch inconsistency nobody else saw: it declined worktree citations while three siblings accepted them, so the 91 are half-verified against two different durability rules
+- 2026-08-09T15:30Z · @clerk · fixed the world not the flag: all nine verified lanes citing an ephemeral worktree now cite docs/plan/evidence and re-verify there, so both batch rules agree
+- 2026-08-09T15:32Z · agent:work-fanout · started L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION
+- 2026-08-09T15:38Z · tool · L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST built-unverified -> verified, evidence docs/plan/evidence/L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST/RUN.md
+- 2026-08-09T15:38Z · tool · L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ built-unverified -> verified, evidence docs/plan/evidence/L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ/FINDING.md
+- 2026-08-09T15:38Z · tool · L-WF-WITHHELD-BOUND built-unverified -> verified, evidence docs/plan/evidence/L-WF-WITHHELD-BOUND/mutation-record.md
+- 2026-08-09T15:41Z · tool · L-FLAGS-EFFECTIVE-RESOLVERS built-unverified -> verified, evidence docs/plan/evidence/L-FLAGS-EFFECTIVE-RESOLVERS/mutation-receipt.md
+- 2026-08-09T15:41Z · tool · L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE built-unverified -> verified, evidence docs/plan/evidence/L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE/SUMMARY.md
+- 2026-08-09T15:42Z · tool · L-GR-CONFIRMED-EMAIL built-unverified -> verified, evidence docs/plan/evidence/L-GR-CONFIRMED-EMAIL/RUN.md
+- 2026-08-09T15:42Z · tool · L-EV-OUTBOX-GUID-SUBSTRING built-unverified -> verified, evidence docs/plan/evidence/L-EV-OUTBOX-GUID-SUBSTRING/detail.md
+- 2026-08-09T15:43Z · tool · L-TRAIN-EVIDENCE-NAMES-COURSE built-unverified -> verified, evidence docs/plan/evidence/L-TRAIN-EVIDENCE-NAMES-COURSE/evidence.md
+- 2026-08-09T15:44Z · tool · L-GR-DEADLINE-STATUTE built-unverified -> verified, evidence docs/plan/evidence/L-GR-DEADLINE-STATUTE/evidence.md
+- 2026-08-09T15:44Z · tool · L-GR-POSTMARK-WEBHOOK built-unverified -> verified, evidence docs/plan/evidence/L-GR-POSTMARK-WEBHOOK/RUN.md
+- 2026-08-09T15:46Z · tool · L-WF-KODEOVERSIKT-UI built-unverified -> verified, evidence docs/plan/evidence/L-WF-KODEOVERSIKT-UI/RUN.md
+- 2026-08-09T15:46Z · tool · L-WF-IDEMPOTENCY-REFUSAL-REST built-unverified -> verified, evidence docs/plan/evidence/L-WF-IDEMPOTENCY-REFUSAL-REST/MUTATION-RECORD.md
+- 2026-08-09T15:47Z · tool · L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK built-unverified -> verified, evidence docs/plan/evidence/L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK/unlandable.md
+- 2026-08-09T15:49Z · tool · L-WF-BOOTSTRAP built-unverified -> verified, evidence docs/plan/evidence/L-WF-BOOTSTRAP/RUN.md
+- 2026-08-09T15:50Z · tool · L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN built-unverified -> verified, evidence docs/plan/evidence/L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN/RUN.md
+- 2026-08-09T15:50Z · tool · L-PRICE-BYPASS-FIVE built-unverified -> verified, evidence docs/plan/evidence/L-PRICE-BYPASS-FIVE/mutation-record.md
+- 2026-08-09T15:53Z · tool · L-MIG-COMPANY-RECEIVABLE built-unverified -> verified, evidence docs/plan/evidence/L-MIG-COMPANY-RECEIVABLE/BOTH-HALVES.md
+- 2026-08-09T15:53Z · tool · L-GR-CONFIRMED-PIN-FIX built-unverified -> verified, evidence docs/plan/evidence/L-GR-CONFIRMED-PIN-FIX/three-clauses.md
+- 2026-08-09T15:53Z · tool · L-WF-CLOCK-WIRE built-unverified -> verified, evidence docs/plan/evidence/L-WF-CLOCK-WIRE/RUN.md
+- 2026-08-09T15:56Z · @clerk · correction: the fodselsnummer values are already on the backend remote in 37 files and predate my push; ada218783..6d5328004 added none of them
+- 2026-08-09T15:56Z · @clerk · so withholding evidence files from the plan branch protects nothing; the real question is whether the backend history needs purging
+- 2026-08-09T15:57Z · tool · L-VIPPS-REDACT-404 built-unverified -> verified, evidence docs/plan/evidence/L-VIPPS-REDACT-404/RUN-AND-FINDING.md
+- 2026-08-09T16:00Z · tool · raised F-LANDING-40AB62D-ALONE-SHIPS-A-RUNNER-THAT-CERTIFIES-KILLS-FROM-RUNS-THAT-NEVER-HAPPENED (blocker): git diff c65b19c 40ab62d is empty, so landing 40ab62d without c65b19c ships the mutation runner while the fix that makes its certificates truthful stays behind
+- 2026-08-09T16:00Z · @clerk · batch 3 corrected the census: L-WF-CLOCK-WIRE's clock-state route exists at WorkforcePosController.cs:161 on f14c91ec1, so it is not-landed rather than not-in-the-estate
+- 2026-08-09T16:00Z · @clerk · verified 483 to 503 and built-unverified 74 to 54; four of six closures sit on branches that are not ancestors of a trunk, so verified means openable not shipped
+- 2026-08-09T16:03Z · tool · L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK built-unverified -> verified, evidence docs/plan/evidence/L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK/six-branches.md
+- 2026-08-09T16:03Z · tool · L-GR-APPROVAL-STATE built-unverified -> verified, evidence docs/plan/evidence/L-GR-APPROVAL-STATE/evidence.md
+- 2026-08-09T16:04Z · tool · L-CONFIRM-POSTMERGE-PIN built-unverified -> verified, evidence docs/plan/evidence/L-CONFIRM-POSTMERGE-PIN/mutation-record.md
+- 2026-08-09T16:04Z · tool · L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED built-unverified -> verified, evidence docs/plan/evidence/L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED/mutation-record.md
+- 2026-08-09T16:04Z · tool · L-GR-TESTSEND-RECORD built-unverified -> verified, evidence docs/plan/evidence/L-GR-TESTSEND-RECORD/mutation-record.md
+- 2026-08-09T16:04Z · tool · L-EV-INQUIRY-GATE built-unverified -> verified, evidence docs/plan/evidence/L-EV-INQUIRY-GATE/mutation-record.md
+- 2026-08-09T16:04Z · tool · L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR built-unverified -> verified, evidence docs/plan/evidence/L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR/evidence.md
+- 2026-08-09T16:06Z · tool · raised F-THE-WIRE-GUARD-FOR-TESTSEND-IS-UNREACHABLE-BY-CONSTRUCTION (blocker): the growth test-send wire answers 404 growth.not_found to every arm because WireHostFixture seeds no newsletter row and every wire admin is phone-signup with no Email, so any refusal measured there is confounded
+- 2026-08-09T16:06Z · @clerk · batch 2 verified L-VIPPS-REDACT-404 which a prior pass declined, and said so: its M2 reproduces the whole deposit token in the path, the trailing-dot case the exit names
+- 2026-08-09T16:06Z · @clerk · verified 503 to 510, built-unverified 54 to 47; 49 evidence files now tracked under docs/plan/evidence
+- 2026-08-09T16:07Z · @clerk · both demo APIs had stopped; the six-module world is restarted on 5091 and answers 200; the margin walk world on 5941 is not restarted
+- 2026-08-09T16:08Z · tool · raised F-THE-ESTATE-SHIPPED-THE-WEAKEST-OF-THREE-OUTBOX-FIXES (blocker): the trunk's events-outbox fix cuts the whole link out, which L-EV-OUTBOX-GUID-SUBSTRING deliberately refused, so an amount leaking inside the URL is now invisible; it keeps a random token and its comment says 1 in 130 where the measurement was 1 in 197.6 over 200000 bodies
+- 2026-08-09T16:08Z · agent:L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION · L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION returned built -> built-unverified, evidence docs/plan/artifacts/forty-seven-remainder.md
+- 2026-08-09T16:08Z · agent:L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION · report L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION: Batch 0, 8 lanes. 3 closed / 3 need an owner ruling / 2 need work outside this lane. Trunk 6d5328004 unmoved, nothing pushed, no container, :5091 and :5941 untouched, all five worktrees I read are 0-changed.; CLOSED L-FLAGS-EFFECTIVE-RESOLVERS (shape 2, green where a red is demanded): I produced the
+- 2026-08-09T16:08Z · tool · L-FORTY-SEVEN-LANES-NEED-THE-WORK-NOT-THE-CITATION built-unverified -> verified, evidence docs/plan/artifacts/forty-seven-remainder.md
+- 2026-08-10T15:22Z · tool · raised F-THE-COMPETENCY-SEAM-VIOLATES-THE-ONE-EVIDENCE-READ-CENSUS (blocker): the competency seam makes WorkforceSchedulesController.Validate a second handler reaching Training evidence rows, which TrainingInspectorEvidencePackTests' IL census forbids; parked on lane/competency-seam-warn-only at 720ac88e0 rather than weakening the guard
+- 2026-08-10T15:22Z · @clerk · parked the competency seam at 720ac88e0: it reds two guards, one deliberate, so the trunk is restored clean at 6d5328004 rather than a guard weakened

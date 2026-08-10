@@ -1,0 +1,57 @@
+PASS test/price-bypass-legacy.test.js
+  ✓ each page keeps the exact format it shipped with; only the absent case changed (1 ms)
+  the X report sums amounts without inventing one
+    ✓ a VAT row whose basis and amount both failed to arrive does not print a total (11 ms)
+    ✓ one absent term is enough — a half-known total is not a total (58 ms)
+    ✓ a genuine zero VAT row still totals, and still totals to a real figure (2 ms)
+    ✓ a stated VAT row is arithmetically unchanged (4 ms)
+  the X report totals that were summed with || 0
+    ✓ a payment mean whose amount did not arrive does not silently drop out of the total (3 ms)
+    ✓ a genuine zero on a mean is a figure, and is still added (2 ms)
+    ✓ the corrections total is withheld when any of its four terms is missing (13 ms)
+  statedSum, the rule the report totals now use
+    ✓ absence propagates through the arithmetic instead of being erased by it
+    ✓ a genuine zero is an addend like any other
+    ✓ nothing to add is zero; that is a real answer and not an absent one
+  the invoice page and the settlements page (nb-NO currency)
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure (9 ms)
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the Wolt menu page ("206.80 kr")
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure (1 ms)
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the rewards page ("206,80 kr")
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the product lists ("206.80 NOK")
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the pages delegate to that rule rather than keeping a copy of it
+    ✓ kravia-invoice invoiceAmountLabel
+    ✓ settlements formatAmount
+    ✓ reward-members formatBalance
+    ✓ the invoice page no longer declares anything called priceLabel
+    ✓ no invoice template call site was left behind on the old name
+  the three pages this suite cannot mount are pinned at the source
+    ✓ these three really are unmountable here, for the stated reason (1 ms)
+    ✓ neither product surface divides the raw field in its template any more
+    ✓ the dine-in cell sums through statedSum, so one absent addend withholds it
+    ✓ all three delegate to the shared rule instead of keeping their own (1 ms)
+  the Wolt menu price INPUT, which wrote the zero back to Wolt
+    ✓ an unpriced item seeds a blank field, not the characters 0.00
+    ✓ a genuinely free item still seeds a real zero, which is editable and true
+    ✓ blurring a blank field writes nothing rather than alerting or storing a zero
+    ✓ the change-detection snapshot records an unpriced item as unpriced
+
+Test Suites: 1 passed, 1 total
+Tests:       40 passed, 40 total
+Snapshots:   0 total
+Time:        0.942 s, estimated 1 s
+Ran all test suites matching /test\/price-bypass-legacy.test.js/i.

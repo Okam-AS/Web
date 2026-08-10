@@ -1,0 +1,22 @@
+host=Unix (Unix 26.5.0)
+runtime=Darwin 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:41:15 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6041
+
+| input | TryCreate(Absolute) | scheme | PagePrefix | arm |
+|---|---|---|---|---|
+| `/events` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `/` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `//guest.example.test/events` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `events` | False | (none) | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | B (TryCreate false) |
+| `./events` | False | (none) | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | B (TryCreate false) |
+| `C:\wwwroot\guest` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `\\server\share` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `file:///srv/guest-web` | True | file | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `javascript:alert(1)` | True | javascript | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | A (non-http scheme) |
+| `http://` | False | (none) | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | B (TryCreate false) |
+| `ht!tp://x` | False | (none) | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | B (TryCreate false) |
+| `http://[::1` | False | (none) | REFUSED: Events:PublicBaseUrl is not an absolute http(s) origin. | B (TryCreate false) |
+| `https://guest.okam.no` | True | https | ACCEPTED -> https://guest.okam.no/events/deposit/ | - |
+| `http://guest.okam.no/` | True | http | ACCEPTED -> http://guest.okam.no/events/deposit/ | - |
+
+armA(non-http scheme)=7  armB(TryCreate false)=5
+accepted=https://guest.okam.no,http://guest.okam.no/

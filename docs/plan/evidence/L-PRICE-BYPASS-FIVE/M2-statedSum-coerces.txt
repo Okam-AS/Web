@@ -1,0 +1,159 @@
+FAIL test/price-bypass-legacy.test.js
+  ✓ each page keeps the exact format it shipped with; only the absent case changed
+  the X report sums amounts without inventing one
+    ✕ a VAT row whose basis and amount both failed to arrive does not print a total (12 ms)
+    ✕ one absent term is enough — a half-known total is not a total (4 ms)
+    ✓ a genuine zero VAT row still totals, and still totals to a real figure (8 ms)
+    ✓ a stated VAT row is arithmetically unchanged (3 ms)
+  the X report totals that were summed with || 0
+    ✕ a payment mean whose amount did not arrive does not silently drop out of the total (3 ms)
+    ✓ a genuine zero on a mean is a figure, and is still added (2 ms)
+    ✕ the corrections total is withheld when any of its four terms is missing (5 ms)
+  statedSum, the rule the report totals now use
+    ✕ absence propagates through the arithmetic instead of being erased by it (1 ms)
+    ✓ a genuine zero is an addend like any other
+    ✓ nothing to add is zero; that is a real answer and not an absent one
+  the invoice page and the settlements page (nb-NO currency)
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure (10 ms)
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the Wolt menu page ("206.80 kr")
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the rewards page ("206,80 kr")
+    ✓ an amount that never arrived is withheld (1 ms)
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the product lists ("206.80 NOK")
+    ✓ an amount that never arrived is withheld
+    ✓ the withheld mark carries no currency of its own
+    ✓ a genuine zero is still printed as a figure
+    ✓ a stated amount is unchanged, and the three worlds are three different strings
+  the pages delegate to that rule rather than keeping a copy of it
+    ✓ kravia-invoice invoiceAmountLabel (1 ms)
+    ✓ settlements formatAmount
+    ✓ reward-members formatBalance
+    ✓ the invoice page no longer declares anything called priceLabel
+    ✓ no invoice template call site was left behind on the old name
+  the three pages this suite cannot mount are pinned at the source
+    ✓ these three really are unmountable here, for the stated reason (1 ms)
+    ✓ neither product surface divides the raw field in its template any more
+    ✕ the dine-in cell sums through statedSum, so one absent addend withholds it
+    ✓ all three delegate to the shared rule instead of keeping their own (1 ms)
+  the Wolt menu price INPUT, which wrote the zero back to Wolt
+    ✓ an unpriced item seeds a blank field, not the characters 0.00
+    ✓ a genuinely free item still seeds a real zero, which is editable and true
+    ✓ blurring a blank field writes nothing rather than alerting or storing a zero
+    ✓ the change-detection snapshot records an unpriced item as unpriced
+
+  ● the X report sums amounts without inventing one › a VAT row whose basis and amount both failed to arrive does not print a total
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "—"
+    Received: "kr 0,00"
+
+      48 |     // `null + null` is 0, so this cell used to read "kr 0" — a stated figure on a fiscal document,
+      49 |     // manufactured out of two fields nobody supplied.
+    > 50 |     expect(vatRow(wrapper).inclVat).toBe(UNKNOWN_AMOUNT)
+         |                                     ^
+      51 |     wrapper.destroy()
+      52 |   })
+      53 |
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:50:37)
+
+  ● the X report sums amounts without inventing one › one absent term is enough — a half-known total is not a total
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "—"
+    Received: "kr 800,00"
+
+      62 |     // row that genuinely carried no VAT.
+      63 |     expect(row.basis).toBe('kr 800,00')
+    > 64 |     expect(row.inclVat).toBe(UNKNOWN_AMOUNT)
+         |                         ^
+      65 |     expect(row.inclVat).not.toBe(row.basis)
+      66 |     wrapper.destroy()
+      67 |   })
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:64:25)
+
+  ● the X report totals that were summed with || 0 › a payment mean whose amount did not arrive does not silently drop out of the total
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "—"
+    Received string:    "pos_report_total_receivedkr 500,00"
+
+      105 |
+      106 |     // `sum + (p.amount || 0)` answered kr 500 — the cash, presented as everything received.
+    > 107 |     expect(receivedTotalOf(wrapper)).toContain(UNKNOWN_AMOUNT)
+          |                                      ^
+      108 |     expect(receivedTotalOf(wrapper)).not.toContain('kr 500')
+      109 |     wrapper.destroy()
+      110 |   })
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:107:38)
+
+  ● the X report totals that were summed with || 0 › the corrections total is withheld when any of its four terms is missing
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected substring: "—"
+    Received string:    "pos_report_total_correctionskr 35,00"
+
+      139 |       .map(x => x.text()).find(t => t.includes('pos_report_total_corrections'))
+      140 |
+    > 141 |     expect(lineOf(withheld)).toContain(UNKNOWN_AMOUNT)
+          |                              ^
+      142 |     // A genuinely zero correction bucket keeps the total a real figure: 10 + 20 + 0 + 5 = kr 35.
+      143 |     expect(lineOf(stated)).toContain('kr 35')
+      144 |     expect(lineOf(stated)).not.toContain(UNKNOWN_AMOUNT)
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:141:30)
+
+  ● statedSum, the rule the report totals now use › absence propagates through the arithmetic instead of being erased by it
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: null
+    Received: 0
+
+      150 | describe('statedSum, the rule the report totals now use', () => {
+      151 |   test('absence propagates through the arithmetic instead of being erased by it', () => {
+    > 152 |     expect(statedSum(null, null)).toBe(null)
+          |                                   ^
+      153 |     expect(statedSum(80000, null)).toBe(null)
+      154 |     expect(statedSum(null, 80000)).toBe(null)
+      155 |     expect(statedSum(80000, undefined)).toBe(null)
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:152:35)
+
+  ● the three pages this suite cannot mount are pinned at the source › the dine-in cell sums through statedSum, so one absent addend withholds it
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "—"
+    Received: "0.00 NOK"
+
+      320 |     expect(template).not.toContain('product.amount + product.tableAdditionalAmount')
+      321 |     expect(template).toContain('statedSum(product.amount, product.tableAdditionalAmount)')
+    > 322 |     expect(amountLabel(statedSum(null, null), { suffix: 'NOK' })).toBe(UNKNOWN_AMOUNT)
+          |                                                                   ^
+      323 |     expect(amountLabel(statedSum(20680, null), { suffix: 'NOK' })).toBe(UNKNOWN_AMOUNT)
+      324 |     expect(amountLabel(statedSum(20680, 2000), { suffix: 'NOK' })).toBe('226.80 NOK')
+      325 |     expect(amountLabel(statedSum(20680, 0), { suffix: 'NOK' })).toBe('206.80 NOK')
+
+      at Object.<anonymous> (test/price-bypass-legacy.test.js:322:67)
+
+Test Suites: 1 failed, 1 total
+Tests:       6 failed, 34 passed, 40 total
+Snapshots:   0 total
+Time:        0.861 s, estimated 1 s
+Ran all test suites matching /test\/price-bypass-legacy.test.js/i.

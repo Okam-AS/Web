@@ -1,0 +1,17 @@
+FULL FAST TIER (targeted runs are not evidence — the sibling-suite hazard is exactly what they miss)
+
+  dotnet build WebApi.Tests/WebApi.Tests.csproj      -> 0 Error(s)
+  dotnet test  WebApi.Tests/WebApi.Tests.csproj --no-build --filter "Database!=SqlServer"
+
+  Passed!  - Failed:     0, Passed:  4361, Skipped:    12, Total:  4373, Duration: 6 m 10 s
+
+Baseline on feature/restaurant-modules de1e5c5e is 4357 (measured and reported by L-GROWTH-NEWSLETTER-WIRE
+with its own file excluded). 4357 + 3 new wire facts + 1 new fixture theory case = 4361. Nothing else moved.
+
+NO SQL TIER. Docker's VM is down estate-wide; `docker info` -> "Cannot connect to the Docker daemon".
+This lane changes one read projection and one response DTO — no entity, no index, no migration, no raw SQL —
+so nothing in it waits on the SQL tier for correctness. The one query it adds is an EF join executed by the
+SQLite provider in every run above.
+
+The suite also rewrites artifacts/journeys/ev-dietary/run-sheet.{json,md} with fresh capture timestamps
+(EventsDietaryRunSheetWireTests, another lane's journey capture). Reverted, not committed.
