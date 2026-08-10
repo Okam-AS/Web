@@ -1,0 +1,130 @@
+FAIL test/vue-coverage-instrumentation.test.js
+  the coverage instrument measures what it claims for .vue files
+    ✕ counts every indented statement in the script block (3 ms)
+    ✕ counts statements that are indented, not only statements in column 0
+    ✕ records a function entry for data(), a computed and a method
+    ✕ records a branch inside a method body (1 ms)
+    ✕ measures a real component past its export default, not just its import list (46 ms)
+
+  ● the coverage instrument measures what it claims for .vue files › counts every indented statement in the script block
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 7
+
+    @@ -2,7 +2,13 @@
+        "instrumentedStatementLines": Array [
+          14,
+          16,
+          19,
+        ],
+    -   "missing": Array [],
+    +   "missing": Array [
+    +     "module-scope-indented (line 17)",
+    +     "data-body (line 23)",
+    +     "computed-body (line 27)",
+    +     "branch-consequent (line 33)",
+    +     "method-body (line 35)",
+    +   ],
+      }
+
+      159 |       missing,
+      160 |       instrumentedStatementLines: statementLines
+    > 161 |     }).toEqual({
+          |        ^
+      162 |       missing: [],
+      163 |       instrumentedStatementLines: statementLines
+      164 |     })
+
+      at Object.<anonymous> (test/vue-coverage-instrumentation.test.js:161:8)
+
+  ● the coverage instrument measures what it claims for .vue files › counts statements that are indented, not only statements in column 0
+
+    expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0
+    Received:   0
+
+      170 |     // The single sentence of the defect: before the fix this number was 0, here and in all 304
+      171 |     // `.vue` files in the coverage report.
+    > 172 |     expect(indented.length).toBeGreaterThan(0)
+          |                             ^
+      173 |   })
+      174 |
+      175 |   it('records a function entry for data(), a computed and a method', () => {
+
+      at Object.<anonymous> (test/vue-coverage-instrumentation.test.js:172:29)
+
+  ● the coverage instrument measures what it claims for .vue files › records a function entry for data(), a computed and a method
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 5
+
+      Object {
+        "fnDeclLines": Array [],
+    -   "missing": Array [],
+    +   "missing": Array [
+    +     "data (line 22)",
+    +     "shouted (line 26)",
+    +     "doubled (line 31)",
+    +   ],
+      }
+
+      181 |       .map(([name, line]) => `${name} (line ${line})`)
+      182 |
+    > 183 |     expect({ missing, fnDeclLines }).toEqual({ missing: [], fnDeclLines })
+          |                                      ^
+      184 |   })
+      185 |
+      186 |   it('records a branch inside a method body', () => {
+
+      at Object.<anonymous> (test/vue-coverage-instrumentation.test.js:183:38)
+
+  ● the coverage instrument measures what it claims for .vue files › records a branch inside a method body
+
+    expect(received).toContain(expected) // indexOf
+
+    Expected value: 32
+    Received array: [16]
+
+      187 |     const branches = markerLines(FIXTURE, 'PROBE-BRANCH')
+      188 |     expect(Object.keys(branches)).toEqual(['negative-guard'])
+    > 189 |     expect(branchLines).toContain(branches['negative-guard'])
+          |                         ^
+      190 |   })
+      191 |
+      192 |   it('measures a real component past its export default, not just its import list', async () => {
+
+      at Object.<anonymous> (test/vue-coverage-instrumentation.test.js:189:25)
+
+  ● the coverage instrument measures what it claims for .vue files › measures a real component past its export default, not just its import list
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "statementsAfterExportDefault": true,
+    +   "statementsAfterExportDefault": false,
+        "subject": "components/admin/AllergensManager.vue",
+      }
+
+      226 |       subject: path.relative(ROOT, subject),
+      227 |       statementsAfterExportDefault: past.length > 0
+    > 228 |     }).toEqual({
+          |        ^
+      229 |       subject: path.relative(ROOT, subject),
+      230 |       statementsAfterExportDefault: true
+      231 |     })
+
+      at Object.<anonymous> (test/vue-coverage-instrumentation.test.js:228:8)
+
+Test Suites: 1 failed, 1 total
+Tests:       5 failed, 5 total
+Snapshots:   0 total
+Time:        0.667 s, estimated 1 s
+Ran all test suites matching /test\/vue-coverage-instrumentation.test.js/i.

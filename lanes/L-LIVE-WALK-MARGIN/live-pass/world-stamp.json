@@ -1,0 +1,15 @@
+{
+  "stamp": 2,
+  "origin": "http://127.0.0.1:5941",
+  "build": {
+    "id": "OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8",
+    "short": "6d53280",
+    "branch": "HEAD",
+    "builtFrom": "6d5328004b831b3ec99424b73c4d05e1d6077dc8"
+  },
+  "pid": 17024,
+  "processStartedAt": "Sun Aug  9 13:37:24 2026",
+  "launchedPid": 17008,
+  "stampedAtUtc": "2026-08-09T11:37:28.438Z",
+  "writtenBy": "test/e2e/scripts/live-world.sh"
+}

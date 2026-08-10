@@ -1,0 +1,41 @@
+===== M1 evidence.js — the completion stamp reads the STORE-LOCAL half instead of the UTC half
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 31 passed, 32 total
+    ✕ THE STAMP IS THE UTC HALF. The store-local twin is dropped, not carried unused (2 ms)
+===== M2 evidence.js — a half-silent integrity block reports CLEAN instead of unknown
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 29 passed, 32 total
+    ✕ A DOCUMENT THAT SAID NOTHING HAS NOT SAID IT IS SOUND — null, and not false
+    ✕ null and false are DIFFERENT answers, asserted apart so neither can stand in for the other
+    ✕ it reads the block integrityOf produced, so the two agree end to end on a real document
+===== M3 statement-client.js — a refused export resolves to an empty document instead of throwing
+Test Suites: 1 failed, 1 total
+Tests:       4 failed, 17 passed, 21 total
+    ✕ THE EXPORT THROWS THE SAME TYPED ERROR THE JSON ROUTES DO, so the page has one input
+    ✕ a non-JSON failure body becomes the detail, and never a fileName
+    ✕ an EMPTY failure body is a routing 404 and carries no code at all
+    ✕ a refusal is a THROW, never a resolved value the page could render as a document (1 ms)
+===== M4 statement-client.js — the pinned ?format=csv is dropped from the export route
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 19 passed, 21 total
+    ✕ #23 export — the deterministic CSV, with format PINNED to csv (1 ms)
+    ✕ the id is ESCAPED into the path on all three routes
+===== M5 store/index.js — SetLineItem always PUSHES, so a quantity change duplicates the line (double charge)
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 41 passed, 42 total
+    ✕ AN ID ALREADY IN THE CART IS REPLACED IN PLACE, never appended (1 ms)
+===== M6 store/index.js — RemoveLineItem compares a value with itself, so it always removes the FIRST line
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 41 passed, 42 total
+    ✕ REMOVING A LINE THAT IS NOT IN THE CART REMOVES NOTHING (1 ms)
+===== M7 cart-service.ts — the checkout route grows a trailing slash (the documented 13-route defect class)
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 20 passed, 22 total
+    ✕ POST /carts/complete/{storeId} — THE CHECKOUT, and it is the only route that mints an order (1 ms)
+    ✕ every path is already in canonical form: one leading slash, no trailing slash, no doubling
+===== M8 cart.ts — the legacy payment-type override defaults to false, so the server discards the chosen payment type
+Test Suites: 1 failed, 1 total
+Tests:       3 failed, 19 passed, 22 total
+    ✕ BOTH LEGACY BOOLEANS ARE IGNORED BY DEFAULT — this is the money switch, not a shim (1 ms)
+    ✕ the optional fields exist as keys and serialise away, so a first PUT sends no invented values
+    ✕ the model the client posts is the model, not a copy the service reshapes (1 ms)

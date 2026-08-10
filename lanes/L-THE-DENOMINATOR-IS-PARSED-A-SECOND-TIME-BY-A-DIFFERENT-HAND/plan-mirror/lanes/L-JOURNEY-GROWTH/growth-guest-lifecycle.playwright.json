@@ -1,0 +1,265 @@
+{
+  "journey": "growth-guest-lifecycle",
+  "title": "A guest joins a venue's newsletter, confirms it from the link, and takes themselves back off it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-04T14:07:54.556Z",
+  "finishedAtUtc": "2026-08-04T14:08:34.622Z",
+  "durationMs": 40066,
+  "capabilities": [
+    "platform.feature-flags.write",
+    "growth.guest.module.gate",
+    "growth.guest.subscribe",
+    "growth.guest.confirm",
+    "growth.guest.confirm.superseded-link",
+    "growth.guest.confirm.replay",
+    "growth.guest.unsubscribe",
+    "growth.guest.unsubscribe.replay",
+    "growth.consent.withdrawal"
+  ],
+  "surface": "public",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3915",
+  "apiBaseUrl": "http://127.0.0.1:4915",
+  "commit": "e34977acebd59b223584158c33451b6f1ffd82c1",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@e34977acebd59b223584158c33451b6f1ffd82c1+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "e34977a-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch feature/restaurant-modules)"
+  },
+  "backendServed": 32,
+  "backendSubjectServed": 23,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4915/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4915/user/login -> 200",
+    "GET http://127.0.0.1:4915/user -> 200",
+    "GET http://127.0.0.1:4915/stores/42/market -> 200",
+    "GET http://127.0.0.1:4915/stores/42 -> 200",
+    "GET http://127.0.0.1:4915/user -> 200",
+    "GET http://127.0.0.1:4915/feature-flags/catalog -> 200",
+    "GET http://127.0.0.1:4915/stores/42/feature-flags -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "an operator switches the newsletter module on for this venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:07:54.559Z",
+      "durationMs": 30845,
+      "detail": "growth.module on for store 42, from «Av»",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the guest joins from the venue's public signup page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:25.404Z",
+      "durationMs": 861,
+      "detail": "capture accepted; the page says the signup is NOT active yet",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "nothing is consented yet, and the server agrees",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:26.266Z",
+      "durationMs": 11,
+      "detail": "contact Pending after 1 capture; a confirm link exists and an unsubscribe link does not",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the confirm page opened WITHOUT a link does not confirm anything",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:26.309Z",
+      "durationMs": 774,
+      "detail": "no-token card; zero POSTs to /subscription-confirmations",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the same guest signs up a second time, which supersedes the first link",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:27.083Z",
+      "durationMs": 915,
+      "detail": "second capture recorded; the contact is still Pending; the confirm link rotated",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "THE SUPERSEDED LINK IS DEAD, and the page offers every reason it could be",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:27.998Z",
+      "durationMs": 798,
+      "detail": "410 on the superseded link; three indistinguishable reasons offered, none picked",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "THE LIVE LINK CONFIRMS, and the page strips the credential out of the URL",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:28.829Z",
+      "durationMs": 802,
+      "detail": "confirmed; the token is gone from the address bar",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the confirmation reached the row, and the fixture hands over an exit handle",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:29.631Z",
+      "durationMs": 4,
+      "detail": "contact Verified; the fixture hands over an exit handle the product would mint at dispatch",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "OPENING THE SAME LINK AGAIN SHOWS THE SAME THING, not a failure",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:29.669Z",
+      "durationMs": 802,
+      "detail": "replay identical; still one Verified contact, still 2 captures",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "an unsubscribe link nobody minted is refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:30.471Z",
+      "durationMs": 783,
+      "detail": "dead-link card; the verified contact is untouched",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "ONE CLICK, AND THEY ARE OUT — no confirmation step, by law",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:31.254Z",
+      "durationMs": 810,
+      "detail": "withdrawn on arrival, nothing asked first; the token is gone from the address bar",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the withdrawal is the SERVER's state, not the page's optimism",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:32.064Z",
+      "durationMs": 2,
+      "detail": "contact Withdrawn",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "the unsubscribe link keeps working, because a provider may POST it unseen",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:32.089Z",
+      "durationMs": 783,
+      "detail": "replayed unsubscribe answers the same; still Withdrawn",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "put the module switch back down, and the same venue goes dark",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:32.872Z",
+      "durationMs": 1737,
+      "detail": "growth.module back to «Av»; the signup page draws no form; no lever left lit",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "NO GUEST CALL EVER CARRIED A BEARER, and this browser has one",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:34.609Z",
+      "durationMs": 6,
+      "detail": "8 guest POSTs across 3 routes, not one Authorization header, with an admin session live",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "what this walk does NOT show, recorded rather than glossed",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:34.615Z",
+      "durationMs": 0,
+      "detail": "2 notes (mail is config-off, not code-absent; the exit token is fixture-minted), 1 defect (no door to the exit, and one of its two blockers survives mail going live)",
+      "error": null
+    },
+    {
+      "n": 17,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-04T14:08:34.615Z",
+      "durationMs": 1,
+      "detail": "2 shell-redirect (note), 0 these pages'",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "no double-opt-in mail is sent AS CONFIGURED — which is a config posture, not a missing transport",
+      "detail": "Worth stating precisely, because the milder wording («the code cannot send») is false of this branch and it is the gentler half of a go-live finding. `Program.cs:963-965` registers THREE providers — Fake, Smtp and a fully live Postmark HTTP client — and the deployment picks one through `Growth:MailProvider`. The committed `appsettings.json:176-177` pins `\"Enabled\": false` and `\"MailProvider\": \"Fake\"`, so as configured nothing leaves the process and `/subscribe/confirm` is unreachable by a real guest. ONE CONFIG KEY CHANGES THAT, with no code change and no deploy of new code. Read on the API's own `feature/restaurant-modules` @ 8e2b57de. The confirm and unsubscribe links this walk opened were read from the fixture's control surface, which is what a mailbox would have carried. So this journey is evidence that the two pages, the guest client and the three anonymous routes agree end to end — and is NOT evidence that a guest receives anything. FT-GROWTH's stated exit names a real mail from the ruled provider; that step is still owed and belongs to L-GROWTH-MAIL after D-MAIL."
+    },
+    {
+      "severity": "defect",
+      "summary": "nothing in the product links a guest to /preferences/unsubscribe",
+      "detail": "The page's own header says so: the newsletter footer (`GrowthMarketingFooter`) links the preference centre instead, and the RFC 8058 one-click URI is fixed to the API origin, which answers POST only — a guest who long-presses that affordance and opens it in a browser gets a 405, which reads as a broken opt-out. This walk reached the page by constructing the URL, which is currently the only way to reach it (C3). The preference centre, which the footer DOES link, cannot open a session from the deployed origins at all (`F-PREF-UNREACHABLE`, `D-PREF-ORIGIN`) — so as deployed there is no surface from which a guest can take themselves off a list, which is the art. 7(3) obligation this module is built around. TWO INDEPENDENT BLOCKERS, and only the first is about mail: (1) no message is sent, so no guest holds either link; (2) even holding a valid one, the preference session cookie is HttpOnly+Secure+SameSite=Strict on the API origin and cannot cross okam.no -> okamapi.azurewebsites.net, while CORS is built with AllowAnyOrigin() and therefore cannot carry credentials at all. THE SECOND SURVIVES MAIL GOING LIVE — turning the provider on does not open this door."
+    },
+    {
+      "severity": "note",
+      "summary": "the exit credential this walk spends has fixture provenance, not the product's",
+      "detail": "The product mints an unsubscribe token PER DISPATCHED DELIVERY inside the send loop (`GrowthDispatchService.cs:465`), each a fresh row with a 730-day expiry; this fixture mints one at confirm and never rotates it. So the state walked here — verified, holding an exit credential, zero messages ever dispatched — is one the product cannot produce. What the walk therefore proves is that the unsubscribe PAGE, the guest client and route #6 agree and that the withdrawal is idempotent; it does NOT prove a guest ever comes to hold such a token. Closing this means driving a real dispatch before the withdrawal, which needs the fixture's synthetic 209-recipient audience wired to the contact ledger first — a change that would move figures three other journeys assert by value, so it is named here rather than smuggled in. Declared at length in `test/e2e/fixture/growth.js`."
+    },
+    {
+      "severity": "note",
+      "summary": "the admin shell logs a router «Navigation cancelled» pair on every signed-in journey",
+      "detail": "Seen 2 times here, during the operator detour, and identically in growth-guest-consent, growth-privacy-queue and the workforce journeys. It is AdminPage's login redirect being superseded by the storeId append, not anything on the guest pages."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Ffeature-flags\" to \"/admin?redirect=%2Fadmin%2Ffeature-flags&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 410 (Gone)",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4915/v1/growth/subscription-confirmations",
+      "status": 410
+    },
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4915/v1/growth/unsubscribe",
+      "status": 410
+    },
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:4915/v1/growth/stores/42/consent-text",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "growth-guest-lifecycle/fixture/01-the-acknowledgment-before-anything-is-confirmed.png",
+    "growth-guest-lifecycle/fixture/02-the-superseded-confirmation-link.png",
+    "growth-guest-lifecycle/fixture/03-the-subscription-confirmed.png",
+    "growth-guest-lifecycle/fixture/04-withdrawn.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/growth-guest-lifecycle.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "provisional": false,
+    "supersedes": null
+  }
+}

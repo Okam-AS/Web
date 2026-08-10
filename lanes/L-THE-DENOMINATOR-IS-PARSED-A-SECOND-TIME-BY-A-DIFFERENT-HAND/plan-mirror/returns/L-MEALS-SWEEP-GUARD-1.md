@@ -1,0 +1,17 @@
+```
+RETURN: L-MEALS-SWEEP-GUARD
+brief: afdbf1ff
+verdict: built
+evidence: /Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md — lane/meals-sweep-guard @ 4bddfc7d (fix e828bcdf) off de1e5c5e, local only
+log:
+BRIEF VERIFIED BY OBSERVATION. Base 168 = SaveChangesAsync inside a try whose only catch is the unique filter; EF raises the concurrency exception from a row-count mismatch, so it has no provider inner and IsUniqueViolation is false. Captured frame by frame at the base: 176(=base 168) -> ReleaseStrandAsync 113 -> SweepExpiredReservationsAsync 91, the foreach, which has no try. Hosted loop catches per CYCLE (291), so remaining STORES died too.
+FIX: catch before the unique catch — rollback, DetachAll, count Conflicted, log, carry on. Rollback is the money line (the decrement is already issued; standing, it returns an allowance nothing released, then again next sweep). Detach is money too: one DbContext per store AND per cycle, so a leftover Modified(Released) is written by the next strand's save with no decrement and no exception filed. No retry inside the run, deliberately — pinned, so it is not trading a lost run for a lost strand. Warning line is XIX.15: the swallow deletes the loop's Error, so the worker emits its own, one per conflicted strand, carrying the exception.
+MUTANTS all reddened: guard deleted = 4 red; containment hoisted strand->loop = 4 red, isolation pin "expected 2, actual 0"; rollback->commit = money pin 10000->6000; DetachAll removed = 4 red (poisoned entity re-fails every later save, 1->3); LogWarning deleted = only the silence pin. HONEST NEGATIVE: deleting the explicit RollbackAsync alone stays GREEN — `await using` disposes and rolls back — so M3 is what pins the semantics. No --no-build anywhere.
+MERGE with L-MEALS-REQUOTE-RELEASE (d5483cb3): zero file overlap, merge clean, 51/51 pins, merged tier 4370/0/12. Masking tested BOTH ways — M1 on the merged tree = my 4 red / their 9 green; their own release-neutered mutant on the merged tree = their 3 red / my 4 green.
+NO MIGRATION AUTHORED and none needed: Migrations/ and the snapshot byte-identical to base, so the THROW ledger was never approached. C4 untouched — a conflicted strand writes NOTHING, so RELEASE-ACTOR's three unattributed releases stay exactly as visible; no fourth added, no actor in any test. C1 clean: no UPDATE/DELETE added.
+TIER 4361/0/12 at e828bcdf from a CLEAN detached worktree; base de1e5c5e measured the same way at 4357, so +4 is measured not inferred. Both trx committed. No container started; foreign zen_pasteur untouched.
+WAITS ON SQL SERVER: that a true rowversion race raises this at all. SQLite never populates the rowversion, so the interceptor supplies the lost CHECK — real EF exception, real path, counted via ThrowingConcurrencyExceptionAsync — not the interleaving. Stated in the test file, not glossed.
+FLAG (pre-existing, not fixed): the hosted loop DISCARDS the whole sweep tally, ReleasedBound and ExceptionsFiled included. Conflicted is exactly as reachable as those, which is why the visibility owed was paid with the log line rather than a fourth unread number. Surfacing the tally is a lane, not this one.
+FLAG (arithmetic): L-MEALS-RELEASE-RACE reported 4361/0/12 off the same base with 3 tests, implying base 4358; the base is measured at 4357. Compute the merged total from the measured base, not from lane totals.
+END RETURN
+```

@@ -1,0 +1,78 @@
+Test run for /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:02.47]     WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: ServiceUnavailable) [FAIL]
+[xUnit.net 00:00:02.47]     WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: NotFound) [FAIL]
+[xUnit.net 00:00:02.48]     WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: InternalServerError) [FAIL]
+[xUnit.net 00:00:02.48]     WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: Unauthorized) [FAIL]
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: ServiceUnavailable) [9 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(HttpStatusCode answered) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 46
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: NotFound) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(HttpStatusCode answered) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 46
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: InternalServerError) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(HttpStatusCode answered) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 46
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(answered: Unauthorized) [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.A_non_success_answer_raises_instead_of_handing_back_null(HttpStatusCode answered) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 46
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:08.72]     WebApi.Tests.Services.DocumentRendererFailureTests.A_bulk_invoice_run_leaves_out_the_store_it_could_not_render [FAIL]
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_bulk_invoice_run_leaves_out_the_store_it_could_not_render [6 s]
+  Error Message:
+   System.NullReferenceException : Object reference not set to an instance of an object.
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.RecordingBuiltMail.BuildInvoiceMessage(IEnumerable`1 to, String subject, String html, IEnumerable`1 pdfs) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 320
+   at WebApi.Services.InvoiceService.BuildInvoiceMessages(List`1 emailMessages, List`1 invoiceModels, DateTime fromPeriod, DateTime toPeriod, String paymentProvider) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/InvoiceService.cs:line 621
+   at WebApi.Services.InvoiceService.RetrySendingExistingInvoices() in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/InvoiceService.cs:line 100
+   at WebApi.Tests.Services.DocumentRendererFailureTests.A_bulk_invoice_run_leaves_out_the_store_it_could_not_render() in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 151
+--- End of stack trace from previous location ---
+[xUnit.net 00:00:08.73]     WebApi.Tests.Services.DocumentRendererFailureTests.The_failure_names_neither_the_functions_host_nor_its_key [FAIL]
+[xUnit.net 00:00:09.32]     WebApi.Tests.Services.DocumentRendererFailureTests.A_payout_report_that_cannot_be_rendered_leaves_the_payout_unsent [FAIL]
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.The_failure_names_neither_the_functions_host_nor_its_key [< 1 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   (No exception was thrown)
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.The_failure_names_neither_the_functions_host_nor_its_key() in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 74
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Services.DocumentRendererFailureTests.A_payout_report_that_cannot_be_rendered_leaves_the_payout_unsent [286 ms]
+  Error Message:
+   Assert.Throws() Failure
+Expected: typeof(WebApi.Helpers.DocumentRenderException)
+Actual:   typeof(System.NullReferenceException): Object reference not set to an instance of an object.
+---- System.NullReferenceException : Object reference not set to an instance of an object.
+  Stack Trace:
+     at WebApi.Tests.Services.DocumentRendererFailureTests.RecordingBuiltMail.BuildInvoiceMessage(IEnumerable`1 to, String subject, String html, IEnumerable`1 pdfs) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 320
+   at WebApi.Services.OkamPayoutService.BuildInvoiceMessage(InvoiceModel invoiceModel, DateTime fromPeriod, DateTime toPeriod) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/OkamPayoutService.cs:line 258
+   at WebApi.Services.OkamPayoutService.SendPayoutInvoice(Int32 okamPayoutId) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/OkamPayoutService.cs:line 243
+----- Inner Stack Trace -----
+   at WebApi.Tests.Services.DocumentRendererFailureTests.RecordingBuiltMail.BuildInvoiceMessage(IEnumerable`1 to, String subject, String html, IEnumerable`1 pdfs) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Services/DocumentRendererFailureTests.cs:line 320
+   at WebApi.Services.OkamPayoutService.BuildInvoiceMessage(InvoiceModel invoiceModel, DateTime fromPeriod, DateTime toPeriod) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/OkamPayoutService.cs:line 258
+   at WebApi.Services.OkamPayoutService.SendPayoutInvoice(Int32 okamPayoutId) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/OkamPayoutService.cs:line 243
+
+Failed!  - Failed:     7, Passed:     3, Skipped:     0, Total:    10, Duration: 6 s - WebApi.Tests.dll (net8.0)

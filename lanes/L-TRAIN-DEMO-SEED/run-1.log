@@ -1,0 +1,27 @@
+   store 1 (Live Journey Kafé), manager +4799999999
+
+[1m--- CONTROL: what this API advertises for Training[0m
+["training.assignments","training.setup"]
+
+[1m--- POSITIVE: seed lines 377-394 (the lever loop) -- expect exit 0[0m
+   lever probe  PUT /stores/1/feature-flags training.onboarding -> 400  {"message":"Unknown feature flag: training.onboarding"}
+   lever probe  PUT /stores/1/feature-flags training.checklists -> 400  {"message":"Unknown feature flag: training.checklists"}
+   lever probe  PUT /stores/1/feature-flags training.deviations -> 400  {"message":"Unknown feature flag: training.deviations"}
+   lever probe  PUT /stores/1/feature-flags training.competency-seam -> 400  {"message":"Unknown feature flag: training.competency-seam"}
+   lever probe  PUT /stores/1/feature-flags training.reminders -> 400  {"message":"Unknown feature flag: training.reminders"}
+  [positive] exit=0
+
+[1m--- POSITIVE: seed lines 411-416 (the unrouted-path probe) -- expect exit 0[0m
+   probe: GET /onboarding/tracks -> 404  body=[]
+  [route] exit=0
+
+[1m--- NEGATIVE A: a real 400 whose words are DIFFERENT (flagKey empty -> 'flagKey is required')[0m
+  server said: 400  {"message":"flagKey is required"}
+  [negative A] exit=1
+
+[1m--- NEGATIVE B: a real non-400 (advertised key on a store this manager does not administer -> 403)[0m
+  server said: 403  []
+  [negative B] exit=1
+
+[1m--- VERDICT[0m
+  PASS: step 11 succeeds only for the catalog's exact refusal, and fails for anything else.

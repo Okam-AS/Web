@@ -1,0 +1,18 @@
+Test run for /Users/svendaneel/okam/OkamAPI-censusderive/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:10.35]     WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds [FAIL]
+  Failed WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds [1 s]
+  Error Message:
+   The committed census and the tree disagree about which files stamp an actor.
+  The tree holds these, the census does not name them — a stamping site the census claims no coverage of:
+    Training  Services/Training/TrainingRefresherService.cs  sites=1 resolvers=1 guards=0  [line 30 (new TrainingAuditEntry)]
+  If the tree is right, regenerate with ACTOR_STAMP_CENSUS_WRITE=1 and read the diff. Do not edit WebApi.Tests/Modules/actor-stamp-census.txt by hand — the digest will refuse it.
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Modules.ModuleAuditActorCallSiteTests.The_census_names_exactly_the_population_the_tree_holds() in /Users/svendaneel/okam/OkamAPI-censusderive/WebApi.Tests/Modules/ModuleAuditActorCallSiteTests.cs:line 382
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     1, Passed:    38, Skipped:     0, Total:    39, Duration: 5 s - WebApi.Tests.dll (net8.0)

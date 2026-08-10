@@ -1,0 +1,16 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-xzprinted/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-xzprinted/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-xzprinted/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:00.93]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 1) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "8ch", amountBase: 100000, countDigits: 1) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "13ch", amountBase: 9900000000, countDigits: 4) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 6) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "4ch", amountBase: 100, countDigits: 6) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 6) [FAIL]
+[xUnit.net 00:00:00.94]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 3) [FAIL]
+[xUnit.net 00:00:00.95]     WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "10ch", amountBase: 99000000, countDigits: 1) [FAIL]
+  Failed WebApi.Tests.Kassa.XZPrintedRowFitSweepTests.Every_count_bearing_row_on_the_printed_x_keeps_its_digits(amountWidth: "12ch", amountBase: 120000000, countDigits: 1) [9 ms]

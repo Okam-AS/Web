@@ -1,0 +1,83 @@
+
+[1m== GROWTH 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+   no separate PowerUser account in this world (+4790000001 cannot sign in); the MANAGER
+   +4799681931 holds PowerUserRole, so manager and concierge are the same identity here.
+
+[1m== GROWTH 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   flag growth.module = on
+
+[1m== GROWTH 3. The consent copy shown at capture -- the guest's own read, and the gate proof[0m
+   consent text nb-NO v1 = id 1 (covers open measurement: false)
+
+[1m== GROWTH 4. The consent standing this world already carries (endpoint 8)[0m
+{"consentedContacts":5,"withdrawnContacts":0,"suppressedContacts":0,"pendingInvites":2,"suppressionsByReason":{}}
+
+[1m== GROWTH 5. The guest capture route, exercised for real[0m
+   unknown-copy probe -> 429: the per-address cap (3 per 15 minutes) answered. This run did not
+   re-prove the capture route's only refusal; the earlier run's proof stands.
+   demo.venter@example.com -> 429: the per-address cap answered. The pending invite an earlier run
+   created is still standing and still unconfirmed; this run simply did not refresh it.
+
+[1m== GROWTH 6. The half this seed CANNOT reach, and exactly what is missing because of it[0m
+   A capture is not a consent. The grant is written by POST /v1/growth/subscription-confirmations, which
+   takes the single-use token from the confirmation email -- and that token exists in exactly one place:
+   the guest's mailbox. Only its SHA-256 hash is persisted, so it cannot be recovered from the API, and
+   the bound provider (GrowthFakeMailProvider) is an in-process per-request recorder that performs no
+   network I/O and exposes no endpoint. There is no mailbox on this machine to open and no route that
+   reveals the token.
+   
+   So this seed produces NONE of the following, and does not pretend otherwise:
+     * no NEW consented contact (no confirm -> no consent receipt -> not a segment candidate)
+     * no withdrawal and no suppression (the one-click credential is minted by a dispatch and mailed;
+       same problem, and GROWTH's own rule is that a suppression must be the guest's act)
+     * no delivery and no dispatch run (see the header: sending is the human's walk, not the seed's)
+   The consented contacts counted in step 4 were granted by earlier confirmations in this world.
+
+[1m== GROWTH 7. The audience (endpoints 10/11) -- an IMMUTABLE snapshot, not a live query[0m
+     newsletter-subscribers v1: Verified email contacts with active newsletter consent for this store, no applicable suppression, and frequency-eligible under the rolling 7-day cap.
+   snapshot 2: included=5 excluded=0 breakdown={} watermark=sha256:57bf012e83c3...
+   recompute over an unchanged ledger returned snapshot 2 again
+
+[1m== GROWTH 8. The per-contact timeline (endpoint 9) is PII, and this run cannot probe it[0m
+   The probe worth running is the CONTRAST: a store admin must be refused (403 growth.contact_pii.read is
+   PowerUser-only in v1) while the PowerUser is served. Two things block it here, and neither is fixable
+   from a seed:
+     * there is one identity, not two: the only store admin of store 1 is +4799681931 and that
+       same account holds PowerUserRole, so there is no un-privileged store admin to be refused.
+     * the route needs a contactPointId, and no endpoint hands one out -- deliberately. Endpoint 11 masks
+       membership to counts, so the audience cannot name a contact. The audit read is the only other
+       place an aggregate id surfaces, and it is checked here rather than assumed:
+         GET /v1/growth/stores/1/audit-events -> 0 events, 0 of them naming a contact point
+       The only contact-point ids this seed could otherwise learn are ones it created itself by confirming
+       a guest, which is the step GROWTH 6 cannot perform.
+
+[1m== GROWTH 9. A newsletter bound to that audience, left for a human to approve and send[0m
+   adopted newsletter 2 "Tapas i kjelleren pa fredag" v2 Draft, bound to snapshot 2 (included 5) -- left untouched
+
+[1m== GROWTH 10. The list the screen reads[0m
+     id   state       v   created
+     2     Draft        2   2026-08-07T08:07:47
+     1     Approved     1   2026-08-06T16:01:24
+   COUNT consented = 5
+   COUNT pending invites = 2
+   COUNT suppressed = 0
+   COUNT withdrawn = 0
+   COUNT newsletters = 2
+   COUNT audience included = 5  (snapshot 2)
+
+[1m== GROWTH DONE[0m
+
+  Open  /admin/growth-newsletter  ("Nyhetsbrev" under Salg og markedsforing).
+
+    Samtykke        consented 5, pending 2, suppressed 0
+                    "Pending" includes demo.venter@example.com, captured by this run and NOT confirmed --
+                    see GROWTH 6 for why no seed can confirm it.
+    Publikum        press "Beregn" -> snapshot 2, included 5, excluded 0, and a watermark.
+    Nyhetsbrev #2   Draft -- APPROVE IT AND SEND IT YOURSELF. That is the walk, and it is left undone on
+                    purpose: a dispatch is irreversible and would put every recipient inside the rolling
+                    7-day frequency cap, emptying the audience this screen is showing you.
+
+  storeId=1   flags: growth.module=on, consent copy nb-NO v1
+  Re-runnable: fixed addresses, an idempotent snapshot and adopt-by-subject. Two subscribes per run, so the
+  fourth run inside 15 minutes meets the per-address cap and says so.

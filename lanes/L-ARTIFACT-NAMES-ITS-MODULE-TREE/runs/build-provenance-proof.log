@@ -1,0 +1,21 @@
+support files under test
+  journey.js            10538ba24d568da99dad8e8c75c1accff3e9bfe0546abdaeebb330b0cd3fcc3d
+  artifact-store.js     24a5e205d86b79445eff8bf5920b5d72c51e8109ff4bd7dbc9d3ed69ce34298f
+  journey-assertions.js 4ddbed1671a04c71405c64657976b6b9a4debe479bf0a85bfde90565f4f07532
+  world-stamp.js        3a82afb5afe3d41c4f2fa3f96ec69fd115945b14498a119f3af41fecda65431f
+  module-tree.js        1e8d12ea4b978d5d7312a3f9bc2811e84add1bc46bd68f135164c58b3c393404
+stand-in live api      http://127.0.0.1:52704   (served by pid 11271, cwd web-modtree)
+stand-in app           http://127.0.0.1:52705
+the port would say     web-modtree@f8980efbac7c4cdf4d0db672a211f704d26466d3   <- the wrong answer, available in every arm
+checkout alpha         okamapi-alpha@c2452a0d0b4ad395e9cb1a2646be44020af84a8a
+checkout beta          okamapi-beta@90c34f5ea3acd061e602ebc9631c31a1647add09
+
+  ok    1  okamapi-alpha@c2452a0d0b4ad395e9cb1a2646be44020af84a8a  stamp:artifacts/world/live/127-0-0-1-52704.json  stamped from checkout ALPHA, nothing declared
+  ok    2  okamapi-beta@90c34f5ea3acd061e602ebc9631c31a1647add09  stamp:artifacts/world/live/127-0-0-1-52704.json  the same world stamped from a DIFFERENT checkout (BETA)
+  ok    3  web-modtree@f8980efbac7c4cdf4d0db672a211f704d26466d3  process:127.0.0.1:52704             stamp INVALIDATED (its world is gone) — must fall back to the port and be WRONG
+  ok    4  okamapi-alpha@c2452a0d0b4ad395e9cb1a2646be44020af84a8a  stamp:artifacts/world/live/127-0-0-1-52704.json  stamped ALPHA while the shell declares BETA — a command copied from an older world
+  ok    5  okamapi-alpha@c2452a0d0b4ad395e9cb1a2646be44020af84a8a  env:E2E_API_BUILD                   NO stamp, the shell declares ALPHA — the declaration still carries a remote runner
+
+All 5 arms held. A live journey artifact names the checkout the world script
+recorded, changes when that checkout changes, and — arm 3 — names the port's wrong answer the
+moment the stamp is no longer verifiable. Nothing asked the API what it was.

@@ -1,0 +1,23 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-migstackmerge/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-migstackmerge/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-migstackmerge/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.34]     WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data [FAIL]
+  Failed WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data [209 ms]
+  Error Message:
+   Assert.DoesNotContain() Failure
+Found:    250
+In value: <!DOCTYPE html><html lang="no"><head><meta charset="UTF-8"></head><body><p>Hei,</p><p>Du har fått et tilbud på arrangementet ditt. Depositum 250 kr. Du kan se det her:</p><p><a href="">Se tilbudet</a></p><p>Lenken er personlig - ikke del den videre.</p><p>Hilsen Okam</p></body></html>
+  Stack Trace:
+     at WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data() in /Users/svendaneel/okam/wt-migstackmerge/WebApi.Tests/Events/EventsOutboxDeliveryTests.cs:line 419
+   at WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data() in /Users/svendaneel/okam/wt-migstackmerge/WebApi.Tests/Events/EventsOutboxDeliveryTests.cs:line 420
+   at WebApi.Tests.Events.EventsOutboxDeliveryTests.The_message_carries_the_link_and_no_other_guest_data() in /Users/svendaneel/okam/wt-migstackmerge/WebApi.Tests/Events/EventsOutboxDeliveryTests.cs:line 420
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     1, Passed:    14, Skipped:     0, Total:    15, Duration: 3 s - WebApi.Tests.dll (net8.0)

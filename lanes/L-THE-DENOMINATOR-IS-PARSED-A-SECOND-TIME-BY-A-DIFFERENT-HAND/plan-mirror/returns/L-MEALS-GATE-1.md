@@ -1,0 +1,22 @@
+```
+RETURN: L-MEALS-GATE
+brief: d4ae0729
+verdict: fail-spec
+evidence: OkamAPI-modules 6f26ad2b · WebApi.Tests/Wire/MealsGateDeploymentWireTests.cs (two booted deployments, 200 vs 404 on the same request) · WebApi.Tests/Meals/MealsGateDeploymentReachTests.cs · receipt artifacts/tests/6f26ad2b2becc2394071edba2452ec91bcb5bd5d/RUN.md
+spec_gap: "`Configure<MealsFeatureSettings>` is called nowhere, so the gate reads false in every deployment whatever configuration says" — the first clause is true and the conclusion is false. Program.cs:813 calls `services.AddMealsFeatureOptions()`, which binds `Features:Meals` via `AddOptions<MealsFeatureSettings>().BindConfiguration(...)`; `BindConfiguration` was chosen over `Configure<T>(GetSection(...))` because `AddServices(IServiceCollection)` has no IConfiguration in scope. So `fact:meals.gate`'s probe (`Program.cs contains:Configure<MealsFeatureSettings>`) cannot go green without writing a redundant or worse binding, and will keep stamping `unconf` at every refresh. Change the probe to `contains:services.AddMealsFeatureOptions();` — that is the one line whose removal darkens the gate, and MealsFeatureSettingsBindingTests already pins that exact string comment-stripped.
+log:
+- Already built, by lane/meals-gate (bf650efd, merged 2262d155) before this brief was cut. Its own commit message names the same grep trap the probe fell into. F-MEALS-GATE is clearable once the probe is fixed.
+- What was NOT built: any join between config and a request. MealsFeatureSettingsBindingTests drives real config through the real binding and stops at four booleans; every request-level Meals suite starts from a hand-built StubFeatureGate. The production MealsFeatureGate was constructed in no test in the repo, so both halves stayed green whatever the composition root did.
+- Built that join at the tier where "deployment" means something: two WireHosts, same type, same containment set, same world, same principal, one config key apart. Shipped host refuses GET /v1/meals/me/companies with the opaque 404; host setting Features:Meals:Module answers 200 through the real pipeline (routing, model binding, [ApiController] filter, JWT handler). Mutation-verified: flipping the override to false fails the admitting test and the delta test.
+- Service tier covers what a booted host cannot state: a config with NO Features:Meals section at all (appsettings now declares it false, so absence is unreachable there), the operator's real lever Features__Meals__Module=true through the environment provider, and the regression itself (binding removed, all flags on, request still refused).
+- WHICH CLAIM I SATISFIED: "bound, and the binding changes what a deployment answers". NOT "usable by an operator".
+- The sibling lane's measurement is TRUE and I verified it independently of its test: 29 routes, 6 store-addressed; two of those six (POST stores/{id}/meals/quotes, POST stores/{id}/meals/statements/drafts) are gated on meals.ordering / meals.statements, which MealsFeatureFlags.Withheld keeps out of the operator catalog. So the per-store lever reaches exactly 4 of 29.
+- Worse than the 4-of-29 split: the host `Features:Meals` section has NO in-product lever at all. It is an App Service application setting. An operator flipping meals.module for a venue lights four routes and gets "enabled and nothing works" for the other twenty-five. Suggest a Flag; it is a product decision, not a wire.
+- No migration, no money-path write, no append-only mutation, no log call added. C1/C2/C4/C6/C7 untouched. C3 strengthened rather than tested afterwards.
+- C5: this is not acceptance. Sven has nothing to walk here — the lever is config, not UI. Honest acceptance is an operator setting Features__Meals__Module on a deployment and seeing the surface appear.
+- Fast tier at 6f26ad2b from a clean detached worktree: 4117/0/8. First run was in the shared tree while siblings edited Program.cs; discarded per artifacts/tests/README.md rather than recorded. SQL tier (519) still unmeasured at every SHA.
+- Trap costing an hour, now in RUN.md: `mv file.bak file.cs` restores the OLD mtime, so the next build reports 0 errors without recompiling and the following --no-build run measures the mutant. Two tests "failed only in a full run" for that and nothing else.
+- Also fixed: MealsWireTests claimed "the wire host configures no such section". Stale since bf650efd — the module is now dark by value, not by absence.
+- Two commits, local only, not pushed: 6f26ad2b (the proof) and 18cf64c0 (the receipt).
+END RETURN
+```

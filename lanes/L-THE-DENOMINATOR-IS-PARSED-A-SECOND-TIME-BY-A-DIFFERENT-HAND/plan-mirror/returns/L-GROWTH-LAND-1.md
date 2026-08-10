@@ -1,0 +1,20 @@
+```
+RETURN: L-GROWTH-LAND
+brief: 13e9ec42
+verdict: built
+evidence: ../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md
+log:
+Four lanes landed one at a time on feature/restaurant-modules, tip a2897738, committed not pushed. mail-postmark, privacy-evidence, webhook-auth, unsub-oneclick and growth-reach are all ancestors; reach carried privacy-evidence and its already-resolved union.
+Growth's tests after EVERY merge, 0 failed at each: 421 baseline -> 436 (mail) -> 454 (reach) -> 467 (webhook) -> 467 (unsub). Fast tier at the merged tip 99855b1d from a clean detached worktree, status asserted EMPTY before the build: 4363 run / 4351 passed / 0 failed / 12 skipped, exit 0.
++47 passing vs f8b3a30f and every one is attributed: 15 mail, 19 reach, 13 webhook, 0 unsub. +3 skips = the sandbox smoke without a token, and the two webhook facts that cannot be written until D-GROWTH-EVENTS names a mechanism.
+Only two merges conflicted. mail: artifacts/tests/README.md alone — both receipt rows kept, with ffb29e4e labelled a LANE commit so the column does not read as a series. Program.cs (Growth DI + AddHttpClient), appsettings, the fixture allow-list and the reachability parks auto-merged and were checked against both sides by hand.
+unsub-oneclick is a TWIN of 4e2e3147, which is already an ancestor: 8 conflicts, all resolved to the branch, and the merged tree is byte-identical to its first parent — which is itself the proof nothing was dropped, since a three-way result equal to HEAD means every lane-side change was already present.
+Test cases per touched test file (HEAD/lane/merged): fixture matrix 17/17/17, reachability sweep 11/11/11, mail contract 13/28/28, dispatch resume -/3/3, privacy evidence -/8/8, notice wire -/5/5, sender 5/6/6, maintenance 14/16/16, resolver -/9/9, webhook wire -/6/6, newsletters endpoint 4/4/4, unsubscribe golden 19/19/19, one-click wire 15/15/15, contract pins 4 lane / 6 branch.
+Two same-count renames verified as renames, not losses: the newsletters endpoint's three concealment facts (renamed when the real StoreAdminPolicy replaced a substituted bool), and the golden suite's No_live_mail_is_reachable... which is the branch's The_growth_smtp_adapter_has_exactly_one_way_out..., documenting the removal of three assertions that could not fail and replacing a MailKit assembly scan the production EmailService also passes with an exact field-shape check. Strictly stronger.
+Collapsed the two independently-derived secret-provisioning helpers onto WireHostFixture.ProvisionGrowthWebhookSecret, where the mechanism and both constraints (one in-memory provider, never the configuration root; not a ConfigurationOverrides entry) are stated once. Whole wire tier 246 passed / 2 skipped after.
+CARRIED, still true at the merged tip: GrowthDeliveryHealthService computes BounceRate/ComplaintRate as attempted==0?0:n/attempted and never consults the bound provider, so with Postmark ruled (it does not sign webhooks, and the ingestion service requires a signature) an operator is shown 0.0/0.0 as fact on a pipeline that can never write a Bounced row. Not fixed here — L-GROWTH-HEALTH-HONEST. The landing did not make it worse: the default binding stays Fake and no health code changed.
+Narrowed the overbroad reconciliation claim where it lives in code (99855b1d): the sandbox journey establishes the SUBMIT wire shape only — the metadata lookup and the suppression export have never run against a live server. The same claim in docs/plan/returns/L-GROWTH-MAIL-1.md is outside my boundary to edit.
+NOT MEASURED: the SQL tier (532 discovered) — another lane holds the slot; no container was started. No UI was walked, so nothing here is acceptance.
+fact:growth.mail.provider is satisfied at the tip (GrowthSettings.MailProvider, line 112). Watch one thing on fact:be.tests: it globs artifacts/tests/*.trx and the mail lane's own receipt ffb29e4e (4110 passed, a non-tip lane SHA) is now committed beside the tip receipt 99855b1d (4351) — both zero-failure, but the readout can show the lane's number.
+END RETURN
+```

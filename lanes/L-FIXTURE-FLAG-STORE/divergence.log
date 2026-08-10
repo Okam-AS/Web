@@ -1,0 +1,10 @@
+
+  fixture   test/e2e/fixture  (12 anchored routes)
+  backend   /Users/svendaneel/okam/OkamAPI-modules
+            34c6c103 [lane/meals-grace-pins], 638 routes, 6 typed error families
+
+  THE FIXTURE IS AHEAD — the fixture refuses and the API does not
+    POST /v1/growth/stores/{storeId}/newsletters/{newsletterId}/test-sends
+      growth-newsletter.js:332  the fixture answers 403 growth.test_address_not_own and Controllers/GrowthNewslettersController.cs never does
+  1 divergence(s) across 12 anchored routes.
+

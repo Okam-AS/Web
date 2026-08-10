@@ -1,0 +1,157 @@
+{
+  "arm": "after",
+  "base": "http://localhost:3971",
+  "at": "2026-08-07T16:09:43.447Z",
+  "results": [
+    {
+      "name": "arm",
+      "value": "after"
+    },
+    {
+      "name": "publications",
+      "value": {
+        "newest": "cf05ec7d-3ce0-4422-9895-c21c450945a0",
+        "older": "fb618f71-4954-4a0e-99bd-8748c3d34626"
+      }
+    },
+    {
+      "name": "state.beforeAnyPress.acknowledgedAtUtc",
+      "value": {
+        "cf05ec7d-3ce0-4422-9895-c21c450945a0": null,
+        "fb618f71-4954-4a0e-99bd-8748c3d34626": null
+      }
+    },
+    {
+      "name": "open.title",
+      "value": "2 nye vaktplaner publisert"
+    },
+    {
+      "name": "open.itemCount",
+      "value": 2
+    },
+    {
+      "name": "open.rows",
+      "value": [
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": true,
+          "receipt": null,
+          "ackButton": "Bekreft mottatt"
+        },
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": true,
+          "receipt": null,
+          "ackButton": "Bekreft mottatt"
+        }
+      ]
+    },
+    {
+      "name": "press1.buttonText",
+      "value": "Bekreft mottatt"
+    },
+    {
+      "name": "press1.status",
+      "value": 200
+    },
+    {
+      "name": "press1.publicationId",
+      "value": "cf05ec7d-3ce0-4422-9895-c21c450945a0"
+    },
+    {
+      "name": "press1.alreadyAcknowledged",
+      "value": false
+    },
+    {
+      "name": "afterPress1.title",
+      "value": "Ny vaktplan publisert"
+    },
+    {
+      "name": "afterPress1.itemCount",
+      "value": 2
+    },
+    {
+      "name": "afterPress1.rows",
+      "value": [
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": false,
+          "receipt": "Bekreftet mottatt 7. aug., 18:09.",
+          "ackButton": "Bekreft på nytt"
+        },
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": true,
+          "receipt": null,
+          "ackButton": "Bekreft mottatt"
+        }
+      ]
+    },
+    {
+      "name": "press2.buttonText",
+      "value": "Bekreft på nytt"
+    },
+    {
+      "name": "press2.status",
+      "value": 200
+    },
+    {
+      "name": "press2.publicationId",
+      "value": "cf05ec7d-3ce0-4422-9895-c21c450945a0"
+    },
+    {
+      "name": "press2.alreadyAcknowledged",
+      "value": true
+    },
+    {
+      "name": "afterPress2.itemCount",
+      "value": 2
+    },
+    {
+      "name": "afterPress2.rows",
+      "value": [
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": false,
+          "receipt": "Allerede bekreftet 7. aug., 18:09.",
+          "ackButton": "Bekreft på nytt"
+        },
+        {
+          "when": "Kom 7. aug., 18:09",
+          "dot": true,
+          "receipt": null,
+          "ackButton": "Bekreft mottatt"
+        }
+      ]
+    },
+    {
+      "name": "afterPress2.errorToastCount",
+      "value": 0
+    },
+    {
+      "name": "pressedTheSamePublicationTwice",
+      "value": true
+    },
+    {
+      "name": "acknowledgementPostsMade",
+      "value": 2
+    },
+    {
+      "name": "state.afterBothPresses.acknowledgedAtUtc",
+      "value": {
+        "cf05ec7d-3ce0-4422-9895-c21c450945a0": "2026-08-07T16:09:40.292264",
+        "fb618f71-4954-4a0e-99bd-8748c3d34626": null
+      }
+    },
+    {
+      "name": "state.publicationsThisWalkAcknowledged",
+      "value": [
+        "cf05ec7d-3ce0-4422-9895-c21c450945a0"
+      ]
+    },
+    {
+      "name": "state.theWeekTheWorkerNeverLookedAtIsUnconfirmed",
+      "value": true
+    }
+  ]
+}

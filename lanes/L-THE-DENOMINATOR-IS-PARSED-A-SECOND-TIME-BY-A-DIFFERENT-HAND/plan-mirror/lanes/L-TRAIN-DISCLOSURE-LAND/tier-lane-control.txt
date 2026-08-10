@@ -1,0 +1,25 @@
+   at System.String.Join(String separator, IEnumerable`1 values)
+   at Xunit.Sdk.AllException.get_Message() in /_/src/xunit.assert/Asserts/Sdk/Exceptions/AllException.cs:line 70
+   at Xunit.Sdk.ExceptionUtility.ConvertExceptionToFailureInformation(Exception ex, Int32 parentIndex, List`1 exceptionTypes, List`1 messages, List`1 stackTraces, List`1 indices) in /_/src/common/ExceptionUtility.cs:line 194
+   at Xunit.Sdk.ExceptionUtility.ConvertExceptionToFailureInformation(Exception ex) in /_/src/common/ExceptionUtility.cs:line 178
+   at Xunit.Sdk.TestFailed..ctor(ITest test, Decimal executionTime, String output, Exception ex) in /_/src/messages/TestFailed.cs:line 42
+   at Xunit.Sdk.TestRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestRunner.cs:line 164
+   at Xunit.Sdk.TestCaseRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCaseRunner.cs:line 82
+   at Xunit.Sdk.TestMethodRunner`1.RunTestCasesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 136
+   at Xunit.Sdk.TestMethodRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestMethodRunner.cs:line 106
+   at Xunit.Sdk.TestClassRunner`1.RunTestMethodsAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 213
+   at Xunit.Sdk.TestClassRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestClassRunner.cs:line 171
+   at Xunit.Sdk.TestCollectionRunner`1.RunTestClassesAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCollectionRunner.cs:line 130
+   at Xunit.Sdk.TestCollectionRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestCollectionRunner.cs:line 101
+   at Xunit.Sdk.TestAssemblyRunner`1.RunTestCollectionsAsync(IMessageBus messageBus, CancellationTokenSource cancellationTokenSource) in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestAssemblyRunner.cs:line 231
+   at Xunit.Sdk.XunitTestAssemblyRunner.RunTestCollectionsAsync(IMessageBus messageBus, CancellationTokenSource cancellationTokenSource) in /_/src/xunit.execution/Sdk/Frameworks/Runners/XunitTestAssemblyRunner.cs:line 165
+   at Xunit.Sdk.TestAssemblyRunner`1.RunAsync() in /_/src/xunit.execution/Sdk/Frameworks/Runners/TestAssemblyRunner.cs:line 196
+   at Xunit.Sdk.XunitTestFrameworkExecutor.RunTestCases(IEnumerable`1 testCases, IMessageSink executionMessageSink, ITestFrameworkExecutionOptions executionOptions) in /_/src/xunit.execution/Sdk/Frameworks/XunitTestFrameworkExecutor.cs:line 95
+   at System.Threading.Tasks.Task.<>c.<ThrowAsync>b__128_1(Object state)
+   at System.Threading.ThreadPoolWorkQueue.Dispatch()
+   at System.Threading.PortableThreadPool.WorkerThread.WorkerThreadStart()
+   at System.Threading.Thread.StartCallback()
+
+
+Passed!  - Failed:     0, Passed:    15, Skipped:     0, Total:    15, Duration: 8 s - WebApi.Tests.dll (net8.0)
+Test Run Aborted.

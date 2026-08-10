@@ -1,0 +1,8 @@
+BASELINE (unmutated)
+  total=12 failed=0 rc=0
+
+M1  the fallback leaves the Vipps order -- backend trunk 1c71ae951 reproduced exactly
+  total=12 failed=5 rc=1
+  restored byte-for-byte: True
+
+KILLED: 5 of 12 arms red under the trunk's own behaviour, and the file is back.

@@ -1,0 +1,4 @@
+awesome_kirch
+testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91
+MemFree: 2116116 kB
+MemAvailable: 4108364 kB

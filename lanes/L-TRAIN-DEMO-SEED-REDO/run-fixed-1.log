@@ -1,0 +1,80 @@
+
+[1m== TRAINING 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== TRAINING 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   before the lever: GET /context -> 200   (a previous run already lit this store)
+   flag training.setup = on
+   flag training.assignments = on
+   context: {"timeZone":"Europe/Oslo","fallback":false,"capabilities":["manage"]}
+
+[1m== TRAINING 3. Who the training is FOR (the Workforce roster, BY VALUE)[0m
+   passes: Nora Berg (1850c97c-afe7-49f0-ae8d-e61c4440dbe7)
+   fails then retakes: Jonas Lie (e00897ac-40ee-49d5-a067-bb3d4cd40c35)
+   holds the certificates: Astrid Vik (08fdc7d5-68ad-4fb6-aedb-0e93032b0856)
+
+[1m== TRAINING 4. Courses, and the version state machine[0m
+jq: parse error: Invalid numeric literal at line 1, column 48
+[31mFAILED: version 1 is not Published: Microsoft.EntityFrameworkCore.DbUpdateException: Could not save changes because the target table has database triggers. Please configure your table accordingly, see https://aka.ms/efcore-docs-sqlserver-save-changes-and-output-clause for more information.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): The target table 'TrainingCourseVersions' of the DML statement cannot have any enabled triggers if the statement contains an OUTPUT clause without INTO clause.
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:b68e2d27-c226-4199-8065-f94c6b336639
+Error Number:334,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.SqlServer.Update.Internal.SqlServerModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(StateManager stateManager, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.<>c__DisplayClass30_0`2.<<ExecuteAsync>b__0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at WebApi.Services.Training.TrainingIdempotency.CompleteAsync(TrainingIdempotencyReservation reservation, String responsePayload, Int32 responseStatusCode, CancellationToken ct) in /Users/svendaneel/okam/wt-lwtwo-api/Services/Training/TrainingIdempotency.cs:line 145
+   at WebApi.Services.Training.TrainingMutation.RunAsync[TResponse](ITrainingIdempotency idempotency, String scope, String idempotencyKey, String actorReference, Int32 storeId, Object canonicalRequest, Func`1 stageAsync, Int32 successStatusCode, CancellationToken ct, Func`2 onConcurrency) in /Users/svendaneel/okam/wt-lwtwo-api/Services/Training/TrainingMutation.cs:line 76
+   at WebApi.Services.Training.TrainingCourseService.PublishVersionAsync(ClaimsPrincipal user, Int32 storeId, Guid courseId, Int32 versionNo, String idempotencyKey, CancellationToken ct) in /Users/svendaneel/okam/wt-lwtwo-api/Services/Training/TrainingCourseService.cs:line 318
+   at WebApi.Controllers.TrainingController.PublishVersion(Int32 storeId, Guid courseId, Int32 versionNo) in /Users/svendaneel/okam/wt-lwtwo-api/Controllers/TrainingController.cs:line 166
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at WebApi.Middleware.DocumentRenderExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/wt-lwtwo-api/Middleware/DocumentRenderExceptionMiddleware.cs:line 29
+   at WebApi.Middleware.OperatorSessionExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/wt-lwtwo-api/Middleware/OperatorSessionExceptionMiddleware.cs:line 23
+   at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpClientIdMetadataDocuments>b__2_0>d.MoveNext() in /Users/svendaneel/okam/wt-lwtwo-api/Mcp/McpMiddlewareExtensions.cs:line 76
+--- End of stack trace from previous location ---
+   at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpAuthenticationChallenge>b__1_0>d.MoveNext() in /Users/svendaneel/okam/wt-lwtwo-api/Mcp/McpMiddlewareExtensions.cs:line 50
+--- End of stack trace from previous location ---
+   at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpDisabledResponse>b__0_0>d.MoveNext() in /Users/svendaneel/okam/wt-lwtwo-api/Mcp/McpMiddlewareExtensions.cs:line 30
+--- End of stack trace from previous location ---
+   at WebApi.Program.<>c.<<Main>b__4_10>d.MoveNext() in /Users/svendaneel/okam/wt-lwtwo-api/Program.cs:line 272
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+
+HEADERS
+=======
+Accept: */*
+Host: 127.0.0.1:5971
+User-Agent: curl/8.7.1
+Authorization: Bearer __JWT_REDACTED__
+Content-Type: application/json
+Idempotency-Key: 4D349DE2-0486-406A-927B-E6F9839C0203[0m

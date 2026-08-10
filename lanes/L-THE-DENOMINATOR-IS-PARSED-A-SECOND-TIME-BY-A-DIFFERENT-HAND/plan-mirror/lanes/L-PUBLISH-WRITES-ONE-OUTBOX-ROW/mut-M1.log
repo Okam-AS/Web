@@ -1,0 +1,33 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-pub-outbox/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-pub-outbox/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-pub-outbox/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:03.84]     WebApi.Tests.Workforce.LanePublishOutboxShapeDiagnostic.Dump_every_outbox_row_one_publish_writes [FAIL]
+  Failed WebApi.Tests.Workforce.LanePublishOutboxShapeDiagnostic.Dump_every_outbox_row_one_publish_writes [2 s]
+  Error Message:
+   Assert.Equal() Failure
+                  ↓ (pos 1)
+Expected: [InApp, Email]
+Actual:   [InApp]
+  Stack Trace:
+     at WebApi.Tests.Workforce.LanePublishOutboxShapeDiagnostic.Dump_every_outbox_row_one_publish_writes() in /Users/svendaneel/okam/wt-pub-outbox/WebApi.Tests/Workforce/LanePublishOutboxShapeDiagnostic.cs:line 83
+   at WebApi.Tests.Workforce.LanePublishOutboxShapeDiagnostic.Dump_every_outbox_row_one_publish_writes() in /Users/svendaneel/okam/wt-pub-outbox/WebApi.Tests/Workforce/LanePublishOutboxShapeDiagnostic.cs:line 86
+   at WebApi.Tests.Workforce.LanePublishOutboxShapeDiagnostic.Dump_every_outbox_row_one_publish_writes() in /Users/svendaneel/okam/wt-pub-outbox/WebApi.Tests/Workforce/LanePublishOutboxShapeDiagnostic.cs:line 86
+--- End of stack trace from previous location ---
+  Standard Output Messages:
+ RECIPIENT PERSON  login=<null>  email=ingrid@example.test  phone=+4740000001  state=Invited
+ PUBLICATION       id=bf63e582-a5a7-416b-93ac-73137349747d  publishedBy=30000000-0000-0000-0000-000000000001  recipients=1  inboxItems=1
+ OUTBOX ROW        channel=InApp  target=30000000-0000-0000-0000-000000000002  dedupeKey=wf.pub:bf63e582a5a7416b93ac73137349747d:30000000000000000000000000000002:inapp  status=Pending  payloadLen=253
+ PAYLOADS IDENTICAL ACROSS ROWS = True
+ DEDUPE KEYS DISTINCT           = True
+ SAMPLE PAYLOAD                 = {"publicationId":"bf63e582-a5a7-416b-93ac-73137349747d","staffMemberId":"30000000-0000-0000-0000-000000000002","rangeStartUtc":"2026-07-05T22:00:00","rangeEndUtc":"2026-07-12T22:00:00","rangeLocalStartDate":"2026-07-06","rangeLocalEndDate":"2026-07-12"}
+
+
+
+Failed!  - Failed:     1, Passed:     0, Skipped:     0, Total:     1, Duration: < 1 ms - WebApi.Tests.dll (net8.0)

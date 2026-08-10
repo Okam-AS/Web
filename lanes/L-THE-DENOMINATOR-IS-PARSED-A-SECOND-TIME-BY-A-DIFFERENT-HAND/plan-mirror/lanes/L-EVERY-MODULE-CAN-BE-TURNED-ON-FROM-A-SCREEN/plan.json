@@ -1,0 +1,8 @@
+[
+  { "module": "Workforce", "flags": ["workforce.module"], "surface": "/admin/workforce-roster" },
+  { "module": "Margin",    "flags": ["Margin.Module"],    "surface": "/admin/margin-recipes" },
+  { "module": "Training",  "flags": ["training.setup"],   "surface": "/admin/training-courses" },
+  { "module": "Events",    "flags": ["Events.Core"],      "surface": "/admin/events-pipeline" },
+  { "module": "Meals",     "flags": ["meals.module"],     "surface": "/admin/meals-companies" },
+  { "module": "Growth",    "flags": ["growth.module"],    "surface": "/subscribe/1", "wait": 8000 }
+]

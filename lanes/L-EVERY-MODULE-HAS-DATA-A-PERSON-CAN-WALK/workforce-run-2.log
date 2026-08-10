@@ -1,0 +1,55 @@
+
+[1m== Demo weeks (Europe/Oslo)[0m
+   A 2026-07-27..2026-08-02        last week   PUBLISHED, has the punches -> attendance + hours export
+   B 2026-08-03..2026-08-09        this week   DRAFT     -> the cost overlay, and the walk to publish
+   C 2026-08-10..2026-08-16        next week   PUBLISHED -> what the WORKER sees (me-page shows the next 28 days)
+
+[1m== 1. Signing in the manager (+4799681931)[0m
+   manager applicationUserId = 6ba6dd27-42b0-4ba9-807b-96930c735f2f
+
+[1m== 1b. Signing in the worker (+4799999999) so /workforce/me has a real caller[0m
+   worker applicationUserId  = b719056b-e99e-4d49-824e-189e1473a566
+
+[1m== 2. SQL bootstrap (store, legal employer, first manager engagement, feature flags)[0m
+
+[1m== 2. ADOPTING the store this manager already administers (no SQL, no bootstrap)[0m
+   storeId = 1 (Two Humans Kafé)
+
+[1m== 2b. Stage flags through the operator lever (adopt mode writes no SQL)[0m
+   workforce.setup = on
+   workforce.publication = on
+   workforce.selfservice = on
+   workforce.exchange = on
+   workforce.clock = on
+   workforce.personnel-list NOT SET: {
+  "message": "Unknown feature flag: workforce.personnel-list"
+}
+   workforce.export = on
+   workforce.dispatch = on
+   legal employer (adopted) = 560c1843-b232-4d71-8011-ef51dbb9bb20
+
+[1m== 3. Manager reaches the surface (GET /context)[0m
+{"storeId":1,"timeZoneId":null,"capabilities":["WorkforceSelf","WorkforceScheduler","WorkforceManager","WorkforcePayrollApprover"]}
+
+[1m== 4. Roles[0m
+   Kokk=37ba9732-0e5f-4e5f-b3a2-d7459617d07c  Servitor=8f225e9c-19ff-4268-a0c2-95208a8c0558
+
+[1m== 5. Staff (through POST /staff -- the real write path)[0m
+   Nora=668f0bda-04c2-4a65-b2dd-40440396c450  Jonas=c433ddb4-8c03-4c6c-8233-dcebab16c5e4  Selma=f2f2be50-c9f9-46fb-90d8-696f5ac85fea
+   Nora holds a pending invitation (2026-08-21T07:55:21.672515Z).
+   /admin/workforce-me will stay empty for +4799999999 until that invitation is CLAIMED from
+   the worker's own sign-in -- adopt mode has no SQL shortcut and no route claims it for her.
+
+[1m== 6. Staff roles[0m
+   Nora=Servitor  Jonas=Kokk  Selma=Kokk
+
+[1m== 7. Employment terms[0m
+   Nora 30h/week, Jonas 37.5h/week, Selma 20h/week
+
+[1m== 8. Rates (through PUT .../rates -- the authoring surface, not a SQL insert)[0m
+   Servitor 220.00 -> 245.00 from 2026-07-29 -> 260.00 from 2026-08-05  (a shift crosses each raise)
+   Jonas engagement override 310.00 NOK/h (outranks the role default)
+   Kokk role default: DELIBERATELY ABSENT -> Selma and the open Kokk shift cannot be priced
+
+[1m== 9. Week A (2026-07-27..2026-08-02) -- last week, will be published[0m
+[31mFAILED: PUT assignments:batch (week A) -> {"type":"https://okam.no/problems/workforce/assignment-invalid","title":"Error","status":422,"detail":"The staff member is not active for the whole assignment.","code":"workforce.assignment-invalid","conflictKind":"assignment-invalid","itemIndex":0,"field":"staffMemberId","retryable":false,"traceId":"0HNNJTTMJ3F9K:00000001"}[0m

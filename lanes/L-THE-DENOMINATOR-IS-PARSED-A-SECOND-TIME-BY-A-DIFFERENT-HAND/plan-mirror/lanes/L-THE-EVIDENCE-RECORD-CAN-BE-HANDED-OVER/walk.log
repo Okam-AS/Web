@@ -1,0 +1,34 @@
+1. opened /admin/training-evidence anonymously -> /admin?redirect=%2Fadmin%2Ftraining-evidence
+2. signed in as 99681931 -> /admin/training-evidence
+3. the print control is on the page, disabled before any read: true
+4. record opened for Selma Haug: 1 completion(s), 2 certificate(s), 18 ledger row(s)
+5. the print control is now live: true
+6. pressing the button reached the browser's print command: true
+7. on paper: 4830 characters (screen: 6785)
+   ON  the paper  «Opplæringsdokumentasjon»: true
+   ON  the paper  «Selma Haug»: true
+   ON  the paper  «4dc94bb7-2515-46ed-aad5-c9e23552dabd»: true
+   OFF the paper  «Velg en person og hent»: true (on screen: false)
+   OFF the paper  «Å hente dette dokumentet er selv en utlevering»: true (on screen: true)
+   OFF the paper  «Hent dokumentasjonen»: true (on screen: true)
+   OFF the paper  «Skriv ut dokumentasjonen»: true (on screen: true)
+   OFF the paper  «Én persons samlede opplæringsjournal»: true (on screen: true)
+8. produced training-evidence.pdf (187483 bytes)
+9. read the file back: 2 pages, 4907 characters
+   in the FILE  «Opplæringsdokumentasjon»: true
+   in the FILE  «Selma Haug»: true
+   in the FILE  «4dc94bb7-2515-46ed-aad5-c9e23552dabd»: true
+   in the FILE  «Opphav»: true
+   in the FILE  «I journalen»: true
+   in the FILE  «journalrad som sier hvem som førte den»: true
+   in the FILE  «Beståttgrense: 80%»: true
+   in the FILE  «Varmebehandling ≥ 75 °C»: true
+   in the FILE  «"scorePercent":"85"}»: true
+   in the FILE  «sha256:db69110e»: true
+   NOT in file «Velg en person og hent»: true
+   NOT in file «Å hente dette dokumentet er selv en utleveri»: true
+   NOT in file «Hent dokumentasjonen»: true
+   NOT in file «Skriv ut dokumentasjonen»: true
+   NOT in file «Én persons samlede opplæringsjournal»: true
+   first sheet is not blank: true (starts «Opplæringsdokumentasjon
+Selma »)

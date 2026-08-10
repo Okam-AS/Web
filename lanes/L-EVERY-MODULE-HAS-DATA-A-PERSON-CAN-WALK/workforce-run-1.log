@@ -1,0 +1,13 @@
+
+[1m== Demo weeks (Europe/Oslo)[0m
+   A 2026-07-27..2026-08-02        last week   PUBLISHED, has the punches -> attendance + hours export
+   B 2026-08-03..2026-08-09        this week   DRAFT     -> the cost overlay, and the walk to publish
+   C 2026-08-10..2026-08-16        next week   PUBLISHED -> what the WORKER sees (me-page shows the next 28 days)
+
+[1m== 1. Signing in the manager (+4799681931)[0m
+   manager applicationUserId = 6ba6dd27-42b0-4ba9-807b-96930c735f2f
+
+[1m== 1b. Signing in the worker (+4790000001) so /workforce/me has a real caller[0m
+[31mFAILED: worker login returned no user id: {"message":"Failed to login"}
+    The worker sign-in uses the PowerUser bypass, which requires the API to have been started with
+    AppSettings__AdminUserPhoneNumber=+4790000001. Any other number needs a real SMS round-trip.[0m

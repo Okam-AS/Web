@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="bfab9cc9-7c68-4aa0-b8bf-4623b3929bc7" name="@Svens-MacBook-Pro 2026-08-06 15:35:25" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-06T15:35:25.8146380+02:00" queuing="2026-08-06T15:35:25.8146380+02:00" start="2026-08-06T15:35:18.6298970+02:00" finish="2026-08-06T15:35:31.4961950+02:00" />
+  <TestSettings name="default" id="51f0c3a3-3769-437b-a17e-295e00286e88">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-06_15_35_25" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="9b20415d-1d92-4ea6-9b87-35585852b10e" testId="12236fca-3687-651b-a737-00ef35e87eb9" testName="WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved" computerName="Svens-MacBook-Pro" duration="00:00:00.0110005" startTime="2026-08-06T15:35:31.3672400+02:00" endTime="2026-08-06T15:35:31.3672400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b20415d-1d92-4ea6-9b87-35585852b10e">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.All() Failure: 1 out of 3 items in the collection did not pass.
+[1]: Item: WebApi.Entities.Training.TrainingAuditEvent
+     Xunit.Sdk.EqualException: Assert.Equal() Failure
+                          ↓ (pos 11)
+     Expected: wire-admin-a
+     Actual:   wire-admin-b
+                          ↑ (pos 11)
+        at Xunit.Assert.Equal(String expected, String actual, Boolean ignoreCase, Boolean ignoreLineEndingDifferences, Boolean ignoreWhiteSpaceDifferences) in /_/src/xunit.assert/Asserts/StringAsserts.cs:line 326
+        at Xunit.Assert.Equal(String expected, String actual) in /_/src/xunit.assert/Asserts/StringAsserts.cs:line 234
+        at WebApi.Tests.Wire.TrainingWireTests.&lt;&gt;c.&lt;An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved&gt;b__33_1(TrainingAuditEvent d) in /Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/Wire/TrainingWireTests.cs:line 1031
+        at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+        at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61</Message>
+          <StackTrace>   at WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved() in /Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/Wire/TrainingWireTests.cs:line 1031
+--- End of stack trace from previous location ---</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="230b1793-c59b-40e2-8f38-3cb6a868563e" testId="d1b41ccc-ead9-c5dc-f6e1-2ee2441e5dd9" testName="WebApi.Tests.Wire.TrainingWireTests.The_person_a_record_is_about_can_see_who_read_it_and_sees_no_other_stores_or_persons" computerName="Svens-MacBook-Pro" duration="00:00:00.0320920" startTime="2026-08-06T15:35:31.3332350+02:00" endTime="2026-08-06T15:35:31.3332350+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="230b1793-c59b-40e2-8f38-3cb6a868563e" />
+    <UnitTestResult executionId="0c53176f-015d-442d-9dbe-4aeeeb778e67" testId="60ed903c-dd6b-2df2-f2b5-9e56c85e0b0d" testName="WebApi.Tests.Wire.TrainingWireTests.A_genuine_store_admin_reaches_the_training_surface_with_the_applications_own_token" computerName="Svens-MacBook-Pro" duration="00:00:00.0422349" startTime="2026-08-06T15:35:31.3009290+02:00" endTime="2026-08-06T15:35:31.3009290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0c53176f-015d-442d-9dbe-4aeeeb778e67" />
+    <UnitTestResult executionId="30df3eff-d5c8-4907-81a4-f8d206d00ac3" testId="db7bbcaf-e67c-14a0-e7de-56d5a02839cb" testName="WebApi.Tests.Wire.TrainingWireTests.Reading_the_disclosure_log_is_itself_recorded_and_the_subject_sees_who_looked" computerName="Svens-MacBook-Pro" duration="00:00:00.0077299" startTime="2026-08-06T15:35:31.3412210+02:00" endTime="2026-08-06T15:35:31.3412210+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="30df3eff-d5c8-4907-81a4-f8d206d00ac3" />
+    <UnitTestResult executionId="0a1366ae-1ebf-4543-963e-33b66ef16b9e" testId="117f95f3-0835-92ac-5e10-3b6e65db744a" testName="WebApi.Tests.Wire.TrainingWireTests.An_unsupported_method_on_a_real_training_route_is_refused_by_routing" computerName="Svens-MacBook-Pro" duration="00:00:00.0023429" startTime="2026-08-06T15:35:31.4255380+02:00" endTime="2026-08-06T15:35:31.4255380+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a1366ae-1ebf-4543-963e-33b66ef16b9e" />
+    <UnitTestResult executionId="254de696-537d-4c5e-9df7-f706d646c8df" testId="209b1ace-4b6c-c30f-0ea9-7a68e7f3db71" testName="WebApi.Tests.Wire.TrainingWireTests.A_replayed_idempotency_key_returns_the_same_course_and_a_changed_payload_is_a_409" computerName="Svens-MacBook-Pro" duration="00:00:00.0165581" startTime="2026-08-06T15:35:31.3819710+02:00" endTime="2026-08-06T15:35:31.3819710+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="254de696-537d-4c5e-9df7-f706d646c8df" />
+    <UnitTestResult executionId="a1543eea-3bcd-4115-a39f-f3478814af84" testId="af0b42e3-2252-7f38-5831-bd555adda05c" testName="WebApi.Tests.Wire.TrainingWireTests.A_store_whose_data_outlived_its_flag_still_reads_but_refuses_to_write" computerName="Svens-MacBook-Pro" duration="00:00:00.0106648" startTime="2026-08-06T15:35:31.1941180+02:00" endTime="2026-08-06T15:35:31.1941180+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1543eea-3bcd-4115-a39f-f3478814af84" />
+    <UnitTestResult executionId="e0485c68-27b9-449e-8309-7b6d0aa1a57b" testId="ccf05df6-c765-c7bb-ba47-f80ce5b55376" testName="WebApi.Tests.Wire.TrainingWireTests.The_flag_lever_takes_a_never_enabled_store_from_an_opaque_404_to_a_walked_journey" computerName="Svens-MacBook-Pro" duration="00:00:00.2365051" startTime="2026-08-06T15:35:24.8113230+02:00" endTime="2026-08-06T15:35:24.8113230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0485c68-27b9-449e-8309-7b6d0aa1a57b" />
+    <UnitTestResult executionId="1115c82f-83c0-4b8a-9a75-30d518023f24" testId="9be225f7-ae3f-9e88-7121-df5762e720b2" testName="WebApi.Tests.Wire.TrainingWireTests.The_context_read_reports_every_training_flag_it_actually_resolved" computerName="Svens-MacBook-Pro" duration="00:00:00.0160747" startTime="2026-08-06T15:35:24.5746300+02:00" endTime="2026-08-06T15:35:24.5746300+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1115c82f-83c0-4b8a-9a75-30d518023f24" />
+    <UnitTestResult executionId="e1bb3b0a-9ba1-4ad7-bc7d-606ffe614f6a" testId="5cc3d3c0-8c77-e188-8831-895c07e671f7" testName="WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_answers_for_the_venue_the_caller_administers_and_refuses_the_other" computerName="Svens-MacBook-Pro" duration="00:00:00.0129212" startTime="2026-08-06T15:35:31.4387230+02:00" endTime="2026-08-06T15:35:31.4387230+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e1bb3b0a-9ba1-4ad7-bc7d-606ffe614f6a" />
+    <UnitTestResult executionId="2d2e880d-f95f-42e8-9238-9755709420ed" testId="83938a74-4459-0193-c270-5f4e03cb0398" testName="WebApi.Tests.Wire.TrainingWireTests.A_malformed_if_match_revision_is_refused_instead_of_silently_overwriting" computerName="Svens-MacBook-Pro" duration="00:00:00.0182414" startTime="2026-08-06T15:35:31.2502320+02:00" endTime="2026-08-06T15:35:31.2502320+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2d2e880d-f95f-42e8-9238-9755709420ed" />
+    <UnitTestResult executionId="86f50c37-fab1-484b-a7b2-1dbe56e2c360" testId="72c80307-ee98-37f3-75fc-906735541431" testName="WebApi.Tests.Wire.TrainingWireTests.A_power_user_reaches_every_stores_training_which_is_why_it_cannot_be_the_proof" computerName="Svens-MacBook-Pro" duration="00:00:00.2601280" startTime="2026-08-06T15:35:24.5579600+02:00" endTime="2026-08-06T15:35:24.5579690+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86f50c37-fab1-484b-a7b2-1dbe56e2c360" />
+    <UnitTestResult executionId="98264f35-4ccf-4f7d-9278-ada6477aac8c" testId="81c707af-2c9c-da3e-4d48-68edf067fc91" testName="WebApi.Tests.Wire.TrainingWireTests.An_inspector_can_be_handed_one_internally_consistent_evidence_document" computerName="Svens-MacBook-Pro" duration="00:00:00.0069686" startTime="2026-08-06T15:35:31.4230040+02:00" endTime="2026-08-06T15:35:31.4230040+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="98264f35-4ccf-4f7d-9278-ada6477aac8c" />
+    <UnitTestResult executionId="66623f07-b27d-43ee-a6ab-2be9e3f12aba" testId="608a965c-f7c2-521e-24dc-eea764cf7f9f" testName="WebApi.Tests.Wire.TrainingWireTests.An_anonymous_caller_is_401_and_never_reaches_the_module_at_all" computerName="Svens-MacBook-Pro" duration="00:00:00.0011867" startTime="2026-08-06T15:35:31.1743110+02:00" endTime="2026-08-06T15:35:31.1743110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="66623f07-b27d-43ee-a6ab-2be9e3f12aba" />
+    <UnitTestResult executionId="8e94d4ba-9fb5-4b79-8d52-18a609d22da0" testId="2bdab203-09aa-e13e-b417-301e5f8dc27d" testName="WebApi.Tests.Wire.TrainingWireTests.Routing_answers_a_malformed_store_or_course_segment_before_any_training_code_runs" computerName="Svens-MacBook-Pro" duration="00:00:00.0074634" startTime="2026-08-06T15:35:31.3489410+02:00" endTime="2026-08-06T15:35:31.3489410+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8e94d4ba-9fb5-4b79-8d52-18a609d22da0" />
+    <UnitTestResult executionId="6c4cf905-2284-4d68-b496-1c7d5b2cb704" testId="f63d3928-9d5f-6e99-4e8d-c78cce3d819f" testName="WebApi.Tests.Wire.TrainingWireTests.An_admin_of_another_venue_is_refused_while_that_venues_own_admin_is_admitted" computerName="Svens-MacBook-Pro" duration="00:00:00.0055234" startTime="2026-08-06T15:35:31.4158600+02:00" endTime="2026-08-06T15:35:31.4158600+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6c4cf905-2284-4d68-b496-1c7d5b2cb704" />
+    <UnitTestResult executionId="bac42849-1e89-40b6-a884-22735d007f29" testId="39e153a5-1e5c-83ff-36e1-37029750d97b" testName="WebApi.Tests.Wire.TrainingWireTests.A_never_enabled_store_is_dark_for_a_fully_bound_write_exactly_as_for_a_read" computerName="Svens-MacBook-Pro" duration="00:00:00.0087063" startTime="2026-08-06T15:35:31.1832360+02:00" endTime="2026-08-06T15:35:31.1832360+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bac42849-1e89-40b6-a884-22735d007f29" />
+    <UnitTestResult executionId="06a42aa7-3a7e-450c-81dc-bb3a99e2f730" testId="76f4204b-9708-205a-70e4-a109f329291a" testName="WebApi.Tests.Wire.TrainingWireTests.A_course_of_another_store_answers_exactly_as_a_course_that_never_existed" computerName="Svens-MacBook-Pro" duration="00:00:00.0144446" startTime="2026-08-06T15:35:24.8259270+02:00" endTime="2026-08-06T15:35:24.8259270+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="06a42aa7-3a7e-450c-81dc-bb3a99e2f730" />
+    <UnitTestResult executionId="1907f612-a4bc-4755-a136-93ee17b53a35" testId="bdc3c2bf-15b0-90e4-5f34-e4f6f0d04206" testName="WebApi.Tests.Wire.TrainingWireTests.An_authenticated_caller_who_administers_nothing_is_refused" computerName="Svens-MacBook-Pro" duration="00:00:00.0036501" startTime="2026-08-06T15:35:31.1729390+02:00" endTime="2026-08-06T15:35:31.1729390+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1907f612-a4bc-4755-a136-93ee17b53a35" />
+    <UnitTestResult executionId="d163517c-e0c3-4e03-96bc-b77405af925e" testId="baf5b21c-93a8-963d-ac58-df74e47b7bb7" testName="WebApi.Tests.Wire.TrainingWireTests.The_certificate_correction_refuses_a_missing_or_blank_if_match_revision" computerName="Svens-MacBook-Pro" duration="00:00:00.0095355" startTime="2026-08-06T15:35:31.2318110+02:00" endTime="2026-08-06T15:35:31.2318110+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d163517c-e0c3-4e03-96bc-b77405af925e" />
+    <UnitTestResult executionId="7712f640-7f94-4429-b793-ed79d80840d9" testId="a0f7af19-fea0-ba36-c47a-a741c0e379d5" testName="WebApi.Tests.Wire.TrainingWireTests.The_tenant_check_answers_before_the_module_gate_so_dark_and_absent_differ_on_purpose" computerName="Svens-MacBook-Pro" duration="00:00:00.0083848" startTime="2026-08-06T15:35:31.4101010+02:00" endTime="2026-08-06T15:35:31.4101010+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7712f640-7f94-4429-b793-ed79d80840d9" />
+    <UnitTestResult executionId="24de9b78-b3c9-483f-b09d-5139d177680b" testId="49e512f2-c19e-9c02-c087-fdea86465d50" testName="WebApi.Tests.Wire.TrainingWireTests.The_keyless_mutation_refusal_precedes_both_gates_and_carries_no_store_information" computerName="Svens-MacBook-Pro" duration="00:00:00.0079931" startTime="2026-08-06T15:35:31.2584370+02:00" endTime="2026-08-06T15:35:31.2584370+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="24de9b78-b3c9-483f-b09d-5139d177680b" />
+    <UnitTestResult executionId="7a3515eb-c801-41a8-a88f-bd0940ad2e3d" testId="c45a8d5a-a0f6-814c-ca8e-1f742a0244cd" testName="WebApi.Tests.Wire.TrainingWireTests.A_forged_token_is_refused_by_the_real_bearer_handler" computerName="Svens-MacBook-Pro" duration="00:00:00.0035825" startTime="2026-08-06T15:35:24.8296290+02:00" endTime="2026-08-06T15:35:24.8296290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7a3515eb-c801-41a8-a88f-bd0940ad2e3d" />
+    <UnitTestResult executionId="7c830249-111e-4380-ba27-54cbcfda61b7" testId="78d8858e-b62a-7c4d-dbb9-5827bbd2d739" testName="WebApi.Tests.Wire.TrainingWireTests.PINNED_model_binding_and_body_validation_both_answer_before_the_tenant_check" computerName="Svens-MacBook-Pro" duration="00:00:00.0192928" startTime="2026-08-06T15:35:31.4014590+02:00" endTime="2026-08-06T15:35:31.4014590+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7c830249-111e-4380-ba27-54cbcfda61b7" />
+    <UnitTestResult executionId="ccb52137-5f1f-4414-b801-73f19d964a31" testId="dc43f152-b90c-ab70-f96e-9c08b48b6f78" testName="WebApi.Tests.Wire.TrainingWireTests.The_disclosure_log_admits_the_subject_and_the_stores_admin_and_nobody_else" computerName="Svens-MacBook-Pro" duration="00:00:00.0276834" startTime="2026-08-06T15:35:31.2220610+02:00" endTime="2026-08-06T15:35:31.2220610+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ccb52137-5f1f-4414-b801-73f19d964a31" />
+    <UnitTestResult executionId="d818d983-78b5-4648-a025-20abca9a6a53" testId="a5bfe44f-eb38-f76e-08e5-18c2c833c253" testName="WebApi.Tests.Wire.TrainingWireTests.The_catalog_advertises_exactly_the_training_flags_that_gate_something_and_withholds_the_rest_with_a_reason" computerName="Svens-MacBook-Pro" duration="00:00:06.3391358" startTime="2026-08-06T15:35:31.1690710+02:00" endTime="2026-08-06T15:35:31.1690710+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d818d983-78b5-4648-a025-20abca9a6a53" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.Routing_answers_a_malformed_store_or_course_segment_before_any_training_code_runs" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="2bdab203-09aa-e13e-b417-301e5f8dc27d">
+      <Execution id="8e94d4ba-9fb5-4b79-8d52-18a609d22da0" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="Routing_answers_a_malformed_store_or_course_segment_before_any_training_code_runs" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_catalog_advertises_exactly_the_training_flags_that_gate_something_and_withholds_the_rest_with_a_reason" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a5bfe44f-eb38-f76e-08e5-18c2c833c253">
+      <Execution id="d818d983-78b5-4648-a025-20abca9a6a53" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_catalog_advertises_exactly_the_training_flags_that_gate_something_and_withholds_the_rest_with_a_reason" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.Reading_the_disclosure_log_is_itself_recorded_and_the_subject_sees_who_looked" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="db7bbcaf-e67c-14a0-e7de-56d5a02839cb">
+      <Execution id="30df3eff-d5c8-4907-81a4-f8d206d00ac3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="Reading_the_disclosure_log_is_itself_recorded_and_the_subject_sees_who_looked" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_disclosure_log_admits_the_subject_and_the_stores_admin_and_nobody_else" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="dc43f152-b90c-ab70-f96e-9c08b48b6f78">
+      <Execution id="ccb52137-5f1f-4414-b801-73f19d964a31" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_disclosure_log_admits_the_subject_and_the_stores_admin_and_nobody_else" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_tenant_check_answers_before_the_module_gate_so_dark_and_absent_differ_on_purpose" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="a0f7af19-fea0-ba36-c47a-a741c0e379d5">
+      <Execution id="7712f640-7f94-4429-b793-ed79d80840d9" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_tenant_check_answers_before_the_module_gate_so_dark_and_absent_differ_on_purpose" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_authenticated_caller_who_administers_nothing_is_refused" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="bdc3c2bf-15b0-90e4-5f34-e4f6f0d04206">
+      <Execution id="1907f612-a4bc-4755-a136-93ee17b53a35" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_authenticated_caller_who_administers_nothing_is_refused" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_store_whose_data_outlived_its_flag_still_reads_but_refuses_to_write" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="af0b42e3-2252-7f38-5831-bd555adda05c">
+      <Execution id="a1543eea-3bcd-4115-a39f-f3478814af84" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_store_whose_data_outlived_its_flag_still_reads_but_refuses_to_write" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_keyless_mutation_refusal_precedes_both_gates_and_carries_no_store_information" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="49e512f2-c19e-9c02-c087-fdea86465d50">
+      <Execution id="24de9b78-b3c9-483f-b09d-5139d177680b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_keyless_mutation_refusal_precedes_both_gates_and_carries_no_store_information" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_context_read_reports_every_training_flag_it_actually_resolved" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="9be225f7-ae3f-9e88-7121-df5762e720b2">
+      <Execution id="1115c82f-83c0-4b8a-9a75-30d518023f24" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_context_read_reports_every_training_flag_it_actually_resolved" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_replayed_idempotency_key_returns_the_same_course_and_a_changed_payload_is_a_409" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="209b1ace-4b6c-c30f-0ea9-7a68e7f3db71">
+      <Execution id="254de696-537d-4c5e-9df7-f706d646c8df" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_replayed_idempotency_key_returns_the_same_course_and_a_changed_payload_is_a_409" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_genuine_store_admin_reaches_the_training_surface_with_the_applications_own_token" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="60ed903c-dd6b-2df2-f2b5-9e56c85e0b0d">
+      <Execution id="0c53176f-015d-442d-9dbe-4aeeeb778e67" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_genuine_store_admin_reaches_the_training_surface_with_the_applications_own_token" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_flag_lever_takes_a_never_enabled_store_from_an_opaque_404_to_a_walked_journey" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="ccf05df6-c765-c7bb-ba47-f80ce5b55376">
+      <Execution id="e0485c68-27b9-449e-8309-7b6d0aa1a57b" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_flag_lever_takes_a_never_enabled_store_from_an_opaque_404_to_a_walked_journey" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_forged_token_is_refused_by_the_real_bearer_handler" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c45a8d5a-a0f6-814c-ca8e-1f742a0244cd">
+      <Execution id="7a3515eb-c801-41a8-a88f-bd0940ad2e3d" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_forged_token_is_refused_by_the_real_bearer_handler" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_unsupported_method_on_a_real_training_route_is_refused_by_routing" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="117f95f3-0835-92ac-5e10-3b6e65db744a">
+      <Execution id="0a1366ae-1ebf-4543-963e-33b66ef16b9e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_unsupported_method_on_a_real_training_route_is_refused_by_routing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.PINNED_model_binding_and_body_validation_both_answer_before_the_tenant_check" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="78d8858e-b62a-7c4d-dbb9-5827bbd2d739">
+      <Execution id="7c830249-111e-4380-ba27-54cbcfda61b7" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="PINNED_model_binding_and_body_validation_both_answer_before_the_tenant_check" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_certificate_correction_refuses_a_missing_or_blank_if_match_revision" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="baf5b21c-93a8-963d-ac58-df74e47b7bb7">
+      <Execution id="d163517c-e0c3-4e03-96bc-b77405af925e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_certificate_correction_refuses_a_missing_or_blank_if_match_revision" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_malformed_if_match_revision_is_refused_instead_of_silently_overwriting" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="83938a74-4459-0193-c270-5f4e03cb0398">
+      <Execution id="2d2e880d-f95f-42e8-9238-9755709420ed" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_malformed_if_match_revision_is_refused_instead_of_silently_overwriting" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_never_enabled_store_is_dark_for_a_fully_bound_write_exactly_as_for_a_read" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="39e153a5-1e5c-83ff-36e1-37029750d97b">
+      <Execution id="bac42849-1e89-40b6-a884-22735d007f29" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_never_enabled_store_is_dark_for_a_fully_bound_write_exactly_as_for_a_read" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_answers_for_the_venue_the_caller_administers_and_refuses_the_other" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5cc3d3c0-8c77-e188-8831-895c07e671f7">
+      <Execution id="e1bb3b0a-9ba1-4ad7-bc7d-606ffe614f6a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_evidence_read_answers_for_the_venue_the_caller_administers_and_refuses_the_other" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.The_person_a_record_is_about_can_see_who_read_it_and_sees_no_other_stores_or_persons" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="d1b41ccc-ead9-c5dc-f6e1-2ee2441e5dd9">
+      <Execution id="230b1793-c59b-40e2-8f38-3cb6a868563e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="The_person_a_record_is_about_can_see_who_read_it_and_sees_no_other_stores_or_persons" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_inspector_can_be_handed_one_internally_consistent_evidence_document" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="81c707af-2c9c-da3e-4d48-68edf067fc91">
+      <Execution id="98264f35-4ccf-4f7d-9278-ada6477aac8c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_inspector_can_be_handed_one_internally_consistent_evidence_document" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_course_of_another_store_answers_exactly_as_a_course_that_never_existed" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="76f4204b-9708-205a-70e4-a109f329291a">
+      <Execution id="06a42aa7-3a7e-450c-81dc-bb3a99e2f730" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_course_of_another_store_answers_exactly_as_a_course_that_never_existed" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="12236fca-3687-651b-a737-00ef35e87eb9">
+      <Execution id="9b20415d-1d92-4ea6-9b87-35585852b10e" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_admin_of_another_venue_is_refused_while_that_venues_own_admin_is_admitted" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f63d3928-9d5f-6e99-4e8d-c78cce3d819f">
+      <Execution id="6c4cf905-2284-4d68-b496-1c7d5b2cb704" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_admin_of_another_venue_is_refused_while_that_venues_own_admin_is_admitted" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.A_power_user_reaches_every_stores_training_which_is_why_it_cannot_be_the_proof" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="72c80307-ee98-37f3-75fc-906735541431">
+      <Execution id="86f50c37-fab1-484b-a7b2-1dbe56e2c360" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="A_power_user_reaches_every_stores_training_which_is_why_it_cannot_be_the_proof" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Wire.TrainingWireTests.An_anonymous_caller_is_401_and_never_reaches_the_module_at_all" storage="/users/svendaneel/okam/wt-trainwire-abort/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="608a965c-f7c2-521e-24dc-eea764cf7f9f">
+      <Execution id="66623f07-b27d-43ee-a6ab-2be9e3f12aba" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Wire.TrainingWireTests" name="An_anonymous_caller_is_401_and_never_reaches_the_module_at_all" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="12236fca-3687-651b-a737-00ef35e87eb9" executionId="9b20415d-1d92-4ea6-9b87-35585852b10e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1b41ccc-ead9-c5dc-f6e1-2ee2441e5dd9" executionId="230b1793-c59b-40e2-8f38-3cb6a868563e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="60ed903c-dd6b-2df2-f2b5-9e56c85e0b0d" executionId="0c53176f-015d-442d-9dbe-4aeeeb778e67" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="db7bbcaf-e67c-14a0-e7de-56d5a02839cb" executionId="30df3eff-d5c8-4907-81a4-f8d206d00ac3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="117f95f3-0835-92ac-5e10-3b6e65db744a" executionId="0a1366ae-1ebf-4543-963e-33b66ef16b9e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="209b1ace-4b6c-c30f-0ea9-7a68e7f3db71" executionId="254de696-537d-4c5e-9df7-f706d646c8df" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="af0b42e3-2252-7f38-5831-bd555adda05c" executionId="a1543eea-3bcd-4115-a39f-f3478814af84" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ccf05df6-c765-c7bb-ba47-f80ce5b55376" executionId="e0485c68-27b9-449e-8309-7b6d0aa1a57b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9be225f7-ae3f-9e88-7121-df5762e720b2" executionId="1115c82f-83c0-4b8a-9a75-30d518023f24" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5cc3d3c0-8c77-e188-8831-895c07e671f7" executionId="e1bb3b0a-9ba1-4ad7-bc7d-606ffe614f6a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="83938a74-4459-0193-c270-5f4e03cb0398" executionId="2d2e880d-f95f-42e8-9238-9755709420ed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="72c80307-ee98-37f3-75fc-906735541431" executionId="86f50c37-fab1-484b-a7b2-1dbe56e2c360" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="81c707af-2c9c-da3e-4d48-68edf067fc91" executionId="98264f35-4ccf-4f7d-9278-ada6477aac8c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="608a965c-f7c2-521e-24dc-eea764cf7f9f" executionId="66623f07-b27d-43ee-a6ab-2be9e3f12aba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2bdab203-09aa-e13e-b417-301e5f8dc27d" executionId="8e94d4ba-9fb5-4b79-8d52-18a609d22da0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f63d3928-9d5f-6e99-4e8d-c78cce3d819f" executionId="6c4cf905-2284-4d68-b496-1c7d5b2cb704" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39e153a5-1e5c-83ff-36e1-37029750d97b" executionId="bac42849-1e89-40b6-a884-22735d007f29" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76f4204b-9708-205a-70e4-a109f329291a" executionId="06a42aa7-3a7e-450c-81dc-bb3a99e2f730" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bdc3c2bf-15b0-90e4-5f34-e4f6f0d04206" executionId="1907f612-a4bc-4755-a136-93ee17b53a35" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="baf5b21c-93a8-963d-ac58-df74e47b7bb7" executionId="d163517c-e0c3-4e03-96bc-b77405af925e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a0f7af19-fea0-ba36-c47a-a741c0e379d5" executionId="7712f640-7f94-4429-b793-ed79d80840d9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="49e512f2-c19e-9c02-c087-fdea86465d50" executionId="24de9b78-b3c9-483f-b09d-5139d177680b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c45a8d5a-a0f6-814c-ca8e-1f742a0244cd" executionId="7a3515eb-c801-41a8-a88f-bd0940ad2e3d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="78d8858e-b62a-7c4d-dbb9-5827bbd2d739" executionId="7c830249-111e-4380-ba27-54cbcfda61b7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dc43f152-b90c-ab70-f96e-9c08b48b6f78" executionId="ccb52137-5f1f-4414-b801-73f19d964a31" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a5bfe44f-eb38-f76e-08e5-18c2c833c253" executionId="d818d983-78b5-4648-a025-20abca9a6a53" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="26" executed="26" passed="25" failed="1" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.90]   Discovering: WebApi.Tests
+[xUnit.net 00:00:01.15]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:01.15]   Starting:    WebApi.Tests
+[xUnit.net 00:00:12.52]       Assert.All() Failure: 1 out of 3 items in the collection did not pass.
+[xUnit.net 00:00:12.52]       [1]: Item: WebApi.Entities.Training.TrainingAuditEvent
+[xUnit.net 00:00:12.52]            Xunit.Sdk.EqualException: Assert.Equal() Failure
+[xUnit.net 00:00:12.52]                                 ↓ (pos 11)
+[xUnit.net 00:00:12.52]            Expected: wire-admin-a
+[xUnit.net 00:00:12.52]            Actual:   wire-admin-b
+[xUnit.net 00:00:12.52]                                 ↑ (pos 11)
+[xUnit.net 00:00:12.52]               at Xunit.Assert.Equal(String expected, String actual, Boolean ignoreCase, Boolean ignoreLineEndingDifferences, Boolean ignoreWhiteSpaceDifferences) in /_/src/xunit.assert/Asserts/StringAsserts.cs:line 326
+[xUnit.net 00:00:12.52]               at Xunit.Assert.Equal(String expected, String actual) in /_/src/xunit.assert/Asserts/StringAsserts.cs:line 234
+[xUnit.net 00:00:12.52]               at WebApi.Tests.Wire.TrainingWireTests.&lt;&gt;c.&lt;An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved&gt;b__33_1(TrainingAuditEvent d) in /Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/Wire/TrainingWireTests.cs:line 1031
+[xUnit.net 00:00:12.52]               at Xunit.Assert.&lt;&gt;c__DisplayClass11_0`1.&lt;All&gt;b__0(T item, Int32 index) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 34
+[xUnit.net 00:00:12.52]               at Xunit.Assert.All[T](IEnumerable`1 collection, Action`2 action) in /_/src/xunit.assert/Asserts/CollectionAsserts.cs:line 61
+[xUnit.net 00:00:12.52]       Stack Trace:
+[xUnit.net 00:00:12.52]         /Users/svendaneel/okam/wt-trainwire-abort/WebApi.Tests/Wire/TrainingWireTests.cs(1031,0): at WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved()
+[xUnit.net 00:00:12.52]         --- End of stack trace from previous location ---
+[xUnit.net 00:00:12.61]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="Svens-MacBook-Pro" outcome="Error" timestamp="2026-08-06T15:35:31.3665830+02:00">
+        <Text>[xUnit.net 00:00:12.52]     WebApi.Tests.Wire.TrainingWireTests.An_evidence_read_records_who_asked_attributed_to_the_token_the_bearer_handler_resolved [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

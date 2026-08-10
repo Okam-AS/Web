@@ -1,0 +1,6 @@
+
+[1m== GROWTH 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+[31mFAILED: PowerUser login (+4790000001) returned no token: {"message":"Failed to login"}
+    That sign-in needs the API started with AppSettings__AdminUserPhoneNumber=+4790000001, which
+    is what puts that number in PowerUserRole and enables the no-SMS code. demo-up.sh does it.[0m

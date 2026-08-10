@@ -1,0 +1,76 @@
+bench built: Api-modules on feature/restaurant-modules
+=================================================================
+  PIN BENCH -- can a probe refuse to answer from the wrong ref?
+  declared world: feature/restaurant-modules
+=================================================================
+
+=== ACT 0  baseline -- the scratch checkout IS on the declared ref ===
+     be.dir.repo      ok      present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       ok      present
+     be.dir.ref       ok      feature/restaurant-modules
+   PASS  green when it should be green, and it NAMES the repo it read: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+
+=== ACT 1  THE MUTATION -- a sibling lane checks out its own branch here ===
+   injecting: git checkout lane/meals-grace-pins in the SCRATCH worktree
+     be.dir.repo      ok      present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       unconf  present
+     be.dir.ref       ok      lane/meals-grace-pins
+   the probe says:  expected=feature/restaurant-modules   found=lane/meals-grace-pins   pin=unconf
+   PASS  RED, and BOTH refs are named: declared feature/restaurant-modules, found lane/meals-grace-pins
+   FALSIFYING -- weaken the pin to a probe with no declared ref in it
+   with 'exists' in place of the declared-ref clause, the SAME mutation reads: pin=ok
+   PASS  falsified: the declared-ref clause is load-bearing. Without it the wrong ref
+         sails through green -- which is the state this plan is in today.
+
+=== ACT 2  a detached HEAD -- a real state, and not a branch ===
+     be.dir.repo      ok      present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       unconf  present
+     be.dir.ref       ok      dde3df53914083b309f6b7d238c199ace725c1e3
+   PASS  RED on a detached HEAD, and the found value is the sha dde3df53914083b309f6b7d238c199ace725c1e3, not a branch name
+
+=== ACT 3  the dir is a DIFFERENT REPO -- a ref with no repo behind it ===
+   injecting: point Api-modules/.git at the OTHER repo's worktree,
+   which is ALSO on feature/restaurant-modules -- right branch name, wrong repo
+     be.dir.repo      unconf  present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Other/.git/worktrees/Other-modules
+     be.dir.pin       ok      present
+     be.dir.ref       ok      feature/restaurant-modules
+   PASS  RED, and be.dir.gitdir NAMES the repo it actually found: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Other/.git/worktrees/Other-modules
+         A branch check alone cannot see this: the branch name was correct.
+
+=== ACT 4  the dir is gone entirely ===
+     be.dir.repo      unconf  present
+     be.dir.gitdir    unconf  /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       ok      present
+     be.dir.ref       ok      feature/restaurant-modules
+   PASS  RED on absence, and retain-and-mark kept the last value beside the mark
+         (blanking it would erase the fact that there ever WAS an answer)
+
+=== ACT 5  back on the declared ref -- a guard must be able to go green again ===
+     be.dir.repo      ok      present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       ok      present
+     be.dir.ref       ok      feature/restaurant-modules
+   PASS  green again: this is a guard, not a permanent red nobody reads
+
+=== ACT 6  THE LIMIT -- shown, not claimed ===
+     be.dir.repo      ok      present
+     be.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench/Api/.git/worktrees/Api-modules
+     be.dir.pin       ok      present
+     be.dir.ref       ok      feature/restaurant-modules
+   PASS  the pin is green at dde3df53914083b309f6b7d238c199ace725c1e3 and green at 6188a22298ac0eff57cd234623826f1e52a23a18.
+         Branch IDENTITY is what this instrument answers. Branch POSITION
+         -- which commit, how far behind -- it does not, and it must not be
+         read as if it did. Position is what commits_behind_integration in
+         WORLD.json answers, and that one IS a stamp, so it goes stale.
+         No commit-level probe is offered here: the only file a probe could
+         read for it is refs/heads/<branch>, which vanishes into packed-refs
+         and would red for a reason that has nothing to do with drift.
+
+=================================================================
+  caught+falsified: 8     failures: 0
+=================================================================
+  bench kept at /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-bench

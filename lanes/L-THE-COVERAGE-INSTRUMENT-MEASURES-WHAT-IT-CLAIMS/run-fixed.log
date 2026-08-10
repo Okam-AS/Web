@@ -1,0 +1,8 @@
+Test Suites: 151 passed, 151 total
+Tests:       3568 passed, 3568 total
+Time:        8.349 s
+Failed to collect coverage from components/molecules/ReceiptModal.vue
+Failed to collect coverage from components/onboarding/OnboardingProductImages.vue
+Failed to collect coverage from pages/admin/wolt-menu.vue
+Failed to collect coverage from pages/admin/offers.vue
+Failed to collect coverage from pages/admin/products.vue

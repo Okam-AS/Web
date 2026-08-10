@@ -1,0 +1,200 @@
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."TimeZone"
+      FROM "Stores" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Country"
+      FROM "Stores" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__localDate_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."ShiftAssignmentId", "w"."StaffMemberId", "w"."RoleId", "w"."StartsUtc", "w"."EndsUtc", "w"."UnpaidBreakMinutes"
+      FROM "WorkforceShiftAssignments" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" = 'Published' AND "w"."LocalBusinessDate" = @__localDate_1
+      ORDER BY "w"."StartsUtc", "w"."ShiftAssignmentId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__fromLocal_1='?' (DbType = DateTime), @__toLocalInclusive_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."StaffMemberId", "w"."LocalBusinessDate", "w"."StartsUtc", "w"."EndsUtc", "w"."UnpaidBreakMinutes"
+      FROM "WorkforceShiftAssignments" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" = 'Published' AND "w"."StaffMemberId" IS NOT NULL AND "w"."LocalBusinessDate" >= @__fromLocal_1 AND "w"."LocalBusinessDate" <= @__toLocalInclusive_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__fromUtc_1='?' (DbType = DateTime), @__sessionCeilingUtc_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."ClockSessionId", "w"."StaffMemberId", "w"."OpenedUtc", "w"."ClosedUtc"
+      FROM "WorkforceClockSessions" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."OpenedUtc" >= @__fromUtc_1 AND "w"."OpenedUtc" < @__sessionCeilingUtc_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__dayStartUtc_1='?' (DbType = DateTime), @__dayEndUtc_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "WorkforceScheduleRevisions" AS "w"
+          WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" = 'Published' AND "w"."RangeStartUtc" <= @__dayStartUtc_1 AND "w"."RangeEndUtc" >= @__dayEndUtc_2)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__dayEndUtc_1='?' (DbType = DateTime), @__dayStartUtc_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "WorkforceScheduleRevisions" AS "w"
+          WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" <> 'Published' AND "w"."RangeStartUtc" < @__dayEndUtc_1 AND "w"."RangeEndUtc" > @__dayStartUtc_2)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__flagKey_1='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Enabled"
+      FROM "StoreFeatureFlags" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0 AND "s"."FlagKey" = @__flagKey_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."StoreId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."LastProcessedAtUtc", "m"."LastProcessedJournalEntryId"
+      FROM "MarginProjectionWatermarks" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT MAX("j"."JournalEntryId")
+      FROM "JournalEntries" AS "j"
+      WHERE "j"."StoreId" = @__storeId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__windowFrom_1='?' (DbType = DateTime), @__windowTo_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."JournalEntryId", "m"."BusinessDate", "m"."NetSalesMinor"
+      FROM "MarginSalesFacts" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0 AND "m"."BusinessDate" >= @__windowFrom_1 AND "m"."BusinessDate" <= @__windowTo_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."CurrencyCode"
+      FROM "Stores" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__localDate_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."ShiftAssignmentId", "w"."StaffMemberId", "w"."RoleId", "w"."StartsUtc", "w"."EndsUtc", "w"."UnpaidBreakMinutes"
+      FROM "WorkforceShiftAssignments" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" = 'Published' AND "w"."LocalBusinessDate" = @__localDate_1
+      ORDER BY "w"."StartsUtc", "w"."ShiftAssignmentId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__fromLocal_1='?' (DbType = DateTime), @__toLocalInclusive_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."StaffMemberId", "w"."LocalBusinessDate", "w"."StartsUtc", "w"."EndsUtc", "w"."UnpaidBreakMinutes"
+      FROM "WorkforceShiftAssignments" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."State" = 'Published' AND "w"."StaffMemberId" IS NOT NULL AND "w"."LocalBusinessDate" >= @__fromLocal_1 AND "w"."LocalBusinessDate" <= @__toLocalInclusive_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__fromUtc_1='?' (DbType = DateTime), @__sessionCeilingUtc_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."ClockSessionId", "w"."StaffMemberId", "w"."OpenedUtc", "w"."ClosedUtc"
+      FROM "WorkforceClockSessions" AS "w"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."OpenedUtc" >= @__fromUtc_1 AND "w"."OpenedUtc" < @__sessionCeilingUtc_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."StoreId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."LastProcessedAtUtc", "m"."LastProcessedJournalEntryId"
+      FROM "MarginProjectionWatermarks" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT MAX("j"."JournalEntryId")
+      FROM "JournalEntries" AS "j"
+      WHERE "j"."StoreId" = @__storeId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__windowFrom_1='?' (DbType = DateTime), @__windowTo_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."JournalEntryId", "m"."BusinessDate", "m"."NetSalesMinor"
+      FROM "MarginSalesFacts" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0 AND "m"."BusinessDate" >= @__windowFrom_1 AND "m"."BusinessDate" <= @__windowTo_2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."CurrencyCode"
+      FROM "Stores" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.WorkforceAttendanceController.GetLabourBand (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.2155ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Workforce.WorkforceLabourBandResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.WorkforceAttendanceController.GetLabourBand (WebApi) in 1.4522ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.WorkforceAttendanceController.GetLabourBand (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/workforce/stores/4101/attendance/labour-band?date=2026-07-07 - 200 2404 application/json;+charset=utf-8 2.1805ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/workforce/stores/4101/staff - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "ListStaff", controller = "WorkforceStaff"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListStaff(Int32) on controller WebApi.Controllers.WorkforceStaffController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__userId_1='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."StaffMemberId", "w"."ActiveFromUtc", "w"."ActiveToUtc", "w"."CapabilityGrants", "w"."ConcurrencyVersion", "w"."CreatedAtUtc", "w"."EmployerEffectiveFromUtc", "w"."EmployerEffectiveToUtc", "w"."EmploymentNumber", "w"."IsActive", "w"."LegalEmployerId", "w"."OperatorId", "w"."PayrollNumber", "w"."StoreId", "w"."WorkforcePersonId"
+      FROM "WorkforceStaffMembers" AS "w"
+      INNER JOIN "WorkforcePersons" AS "w0" ON "w"."WorkforcePersonId" = "w0"."WorkforcePersonId"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."IsActive" AND "w0"."ApplicationUserId" = @__userId_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__flagKey_1='?' (Size = 16)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Enabled"
+      FROM "StoreFeatureFlags" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0 AND "s"."FlagKey" = @__flagKey_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "WorkforceStaffMembers" AS "w"
+          WHERE "w"."StoreId" = @__storeId_0)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."StaffMemberId", "w"."ActiveFromUtc", "w"."ActiveToUtc", "w"."CapabilityGrants", "w"."ConcurrencyVersion", "w"."CreatedAtUtc", "w"."EmployerEffectiveFromUtc", "w"."EmployerEffectiveToUtc", "w"."EmploymentNumber", "w"."IsActive", "w"."LegalEmployerId", "w"."OperatorId", "w"."PayrollNumber", "w"."StoreId", "w"."WorkforcePersonId", "w0"."DisplayName", "w0"."State"
+      FROM "WorkforceStaffMembers" AS "w"
+      INNER JOIN "WorkforcePersons" AS "w0" ON "w"."WorkforcePersonId" = "w0"."WorkforcePersonId"
+      WHERE "w"."StoreId" = @__storeId_0
+      ORDER BY "w0"."DisplayName"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 0.3226ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[WebApi.Models.Workforce.WorkforceStaffSummary, WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi) in 0.4858ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/workforce/stores/4101/staff - 200 401 application/json;+charset=utf-8 1.0867ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/workforce/stores/4101/staff - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "ListStaff", controller = "WorkforceStaff"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListStaff(Int32) on controller WebApi.Controllers.WorkforceStaffController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__userId_1='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."StaffMemberId", "w"."ActiveFromUtc", "w"."ActiveToUtc", "w"."CapabilityGrants", "w"."ConcurrencyVersion", "w"."CreatedAtUtc", "w"."EmployerEffectiveFromUtc", "w"."EmployerEffectiveToUtc", "w"."EmploymentNumber", "w"."IsActive", "w"."LegalEmployerId", "w"."OperatorId", "w"."PayrollNumber", "w"."StoreId", "w"."WorkforcePersonId"
+      FROM "WorkforceStaffMembers" AS "w"
+      INNER JOIN "WorkforcePersons" AS "w0" ON "w"."WorkforcePersonId" = "w0"."WorkforcePersonId"
+      WHERE "w"."StoreId" = @__storeId_0 AND "w"."IsActive" AND "w0"."ApplicationUserId" = @__userId_1
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.2064ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi) in 0.3222ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.WorkforceStaffController.ListStaff (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/workforce/stores/4101/staff - 403 220 application/problem+json;+charset=utf-8 0.9715ms
+Results File: /Users/svendaneel/okam/wt-pdffamily/WebApi.Tests/TestResults/merged-5df07afa.trx
+
+Passed!  - Failed:     0, Passed:  4571, Skipped:    12, Total:  4583, Duration: 5 m 53 s - WebApi.Tests.dll (net8.0)

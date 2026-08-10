@@ -1,0 +1,128 @@
+[
+  {
+    "name": "THE DECISIVE ONE: woltDeliveryStatusLabel returns a Norwegian literal again",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the whole wolt switch reverts to literals with no dictionary at all",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "dineHomeDeliveryStatusLabel returns a Norwegian literal again",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "NotSet is dropped from the wolt map",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the carried DropoffCompleted is silently deleted",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a word is invented for an event the column cannot hold",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "two wolt statuses are wired to each other's words",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the wolt lookup uses `in`, so a prototype property resolves a function",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the dineHome lookup uses `in`, so a prototype property resolves a function",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the wolt fallback resolves the dineHome sentence",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "NotSet stops sharing the fallback sentence",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a German value is replaced by its Norwegian one",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a second German value is corrupted",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the German fallback sentence is corrupted",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a German key is deleted entirely, so the build falls back to Norwegian",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a Norwegian word the pre-lane switch returned is reworded",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the Norwegian fallback sentence is reworded",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an English key is emptied",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "THE ORIGINAL DEFECT RESTORED: OrderCard grows its shadowing copy back",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the card renders the raw wire value instead of the label",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the two rows are wired to each other's label function",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  }
+]

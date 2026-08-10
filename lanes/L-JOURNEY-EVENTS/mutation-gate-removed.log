@@ -1,0 +1,87 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4061
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3061/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 20.61s
+[WebServer] ✔ Client: Compiled successfully in 24.12s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 933 MB (RSS: 1.74 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3061/
+  ✘  1 [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:124:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture (43.1s)
+
+
+  1) [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:124:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-test="refusal"]')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('[data-test="refusal"]')
+
+
+      303 |
+      304 |       const refusal = page.locator('[data-test="refusal"]');
+    > 305 |       await expect(refusal).toBeVisible();
+          |                             ^
+      306 |       await expect(refusal).toContainText(REFUSED_HEADING);
+      307 |       // THE RIGHT REFUSAL, not merely a refusal. The gate answers the same 404 an unknown link gets,
+      308 |       // so a guest must not be told the venue's configuration — and a run where this arrived as
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/events-enquiry-to-settlement.spec.js:305:29
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:284:22)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/events-enquiry-to-settlement.spec.js:291:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/events-enquiry-to-settlement.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/events-enquiry-to-settlement.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/events-enquiry-to-settleme-82195-ses-while-the-module-is-off-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/events-enquiry-to-settlement.spec.js:124:1 › A private booking runs from a public enquiry to a settled statement, and the accept refuses while the module is off @fixture 

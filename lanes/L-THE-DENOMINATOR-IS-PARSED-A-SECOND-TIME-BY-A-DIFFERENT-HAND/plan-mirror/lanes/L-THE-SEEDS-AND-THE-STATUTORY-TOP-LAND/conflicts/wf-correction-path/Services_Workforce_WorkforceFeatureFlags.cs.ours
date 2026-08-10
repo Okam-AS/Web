@@ -1,0 +1,187 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using WebApi.Services.Platform.FeatureFlags;
+using WebApi.Services.Workforce.Interfaces;
+
+namespace WebApi.Services.Workforce
+{
+    /// <summary>
+    /// The default <see cref="IWorkforceFeatureFlags"/> implementation. It returns the spec §9.1
+    /// DEFAULT-OFF flag state (every stage flag off except <c>workforce.setup</c>), mirroring the static
+    /// default the W1 context endpoint already reports (<c>WorkforceStaffService.DefaultFeatureFlags</c>).
+    /// It is now the FALLBACK layer under <see cref="StoreBackedWorkforceFeatureFlags"/>: when no per-store
+    /// override row exists in the shared feature-flag store, this compile-time default answers (§9.2
+    /// kill-switch — the clock write surface is read-only by default). Tests inject a provider whose
+    /// <c>workforce.clock</c> flag is on/off to exercise both branches.
+    ///
+    /// <para><b>Declared is not advertised.</b> One of the nine declared flags stages a surface that exists
+    /// only as reads, so no flag may gate it — it is WITHHELD from <see cref="Describe"/> with its reason
+    /// in <see cref="Withheld"/>, measured behaviourally by <c>WorkforceFlagCensus</c> rather than read off
+    /// this file. <c>GET /context</c> still reports the whole family (see <see cref="All"/>), so a client
+    /// never has to INFER a stage; a withheld flag reports its default, which is the truth and the one answer
+    /// an operator cannot change.</para>
+    /// </summary>
+    public class WorkforceFeatureFlags : IWorkforceFeatureFlags
+    {
+        /// <summary>
+        /// The per-store MODULE flag — the store-level refinement of module visibility, and the sibling of
+        /// <c>Events.Core</c> / <c>Margin.Module</c> / <c>meals.module</c> / <c>growth.module</c>. Every other
+        /// flag in this family is a STAGE flag inside a module a store already has; this one answers whether
+        /// the store has the module at all.
+        /// <para>
+        /// Resolved through <see cref="IWorkforceModuleGate"/>, NOT through
+        /// <see cref="IsEnabledAsync"/>'s plain <c>override ?? default</c>: an absent row falls back to a
+        /// data probe (does this store already have a Workforce engagement) so that turning the gate on
+        /// cannot dark a store that is already using the module. An EXPLICIT row always wins, in both
+        /// directions, or the flag would be a lever that lies.
+        /// </para>
+        /// </summary>
+        public const string Module = "workforce.module";
+
+        /// <summary>The stage-1 setup flag (spec §9.1) — the only flag ON by default.</summary>
+        public const string Setup = "workforce.setup";
+
+        /// <summary>The stage-3 schedule-publication flag (spec §9.1).</summary>
+        public const string Publication = "workforce.publication";
+
+        /// <summary>The stage self-service flag (spec §9.1).</summary>
+        public const string SelfService = "workforce.selfservice";
+
+        /// <summary>The stage shift-exchange flag (spec §9.1).</summary>
+        public const string Exchange = "workforce.exchange";
+
+        /// <summary>The stage-5 clock write flag (spec §9.1).</summary>
+        public const string Clock = "workforce.clock";
+
+        /// <summary>The stage-5 personalliste flag (spec §9.1). Withheld from the catalog — see <see cref="Withheld"/>.</summary>
+        public const string PersonnelList = "workforce.personnel-list";
+
+        /// <summary>
+        /// The stage-6 export flag (spec §9.1). Its enforcement point is the W5 timesheet WRITE surface —
+        /// approve (endpoint 28) and the export batch (endpoint 29) both resolve through
+        /// <c>RequireWriteCapabilityAsync(..., Export, ...)</c>. Everything W5 READS is deliberately
+        /// ungated, including the download of a batch already sent: §9.2 and journey WFJ-15 require a
+        /// disabled write flag to leave reads and exports readable, and the W6 hours CSV keeps working
+        /// whatever this flag says.
+        /// </summary>
+        public const string Export = "workforce.export";
+
+        /// <summary>The stage dispatch flag (spec §9.1).</summary>
+        public const string Dispatch = "workforce.dispatch";
+
+        /// <summary>
+        /// The ONE declaration of the family: key, title and compile-time default together, in §9.1 stage
+        /// order. <see cref="All"/>, <see cref="Describe"/> and <see cref="DefaultFor"/> are all DERIVED from
+        /// this list, so a flag cannot be served-but-unadvertised or advertised-but-unserved.
+        /// <para>
+        /// This shape is deliberate and is the <c>Events.Settlement</c> lesson (86cb4d25) applied here: that
+        /// bug existed because a second hand-maintained list of the family's keys sat beside
+        /// <c>Describe()</c> and drifted from it. Add a flag here once; never write a second list of the keys
+        /// (the derived projections above are not one — they cannot disagree with this).
+        /// </para>
+        /// </summary>
+        private static readonly IReadOnlyList<FeatureFlagDescriptor> Declared = new List<FeatureFlagDescriptor>
+        {
+            new FeatureFlagDescriptor(Module, "Workforce", "Module (store surfaces)", false),
+            new FeatureFlagDescriptor(Setup, "Workforce", "Setup", true),
+            new FeatureFlagDescriptor(Publication, "Workforce", "Schedule publication", false),
+            new FeatureFlagDescriptor(SelfService, "Workforce", "Self-service", false),
+            new FeatureFlagDescriptor(Exchange, "Workforce", "Shift exchange", false),
+            new FeatureFlagDescriptor(Clock, "Workforce", "POS clock write", false),
+            new FeatureFlagDescriptor(PersonnelList, "Workforce", "Personalliste", false),
+            new FeatureFlagDescriptor(Export, "Workforce", "Export", false),
+            new FeatureFlagDescriptor(Dispatch, "Workforce", "Dispatch", false),
+        };
+
+        /// <summary>
+        /// The declared flags deliberately kept OUT of the operator catalog, each with the reason it cannot
+        /// be a lever. The one left stages a surface that exists only as READS, and §9.2 forbids gating a
+        /// read — so it is not a flag awaiting an enforcement point, it is a flag whose enforcement point
+        /// would be unlawful.
+        /// <para>
+        /// This reason lived in <c>WorkforceStageFlagGateTests.SurfacelessFlags</c>, where it exempted the
+        /// flag from that suite's own census while leaving it ADVERTISED — so an operator could still flip
+        /// <c>workforce.personnel-list</c>, watch <c>GET /context</c> report the stage live, and get no
+        /// behaviour change. That is the same defect the census was written to end, one level up.
+        /// Advertising a flag is a promise that flipping it does something; the honest treatment of a flag
+        /// that cannot keep that promise is to withhold it and say why, which is what
+        /// <c>TrainingFeatureFlags.Withheld</c> established.
+        /// </para>
+        /// <para>
+        /// The whole family is still reported by <c>GET /workforce/{store}/context</c> (see <see cref="All"/>),
+        /// so no client contract moves: a withheld flag reports its compile-time default, which is the truth
+        /// and the one answer an operator cannot change. A row leaves this dictionary in the SAME commit that
+        /// gives its flag an enforcement point.
+        /// </para>
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> Withheld =
+            new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                [PersonnelList] =
+                    "Stage 5 turns the personalliste on ALONGSIDE workforce.clock, and its only surfaces are "
+                    + "reads (endpoints 30 and 46). §9.2 forbids gating a read, and here that is not merely a "
+                    + "convention: a venue that is clocking is legally obliged to be able to produce the "
+                    + "register at the workplace (bokføringsforskriften § 8-5-6), so no flag may take it away. "
+                    + "The flag stages a surface it must never remove, so it can have no enforcement point at "
+                    + "all — advertising it would offer an operator a switch for a stage no switch can move.",
+            };
+
+        /// <summary>
+        /// Advertised flags that deliberately ship ON, with the reason — the exception to deny-closed, stated
+        /// where the decision lives rather than tolerated silently by whatever reads <see cref="Describe"/>.
+        /// </summary>
+        public static readonly IReadOnlyDictionary<string, string> DefaultOn =
+            new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                [Setup] =
+                    "§9.1 stage 1: setup is the stage a store is IN the moment the module becomes visible to "
+                    + "it, so a store whose workforce.module gate has just opened must be able to build its "
+                    + "roster without a second flip. It is not a fleet-wide behaviour change, because nothing "
+                    + "behind it is reachable until workforce.module opens for that store — which is itself "
+                    + "deny-closed.",
+            };
+
+        /// <summary>
+        /// The full <c>workforce.*</c> family in stage order — the set <c>GET /context</c> reports, advertised
+        /// or withheld. Wider than <see cref="Describe"/> on purpose: a client is told the state of every
+        /// stage, an operator is offered a switch only for the stages that have one.
+        /// </summary>
+        public static readonly IReadOnlyList<string> All = Declared.Select(d => d.Key).ToList();
+
+        private static readonly IReadOnlyDictionary<string, bool> Defaults =
+            Declared.ToDictionary(d => d.Key, d => d.DefaultEnabled, StringComparer.Ordinal);
+
+        private static readonly IReadOnlyList<FeatureFlagDescriptor> Advertised =
+            Declared.Where(d => !Withheld.ContainsKey(d.Key)).ToList();
+
+        /// <summary>The compile-time default for a flag (false for an unknown flag) — the fallback the store-backed layer uses.</summary>
+        public static bool DefaultFor(string flag)
+        {
+            bool enabled;
+            return flag != null && Defaults.TryGetValue(flag, out enabled) && enabled;
+        }
+
+        /// <summary>
+        /// The Workforce contribution to the shared feature-flag catalog (each module declares its own flags
+        /// from its own namespace, so the shared catalog never imports Workforce), and — by construction, see
+        /// <see cref="StoreBackedWorkforceFeatureFlags"/> — the exact set of <c>workforce.*</c> keys that are
+        /// per-store toggleable.
+        /// <para>
+        /// The <see cref="Withheld"/> keys are not here: they gate nothing and can gate nothing, and
+        /// advertising them would offer operators switches for stages no switch can move.
+        /// </para>
+        /// </summary>
+        public static IReadOnlyList<FeatureFlagDescriptor> Describe()
+        {
+            return Advertised;
+        }
+
+        public Task<bool> IsEnabledAsync(int storeId, string flag, CancellationToken ct = default(CancellationToken))
+        {
+            return Task.FromResult(DefaultFor(flag));
+        }
+    }
+}

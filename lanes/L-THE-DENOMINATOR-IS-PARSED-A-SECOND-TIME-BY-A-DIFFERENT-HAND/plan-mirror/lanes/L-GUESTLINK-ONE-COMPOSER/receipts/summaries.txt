@@ -1,0 +1,24 @@
+### baseline
+Passed!  - Failed:     0, Passed:  4638, Skipped:    12, Total:  4650, Duration: 6 m 51 s - WebApi.Tests.dll (net8.0)
+
+### focus-green
+Passed!  - Failed:     0, Passed:    80, Skipped:     0, Total:    80, Duration: 11 s - WebApi.Tests.dll (net8.0)
+
+### m1-inline-restored
+Failed!  - Failed:     6, Passed:    74, Skipped:     0, Total:    80, Duration: 5 s - WebApi.Tests.dll (net8.0)
+
+Failed WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "/") [1 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "/events") [< 1 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkOriginTests.An_origin_that_is_not_an_absolute_http_origin_is_refused_and_nothing_is_mailed(publicBaseUrl: "file:///srv/guest-web") [< 1 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.Every_production_caller_of_the_composer_is_named_here [122 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_guest_page_address_is_composed_in_exactly_one_production_file [188 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_outbox_mail_path_composes_through_the_composer [< 1 ms]
+### m2-correct-inline
+Failed!  - Failed:     3, Passed:    77, Skipped:     0, Total:    80, Duration: 4 s - WebApi.Tests.dll (net8.0)
+
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.Every_production_caller_of_the_composer_is_named_here [123 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_guest_page_address_is_composed_in_exactly_one_production_file [122 ms]
+Failed WebApi.Tests.Events.EventsGuestLinkSoleComposerTests.The_outbox_mail_path_composes_through_the_composer [1 ms]
+### after
+Passed!  - Failed:     0, Passed:  4675, Skipped:    12, Total:  4687, Duration: 7 m 15 s - WebApi.Tests.dll (net8.0)
+

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "the moved row keeps its old holder",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the moved row keeps its old type",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a known receiver gets a second row again",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an unknown receiver gets a second row again",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the handover copy is taken after the reassignment",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  }
+]

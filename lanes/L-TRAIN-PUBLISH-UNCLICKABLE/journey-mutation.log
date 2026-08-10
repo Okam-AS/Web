@@ -1,0 +1,103 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4098
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3098/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 14.91s
+[WebServer] ✔ Client: Compiled successfully in 17.66s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.27 GB (RSS: 1.98 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3098/
+  ✘  1 [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture (31.7s)
+
+
+  1) [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 
+
+    TimeoutError: locator.click: Timeout 8000ms exceeded.
+    Call log:
+      - waiting for locator('[data-test="version-publish"]')
+        - locator resolved to <button type="button" data-v-476c99e0="" data-test="version-publish" class="trn-btn trn-btn--small">↵                  Publiser↵                </button>
+      - attempting click action (trial run)
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <p data-v-86835500="" class="trn-form__hint">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84="" data-v-70f5b8c5="" class="trn-page__column">…</div> subtree intercepts pointer events
+        - retrying click action (trial run)
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - <p data-v-86835500="" class="trn-form__hint">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84="" data-v-70f5b8c5="" class="trn-page__column">…</div> subtree intercepts pointer events
+        - retrying click action (trial run)
+          - waiting 100ms
+        15 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - <p data-v-86835500="" class="trn-form__hint">↵    Dette er beviset på at de fem stegene over g…</p> from <div data-v-3007fc84="" data-v-70f5b8c5="" class="trn-page__column">…</div> subtree intercepts pointer events
+         - retrying click action (trial run)
+           - waiting 500ms
+
+
+      235 |       //    no mouse can reach — unlike `force: true` (fires at the coordinates regardless, hitting
+      236 |       //    whatever covers it) or `dispatchEvent` (proves the handler, never the control).
+    > 237 |       await page.locator('[data-test="version-publish"]').click({ trial: true, timeout: 8000 });
+          |                                                           ^
+      238 |
+      239 |       // 2. The cause, named directly, so a regression says WHY rather than just "click timed out".
+      240 |       //    The table is allowed to be wider than its column — that is what the scroll container is
+        at fn (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/training-course-to-evidence.spec.js:237:59)
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:387:28)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/training-course-to-evidence.spec.js:214:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/training-course-to-evidence.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/training-course-to-evidence.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/training-course-to-evidenc-f764e--SERVER-calls-it-not-passed-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/training-course-to-evidence.spec.js:63:1 › A manager opens Training, publishes a course version, files a failing score, and the SERVER calls it not passed @fixture 

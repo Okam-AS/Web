@@ -1,0 +1,53 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/consumer/meals-module-dark.spec.js:51:1 › a deployment with Company Meals switched off gives the guest an ordinary checkout, not an error @fixture (16.1s)
+
+
+  1) [chromium] › test/e2e/journeys/consumer/meals-module-dark.spec.js:51:1 › a deployment with Company Meals switched off gives the guest an ordinary checkout, not an error @fixture 
+
+    Error: expect(locator).toHaveCount(expected) failed
+
+    Locator:  getByTestId('meals-company-option')
+    Expected: 0
+    Received: 1
+    Timeout:  15000ms
+
+    Call log:
+      - Expect "toHaveCount" with timeout 15000ms
+      - waiting for getByTestId('meals-company-option')
+        34 × locator resolved to 1 element
+           - unexpected value "1"
+
+
+      83 |       // Not "disabled", not "shown with a reason" — absent. `CheckoutMeals` renders nothing when the
+      84 |       // company list is empty, and the list is empty because the entry read was refused.
+    > 85 |       await expect(page.getByTestId('meals-company-option')).toHaveCount(0);
+         |                                                              ^
+      86 |       await expect(page.getByTestId('meals-reserved')).toHaveCount(0);
+      87 |       await expect(page.getByTestId('meals-exceeds')).toHaveCount(0);
+      88 |       return 'no company option, no reservation strip, no shortfall notice';
+        at fn (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-module-dark.spec.js:85:62)
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:28)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-module-dark.spec.js:82:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-module-dark-a-deploy-32708-inary-checkout-not-an-error-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-module-dark.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output-consumer/meals-module-dark-a-deploy-32708-inary-checkout-not-an-error-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-module-dark-a-deploy-32708-inary-checkout-not-an-error-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output-consumer/meals-module-dark-a-deploy-32708-inary-checkout-not-an-error-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/consumer/meals-module-dark.spec.js:51:1 › a deployment with Company Meals switched off gives the guest an ordinary checkout, not an error @fixture 

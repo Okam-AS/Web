@@ -1,0 +1,52 @@
+===========================================================
+  ANTI-DRIFT DEMO -- injected drift, nobody told the system
+===========================================================
+  tree under test : /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on
+  bench           : /var/folders/lx/2ys8sqh90gb3dhpjvnv5wtc40000gn/T/okam-drift-bench
+
+  NOT IN THIS CHECKOUT: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/docs/plan/plan.md
+    the plan hub itself. The 2026-08-06 trunk landing (11be859) kept the code and left every docs/ and
+    lanes/ path on wip/session-2026-08-06-all-work, so no checkout of feature/restaurant-modules carries
+    a plan. Point DRIFT_DEMO_SRC at a checkout that has docs/plan/, or run `plan init` in one.
+
+  NOT IN THIS CHECKOUT: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/.claude/hooks/plan-pulse.sh
+    the UserPromptSubmit hook ACT 3 measures. .claude/ is excluded by this repo's own .gitignore ON PURPOSE,
+    so no checkout of this branch will ever carry it and no landing can fix that. Install the plan-hub skill
+    into .claude/hooks/, or set DRIFT_DEMO_PULSE to wherever the hook lives.
+
+  NOT IN THIS CHECKOUT: http://127.0.0.1:8766/plan.html
+    nothing answers there. This is the page the owner actually opens, and ACT 5 is about what that page hides.
+    Serve it with `plan serve --port 8766` from a checkout that has docs/plan/. NOTE: plan serve REFUSES
+    while PLAN_ACTOR is set -- the page is the owner's guard, not an agent's -- so from an agent shell the
+    only route is `plan render --html --out F` and DRIFT_DEMO_HUB=file://F, which curl reads directly.
+
+  3 input(s) absent -- the acts that need them will SKIP, not guess.
+
+=== ACT 1  a checkout quietly moves to a lane branch ===
+   injecting: git checkout lane/somelane in the sibling repo
+   guard says: on_expected=False ancestor=False behind=2
+   PASS  caught: named the wrong branch AND the two landed commits it is missing
+   FALSIFYING -- removing world.config, re-running the IDENTICAL injection
+   PASS  falsified: with the guard off the same drift reports 'unknown', not 'false'
+         (and NOT 'true' -- an absent guard must never read as conformance)
+
+=== ACT 2  a probe's source vanishes underneath a recorded fact ===
+   SKIP  no plan to injure
+         wanted: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/docs/plan/plan.md + /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/docs/plan/intent.md, plus `plan` and python3 on PATH
+
+=== ACT 3  the wake channel vs. a clerk who filters ===
+   SKIP  the wake channel could not be exercised
+         wanted: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/.claude/hooks/plan-pulse.sh (+ /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/docs/plan/plan.md and `plan` on PATH)
+
+=== ACT 4  THE MISS -- a false sentence with no fact behind it ===
+   SKIP  there was no plan to lie in
+         wanted: /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/verify-elsewhere/a-path-it-was-never-authored-on/docs/plan/plan.md (+ `plan` on PATH)
+
+=== ACT 5  THE SECOND MISS -- caught, recorded, and invisible to the reader ===
+   SKIP  nothing is serving the page the owner opens
+         wanted: http://127.0.0.1:8766/plan.html -- start it with `plan serve --port 8766`
+
+===========================================================
+  caught+falsified: 2     shown-uncatchable: 0
+  failures: 0     skipped for absent inputs: 4
+===========================================================

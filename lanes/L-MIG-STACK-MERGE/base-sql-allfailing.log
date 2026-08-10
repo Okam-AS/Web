@@ -1,0 +1,301 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-msm-base/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[testcontainers.org 00:00:00.08] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 28.4.0
+  Kernel Version: 6.10.14-linuxkit
+  API Version: 1.51
+  Operating System: Docker Desktop
+  Total Memory: 7.65 GB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/svendaneel/Library/Containers/com.docker.docker/Data/docker-cli.sock
+[testcontainers.org 00:00:00.21] Docker container 72bb2de0026a created
+[testcontainers.org 00:00:00.24] Start Docker container 72bb2de0026a
+[testcontainers.org 00:00:00.37] Wait for Docker container 72bb2de0026a to complete readiness checks
+[testcontainers.org 00:00:01.40] Docker container 72bb2de0026a ready
+[testcontainers.org 00:00:01.44] Docker container be3c47c9dd3e created
+[testcontainers.org 00:00:01.45] Start Docker container be3c47c9dd3e
+[testcontainers.org 00:00:01.57] Wait for Docker container be3c47c9dd3e to complete readiness checks
+[testcontainers.org 00:00:01.59] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container be3c47c9dd3e
+[testcontainers.org 00:00:01.67] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container be3c47c9dd3e
+[testcontainers.org 00:00:09.43] Docker container be3c47c9dd3e ready
+[xUnit.net 00:00:30.72]     WebApi.Tests.Margin.MarginW1MigrationLineageTests.Has_no_pending_model_changes_after_the_margin_wave [FAIL]
+  Failed WebApi.Tests.Margin.MarginW1MigrationLineageTests.Has_no_pending_model_changes_after_the_margin_wave [1 s]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Margin.MarginW1MigrationLineageTests.Has_no_pending_model_changes_after_the_margin_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Margin/MarginW1MigrationLineageTests.cs:line 81
+   at WebApi.Tests.Margin.MarginW1MigrationLineageTests.Has_no_pending_model_changes_after_the_margin_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Margin/MarginW1MigrationLineageTests.cs:line 82
+--- End of stack trace from previous location ---
+[testcontainers.org 00:00:30.10] Delete Docker container be3c47c9dd3e
+[testcontainers.org 00:00:31.37] Docker container d713691673b2 created
+[testcontainers.org 00:00:31.41] Start Docker container d713691673b2
+[testcontainers.org 00:00:32.14] Wait for Docker container d713691673b2 to complete readiness checks
+[testcontainers.org 00:00:32.18] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container d713691673b2
+[testcontainers.org 00:00:32.30] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container d713691673b2
+[testcontainers.org 00:00:41.51] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container d713691673b2
+[testcontainers.org 00:00:43.64] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container d713691673b2
+[testcontainers.org 00:00:44.88] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container d713691673b2
+[testcontainers.org 00:00:45.14] Docker container d713691673b2 ready
+[xUnit.net 00:00:58.61]     WebApi.Tests.Meals.MealsW1MigrationLineageTests.Has_no_pending_model_changes_after_the_meals_wave [FAIL]
+  Failed WebApi.Tests.Meals.MealsW1MigrationLineageTests.Has_no_pending_model_changes_after_the_meals_wave [262 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Meals.MealsW1MigrationLineageTests.Has_no_pending_model_changes_after_the_meals_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs:line 86
+   at WebApi.Tests.Meals.MealsW1MigrationLineageTests.Has_no_pending_model_changes_after_the_meals_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW1MigrationLineageTests.cs:line 86
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:00.50]     WebApi.Tests.Meals.MealsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [FAIL]
+  Failed WebApi.Tests.Meals.MealsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [182 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Meals.MealsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW2MigrationLineageTests.cs:line 72
+   at WebApi.Tests.Meals.MealsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW2MigrationLineageTests.cs:line 72
+--- End of stack trace from previous location ---
+[xUnit.net 00:01:00.80]     WebApi.Tests.Meals.MealsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [FAIL]
+  Failed WebApi.Tests.Meals.MealsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [181 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Meals.MealsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW3MigrationLineageTests.cs:line 82
+   at WebApi.Tests.Meals.MealsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Meals/MealsW3MigrationLineageTests.cs:line 82
+--- End of stack trace from previous location ---
+[testcontainers.org 00:00:59.98] Delete Docker container d713691673b2
+[testcontainers.org 00:01:00.31] Docker container 4ebcdba0844c created
+[testcontainers.org 00:01:00.32] Start Docker container 4ebcdba0844c
+[testcontainers.org 00:01:00.47] Wait for Docker container 4ebcdba0844c to complete readiness checks
+[testcontainers.org 00:01:00.48] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 4ebcdba0844c
+[testcontainers.org 00:01:00.57] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 4ebcdba0844c
+[testcontainers.org 00:01:09.67] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 4ebcdba0844c
+[testcontainers.org 00:01:09.90] Docker container 4ebcdba0844c ready
+[xUnit.net 00:01:29.77]     WebApi.Tests.Training.TrainingW1MigrationLineageTests.Has_no_pending_model_changes_after_the_training_wave [FAIL]
+  Failed WebApi.Tests.Training.TrainingW1MigrationLineageTests.Has_no_pending_model_changes_after_the_training_wave [254 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Training.TrainingW1MigrationLineageTests.Has_no_pending_model_changes_after_the_training_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Training/TrainingW1MigrationLineageTests.cs:line 66
+   at WebApi.Tests.Training.TrainingW1MigrationLineageTests.Has_no_pending_model_changes_after_the_training_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Training/TrainingW1MigrationLineageTests.cs:line 66
+--- End of stack trace from previous location ---
+[testcontainers.org 00:01:28.82] Delete Docker container 4ebcdba0844c
+[testcontainers.org 00:01:29.21] Docker container 6369646e99bb created
+[testcontainers.org 00:01:29.23] Start Docker container 6369646e99bb
+[testcontainers.org 00:01:29.50] Wait for Docker container 6369646e99bb to complete readiness checks
+[testcontainers.org 00:01:29.51] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 6369646e99bb
+[testcontainers.org 00:01:29.62] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 6369646e99bb
+[testcontainers.org 00:01:38.76] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 6369646e99bb
+[testcontainers.org 00:01:39.13] Docker container 6369646e99bb ready
+[xUnit.net 00:02:03.72]     WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run [FAIL]
+  Failed WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run [12 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.<>c__DisplayClass3_0.<<GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run>g__Create|0>d.MoveNext() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 54
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.<>c__DisplayClass3_0.<<GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run>g__Create|0>d.MoveNext() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 54
+--- End of stack trace from previous location ---
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 57
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatch_requests_create_exactly_one_run() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 64
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:15.82]     WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once [FAIL]
+  Failed WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once [12 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 82
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 83
+   at WebApi.Tests.Growth.GrowthDispatchLinearizationSqlServerTests.GRW_DISPATCH_001_two_concurrent_dispatchers_send_each_recipient_exactly_once() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 117
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:27.32]     WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.A_retry_reusing_the_stable_client_key_deduplicates_at_the_provider [FAIL]
+  Failed WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.A_retry_reusing_the_stable_client_key_deduplicates_at_the_provider [11 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.A_retry_reusing_the_stable_client_key_deduplicates_at_the_provider() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 184
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.A_retry_reusing_the_stable_client_key_deduplicates_at_the_provider() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 185
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.A_retry_reusing_the_stable_client_key_deduplicates_at_the_provider() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 198
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:39.03]     WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.Duplicate_provider_client_key_is_rejected_by_the_unique_index [FAIL]
+  Failed WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.Duplicate_provider_client_key_is_rejected_by_the_unique_index [11 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.Duplicate_provider_client_key_is_rejected_by_the_unique_index() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 143
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.Duplicate_provider_client_key_is_rejected_by_the_unique_index() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 145
+   at WebApi.Tests.Growth.GrowthProviderClientKeyIdempotencyTests.Duplicate_provider_client_key_is_rejected_by_the_unique_index() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchLinearizationSqlServerTests.cs:line 172
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:39.35]     WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes [FAIL]
+  Failed WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes [323 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs:line 73
+   at WebApi.Tests.Growth.GrowthDispatchMigrationLineageTests.Growth_dispatch_migration_is_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchMigrationLineageTests.cs:line 73
+--- End of stack trace from previous location ---
+[xUnit.net 00:02:50.96]     WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_under_the_production_retry_strategy_creates_the_run_graph [FAIL]
+  Failed WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_under_the_production_retry_strategy_creates_the_run_graph [10 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_under_the_production_retry_strategy_creates_the_run_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 43
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_under_the_production_retry_strategy_creates_the_run_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 44
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_under_the_production_retry_strategy_creates_the_run_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 56
+--- End of stack trace from previous location ---
+[xUnit.net 00:03:01.29]     WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_is_idempotent_under_the_retry_strategy_no_duplicate_graph [FAIL]
+  Failed WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_is_idempotent_under_the_retry_strategy_no_duplicate_graph [10 s]
+  Error Message:
+   System.InvalidOperationException : Sequence contains no elements.
+  Stack Trace:
+     at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.ShapedQueryCompilingExpressionVisitor.SingleAsync[TSource](IAsyncEnumerable`1 asyncEnumerable, CancellationToken cancellationToken)
+   at WebApi.Services.Growth.GrowthDispatchService.CreateOrGetRunAsync(Int32 storeId, Int64 newsletterId, String userId, CancellationToken cancellationToken) in /Users/svendaneel/okam/wt-msm-base/Services/Growth/GrowthDispatchService.cs:line 316
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_is_idempotent_under_the_retry_strategy_no_duplicate_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 72
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_is_idempotent_under_the_retry_strategy_no_duplicate_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 74
+   at WebApi.Tests.Growth.GrowthDispatchRetryStrategySqlServerTests.CreateOrGetRun_is_idempotent_under_the_retry_strategy_no_duplicate_graph() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthDispatchRetryStrategySqlServerTests.cs:line 88
+--- End of stack trace from previous location ---
+[xUnit.net 00:03:01.74]     WebApi.Tests.Growth.GrowthMigrationLineageTests.Growth_migration_is_present_on_the_certified_chain_and_has_no_pending_changes [FAIL]
+  Failed WebApi.Tests.Growth.GrowthMigrationLineageTests.Growth_migration_is_present_on_the_certified_chain_and_has_no_pending_changes [123 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Growth.GrowthMigrationLineageTests.Growth_migration_is_present_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthMigrationLineageTests.cs:line 80
+   at WebApi.Tests.Growth.GrowthMigrationLineageTests.Growth_migration_is_present_on_the_certified_chain_and_has_no_pending_changes() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Growth/GrowthMigrationLineageTests.cs:line 80
+--- End of stack trace from previous location ---
+[testcontainers.org 00:03:00.31] Delete Docker container 6369646e99bb
+[testcontainers.org 00:03:00.71] Docker container 2a9756efe403 created
+[testcontainers.org 00:03:00.72] Start Docker container 2a9756efe403
+[testcontainers.org 00:03:00.97] Wait for Docker container 2a9756efe403 to complete readiness checks
+[testcontainers.org 00:03:00.98] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 2a9756efe403
+[testcontainers.org 00:03:01.07] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 2a9756efe403
+[testcontainers.org 00:03:10.20] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 2a9756efe403
+[testcontainers.org 00:03:10.42] Docker container 2a9756efe403 ready
+[xUnit.net 00:03:45.27]     WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically [FAIL]
+  Failed WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically [11 s]
+  Error Message:
+   Assert.Equal() Failure
+Expected: 1
+Actual:   2
+  Stack Trace:
+     at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 60
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+--- End of stack trace from previous location ---
+[xUnit.net 00:04:53.42]     WebApi.Tests.Workforce.WorkforceMigrationLineageTests.Has_no_pending_model_changes_after_the_workforce_wave [FAIL]
+  Failed WebApi.Tests.Workforce.WorkforceMigrationLineageTests.Has_no_pending_model_changes_after_the_workforce_wave [120 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceMigrationLineageTests.Has_no_pending_model_changes_after_the_workforce_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceMigrationLineageTests.cs:line 122
+   at WebApi.Tests.Workforce.WorkforceMigrationLineageTests.Has_no_pending_model_changes_after_the_workforce_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceMigrationLineageTests.cs:line 122
+--- End of stack trace from previous location ---
+[xUnit.net 00:04:54.89]     WebApi.Tests.Workforce.WorkforceW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [FAIL]
+  Failed WebApi.Tests.Workforce.WorkforceW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [248 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW2MigrationLineageTests.cs:line 81
+   at WebApi.Tests.Workforce.WorkforceW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW2MigrationLineageTests.cs:line 81
+--- End of stack trace from previous location ---
+[xUnit.net 00:04:56.01]     WebApi.Tests.Workforce.WorkforceW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [FAIL]
+  Failed WebApi.Tests.Workforce.WorkforceW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [190 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW3MigrationLineageTests.cs:line 85
+   at WebApi.Tests.Workforce.WorkforceW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW3MigrationLineageTests.cs:line 85
+--- End of stack trace from previous location ---
+[xUnit.net 00:04:57.41]     WebApi.Tests.Workforce.WorkforceW4MigrationLineageTests.Has_no_pending_model_changes_after_the_w4_wave [FAIL]
+[testcontainers.org 00:04:55.92] Delete Docker container 2a9756efe403
+[testcontainers.org 00:04:56.39] Docker container 454a1bb0d8dc created
+[testcontainers.org 00:04:56.40] Start Docker container 454a1bb0d8dc
+[testcontainers.org 00:04:56.55] Wait for Docker container 454a1bb0d8dc to complete readiness checks
+[testcontainers.org 00:04:56.56] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 454a1bb0d8dc
+[testcontainers.org 00:04:56.65] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 454a1bb0d8dc
+  Failed WebApi.Tests.Workforce.WorkforceW4MigrationLineageTests.Has_no_pending_model_changes_after_the_w4_wave [148 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Workforce.WorkforceW4MigrationLineageTests.Has_no_pending_model_changes_after_the_w4_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW4MigrationLineageTests.cs:line 141
+   at WebApi.Tests.Workforce.WorkforceW4MigrationLineageTests.Has_no_pending_model_changes_after_the_w4_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Workforce/WorkforceW4MigrationLineageTests.cs:line 141
+--- End of stack trace from previous location ---
+[testcontainers.org 00:05:05.76] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 454a1bb0d8dc
+[testcontainers.org 00:05:06.01] Docker container 454a1bb0d8dc ready
+[xUnit.net 00:05:18.52]     WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave [FAIL]
+  Failed WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave [275 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs:line 297
+   at WebApi.Tests.Events.EventsMigrationLineageTests.Has_no_pending_model_changes_after_the_events_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsMigrationLineageTests.cs:line 297
+--- End of stack trace from previous location ---
+[xUnit.net 00:05:19.75]     WebApi.Tests.Events.EventsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [FAIL]
+  Failed WebApi.Tests.Events.EventsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave [192 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Events.EventsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsW2MigrationLineageTests.cs:line 176
+   at WebApi.Tests.Events.EventsW2MigrationLineageTests.Has_no_pending_model_changes_after_the_w2_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsW2MigrationLineageTests.cs:line 176
+--- End of stack trace from previous location ---
+[xUnit.net 00:05:20.22]     WebApi.Tests.Events.EventsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [FAIL]
+[testcontainers.org 00:05:18.78] Delete Docker container 454a1bb0d8dc
+  Failed WebApi.Tests.Events.EventsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave [152 ms]
+  Error Message:
+   Assert.False() Failure
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Events.EventsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsW3MigrationLineageTests.cs:line 177
+   at WebApi.Tests.Events.EventsW3MigrationLineageTests.Has_no_pending_model_changes_after_the_w3_wave() in /Users/svendaneel/okam/wt-msm-base/WebApi.Tests/Events/EventsW3MigrationLineageTests.cs:line 177
+--- End of stack trace from previous location ---
+Results File: /Users/svendaneel/okam/Web-modules/lanes/L-MIG-STACK-MERGE/trx/BASE-8e2b57de-sql-allfailing.trx
+
+Failed!  - Failed:    21, Passed:   224, Skipped:     0, Total:   245, Duration: 4 m 51 s - WebApi.Tests.dll (net8.0)

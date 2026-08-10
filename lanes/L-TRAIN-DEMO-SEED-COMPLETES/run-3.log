@@ -1,0 +1,110 @@
+
+[1m== TRAINING 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== TRAINING 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   before the lever: GET /context -> 200   (a previous run already lit this store)
+   flag training.setup = on
+   flag training.assignments = on
+   context: {"timeZone":"Europe/Oslo","fallback":false,"capabilities":["manage"]}
+
+[1m== TRAINING 3. Who the training is FOR (the Workforce roster, BY VALUE)[0m
+   passes: Nora Berg (1850c97c-afe7-49f0-ae8d-e61c4440dbe7)
+   fails then retakes: Jonas Lie (e00897ac-40ee-49d5-a067-bb3d4cd40c35)
+   holds the certificates: Astrid Vik (08fdc7d5-68ad-4fb6-aedb-0e93032b0856)
+
+[1m== TRAINING 4. Courses, and the version state machine[0m
+   adopted the course already on this screen: Alkoholservering og skjenkeregler (193639)
+   adopted the frozen v1 already published on this course
+   adopted the course already on this screen: Næringsmiddelhygiene og temperaturkontroll
+   adopted the frozen v1 already published on this course
+   adopted the editable draft v3 already on this course
+   the hygiene course carries v1 (Published, frozen) and v3 (Draft, editable)
+   adopted the course already on this screen: Brannvern og romningsveier
+   adopted the editable draft v1 already on this course
+
+[1m== TRAINING 5. Assignments -- by role, by person, and one that is OVERDUE[0m
+   adopted the assignment already on this screen: role Barista, due 2026-08-20T00:00:00
+   role-scoped: every Barista owes the hygiene course's frozen version
+   adopted the assignment already on this screen: person Nora Berg, due 2026-08-03T12:00:00
+   person-scoped: Nora Berg owes the alcohol course -- due 2026-08-03, i.e. OVERDUE
+   adopted the assignment already on this screen: person Jonas Lie, due 2026-09-05T12:00:00
+   probe: assigning a DRAFT version -> 400 Only a published course version can be assigned.
+
+[1m== TRAINING 6. Completions -- append-only, and the verdict is the SERVER'S[0m
+   adopted the attempt already on the record: Nora Berg pass
+   Nora Berg  92 % -> passed=true    (source ManagerRecorded -- the only source that exists today)
+   adopted the attempt already on the record: Jonas Lie fail
+   Jonas Lie 55 % -> passed=false
+   adopted the attempt already on the record: Jonas Lie retake
+   Jonas Lie 88 % -> passed=true     (a SECOND row -- the 55 % attempt is still on the record)
+   adopted the attempt already on the record: Astrid Vik hygiene
+   Astrid Vik 85 % on the hygiene course (threshold 80) -> passed=true
+   probe: a completion for a person who exists nowhere -> 400 The person reference does not identify a known person.
+
+[1m== TRAINING 7. The certificate vault -- four states, all DERIVED[0m
+   adopted the Expiring 'alkoholservering' already in this vault
+   Nora Berg, kommunal skjenkeopplaering -> Expiring
+   adopted the Expired 'naeringsmiddelhygiene' already in this vault
+   Jonas Lie, naeringsmiddelhygiene -> Expired
+   adopted the Valid 'forstehjelp' already in this vault
+   Astrid Vik, forstehjelp -> Valid
+   adopted the Valid 'fagbrev-kokk' already in this vault
+   Astrid Vik, fagbrev (NO expiry) -> Valid
+   expiring feed (30 days): [{"type":"forstehjelp","status":"Expired"},{"type":"naeringsmiddelhygiene","status":"Expired"},{"type":"alkoholservering","status":"Expiring"},{"type":"naeringsmiddelhygiene","status":"Expiring"}]
+
+[1m== TRAINING 8. The correction route -- the module's ONE compare-and-swap[0m
+   revision: AAAAAAAAQK4=
+   probe: PATCH with no If-Match -> 400 An If-Match revision header is required for this correction.
+   probe: PATCH with a garbled If-Match -> 400 The If-Match header does not carry a valid resource revision.
+   corrected the issuer; new revision AAAAAAAAQLQ=
+   probe: PATCH replaying the superseded revision -> 409 training.stale-version
+
+[1m== TRAINING 9. Competency holdings -- the inspector's question[0m
+   Nora Berg holds: {"keys":["alkoholservering"],"certs":[{"type":"alkoholservering","status":"Expiring","expiry":"2026-08-26T00:00:00"}]}
+   Jonas Lie holds: {"keys":["alkoholservering"],"certs":[]}
+
+[1m== TRAINING 10. The four reads the admin page issues, answered[0m
+   courses=6  assignments=3  completions=4  certificates=7
+
+[1m== TRAINING 11. The five stages an operator cannot even switch on (the lever's own refusal)[0m
+   lever probe  PUT /stores/1/feature-flags training.onboarding -> 400  {"message":"Unknown feature flag: training.onboarding"}
+   lever probe  PUT /stores/1/feature-flags training.checklists -> 400  {"message":"Unknown feature flag: training.checklists"}
+   lever probe  PUT /stores/1/feature-flags training.deviations -> 400  {"message":"Unknown feature flag: training.deviations"}
+   lever probe  PUT /stores/1/feature-flags training.competency-seam -> 400  {"message":"Unknown feature flag: training.competency-seam"}
+   lever probe  PUT /stores/1/feature-flags training.reminders -> 400  {"message":"Unknown feature flag: training.reminders"}
+   context reports all seven, the five withheld ones off: {"training.setup":true,"training.assignments":true,"training.onboarding":false,"training.checklists":false,"training.deviations":false,"training.competency-seam":false,"training.reminders":false}
+   probe: GET /onboarding/tracks -> 404  body=[]
+
+   TRAINING world is up on store 1.
+
+   Open  /admin/training-courses  as this world's manager (+4799681931).
+
+   What to look at, and what "working" looks like:
+
+     Courses      three subjects, and their version states differ on purpose. The hygiene course shows
+                  a frozen Published version beside an editable Draft; the fire-safety one has only a
+                  draft, and could not be assigned -- the seed printed that refusal above. A course
+                  this world already carried was adopted rather than duplicated, so running this again
+                  changes nothing on the screen instead of doubling it.
+     Assignments  one role-scoped, two person-scoped, and Nora Berg's is OVERDUE by three days.
+     Completions  four rows for three people. Jonas Lie has TWO: 55 % (failed) and 88 %
+                  (passed), against a threshold of 80 %. The failed one is still there, because
+                  the table is append-only and a retake is a new row.
+     Certificates Expired / Expiring / Valid / Valid-forever, all four derived from the expiry date
+                  against the store's calendar date. None of them blocks anything -- by design.
+     Holdings     ask for Nora Berg: they hold 'alkoholservering' because they PASSED the course carrying
+                  that key. Ask for Jonas Lie: they hold it too, on the retake -- and their expired
+                  hygiene certificate is simply absent, never reported as a failure.
+
+   What is NOT here, and is not a seeding gap:
+
+     * No worker surface. All 16 routes are management under /training/stores/{storeId};
+       /training/me/* does not exist, so nobody attests their own training and every completion reads
+       ManagerRecorded. TrainingCompletionSource.Quiz is declared and written by no production code.
+     * No onboarding, no checklists, no deviations -- the module's W2/W3 tables, none of which exist.
+       Their flags are withheld from the operator catalog rather than offered as switches that do
+       nothing: step 11 prints the refusal. docs/plans/PENDING-MIGRATIONS-LEDGER.md has the schema.
+     * No reminders. training.reminders is withheld too; there is no dispatcher behind it.
+     * No competency warning on the schedule. That is the module's headline differentiator and it is
+       NOT wired -- see docs/plans/PROOF-BENCHMARKS.md, TR-B5.

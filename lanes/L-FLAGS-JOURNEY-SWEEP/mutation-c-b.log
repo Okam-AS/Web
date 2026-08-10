@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/consumer/meals-funded-checkout.spec.js:25:1 › a guest puts lunch on the company tab and the company budget pays for it @fixture (15.8s)
+
+
+  1) [chromium] › test/e2e/journeys/consumer/meals-funded-checkout.spec.js:25:1 › a guest puts lunch on the company tab and the company budget pays for it @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('meals-company-option')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 15000ms
+      - waiting for getByTestId('meals-company-option')
+
+
+      44 |     await journey.step('the company payer strip offers the company tab', async () => {
+      45 |       const option = page.getByTestId('meals-company-option');
+    > 46 |       await expect(option).toBeVisible();
+         |                            ^
+      47 |       await expect(option).toContainText('Nordane');
+      48 |       const remaining = await page.getByTestId('meals-remaining').textContent();
+      49 |       await journey.shot('payer strip offers the company tab');
+        at fn (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-funded-checkout.spec.js:46:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:28)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/consumer/meals-funded-checkout.spec.js:44:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-funded-checkout-a-gu-0d45b--company-budget-pays-for-it-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-funded-checkout.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output-consumer/meals-funded-checkout-a-gu-0d45b--company-budget-pays-for-it-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output-consumer/meals-funded-checkout-a-gu-0d45b--company-budget-pays-for-it-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output-consumer/meals-funded-checkout-a-gu-0d45b--company-budget-pays-for-it-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/consumer/meals-funded-checkout.spec.js:25:1 › a guest puts lunch on the company tab and the company budget pays for it @fixture 

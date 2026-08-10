@@ -1,0 +1,212 @@
+{
+  "journey": "margin-supplier-to-plate",
+  "title": "A venue records a supplier, an article and a price, and a plate cost stops being unknown",
+  "status": "passed",
+  "startedAtUtc": "2026-08-09T11:42:58.791Z",
+  "finishedAtUtc": "2026-08-09T11:43:25.435Z",
+  "durationMs": 26644,
+  "capabilities": [
+    "margin.module.gate",
+    "margin.ingredients.author",
+    "margin.suppliers.author",
+    "margin.supplier-items.author",
+    "margin.supplier-items.costability-rule",
+    "margin.prices.effective-dated-append",
+    "margin.recipe.cost-preview",
+    "margin.menu-margin.read"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3941",
+  "apiBaseUrl": "http://127.0.0.1:5941",
+  "commit": "b704d45e14f503e8b5217f2de47fa0d93f5bcab0",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5941/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8",
+    "source": "stamp:artifacts/world/live/127-0-0-1-5941.json",
+    "short": "6d53280",
+    "detail": "branch HEAD, stamped by test/e2e/scripts/live-world.sh at 2026-08-09T11:37:28.438Z, pid 17024 (which was serving this origin) still running"
+  },
+  "backendServed": 110,
+  "backendSubjectServed": 96,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5941/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5941/user/login -> 200",
+    "GET http://127.0.0.1:5941/user -> 200",
+    "GET http://127.0.0.1:5941/stores/1/market -> 200",
+    "GET http://127.0.0.1:5941/margin/status?storeId=1 -> 404",
+    "GET http://127.0.0.1:5941/user -> 200",
+    "GET http://127.0.0.1:5941/user -> 200",
+    "GET http://127.0.0.1:5941/stores/1/feature-flags -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in, and find the supplier screen closed like the rest of the module",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:42:58.816Z",
+      "durationMs": 18843,
+      "detail": "stopped by Margin.Module",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "turn the module on, and find a store with suppliers and no ingredients",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:17.659Z",
+      "durationMs": 1368,
+      "detail": "2 suppliers, 0 ingredients, nothing priced",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "author the ingredient itself — NOT a starter, so it arrives unpriced",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:19.104Z",
+      "durationMs": 130,
+      "detail": "Smør mastered in kilo, with no price of any kind",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "a recipe that uses it has no cost, and the page says why and where to go",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:19.234Z",
+      "durationMs": 879,
+      "detail": "batch and per-portion both withheld; the notice names 1 unpriced line and links to the supplier screen",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "sell it as a dish and activate it — the margin is a floor, not a figure",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:20.113Z",
+      "durationMs": 368,
+      "detail": "sold at kr 30,00 net, plate cost a floor of kr 0,00, contribution and food cost withheld",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "record the supplier, and note it can be created but not re-edited",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:20.553Z",
+      "durationMs": 712,
+      "detail": "Vestland Meieri created and selected; its revision held only until the next reload",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "THE TRAP — an article with no pack size, marked preferred",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:21.265Z",
+      "durationMs": 128,
+      "detail": "Smør 10 kg kartong saved without a pack size and marked preferred — accepted, and useless",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "enter the invoice price anyway, exactly as a venue would",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:21.393Z",
+      "durationMs": 104,
+      "detail": "kr 900,00 per carton recorded and in force — on an article that cannot cost",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "AND THE RECIPE IS STILL UNPRICED — which is the point of the rule",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:21.588Z",
+      "durationMs": 676,
+      "detail": "supplier recorded, article recorded, price recorded — and the cost is still unknown",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "fix ONE field, and the plate cost appears",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:22.264Z",
+      "durationMs": 785,
+      "detail": "pack size 10 · kg · factor 1 — kr 900,00 per carton is now kr 90,00 per kilo",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "the plate cost, and the margin, to the øre",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:23.049Z",
+      "durationMs": 723,
+      "detail": "batch kr 36,00 · portion kr 4,50 · take-away 15,00 % · servering 11,25 %",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the supplier raises the price, and every figure follows it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:23.849Z",
+      "durationMs": 1510,
+      "detail": "kr 1 080,00 supersedes kr 900,00; plate kr 4,50 -> kr 5,40, food cost 15,00 % -> 18,00 %",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T11:43:25.434Z",
+      "durationMs": 1,
+      "detail": "110 backend responses; refused: only the dark-module status 404 (1 in this mode); 0 unexplained console error(s)",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "note",
+      "summary": "the preferred-article rule is only half driven by this walk",
+      "detail": "This step proves an INCOMPLETE article does not cost. It does not prove the harder half of `MarginPriceResolver`: that an incomplete PREFERRED article suppresses a COMPLETE rival, so an ingredient with two perfectly good priced suppliers resolves to no price at all. `utils/margin/supplier-model.js` calls that the case the file exists for, and `mrg_item_preferred_blocks` — which this walk does render — is the venue-facing warning for it. Driving it needs a second supplier selling the same ingredient; no journey in this repo builds one, so nothing here is evidence for that branch."
+    },
+    {
+      "severity": "note",
+      "summary": "the dark module refuses its own status read; the fixture does not",
+      "detail": "On the live backend the pre-lever visit to /admin/margin-suppliers was answered 404 `margin.not-found` on GET /margin/status (1 time(s)) — the module-invisible refusal MarginStatusController documents as MARG-L10 — and the page rendered the module-off blocker from that coded 404. The fixture serves /margin/status unconditionally (200 with flags.module:false), so this walk’s fixture captures all show zero refused requests where a real venue’s browser records one. The page handles both shapes; the fixture hid the refusal, not a defect."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmargin-suppliers\" to \"/admin?redirect=%2Fadmin%2Fmargin-suppliers&storeId=1\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmargin-suppliers\" to \"/admin?redirect=%2Fadmin%2Fmargin-suppliers&storeId=1\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failedRequests": [
+    {
+      "method": "GET",
+      "url": "http://127.0.0.1:5941/margin/status?storeId=1",
+      "status": 404
+    }
+  ],
+  "screenshots": [
+    "margin-supplier-to-plate/live-5941-unidentified/01-the-supplier-screen-empty.png",
+    "margin-supplier-to-plate/live-5941-unidentified/02-a-dish-whose-cost-side-is-unknown.png",
+    "margin-supplier-to-plate/live-5941-unidentified/03-a-price-on-an-article-that-cannot-cost.png",
+    "margin-supplier-to-plate/live-5941-unidentified/04-the-plate-cost-built-from-the-supplier-price.png",
+    "margin-supplier-to-plate/live-5941-unidentified/05-the-price-rise-and-what-it-did-to-the-margin.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "live-5941-6d53280",
+    "file": "artifacts/journeys/runs/margin-supplier-to-plate.live-5941-6d53280.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-5941-6d53280",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

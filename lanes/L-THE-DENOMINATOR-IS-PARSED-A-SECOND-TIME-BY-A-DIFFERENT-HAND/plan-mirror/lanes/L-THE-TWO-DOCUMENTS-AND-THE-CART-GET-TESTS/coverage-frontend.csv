@@ -1,0 +1,13 @@
+file,when,stmt_cov,stmt_total,stmt_pct,branch_cov,branch_total,branch_pct,fn_cov,fn_total,fn_pct
+utils/training/evidence.js,before,0,31,0,0,101,0,0,6,0
+utils/training/evidence.js,after,33,33,100,105,105,100,6,6,100
+utils/meals/statement-client.js,before,0,25,0,0,20,0,0,5,0
+utils/meals/statement-client.js,after,25,25,100,20,20,100,5,5,100
+core/services/cart-service.ts,before,2,46,4.34,0,8,0,0,10,0
+core/services/cart-service.ts,after,46,46,100,8,8,100,10,10,100
+core/models/cart/cart.ts,before,2,32,6.25,0,0,100,0,1,0
+core/models/cart/cart.ts,after,32,32,100,0,0,100,1,1,100
+store/index.js,before,0,97,0,0,61,0,0,43,0
+store/index.js,after,97,97,100,56,61,91.8,43,43,100
+TOTAL,before,5611,8698,64.5,3731,5330,70,1033,2221,46.51
+TOTAL,after,5845,8700,67.18,3922,5334,73.52,1104,2221,49.7

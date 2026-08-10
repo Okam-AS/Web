@@ -1,0 +1,23 @@
+```
+RETURN: L-TRIPLETEX-CREDIT
+brief: 0f20de86
+verdict: blocked
+evidence: Services/Tripletex/TripletexPosService.cs:285-312 (both default arms, verified); Services/Kassa/PosSettlementService.cs:378-381 (tender refused upstream); docs/plans/tripletex-plan.md:289-292 (reskontro posting needs customer id); base tier 4357/0/12/4369 at 34c6c103
+spec_gap: "the bookkeeping voucher for a company lunch literally reads CompanyAccount" is true of the code but not of production. No company lunch can reach a voucher line: PosSettlementService.cs:378-381 throws on any tender that is not Cash or IsTerminalPayment(), the only OrderPayment writers are that method's two branches (:302, :365), and the only journal-sale writers are FinalizeService:222/449/585, all POS-fed. PaymentTotalsJson today carries exactly Cash, DinteroTerminal, SurfboardTerminal. The defect is latent, not live.
+needs: +D-MEALS-CREDIT-ACCOUNT, +L-MIG-COMPANY-RECEIVABLE, +L-MEALS-POS-TENDER-WIRE
+reason: the account is a bookkeeping decision (C6), has no column to live in without a migration this lane may not author, and the settlement the exit criterion names cannot occur in production today
+log: Base 34c6c103, clean checkout, container-free tier: 4357 passed / 0 failed / 12 skipped / 4369 total. No after number: nothing built, tree left clean, no commit, no container, no migration.
+VERIFIED both default arms. PaymentAccountNumber:295-296 falls to config.AccountNumberReceivables; PaymentDescription:309-310 falls to paymentType.ToString(). Both private, used only at :155 and :232-234.
+VERIFIED SAF-T is correct for this tender: PaymentCode 12006 CUSTACCT (MasterData.cs:244-247), transType 11002 Kredittsalg (Transactions.cs:249-251).
+CORRECTION (overstatement): exposure is latent. The refusal at PosSettlementService.cs:378-381 is the only gate and it holds; no production code can write a CompanyAccount JournalPaymentLine.
+CORRECTION (understatement, larger than the brief): the Company Meals credit sale has NO production POS write path at all. The journey tests insert the journal receipt directly (MealsOrderLoopJourneyTests.cs:45-47 via MealsProjectionTestKit.InsertReceiptAsync, under the comment "POS sale settles -> capture"; MealsSaftJournalKit.cs:126 appends via JournalService). Funding capture, statement lines and SAF-T 11002 all sit downstream of a SALREC production cannot produce. The missing wire, not the voucher label, is the real gap.
+XZReportService does not filter (676, 714-724, 830). Widen the upstream guard and the tender flows straight into PaymentTotalsJson and into both default arms, unchanged.
+No test pins either default arm; PaymentDescription has no test at all. Nothing in 4369 tests would have caught it.
+Also measured: CompanyAccount is absent from OnlineSettledPaymentTypes (PaymentTypeExtensions.cs:67-68), so the online day voucher never sees it either. Both export paths are silent on this tender.
+BLOCKER 1 (bookkeeping). The account must be DISTINCT from AccountNumberReceivables or the double-count stands. TripletexAccountingExportProvider.cs:109-122 states the governing rule in this codebase: both sides of the same money must meet on the same account, which is why Dintero and Surfboard each got their own intermediary. The other side of a company credit sale is the company's bank transfer against an invoice, not a provider payout, so it needs its own account.
+BLOCKER 2 (schema). No column holds it. The sibling intermediary accounts live on TripletexConnection.cs:60-61; a third sibling is a migration, which this lane may not author.
+BLOCKER 3 (Tripletex mechanics, not in the brief). docs/plans/tripletex-plan.md:289-292: a posting to a reskontro account such as 1500 Kundefordringer additionally requires customer:{id}. TripletexPostingRequest.Customer exists (TripletexRequestModels.cs:43-45) but no Tripletex service ever sets it. The ruling must therefore also choose general interim account vs reskontro plus a MealsCompany-to-Tripletex customer mapping.
+Fix shape once ruled, roughly one lane: name every enum member in both switches with no default arm; anything unclassified goes to missingRoles (the existing pattern at :156) so the export refuses rather than misposts; description "Bedriftskonto (kredittsalg)"; pin derived from Enum.GetValues(typeof(PaymentType)), following MarginSalesEligibilityPredicateTests and EventsDepositPortReachableStateTests, asserting every member is deliberately named and that no description equals its own enum name.
+Deliberately did NOT land the description-only half: a Norwegian label on the wrong account is a confident-looking misposting, and making a company lunch block the store's whole Z export is a product call nobody has made.
+END RETURN
+```

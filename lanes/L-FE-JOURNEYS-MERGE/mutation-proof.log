@@ -1,0 +1,258 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4077
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.23 GB (RSS: 1.8 GB)
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+  ✘  1 [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture (26.1s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 6
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "authorization": "ABSENT",
+    +     "route": "invitations/session",
+    +   },
+    + ]
+
+      116 |       expect(inviteeCalls.length).toBeGreaterThan(0);
+      117 |       const unauthenticated = inviteeCalls.filter(call => call.authorization === 'ABSENT');
+    > 118 |       expect(unauthenticated).toEqual([]);
+          |                               ^
+      119 |       // …and the refusal on screen is about the CODE, not about the session. That distinction is the
+      120 |       // whole difference: a 401 renders as "Du er ikke logget inn lenger", which is what this page
+      121 |       // said to every invited employee before the fix.
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/meals-guest-claim.spec.js:118:31
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-fejmerge/test/e2e/support/journey.js:193:22)
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/meals-guest-claim.spec.js:110:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-guest-claim.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:46:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture 
+[WebServer] [fixture] listening on http://127.0.0.1:4077
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+
+Running 1 test using 1 worker
+
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.28 GB (RSS: 1.7 GB)
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+  ✘  1 [chromium] › test/e2e/journeys/growth-guest-consent.spec.js:51:1 › A guest reads the consent wording verbatim, is refused without ticking it, and then subscribes @fixture (1.0m)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/growth-guest-consent.spec.js:51:1 › A guest reads the consent wording verbatim, is refused without ticking it, and then subscribes @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('[data-test="unavailable"]')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 30000ms
+      - waiting for locator('[data-test="unavailable"]')
+
+
+      89 |       // The cold-compile navigation — see the note at the top of the body.
+      90 |       await page.goto('/subscribe/' + STORE, { timeout: 120000 });
+    > 91 |       await expect(page.locator('[data-test="unavailable"]')).toBeVisible({ timeout: 30000 });
+         |                                                               ^
+      92 |       await expect(page.locator('[data-test="consent"]')).toHaveCount(0);
+      93 |       return STORE + ' dark: ' + MODULE_FLAG + ' never overridden';
+      94 |     });
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/growth-guest-consent.spec.js:91:63
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-fejmerge/test/e2e/support/journey.js:193:22)
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/growth-guest-consent.spec.js:85:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-guest-consent-A-gue-1b625-king-it-and-then-subscribes-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/growth-guest-consent.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/growth-guest-consent-A-gue-1b625-king-it-and-then-subscribes-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/growth-guest-consent-A-gue-1b625-king-it-and-then-subscribes-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/growth-guest-consent-A-gue-1b625-king-it-and-then-subscribes-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/growth-guest-consent.spec.js:51:1 › A guest reads the consent wording verbatim, is refused without ticking it, and then subscribes @fixture 
+[WebServer] [fixture] listening on http://127.0.0.1:4077
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] [warn] You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] [warn] You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] [warn] Module `@nuxt/image` is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version `>=3.1.0` is required but currently using `2.17.1`
+[WebServer] [info] [@nuxt/content] Parsed 0 files in 0.0 seconds
+[WebServer] [info] [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] [info] [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+[WebServer] [info] Preparing project for development
+[WebServer] [info] Initial build may take a while
+
+Running 2 tests using 1 worker
+
+[WebServer] [info] Discovered Components: .nuxt/components/readme.md
+[WebServer] [success] Builder initialized
+[WebServer] [success] Nuxt files generated
+[WebServer] [warn] Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] [info] Waiting for file changes
+[WebServer] [info] Memory usage: 1.22 GB (RSS: 1.68 GB)
+[WebServer] [info] Listening on: http://192.168.68.110:3077/
+  ✘  1 [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture (31.5s)
+  ✘  2 [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture (12.2s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture 
+
+    TimeoutError: page.goto: Timeout 30000ms exceeded.
+    Call log:
+      - navigating to "http://127.0.0.1:3077/admin/margin-statements", waiting until "load"
+
+
+      56 |   async ({ page, journey }) => {
+      57 |     await journey.step('sign in, and be stopped by the module master', async () => {
+    > 58 |       await page.goto('/admin/margin-statements');
+         |                  ^
+      59 |       await page.waitForURL(/\/admin\?redirect=/, { timeout: 30000 });
+      60 |       await signIn(page, { phone: '99999999', code: 'AppSettings__DemoVerificationCode__REDACTED', expectPath: '/admin/margin-statements' });
+      61 |       await expect(page.locator('.mrgs-page__title')).toHaveText('Ukentlig marginoppgjør');
+        at fn (/Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/margin-statement-week.spec.js:58:18)
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-fejmerge/test/e2e/support/journey.js:193:28)
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/margin-statement-week.spec.js:57:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/margin-statement-week.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/margin-statement-week-A-ve-3c171-ises-it-and-finds-it-frozen-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.meals-company form')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('.meals-company form')
+
+
+      56 |       // identity in this world is a store admin and is refused here — measured, not assumed: this
+      57 |       // assertion failed against the manager's number before the PowerUser identity existed.
+    > 58 |       await expect(page.locator('.meals-company form')).toBeVisible();
+         |                                                         ^
+      59 |       return 'on /admin/meals-companies as ' + world.CONCIERGE_PHONE + ' (PowerUser)';
+      60 |     });
+      61 |
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/meals-admin-setup.spec.js:58:57
+        at JourneyRecorder.step (/Users/svendaneel/okam/wt-fejmerge/test/e2e/support/journey.js:193:22)
+        at /Users/svendaneel/okam/wt-fejmerge/test/e2e/journeys/meals-admin-setup.spec.js:48:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/meals-admin-setup.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [chromium] › test/e2e/journeys/margin-statement-week.spec.js:41:1 › A venue opens a week, enters its purchase spend, finalises it, and finds it frozen @fixture 
+    [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:31:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 

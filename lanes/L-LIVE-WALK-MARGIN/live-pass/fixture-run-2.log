@@ -1,0 +1,48 @@
+
+> okam-consumer@1.0.0 test:e2e
+> playwright test test/e2e/journeys/margin-supplier-to-plate.spec.js test/e2e/journeys/margin-recipe-to-margin.spec.js
+
+[WebServer] [fixture] listening on http://127.0.0.1:4941
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://192.168.68.111:3942/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+
+Running 2 tests using 1 worker
+
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 14.80s
+[WebServer] ✔ Client: Compiled successfully in 17.74s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.29 GB (RSS: 1.99 GB)
+[WebServer] ℹ Listening on: http://192.168.68.111:3942/
+  ✓  1 [chromium] › test/e2e/journeys/margin-recipe-to-margin.spec.js:51:1 › A chef switches Margin on, costs a recipe, sells it as a dish, and meets the statements gate @fixture (25.6s)
+[journey] margin-supplier-to-plate: filed as artifacts/journeys/runs/margin-supplier-to-plate.fixture.playwright.json.
+          artifacts/journeys/margin-supplier-to-plate.playwright.json still belongs to `live-5941-6d53280`, which this run did not outrank.
+          To hand it over deliberately, delete that file and run again.
+  ✓  2 [chromium] › test/e2e/journeys/margin-supplier-to-plate.spec.js:70:1 › A venue records a supplier, an article and a price, and a plate cost stops being unknown @live (8.6s)
+[teardown] returned core/ to an empty submodule mount
+
+  2 passed (37.2s)

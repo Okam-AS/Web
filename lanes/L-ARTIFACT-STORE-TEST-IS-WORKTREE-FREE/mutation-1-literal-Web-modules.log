@@ -1,0 +1,92 @@
+FAIL test/journey-artifact-store.test.js
+  the canonical slot
+    ✓ is not taken from a live pass by a fixture re-run of the same journey (14 ms)
+    ✓ is not taken from a live pass by a live run against a DIFFERENT build on the same port (12 ms)
+    ✓ IS taken by a live pass standing over a fixture pass, because live outranks fixture (12 ms)
+    ✓ IS taken by a live run that names its build from one that could not (11 ms)
+    ✓ is handed back by its own backend when that backend starts failing (11 ms)
+    ✓ is not taken by a WEAKER run even when that run is the most recent (13 ms)
+    ✓ is re-elected freely once the file is deleted — the documented way to hand it over (2 ms)
+  a canonical record that git keeps
+    ✓ is not overwritten by a re-run of its own lineage, which is how the workforce record was rewritten (43 ms)
+    ✓ is not overwritten by a run that OUTRANKS it — the case reordering rank would have missed (40 ms)
+    ✓ is not replaced by the provisional `running` record a run files before the browser opens (42 ms)
+    ✓ is regenerated the documented way — deleted, re-run, re-added — because a deleted file has no bytes to keep (32 ms)
+    ✓ is answered `false` outside a checkout, so the harnesses that copy these files into temp trees still write (41 ms)
+    ✓ is told apart from the ignored run output beside it, which `git check-ignore` cannot do (48 ms)
+  the record a run replaces with a worse one of its own backend
+    ✓ is kept whole, and the run that replaced it says where (11 ms)
+    ✓ is not itself lost when the SAME backend then fails again, or is killed mid-run (31 ms)
+    ✓ is NOT written when the replacement is not weaker — that is an ordinary re-run (12 ms)
+    ✓ is NOT written for a loser, which was never overwritten in the first place (11 ms)
+    ✓ names the kept file in the ledger too, so the append-only history points at it (12 ms)
+  a run that never finishes
+    ✓ leaves its own backend visibly unfinished rather than its predecessor passing (14 ms)
+    ✓ cannot take the canonical slot from another backend merely by starting (12 ms)
+    ✓ is replaced by its own final record when it does finish (11 ms)
+  the ledger
+    ✓ keeps every run, including the ones that lost the slot and the one that never finished (23 ms)
+  backend identity
+    ✓ takes the build a world script declared, over anything it could infer
+    ✓ asks the named checkout for its own HEAD when nothing declared one (38 ms)
+    ✕ asks whoever is holding the port what directory they are running from (132 ms)
+    ✓ does not inspect a process it has no business inspecting, nor a port nobody holds (56 ms)
+    ✓ is null rather than guessed when nothing can say — and null is not this repo's commit
+    ✓ keys a live backend by origin AND build, so one port cannot hold two builds at one name (1 ms)
+    ✓ lets the fixture answer for itself, under a name no reader can mistake for an API build (38 ms)
+    ✓ does not let a fixture run outrank a live one just because it can now name its build (11 ms)
+    ✓ keeps `+dirty` in the key, so a modified tree cannot overwrite the clean commit it sits on (1 ms)
+    ✓ reads a legacy artifact — one written before builds were recorded — as unidentified, not as a match (1 ms)
+    the world stamp
+      ✕ names the checkout the world script recorded, not the one holding the port (281 ms)
+      ✓ records a DIFFERENT build when a different checkout built the world (294 ms)
+      ✓ is refused when the world it describes is gone, and the run falls through to the port (279 ms)
+      ✓ is refused when its pid has been reused by a process it did not stamp (279 ms)
+      ✓ is refused when it is about a different origin, however it got that filename (148 ms)
+      ✓ outranks a declared build that disagrees, and says in the artifact what it overrode (150 ms)
+      ✓ records that the declaration agreed, when it did (146 ms)
+      ✓ leaves the declared build in charge when there is no stamp to prefer (1 ms)
+      ✓ is neither written nor read for an origin on another machine (63 ms)
+      ✓ refuses to stamp a world it cannot tie to a process it started, rather than writing an unverifiable one (148 ms)
+      ✓ records who wrote it, rather than claiming an authorship it does not have (256 ms)
+      ✓ keys a stamped dirty tree the same way every other route keys it (148 ms)
+
+  ● backend identity › asks whoever is holding the port what directory they are running from
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Web-modules"
+    Received: "wt-lane-tree"
+
+      432 |       // process is running out of — whatever that tree happens to be called.
+      433 |       expect(build.id).toMatch(/^[^@]+@[0-9a-f]{40}(\+dirty)?$/);
+    > 434 |       expect(build.id.split('@')[0]).toBe(SELF);
+          |                                      ^
+      435 |       // The checkout's name identifies it; its absolute path is the laptop's business and stays out of
+      436 |       // a file that gets pasted into reviews.
+      437 |       expect(JSON.stringify(build)).not.toContain(path.resolve(__dirname, '..'));
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:434:38)
+
+  ● backend identity › the world stamp › names the checkout the world script recorded, not the one holding the port
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "Web-modules"
+    Received: "wt-lane-tree"
+
+      599 |       // The answer the port would have given, and the one this run must NOT have taken: this process
+      600 |       // is running out of THIS checkout and holds that socket.
+    > 601 |       expect(store.buildFromListeningProcess(origin).id.split('@')[0]).toBe(SELF);
+          |                                                                        ^
+      602 |       expect(build.id.split('@')[0]).not.toBe(SELF);
+      603 |     });
+      604 |
+
+      at Object.<anonymous> (test/journey-artifact-store.test.js:601:72)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 42 passed, 44 total
+Snapshots:   0 total
+Time:        3.348 s, estimated 4 s
+Ran all test suites matching /test\/journey-artifact-store.test.js/i.

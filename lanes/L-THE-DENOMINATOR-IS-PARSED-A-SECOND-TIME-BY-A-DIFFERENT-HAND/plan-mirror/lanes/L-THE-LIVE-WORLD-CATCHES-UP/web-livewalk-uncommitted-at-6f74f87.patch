@@ -1,0 +1,725 @@
+diff --git a/components/admin/training/TrainingEvidenceDocument.vue b/components/admin/training/TrainingEvidenceDocument.vue
+index 8f231f7..5761c29 100644
+--- a/components/admin/training/TrainingEvidenceDocument.vue
++++ b/components/admin/training/TrainingEvidenceDocument.vue
+@@ -54,7 +54,7 @@
+         {{ $i('trn_ev_completions_empty') }}
+       </p>
+       <div v-else class="trn-ev__scroll">
+-        <table class="trn-table" data-test="evidence-completions">
++        <table class="trn-table trn-ev__table--completions" data-test="evidence-completions">
+           <thead>
+             <tr>
+               <th>{{ $i('trn_col_course') }}</th>
+@@ -132,7 +132,7 @@
+         {{ $i('trn_ev_certificates_empty') }}
+       </p>
+       <div v-else class="trn-ev__scroll">
+-        <table class="trn-table" data-test="evidence-certificates">
++        <table class="trn-table trn-ev__table--certificates" data-test="evidence-certificates">
+           <thead>
+             <tr>
+               <th>{{ $i('trn_col_type') }}</th>
+@@ -179,7 +179,7 @@
+         {{ $i('trn_ev_chain_empty') }}
+       </p>
+       <div v-else class="trn-ev__scroll">
+-        <table class="trn-table" data-test="evidence-chain">
++        <table class="trn-table trn-ev__table--chain" data-test="evidence-chain">
+           <thead>
+             <tr>
+               <th>{{ $i('trn_col_when') }}</th>
+@@ -493,4 +493,188 @@ export default {
+   white-space: pre-wrap;
+   word-break: break-word;
+ }
++
++/* ---- THE COPY THAT LEAVES THE BUILDING --------------------------------------------------------
++   The page's own print block decides that nothing but this document reaches the paper; this half
++   decides how the document sets on it. Between them they are what makes `trn_ev_page_intro`'s claim
++   — that this is the record «slik den kan legges fram ved tilsyn» — a thing the product can do
++   rather than a sentence it prints.
++
++   SCOPED, AND THAT IS THE GUARD. Every selector carries this component's own `data-v-` attribute, so
++   it can only match an element this component rendered and it is dead the moment the component
++   unmounts. An UNSCOPED `@media print` block would outlive the page in a Nuxt build and quietly
++   restyle the printing of every other admin screen; `pages/admin/events-pipeline.vue` records the
++   time this estate paid for a print stylesheet guarded by a body class instead.
++
++   ONE RENDERING FOR BOTH. There is no print-only markup tree here and no second assembly of the
++   record — the rules below change what SURROUNDS the same tables the screen shows. A separate print
++   template is the classic way a statutory sheet ends up carrying something the screen never did, or
++   the reverse, and on an append-only record either direction is a document disagreeing with itself.
++
++   THE THREE-STATE NOTES STAY ON THE PAPER. Idle, unknown and refused all print. A refusal handed
++   over as a sheet saying «the server declined» is a finding; the same refusal printed as a blank
++   page reads as a clean file, and this document exists to keep those two apart. */
++@media print {
++  .trn-ev__doc {
++    border: 0;
++    border-radius: 0;
++    padding: 0;
++    color: #000;
++  }
++
++  // A heading is never the last thing on a sheet of paper.
++  .trn-ev__head {
++    border-bottom: 1pt solid #000;
++    padding-bottom: 8pt;
++    margin-bottom: 10pt;
++    break-inside: avoid;
++    page-break-inside: avoid;
++    break-after: avoid;
++    page-break-after: avoid;
++  }
++
++  .trn-ev__subject { font-size: 13pt; }
++
++  .trn-ev__section {
++    font-size: 11pt;
++    margin-top: 14pt;
++    break-after: avoid;
++    page-break-after: avoid;
++  }
++
++  /* THE ONE RULE WITHOUT WHICH THE RECORD IS INCOMPLETE ON PAPER RATHER THAN MERELY UGLY.
++     `.trn-ev__scroll` is `overflow-x: auto` on screen, which is correct there — the chain is a
++     five-column table and its delta column carries whole JSON snapshots. A printer cannot scroll, so
++     an overflow container CLIPS: the columns past the page width simply do not exist on the sheet,
++     and the missing ones would be the actor and the delta. */
++  .trn-ev__scroll {
++    overflow: visible;
++    margin-bottom: 0;
++  }
++
++  // Grey-on-grey screen furniture becomes readable text rather than a photocopy of a panel.
++  .trn-ev__meta,
++  .trn-ev__version,
++  .trn-ev__threshold,
++  .trn-ev__source,
++  .trn-ev__by,
++  .trn-ev__material-label,
++  .trn-note,
++  .trn-form__hint,
++  .trn-table th,
++  .trn-table td { color: #000; }
++
++  .trn-note {
++    background: transparent;
++    padding: 0 0 6pt;
++    font-size: 9pt;
++    margin: 0 0 6pt;
++  }
++
++  // A finding and a refusal are the two notes an inspection acts on, so they keep a mark of their
++  // own on a sheet that has no colour left to say it with.
++  .trn-note--blocked,
++  .trn-note--refused,
++  .trn-note--unknown {
++    border-left: 2pt solid #000;
++    padding-left: 6pt;
++  }
++
++  .trn-form__hint { font-style: normal; font-size: 8pt; }
++
++  /* MEASURED, NOT ASSUMED, AND THE FIRST VERSION OF THIS FILE GOT IT WRONG.
++     A table left at `table-layout: auto` is sized by its content's MIN width, and these carry a
++     71-character sha256, whole JSON snapshots and a course title. On screen that is fine — the
++     wrapper scrolls. On paper the table simply ran off the right-hand edge, and Chromium clips
++     rather than scrolls: the first PDF this lane produced had «Opphav» printed as «Opp» and the
++     ledger's delta column cut mid-JSON, which is a record that LOOKS complete and is not.
++     `fixed` makes the declared widths authoritative and `anywhere` breaks the long tokens inside
++     them. The widths are per table because equal sixths would give a date column the same room as a
++     JSON snapshot; they sum to 100 in each case. */
++  .trn-table {
++    font-size: 8pt;
++    margin-bottom: 6pt;
++    table-layout: fixed;
++    width: 100%;
++  }
++
++  .trn-table th,
++  .trn-table td { overflow-wrap: anywhere; word-break: break-word; }
++  .trn-table th { border-bottom: 1pt solid #000; padding: 3pt 4pt; white-space: normal; }
++  .trn-table td { border-bottom: 0.5pt solid #666; padding: 4pt; }
++
++  .trn-ev__table--completions th:nth-child(1) { width: 20%; }
++  .trn-ev__table--completions th:nth-child(2) { width: 10%; }
++  .trn-ev__table--completions th:nth-child(3) { width: 9%; }
++  .trn-ev__table--completions th:nth-child(4) { width: 9%; }
++  .trn-ev__table--completions th:nth-child(5) { width: 33%; }
++  .trn-ev__table--completions th:nth-child(6) { width: 19%; }
++
++  .trn-ev__table--certificates th:nth-child(1) { width: 18%; }
++  .trn-ev__table--certificates th:nth-child(2) { width: 24%; }
++  .trn-ev__table--certificates th:nth-child(3) { width: 13%; }
++  .trn-ev__table--certificates th:nth-child(4) { width: 13%; }
++  .trn-ev__table--certificates th:nth-child(5) { width: 13%; }
++  .trn-ev__table--certificates th:nth-child(6) { width: 19%; }
++
++  .trn-ev__table--chain th:nth-child(1) { width: 12%; }
++  .trn-ev__table--chain th:nth-child(2) { width: 16%; }
++  .trn-ev__table--chain th:nth-child(3) { width: 11%; }
++  .trn-ev__table--chain th:nth-child(4) { width: 21%; }
++  .trn-ev__table--chain th:nth-child(5) { width: 40%; }
++
++  // The column headings repeat at the top of every printed page: `table-header-group` is the only
++  // thing a browser repeats across a page break, and a two-page chain would otherwise be a list of
++  // unlabelled columns from sheet two onwards.
++  .trn-table thead { display: table-header-group; }
++
++  // A row is never split across two sheets of paper.
++  .trn-table tr { break-inside: avoid; page-break-inside: avoid; }
++
++  // Colour is the only thing separating a pass from a fail on screen. On paper — and on the
++  // photocopy an inspector takes away — it is not there, so the badges are outlined and the two
++  // that carry a verdict are marked apart from the ones that carry a state.
++  .trn-badge {
++    background: transparent;
++    color: #000;
++    border: 0.5pt solid #000;
++    border-radius: 0;
++    padding: 0 3pt;
++    font-size: 7.5pt;
++  }
++
++  .trn-badge--off { font-weight: 700; text-decoration: underline; }
++  .trn-badge--warn { border-style: dashed; }
++
++  .trn-ref { font-size: 7pt; word-break: break-all; }
++
++  .trn-ev__pre {
++    background: transparent;
++    border: 0.5pt solid #666;
++    border-radius: 0;
++    padding: 3pt;
++    font-size: 7.5pt;
++    // A JSON page-list has no spaces to break at, so `break-word` alone leaves it as one long token
++    // and the fixed column it sits in cannot hold it.
++    overflow-wrap: anywhere;
++  }
++
++  /* THE MATERIAL IS NOT OPTIONAL ON PAPER, AND A DISCLOSURE WIDGET CANNOT BE OPENED ON IT.
++     `trn_ev_page_intro` promises that this document prints the server's figures BESIDE the values
++     they were computed from — the pages, the quiz and the frozen threshold the content hash was
++     taken over. On screen those sit behind a `<details>` because a reader can open it; a printer
++     cannot, so a closed one would take the re-derivable half of the promise off the sheet and leave
++     a hash an inspector can only believe. That is the difference between evidence and a report.
++
++     Two mechanisms, because engines disagree about how a closed `<details>` hides its contents:
++     current Chromium, Firefox and Safari render them into a `::details-content` box carrying
++     `content-visibility: hidden`, and older engines do not lay the children out at all. Both are
++     addressed; a browser that supports neither form drops the declaration it does not understand and
++     keeps the other. The summary itself goes — it is a control, and its label («vis materialet»)
++     would be an instruction to press something on a piece of paper. */
++  .trn-ev__material { display: block; margin-top: 4pt; font-size: 8pt; }
++  .trn-ev__material > summary { display: none; }
++  .trn-ev__material > *:not(summary) { display: block !important; }
++  .trn-ev__material::details-content { content-visibility: visible; block-size: auto; }
++}
+ </style>
+diff --git a/components/admin/workforce-me/WorkforcePublicationNotice.vue b/components/admin/workforce-me/WorkforcePublicationNotice.vue
+index bb1b011..9bbcff1 100644
+--- a/components/admin/workforce-me/WorkforcePublicationNotice.vue
++++ b/components/admin/workforce-me/WorkforcePublicationNotice.vue
+@@ -1,16 +1,19 @@
+ <template>
+   <section v-if="items && items.length" class="wfme-pub">
+     <h2 class="wfme-pub__title">
+-      {{ items.length === 1 ? $i('wfme_pub_title_one') : $i('wfme_pub_title_many', { count: items.length }) }}
++      {{ title }}
+     </h2>
+-    <p class="wfme-pub__lede">
++    <!-- "You have not opened this yet" is a claim about an UNREAD row. A row kept on screen only
++         because this session acknowledged it has been opened, so the lede goes when nothing here is
++         unread rather than telling the worker something they have just disproved. -->
++    <p v-if="unreadCount" class="wfme-pub__lede">
+       {{ $i('wfme_pub_lede') }}
+     </p>
+ 
+     <ul class="wfme-pub__list">
+       <li v-for="item in items" :key="item.inboxItemId" class="wfme-pub__item">
+         <div class="wfme-pub__when">
+-          <span class="wfme-pub__dot" aria-hidden="true" />
++          <span v-if="!item.isRead" class="wfme-pub__dot" aria-hidden="true" />
+           {{ $i('wfme_pub_published', { time: publishedLabel(item) }) }}
+         </div>
+ 
+@@ -19,7 +22,10 @@
+         </p>
+ 
+         <div class="wfme-pub__actions">
++          <!-- Offered only while there is something to mark. A row that is already read gets no
++               button whose only possible effect is to re-assert what the server already says. -->
+           <button
++            v-if="!item.isRead"
+             class="wfme-pub__btn wfme-pub__btn--ghost"
+             :disabled="busyId === item.inboxItemId"
+             @click="$emit('mark-read', item)"
+@@ -68,6 +74,24 @@ export default {
+     busyId: { type: String, default: null },
+     locale: { type: String, default: 'nb-NO' }
+   },
++  computed: {
++    /** Rows the server still reports as unread. The heading and the lede are claims about these. */
++    unreadCount () {
++      return (this.items || []).filter(item => !item.isRead).length;
++    },
++    /**
++     * "Ny vaktplan publisert" is an announcement, and an announcement about a roster the worker has
++     * just confirmed is stale the moment it is made. Once nothing here is unread, the heading says
++     * the thing that IS true — this was confirmed — so the row carrying the receipt is not sitting
++     * under a title calling it new.
++     */
++    title () {
++      if (!this.unreadCount) { return this.$i('wfme_pub_title_confirmed'); }
++      return this.unreadCount === 1
++        ? this.$i('wfme_pub_title_one')
++        : this.$i('wfme_pub_title_many', { count: this.unreadCount });
++    }
++  },
+   methods: {
+     publishedLabel (item) {
+       return this.formatInstant(item.createdAtUtc);
+diff --git a/pages/admin/training-evidence.vue b/pages/admin/training-evidence.vue
+index e0a913f..a04fde3 100644
+--- a/pages/admin/training-evidence.vue
++++ b/pages/admin/training-evidence.vue
+@@ -50,6 +50,41 @@
+           </button>
+         </form>
+ 
++        <!-- THE HAND-OVER. The page's own sentence says this record is one that «kan legges fram ved
++             tilsyn», and until this control existed the only thing a manager could produce on the day
++             was a browser tab. It is a first-class button rather than a hint to use the browser's own
++             menu for the same reason the personalliste's is: a document somebody may be asked for
++             while an inspector stands there is not something to go hunting through a menu for.
++
++             Disabled until there is something to hand over. A print that produced the page's own
++             heading and «velg en person» is worse than no button, because it looks like the record. -->
++        <div class="trn-ev-page__actions">
++          <button
++            class="trn-btn"
++            type="button"
++            :disabled="!canPrint"
++            data-test="evidence-print"
++            @click="printDocument"
++          >
++            {{ $i('trn_ev_print') }}
++          </button>
++          <p class="trn-form__hint" data-test="evidence-print-hint">
++            {{ $i('trn_ev_print_hint') }}
++          </p>
++          <p v-if="printFailure" class="trn-note trn-note--blocked" data-test="evidence-print-failure">
++            {{ printFailure }}
++          </p>
++        </div>
++
++        <!-- PAPER ONLY — revealed by this page's print block and by nothing else. On screen the
++             browser tab, the sidebar and the page heading all say what is being looked at; on paper
++             none of them survive, and a sheet handed over unnamed is a sheet about nothing. -->
++        <div class="trn-ev-page__sheet-head">
++          <h2 class="trn-ev-page__sheet-title">
++            {{ $i('trn_ev_page_title') }}
++          </h2>
++        </div>
++
+         <TrainingEvidenceDocument
+           :read="evidence"
+           :locale="locale"
+@@ -87,7 +122,7 @@ import {
+   TRAINING_FLAG_DISABLED_READ_ONLY
+ } from '~/utils/training/training-client';
+ import { WorkforceRosterService } from '~/utils/workforce/roster-client';
+-import { personDirectory, zoneIdOf, zoneIsFallback, isReferenceId } from '~/utils/training/journey';
++import { personDirectory, zoneIdOf, zoneIsFallback, isReferenceId, READ_ANSWERED } from '~/utils/training/journey';
+ import { readEvidence } from '~/utils/training/evidence';
+ 
+ const ERROR_KEYS = {
+@@ -163,7 +198,12 @@ export default {
+       evidenceError: null,
+       asked: false,
+       loading: false,
+-      failure: ''
++      failure: '',
++      // Its own line rather than the read's banner. `failure` is keyed on a `training.*` code the
++      // server issued; this one is about the browser in front of the manager and the server has no
++      // opinion about it, so folding the two together would attribute a browser's limitation to the
++      // module.
++      printFailure: ''
+     };
+   },
+   computed: {
+@@ -197,6 +237,18 @@ export default {
+     canSubmit () {
+       return !this.busy && isReferenceId(this.personRef);
+     },
++    /**
++     * Nothing is offered for printing until a document has actually answered.
++     *
++     * `answered` and not «asked»: an idle page, a refusal and a read that never came back all render
++     * a sentence rather than a record, and putting any of those three on paper under this page's
++     * heading would hand somebody a document that looks like a clean file and is not one. The three
++     * sentences DO print if a manager reaches the browser's own print command — see the component's
++     * print rules — because a sheet saying «the server declined» is honest and a blank one is not.
++     */
++    canPrint () {
++      return !this.busy && this.evidence.state === READ_ANSWERED;
++    },
+     zoneFootnote () {
+       if (!this.zoneId) { return this.$i('trn_footnote_zone_utc'); }
+       return zoneIsFallback(this.context)
+@@ -216,6 +268,7 @@ export default {
+       this.gate = GATE_UNKNOWN;
+       this.context = null;
+       this.failure = '';
++      this.printFailure = '';
+       // The document belongs to the store it was read from. Switching stores clears it rather than
+       // re-fetching: re-fetching would write a disclosure nobody asked for, and keeping it on screen
+       // would label one store's record with another store's heading.
+@@ -248,6 +301,31 @@ export default {
+       this.open(this.personRef.trim());
+     },
+ 
++    /**
++     * THE COPY THAT LEAVES THE BUILDING.
++     *
++     * `window.print()` is what produces it; the stylesheets at the bottom of this file and of
++     * `TrainingEvidenceDocument.vue` are what make the output a document rather than a screenshot of
++     * an admin panel — the page heading, the lookup form, this button and the sidebar all come off
++     * the paper, and every claim the document carries stays on it. The browser's own «save as PDF»
++     * is the same pipeline, so the same press yields either paper or a file.
++     *
++     * NOTHING IS RE-READ. The record already on screen is the record that prints: a second fetch
++     * would append a second disclosure to an append-only ledger for a manager who only pressed
++     * print, and the row would say the file was opened twice.
++     *
++     * A browser exposing no print command is TOLD about rather than left with a control that appears
++     * to work and silently does nothing — which is the failure this whole page exists to avoid.
++     */
++    printDocument () {
++      this.printFailure = '';
++      if (typeof window === 'undefined' || typeof window.print !== 'function') {
++        this.printFailure = this.$i('trn_ev_print_unavailable');
++        return;
++      }
++      window.print();
++    },
++
+     /**
+      * THE DISCLOSURE. One press, one read, one permanent ledger row.
+      *
+@@ -359,4 +437,118 @@ export default {
+   color: #64748b;
+   font-style: italic;
+ }
++
++.trn-ev-page__actions {
++  display: flex;
++  align-items: baseline;
++  flex-wrap: wrap;
++  gap: 12px;
++  margin: 16px 0 20px;
++
++  .trn-form__hint {
++    margin: 0;
++    flex: 1 1 260px;
++  }
++
++  .trn-note {
++    flex: 1 1 100%;
++    margin: 0;
++  }
++}
++
++// Paper only. Revealed by the print block below and by nothing else.
++.trn-ev-page__sheet-head {
++  display: none;
++}
++
++/* ---- THE PAGE HALF OF THE PRINT PATH ------------------------------------------------------------
++   The component half lives in `TrainingEvidenceDocument.vue` and decides how the record itself sets
++   on paper. This half decides that nothing ELSE on the page reaches it.
++
++   SCOPED, AND THAT IS THE WHOLE GUARD. Every selector below carries this page's `data-v-` attribute,
++   so it cannot reach a screen this page did not render — even though a Nuxt chunk's CSS stays loaded
++   after navigation. No body class, no `head()`, nothing anyone has to apply and therefore nothing to
++   forget: the estate has already shipped one print stylesheet guarded by a class set imperatively on
++   `document.body`, which vue-meta rebuilt from its own map. The class was wiped, the rules stayed in
++   the file, and the document printed with the admin shell down the side of it for as long as nobody
++   looked. `pages/admin/events-pipeline.vue` records that diagnosis in full.
++
++   DEFAULT-DENY. Everything comes off the paper and three things are named back in: the paper-only
++   heading, the document, and the two footnotes — the zone every instant on the sheet is stated in,
++   and what the record's scope is. Both of those are qualifications on the figures above them, and a
++   record printed without them would be over-claiming in exactly the direction that matters. What is
++   NOT named back in is the page intro, the lookup form, this page's own controls and the disclosure
++   notice: a warning about an act the reader is about to perform has nothing to say on a sheet that
++   is the result of having performed it, and a control is not part of the document it produces.
++
++   The default-deny is also what covers whatever a later lane adds beside them.
++
++   `.trn-ev` is `TrainingEvidenceDocument`'s root, and Vue stamps THIS page's scope id onto a child
++   component's root element — which is why it is reachable from here and its innards are not. That is
++   the correct seam: what happens inside the record is the component's business. */
++@media print {
++  .trn-ev-page {
++    max-width: none;
++    margin: 0;
++    padding: 0;
++  }
++
++  .trn-ev-page > * {
++    display: none !important;
++  }
++
++  .trn-ev-page__sheet-head {
++    display: block !important;
++    border-bottom: 1.5pt solid #000;
++    margin: 0 0 10pt;
++    padding-bottom: 6pt;
++    break-after: avoid;
++    page-break-after: avoid;
++  }
++
++  .trn-ev-page__sheet-title {
++    font-size: 15pt;
++    font-weight: 600;
++    color: #000;
++    margin: 0;
++  }
++
++  .trn-ev-page > .trn-ev {
++    display: block !important;
++  }
++
++  .trn-ev-page__footnote {
++    display: block !important;
++    color: #000;
++    font-style: normal;
++    font-size: 8pt;
++    margin: 8pt 0 0;
++  }
++}
++/* ---- THERE IS NO `@page` BOX HERE, AND THAT IS A MEASUREMENT RATHER THAN AN OMISSION ------------
++   The two print paths this page was modelled on both declare a named page box — `@page wfpl-sheet`
++   on the personalliste, `@page ev-runsheet` on the run sheet — and claim it from a scoped rule, so
++   the sheet comes out A4 at 14 mm regardless of the dialog. This page had the same pair and it was
++   REMOVED after reading the file it produced:
++
++     • A BLANK FIRST SHEET. `.trn-ev-page` is not the first box in the printed flow (the admin shell
++       wraps it), so claiming a named box part-way through forced a page break: the record began on
++       sheet two and sheet one came out of the printer empty. Handing an inspector a blank first page
++       is not a cosmetic defect.
++     • THE RIGHT-HAND EDGE CUT OFF. With the named box's 14 mm margin applied to the page and the
++       device margin still at the dialog's value, the document was laid out at the full paper width
++       and cropped at the narrower one. `Opphav` printed as `Opp`, `I journalen` as `I journa`, and
++       the ledger's delta column stopped mid-JSON — a document that LOOKS complete on paper and is
++       missing the column naming who filed each row.
++
++   Both were read out of the produced PDF with `pdftotext`, before and after. Without the named box
++   the record prints on the paper the manager chose, at the browser's own margins, on two sheets with
++   nothing cut off. A guaranteed 14 mm is worth less than a page that carries all of its columns.
++
++   No rule reaching `.admin__content`, `.admin__main` or `body` either. Those are ancestors of this
++   page's scope, so touching them means an unscoped rule — the thing this whole arrangement avoids —
++   and the shell's own components already take themselves off the paper (`AdminPageHeader.vue` hides
++   `.admin-nav`, `OnboardingNotification.vue` hides its banner, each in its own scoped `@media
++   print`). Measured at the printable width under emulated print media, `.admin__content` and every
++   box inside it are exactly the page width with no overflow, so there is nothing left to correct. */
+ </style>
+diff --git a/pages/admin/workforce-me.vue b/pages/admin/workforce-me.vue
+index 5c42729..262bc58 100644
+--- a/pages/admin/workforce-me.vue
++++ b/pages/admin/workforce-me.vue
+@@ -39,7 +39,7 @@
+ 
+       <template v-else>
+         <WorkforcePublicationNotice
+-          :items="unreadPublicationItems"
++          :items="noticePublicationItems"
+           :receipts="ackReceipts"
+           :busy-id="busyKey"
+           :locale="locale"
+@@ -285,7 +285,7 @@ import { WorkforceMeService } from '~/utils/workforce-me/me-client';
+ import {
+   classifyClaimFailure, isNormalOutcome, outcomeMessageKey, requiresRefresh
+ } from '~/utils/workforce-me/claim-outcome';
+-import { publicationCount, unreadPublications } from '~/utils/workforce-me/inbox-filter';
++import { publicationCount, publicationsForNotice } from '~/utils/workforce-me/inbox-filter';
+ import { roleSummary, selfServiceMemberships } from '~/utils/workforce-me/memberships';
+ import {
+   SELF_ALREADY_DECIDED, classifySelfFailure, selfFailureMessageKey
+@@ -345,7 +345,14 @@ export default {
+       // APPENDS a row to the very log it returns, so a page that fetched it automatically would
+       // grow this worker's own access log every time they opened the page for anything else.
+       disclosuresByStore: {},
++      // publicationId -> the #44 receipt, and publicationId -> the inbox row it was earned on.
++      // BOTH, because acknowledging marks that row read and the next inbox read therefore stops
++      // reporting it as unread — and the receipt is rendered on the row. Keeping only the receipt is
++      // what made the confirmation vanish the instant it was earned. Session-scoped by design: the
++      // inbox row carries `isRead` and no acknowledgement field, so there is nothing to restore this
++      // from after a reload and the page must not pretend otherwise.
+       ackReceipts: {},
++      ackItems: {},
+       toast: { show: false, message: '', type: 'success' },
+       toastTimer: null
+     };
+@@ -434,8 +441,13 @@ export default {
+     },
+ 
+     // --- inbox -------------------------------------------------------------------------------
+-    unreadPublicationItems () {
+-      return unreadPublications(this.inbox ? this.inbox.items : null);
++    /**
++     * What the notice shows: the unread publications, plus any publication acknowledged in this
++     * session. See `publicationsForNotice` — acknowledging is what makes a row read, so a notice fed
++     * unread rows alone erases the receipt at the moment the worker earns it.
++     */
++    noticePublicationItems () {
++      return publicationsForNotice(this.inbox ? this.inbox.items : null, this.ackItems);
+     },
+ 
+     // --- open shifts -------------------------------------------------------------------------
+@@ -754,6 +766,11 @@ export default {
+         const receipt = await this._workforceMeService.AcknowledgePublication(item.schedulePublicationId);
+         if (receipt) {
+           this.ackReceipts = Object.assign({}, this.ackReceipts, { [item.schedulePublicationId]: receipt });
++          // The ROW is kept alongside the receipt, and this is the whole repair. The reload below
++          // returns this item `isRead: true` — acknowledging implies seen — so the unread filter
++          // would drop it, and the receipt line is rendered on the row. Without this the worker
++          // pressed the button and the entire notice, receipt included, left the screen.
++          this.ackItems = Object.assign({}, this.ackItems, { [item.schedulePublicationId]: item });
+         }
+         // Acknowledging implies seen, so the inbox read state moves with it.
+         await this.loadInbox();
+diff --git a/translations/de.ts b/translations/de.ts
+index 6bc3132..0e76a0c 100644
+--- a/translations/de.ts
++++ b/translations/de.ts
+@@ -2806,6 +2806,7 @@ export default {
+   // Veröffentlichter Dienstplan: Lesemarkierung und Empfangsbestätigung
+   wfme_pub_title_one: 'Neuer Dienstplan veröffentlicht',
+   wfme_pub_title_many: '{count} neue Dienstpläne veröffentlicht',
++  wfme_pub_title_confirmed: 'Dienstplan bestätigt',
+   wfme_pub_lede: 'Du hast ihn noch nicht geöffnet. Die Leitung sieht, wer gelesen hat.',
+   wfme_pub_published: 'Eingegangen {time}',
+   wfme_pub_mark_read: 'Als gelesen markieren',
+@@ -4884,6 +4885,12 @@ export default {
+   trn_ev_page_intro: 'Der gesammelte Schulungsnachweis einer Person, so wie er bei einer Prüfung vorgelegt werden kann: die Abschlüsse mit dem eingefrorenen Inhalt, gegen den sie abgelegt wurden, die Zertifikate und die Journalzeilen, die sagen, wer sie jeweils erfasst hat. Hier wird nichts neu berechnet — das Dokument druckt die Werte des Servers neben den Angaben, aus denen sie berechnet wurden, damit beides nachgeprüft werden kann.',
+   trn_ev_person_label: 'Person',
+   trn_ev_open: 'Nachweis abrufen',
++  // Die Papierkopie. Kein Paragraf und kein Verweis auf eine Vorschrift: OD-6 hält Rechtsangaben von
++  // dieser Fläche fern, bis TR8/TR-B6 ausgeliefert ist. Eingelöst wird hier das Versprechen eines
++  // vorlegbaren Dokuments, nicht das einer Rechtsgrundlage.
++  trn_ev_print: 'Nachweis drucken',
++  trn_ev_print_hint: 'Druckt das Dokument so, wie es dasteht — ohne das Suchformular, die Schaltflächen und das Menü. Mit „Als PDF sichern“ im Druckdialog erhalten Sie dasselbe Dokument als Datei. Es wird nichts erneut abgerufen, der Druck erzeugt also keine weitere Journalzeile.',
++  trn_ev_print_unavailable: 'Dieser Browser stellt keinen Druckbefehl bereit, den wir starten können. Verwenden Sie das Druckmenü des Browsers — das Dokument ist dasselbe.',
+   trn_ev_prompt: 'Wählen Sie eine Person und rufen Sie den Nachweis ab. Er lädt nicht von allein, weil jeder Abruf im Journal vermerkt wird.',
+   trn_ev_unknown: 'Der Server hat nicht so geantwortet, wie dieser Stand es versteht. Damit wird nichts darüber gesagt, was das Geschäft für diese Person erfasst hat.',
+   trn_ev_refused: 'Der Server hat den Abruf abgelehnt. Das heißt nicht, dass es keinen Nachweis gibt — es heißt, dass er uns nicht gezeigt wurde.',
+diff --git a/translations/en.ts b/translations/en.ts
+index 7d1f4e2..53eb252 100644
+--- a/translations/en.ts
++++ b/translations/en.ts
+@@ -2802,6 +2802,7 @@ export default {
+   // Published schedule: read marker and acknowledgement receipt
+   wfme_pub_title_one: 'New schedule published',
+   wfme_pub_title_many: '{count} new schedules published',
++  wfme_pub_title_confirmed: 'Schedule confirmed',
+   wfme_pub_lede: 'You have not opened this yet. Your manager can see who has read it.',
+   wfme_pub_published: 'Arrived {time}',
+   wfme_pub_mark_read: 'Mark as read',
+@@ -4876,6 +4877,12 @@ export default {
+   trn_ev_page_intro: 'One person\'s assembled training record, in the form it can be produced for an inspection: the completions with the frozen material they were taken against, the certificates, and the ledger rows naming who filed each one. Nothing is recomputed here — the document prints the server\'s figures beside the values they were computed from, so both can be re-checked.',
+   trn_ev_person_label: 'Person',
+   trn_ev_open: 'Open the record',
++  // The paper copy. No statute and no section reference: OD-6 keeps legal citations off this surface
++  // until TR8/TR-B6 ships, and the promise being made good here was the one about a record that can
++  // be produced — not one about a provision.
++  trn_ev_print: 'Print the record',
++  trn_ev_print_hint: 'Prints the document as it stands — without the lookup form, the controls or the menu. Choosing “Save as PDF” in the print dialog gives you the same document as a file. Nothing is fetched again, so printing writes no further ledger row.',
++  trn_ev_print_unavailable: 'This browser exposes no print command we can start. Use the browser’s own print menu — the document is the same.',
+   trn_ev_prompt: 'Choose a person and open the record. It does not load on its own, because every read is written to the ledger.',
+   trn_ev_unknown: 'The server did not answer in a way this build understands. Nothing is claimed about what the store holds for this person.',
+   trn_ev_refused: 'The server refused the read. That does not mean there is no record — it means we were not shown it.',
+diff --git a/translations/no.ts b/translations/no.ts
+index d1cdf36..98f09c4 100644
+--- a/translations/no.ts
++++ b/translations/no.ts
+@@ -2858,6 +2858,7 @@ export default {
+   // Publisert vaktplan: lest-markering og mottakskvittering
+   wfme_pub_title_one: 'Ny vaktplan publisert',
+   wfme_pub_title_many: '{count} nye vaktplaner publisert',
++  wfme_pub_title_confirmed: 'Vaktplanen er bekreftet',
+   wfme_pub_lede: 'Du har ikke åpnet denne ennå. Lederen ser hvem som har lest.',
+   wfme_pub_published: 'Kom {time}',
+   wfme_pub_mark_read: 'Marker som lest',
+@@ -4940,6 +4941,12 @@ export default {
+   trn_ev_page_intro: 'Én persons samlede opplæringsjournal, slik den kan legges fram ved tilsyn: gjennomføringene med det frosne innholdet de ble tatt mot, sertifikatene, og journalradene som sier hvem som førte hver av dem. Ingenting regnes ut på nytt her — dokumentet skriver ut serverens tall ved siden av det de ble regnet ut fra, slik at de kan etterprøves.',
+   trn_ev_person_label: 'Person',
+   trn_ev_open: 'Hent dokumentasjonen',
++  // Papirkopien. Ingen paragraf, ingen forskrift: OD-6 holder lovhenvisningene av denne flaten til
++  // TR8/TR-B6 er levert, og løftet som skulle innfris her var det om et dokument som kan legges fram
++  // — ikke et om en hjemmel.
++  trn_ev_print: 'Skriv ut dokumentasjonen',
++  trn_ev_print_hint: 'Skriver ut dokumentet slik det står — uten skjemaet, knappene og menyen. Velger du «Lagre som PDF» i utskriftsvinduet, får du det samme dokumentet som fil. Ingenting hentes på nytt, så utskriften fører ingen ny rad i journalen.',
++  trn_ev_print_unavailable: 'Denne nettleseren har ingen utskriftskommando vi kan starte. Bruk nettleserens egen utskriftsmeny — dokumentet er det samme.',
+   trn_ev_prompt: 'Velg en person og hent dokumentasjonen. Den lastes ikke av seg selv, fordi hvert oppslag føres i journalen.',
+   trn_ev_unknown: 'Serveren svarte ikke på en måte denne versjonen forstår. Da sies ingenting om hva butikken har ført på denne personen.',
+   trn_ev_refused: 'Serveren avviste oppslaget. Det betyr ikke at det ikke finnes dokumentasjon — det betyr at vi ikke fikk se den.',
+diff --git a/utils/workforce-me/inbox-filter.js b/utils/workforce-me/inbox-filter.js
+index b3afd4b..190e30c 100644
+--- a/utils/workforce-me/inbox-filter.js
++++ b/utils/workforce-me/inbox-filter.js
+@@ -116,6 +116,50 @@ export function unreadPublications (items) {
+   return filterInboxItems(items, { kind: 'publication', state: 'unread' });
+ }
+ 
++/**
++ * The publications the notice must put on screen: everything still unread, PLUS everything this
++ * session holds an acknowledgement receipt for.
++ *
++ * WHY THE SECOND HALF EXISTS, AND WHY IT IS NOT A RENDERING DETAIL. Acknowledging IMPLIES seen, so
++ * the act that produces a receipt is the same act that makes the row read. A notice fed
++ * `unreadPublications` alone therefore loses the row one tick after the receipt for it arrives —
++ * and the receipt line lives ON that row, so it goes with it. The worker pressed "Bekreft mottatt"
++ * and was shown nothing at all. The renderer needed an item that was both unread and acknowledged,
++ * and no such item can exist; this is where that contradiction is resolved, because no change to the
++ * template can resolve it.
++ *
++ * `acknowledged` is keyed by `schedulePublicationId` and holds the inbox item AS IT STOOD when the
++ * worker pressed. Kept from the press rather than looked up afterwards, so the confirmation does not
++ * depend on a second request succeeding: an inbox re-read that failed leaves the receipt on screen.
++ *
++ * Null still means NOT LOADED, exactly as `unreadPublications` does — null in, with nothing
++ * acknowledged, gives null out. Receipts alone are enough to render, because they are this page's
++ * own first-hand record of an act it performed, not an inference about server state.
++ */
++export function publicationsForNotice (items, acknowledged) {
++  const kept = acknowledged || {};
++  const ids = Object.keys(kept).filter(id => kept[id]);
++  const unread = unreadPublications(items);
++  if (unread === null && !ids.length) { return null; }
++
++  // Unread first, then what was just confirmed. What still needs the worker's attention outranks
++  // what no longer does.
++  const shown = (unread || []).slice();
++  const reported = filterInboxItems(items, { kind: 'publication', state: 'all' }) || [];
++  ids.forEach((id) => {
++    const pressed = kept[id];
++    // Already there, because the server has not marked it read. Nothing to add.
++    if (shown.some(item => item.inboxItemId === pressed.inboxItemId)) { return; }
++    // The SERVER's copy where the inbox still reports it, because that copy is the one carrying
++    // `isRead: true` — which is what the surface reads to stop calling this row new. Falling back to
++    // the row as it was pressed is what keeps the receipt on screen when the re-read failed or no
++    // longer carries it: a confirmation must not depend on a second request succeeding.
++    const current = reported.find(item => item.inboxItemId === pressed.inboxItemId);
++    shown.push(current || pressed);
++  });
++  return shown;
++}
++
+ /**
+  * How many publications have ever reached this worker, or `null` when the inbox is not loaded.
+  *

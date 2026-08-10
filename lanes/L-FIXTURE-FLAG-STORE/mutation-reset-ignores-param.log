@@ -1,0 +1,89 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4111
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3111/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 15.03s
+[WebServer] ✔ Client: Compiled successfully in 17.61s
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.22 GB (RSS: 2.12 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3111/
+  ✘  1 [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:51:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture (3.4s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:51:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture 
+
+    Error: the fixture stood up with Features:Meals down
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+      Object {
+    -   "module": false,
+    +   "module": true,
+      }
+
+      296 |       // The world asked for is the world got. Without this, a typo in the query string would stand
+      297 |       // the deployment up LIT and everything below would be asserted against a working module.
+    > 298 |       expect(world0.meals, 'the fixture stood up with Features:Meals down').toEqual({ module: false });
+          |                                                                             ^
+      299 |
+      300 |       // The reset re-seeded the invitations, so `GOOD` is Pending again and names this same signed-in
+      301 |       // person — it succeeded thirty lines ago on exactly these terms. The ONLY difference is the
+        at /Users/svendaneel/okam/web-fixtureflags/test/e2e/journeys/meals-guest-claim.spec.js:298:77
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-fixtureflags/test/e2e/support/journey.js:347:22)
+        at /Users/svendaneel/okam/web-fixtureflags/test/e2e/journeys/meals-guest-claim.spec.js:293:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/meals-guest-claim.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/meals-guest-claim.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/meals-guest-claim-An-emplo-4dcca-it-is-then-claims-their-own-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/meals-guest-claim.spec.js:51:1 › An employee is refused a stranger's invitation without being told whose it is, then claims their own @fixture 

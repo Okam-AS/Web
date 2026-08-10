@@ -1,0 +1,118 @@
+
+[1m== Demo weeks (Europe/Oslo)[0m
+   A 2026-07-27..2026-08-02        last week   PUBLISHED, has the punches -> attendance + hours export
+   B 2026-08-03..2026-08-09        this week   DRAFT     -> the cost overlay, and the walk to publish
+   C 2026-08-10..2026-08-16        next week   PUBLISHED -> what the WORKER sees (me-page shows the next 28 days)
+
+[1m== 1. Signing in the manager (+4799681931)[0m
+   manager applicationUserId = 6ba6dd27-42b0-4ba9-807b-96930c735f2f
+
+[1m== 1b. Signing in the worker (+4799999999) so /workforce/me has a real caller[0m
+   worker applicationUserId  = b719056b-e99e-4d49-824e-189e1473a566
+
+[1m== 2. ADOPTING the store this manager already administers (no SQL, no bootstrap)[0m
+   storeId = 1 (Two Humans Kafé)
+
+[1m== 2b. Stage flags through the operator lever (adopt mode writes no SQL)[0m
+   workforce.setup = on
+   workforce.publication = on
+   workforce.selfservice = on
+   workforce.exchange = on
+   workforce.clock = on
+   workforce.personnel-list NOT SET: {
+  "message": "Unknown feature flag: workforce.personnel-list"
+}
+   workforce.export = on
+   workforce.dispatch = on
+   legal employer (adopted) = 560c1843-b232-4d71-8011-ef51dbb9bb20
+
+[1m== 3. Manager reaches the surface (GET /context)[0m
+{"storeId":1,"timeZoneId":null,"capabilities":["WorkforceSelf","WorkforceScheduler","WorkforceManager","WorkforcePayrollApprover"]}
+
+[1m== 4. Roles[0m
+   Kokk=d07a027b-990c-480d-9e42-8481f899f610  Servitor=c1d228d1-4372-4cb3-b021-6769f19508c2
+
+[1m== 5. Staff (through POST /staff -- the real write path)[0m
+   Nora=668f0bda-04c2-4a65-b2dd-40440396c450  Jonas=c433ddb4-8c03-4c6c-8233-dcebab16c5e4  Selma=f2f2be50-c9f9-46fb-90d8-696f5ac85fea
+   (GET http://localhost:5971/workforce/stores/1/invitations -> 404: this API predates the invitation LIST route, so what is
+    outstanding cannot be read back. Reissuing supersedes the previous code rather than adding one.)
+   Nora holds a pending invitation (2026-08-21T08:28:39.097847Z).
+   /admin/workforce-me will stay empty for +4799999999 until that invitation is CLAIMED from
+   the worker's own sign-in -- adopt mode has no SQL shortcut and no route claims it for her.
+
+[1m== 6. Staff roles[0m
+   Nora=Servitor  Jonas=Kokk  Selma=Kokk
+
+[1m== 7. Employment terms[0m
+   Nora 30h/week, Jonas 37.5h/week, Selma 20h/week
+
+[1m== 8. Rates (through PUT .../rates -- the authoring surface, not a SQL insert)[0m
+   Servitor 220.00 -> 245.00 from 2026-07-29 -> 260.00 from 2026-08-05  (a shift crosses each raise)
+   Jonas engagement override 310.00 NOK/h (outranks the role default)
+   Kokk role default: DELIBERATELY ABSENT -> Selma and the open Kokk shift cannot be priced
+
+[1m== 9. Week A (2026-07-27..2026-08-02) -- last week, will be published[0m
+   already published with 5 assignments -- left alone
+
+[1m== 11. Week B (2026-08-03..2026-08-09) -- THIS week, stays a DRAFT for the manager to walk[0m
+   a draft with 5 assignments is already here -- left alone
+
+[1m== 11b. Week C (2026-08-10..2026-08-16) -- next week, published so the worker's own page is not empty[0m
+   already published with 8 assignments -- left alone
+
+[1m== 12. The cost overlay, read back off the wire (week B, the draft)[0m
+{
+  "costComplete": false,
+  "totalMinor": null,
+  "currency": "NOK",
+  "incompleteCode": "workforce.rate-unresolved",
+  "openShiftCount": 1,
+  "pricedShiftCount": 3,
+  "unpricedShiftCount": 1
+}
+   per-day:
+     2026-08-03  complete=true  total=232500  open=0  unpriced=0
+     2026-08-04  complete=true  total=232500  open=0  unpriced=0
+     2026-08-06  complete=false  total=-  open=0  unpriced=1
+     2026-08-07  complete=true  total=0  open=1  unpriced=0
+     2026-08-08  complete=true  total=237563  open=0  unpriced=0
+   the two honest states:
+     workforce.rate-unresolved No rate is in force for this engagement or its role over this window.
+     OPEN SHIFT (a floor, not a zero) 
+
+[1m== 13. Punches so attendance and the hours export have something to say[0m
+   SKIPPED. Adopt mode writes no SQL, and POST /workforce/pos/clock-events -- the only HTTP
+   path to a punch -- needs a POS OPERATOR SESSION (register + operator + PIN + OD-2
+   verification), which is a second product surface this seed does not stand up. So an
+   adopted world carries NO clock punches: attendance shows planned minutes with no actuals,
+   and the hours export has a header and no rows. That is the module's real boundary today.
+
+[1m== 14. Attendance and hours export, read back off the wire[0m
+{"rows":4}
+     # okam-workforce-hours
+     # version=2
+     # storeId=1
+     # timeZoneId=Europe/Oslo
+     # fromBusinessDate=2026-07-27
+     # toBusinessDate=2026-08-02
+     # basis=hours-only
+     # wageMath=none
+     # rowCount=4
+     # complete=false
+     # incompleteRowCount=4
+     staffMemberId,employmentNumber,displayName,businessDate,payCode,paid,minutes,plannedMinutes,status,approvedAdjustments
+     ... 5 lines below the envelope (1 header + rows)
+
+[1m== 15. DONE[0m
+
+  Store             : 1  (Two Humans Kafé, Europe/Oslo)
+  Manager sign-in   : +4799681931 / 849666
+  Worker sign-in    : +4799999999 / 123123   (Nora Berg)
+  Week A (published): 2026-07-27 .. 2026-08-02  (last week) -- punches, attendance, hours export
+  Week B (draft)    : 2026-08-03 .. 2026-08-09  (THIS week) -- cost overlay, open shift, refusal
+  Week C (published): 2026-08-10 .. 2026-08-16  (next week) -- what the worker sees on /admin/workforce-me
+  Draft revision    : (this run adopted the draft it found; read it off GET /schedules?view=draft)
+
+  Open the admin web and go to:
+     /admin/workforce-schedule
+     /admin/workforce-me

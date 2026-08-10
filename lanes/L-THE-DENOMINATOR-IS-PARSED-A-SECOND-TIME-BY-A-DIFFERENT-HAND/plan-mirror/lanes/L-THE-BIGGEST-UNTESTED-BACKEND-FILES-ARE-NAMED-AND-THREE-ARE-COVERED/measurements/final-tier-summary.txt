@@ -1,0 +1,2 @@
+Failed!  - Failed:     2, Passed:  4955, Skipped:    10, Total:  4967, Duration: 5 m 45 s - WebApi.Tests.dll (net8.0)
+TESTEXIT=1

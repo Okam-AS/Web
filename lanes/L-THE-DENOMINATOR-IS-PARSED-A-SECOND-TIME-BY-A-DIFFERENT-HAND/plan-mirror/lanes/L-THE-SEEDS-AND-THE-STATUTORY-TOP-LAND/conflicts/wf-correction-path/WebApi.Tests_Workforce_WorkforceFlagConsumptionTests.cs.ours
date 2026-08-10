@@ -1,0 +1,89 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using WebApi.Services.Workforce;
+using WebApi.Tests.Modules;
+using Xunit;
+
+namespace WebApi.Tests.Workforce;
+
+/// <summary>
+/// <b>What the <c>workforce.*</c> family actually does, stated as a measurement.</b>
+///
+/// <para>The estate-wide guard enforces the RULE (an advertised flag gates at least one request); this
+/// states the FACT, per flag, so a change in what a flag gates is visible as a diff rather than only as a
+/// rule that still happens to hold. It is the sibling of <c>TrainingFlagConsumptionTests</c> and reads the
+/// same census, which is the point — there is one measurement of "gates something" in the suite now, not one
+/// per module.</para>
+///
+/// <para>The one withheld key measures NOTHING, and that is the assertion rather than an omission: it is
+/// the evidence behind <see cref="WorkforceFeatureFlags.Withheld"/>. If it ever gains an enforcement point,
+/// this goes red beside the withholding it invalidates. <c>workforce.export</c> left that dictionary when
+/// W5 landed, and it left BECAUSE it appears in the map below — the withholding and the gate are two
+/// readings of the same measurement, and this file is where they have to agree.</para>
+/// </summary>
+public sealed class WorkforceFlagConsumptionTests
+{
+    /// <summary>The flags that DO gate, and exactly which probed mutations each one refuses.</summary>
+    private static readonly IReadOnlyDictionary<string, string[]> ExpectedGates =
+        new Dictionary<string, string[]>(StringComparer.Ordinal)
+        {
+            // The module master answers above every stage flag, so it refuses the whole probed surface.
+            [WorkforceFeatureFlags.Module] = new[]
+            {
+                "POST   /workforce/{store}/staff",
+                "POST   /workforce/{store}/schedules/drafts",
+                "POST   /workforce/me/staff-memberships/{id}/time-off",
+                "POST   /workforce/me/staff-memberships/{id}/open-assignments/{id}/requests",
+                "POST   /workforce/{store}/attendance/adjustments",
+                "POST   /workforce/{store}/timesheets/{id}/approve",
+            },
+            [WorkforceFeatureFlags.Setup] = new[] { "POST   /workforce/{store}/staff" },
+            [WorkforceFeatureFlags.Publication] = new[] { "POST   /workforce/{store}/schedules/drafts" },
+            [WorkforceFeatureFlags.SelfService] = new[] { "POST   /workforce/me/staff-memberships/{id}/time-off" },
+            [WorkforceFeatureFlags.Exchange] = new[]
+            {
+                "POST   /workforce/me/staff-memberships/{id}/open-assignments/{id}/requests",
+            },
+            [WorkforceFeatureFlags.Clock] = new[] { "POST   /workforce/{store}/attendance/adjustments" },
+            // W5 stage 6. The probe drives the FREEZE rather than the export batch because a batch needs a
+            // frozen period to export and both writes pass through the same gate on the same call path.
+            [WorkforceFeatureFlags.Export] = new[] { "POST   /workforce/{store}/timesheets/{id}/approve" },
+            [WorkforceFeatureFlags.Dispatch] = new[] { "DRAIN  workforce notification outbox" },
+        };
+
+    /// <summary>
+    /// The census, probe by probe. Asserted as a full map rather than a count, so a flag that begins
+    /// refusing a DIFFERENT operation than the one it is documented to gate fails here too — which is how a
+    /// gate accidentally repointed at another flag's key becomes visible.
+    /// </summary>
+    [Fact]
+    public async Task Eight_of_the_nine_declared_workforce_flags_gate_a_request_and_the_withheld_one_gates_nothing()
+    {
+        var census = await ModuleFlagCensus.MeasureAsync("Workforce");
+
+        Assert.Equal(CensusMethod.Behavioural, census.Method);
+
+        foreach (var flag in WorkforceFeatureFlags.All)
+        {
+            string[] expected;
+            if (!ExpectedGates.TryGetValue(flag, out expected))
+            {
+                expected = Array.Empty<string>();
+            }
+
+            Assert.Equal(expected, census.Evidence[flag]);
+        }
+
+        // Stated as its own claim so the count cannot drift while the map above still passes row by row.
+        Assert.Equal(
+            ExpectedGates.Keys.OrderBy(k => k, StringComparer.Ordinal).ToList(),
+            census.Evidence.Where(e => e.Value.Length > 0).Select(e => e.Key).OrderBy(k => k, StringComparer.Ordinal).ToList());
+
+        // …and the one the withholding still rests on.
+        Assert.Equal(
+            new[] { WorkforceFeatureFlags.PersonnelList },
+            WorkforceFeatureFlags.Withheld.Keys.ToArray());
+    }
+}

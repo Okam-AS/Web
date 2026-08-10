@@ -1,0 +1,14 @@
+MUTATION CONTROL: ModuleTriggerBuilder(builder) call removed from OnModelCreating.
+total cases: 102   failed: 38   passed: 64
+
+ 32  EF UPDATE refused by 334
+  1  Chain_triggers_migration_catalog_and_ef_model_all_agree
+  1  EF batched INSERT refused by 334
+  1  EF single-row INSERT refused by 334
+  1  Every_trigger_the_chain_installs_is_declared_on_its_entity
+  1  Publishing_a_draft_course_version_through_ef_commits
+  1  The_diff_is_taken_between_models_that_actually_differ
+
+INSERT-refused cases (table, trigger):
+    (table: "MarginWasteEntries", trigger: "TR_MarginWasteEntries_FrozenWeekImmutable")
+    (table: "MarginWasteEntries", trigger: "TR_MarginWasteEntries_FrozenWeekImmutable")

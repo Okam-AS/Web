@@ -1,0 +1,8 @@
+be.dir.repo              meta      ../OkamAPI-modules/.git                                                 contains:/OkamAPI/.git/worktrees/OkamAPI-modules
+be.dir.gitdir            meta      ../OkamAPI-modules/.git                                                 regex:^gitdir: (.+)$
+be.dir.pin               meta      ../OkamAPI/.git/worktrees/OkamAPI-modules/HEAD                          contains:ref: refs/heads/feature/restaurant-modules
+be.dir.ref               meta      ../OkamAPI/.git/worktrees/OkamAPI-modules/HEAD                          regex:^(?:ref: refs/heads/)?(.+)$
+fe.dir.repo              meta      .git                                                                    contains:/Web/.git/worktrees/Web-modules
+fe.dir.gitdir            meta      .git                                                                    regex:^gitdir: (.+)$
+fe.dir.pin               meta      ../Web/.git/worktrees/Web-modules/HEAD                                  contains:ref: refs/heads/feature/restaurant-modules
+fe.dir.ref               meta      ../Web/.git/worktrees/Web-modules/HEAD                                  regex:^(?:ref: refs/heads/)?(.+)$

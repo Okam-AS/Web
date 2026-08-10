@@ -1,0 +1,31 @@
+
+[1m== MARGIN 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== MARGIN 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   flag Margin.Module = on
+   status: {"module":true,"priceImport":true,"statements":true}
+
+[1m== MARGIN 3. The dishes (POST /Products -- the POS catalog, not a Margin table)[0m
+   Fiskesuppe = kr 189,00 (MVA 15 %)
+   Safranrisotto = kr 245,00 (MVA 15 %)
+   Husets vann = kr 39,00 (MVA 15 %)
+   Kaffe = kr 42,00 (MVA 15 %)
+
+[1m== MARGIN 4. Ingredients[0m
+   Laks, Fiskeavskjaer, Flote  -- priced below
+   Safran                      -- DELIBERATELY never priced
+
+[1m== MARGIN 5. Supplier, supplier items and effective-dated prices[0m
+   Laks: 279 fra 2026-06-01 til aapen  ->  249 fra 2026-01-01 til 2026-06-01
+   Fiskeavskjaer 445,00/5 kg   Flote 32,00/l
+
+[1m== MARGIN 6. Recipes[0m
+   Fiskekraft (grunnbase)     v1 Aktiv   kost 8900 ore (komplett=true)
+   Fiskesuppe (oppskrift)     v1 Aktiv   kost 21900 ore (komplett=true)
+   Safranrisotto (oppskrift)  v1 Aktiv   kost 5580 ore (komplett=false)
+   Husets vann (oppskrift)    v1 Aktiv   kost 0 ore (komplett=true)
+   Dessertsaus (uten rett)    v1 Aktiv   kost 3200 ore (komplett=true)
+
+[1m== MARGIN 7. Link the recipes to the dishes[0m
+[31mFAILED: PUT product-links -> {"type":"https://httpstatuses.io/400","title":"Bad Request","status":400,"detail":"An If-Match header (the resource revision) is required for this mutation.","traceId":"0HNNJTTMJ3EVL:00000001"}[0m

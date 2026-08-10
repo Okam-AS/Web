@@ -1,0 +1,48 @@
+[ nuxi ] Nuxt 3.16.2 with Nitro 2.11.8
+
+  ➜ Local:    http://localhost:3020/
+  ➜ Network:  use --host to expose
+
+  ➜ DevTools: press Shift + Option + D in the browser (v2.3.2)
+
+✔ Vite client built in 23ms
+✔ Vite server built in 158ms
+[nitro] ✔ Nuxt Nitro server built in 356ms
+
+ WARN  Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+ℹ Vite client warmed up in 145ms
+ℹ page reload core/enums/payment-type.ts
+ℹ page reload core/models/index.ts
+ℹ page reload core/services/request-service.ts
+ℹ page reload core/services/request-service.ts (x2)
+ℹ page reload core/services/request-service.ts (x3)
+ℹ page reload core/services/cart-service.ts
+ℹ page reload core/services/index.ts
+ℹ page reload core/pinia/services.ts
+ℹ page reload core/pinia/checkout.ts
+ℹ page reload core/pinia/checkout.ts (x2)
+ℹ page reload core/pinia/checkout.ts (x3)
+ℹ page reload core/pinia/checkout.ts (x4)
+ℹ page reload core/pinia/checkout.ts (x5)
+ℹ page reload core/translations/en.ts
+ℹ page reload core/translations/no.ts
+ℹ page reload core/translations/de.ts
+ℹ page reload core/translations/no.ts
+ℹ hmr update /pages/checkout.vue?macro=true, /@id/virtual:nuxt:%2FUsers%2Fsvendaneel%2Fokam%2FConsumerWeb%2F.nuxt%2Froutes.mjs
+ℹ hmr update /pages/checkout.vue?macro=true, /@id/virtual:nuxt:%2FUsers%2Fsvendaneel%2Fokam%2FConsumerWeb%2F.nuxt%2Froutes.mjs (x2)
+ℹ hmr update /pages/confirmation.vue?macro=true, /@id/virtual:nuxt:%2FUsers%2Fsvendaneel%2Fokam%2FConsumerWeb%2F.nuxt%2Froutes.mjs
+ℹ page reload core/pinia/checkout.ts
+ℹ page reload core/pinia/checkout.ts (x2)
+ℹ page reload core/pinia/checkout.ts (x3)
+ℹ page reload core/pinia/checkout.ts (x4)
+ℹ page reload core/pinia/checkout.ts (x5)
+ℹ page reload core/pinia/checkout.ts (x6)
+ℹ page reload core/pinia/checkout.ts (x7)
+ℹ page reload core/helpers/tools.ts
+ℹ page reload core/helpers/tools.ts (x2)
+ℹ page reload core/helpers/tools.ts (x3)
+ℹ page reload core/helpers/tools.ts (x4)
+ℹ page reload core/helpers/tools.ts (x5)

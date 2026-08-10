@@ -1,0 +1,31 @@
+[xUnit.net 00:00:06.60]     WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift [FAIL]
+[xUnit.net 00:00:06.60]       The model and ApplicationDbContextModelSnapshot disagree. 1 unrecorded operation(s) would be needed to bring the snapshot up to the model:
+[xUnit.net 00:00:06.60]         - CreateIndex IX_ScratchTreeRedProof_AccountingSummaries_SendingSuccessful on AccountingSummaries (SendingSuccessful)
+[xUnit.net 00:00:06.60]       Each line is something declared in OnModelCreating that the chain does not create, so it exists on every model-built test database and on no deployed one. Add the migration (C2: one migration author at a time, and the chain is the truth, not the model). If a migration cannot be authored yet, record it in Parked with the ledger number that owns it.
+[xUnit.net 00:00:06.60]       
+[xUnit.net 00:00:06.60]       Expected: True
+[xUnit.net 00:00:06.60]       Actual:   False
+[xUnit.net 00:00:06.60]       Stack Trace:
+[xUnit.net 00:00:06.60]         /Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/Modules/ModelVersusChainDriftTests.cs(145,0): at WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift()
+[xUnit.net 00:00:06.60]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:06.60]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+[xUnit.net 00:00:06.98]   Finished:    WebApi.Tests
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.Every_parked_drift_is_still_exactly_as_recorded [333 ms]
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_reported_drift_does_not_depend_on_whether_the_api_ran_first [465 ms]
+  Failed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift [211 ms]
+  Error Message:
+   The model and ApplicationDbContextModelSnapshot disagree. 1 unrecorded operation(s) would be needed to bring the snapshot up to the model:
+  - CreateIndex IX_ScratchTreeRedProof_AccountingSummaries_SendingSuccessful on AccountingSummaries (SendingSuccessful)
+Each line is something declared in OnModelCreating that the chain does not create, so it exists on every model-built test database and on no deployed one. Add the migration (C2: one migration author at a time, and the chain is the truth, not the model). If a migration cannot be authored yet, record it in Parked with the ledger number that owns it.
+
+Expected: True
+Actual:   False
+  Stack Trace:
+     at WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift() in /Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/Modules/ModelVersusChainDriftTests.cs:line 145
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_pending_changes_api_and_this_suites_own_diff_agree [364 ms]
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_check_is_not_vacuous_because_the_snapshot_is_found_and_populated [11 ms]
+
+Test Run Failed.
+Total tests: 6

@@ -1,0 +1,30 @@
+baseline /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/trx/baseline-8e2b57de.trx: 4650 results
+lane     /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/trx/lane-0f29a898.trx: 4670 results
+
+== ONLY IN LANE (+): 20
+  Passed   WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark
+  Passed   WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.Every_events_flag_answers_for_the_undeployed_case_not_only_the_core_one
+  Passed   WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions
+  Passed   WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises
+  Passed   WebApi.Tests.Events.EventsFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on
+  Passed   WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.A_row_flipped_on_under_an_undeployed_module_is_reported_dark
+  Passed   WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.On_a_deployed_module_the_row_still_decides_in_both_directions
+  Passed   WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_dispatch_kill_switch_answers_for_the_undeployed_case_too
+  Passed   WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_resolver_claims_every_key_the_module_advertises
+  Passed   WebApi.Tests.Growth.GrowthFeatureFlagEffectiveTests.The_write_response_does_not_promise_a_surface_the_deployment_has_not_turned_on
+  Passed   WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.A_store_enabled_only_by_configuration_is_reported_effective_not_hidden
+  Passed   WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.An_explicit_row_still_decides_in_both_directions
+  Passed   WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.Clearing_a_row_reverts_to_the_configuration_rather_than_to_the_advertised_default
+  Passed   WebApi.Tests.Meals.MealsFeatureFlagEffectiveTests.The_resolver_claims_the_one_key_the_catalog_carries_and_no_money_path_key
+  Passed   WebApi.Tests.Meals.MealsOperatorLeverReachTests.The_effective_value_reporter_reports_and_does_not_refuse
+  Passed   WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_catalog_flag_is_either_claimed_by_a_registered_resolver_or_excused_by_name
+  Passed   WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_excused_flag_is_a_catalog_flag_that_no_resolver_claims
+  Passed   WebApi.Tests.Wire.FlagEffectiveResolverWireTests.Every_registered_resolver_is_asked_before_the_row_for_at_least_one_real_catalog_key
+  Passed   WebApi.Tests.Wire.FlagEffectiveResolverWireTests.No_two_registered_resolvers_claim_the_same_flag
+  Passed   WebApi.Tests.Wire.MealsGateDeploymentWireTests.The_flag_board_agrees_with_the_deployment_for_a_venue_with_no_row
+
+== ONLY IN BASELINE (-): 0
+
+== OUTCOME CHANGED: 0
+baseline outcomes: {'Passed': 4638, 'NotExecuted': 12}
+lane outcomes: {'Passed': 4658, 'NotExecuted': 12}

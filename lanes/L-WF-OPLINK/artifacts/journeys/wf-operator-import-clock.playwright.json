@@ -1,0 +1,156 @@
+{
+  "journey": "wf-operator-import-clock",
+  "title": "A manager links a POS operator, and that operator clocks a shift onto the attendance table",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T14:58:07.671Z",
+  "finishedAtUtc": "2026-08-01T14:59:31.046Z",
+  "durationMs": 83375,
+  "capabilities": [
+    "workforce.roster.operator-import",
+    "workforce.pos.clock",
+    "workforce.attendance.read"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3338",
+  "apiBaseUrl": "http://127.0.0.1:3340",
+  "commit": "3e811b222dfd42a018f1f3b792a577a930024a93",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager and open the roster",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:07.672Z",
+      "durationMs": 15792,
+      "detail": "roster: Ola Ansatt, Kari Hansen",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the roster offers the link, and says who cannot clock today",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:23.464Z",
+      "durationMs": 40,
+      "detail": "Kari Hansen #1 Kan stemple – koblet til Kari Hansen | Ola Ansatt #2 Kan ikke stemple – ingen kobling",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "choosing Ola shows both sides of the binding before it is made",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:23.554Z",
+      "durationMs": 38,
+      "detail": "Det blir opprettet en ny person med dette navnet, og en ansettelse under valgt arbeidsgiver. Ansettelsen får bare tilgang til sitt eget – ingen lederrettigheter.",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the import runs, and the receipt names the person, not a guid",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:23.643Z",
+      "durationMs": 34,
+      "detail": "1 av 1 ble koblet nå",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the engagement itself now states the register link",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:23.729Z",
+      "durationMs": 39,
+      "detail": "Koblet til kasseoperatør #2. Stemplinger fra den operatøren blir denne ansettelsens timer.",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "become the register: sign in as the person who runs the till",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:23.847Z",
+      "durationMs": 741,
+      "detail": "the register is at its PIN screen",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "Ola signs in with his PIN — the operator the clock journey could not clock",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:24.588Z",
+      "durationMs": 135,
+      "detail": "operator session open for Ola Ansatt",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "he clocks in, and the register is not refused",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:24.723Z",
+      "durationMs": 78,
+      "detail": "Du er stemplet inn. Økta står åpen fra 16:58.",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "a minute later he clocks out, and the window closes",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:58:24.821Z",
+      "durationMs": 65064,
+      "detail": "Du er stemplet ut. Økta er ført 16:58–16:59.",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the manager reads the hours back off the attendance table",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:59:29.885Z",
+      "durationMs": 1107,
+      "detail": "Ola Ansatt 2026-08-01 0 min 1 min 1 min",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T14:59:31.035Z",
+      "durationMs": 0,
+      "detail": "3 distinct, recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the operator-import journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the operator-import journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fpos\" to \"/admin?redirect=%2Fadmin%2Fpos&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the operator-import journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-rates\" to \"/admin?redirect=%2Fadmin%2Fworkforce-rates&storeId=42\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fpos\" to \"/admin?redirect=%2Fadmin%2Fpos&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fpos\" to \"/admin?redirect=%2Fadmin%2Fpos&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-rates\" to \"/admin?redirect=%2Fadmin%2Fworkforce-rates&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-rates\" to \"/admin?redirect=%2Fadmin%2Fworkforce-rates&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "wf-operator-import-clock/01-who-can-clock-before-the-link-exists.png",
+    "wf-operator-import-clock/02-the-review-names-both-sides.png",
+    "wf-operator-import-clock/03-the-import-receipt.png",
+    "wf-operator-import-clock/04-the-link-on-the-engagement.png",
+    "wf-operator-import-clock/05-the-linked-operator-is-clocked-in.png",
+    "wf-operator-import-clock/06-the-clocked-minutes-on-the-attendance-table.png"
+  ],
+  "error": null
+}

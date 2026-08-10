@@ -1,0 +1,74 @@
+diff --git a/WebApi.Tests/Wire/TrainingWireTests.cs b/WebApi.Tests/Wire/TrainingWireTests.cs
+index a64c8a0b..ecabfcc6 100644
+--- a/WebApi.Tests/Wire/TrainingWireTests.cs
++++ b/WebApi.Tests/Wire/TrainingWireTests.cs
+@@ -1012,24 +1012,32 @@ public class TrainingWireTests
+         var person = WireHostFixture.TrainingPersonRef;
+         var client = _wire.CreateClientAs(WireHostFixture.AdminA);
+ 
+-        int before;
++        // The rows this request adds are IDENTIFIED, not counted, because an all-rows claim is false here: the
++        // collection shares one fixture, and the disclosure-log test below has AdminB read THIS person in
++        // StoreB deliberately, so "every evidence.read for this person was AdminA in StoreA" holds only in the
++        // orders where that test has not run yet. Taking the ids first keeps the claim about this request.
++        List<Guid> before;
+         using (var db = _wire.NewDbContext())
+         {
+             before = db.TrainingAuditEvents.AsNoTracking()
+-                .Count(e => e.EventType == "evidence.read" && e.AggregateId == person.ToString());
++                .Where(e => e.EventType == "evidence.read" && e.AggregateId == person.ToString())
++                .Select(e => e.Id)
++                .ToList();
+         }
+ 
+         var response = await client.GetAsync(Evidence(WireHostFixture.StoreA, person));
+         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+ 
+         using var after = _wire.NewDbContext();
+-        var disclosures = after.TrainingAuditEvents.AsNoTracking()
++        var written = after.TrainingAuditEvents.AsNoTracking()
+             .Where(e => e.EventType == "evidence.read" && e.AggregateId == person.ToString())
++            .ToList()
++            .Where(e => !before.Contains(e.Id))
+             .ToList();
+ 
+-        Assert.Equal(before + 1, disclosures.Count);
+-        Assert.All(disclosures, d => Assert.Equal(WireHostFixture.AdminA, d.ActorReference));
+-        Assert.All(disclosures, d => Assert.Equal(WireHostFixture.StoreA, d.StoreId));
++        var disclosure = Assert.Single(written);
++        Assert.Equal(WireHostFixture.AdminA, disclosure.ActorReference);
++        Assert.Equal(WireHostFixture.StoreA, disclosure.StoreId);
+     }
+ 
+     // ---- The disclosure log: who has looked at one person's record -----------------------------------
+@@ -1091,10 +1099,26 @@ public class TrainingWireTests
+         Assert.DoesNotContain(WireHostFixture.AdminB, actors);
+         Assert.DoesNotContain(WireHostFixture.PowerUser, actors);
+ 
+-        // Nobody in this world has read their own file, so the derived "that was me" flag is false for every
+-        // row — and it is a real derivation, proved by the subject's own read in the test below.
+-        Assert.All(root.GetProperty("disclosures").EnumerateArray(),
+-            d => Assert.False(d.GetProperty("actorIsSubject").GetBoolean()));
++        // The flag is read out as booleans BEFORE Assert.All sees them, and the claim is scoped to the rows
++        // this test causes. Both halves are load-bearing.
++        //
++        // Scope: an all-rows claim here is not true of this world. The collection shares one WireHostFixture,
++        // TrainingPersonRef is Claimed by Outsider, and two siblings below read this same log as that subject —
++        // whose disclosure-log.read rows come back with actorIsSubject TRUE. So an all-rows claim passes or
++        // fails on test order. AdminA is the reader this test wrote (above) and Assert.Contains just proved is
++        // present, and is never the subject; Assert.NotEmpty is because Assert.All passes over nothing.
++        //
++        // Materialize: a JsonElement is a cursor into `document`, and AllException keeps the failing item to
++        // format in get_Message — which xunit calls while unwinding, AFTER this method's `using` has disposed
++        // the document. Handing elements to Assert.All turns any failure here into ObjectDisposedException
++        // inside xunit's reporting path, i.e. a dead test host and an aborted run rather than a red test.
++        var readByTheStoresAdmin = root.GetProperty("disclosures").EnumerateArray()
++            .Where(d => d.GetProperty("actorReference").GetString() == WireHostFixture.AdminA)
++            .Select(d => d.GetProperty("actorIsSubject").GetBoolean())
++            .ToList();
++
++        Assert.NotEmpty(readByTheStoresAdmin);
++        Assert.All(readByTheStoresAdmin, actorIsSubject => Assert.False(actorIsSubject));
+     }
+ 
+     /// <summary>

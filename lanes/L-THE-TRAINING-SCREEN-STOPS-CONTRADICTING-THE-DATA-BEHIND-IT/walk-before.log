@@ -1,0 +1,18 @@
+gate panel present (a dark module): false
+completion rows on screen: 4
+their Kurs column reads: ["—","—","—","—"]
+nothing selected -> «Ny tildeling» says: "Ingen publisert versjon å tildele. Publiser en versjon først — serveren avviser tildeling av utkast og pensjonerte versjoner."
+nothing selected -> «For en gjennomforing» says: "Ingen låst versjon å føre mot. En gjennomføring må stemples mot en publisert eller pensjonert versjon."
+nothing selected -> an assign version picker exists: false
+GET /courses returned 6 courses; 5 carry a published version
+GET /courses course keys: ["courseId","title","category","competencyKey","isActive","versionCount","hasPublishedVersion","createdAtUtc"]
+  -> the list carries per-course versions: false
+GET /completions returned 4 rows
+GET /completions row keys: ["completionId","personRef","courseId","courseVersionId","scorePercent","passed","versionContentHash","source","completedAtUtc"]
+  -> the row carries courseTitle: false
+  -> the row carries versionNo: false
+
+---- console errors ----
+[]
+---- failed requests ----
+[]

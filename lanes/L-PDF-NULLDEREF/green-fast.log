@@ -1,0 +1,400 @@
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId" AS "RewardProgramId0", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name" AS "Name0"
+          FROM "Stores" AS "s"
+          LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+          WHERE "s"."StoreId" = @__cartModel_StoreId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "RewardCashbackRanges" AS "r0" ON "t"."RewardProgramId0" = "r0"."RewardProgramId"
+      ORDER BY "t"."StoreId", "t"."RewardProgramId0"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name"
+      FROM "Stores" AS "s"
+      LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 33)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Purchased'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 33)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Redeemed'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__cartModel_StoreId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "t"."RewardProgramId0", "t"."CashbackEnabled", "t"."CutOffDaysForRewardCalculation", "t"."Name0", "r0"."RewardCashbackRangeId", "r0"."FromAmount", "r0"."Percent", "r0"."RewardProgramId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId" AS "RewardProgramId0", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name" AS "Name0"
+          FROM "Stores" AS "s"
+          LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+          WHERE "s"."StoreId" = @__cartModel_StoreId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "RewardCashbackRanges" AS "r0" ON "t"."RewardProgramId0" = "r0"."RewardProgramId"
+      ORDER BY "t"."StoreId", "t"."RewardProgramId0"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__today_0='?' (DbType = DateTime), @__storeId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Orders" AS "o"
+      WHERE "o"."Kind" = 'Consumer' AND "o"."Created" >= @__today_0 AND CASE
+          WHEN "o"."OriginalStoreId" > 0 THEN "o"."OriginalStoreId" = @__storeId_1
+          ELSE "o"."StoreId" = @__storeId_1
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Decimal), @p2='?' (DbType = Boolean), @p3='?' (DbType = Int32), @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?' (DbType = DateTime), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = DateTime), @p17='?' (DbType = Int32), @p18='?', @p19='?' (Size = 10), @p20='?' (DbType = Int32), @p21='?' (Size = 6), @p22='?', @p23='?', @p24='?' (DbType = DateTime), @p25='?' (DbType = Int32), @p26='?' (Size = 2), @p27='?', @p28='?' (DbType = Guid), @p29='?' (DbType = Boolean), @p30='?' (DbType = Boolean), @p31='?' (DbType = Boolean), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int64), @p35='?' (DbType = Double), @p36='?' (DbType = Double), @p37='?' (Size = 6), @p38='?' (DbType = Int32), @p39='?' (DbType = Int32), @p40='?' (DbType = Int32), @p41='?', @p42='?' (Size = 14), @p43='?' (DbType = Int32), @p44='?' (DbType = DateTime), @p45='?' (Size = 4), @p46='?' (DbType = DateTime), @p47='?' (DbType = DateTime), @p48='?' (DbType = Int64), @p49='?' (DbType = DateTime), @p50='?' (DbType = Int32), @p51='?' (DbType = Int32), @p52='?' (DbType = Int32), @p53='?' (DbType = Int32), @p54='?' (Size = 8), @p55='?', @p56='?', @p57='?', @p58='?' (DbType = Int32), @p59='?' (Size = 19), @p60='?' (DbType = Int64), @p61='?', @p62='?', @p63='?', @p64='?' (DbType = Int32), @p65='?', @p66='?' (DbType = Int32), @p67='?' (DbType = Int32), @p68='?' (DbType = Int32), @p69='?', @p70='?' (Size = 33), @p71='?' (DbType = Boolean), @p72='?', @p73='?' (DbType = Guid), @p74='?', @p75='?' (DbType = Int32), @p76='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Orders" ("ApplicationFeeAmount", "ApplicationFeePercent", "CanceledByStore", "CashPointId", "City", "Comment", "CompanyAddress", "CompanyCity", "CompanyEmail", "CompanyName", "CompanyPhone", "CompanyVat", "CompanyZipCode", "Completed", "ConcurrencyVersion", "Couverts", "Created", "DeliveryAmount", "DeliveryInstructions", "DeliveryType", "DineHomeOrderId", "DineHomeStatus", "DinteroSessionId", "DinteroTransactionId", "EstimatedProcessingEndTime", "FinalAmount", "FriendlyOrderId", "FullAddress", "GiftcardTransactionId", "IsInPreorderMode", "IsSelfPickup", "IsWaiterOrder", "ItemsAmount", "ItemsAmountLineThrough", "JournalEntryId", "Lat", "Lng", "NotificationHub", "OperatorId", "OrderDiscountAmount", "OriginalStoreId", "PaymentIntentId", "PaymentType", "PayoutStoreId", "Pickup", "Platform", "ProcessingEndTime", "ProcessingStartTime", "ReceiptNumber", "RequestedCompletion", "ReservationId", "ServiceFeeAmount", "SmsCount", "SmsFee", "Status", "StoreCity", "StoreDineHomeOutletId", "StoreFullAddress", "StoreId", "StoreLegalName", "StoreVAT", "StoreZipCode", "SurfboardOrderId", "SurfboardPaymentId", "TableId", "TableName", "TipAmount", "TotalFeeAmount", "UsedRewardAmount", "UserFullName", "UserId", "UserIsMember", "VippsOrderId", "WoltDeliveryInfoId", "WoltMarketplaceOrderId", "WoltServiceFeeAmount", "ZipCode")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37, @p38, @p39, @p40, @p41, @p42, @p43, @p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53, @p54, @p55, @p56, @p57, @p58, @p59, @p60, @p61, @p62, @p63, @p64, @p65, @p66, @p67, @p68, @p69, @p70, @p71, @p72, @p73, @p74, @p75, @p76)
+      RETURNING "OrderId", "Kind";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__tokenHash_0='?' (Size = 43)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ReservationId", "m"."AgreementId", "m"."ApplicationUserId", "m"."AuthorizationTokenHash", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Currency", "m"."ExpiresAtUtc", "m"."MembershipId", "m"."PeriodKey", "m"."PolicyVersionId", "m"."ProgramId", "m"."QuoteHash", "m"."ReleaseReasonCode", "m"."ReservedCapMinor", "m"."State", "m"."StoreId"
+      FROM "MealsFundingReservations" AS "m"
+      WHERE "m"."AuthorizationTokenHash" = @__tokenHash_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?', @p3='?', @p4='?', @p5='?' (Size = 19), @p6='?' (Size = 27), @p7='?' (Size = 4), @p8='?', @p9='?', @p10='?', @p11='?' (Size = 11), @p12='?' (Size = 1), @p13='?', @p14='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "EventLogs" ("EventLogId", "AppName", "AppVersion", "DeviceMake", "DeviceModel", "EventName", "EventValue", "LaunchId", "ModalName", "Os", "OsVersion", "PageName", "ResumeId", "StackTrace", "TimeStamp")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p0='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Orders" SET "Status" = @p0
+      WHERE "OrderId" = @p1 AND "ConcurrencyVersion" = @p2
+      RETURNING 1;
+warn: WebApi.Controllers.CartsController[0]
+      MEALS_RESERVATION_NOT_FOUND
+      WebApi.Helpers.AppException: MEALS_RESERVATION_NOT_FOUND
+         at WebApi.Services.CartService.PromoteToOrder(String userId, Int32 storeId, PaymentType overridePaymentType, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/CartService.cs:line 731
+         at WebApi.Controllers.CartsController.Complete(Int32 storeId, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/CartsController.cs:line 169
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.CartsController.Complete (WebApi), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 5.2939ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.CartsController.Complete (WebApi) in 10.7302ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.CartsController.Complete (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/carts/complete/4501?reservationToken=mealstok_not-a-reservation-at-all - 400 41 application/json;+charset=utf-8 12.4638ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/stores/4501/meals/quotes - application/json;+charset=utf-8 154
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 31)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "CreateQuote", controller = "MealsFunding"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateQuote(Int32, WebApi.Models.Meals.CreateMealsQuoteRequest) on controller WebApi.Controllers.Meals.MealsFundingController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__request_CompanyId_0='?' (DbType = Guid), @__userId_1='?' (Size = 31)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."MembershipId", "m"."ApplicationUserId", "m"."ClaimedFromInvitationId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."EmployeeReference", "m"."Role", "m"."State"
+      FROM "MealsMemberships" AS "m"
+      WHERE "m"."CompanyId" = @__request_CompanyId_0 AND "m"."ApplicationUserId" = @__userId_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__request_CompanyId_0='?' (DbType = Guid), @__storeId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."AgreementId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Currency", "m"."EffectiveFromUtc", "m"."EffectiveToUtc", "m"."PilotPriceTerms", "m"."SellerAddress", "m"."SellerLegalName", "m"."SellerOrganizationNumber", "m"."SellerVatStatus", "m"."Status", "m"."StoreId"
+      FROM "MealsAgreements" AS "m"
+      WHERE "m"."CompanyId" = @__request_CompanyId_0 AND "m"."StoreId" = @__storeId_1 AND "m"."Status" = 'Active'
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__request_CompanyId_0='?' (DbType = Guid), @__agreement_AgreementId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ProgramId", "m"."AgreementId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Name", "m"."Status"
+      FROM "MealsPrograms" AS "m"
+      WHERE "m"."CompanyId" = @__request_CompanyId_0 AND "m"."AgreementId" = @__agreement_AgreementId_1 AND "m"."Status" = 'Active'
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__request_CompanyId_0='?' (DbType = Guid), @__program_ProgramId_1='?' (DbType = Guid), @__membership_MembershipId_2='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "MealsProgramMembers" AS "m"
+          WHERE "m"."CompanyId" = @__request_CompanyId_0 AND "m"."ProgramId" = @__program_ProgramId_1 AND "m"."MembershipId" = @__membership_MembershipId_2 AND "m"."State" = 'Enrolled')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__programId_1='?' (DbType = Guid), @__nowUtc_2='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."PolicyVersionId", "m"."AllowanceMinor", "m"."CompanyId", "m"."CreatedAtUtc", "m"."Currency", "m"."EffectiveFromUtc", "m"."EligibleWeekdaysMask", "m"."LocalWindowEndMinutes", "m"."LocalWindowStartMinutes", "m"."PeriodKind", "m"."ProgramId", "m"."TimeZoneId", "m"."Version"
+      FROM "MealsPolicyVersions" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."ProgramId" = @__programId_1 AND "m"."EffectiveFromUtc" <= @__nowUtc_2
+      ORDER BY "m"."EffectiveFromUtc" DESC, "m"."Version" DESC
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__scopeKey_1='?' (Size = 43), @__idempotencyKey_2='?' (Size = 25)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CommandReceiptId", "m"."CompanyId", "m"."CompletedAtUtc", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."IdempotencyKey", "m"."RequestHash", "m"."ResponseSnapshotJson", "m"."ResponseStatusCode", "m"."ScopeKey"
+      FROM "MealsCommandReceipts" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."ScopeKey" = @__scopeKey_1 AND "m"."IdempotencyKey" = @__idempotencyKey_2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = Guid), @p3='?' (DbType = Guid), @p4='?' (Size = 8), @p5='?' (Size = 3), @p6='?' (DbType = DateTime), @p7='?' (DbType = Guid), @p8='?' (DbType = Guid), @p9='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      
+      INSERT INTO MealsBudgetGuards (BudgetGuardId, CompanyId, ProgramId, MembershipId, PeriodKey, ReservedMinor, CapturedMinor, Currency, ConcurrencyVersion, CreatedAtUtc)
+      SELECT @p0, @p1, @p2, @p3, @p4, 0, 0, @p5, 0, @p6
+      WHERE NOT EXISTS (
+          SELECT 1 FROM MealsBudgetGuards
+          WHERE ProgramId = @p7 AND MembershipId = @p8 AND PeriodKey = @p9)
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int64), @p1='?' (DbType = Guid), @p2='?' (DbType = Guid), @p3='?' (Size = 8), @p4='?' (DbType = Int64), @p5='?' (DbType = Int64), @p6='?' (DbType = Guid), @p7='?' (DbType = Guid), @p8='?' (DbType = DateTime), @p9='?' (DbType = DateTime), @p10='?' (DbType = DateTime), @p11='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      
+      UPDATE MealsBudgetGuards
+      SET ReservedMinor = ReservedMinor + @p0,
+          ConcurrencyVersion = ConcurrencyVersion + 1
+      WHERE ProgramId = @p1
+        AND MembershipId = @p2
+        AND PeriodKey = @p3
+        AND ReservedMinor + @p4 <= @p5
+        AND NOT EXISTS (
+            SELECT 1 FROM MealsPolicyVersions pv
+            WHERE pv.CompanyId = @p6
+              AND pv.ProgramId = @p7
+              AND pv.EffectiveFromUtc <= @p8
+              AND (pv.EffectiveFromUtc > @p9
+                   OR (pv.EffectiveFromUtc = @p10 AND pv.Version > @p11)))
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime), @p3='?' (DbType = DateTime), @p4='?' (Size = 25), @p5='?' (Size = 64), @p6='?' (Size = 192), @p7='?' (DbType = Int32), @p8='?' (Size = 43)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsCommandReceipts" ("CommandReceiptId", "CompanyId", "CompletedAtUtc", "CreatedAtUtc", "IdempotencyKey", "RequestHash", "ResponseSnapshotJson", "ResponseStatusCode", "ScopeKey")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8)
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (Size = 31), @p3='?' (Size = 43), @p4='?' (DbType = Guid), @p5='?' (DbType = DateTime), @p6='?' (Size = 3), @p7='?' (DbType = DateTime), @p8='?' (DbType = Guid), @p9='?' (Size = 8), @p10='?' (DbType = Guid), @p11='?' (DbType = Guid), @p12='?' (Size = 47), @p13='?', @p14='?' (DbType = Int64), @p15='?' (Size = 8), @p16='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsFundingReservations" ("ReservationId", "AgreementId", "ApplicationUserId", "AuthorizationTokenHash", "CompanyId", "CreatedAtUtc", "Currency", "ExpiresAtUtc", "MembershipId", "PeriodKey", "PolicyVersionId", "ProgramId", "QuoteHash", "ReleaseReasonCode", "ReservedCapMinor", "State", "StoreId")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16)
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.4112ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsQuoteResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi) in 2.1141ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/stores/4501/meals/quotes - 200 242 application/json;+charset=utf-8 5.1080ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/carts/complete/4501?reservationToken=mealstok_rPFgfbqPlSKC7AQrBIcg_JY7NotvrFjh72vai3KNr7g - text/plain;+charset=utf-8 0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 35)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.CartsController.Complete (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "Complete", controller = "Carts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Complete(Int32, System.String) on controller WebApi.Controllers.CartsController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.CartsController.Complete (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 35), @__storeId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."CartId", "t"."City", "t"."Comment", "t"."CompanyAddress", "t"."CompanyCity", "t"."CompanyEmail", "t"."CompanyName", "t"."CompanyPhone", "t"."CompanyVat", "t"."CompanyZipCode", "t"."Created", "t"."DeliveryInstructions", "t"."DeliveryType", "t"."DinteroSessionId", "t"."DinteroTransactionId", "t"."DiscountCode", "t"."FullAddress", "t"."HomeDeliveryMethodId", "t"."IgnoreLegecyIsSelfPickupBool", "t"."IgnoreLegecyIsWaiterOrderBool", "t"."IsSelfPickup", "t"."IsWaiterOrder", "t"."NotificationHub", "t"."PaymentIntentId", "t"."PaymentType", "t"."Platform", "t"."RequestedCompletion", "t"."StoreId", "t"."SurfboardOrderId", "t"."SurfboardPaymentId", "t"."TableName", "t"."TipAmount", "t"."TipPercent", "t"."Updated", "t"."UseReward", "t"."UserId", "t"."VippsOrderId", "t"."ZipCode", "t"."HomeDeliveryMethodId0", "t1"."CartLineItemId", "t1"."AddedToCart", "t1"."CartId", "t1"."Notes", "t1"."ProductId", "t1"."Quantity", "t1"."ProductId0", "t1"."ProductVariantOptionId", "t1"."CartLineItemId0", "t1"."ProductVariantOptionId0", "t1"."Amount", "t1"."Name", "t1"."NegativeAmount", "t1"."OrderIndex", "t1"."OtherInformation", "t1"."ProductVariantId", "t1"."Amount0", "t1"."Barcode", "t1"."BarcodeEnabled", "t1"."CommaSeparatedHideFromDeliveryTypes", "t1"."CreatedAt", "t1"."Currency", "t1"."DeliveryAdditionalAmount", "t1"."DeliveryPriceEnabled", "t1"."DeliveryTax", "t1"."DepositAmount", "t1"."DepositEnabled", "t1"."Description", "t1"."GoodsGroupId", "t1"."Hide", "t1"."Inventory", "t1"."InventoryEnabled", "t1"."KitchenPrintEnabled", "t1"."ManualRewardAmount", "t1"."ManualRewardAmountEnabled", "t1"."Name0", "t1"."OtherInformation0", "t1"."ProductVariantEnabled", "t1"."StoreId", "t1"."TableAdditionalAmount", "t1"."TablePriceEnabled", "t1"."TableTax", "t1"."Tax", "t1"."UpdatedAt", "t1"."ProductVariantId0", "t1"."CategoryId", "t1"."MaximumSelectedOptions", "t1"."MinimumSelectedOptions", "t1"."Name1", "t1"."OrderIndex0", "t1"."ProductId1", "t1"."ProductVariantOptionId1", "t1"."Amount1", "t1"."Name00", "t1"."NegativeAmount0", "t1"."OrderIndex00", "t1"."OtherInformation1", "t1"."ProductVariantId00", "t"."Amount", "t"."IsDineHomeDelivery", "t"."IsWoltHomeDelivery", "t"."Lat", "t"."Lng", "t"."MaxDistance", "t"."StoreId0", "t"."UpdatedAt", "t"."WoltShipmentPromiseId"
+      FROM (
+          SELECT "c"."CartId", "c"."City", "c"."Comment", "c"."CompanyAddress", "c"."CompanyCity", "c"."CompanyEmail", "c"."CompanyName", "c"."CompanyPhone", "c"."CompanyVat", "c"."CompanyZipCode", "c"."Created", "c"."DeliveryInstructions", "c"."DeliveryType", "c"."DinteroSessionId", "c"."DinteroTransactionId", "c"."DiscountCode", "c"."FullAddress", "c"."HomeDeliveryMethodId", "c"."IgnoreLegecyIsSelfPickupBool", "c"."IgnoreLegecyIsWaiterOrderBool", "c"."IsSelfPickup", "c"."IsWaiterOrder", "c"."NotificationHub", "c"."PaymentIntentId", "c"."PaymentType", "c"."Platform", "c"."RequestedCompletion", "c"."StoreId", "c"."SurfboardOrderId", "c"."SurfboardPaymentId", "c"."TableName", "c"."TipAmount", "c"."TipPercent", "c"."Updated", "c"."UseReward", "c"."UserId", "c"."VippsOrderId", "c"."ZipCode", "h"."HomeDeliveryMethodId" AS "HomeDeliveryMethodId0", "h"."Amount", "h"."IsDineHomeDelivery", "h"."IsWoltHomeDelivery", "h"."Lat", "h"."Lng", "h"."MaxDistance", "h"."StoreId" AS "StoreId0", "h"."UpdatedAt", "h"."WoltShipmentPromiseId"
+          FROM "Carts" AS "c"
+          LEFT JOIN "HomeDeliveryMethods" AS "h" ON "c"."HomeDeliveryMethodId" = "h"."HomeDeliveryMethodId"
+          WHERE "c"."UserId" = @__userId_0 AND "c"."StoreId" = @__storeId_1
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN (
+          SELECT "c0"."CartLineItemId", "c0"."AddedToCart", "c0"."CartId", "c0"."Notes", "c0"."ProductId", "c0"."Quantity", "p"."ProductId" AS "ProductId0", "t0"."ProductVariantOptionId", "t0"."CartLineItemId" AS "CartLineItemId0", "t0"."ProductVariantOptionId0", "t0"."Amount", "t0"."Name", "t0"."NegativeAmount", "t0"."OrderIndex", "t0"."OtherInformation", "t0"."ProductVariantId", "p"."Amount" AS "Amount0", "p"."Barcode", "p"."BarcodeEnabled", "p"."CommaSeparatedHideFromDeliveryTypes", "p"."CreatedAt", "p"."Currency", "p"."DeliveryAdditionalAmount", "p"."DeliveryPriceEnabled", "p"."DeliveryTax", "p"."DepositAmount", "p"."DepositEnabled", "p"."Description", "p"."GoodsGroupId", "p"."Hide", "p"."Inventory", "p"."InventoryEnabled", "p"."KitchenPrintEnabled", "p"."ManualRewardAmount", "p"."ManualRewardAmountEnabled", "p"."Name" AS "Name0", "p"."OtherInformation" AS "OtherInformation0", "p"."ProductVariantEnabled", "p"."StoreId", "p"."TableAdditionalAmount", "p"."TablePriceEnabled", "p"."TableTax", "p"."Tax", "p"."UpdatedAt", "t2"."ProductVariantId" AS "ProductVariantId0", "t2"."CategoryId", "t2"."MaximumSelectedOptions", "t2"."MinimumSelectedOptions", "t2"."Name" AS "Name1", "t2"."OrderIndex" AS "OrderIndex0", "t2"."ProductId" AS "ProductId1", "t2"."ProductVariantOptionId" AS "ProductVariantOptionId1", "t2"."Amount" AS "Amount1", "t2"."Name0" AS "Name00", "t2"."NegativeAmount" AS "NegativeAmount0", "t2"."OrderIndex0" AS "OrderIndex00", "t2"."OtherInformation" AS "OtherInformation1", "t2"."ProductVariantId0" AS "ProductVariantId00"
+          FROM "CartLineItems" AS "c0"
+          LEFT JOIN "Products" AS "p" ON "c0"."ProductId" = "p"."ProductId"
+          LEFT JOIN (
+              SELECT "c1"."ProductVariantOptionId", "c1"."CartLineItemId", "p0"."ProductVariantOptionId" AS "ProductVariantOptionId0", "p0"."Amount", "p0"."Name", "p0"."NegativeAmount", "p0"."OrderIndex", "p0"."OtherInformation", "p0"."ProductVariantId"
+              FROM "CartLineItemProductVariantOptions" AS "c1"
+              INNER JOIN "ProductVariantOptions" AS "p0" ON "c1"."ProductVariantOptionId" = "p0"."ProductVariantOptionId"
+          ) AS "t0" ON "c0"."CartLineItemId" = "t0"."CartLineItemId"
+          LEFT JOIN (
+              SELECT "p1"."ProductVariantId", "p1"."CategoryId", "p1"."MaximumSelectedOptions", "p1"."MinimumSelectedOptions", "p1"."Name", "p1"."OrderIndex", "p1"."ProductId", "p2"."ProductVariantOptionId", "p2"."Amount", "p2"."Name" AS "Name0", "p2"."NegativeAmount", "p2"."OrderIndex" AS "OrderIndex0", "p2"."OtherInformation", "p2"."ProductVariantId" AS "ProductVariantId0"
+              FROM "ProductVariants" AS "p1"
+              LEFT JOIN "ProductVariantOptions" AS "p2" ON "p1"."ProductVariantId" = "p2"."ProductVariantId"
+          ) AS "t2" ON "p"."ProductId" = "t2"."ProductId"
+      ) AS "t1" ON "t"."CartId" = "t1"."CartId"
+      ORDER BY "t"."CartId", "t"."HomeDeliveryMethodId0", "t1"."CartLineItemId", "t1"."ProductId0", "t1"."ProductVariantOptionId", "t1"."CartLineItemId0", "t1"."ProductVariantOptionId0", "t1"."ProductVariantId0"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "t"."AddressId0", "t"."City", "t"."FullAddress", "t"."Latitude", "t"."Longitude", "t"."ZipCode", "t"."AddressId1", "t"."City0", "t"."FullAddress0", "t"."Latitude0", "t"."Longitude0", "t"."ZipCode0", "t"."Id", "t"."Id0", "t"."RewardProgramId0", "o"."OpeningHourId", "o"."ClosingTime", "o"."DayOfWeek", "o"."Open", "o"."OpeningTime", "o"."StoreId", "s1"."SpecialOpeningHourId", "s1"."ClosingTime", "s1"."Date", "s1"."Note", "s1"."Open", "s1"."OpeningTime", "s1"."StoreId", "s2"."ApplicationUserId", "s2"."StoreId", "s2"."SendSMSOnNewOrder", "t"."ApplePayEnabled", "t"."BillieEnabled", "t"."BillieMessage", "t"."CallbackSignatureSecret", "t"."ClientId", "t"."ClientSecret", "t"."CommissionPercentage", "t"."CreditCardEnabled", "t"."DinteroAccountId", "t"."GooglePayEnabled", "t"."KlarnaEnabled", "t"."KraviaEnabled", "t"."KraviaMessage", "t"."SplitSellerId", "t"."StoreId0", "t"."VippsEnabled0", "t"."WoltDeliveryFeePercent", "t"."ApplicationId", "t"."CardEnabled", "t"."CommissionPercentage0", "t"."KlarnaEnabled0", "t"."MerchantId", "t"."MobilePayEnabled", "t"."OnboardingStatus", "t"."OnlineTerminalId", "t"."PartialPaymentsEnabled", "t"."StoreExternalId", "t"."StoreId1", "t"."SwishEnabled", "t"."TerminalCommissionPercentage", "t"."TipsEnabled", "t"."VippsEnabled1", "t"."WebhookSecret", "t"."WoltDeliveryFeePercent0", "t"."CashbackEnabled", "t"."CutOffDaysForRewardCalculation", "t"."Name0", "r0"."RewardCashbackRangeId", "r0"."FromAmount", "r0"."Percent", "r0"."RewardProgramId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "a"."AddressId" AS "AddressId0", "a"."City", "a"."FullAddress", "a"."Latitude", "a"."Longitude", "a"."ZipCode", "a0"."AddressId" AS "AddressId1", "a0"."City" AS "City0", "a0"."FullAddress" AS "FullAddress0", "a0"."Latitude" AS "Latitude0", "a0"."Longitude" AS "Longitude0", "a0"."ZipCode" AS "ZipCode0", "d"."Id", "d"."ApplePayEnabled", "d"."BillieEnabled", "d"."BillieMessage", "d"."CallbackSignatureSecret", "d"."ClientId", "d"."ClientSecret", "d"."CommissionPercentage", "d"."CreditCardEnabled", "d"."DinteroAccountId", "d"."GooglePayEnabled", "d"."KlarnaEnabled", "d"."KraviaEnabled", "d"."KraviaMessage", "d"."SplitSellerId", "d"."StoreId" AS "StoreId0", "d"."VippsEnabled" AS "VippsEnabled0", "d"."WoltDeliveryFeePercent", "s0"."Id" AS "Id0", "s0"."ApplicationId", "s0"."CardEnabled", "s0"."CommissionPercentage" AS "CommissionPercentage0", "s0"."KlarnaEnabled" AS "KlarnaEnabled0", "s0"."MerchantId", "s0"."MobilePayEnabled", "s0"."OnboardingStatus", "s0"."OnlineTerminalId", "s0"."PartialPaymentsEnabled", "s0"."StoreExternalId", "s0"."StoreId" AS "StoreId1", "s0"."SwishEnabled", "s0"."TerminalCommissionPercentage", "s0"."TipsEnabled", "s0"."VippsEnabled" AS "VippsEnabled1", "s0"."WebhookSecret", "s0"."WoltDeliveryFeePercent" AS "WoltDeliveryFeePercent0", "r"."RewardProgramId" AS "RewardProgramId0", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name" AS "Name0"
+          FROM "Stores" AS "s"
+          LEFT JOIN "Address" AS "a" ON "s"."AddressId" = "a"."AddressId"
+          LEFT JOIN "Address" AS "a0" ON "s"."HomeDeliveryFromAddressId" = "a0"."AddressId"
+          LEFT JOIN "DinteroStoreConfigurations" AS "d" ON "s"."StoreId" = "d"."StoreId"
+          LEFT JOIN "SurfboardStoreConfigurations" AS "s0" ON "s"."StoreId" = "s0"."StoreId"
+          LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "OpeningHours" AS "o" ON "t"."StoreId" = "o"."StoreId"
+      LEFT JOIN "SpecialOpeningHours" AS "s1" ON "t"."StoreId" = "s1"."StoreId"
+      LEFT JOIN "StoreUserSettings" AS "s2" ON "t"."StoreId" = "s2"."StoreId"
+      LEFT JOIN "RewardCashbackRanges" AS "r0" ON "t"."RewardProgramId0" = "r0"."RewardProgramId"
+      ORDER BY "t"."StoreId", "t"."AddressId0", "t"."AddressId1", "t"."Id", "t"."Id0", "t"."RewardProgramId0", "o"."OpeningHourId", "s1"."SpecialOpeningHourId", "s2"."ApplicationUserId", "s2"."StoreId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "r"."RegularDiscountId", "r"."Applicability", "r"."Code", "r"."Discount", "r"."Expired", "r"."GiveRewardInsteadOfDiscountEnabled", "r"."Label", "r"."MaximumTotalUsageCount", "r"."MaximumTotalUsageCountEnabled", "r"."MaximumUsagePerCustomerCount", "r"."MaximumUsagePerCustomerCountEnabled", "r"."MinimumOrderAmount", "r"."MinimumOrderAmountEnabled", "r"."ShowInPos", "r"."SortOrder", "r"."StoreId", "r"."TimedEnabled", "r"."Type", "r"."ValidFrom", "r"."ValidTo", "t0"."RegularDiscountId", "t0"."OrderId", "t0"."OrderId0", "t0"."ApplicationFeeAmount", "t0"."ApplicationFeePercent", "t0"."CanceledByStore", "t0"."CashPointId", "t0"."City", "t0"."Comment", "t0"."CompanyAddress", "t0"."CompanyCity", "t0"."CompanyEmail", "t0"."CompanyName", "t0"."CompanyPhone", "t0"."CompanyVat", "t0"."CompanyZipCode", "t0"."Completed", "t0"."ConcurrencyVersion", "t0"."Couverts", "t0"."Created", "t0"."DeliveryAmount", "t0"."DeliveryInstructions", "t0"."DeliveryType", "t0"."DineHomeOrderId", "t0"."DineHomeStatus", "t0"."DinteroSessionId", "t0"."DinteroTransactionId", "t0"."EstimatedProcessingEndTime", "t0"."FinalAmount", "t0"."FriendlyOrderId", "t0"."FullAddress", "t0"."GiftcardTransactionId", "t0"."IsInPreorderMode", "t0"."IsSelfPickup", "t0"."IsWaiterOrder", "t0"."ItemsAmount", "t0"."ItemsAmountLineThrough", "t0"."JournalEntryId", "t0"."Kind", "t0"."Lat", "t0"."Lng", "t0"."NotificationHub", "t0"."OperatorId", "t0"."OrderDiscountAmount", "t0"."OriginalStoreId", "t0"."PaymentIntentId", "t0"."PaymentType", "t0"."PayoutStoreId", "t0"."Pickup", "t0"."Platform", "t0"."ProcessingEndTime", "t0"."ProcessingStartTime", "t0"."ReceiptNumber", "t0"."RequestedCompletion", "t0"."ReservationId", "t0"."ServiceFeeAmount", "t0"."SmsCount", "t0"."SmsFee", "t0"."Status", "t0"."StoreCity", "t0"."StoreDineHomeOutletId", "t0"."StoreFullAddress", "t0"."StoreId", "t0"."StoreLegalName", "t0"."StoreVAT", "t0"."StoreZipCode", "t0"."SurfboardOrderId", "t0"."SurfboardPaymentId", "t0"."TableId", "t0"."TableName", "t0"."TipAmount", "t0"."TotalFeeAmount", "t0"."UsedRewardAmount", "t0"."UserFullName", "t0"."UserId", "t0"."UserIsMember", "t0"."VippsOrderId", "t0"."WoltDeliveryInfoId", "t0"."WoltMarketplaceOrderId", "t0"."WoltServiceFeeAmount", "t0"."ZipCode", "d"."RegularDiscountId", "d"."ProductId"
+      FROM "RegularDiscount" AS "r"
+      LEFT JOIN (
+          SELECT "r0"."RegularDiscountId", "r0"."OrderId", "t"."OrderId" AS "OrderId0", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."CanceledByStore", "t"."CashPointId", "t"."City", "t"."Comment", "t"."CompanyAddress", "t"."CompanyCity", "t"."CompanyEmail", "t"."CompanyName", "t"."CompanyPhone", "t"."CompanyVat", "t"."CompanyZipCode", "t"."Completed", "t"."ConcurrencyVersion", "t"."Couverts", "t"."Created", "t"."DeliveryAmount", "t"."DeliveryInstructions", "t"."DeliveryType", "t"."DineHomeOrderId", "t"."DineHomeStatus", "t"."DinteroSessionId", "t"."DinteroTransactionId", "t"."EstimatedProcessingEndTime", "t"."FinalAmount", "t"."FriendlyOrderId", "t"."FullAddress", "t"."GiftcardTransactionId", "t"."IsInPreorderMode", "t"."IsSelfPickup", "t"."IsWaiterOrder", "t"."ItemsAmount", "t"."ItemsAmountLineThrough", "t"."JournalEntryId", "t"."Kind", "t"."Lat", "t"."Lng", "t"."NotificationHub", "t"."OperatorId", "t"."OrderDiscountAmount", "t"."OriginalStoreId", "t"."PaymentIntentId", "t"."PaymentType", "t"."PayoutStoreId", "t"."Pickup", "t"."Platform", "t"."ProcessingEndTime", "t"."ProcessingStartTime", "t"."ReceiptNumber", "t"."RequestedCompletion", "t"."ReservationId", "t"."ServiceFeeAmount", "t"."SmsCount", "t"."SmsFee", "t"."Status", "t"."StoreCity", "t"."StoreDineHomeOutletId", "t"."StoreFullAddress", "t"."StoreId", "t"."StoreLegalName", "t"."StoreVAT", "t"."StoreZipCode", "t"."SurfboardOrderId", "t"."SurfboardPaymentId", "t"."TableId", "t"."TableName", "t"."TipAmount", "t"."TotalFeeAmount", "t"."UsedRewardAmount", "t"."UserFullName", "t"."UserId", "t"."UserIsMember", "t"."VippsOrderId", "t"."WoltDeliveryInfoId", "t"."WoltMarketplaceOrderId", "t"."WoltServiceFeeAmount", "t"."ZipCode"
+          FROM "RegularDiscountUsage" AS "r0"
+          INNER JOIN (
+              SELECT "o"."OrderId", "o"."ApplicationFeeAmount", "o"."ApplicationFeePercent", "o"."CanceledByStore", "o"."CashPointId", "o"."City", "o"."Comment", "o"."CompanyAddress", "o"."CompanyCity", "o"."CompanyEmail", "o"."CompanyName", "o"."CompanyPhone", "o"."CompanyVat", "o"."CompanyZipCode", "o"."Completed", "o"."ConcurrencyVersion", "o"."Couverts", "o"."Created", "o"."DeliveryAmount", "o"."DeliveryInstructions", "o"."DeliveryType", "o"."DineHomeOrderId", "o"."DineHomeStatus", "o"."DinteroSessionId", "o"."DinteroTransactionId", "o"."EstimatedProcessingEndTime", "o"."FinalAmount", "o"."FriendlyOrderId", "o"."FullAddress", "o"."GiftcardTransactionId", "o"."IsInPreorderMode", "o"."IsSelfPickup", "o"."IsWaiterOrder", "o"."ItemsAmount", "o"."ItemsAmountLineThrough", "o"."JournalEntryId", "o"."Kind", "o"."Lat", "o"."Lng", "o"."NotificationHub", "o"."OperatorId", "o"."OrderDiscountAmount", "o"."OriginalStoreId", "o"."PaymentIntentId", "o"."PaymentType", "o"."PayoutStoreId", "o"."Pickup", "o"."Platform", "o"."ProcessingEndTime", "o"."ProcessingStartTime", "o"."ReceiptNumber", "o"."RequestedCompletion", "o"."ReservationId", "o"."ServiceFeeAmount", "o"."SmsCount", "o"."SmsFee", "o"."Status", "o"."StoreCity", "o"."StoreDineHomeOutletId", "o"."StoreFullAddress", "o"."StoreId", "o"."StoreLegalName", "o"."StoreVAT", "o"."StoreZipCode", "o"."SurfboardOrderId", "o"."SurfboardPaymentId", "o"."TableId", "o"."TableName", "o"."TipAmount", "o"."TotalFeeAmount", "o"."UsedRewardAmount", "o"."UserFullName", "o"."UserId", "o"."UserIsMember", "o"."VippsOrderId", "o"."WoltDeliveryInfoId", "o"."WoltMarketplaceOrderId", "o"."WoltServiceFeeAmount", "o"."ZipCode"
+              FROM "Orders" AS "o"
+              WHERE "o"."Kind" = 'Consumer'
+          ) AS "t" ON "r0"."OrderId" = "t"."OrderId"
+      ) AS "t0" ON "r"."RegularDiscountId" = "t0"."RegularDiscountId"
+      LEFT JOIN "DiscountProducts" AS "d" ON "r"."RegularDiscountId" = "d"."RegularDiscountId"
+      WHERE "r"."StoreId" = @__storeId_0
+      ORDER BY "r"."RegularDiscountId", "t0"."RegularDiscountId", "t0"."OrderId", "t0"."OrderId0", "d"."RegularDiscountId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "c"."CategoryId", "c"."CategoryProductListEnabled", "c"."CommaSeparatedHideFromDeliveryTypes", "c"."Hide", "c"."ImageCarouselEnabled", "c"."KitchenPrintEnabled", "c"."Name", "c"."OrderIndex", "c"."ProductVariantEnabled", "c"."Slug", "c"."SoldOut", "c"."StartPublish", "c"."StopPublish", "c"."StoreId", "t"."ProductVariantId", "t"."CategoryId", "t"."MaximumSelectedOptions", "t"."MinimumSelectedOptions", "t"."Name", "t"."OrderIndex", "t"."ProductId", "t"."ProductVariantOptionId", "t"."Amount", "t"."Name0", "t"."NegativeAmount", "t"."OrderIndex0", "t"."OtherInformation", "t"."ProductVariantId0", "t0"."ImageCarouselItemId", "t0"."CategoryId", "t0"."OrderIndex", "t0"."ImageCarouselItemMarkerId", "t0"."ImageCarouselItemId0", "t0"."PercentX", "t0"."PercentY", "t0"."ProductId", "c0"."CategoryProductListItemId", "c0"."CategoryId", "c0"."Heading", "c0"."IsHeading", "c0"."OrderIndex", "c0"."ProductId"
+      FROM "Categories" AS "c"
+      LEFT JOIN (
+          SELECT "p"."ProductVariantId", "p"."CategoryId", "p"."MaximumSelectedOptions", "p"."MinimumSelectedOptions", "p"."Name", "p"."OrderIndex", "p"."ProductId", "p0"."ProductVariantOptionId", "p0"."Amount", "p0"."Name" AS "Name0", "p0"."NegativeAmount", "p0"."OrderIndex" AS "OrderIndex0", "p0"."OtherInformation", "p0"."ProductVariantId" AS "ProductVariantId0"
+          FROM "ProductVariants" AS "p"
+          LEFT JOIN "ProductVariantOptions" AS "p0" ON "p"."ProductVariantId" = "p0"."ProductVariantId"
+      ) AS "t" ON "c"."CategoryId" = "t"."CategoryId"
+      LEFT JOIN (
+          SELECT "i"."ImageCarouselItemId", "i"."CategoryId", "i"."OrderIndex", "i0"."ImageCarouselItemMarkerId", "i0"."ImageCarouselItemId" AS "ImageCarouselItemId0", "i0"."PercentX", "i0"."PercentY", "i0"."ProductId"
+          FROM "ImageCarouselItem" AS "i"
+          LEFT JOIN "ImageCarouselItemMarkers" AS "i0" ON "i"."ImageCarouselItemId" = "i0"."ImageCarouselItemId"
+      ) AS "t0" ON "c"."CategoryId" = "t0"."CategoryId"
+      LEFT JOIN "CategoryProductListItems" AS "c0" ON "c"."CategoryId" = "c0"."CategoryId"
+      WHERE "c"."StoreId" = @__storeId_0
+      ORDER BY "c"."CategoryId", "t"."ProductVariantId", "t"."ProductVariantOptionId", "t0"."ImageCarouselItemId", "t0"."ImageCarouselItemMarkerId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name"
+      FROM "Stores" AS "s"
+      LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 35)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Purchased'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 35)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Redeemed'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__cartModel_StoreId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "t"."RewardProgramId0", "t"."CashbackEnabled", "t"."CutOffDaysForRewardCalculation", "t"."Name0", "r0"."RewardCashbackRangeId", "r0"."FromAmount", "r0"."Percent", "r0"."RewardProgramId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId" AS "RewardProgramId0", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name" AS "Name0"
+          FROM "Stores" AS "s"
+          LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+          WHERE "s"."StoreId" = @__cartModel_StoreId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "RewardCashbackRanges" AS "r0" ON "t"."RewardProgramId0" = "r0"."RewardProgramId"
+      ORDER BY "t"."StoreId", "t"."RewardProgramId0"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name"
+      FROM "Stores" AS "s"
+      LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+      WHERE "s"."StoreId" = @__storeId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 35)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Purchased'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__clientTheme_0='?' (Size = 4), @__userId_1='?' (Size = 35)], CommandType='Text', CommandTimeout='30']
+      SELECT COALESCE(SUM("g"."Amount"), 0)
+      FROM "GiftcardTransactions" AS "g"
+      WHERE "g"."ClientTheme" = @__clientTheme_0 AND "g"."UserId" = @__userId_1 AND "g"."Type" = 'Redeemed'
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__cartModel_StoreId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "t"."RewardProgramId0", "t"."CashbackEnabled", "t"."CutOffDaysForRewardCalculation", "t"."Name0", "r0"."RewardCashbackRangeId", "r0"."FromAmount", "r0"."Percent", "r0"."RewardProgramId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount", "r"."RewardProgramId" AS "RewardProgramId0", "r"."CashbackEnabled", "r"."CutOffDaysForRewardCalculation", "r"."Name" AS "Name0"
+          FROM "Stores" AS "s"
+          LEFT JOIN "RewardPrograms" AS "r" ON "s"."RewardProgramId" = "r"."RewardProgramId"
+          WHERE "s"."StoreId" = @__cartModel_StoreId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "RewardCashbackRanges" AS "r0" ON "t"."RewardProgramId0" = "r0"."RewardProgramId"
+      ORDER BY "t"."StoreId", "t"."RewardProgramId0"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__today_0='?' (DbType = DateTime), @__storeId_1='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT COUNT(*)
+      FROM "Orders" AS "o"
+      WHERE "o"."Kind" = 'Consumer' AND "o"."Created" >= @__today_0 AND CASE
+          WHEN "o"."OriginalStoreId" > 0 THEN "o"."OriginalStoreId" = @__storeId_1
+          ELSE "o"."StoreId" = @__storeId_1
+      END
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Decimal), @p2='?' (DbType = Boolean), @p3='?' (DbType = Int32), @p4='?', @p5='?', @p6='?', @p7='?', @p8='?', @p9='?', @p10='?', @p11='?', @p12='?', @p13='?' (DbType = DateTime), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?' (DbType = DateTime), @p17='?' (DbType = Int32), @p18='?', @p19='?' (Size = 10), @p20='?' (DbType = Int32), @p21='?' (Size = 6), @p22='?', @p23='?', @p24='?' (DbType = DateTime), @p25='?' (DbType = Int32), @p26='?' (Size = 2), @p27='?', @p28='?' (DbType = Guid), @p29='?' (DbType = Boolean), @p30='?' (DbType = Boolean), @p31='?' (DbType = Boolean), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int64), @p35='?' (DbType = Double), @p36='?' (DbType = Double), @p37='?' (Size = 6), @p38='?' (DbType = Int32), @p39='?' (DbType = Int32), @p40='?' (DbType = Int32), @p41='?', @p42='?' (Size = 14), @p43='?' (DbType = Int32), @p44='?' (DbType = DateTime), @p45='?' (Size = 4), @p46='?' (DbType = DateTime), @p47='?' (DbType = DateTime), @p48='?' (DbType = Int64), @p49='?' (DbType = DateTime), @p50='?' (DbType = Int32), @p51='?' (DbType = Int32), @p52='?' (DbType = Int32), @p53='?' (DbType = Int32), @p54='?' (Size = 8), @p55='?', @p56='?', @p57='?', @p58='?' (DbType = Int32), @p59='?' (Size = 19), @p60='?' (DbType = Int64), @p61='?', @p62='?', @p63='?', @p64='?' (DbType = Int32), @p65='?', @p66='?' (DbType = Int32), @p67='?' (DbType = Int32), @p68='?' (DbType = Int32), @p69='?', @p70='?' (Size = 35), @p71='?' (DbType = Boolean), @p72='?', @p73='?' (DbType = Guid), @p74='?', @p75='?' (DbType = Int32), @p76='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Orders" ("ApplicationFeeAmount", "ApplicationFeePercent", "CanceledByStore", "CashPointId", "City", "Comment", "CompanyAddress", "CompanyCity", "CompanyEmail", "CompanyName", "CompanyPhone", "CompanyVat", "CompanyZipCode", "Completed", "ConcurrencyVersion", "Couverts", "Created", "DeliveryAmount", "DeliveryInstructions", "DeliveryType", "DineHomeOrderId", "DineHomeStatus", "DinteroSessionId", "DinteroTransactionId", "EstimatedProcessingEndTime", "FinalAmount", "FriendlyOrderId", "FullAddress", "GiftcardTransactionId", "IsInPreorderMode", "IsSelfPickup", "IsWaiterOrder", "ItemsAmount", "ItemsAmountLineThrough", "JournalEntryId", "Lat", "Lng", "NotificationHub", "OperatorId", "OrderDiscountAmount", "OriginalStoreId", "PaymentIntentId", "PaymentType", "PayoutStoreId", "Pickup", "Platform", "ProcessingEndTime", "ProcessingStartTime", "ReceiptNumber", "RequestedCompletion", "ReservationId", "ServiceFeeAmount", "SmsCount", "SmsFee", "Status", "StoreCity", "StoreDineHomeOutletId", "StoreFullAddress", "StoreId", "StoreLegalName", "StoreVAT", "StoreZipCode", "SurfboardOrderId", "SurfboardPaymentId", "TableId", "TableName", "TipAmount", "TotalFeeAmount", "UsedRewardAmount", "UserFullName", "UserId", "UserIsMember", "VippsOrderId", "WoltDeliveryInfoId", "WoltMarketplaceOrderId", "WoltServiceFeeAmount", "ZipCode")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25, @p26, @p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37, @p38, @p39, @p40, @p41, @p42, @p43, @p44, @p45, @p46, @p47, @p48, @p49, @p50, @p51, @p52, @p53, @p54, @p55, @p56, @p57, @p58, @p59, @p60, @p61, @p62, @p63, @p64, @p65, @p66, @p67, @p68, @p69, @p70, @p71, @p72, @p73, @p74, @p75, @p76)
+      RETURNING "OrderId", "Kind";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__tokenHash_0='?' (Size = 43)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ReservationId", "m"."AgreementId", "m"."ApplicationUserId", "m"."AuthorizationTokenHash", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Currency", "m"."ExpiresAtUtc", "m"."MembershipId", "m"."PeriodKey", "m"."PolicyVersionId", "m"."ProgramId", "m"."QuoteHash", "m"."ReleaseReasonCode", "m"."ReservedCapMinor", "m"."State", "m"."StoreId"
+      FROM "MealsFundingReservations" AS "m"
+      WHERE "m"."AuthorizationTokenHash" = @__tokenHash_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__reservation_CompanyId_0='?' (DbType = Guid), @__reservation_ReservationId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."AttributionId", "m"."BoundAtUtc", "m"."BoundCartTotalMinor", "m"."CapturedAtUtc", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Currency", "m"."OrderId", "m"."ReservationId", "m"."StoreId"
+      FROM "MealsOrderAttributions" AS "m"
+      WHERE "m"."CompanyId" = @__reservation_CompanyId_0 AND "m"."ReservationId" = @__reservation_ReservationId_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."AttributionId", "m"."BoundAtUtc", "m"."BoundCartTotalMinor", "m"."CapturedAtUtc", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Currency", "m"."OrderId", "m"."ReservationId", "m"."StoreId"
+      FROM "MealsOrderAttributions" AS "m"
+      WHERE "m"."OrderId" = @__orderId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?', @p3='?', @p4='?', @p5='?' (Size = 19), @p6='?' (Size = 27), @p7='?' (Size = 4), @p8='?', @p9='?', @p10='?', @p11='?' (Size = 11), @p12='?' (Size = 1), @p13='?', @p14='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "EventLogs" ("EventLogId", "AppName", "AppVersion", "DeviceMake", "DeviceModel", "EventName", "EventValue", "LaunchId", "ModalName", "Os", "OsVersion", "PageName", "ResumeId", "StackTrace", "TimeStamp")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p0='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Orders" SET "Status" = @p0
+      WHERE "OrderId" = @p1 AND "ConcurrencyVersion" = @p2
+      RETURNING 1;
+warn: WebApi.Controllers.CartsController[0]
+      MEALS_RESERVATION_NOT_OWNED
+      WebApi.Helpers.AppException: MEALS_RESERVATION_NOT_OWNED
+         at WebApi.Services.CartService.PromoteToOrder(String userId, Int32 storeId, PaymentType overridePaymentType, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/CartService.cs:line 731
+         at WebApi.Controllers.CartsController.Complete(Int32 storeId, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/CartsController.cs:line 169
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.CartsController.Complete (WebApi), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 5.4232ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.CartsController.Complete (WebApi) in 5.9141ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.CartsController.Complete (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/carts/complete/4501?reservationToken=mealstok_rPFgfbqPlSKC7AQrBIcg_JY7NotvrFjh72vai3KNr7g - 400 41 application/json;+charset=utf-8 7.2174ms
+[xUnit.net 00:05:45.56]     WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane [SKIP]
+[xUnit.net 00:05:45.56]     WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow [SKIP]
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane [1 ms]
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow [1 ms]
+[xUnit.net 00:06:15.38]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [SKIP]
+[xUnit.net 00:06:15.54]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [SKIP]
+[xUnit.net 00:06:15.54]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [SKIP]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [1 ms]
+[xUnit.net 00:06:18.65]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+[xUnit.net 00:06:18.65]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+Results File: /Users/svendaneel/okam/OkamAPI-pdfnull/artifacts/tests/pdf-nullderef-fast.trx
+
+Passed!  - Failed:     0, Passed:  4399, Skipped:    12, Total:  4411, Duration: 6 m 29 s - WebApi.Tests.dll (net8.0)
+EXIT=0

@@ -1,0 +1,36 @@
+34 tests on feature/restaurant-modules d30c1c4d4 asserting the credit-sale capability, all {'Passed'}
+
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.An_undefined_payment_type_prints_the_residual_word_not_a_number
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Cash, tender: "Kontant")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: CompanyAccount, tender: "Bedriftskonto")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Dintero, tender: "Kort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: DinteroBillie, tender: "Billie")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: DinteroKlarna, tender: "Klarna")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: DinteroKravia, tender: "Kravia")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: DinteroTerminal, tender: "Kort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: DinteroVipps, tender: "Vipps")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Giftcard, tender: "Gavekort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: NotSet, tender: "Ingen betaling")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: PayInStore, tender: "Betal i butikk")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Stripe, tender: "Kort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Surfboard, tender: "Kort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: SurfboardTerminal, tender: "Kort")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: SurfboardVipps, tender: "Vipps")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: Vipps, tender: "Vipps")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Both_printed_ladders_name_the_tender_in_Norwegian(type: WoltMarketplace, tender: "Wolt")
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.Every_declared_member_is_labelled_by_its_own_arm
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.No_declared_member_prints_a_raw_csharp_identifier
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.The_expected_tenders_cover_exactly_the_declared_members
+[Passed] WebApi.Tests.Kassa.EscPosPaymentLabelTests.The_receipt_and_the_XZ_report_name_a_tender_identically
+[Passed] WebApi.Tests.Kassa.EscPosXZCreditSaleTests.ACreditSaleIsNeverListedUnderReceivedPayment
+[Passed] WebApi.Tests.Kassa.EscPosXZCreditSaleTests.ADayWithNoCreditSalesPrintsNoCreditSection
+[Passed] WebApi.Tests.Kassa.EscPosXZCreditSaleTests.IsReceived_isTheOneRuleEveryEmitterReads
+[Passed] WebApi.Tests.Kassa.EscPosXZCreditSaleTests.SumMottatt_countsOnlyTheMoneyTheRegisterTookIn
+[Passed] WebApi.Tests.Kassa.EscPosXZCreditSaleTests.TheInvoicedSaleIsStated_notSilentlyDropped
+[Passed] WebApi.Tests.Kassa.EscPosXZReportBuilderTests.OperatorControlledText_CannotInjectPrinterCommands
+[Passed] WebApi.Tests.Kassa.EscPosXZReportBuilderTests.PrintedReport_FeedsPastTheTearBarBeforeCutting
+[Passed] WebApi.Tests.Kassa.EscPosXZReportBuilderTests.PrintedXReport_CarriesTurnoverVatAndGrandTotals
+[Passed] WebApi.Tests.Kassa.EscPosXZReportBuilderTests.PrintedZReport_IsTitledWithItsNumberAndCarriesTheSignature
+[Passed] WebApi.Tests.Meals.CompanyAccountClassificationTests.CompanyAccount_IsADistinctTender_NotOverloadingPayInStoreOrCash
+[Passed] WebApi.Tests.Meals.CompanyAccountClassificationTests.IsCompanyAccount_IsTrueOnlyForCompanyAccount_AndNeverCashCardOrProvider
+[Passed] WebApi.Tests.Meals.CompanyAccountClassificationTests.Receipt_RendersADistinctCompanyAccountTenderLabel_NotTheEmptyGenericFallback

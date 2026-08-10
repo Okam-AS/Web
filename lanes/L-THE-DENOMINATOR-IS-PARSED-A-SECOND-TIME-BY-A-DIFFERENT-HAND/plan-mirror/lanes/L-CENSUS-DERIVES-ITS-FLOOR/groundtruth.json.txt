@@ -1,0 +1,520 @@
+{
+  "Meals": {
+    "Services/Meals/Interfaces/IMealsAuditWriter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsAgreementService.cs": {
+      "sites": 1,
+      "lines": [
+        165
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Meals/MealsAuditEntry.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsAuditWriter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsCompanyService.cs": {
+      "sites": 3,
+      "lines": [
+        156,
+        270,
+        342
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Meals/MealsFundingAuthority.cs": {
+      "sites": 1,
+      "lines": [
+        251
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsMembershipService.cs": {
+      "sites": 4,
+      "lines": [
+        131,
+        244,
+        334,
+        481
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsProgramService.cs": {
+      "sites": 3,
+      "lines": [
+        173,
+        284,
+        435
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Meals/MealsReconciliationService.cs": {
+      "sites": 1,
+      "lines": [
+        245
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Meals/MealsStatementService.cs": {
+      "sites": 2,
+      "lines": [
+        189,
+        277
+      ],
+      "resolvers": 1,
+      "guards": 0
+    }
+  },
+  "Training": {
+    "Services/Training/Interfaces/ITrainingAuditWriter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Training/TrainingAssignmentService.cs": {
+      "sites": 2,
+      "lines": [
+        134,
+        201
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Training/TrainingAuditEntry.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Training/TrainingAuditWriter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Training/TrainingCertificateService.cs": {
+      "sites": 2,
+      "lines": [
+        193,
+        310
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Training/TrainingCompletionService.cs": {
+      "sites": 1,
+      "lines": [
+        146
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Training/TrainingCourseService.cs": {
+      "sites": 5,
+      "lines": [
+        157,
+        234,
+        290,
+        340,
+        389
+      ],
+      "resolvers": 1,
+      "guards": 0
+    },
+    "Services/Training/TrainingEvidenceService.cs": {
+      "sites": 1,
+      "lines": [
+        274
+      ],
+      "resolvers": 1,
+      "guards": 0
+    }
+  },
+  "Events": {
+    "Entities/Events/EventsPaymentReceipt.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Events/EventsStateTransition.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Events/EventsActorKind.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Events/EventsLossReason.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Events/EventsPaymentReceiptKind.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Growth/GrowthAuditActorKind.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Helpers/ApplicationDbContext.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Models/Events/EventsDepositModels.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Models/Events/EventsProposalViews.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsAmendmentService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsDepositCompletionSink.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsDepositPaid.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsDepositService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsDetailReader.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsInquiryService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsPaymentLedger.cs": {
+      "sites": 1,
+      "lines": [
+        72
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsProposalService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsSettlementService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsStateMachine.cs": {
+      "sites": 1,
+      "lines": [
+        248
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsViewMapper.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/EventsWriteGuards.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/Interfaces/IEventsDepositService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Events/Interfaces/IEventsInquiryService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    }
+  },
+  "Margin": {
+    "Entities/Margin/MarginPriceImportBatch.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Margin/MarginPriceImportRow.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Margin/MarginSupplierItemPrice.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Margin/MarginPriceImportBatchState.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Margin/MarginPriceSource.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Helpers/ApplicationDbContext.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Models/Margin/MarginPriceImportModels.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Margin/MarginPriceImportService.cs": {
+      "sites": 1,
+      "lines": [
+        185
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Margin/MarginPriceImportStatusContributor.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    }
+  },
+  "Growth": {
+    "Controllers/GrowthNewslettersController.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Growth/GrowthDispatchRun.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Growth/GrowthNewsletter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Growth/GrowthNewsletterApproval.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Entities/Growth/GrowthNewsletterVersion.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Enums/Growth/GrowthNewsletterState.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Helpers/ApplicationDbContext.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Helpers/NumericConfirmationCode.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Models/Growth/GrowthNewsletterModels.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Program.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthConsentService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthDeliveryHealthService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthDispatchService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthNewsletterService.cs": {
+      "sites": 4,
+      "lines": [
+        117,
+        127,
+        195,
+        378
+      ],
+      "resolvers": 0,
+      "guards": 1
+    },
+    "Services/Growth/GrowthPublicRateLimiter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthWebhookIngestionService.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    }
+  },
+  "GrowthAudit": {
+    "Services/Growth/GrowthAuditEntry.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthAuditWriter.cs": {
+      "sites": 0,
+      "lines": [],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthConsentTextService.cs": {
+      "sites": 1,
+      "lines": [
+        227
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthDispatchService.cs": {
+      "sites": 1,
+      "lines": [
+        186
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthNewsletterService.cs": {
+      "sites": 2,
+      "lines": [
+        224,
+        313
+      ],
+      "resolvers": 0,
+      "guards": 1
+    },
+    "Services/Growth/GrowthProviderAccountService.cs": {
+      "sites": 1,
+      "lines": [
+        118
+      ],
+      "resolvers": 0,
+      "guards": 0
+    },
+    "Services/Growth/GrowthSubscriptionService.cs": {
+      "sites": 1,
+      "lines": [
+        235
+      ],
+      "resolvers": 0,
+      "guards": 0
+    }
+  }
+}
+
+==== TOTALS ====
+Meals        files=10 sites=15 resolvers=4 guards=0
+Training     files=8 sites=11 resolvers=5 guards=0
+Events       files=23 sites=2 resolvers=0 guards=0
+Margin       files=9 sites=1 resolvers=0 guards=0
+Growth       files=16 sites=4 resolvers=0 guards=1
+GrowthAudit  files=7 sites=6 resolvers=0 guards=1

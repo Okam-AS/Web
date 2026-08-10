@@ -1,0 +1,37 @@
+[
+  {
+    "name": "the moved row keeps its old holder",
+    "file": "../wt-gcxfer/Services/GiftcardService.cs",
+    "test": "FullyQualifiedName~GiftcardBalanceTests",
+    "from": "            held.UserId = userId;",
+    "to": "            held.UserId = held.UserId;"
+  },
+  {
+    "name": "the moved row keeps its old type",
+    "file": "../wt-gcxfer/Services/GiftcardService.cs",
+    "test": "FullyQualifiedName~GiftcardBalanceTests",
+    "from": "            held.Type = type;\n            held.UserId = userId;",
+    "to": "            held.UserId = userId;"
+  },
+  {
+    "name": "a known receiver gets a second row again",
+    "file": "../wt-gcxfer/Services/GiftcardService.cs",
+    "test": "FullyQualifiedName~GiftcardBalanceTests",
+    "from": "                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id);",
+    "to": "                        await CreateTransactionForGiftcard(clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id, giftcard.FinalAmount, giftcard.GiftcardId, true);"
+  },
+  {
+    "name": "an unknown receiver gets a second row again",
+    "file": "../wt-gcxfer/Services/GiftcardService.cs",
+    "test": "FullyQualifiedName~GiftcardBalanceTests",
+    "from": "                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.AwaitingReceiver, giftcard.BuyerUserId);",
+    "to": "                        await CreateTransactionForGiftcard(clientTheme, GiftcardTransactionType.AwaitingReceiver, giftcard.BuyerUserId, giftcard.FinalAmount, giftcard.GiftcardId, true);"
+  },
+  {
+    "name": "the handover copy is taken after the reassignment",
+    "file": "../wt-gcxfer/Services/GiftcardService.cs",
+    "test": "FullyQualifiedName~GiftcardBalanceTests",
+    "from": "                    await CreateGiftcardCopy(GiftcardStatus.Transferred, GiftcardTransactionType.Transferred, originalReceiverId, giftcard);\n\n                    if (receiverUser == null)\n                    {\n                        giftcard.ReceiverUserId = string.Empty;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.AwaitingReceiver, giftcard.BuyerUserId);\n                        giftcard.Status = GiftcardStatus.AwaitingReceiver;\n                    }\n                    else\n                    {\n                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id);\n                    }",
+    "to": "                    if (receiverUser == null)\n                    {\n                        giftcard.ReceiverUserId = string.Empty;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.AwaitingReceiver, giftcard.BuyerUserId);\n                        giftcard.Status = GiftcardStatus.AwaitingReceiver;\n                    }\n                    else\n                    {\n                        giftcard.ReceiverUserId = receiverUser.Id;\n                        giftcard.ReceiverPhoneNumber = newReceiverPhoneNumber;\n                        await MoveGiftcardValueTo(giftcard, clientTheme, GiftcardTransactionType.Purchased, receiverUser.Id);\n                    }\n                    await CreateGiftcardCopy(GiftcardStatus.Transferred, GiftcardTransactionType.Transferred, originalReceiverId, giftcard);"
+  }
+]

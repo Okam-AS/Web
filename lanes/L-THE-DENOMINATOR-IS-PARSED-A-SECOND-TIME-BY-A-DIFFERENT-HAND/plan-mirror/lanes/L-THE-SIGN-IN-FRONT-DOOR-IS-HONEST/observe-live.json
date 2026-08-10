@@ -1,0 +1,46 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "tag": "live",
+  "at": "2026-08-06T20:01:36.632Z",
+  "msToModalVisible": 1312,
+  "atModalVisible": {
+    "modalText": "Logg inn Okam Admin Web Portal +47 Send kode",
+    "hasPhoneInput": true,
+    "hasSendButton": true,
+    "sendButtonText": "Send kode",
+    "sendButtonDisabled": false,
+    "sendButtonAriaDisabled": null,
+    "otpBoxes": 0,
+    "nuxtReady": true,
+    "loadState": "complete"
+  },
+  "earlyClick": {
+    "attempted": true,
+    "filled": true,
+    "clicked": true,
+    "requestsAfter": 1,
+    "dom": {
+      "otpBoxes": 6,
+      "says": null,
+      "sendButtonStillThere": false,
+      "sendButtonDisabled": null,
+      "nuxtReady": true
+    }
+  },
+  "clicksNeededAfterSettle": 0,
+  "urlAtOtpStep": "http://127.0.0.1:3971/admin",
+  "finalUrl": "http://127.0.0.1:3971/admin?storeId=1",
+  "urlTrail": [
+    "http://127.0.0.1:3971/admin/overview",
+    "http://127.0.0.1:3971/admin/overview",
+    "http://127.0.0.1:3971/admin/overview",
+    "http://127.0.0.1:3971/admin",
+    "http://127.0.0.1:3971/admin?storeId=1"
+  ],
+  "signedInUserId": "6ba6dd27-42b0-4ba9-807b-96930c735f2f",
+  "finalHeadings": [
+    "Velkommen !",
+    "Butikkinformasjon"
+  ],
+  "consoleErrors": []
+}

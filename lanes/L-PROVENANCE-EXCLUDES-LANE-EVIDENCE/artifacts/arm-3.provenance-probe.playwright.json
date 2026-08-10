@@ -1,0 +1,67 @@
+{
+  "journey": "provenance-probe",
+  "title": "the page loads and says who served it",
+  "status": "passed",
+  "startedAtUtc": "2026-08-05T04:09:39.040Z",
+  "finishedAtUtc": "2026-08-05T04:09:39.061Z",
+  "durationMs": 21,
+  "capabilities": [
+    "harness.provenance.probe"
+  ],
+  "surface": "public",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:54294",
+  "apiBaseUrl": "http://127.0.0.1:54293",
+  "commit": null,
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:54293/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "web-provexcl@607f1385adeb430668d15e3259cc84bfc0d8fc5e",
+    "source": "process:127.0.0.1:54293",
+    "short": "607f138",
+    "detail": "branch lane/provenance-excludes-lane-evidence; 3 untracked paths under lanes/ or docs/plan/ ignored as lane evidence"
+  },
+  "backendServed": 2,
+  "backendSubjectServed": 1,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "backendSample": [
+    "GET http://127.0.0.1:54293/user -> 200",
+    "GET http://127.0.0.1:54293/workforce/stores/1/context -> 200"
+  ],
+  "servingFixture": {
+    "origin": "http://127.0.0.1:54293",
+    "identitySource": "none",
+    "unresolved": "live backend — which build answered is recorded in `backendBuild`, and a live API's working directory is not this checkout by design"
+  },
+  "nodeCalls": [],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the page",
+      "status": "passed",
+      "startedAtUtc": "2026-08-05T04:09:39.041Z",
+      "durationMs": 19,
+      "detail": "served by live",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": null,
+  "artifact": {
+    "key": "live-54293-607f138",
+    "file": "artifacts/journeys/runs/provenance-probe.live-54293-607f138.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "live-54293-607f138",
+    "provisional": false,
+    "supersedes": null
+  }
+}

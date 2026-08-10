@@ -1,0 +1,10 @@
+signed in on :3971 (the owner's served tree)
+signed in on :3979 (this lane's worktree)
+module ON, :3979 roster wire: ["200 /workforce/stores/1/context","404 /workforce/stores/1/invitations","200 /workforce/stores/1/roles","200 /workforce/stores/1/staff","200 /workforce/stores/1/context","404 /workforce/stores/1/invitations","200 /workforce/stores/1/roles","200 /workforce/stores/1/staff"]
+module ON, :3979 roster: Ansatte | Hvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes. | Legg til person | Oppdater
+workforce.module OFF from the board -> {"badge":"Av","facts":["Standard: av","Overstyrt for butikken","Faktisk: av"]}
+:3971 (old code)  roster prints: Du har ikke bemanningstilgang i denne butikken.
+:3979 (fixed)     roster prints: Bemanningsmodulen er ikke slått på for denne butikken. Det er en bryter per butikk (workforce.module), og den står av her — det sier ingenting om hvilke tilganger du har.
+:3979 (fixed)     schedule prints: Vaktplan | Uken i butikken: hvem som jobber når, hva som er ledig, og hva som faktisk er publisert. | Bemanningsmodulen er ikke slått på for denne butikken. Det er en bryter per butikk (workforce.module), og den står av her — det sier ingenting om hvilke tilganger du har.
+workforce.module BACK ON -> {"badge":"På","facts":["Standard: av","Overstyrt for butikken","Faktisk: på"]}
+module ON again, :3979 roster: Ansatte | Hvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes. | Legg til person

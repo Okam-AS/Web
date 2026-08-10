@@ -1,0 +1,158 @@
+[
+  {
+    "name": "terminated corridors are listed as if a bill might exist",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the authority boundary is reported as a generic failure",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a failed read leaves the previous statement on screen",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "opening another run keeps the CSV held for the previous one",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a client-named file is passed off as the server's name",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a file with no server name is offered as null.csv",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an unknown period leaks into the file name as null",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the saved file is named something other than the one shown",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the download link points at nothing",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the saved file is not a CSV",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a browser with no object URL saves silently instead of refusing",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the opened run never fills the run field",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "history rows are rendered raw instead of read",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a run named on the URL is ignored",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an export is attempted with no statement open",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "an empty run id is still sent to the server",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a refused export is swallowed",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a failed directory read falls through and reports no companies",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a non-array directory payload is used as-is",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a signed-out visitor is read for anyway",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the first administered store is not used when nothing is selected",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "a store change does not re-read",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "signing in on the page is not heard",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the frozen and still-draft notes are swapped",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the month-close ownership note is dropped",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  },
+  {
+    "name": "the statement is opened before the history rather than after",
+    "outcome": "RED",
+    "reddened": 0,
+    "first": []
+  }
+]

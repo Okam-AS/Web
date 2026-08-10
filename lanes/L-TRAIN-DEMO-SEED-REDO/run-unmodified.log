@@ -1,0 +1,14 @@
+
+[1m== TRAINING 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== TRAINING 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   before the lever: GET /context -> 200   (a previous run already lit this store)
+   flag training.setup = on
+   flag training.assignments = on
+   context: {"timeZone":"Europe/Oslo","fallback":false,"capabilities":["manage"]}
+
+[1m== TRAINING 3. Who the training is FOR (the Workforce roster, BY VALUE)[0m
+   the roster read did not yield the three persons; reading WorkforcePersons directly instead
+Error response from daemon: container ab2c8a21c93304a7426c05cf61601834aaff52af76aab1db95ff470d2d4d1fce is not running
+[31mFAILED: SQL failed: SELECT TOP 1 CONVERT(varchar(36), WorkforcePersonId) FROM WorkforcePersons WHERE DisplayName = N'Nora Berg';[0m

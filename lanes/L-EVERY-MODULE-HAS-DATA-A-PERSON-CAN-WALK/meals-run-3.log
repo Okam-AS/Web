@@ -1,0 +1,69 @@
+
+[1m== MEALS 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== MEALS 2. Turn the module on for this store (the operator lever)[0m
+   flag meals.module = on
+
+[1m== MEALS 3. Resolve the identity that actually holds PowerUserRole[0m
+   no separate PowerUser account in this world (+4790000001 cannot sign in).
+   the MANAGER +4799681931 holds PowerUserRole, so the concierge steps run as the manager.
+
+[1m== MEALS 4. The company-account surface, probed rather than assumed[0m
+   POST /v1/meals/companies -> 400 An organization number is required.
+   a 400 is the LIT answer: the module's own validation refused an empty body, so Features:Meals is bound here.
+
+[1m== MEALS 5. The buying companies[0m
+   Nordsjo Consulting = 4b898e81-0b4c-f645-075b-6ec8071d41ea (org 915001001, Active) via idempotency key 'demo-meals-company-nordsjo-v1'
+   Havnekontoret = e12ad6c2-c7f8-6993-e7a4-c2528d1924dc (org 915002002, Active) via idempotency key 'demo-meals-company-havnekontoret-v1'
+
+[1m== MEALS 6. Sign the corridors (concierge authority, not the buyer's admin)[0m
+   Nordsjo Consulting already holds an Active NOK corridor (a3b38906-fc82-48c6-8dcb-be5b798a3a34) -- adopted, not re-signed
+   Havnekontoret already holds an Active NOK corridor (ec8e61b7-34a4-4a0e-8a71-0f7fa6d1632b) -- adopted, not re-signed
+
+[1m== MEALS 7. The guard: one active corridor per (company, store, currency)[0m
+   second NOK corridor -> 409 A concurrent request with this idempotency key is still in progress; retry shortly.
+
+[1m== MEALS 8. Authority: a plain store admin cannot sign a corridor[0m
+   SKIPPED, and here is exactly what is therefore NOT proven. This probe needs two identities: a
+   store admin WITHOUT PowerUserRole to be refused, and the PowerUser to succeed. In this world the
+   only store admin of store 1 is +4799681931, and that same account holds PowerUserRole,
+   so signing as 'the store admin' would SUCCEED and would create a real second corridor. Running it
+   would therefore write data, not prove a rule. The concierge-only gate on
+   POST /v1/stores/1/meals/companies/{id}/agreements is left unmeasured by this run.
+
+[1m== MEALS 9. The two reads the admin page binds[0m
+     company                 org         corridor   valuta  medlemmer
+     Akersgata Arkitekter    923456789   Active     NOK     2
+     Havnekontoret           915002002   Active     NOK     1
+     Nordsjo Consulting      915001001   Active     NOK     1
+   COUNT companies = 3
+   COUNT attributed orders = 10
+     Captured: 9
+     Released: 1
+   COUNT reservations whose capture was later reversed = 1
+
+[1m== MEALS 10. The funded half[0m
+   POST /v1/stores/1/meals/quotes -> 400 The cart total to fund must be a positive minor-unit amount.
+   400 is the LIT answer: the ordering gate let the request through and its own validation refused it.
+
+[1m== MEALS 11. The statement surface, read per company (never written by this seed)[0m
+   59d1a90e-91b2-7de9-d950-1ade6deee09a -> Draft=1 Finalized=1
+   e12ad6c2-c7f8-6993-e7a4-c2528d1924dc -> no statements
+   4b898e81-0b4c-f645-075b-6ec8071d41ea -> no statements
+
+[1m== MEALS DONE[0m
+
+  Open  /admin/meals-agreements  ("Bedriftsmat" under Administrasjon).
+
+  WHAT YOU CAN WALK
+    Avtaler        3 compan(y/ies), each on an ACTIVE corridor. Click a row to scope the orders panel.
+    Bestillinger   10 attributed order(s) with their reservation state.
+
+  WHAT THIS SEED DID NOT WRITE, DELIBERATELY
+    Nothing here inserts a row into the database. Where a route was missing or dark, the step above says so
+    and says what it therefore could not produce, rather than reaching past the product.
+    No statement is drafted or finalized: that surface is append-only and a re-runnable seed must not append.
+    No quote is created: a reservation would move real budget and could not be adopted on the next run.
+
+  storeId=1   companies=3   orders=10   company surface: lit

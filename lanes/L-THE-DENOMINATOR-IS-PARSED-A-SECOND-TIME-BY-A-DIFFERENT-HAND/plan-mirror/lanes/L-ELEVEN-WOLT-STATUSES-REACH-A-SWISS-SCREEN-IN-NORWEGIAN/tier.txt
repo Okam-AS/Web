@@ -1,0 +1,3 @@
+lane branch: lane/wolt-status-labels-translate @ 32518da (off feature/restaurant-modules @ d4c308e)
+tier at lane tip: 169 suites / 4063 tests / 0 failed
+mutations: 21 of 21 applied-and-reverted mutations reddened the suite

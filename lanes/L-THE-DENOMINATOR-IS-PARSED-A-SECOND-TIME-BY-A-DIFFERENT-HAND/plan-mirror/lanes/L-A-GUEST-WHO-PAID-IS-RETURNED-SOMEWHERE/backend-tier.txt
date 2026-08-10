@@ -1,0 +1,15 @@
+# Backend non-SQL tier, run from WebApi.Tests/ with --filter "Database!=SqlServer".
+# Each build asserted WebApi.dll's mtime moved; each log grepped ABOVE the summary for an abort.
+
+## baseline, trunk 1c71ae951 (measured, not carried over)
+Passed!  - Failed:     0, Passed:  4980, Skipped:    11, Total:  4991, Duration: 6 m 51 s - WebApi.Tests.dll (net8.0)
+  abort lines: none
+
+## composed tip 976489141
+Passed!  - Failed:     0, Passed:  4992, Skipped:    11, Total:  5003, Duration: 6 m 27 s - WebApi.Tests.dll (net8.0)
+  abort lines: none
+
+## delta: +12 passed, +12 total, +0 skipped
+## the new suite, run by name, executes exactly 12:
+   dotnet test --filter FullyQualifiedName~EventsDepositVippsFallbackTests -> Passed: 12, Total: 12
+## so every added test is EventsDepositVippsFallbackTests and nothing else moved.

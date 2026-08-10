@@ -1,0 +1,57 @@
+15:03:16  mssql_running=0  MemFree:=868792 MemAvailable:=2856112   sad_goldberg:4.024GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:04:04  mssql_running=0  MemFree:=3805292 MemAvailable:=5795072   awesome_kirch:1.204GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:04:52  mssql_running=0  MemFree:=3573996 MemAvailable:=5563960   awesome_kirch:1.412GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:05:40  mssql_running=1  MemFree:=2227680 MemAvailable:=4269204   lgam-mssql:1.01GiB / 2.441GiB awesome_kirch:1.613GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:06:30  mssql_running=1  MemFree:=1974540 MemAvailable:=4016492   lgam-mssql:1.081GiB / 2.441GiB awesome_kirch:1.795GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:07:19  mssql_running=1  MemFree:=1784744 MemAvailable:=3826760   lgam-mssql:1.072GiB / 2.441GiB awesome_kirch:1.98GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:08:07  mssql_running=1  MemFree:=1661032 MemAvailable:=3703424   lgam-mssql:1.075GiB / 2.441GiB awesome_kirch:2.111GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:08:56  mssql_running=0  MemFree:=2563944 MemAvailable:=4555984   awesome_kirch:2.398GiB / 7.653GiB testcontainers-ryuk-ec9af0b0-058f-4ce1-ab05-5003baa9ba91:13.28MiB / 7.653GiB 
+15:11:23  MemFree:=5201796 MemAvailable:=7144236   
+15:12:03  MemFree:=3961716 MemAvailable:=5957124   wizardly_engelbart:1.152GiB / 7.653GiB testcontainers-ryuk-ec6e993f-82db-414c-9988-bfa558290f84:11.46MiB / 7.653GiB 
+15:12:46  MemFree:=3622552 MemAvailable:=5615368   wizardly_engelbart:1.376GiB / 7.653GiB testcontainers-ryuk-ec6e993f-82db-414c-9988-bfa558290f84:11.46MiB / 7.653GiB 
+15:13:29  MemFree:=3377420 MemAvailable:=5370328   wizardly_engelbart:1.598GiB / 7.653GiB testcontainers-ryuk-ec6e993f-82db-414c-9988-bfa558290f84:11.46MiB / 7.653GiB 
+15:15:26 MemFree:=1197980 MemAvailable:=3242316  wizardly_nobel:1.53GiB / 7.653GiB wizardly_engelbart:2.129GiB / 7.653GiB 
+15:16:29 MemFree:=552512 MemAvailable:=2596952  wizardly_nobel:1.82GiB / 7.653GiB wizardly_engelbart:2.409GiB / 7.653GiB 
+15:17:33 MemFree:=110696 MemAvailable:=2005328  wizardly_nobel:2.1GiB / 7.653GiB wizardly_engelbart:2.792GiB / 7.653GiB 
+15:18:36 MemFree:=78348 MemAvailable:=1300532  wizardly_nobel:2.472GiB / 7.653GiB wizardly_engelbart:3.164GiB / 7.653GiB 
+15:19:38 MemFree:=397212 MemAvailable:=1389964  wizardly_nobel:2.171GiB / 7.653GiB wizardly_engelbart:3.314GiB / 7.653GiB 
+15:20:41 MemFree:=1556200 MemAvailable:=3527272  eager_bardeen:1.233GiB / 7.653GiB wizardly_nobel:2.167GiB / 7.653GiB 
+15:21:44 MemFree:=1172504 MemAvailable:=3146328  eager_bardeen:1.678GiB / 7.653GiB wizardly_nobel:2.171GiB / 7.653GiB 
+15:22:46 MemFree:=1357812 MemAvailable:=3335016  confident_newton:1.513GiB / 7.653GiB eager_bardeen:2.139GiB / 7.653GiB 
+15:23:49 MemFree:=2095248 MemAvailable:=4072644  affectionate_keldysh:1.323GiB / 7.653GiB kind_chaplygin:1.53GiB / 7.653GiB 
+15:24:51 MemFree:=1864772 MemAvailable:=3843484  exciting_albattani:1.338GiB / 7.653GiB affectionate_keldysh:1.715GiB / 7.653GiB 
+15:25:54 MemFree:=1971936 MemAvailable:=3952612  dazzling_wu:1.205GiB / 7.653GiB exciting_albattani:1.806GiB / 7.653GiB 
+15:26:56 MemFree:=1106052 MemAvailable:=3085644  dazzling_wu:1.558GiB / 7.653GiB exciting_albattani:2.285GiB / 7.653GiB 
+15:27:59 MemFree:=556612 MemAvailable:=2536112  dazzling_wu:1.736GiB / 7.653GiB exciting_albattani:2.618GiB / 7.653GiB 
+15:29:01 MemFree:=150644 MemAvailable:=2130400  dazzling_wu:1.789GiB / 7.653GiB exciting_albattani:2.931GiB / 7.653GiB 
+15:30:04 MemFree:=91464 MemAvailable:=1663876  dazzling_wu:1.834GiB / 7.653GiB exciting_albattani:3.431GiB / 7.653GiB 
+15:31:07 MemFree:=79936 MemAvailable:=1340956  dazzling_wu:1.998GiB / 7.653GiB exciting_albattani:3.584GiB / 7.653GiB 
+15:32:09 MemFree:=93780 MemAvailable:=1219664  dazzling_wu:2.052GiB / 7.653GiB exciting_albattani:3.622GiB / 7.653GiB 
+15:33:11 MemFree:=110520 MemAvailable:=1142272  dazzling_wu:2.131GiB / 7.653GiB exciting_albattani:3.664GiB / 7.653GiB 
+15:34:14 MemFree:=103316 MemAvailable:=1036776  dazzling_wu:2.172GiB / 7.653GiB exciting_albattani:3.704GiB / 7.653GiB 
+15:35:17 MemFree:=115320 MemAvailable:=983844  dazzling_wu:2.184GiB / 7.653GiB exciting_albattani:3.745GiB / 7.653GiB 
+15:36:19 MemFree:=1811412 MemAvailable:=3739188  heuristic_fermi:1.142GiB / 7.653GiB dazzling_wu:2.174GiB / 7.653GiB 
+15:37:21 MemFree:=1325944 MemAvailable:=3251604  heuristic_fermi:1.535GiB / 7.653GiB dazzling_wu:2.175GiB / 7.653GiB 
+15:38:24 MemFree:=1977648 MemAvailable:=3953504  cranky_maxwell:1.188GiB / 7.653GiB heuristic_fermi:1.881GiB / 7.653GiB 
+15:39:27 MemFree:=1200156 MemAvailable:=3174964  cranky_maxwell:1.505GiB / 7.653GiB heuristic_fermi:2.303GiB / 7.653GiB 
+15:40:29 MemFree:=481596 MemAvailable:=2457584  cranky_maxwell:1.751GiB / 7.653GiB heuristic_fermi:2.714GiB / 7.653GiB 
+15:41:31 MemFree:=74152 MemAvailable:=1916720  cranky_maxwell:1.8GiB / 7.653GiB heuristic_fermi:3.2GiB / 7.653GiB 
+15:42:34 MemFree:=1631936 MemAvailable:=3602988  vigilant_volhard:1.461GiB / 7.653GiB cranky_maxwell:1.835GiB / 7.653GiB 
+15:43:37 MemFree:=1992896 MemAvailable:=3963876  relaxed_archimedes:1.232GiB / 7.653GiB vigilant_volhard:1.766GiB / 7.653GiB 
+15:44:39 MemFree:=1600256 MemAvailable:=3571264  relaxed_archimedes:1.376GiB / 7.653GiB vigilant_volhard:2.016GiB / 7.653GiB 
+15:45:41 MemFree:=1233012 MemAvailable:=3204228  relaxed_archimedes:1.549GiB / 7.653GiB vigilant_volhard:2.184GiB / 7.653GiB 
+15:46:46 MemFree:=865384 MemAvailable:=2836736  relaxed_archimedes:1.716GiB / 7.653GiB vigilant_volhard:2.35GiB / 7.653GiB 
+15:47:50 MemFree:=594884 MemAvailable:=2566284  relaxed_archimedes:1.749GiB / 7.653GiB vigilant_volhard:2.596GiB / 7.653GiB 
+15:48:52 MemFree:=252444 MemAvailable:=2223840  relaxed_archimedes:1.904GiB / 7.653GiB vigilant_volhard:2.769GiB / 7.653GiB 
+15:49:56 MemFree:=102144 MemAvailable:=2006752  relaxed_archimedes:1.948GiB / 7.653GiB vigilant_volhard:2.928GiB / 7.653GiB 
+15:51:00 MemFree:=135996 MemAvailable:=1773160  relaxed_archimedes:1.983GiB / 7.653GiB vigilant_volhard:3.179GiB / 7.653GiB 
+15:52:04 MemFree:=3563660 MemAvailable:=5016836  relaxed_archimedes:2.015GiB / 7.653GiB 
+15:53:07 MemFree:=3553864 MemAvailable:=5006912  relaxed_archimedes:2.028GiB / 7.653GiB 
+15:54:11 MemFree:=3533084 MemAvailable:=4986176  relaxed_archimedes:2.072GiB / 7.653GiB 
+15:55:14 MemFree:=3506816 MemAvailable:=4960140  
+15:56:18 MemFree:=5821888 MemAvailable:=7226060  
+15:57:18 MemFree:=5849580 MemAvailable:=7253744  
+15:58:19 MemFree:=5843132 MemAvailable:=7247300  
+15:59:20 MemFree:=5855208 MemAvailable:=7259448  
+16:00:21 MemFree:=5867620 MemAvailable:=7271860  
+16:01:21 MemFree:=5851296 MemAvailable:=7255496  

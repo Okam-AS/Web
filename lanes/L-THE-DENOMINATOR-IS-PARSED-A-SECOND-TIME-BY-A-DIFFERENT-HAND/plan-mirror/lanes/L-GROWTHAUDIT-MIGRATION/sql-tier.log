@@ -1,0 +1,82 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  WebApi -> /Users/svendaneel/okam/wt-growthaudit/bin/Debug/net8.0/WebApi.dll
+  WebApi.Tests -> /Users/svendaneel/okam/wt-growthaudit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll
+Test run for /Users/svendaneel/okam/wt-growthaudit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[testcontainers.org 00:00:00.07] Connected to Docker:
+  Host: unix:///var/run/docker.sock
+  Server Version: 28.4.0
+  Kernel Version: 6.10.14-linuxkit
+  API Version: 1.51
+  Operating System: Docker Desktop
+  Total Memory: 7.65 GB
+  Labels: 
+    com.docker.desktop.address=unix:///Users/svendaneel/Library/Containers/com.docker.docker/Data/docker-cli.sock
+[testcontainers.org 00:00:00.19] Docker container e087c1506772 created
+[testcontainers.org 00:00:00.21] Start Docker container e087c1506772
+[testcontainers.org 00:00:00.31] Wait for Docker container e087c1506772 to complete readiness checks
+[testcontainers.org 00:00:01.33] Docker container e087c1506772 ready
+[testcontainers.org 00:00:01.37] Docker container 1f7444389e03 created
+[testcontainers.org 00:00:01.37] Start Docker container 1f7444389e03
+[testcontainers.org 00:00:01.50] Wait for Docker container 1f7444389e03 to complete readiness checks
+[testcontainers.org 00:00:01.50] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 1f7444389e03
+[testcontainers.org 00:00:01.60] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 1f7444389e03
+[testcontainers.org 00:00:10.77] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 1f7444389e03
+[testcontainers.org 00:00:12.79] Docker container 1f7444389e03 ready
+[xUnit.net 00:04:20.41]     WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically [FAIL]
+  Failed WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically [7 s]
+  Error Message:
+   Assert.Equal() Failure
+Expected: 1
+Actual:   2
+  Stack Trace:
+     at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-growthaudit/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 60
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-growthaudit/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+   at WebApi.Tests.Workforce.SchedulePublishSqlServerTests.Publish_commits_publication_recipients_inbox_outbox_and_audit_atomically() in /Users/svendaneel/okam/wt-growthaudit/WebApi.Tests/Workforce/SchedulePublishSqlServerTests.cs:line 65
+--- End of stack trace from previous location ---
+[testcontainers.org 00:07:59.59] Delete Docker container 1f7444389e03
+[testcontainers.org 00:07:59.90] Docker container 63c9eec9f6ad created
+[testcontainers.org 00:07:59.91] Start Docker container 63c9eec9f6ad
+[testcontainers.org 00:08:00.01] Wait for Docker container 63c9eec9f6ad to complete readiness checks
+[testcontainers.org 00:08:00.02] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 63c9eec9f6ad
+[testcontainers.org 00:08:00.08] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 63c9eec9f6ad
+[testcontainers.org 00:08:05.99] Docker container 63c9eec9f6ad ready
+[testcontainers.org 00:09:25.39] Delete Docker container 63c9eec9f6ad
+[testcontainers.org 00:09:25.66] Docker container f44f949e4c2c created
+[testcontainers.org 00:09:25.66] Start Docker container f44f949e4c2c
+[testcontainers.org 00:09:25.75] Wait for Docker container f44f949e4c2c to complete readiness checks
+[testcontainers.org 00:09:25.75] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container f44f949e4c2c
+[testcontainers.org 00:09:25.83] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container f44f949e4c2c
+[testcontainers.org 00:09:32.52] Docker container f44f949e4c2c ready
+[testcontainers.org 00:11:54.72] Delete Docker container f44f949e4c2c
+[testcontainers.org 00:11:55.00] Docker container 03c4b50a8e38 created
+[testcontainers.org 00:11:55.00] Start Docker container 03c4b50a8e38
+[testcontainers.org 00:11:55.10] Wait for Docker container 03c4b50a8e38 to complete readiness checks
+[testcontainers.org 00:11:55.10] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 03c4b50a8e38
+[testcontainers.org 00:11:55.17] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 03c4b50a8e38
+[testcontainers.org 00:12:01.87] Docker container 03c4b50a8e38 ready
+[testcontainers.org 00:24:29.35] Delete Docker container 03c4b50a8e38
+[testcontainers.org 00:24:29.66] Docker container ff1bcd93b788 created
+[testcontainers.org 00:24:29.66] Start Docker container ff1bcd93b788
+[testcontainers.org 00:24:29.80] Wait for Docker container ff1bcd93b788 to complete readiness checks
+[testcontainers.org 00:24:29.81] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container ff1bcd93b788
+[testcontainers.org 00:24:29.87] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container ff1bcd93b788
+[testcontainers.org 00:24:35.56] Docker container ff1bcd93b788 ready
+[testcontainers.org 00:29:24.36] Delete Docker container ff1bcd93b788
+[testcontainers.org 00:29:25.04] Docker container 444cd4912a8a created
+[testcontainers.org 00:29:25.08] Start Docker container 444cd4912a8a
+[testcontainers.org 00:29:25.49] Wait for Docker container 444cd4912a8a to complete readiness checks
+[testcontainers.org 00:29:25.52] Execute "/bin/sh -c find /opt/mssql-tools*/bin/sqlcmd -type f -print -quit" at Docker container 444cd4912a8a
+[testcontainers.org 00:29:25.70] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 444cd4912a8a
+[testcontainers.org 00:29:34.90] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 444cd4912a8a
+[testcontainers.org 00:29:37.65] Execute "/opt/mssql-tools18/bin/sqlcmd -C -Q SELECT 1;" at Docker container 444cd4912a8a
+[testcontainers.org 00:29:37.95] Docker container 444cd4912a8a ready
+[testcontainers.org 00:41:28.98] Delete Docker container 444cd4912a8a
+Results File: /Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/trx/lane-mig29-sql-tier.trx
+
+Failed!  - Failed:     1, Passed:   593, Skipped:     0, Total:   594, Duration: 40 m 54 s - WebApi.Tests.dll (net8.0)

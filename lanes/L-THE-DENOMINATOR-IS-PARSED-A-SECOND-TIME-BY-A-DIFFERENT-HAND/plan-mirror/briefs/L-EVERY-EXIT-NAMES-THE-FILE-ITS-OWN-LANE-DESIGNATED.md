@@ -1,0 +1,107 @@
+<!-- GENERATED brief 65f46e54 for L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED · intent 7c84435b072ff7fe · 2026-08-08T23:00Z -->
+# Brief — L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED
+
+export PLAN_ACTOR=agent:L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED
+
+## Objective
+133 lanes hold evidence the tool cannot read
+
+**133 lanes sit at `built-unverified` and the measurement of why is already done — by me, not by you.** Run
+`plan verify` against each lane's recorded evidence and the refusals sort into five classes:
+
+| class | count | what it means |
+|---|---|---|
+| evidence exists on disk | **73** | the file is right there; the **exit does not name it** |
+| recoverable from a backend git ref | **16** | committed on a branch that never reached the trunk |
+| recoverable from a frontend git ref | **3** | same, other repo |
+| nowhere on disk or in any ref | **7** | genuinely destroyed |
+| the evidence line names no path at all | **34** | `fact:` or prose |
+
+**The 73 are the cheapest and the most dangerous.** Cheapest because nothing needs rebuilding. Dangerous
+because the repair is *editing an exit until the evidence fits it*, and **an exit rewritten to match the
+evidence it received proves nothing.** That is the failure this whole plan exists to prevent, available in
+one command.
+
+**So the rule is the lane, and it is not negotiable: amend an exit ONLY where the lane body designated that
+artifact BEFORE the work began.** Read the body. If the body names the path — the way a brief says *"write
+to `docs/plan/artifacts/x.md`"* — the exit was clerically incomplete and naming it is a correction. **If the
+artifact was chosen by the agent afterwards, LEAVE THE EXIT ALONE** and record it as not-amendable. A lane
+you decline to amend is a result, not a failure; **the count you decline is the number I most want to see.**
+
+**Two worked examples, both mine, both legitimate**: `L-THE-FIXTURE-CANNOT-TELL-A-NAME-FROM-AN-ID` and
+`L-A-VOID-RUN-COHORT-IS-RE-MEASURED` each had an exit that *described* its artifact — "a committed artifact
+naming every production site…" — while the body designated the exact path. Naming the path let `plan verify`
+accept work that was always admissible. **Neither exit's substance changed.** If your amendment changes what
+the lane must be true for, it is not this operation.
+
+**Do not touch the 7 destroyed ones.** They are already recorded and re-manufacturing evidence for them is
+the worst act available here.
+
+**The 16+3 recoverable are NOT yours either** — bringing a file onto a trunk is a landing, it races other
+lanes, and it earns its own lane with the atomic guard. **Name them and stop.**
+
+**A path resolves relative to the plan repo, not the lane's workdir** — that is why `lanes/X/evidence.md`
+refuses while `../OkamAPI-modules/lanes/X/evidence.md` is found. **Several exits name the unprefixed form,
+so the amendment must carry the prefix the tool can actually open**, and you must confirm by running
+`plan verify` rather than by reasoning about it.
+
+**Run `plan verify` after every amendment and record what it said.** An amendment you did not test is the
+same unproven claim in a new place. **State the count accepted and the count still refused.**
+
+**Boundaries.** You may edit `## Lanes` exit lines and your artifact — **nothing else in `plan.md`**, no
+lane bodies, no `state:` lines, no decisions, no flags. **Never `plan accept`.** **Do not move any trunk. Do
+not push.** Backend trunk is `28e60e6b8`.
+
+## Exit criteria
+docs/plan/artifacts/exits-that-name-their-file.md states, per built-unverified lane, whether its exit was amended to name an artifact the lane body designated BEFORE the work, or was left alone with the reason, with the count of each and the count plan verify then accepted
+
+## Constraints in force
+- C1: Append-only tables are never backfilled, repaired in place, or purged.
+  holds_because: The journal projections, deposit receipts, statement lines, consent receipts and personnel records are the evidence a bokføring, Skatteetaten or Datatilsynet inspector reads. A row that changed after the fact is worth nothing to them, and the deny-triggers already on those tables are the only thing that makes the claim checkable instead of a promise. Written now because the estate has already shipped one defect of exactly this shape — an RF-1313 systembeskrivelse asserting database triggers that no migration in the chain creates.
+  violated_when: a diff contains an UPDATE or DELETE statement — in a migration, a script, or raw SQL — against a table carrying an append-only deny-trigger or the GuardAppendOnly guard; or an EF entity mapped to one of those tables is mutated and saved outside its documented append path.
+- C2: One migration author at a time, and the chain is the truth, not the model.
+  holds_because: Two lanes generating EF migrations against one DbContext produce two snapshots that each claim to be the model, and the chain then replays in an order neither author tested — the failure surfaces on a fresh database and never on the author's. The estate has been bitten twice already: a chain that cannot replay from empty because two migrations both add Orders.TableId, and AccountingSummaries, whose unique index exists in the model and in every model-built test database but in no migration.
+  violated_when: a diff adds a migration whose Designer snapshot's parent id is not the current chain tip, or two migration files on one branch share a parent; or a diff adds an index, unique constraint or check constraint in OnModelCreating without a migration in the same diff creating it.
+- C3: A capability exists only when it is reachable; service, DI registration, route and navigation entry land in the same change.
+  holds_because: On 2026-07-29 four of five module journeys stopped at a missing wire while the suite was green — a service with no controller, a feature flag with no lever and no bound Configure<>, a seed with no production caller, a page nothing linked to. A green suite cannot see code that no caller can reach, so reachability has to be a property the diff carries rather than a property the tests are asked for afterwards.
+  violated_when: a diff adds a service or handler that no controller action and no DI registration references; or adds a page under pages/ that no navigation surface links to; or adds a feature flag with no operator lever; and the same diff does not close the gap.
+- C4: Every money-path write names the actor that caused it.
+  holds_because: A deposit, a capture, a refund, a settlement line, a funded order and a payroll-bearing hour are all rows somebody will later have to explain. If a webhook, a background job and an operator can each write the same row under different — or absent — actor identity, the audit trail names nobody and the kroner cannot be traced back to a decision. Events has already had to re-prove its attribution twice against a world a prior lane had changed underneath it.
+  violated_when: a money-path write (deposit, capture, refund, settlement or statement line, funded order, timesheet cost) is reachable from a code path that carries no resolved actor, or a test constructs one with a null, ambient or hard-coded system actor.
+- C5: Acceptance is a person completing the journey, never a suite reporting green.
+  holds_because: Standing law (Sven, 2026-07-28) — drive each feature to the end, then open the UI so he walks it himself; his acceptance is the gate. The estate has repeatedly shipped green suites over unreachable features, so a suite result is evidence that code behaves, never evidence that a capability exists. This branch has no browser-level test framework at all, which makes the rule load-bearing rather than decorative.
+  violated_when: an item is moved to verified or accepted whose only named evidence is a .trx, a junit file, a suite-kind fact, or a test name; or a status message offers a suite count as the reason a capability is finished.
+- C6: A statutory claim is printed only where the document it claims can be produced.
+  holds_because: The product names Norwegian law on screen — personalliste under bokføringsforskriften § 8-5-6, kassasystemforskrifta, internkontroll. Each of those names promises an artifact an inspector may demand on the day, and an unbacked claim is worse than a missing feature because it invites the inspection it cannot survive. On 2026-07-30 the internkontroll claim was taken back off the UI for exactly this reason; the personalliste's identity-code substitution is the same shape and is still open.
+  violated_when: a UI string, export or generated document names a Norwegian statute, forskrift or § reference while no code path in the same change produces the artifact that provision requires, and no Flag in this plan records the gap.
+- C7: Secrets and credentials never reach a log sink.
+  holds_because: Application Insights retains what is written to it, so a credential logged at any level is a credential published to everyone with portal access and to history nobody can edit afterwards. The estate has paid this twice — the Wolt callback signing secret and a live refresh token, both at Information level — and both times the rotation, not the code fix, was the expensive part.
+  violated_when: a diff adds a log or telemetry call whose message template or argument list carries a token, secret, key, signature or password-bearing property, at any level including Error.
+
+## Resources
+class: analysis · pts: 0.5 · workdir: .
+caps in force: sql=2 suite=4 node=6 analysis=6 global=12
+
+## Boundaries
+You may not run `plan accept` or `plan decide`.
+You may not edit docs/plan/** except your RETURN.
+If the brief contradicts reality, stop and return verdict fail-spec — do not improvise.
+All writes under your lane directory or your own worktree. Never a shared scratch path.
+At most 2 children; your entire subtree runs at most 1 test suite at a time.
+Never start a container unless your brief grants the slot; never touch containers you did not create.
+If a resource is busy, return `blocked` immediately; never spin-wait.
+Return a ≤15-line summary plus evidence pointers; full detail goes in your lane directory.
+## Return protocol
+Write this block to docs/plan/returns/L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED-<n>.md and hand it back:
+
+```
+RETURN: L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED
+brief: 65f46e54
+verdict: built | fail-spec | blocked | aborted
+evidence: <path or fact:key>        # required for built
+spec_gap: <brief sentence, contradicted by what observation>  # required for fail-spec
+needs: +<ID>                        # required for blocked
+reason: <what stopped>              # required for aborted
+log: <≤15 lines>
+END RETURN
+```

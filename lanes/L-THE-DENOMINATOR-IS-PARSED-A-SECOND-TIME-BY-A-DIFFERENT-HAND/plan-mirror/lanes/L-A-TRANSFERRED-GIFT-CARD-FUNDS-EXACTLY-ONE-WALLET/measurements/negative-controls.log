@@ -1,0 +1,2 @@
+ZERO filter=FullyQualifiedName~NoSuchTestClassAnywhere rc=0
+BUILD filter=FullyQualifiedName~GiftcardBalanceTests

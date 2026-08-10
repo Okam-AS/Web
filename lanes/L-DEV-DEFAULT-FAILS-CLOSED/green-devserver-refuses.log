@@ -1,0 +1,62 @@
+# ARM: npm run dev equivalent, API_BASE_URL unset, port 3873
+# command: env -u API_BASE_URL NODE_ENV=development PORT=3873 HOST=127.0.0.1 node node_modules/.bin/nuxt-ts
+# started: 2026-08-06T14:28:48Z
+
+
+ WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+
+
+ WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+
+
+ FATAL 
+API_BASE_URL is not set, and a dev build will not guess one.
+
+This app inlines ONE backend origin at build time. What used to be filled in here was the
+DEPLOYED API, so a dev server started without this variable was a live client against real
+venues — on an app whose admin pages overwrite a store record on Save. Name the target:
+
+  API_BASE_URL=http://localhost:5080 npm run dev     (a backend you are running)
+  echo API_BASE_URL=http://localhost:5080 >> .env    (remembered; .gitignore covers .env)
+
+Pointing a dev build at the deployed API is still allowed, and has to be typed:
+
+  API_BASE_URL=https://okamapi.azurewebsites.net npm run dev
+
+Deployed builds are unaffected: build, generate and start run with NODE_ENV=production and
+keep https://okamapi.azurewebsites.net.
+
+
+  API_BASE_URL is not set, and a dev build will not guess one.
+  
+  This app inlines ONE backend origin at build time. What used to be filled in here was the
+  DEPLOYED API, so a dev server started without this variable was a live client against real
+  venues — on an app whose admin pages overwrite a store record on Save. Name the target:
+  
+  API_BASE_URL=http://localhost:5080 npm run dev     (a backend you are running)
+  echo API_BASE_URL=http://localhost:5080 >> .env    (remembered; .gitignore covers .env)
+  
+  Pointing a dev build at the deployed API is still allowed, and has to be typed:
+  
+  API_BASE_URL=https://okamapi.azurewebsites.net npm run dev
+  
+  Deployed builds are unaffected: build, generate and start run with NODE_ENV=production and
+  keep https://okamapi.azurewebsites.net.
+  
+  at resolveApiBaseUrl (nuxt.config.js:66:9)
+  at nuxt.config.js:87:22
+  at evalModule (node_modules/jiti/dist/jiti.js:1:255106)
+  at jiti (node_modules/jiti/dist/jiti.js:1:253034)
+  at Object.loadNuxtConfig (node_modules/@nuxt/config/dist/config.js:857:15)
+  at loadNuxtConfig (node_modules/@nuxt/cli/dist/cli-index.js:295:32)
+  at NuxtCommand.getNuxtConfig (node_modules/@nuxt/cli/dist/cli-index.js:397:26)
+  at Object._listenDev (node_modules/@nuxt/cli/dist/cli-dev.js:63:30)
+  at Object.startDev (node_modules/@nuxt/cli/dist/cli-dev.js:49:25)
+  at Object.run (node_modules/@nuxt/cli/dist/cli-dev.js:44:16)
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮│                                                                              ││   ✖ Nuxt Fatal Error                                                         ││                                                                              ││   Error:                                                                     ││   API_BASE_URL is not set, and a dev build will not guess one.               ││                                                                              ││   This app inlines ONE backend origin at build time. What used to be         ││   filled in                                                                  ││   here was the                                                               ││   DEPLOYED API, so a dev server started without this variable was a live     ││   client                                                                     ││   against real                                                               ││   venues — on an app whose admin pages overwrite a store record on Save.     ││   Name the                                                                   ││   target:                                                                    ││                                                                              ││   API_BASE_URL=http://localhost:5080 npm run dev     (a backend you are      ││   running)                                                                   ││   echo API_BASE_URL=http://localhost:5080 >> .env    (remembered;            ││   .gitignore                                                                 ││   covers .env)                                                               ││                                                                              ││   Pointing a dev build at the deployed API is still allowed, and has to be   ││   typed:                                                                     ││                                                                              ││   API_BASE_URL=https://okamapi.azurewebsites.net npm run dev                 ││                                                                              ││   Deployed builds are unaffected: build, generate and start run with         ││   NODE_ENV=production and                                                    ││   keep https://okamapi.azurewebsites.net.                                    ││                                                                              ││                                                                              │╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+# exit code: 1
+# listening on 3873 afterwards: <none>

@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="c27f0101-907e-4b04-8450-9cb7f396ff8b" name="@Svens-MacBook-Pro 2026-08-08 23:34:45" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-08-08T23:34:45.2827630+02:00" queuing="2026-08-08T23:34:45.2827640+02:00" start="2026-08-08T23:34:41.6096190+02:00" finish="2026-08-08T23:34:48.4483550+02:00" />
+  <TestSettings name="default" id="0a6ad7e0-bd1f-428a-9bc5-6ed3d5982b46">
+    <Deployment runDeploymentRoot="_Svens-MacBook-Pro_2026-08-08_23_34_45" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="dea4e997-aa73-4b7e-a35d-9dc0331e0f4a" testId="90cf5577-bf7e-7db7-acd5-a90e5b7c6844" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_NotBlocked_ByEmptyOpenCheck_WhichIsDiscarded" computerName="Svens-MacBook-Pro" duration="00:00:00.2776389" startTime="2026-08-08T23:34:48.2721790+02:00" endTime="2026-08-08T23:34:48.2721790+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dea4e997-aa73-4b7e-a35d-9dc0331e0f4a" />
+    <UnitTestResult executionId="5255d16f-fd50-4ff1-bc61-37227b6faaca" testId="16ce1922-4c6f-3a96-25e0-d69a4247819b" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_NoExplanation_Rejected_AndDayStaysOpen" computerName="Svens-MacBook-Pro" duration="00:00:00.3056797" startTime="2026-08-08T23:34:45.5739470+02:00" endTime="2026-08-08T23:34:45.5739470+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5255d16f-fd50-4ff1-bc61-37227b6faaca" />
+    <UnitTestResult executionId="d28e51d5-cef8-47aa-90e5-fc323650f0fe" testId="c6c702db-9c4b-0bc2-a724-555d492d8105" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithEmail_SendsReceipt_AndStoresAddress" computerName="Svens-MacBook-Pro" duration="00:00:00.2575573" startTime="2026-08-08T23:34:46.1583740+02:00" endTime="2026-08-08T23:34:46.1583740+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d28e51d5-cef8-47aa-90e5-fc323650f0fe" />
+    <UnitTestResult executionId="f3cd2455-2988-4a59-837a-ea5490138468" testId="309d39df-9aa6-3e6d-9dd7-c20f341daf56" testName="WebApi.Tests.Kassa.EodServiceTests.GetSummary_LiveBankDeposit_ReducesExpected" computerName="Svens-MacBook-Pro" duration="00:00:00.1975315" startTime="2026-08-08T23:34:47.4762290+02:00" endTime="2026-08-08T23:34:47.4762290+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f3cd2455-2988-4a59-837a-ea5490138468" />
+    <UnitTestResult executionId="ac08ecc8-5050-4441-8bf9-06322316ca9a" testId="c0648be1-47cb-99f3-cc59-f2970636bbea" testName="WebApi.Tests.Kassa.EodServiceTests.TheCloseAndTheXZReport_ReadTheSameReceivedRule" computerName="Svens-MacBook-Pro" duration="00:00:00.0009034" startTime="2026-08-08T23:34:47.2785990+02:00" endTime="2026-08-08T23:34:47.2785990+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ac08ecc8-5050-4441-8bf9-06322316ca9a" />
+    <UnitTestResult executionId="da77f06a-4a58-4146-8744-ec7355233a28" testId="38df925e-c6e2-278d-d2d5-83450beff7b7" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_WithExplanation_ClosesAndStoresExplanation" computerName="Svens-MacBook-Pro" duration="00:00:00.4028727" startTime="2026-08-08T23:34:47.2776820+02:00" endTime="2026-08-08T23:34:47.2776820+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da77f06a-4a58-4146-8744-ec7355233a28" />
+    <UnitTestResult executionId="26ec2543-27f6-4ab7-9c45-05b1495790cf" testId="0930f8c1-c754-1fdf-6dce-8292a31604cb" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithoutEmail_SendsNothing" computerName="Svens-MacBook-Pro" duration="00:00:00.1710241" startTime="2026-08-08T23:34:47.8512000+02:00" endTime="2026-08-08T23:34:47.8512000+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="26ec2543-27f6-4ab7-9c45-05b1495790cf" />
+    <UnitTestResult executionId="185ce1d9-a169-44ca-8e1f-905ea1d721a3" testId="de0c85a6-c8bb-06fa-3262-77935986501a" testName="WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACreditReturn_NetsAgainstTheCreditTotal_NotAgainstTakings" computerName="Svens-MacBook-Pro" duration="00:00:00.2037826" startTime="2026-08-08T23:34:47.6800930+02:00" endTime="2026-08-08T23:34:47.6800930+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="185ce1d9-a169-44ca-8e1f-905ea1d721a3" />
+    <UnitTestResult executionId="c270ec5f-5f92-4831-8a65-c59b31f18579" testId="cf27ab0a-4f4d-03f6-ff6d-658694941b9d" testName="WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACompanyAccountSale_IsStatedApart_NotCountedAsTakings" computerName="Svens-MacBook-Pro" duration="00:00:00.1431838" startTime="2026-08-08T23:34:47.9944670+02:00" endTime="2026-08-08T23:34:47.9944670+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c270ec5f-5f92-4831-8a65-c59b31f18579" />
+    <UnitTestResult executionId="62a84846-6041-46bc-b0a0-994e5dfa3a4f" testId="f319b1cd-0244-a244-cde2-9ecd278473cf" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_SmallInToleranceDifference_StillRequiresAReason" computerName="Svens-MacBook-Pro" duration="00:00:00.3267434" startTime="2026-08-08T23:34:45.9007400+02:00" endTime="2026-08-08T23:34:45.9007400+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62a84846-6041-46bc-b0a0-994e5dfa3a4f" />
+    <UnitTestResult executionId="212dd401-8571-4936-97e2-67019ae985db" testId="95bf5ca7-6123-6f80-a51a-67f16fa82795" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_Blocked_WhileStoreHasOpenCheck_AndDayStaysOpen" computerName="Svens-MacBook-Pro" duration="00:00:00.4704455" startTime="2026-08-08T23:34:46.8747090+02:00" endTime="2026-08-08T23:34:46.8747090+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="212dd401-8571-4936-97e2-67019ae985db" />
+    <UnitTestResult executionId="b2f4708a-7b97-4559-8b07-7197417ebf42" testId="e970f9f0-9f54-2bb0-8257-5088127a7c3f" testName="WebApi.Tests.Kassa.EodServiceTests.GetSummary_Live_ComputesExpected_ProjectsCardAndCash_NettingReturns" computerName="Svens-MacBook-Pro" duration="00:00:02.4555503" startTime="2026-08-08T23:34:45.2683860+02:00" endTime="2026-08-08T23:34:45.2683940+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b2f4708a-7b97-4559-8b07-7197417ebf42" />
+    <UnitTestResult executionId="11336922-66f9-43c8-b69e-d013c1e6ed9c" testId="5af50aa6-3342-e3fd-21b4-8b54e94ab39b" testName="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithinTolerance_ClosesPersistsAndJournalsPosEnd" computerName="Svens-MacBook-Pro" duration="00:00:00.2457229" startTime="2026-08-08T23:34:46.4041800+02:00" endTime="2026-08-08T23:34:46.4041800+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11336922-66f9-43c8-b69e-d013c1e6ed9c" />
+    <UnitTestResult executionId="c18bc3d8-535b-4d64-9be0-a219449b0cec" testId="c8d7375d-d2ed-e7b3-96db-927dce6831aa" testName="WebApi.Tests.Kassa.EodServiceTests.GetSummary_WithoutCount_LeavesDifferenceNull" computerName="Svens-MacBook-Pro" duration="00:00:00.1467897" startTime="2026-08-08T23:34:48.4190410+02:00" endTime="2026-08-08T23:34:48.4190410+02:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c18bc3d8-535b-4d64-9be0-a219449b0cec" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_WithExplanation_ClosesAndStoresExplanation" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="38df925e-c6e2-278d-d2d5-83450beff7b7">
+      <Execution id="da77f06a-4a58-4146-8744-ec7355233a28" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_OutOfTolerance_WithExplanation_ClosesAndStoresExplanation" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_Blocked_WhileStoreHasOpenCheck_AndDayStaysOpen" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="95bf5ca7-6123-6f80-a51a-67f16fa82795">
+      <Execution id="212dd401-8571-4936-97e2-67019ae985db" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_Blocked_WhileStoreHasOpenCheck_AndDayStaysOpen" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACreditReturn_NetsAgainstTheCreditTotal_NotAgainstTakings" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="de0c85a6-c8bb-06fa-3262-77935986501a">
+      <Execution id="185ce1d9-a169-44ca-8e1f-905ea1d721a3" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="GetSummary_ACreditReturn_NetsAgainstTheCreditTotal_NotAgainstTakings" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithEmail_SendsReceipt_AndStoresAddress" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c6c702db-9c4b-0bc2-a724-555d492d8105">
+      <Execution id="d28e51d5-cef8-47aa-90e5-fc323650f0fe" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_WithEmail_SendsReceipt_AndStoresAddress" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_NoExplanation_Rejected_AndDayStaysOpen" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="16ce1922-4c6f-3a96-25e0-d69a4247819b">
+      <Execution id="5255d16f-fd50-4ff1-bc61-37227b6faaca" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_OutOfTolerance_NoExplanation_Rejected_AndDayStaysOpen" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.GetSummary_Live_ComputesExpected_ProjectsCardAndCash_NettingReturns" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="e970f9f0-9f54-2bb0-8257-5088127a7c3f">
+      <Execution id="b2f4708a-7b97-4559-8b07-7197417ebf42" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="GetSummary_Live_ComputesExpected_ProjectsCardAndCash_NettingReturns" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACompanyAccountSale_IsStatedApart_NotCountedAsTakings" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="cf27ab0a-4f4d-03f6-ff6d-658694941b9d">
+      <Execution id="c270ec5f-5f92-4831-8a65-c59b31f18579" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="GetSummary_ACompanyAccountSale_IsStatedApart_NotCountedAsTakings" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_NotBlocked_ByEmptyOpenCheck_WhichIsDiscarded" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="90cf5577-bf7e-7db7-acd5-a90e5b7c6844">
+      <Execution id="dea4e997-aa73-4b7e-a35d-9dc0331e0f4a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_NotBlocked_ByEmptyOpenCheck_WhichIsDiscarded" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.TheCloseAndTheXZReport_ReadTheSameReceivedRule" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c0648be1-47cb-99f3-cc59-f2970636bbea">
+      <Execution id="ac08ecc8-5050-4441-8bf9-06322316ca9a" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="TheCloseAndTheXZReport_ReadTheSameReceivedRule" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithoutEmail_SendsNothing" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="0930f8c1-c754-1fdf-6dce-8292a31604cb">
+      <Execution id="26ec2543-27f6-4ab7-9c45-05b1495790cf" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_WithoutEmail_SendsNothing" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_WithinTolerance_ClosesPersistsAndJournalsPosEnd" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="5af50aa6-3342-e3fd-21b4-8b54e94ab39b">
+      <Execution id="11336922-66f9-43c8-b69e-d013c1e6ed9c" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_WithinTolerance_ClosesPersistsAndJournalsPosEnd" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.EndDay_SmallInToleranceDifference_StillRequiresAReason" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="f319b1cd-0244-a244-cde2-9ecd278473cf">
+      <Execution id="62a84846-6041-46bc-b0a0-994e5dfa3a4f" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="EndDay_SmallInToleranceDifference_StillRequiresAReason" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.GetSummary_WithoutCount_LeavesDifferenceNull" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="c8d7375d-d2ed-e7b3-96db-927dce6831aa">
+      <Execution id="c18bc3d8-535b-4d64-9be0-a219449b0cec" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="GetSummary_WithoutCount_LeavesDifferenceNull" />
+    </UnitTest>
+    <UnitTest name="WebApi.Tests.Kassa.EodServiceTests.GetSummary_LiveBankDeposit_ReducesExpected" storage="/users/svendaneel/okam/wt-eodcredit/webapi.tests/bin/debug/net8.0/webapi.tests.dll" id="309d39df-9aa6-3e6d-9dd7-c20f341daf56">
+      <Execution id="f3cd2455-2988-4a59-837a-ea5490138468" />
+      <TestMethod codeBase="/Users/svendaneel/okam/wt-eodcredit/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="WebApi.Tests.Kassa.EodServiceTests" name="GetSummary_LiveBankDeposit_ReducesExpected" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="90cf5577-bf7e-7db7-acd5-a90e5b7c6844" executionId="dea4e997-aa73-4b7e-a35d-9dc0331e0f4a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="16ce1922-4c6f-3a96-25e0-d69a4247819b" executionId="5255d16f-fd50-4ff1-bc61-37227b6faaca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c6c702db-9c4b-0bc2-a724-555d492d8105" executionId="d28e51d5-cef8-47aa-90e5-fc323650f0fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="309d39df-9aa6-3e6d-9dd7-c20f341daf56" executionId="f3cd2455-2988-4a59-837a-ea5490138468" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c0648be1-47cb-99f3-cc59-f2970636bbea" executionId="ac08ecc8-5050-4441-8bf9-06322316ca9a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="38df925e-c6e2-278d-d2d5-83450beff7b7" executionId="da77f06a-4a58-4146-8744-ec7355233a28" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0930f8c1-c754-1fdf-6dce-8292a31604cb" executionId="26ec2543-27f6-4ab7-9c45-05b1495790cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="de0c85a6-c8bb-06fa-3262-77935986501a" executionId="185ce1d9-a169-44ca-8e1f-905ea1d721a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cf27ab0a-4f4d-03f6-ff6d-658694941b9d" executionId="c270ec5f-5f92-4831-8a65-c59b31f18579" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f319b1cd-0244-a244-cde2-9ecd278473cf" executionId="62a84846-6041-46bc-b0a0-994e5dfa3a4f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="95bf5ca7-6123-6f80-a51a-67f16fa82795" executionId="212dd401-8571-4936-97e2-67019ae985db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e970f9f0-9f54-2bb0-8257-5088127a7c3f" executionId="b2f4708a-7b97-4559-8b07-7197417ebf42" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5af50aa6-3342-e3fd-21b4-8b54e94ab39b" executionId="11336922-66f9-43c8-b69e-d013c1e6ed9c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c8d7375d-d2ed-e7b3-96db-927dce6831aa" executionId="c18bc3d8-535b-4d64-9be0-a219449b0cec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="14" executed="14" passed="14" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 8.0.28)
+[xUnit.net 00:00:00.70]   Discovering: WebApi.Tests
+[xUnit.net 00:00:00.99]   Discovered:  WebApi.Tests
+[xUnit.net 00:00:00.99]   Starting:    WebApi.Tests
+[xUnit.net 00:00:06.62]   Finished:    WebApi.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

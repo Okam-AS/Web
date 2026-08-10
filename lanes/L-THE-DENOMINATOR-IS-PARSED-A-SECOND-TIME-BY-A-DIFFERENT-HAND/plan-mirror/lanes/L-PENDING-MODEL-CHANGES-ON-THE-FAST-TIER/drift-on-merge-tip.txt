@@ -1,0 +1,46 @@
+[xUnit.net 00:00:05.24]     WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift [FAIL]
+[xUnit.net 00:00:05.24]       The model and ApplicationDbContextModelSnapshot disagree. 3 operation(s) would be needed to bring the snapshot up to the model:
+[xUnit.net 00:00:05.24]         - CreateTable GrowthAuditEvents
+[xUnit.net 00:00:05.25]         - CreateIndex IX_GrowthAuditEvents_AggregateType_AggregateId on GrowthAuditEvents (AggregateType, AggregateId)
+[xUnit.net 00:00:05.25]         - CreateIndex IX_GrowthAuditEvents_StoreId_OccurredAt on GrowthAuditEvents (StoreId, OccurredAt)
+[xUnit.net 00:00:05.25]       Each line is something declared in OnModelCreating that the chain does not create. Add the migration (C2: one migration author at a time, and the chain is the truth, not the model).
+[xUnit.net 00:00:05.25]       
+[xUnit.net 00:00:05.25]       Expected: False
+[xUnit.net 00:00:05.25]       Actual:   True
+[xUnit.net 00:00:05.25]       Stack Trace:
+[xUnit.net 00:00:05.25]         /Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/Modules/ModelVersusChainDriftTests.cs(113,0): at WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift()
+[xUnit.net 00:00:05.25]            at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+[xUnit.net 00:00:05.25]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Failed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift [3 s]
+  Error Message:
+   The model and ApplicationDbContextModelSnapshot disagree. 3 operation(s) would be needed to bring the snapshot up to the model:
+  - CreateTable GrowthAuditEvents
+  - CreateIndex IX_GrowthAuditEvents_AggregateType_AggregateId on GrowthAuditEvents (AggregateType, AggregateId)
+  - CreateIndex IX_GrowthAuditEvents_StoreId_OccurredAt on GrowthAuditEvents (StoreId, OccurredAt)
+Each line is something declared in OnModelCreating that the chain does not create. Add the migration (C2: one migration author at a time, and the chain is the truth, not the model).
+
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Modules.ModelVersusChainDriftTests.The_model_and_the_migration_snapshot_do_not_drift() in /Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/Modules/ModelVersusChainDriftTests.cs:line 113
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.A_model_only_index_makes_the_check_red [3 s]
+[xUnit.net 00:00:09.08]   Finished:    WebApi.Tests
+  Passed WebApi.Tests.Modules.ModelVersusChainDriftTests.The_check_is_not_vacuous_because_the_snapshot_is_found_and_populated [95 ms]
+
+Test Run Failed.
+Total tests: 3
+     Passed: 2
+     Failed: 1
+ Total time: 9.4300 Seconds
+     1>Project "/Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/WebApi.Tests.csproj" on node 1 (VSTest target(s)).
+     1>VSTest:
+         MSB4181: The "Microsoft.TestPlatform.Build.Tasks.VSTestTask" task returned false but did not log an error.
+     1>Done Building Project "/Users/svendaneel/okam/wt-pendmodel/WebApi.Tests/WebApi.Tests.csproj" (VSTest target(s)) -- FAILED.
+
+Build FAILED.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:09.81

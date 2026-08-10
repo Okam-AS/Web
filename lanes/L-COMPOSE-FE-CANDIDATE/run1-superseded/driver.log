@@ -1,0 +1,183 @@
+STEP F0 lane/worktree-basename-pin OK merge=8bb84f0 changed=2 decoy=0
+  TRANS: TRANSLATIONS-OK | keys {"translations/en.ts":4781,"translations/no.ts":4816,"translations/de.ts":4781} | dup=0 dropped=0 new-skew=0 (baseline skew 35)
+  RERUN step=F0 GREEN | Test Suites: 112 passed, 112 total | Tests:       2583 passed, 2583 total | core=populated@1bcab0b
+  (baseline red floor now 0)
+STEP F1.01 lane/fe-training-meals-surfaces CONFLICT rc=1
+  conflicted: components/admin/margin/MarginCoveragePanel.vue components/organisms/AdminPageHeader.vue pages/admin/training-courses.vue playwright.config.js test/admin-nav-access.test.js test/e2e/fixture/api-server.js test/e2e/fixture/growth.js test/e2e/fixture/margin.js test/e2e/fixture/meals.js test/e2e/fixture/training.js test/e2e/fixture/world.js test/e2e/journeys/events-guest-proposal.spec.js test/e2e/journeys/growth-guest-consent.spec.js test/e2e/journeys/margin-recipe-to-margin.spec.js test/e2e/journeys/margin-statement-week.spec.js test/e2e/journeys/meals-admin-setup.spec.js test/e2e/journeys/meals-guest-claim.spec.js test/e2e/journeys/training-course-to-evidence.spec.js test/e2e/support/journey.js translations/de.ts translations/en.ts translations/no.ts utils/training/training-client.js 
+STEP F1.02 feature/swiss CONFLICT rc=1
+  conflicted: .gitignore core nuxt.config.js pages/admin/index.vue pages/admin/products.vue plugins/global-mixin.js test/chf-format.test.js translations/de.ts translations/en.ts translations/no.ts 
+STEP F1.03 lane/ev-stale-cause CONFLICT rc=1
+  conflicted: test/e2e/fixture/api-server.js test/e2e/fixture/world.js translations/de.ts translations/en.ts translations/no.ts 
+STEP F1.04 lane/fe-events-margin-surfaces CONFLICT rc=1
+  conflicted: components/admin/events/EventsJourney.vue components/admin/margin/MarginCoveragePanel.vue components/admin/margin/MarginStatementFiguresPanel.vue pages/admin/events-pipeline.vue pages/admin/margin-statements.vue test/e2e/fixture/api-server.js test/e2e/journeys/margin-statement-week.spec.js test/margin-statement-components.test.js 
+STEP F1.05 lane/statute-evidence-world CONFLICT rc=1
+  conflicted: test/e2e/fixture/api-server.js test/e2e/fixture/world.js translations/de.ts translations/en.ts translations/no.ts 
+STEP F1.06 lane/fe-wf-link-deadend CONFLICT rc=1
+  conflicted: pages/admin/workforce-roster.vue test/e2e/fixture/api-server.js test/e2e/fixture/world.js translations/de.ts translations/en.ts translations/no.ts utils/workforce/roster-client.js 
+STEP F1.07 lane/fe-wf-self CONFLICT rc=1
+  conflicted: components/organisms/AdminPageHeader.vue pages/admin/growth-privacy.vue pages/admin/workforce-me.vue test/admin-nav-access.test.js test/e2e/fixture/api-server.js test/e2e/fixture/world.js test/e2e/journeys/workforce-invitation-onboarding.spec.js test/workforce-me-self-service.test.js utils/growth/growth-client.js utils/workforce-me/me-client.js 
+STEP F1.08 lane/journey-workforce OK merge=28430b7 changed=32 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4798,"translations/no.ts":4833,"translations/de.ts":4798} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.08 GREEN | Test Suites: 112 passed, 112 total | Tests:       2603 passed, 2603 total | core=populated@1bcab0b
+STEP F1.09 lane/menu-allergen-matrix CONFLICT rc=1
+  conflicted: test/admin-nav-access.test.js test/e2e/fixture/world.js translations/de.ts translations/en.ts translations/no.ts 
+STEP F1.10 lane/train-evidence-pack-ui OK merge=9cf33b8 changed=12 decoy=4
+  decoy: test/e2e/fixture/api-server.js translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4851,"translations/no.ts":4886,"translations/de.ts":4851} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.10 GREEN | Test Suites: 112 passed, 112 total | Tests:       2603 passed, 2603 total | core=populated@1bcab0b
+STEP F1.11 lane/wf-kodeoversikt-ui OK merge=106a56f changed=16 decoy=4
+  decoy: test/e2e/fixture/api-server.js translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4857,"translations/no.ts":4892,"translations/de.ts":4857} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.11 GREEN | Test Suites: 114 passed, 114 total | Tests:       2618 passed, 2618 total | core=populated@1bcab0b
+STEP F1.12 lane/wf-pubhist CONFLICT rc=1
+  conflicted: test/admin-nav-access.test.js 
+STEP F1.13 lane/wf-roles-ui OK merge=2fd3dbb changed=12 decoy=8
+  decoy: components/organisms/AdminPageHeader.vue test/admin-nav-access.test.js test/e2e/fixture/api-server.js test/e2e/fixture/world.js translations/de.ts translations/en.ts translations/no.ts utils/workforce/roster-client.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4895,"translations/no.ts":4930,"translations/de.ts":4895} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.13 GREEN | Test Suites: 115 passed, 115 total | Tests:       2633 passed, 2633 total | core=populated@1bcab0b
+STEP F1.14 lane/margin-menu-margin-ui CONFLICT rc=1
+  conflicted: pages/admin/margin-recipes.vue utils/margin/recipe-client.js 
+STEP F1.15 lane/meals-admin CONFLICT rc=1
+  conflicted: pages/admin/meals-agreements.vue test/meals-store-view.test.js translations/de.ts translations/en.ts translations/no.ts utils/meals/meals-client.js utils/meals/refusal-copy.js 
+STEP F1.16 lane/meals-enrol-pretick OK merge=1dabf16 changed=18 decoy=3
+  decoy: translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4903,"translations/no.ts":4938,"translations/de.ts":4903} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.16 GREEN | Test Suites: 116 passed, 116 total | Tests:       2662 passed, 2662 total | core=populated@1bcab0b
+STEP F1.17 lane/events-admin CONFLICT rc=1
+  conflicted: components/admin/events/EventsJourney.vue pages/admin/events-pipeline.vue test/events-client.test.js test/events-journey.test.js test/events-page.test.js test/events-surface.test.js translations/de.ts translations/en.ts translations/no.ts utils/events/events-client.js utils/events/journey.js 
+STEP F1.18 lane/fe-meals-statement-surface OK merge=2f80109 changed=14 decoy=5
+  decoy: components/organisms/AdminPageHeader.vue test/admin-nav-access.test.js translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4959,"translations/no.ts":4994,"translations/de.ts":4959} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.18 GREEN | Test Suites: 117 passed, 117 total | Tests:       2684 passed, 2684 total | core=populated@1bcab0b
+STEP F1.19 lane/margin-recipes CONFLICT rc=1
+  conflicted: components/admin/margin/MarginCostPanel.vue pages/admin/margin-recipes.vue test/margin-cost-panel.component.test.js test/margin-recipe-client.test.js test/margin-recipes-page.test.js translations/de.ts translations/en.ts translations/no.ts utils/margin/api-client.js utils/margin/cost-preview.js utils/margin/recipe-client.js 
+STEP F1.20 lane/training-admin CONFLICT rc=1
+  conflicted: components/admin/training/TrainingAssignmentPanel.vue components/admin/training/TrainingCertificatePanel.vue components/admin/training/TrainingCompletionPanel.vue components/admin/training/TrainingHoldingsPanel.vue components/admin/training/TrainingVersionPanel.vue pages/admin/training-courses.vue test/training-components.test.js test/training-journey.test.js test/training-page.test.js translations/de.ts translations/en.ts translations/no.ts utils/training/journey.js utils/training/training-client.js 
+STEP F1.21 lane/coercion-write-paths OK merge=3d1b402 changed=9 decoy=3
+  decoy: translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4960,"translations/no.ts":4995,"translations/de.ts":4960} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.21 GREEN | Test Suites: 117 passed, 117 total | Tests:       2690 passed, 2690 total | core=populated@1bcab0b
+STEP F1.22 lane/fe-meals-claim-receipt OK merge=f780ede changed=8 decoy=4
+  decoy: translations/de.ts translations/en.ts translations/no.ts utils/meals/admin-view.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":4961,"translations/no.ts":4996,"translations/de.ts":4961} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.22 GREEN | Test Suites: 117 passed, 117 total | Tests:       2698 passed, 2698 total | core=populated@1bcab0b
+STEP F1.23 lane/fe-meals-reconcile-ui OK merge=b022c59 changed=16 decoy=3
+  decoy: translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5027,"translations/no.ts":5062,"translations/de.ts":5027} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.23 GREEN | Test Suites: 118 passed, 118 total | Tests:       2726 passed, 2726 total | core=populated@1bcab0b
+STEP F1.24 lane/fe-wf-bootstrap CONFLICT rc=1
+  conflicted: utils/workforce/roster-client.js 
+STEP F1.25 lane/fe-wf-contact-imported OK merge=5200506 changed=7 decoy=4
+  decoy: translations/de.ts translations/en.ts translations/no.ts utils/workforce/roster-client.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5034,"translations/no.ts":5069,"translations/de.ts":5034} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.25 GREEN | Test Suites: 119 passed, 119 total | Tests:       2744 passed, 2744 total | core=populated@1bcab0b
+STEP F1.26 lane/fe-wf-correction-path CONFLICT rc=1
+  conflicted: pages/admin/workforce-personnel-list.vue utils/workforce/personnel-list-client.js 
+STEP F1.27 lane/growth-admin CONFLICT rc=1
+  conflicted: components/admin/growth/GrowthRunOutcome.vue components/admin/growth/GrowthSendGate.vue pages/admin/growth-newsletter.vue test/growth-client.test.js test/growth-components.test.js test/growth-newsletter-page.test.js test/growth-send-gate.test.js translations/de.ts translations/en.ts translations/no.ts utils/growth/growth-client.js utils/growth/platform-capability.js utils/growth/send-gate.js 
+STEP F1.28 lane/meals-reachable-web OK merge=305e510 changed=5 decoy=3
+  decoy: translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5035,"translations/no.ts":5070,"translations/de.ts":5035} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.28 GREEN | Test Suites: 119 passed, 119 total | Tests:       2753 passed, 2753 total | core=populated@1bcab0b
+STEP F1.29 lane/mrg-coverage-unknown OK merge=54d2313 changed=7 decoy=4
+  decoy: test/margin-waste.test.js translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5035,"translations/no.ts":5070,"translations/de.ts":5035} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.29 GREEN | Test Suites: 119 passed, 119 total | Tests:       2763 passed, 2763 total | core=populated@1bcab0b
+STEP F1.30 lane/mrg-lag-visible OK merge=57a3050 changed=7 decoy=4
+  decoy: test/margin-statements-page.test.js translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5040,"translations/no.ts":5075,"translations/de.ts":5040} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.30 GREEN | Test Suites: 119 passed, 119 total | Tests:       2771 passed, 2771 total | core=populated@1bcab0b
+STEP F1.31 lane/mrg-recipe-revise-ui OK merge=ec838d2 changed=10 decoy=3
+  decoy: translations/de.ts translations/en.ts translations/no.ts 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.31 GREEN | Test Suites: 120 passed, 120 total | Tests:       2801 passed, 2801 total | core=populated@1bcab0b
+STEP F1.32 lane/mrg-waste-frontend CONFLICT rc=1
+  conflicted: components/admin/margin/MarginWastePanel.vue pages/admin/margin-statements.vue 
+STEP F1.33 lane/train-readonly-visible CONFLICT rc=1
+  conflicted: test/feature-flags-page.test.js 
+STEP F1.34 lane/wf-adjust-address CONFLICT rc=1
+  conflicted: utils/workforce/roster-client.js 
+STEP F1.35 lane/wf-idreg OK merge=c9e1779 changed=0 decoy=10
+  decoy: pages/admin/workforce-personnel-list.vue test/workforce-personnel-list-code-register-client.test.js test/workforce-personnel-list-code-register.test.js test/workforce-personnel-list-components.test.js translations/de.ts translations/en.ts translations/no.ts utils/workforce-rates/rates-client.js utils/workforce/api-client.js utils/workforce/personnel-list-client.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.35 GREEN | Test Suites: 120 passed, 120 total | Tests:       2801 passed, 2801 total | core=populated@1bcab0b
+STEP F1.36 lane/workforce-roster CONFLICT rc=1
+  conflicted: components/admin/workforce/WorkforceEngagementPanel.vue components/organisms/AdminPageHeader.vue pages/admin/workforce-roster.vue test/workforce-roster-client.test.js test/workforce-roster-components.test.js translations/de.ts translations/en.ts translations/no.ts utils/workforce/api-client.js utils/workforce/roster-client.js 
+STEP F1.37 lane/L-JOURNEY-GROWTH CONFLICT rc=1
+  conflicted: test/e2e/fixture/api-server.js 
+STEP F1.38 lane/modal-broken-two CONFLICT rc=1
+  conflicted: test/e2e/fixture/api-server.js test/e2e/fixture/world.js 
+STEP F1.39 lane/fe-gr-withdraw-origin OK merge=8f98b0d changed=8 decoy=2
+  decoy: test/e2e/fixture/api-server.js test/e2e/fixture/world.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.39 GREEN | Test Suites: 121 passed, 121 total | Tests:       2806 passed, 2806 total | core=populated@1bcab0b
+STEP F1.40 lane/journey-teardown CONFLICT rc=1
+  conflicted: test/e2e/fixture/api-server.js 
+STEP F1.41 lane/fe-gr-exit-wire-the-mail CONFLICT rc=1
+  conflicted: test/e2e/fixture/growth.js 
+STEP F1.42 lane/price-crosscurrency OK merge=cd16f85 changed=15 decoy=1
+  decoy: components/admin/meals/MealsProgramPanel.vue 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F1.42 GREEN | Test Suites: 122 passed, 122 total | Tests:       2838 passed, 2838 total | core=populated@1bcab0b
+STEP F2.01 lane/fe-meals-docsync CONFLICT rc=1
+  conflicted: utils/meals/admin-client.js 
+STEP F2.02 lane/L-JOURNEY-PROXY-BLINDSPOT OK merge=f040f12 changed=9 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.02 GREEN | Test Suites: 122 passed, 122 total | Tests:       2856 passed, 2856 total | core=populated@1bcab0b
+STEP F2.03 lane/mrg-page-test-vacuous OK merge=74ba8ac changed=4 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.03 GREEN | Test Suites: 123 passed, 123 total | Tests:       2887 passed, 2887 total | core=populated@1bcab0b
+STEP F2.04 lane/offers-page-hundredfold OK merge=afa1745 changed=18 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.04 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F2.05 lane/tier-artifacts OK merge=2ea3db3 changed=9 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.05 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F2.06 lane/train-publish-unclickable OK merge=53fe505 changed=19 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.06 COLLECTION-ARTIFACT | Test Suites: 1 failed, 124 passed, 125 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+  !! RED ABOVE BASELINE (0 failed tests, baseline 0; 1 failed suites) -- reverting lane/train-publish-unclickable
+  RERUN step=F2.06-revert GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F2.07 lane/L-JOURNEY-PORT-HARDCODED CONFLICT rc=1
+  conflicted: test/e2e/journeys/meals-statement-month.spec.js 
+STEP F2.08 lane/fe-admin-refusal-credential OK merge=7aaf007 changed=1 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F2.08 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F3.01 lane/L-PRICE-SHADOW-GUARD OK merge=2a8e520 changed=10 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.01 BEHAVIOUR-RED | Test Suites: 1 failed, 124 passed, 125 total | Tests:       2 failed, 2962 passed, 2964 total | core=populated@1bcab0b
+  !! RED ABOVE BASELINE (2 failed tests, baseline 0; 1 failed suites) -- reverting lane/L-PRICE-SHADOW-GUARD
+  RERUN step=F3.01-revert GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F3.02 lane/ev-guestlink-one-composer OK merge=4e6a9de changed=1 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.02 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F3.03 lane/exit-instrument-census OK merge=093cd16 changed=3 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.03 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F3.04 lane/fe-ci OK merge=240ec0d changed=2 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.04 GREEN | Test Suites: 124 passed, 124 total | Tests:       2936 passed, 2936 total | core=populated@1bcab0b
+STEP F3.05 lane/fe-ev-inquiry-gate OK merge=4c3b664 changed=2 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.05 GREEN | Test Suites: 124 passed, 124 total | Tests:       2938 passed, 2938 total | core=populated@1bcab0b
+STEP F3.06 lane/fe-journey-meals OK merge=638027a changed=15 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.06 GREEN | Test Suites: 124 passed, 124 total | Tests:       2938 passed, 2938 total | core=populated@1bcab0b
+STEP F3.07 lane/mrg-revise-land OK merge=d788afc changed=5 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.07 GREEN | Test Suites: 124 passed, 124 total | Tests:       2938 passed, 2938 total | core=populated@1bcab0b
+STEP F3.08 lane/mrg-waste-receipts OK merge=904caa5 changed=10 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.08 GREEN | Test Suites: 125 passed, 125 total | Tests:       2949 passed, 2949 total | core=populated@1bcab0b
+STEP F3.09 lane/wf-timesheet-ui OK merge=e72a137 changed=27 decoy=0
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F3.09 BEHAVIOUR-RED | Test Suites: 4 failed, 124 passed, 128 total | Tests:       22 failed, 2981 passed, 3003 total | core=populated@1bcab0b
+  !! RED ABOVE BASELINE (22 failed tests, baseline 0; 4 failed suites) -- reverting lane/wf-timesheet-ui
+  RERUN step=F3.09-revert GREEN | Test Suites: 125 passed, 125 total | Tests:       2949 passed, 2949 total | core=populated@1bcab0b
+STEP F5.01 lanes/L-XZ-NEGATED-ABSENCE CONFLICT rc=1
+  conflicted: components/admin/pos/XReportView.vue pages/admin/kravia-invoice.vue test/price-bypass-legacy.test.js utils/price.js 
+STEP F5.02 lanes/L-WORLD-STAMP-WINDOWS OK merge=8f25904 changed=18 decoy=1
+  decoy: test/journey-artifact-store.test.js 
+  TRANS: TRANSLATIONS-DAMAGE | keys {"translations/en.ts":5054,"translations/no.ts":5089,"translations/de.ts":5054} | dup=0 dropped=3 new-skew=0 (baseline skew 35)
+  RERUN step=F5.02 GREEN | Test Suites: 126 passed, 126 total | Tests:       2959 passed, 2959 total | core=populated@1bcab0b
+DRIVER COMPLETE

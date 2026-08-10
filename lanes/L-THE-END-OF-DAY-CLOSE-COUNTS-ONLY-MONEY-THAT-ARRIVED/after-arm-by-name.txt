@@ -1,0 +1,16 @@
+EodServiceTests at composed tip bcfe0d893 - 14 tests, outcomes {'Passed'}
+
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_Blocked_WhileStoreHasOpenCheck_AndDayStaysOpen
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_NotBlocked_ByEmptyOpenCheck_WhichIsDiscarded
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_NoExplanation_Rejected_AndDayStaysOpen
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_OutOfTolerance_WithExplanation_ClosesAndStoresExplanation
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_SmallInToleranceDifference_StillRequiresAReason
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_WithEmail_SendsReceipt_AndStoresAddress
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_WithinTolerance_ClosesPersistsAndJournalsPosEnd
+[Passed] WebApi.Tests.Kassa.EodServiceTests.EndDay_WithoutEmail_SendsNothing
+[Passed] WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACompanyAccountSale_IsStatedApart_NotCountedAsTakings
+[Passed] WebApi.Tests.Kassa.EodServiceTests.GetSummary_ACreditReturn_NetsAgainstTheCreditTotal_NotAgainstTakings
+[Passed] WebApi.Tests.Kassa.EodServiceTests.GetSummary_LiveBankDeposit_ReducesExpected
+[Passed] WebApi.Tests.Kassa.EodServiceTests.GetSummary_Live_ComputesExpected_ProjectsCardAndCash_NettingReturns
+[Passed] WebApi.Tests.Kassa.EodServiceTests.GetSummary_WithoutCount_LeavesDifferenceNull
+[Passed] WebApi.Tests.Kassa.EodServiceTests.TheCloseAndTheXZReport_ReadTheSameReceivedRule

@@ -1,0 +1,31 @@
+
+[1m== Demo weeks (Europe/Oslo)[0m
+   A 2026-07-27..2026-08-02        last week   PUBLISHED, has the punches -> attendance + hours export
+   B 2026-08-03..2026-08-09        this week   DRAFT     -> the cost overlay, and the walk to publish
+   C 2026-08-10..2026-08-16        next week   PUBLISHED -> what the WORKER sees (me-page shows the next 28 days)
+
+[1m== 1. Signing in the manager (+4799681931)[0m
+   manager applicationUserId = 6ba6dd27-42b0-4ba9-807b-96930c735f2f
+
+[1m== 1b. Signing in the worker (+4799999999) so /workforce/me has a real caller[0m
+   worker applicationUserId  = b719056b-e99e-4d49-824e-189e1473a566
+
+[1m== 2. SQL bootstrap (store, legal employer, first manager engagement, feature flags)[0m
+
+[1m== 2. ADOPTING the store this manager already administers (no SQL, no bootstrap)[0m
+   storeId = 1 (Two Humans Kafé)
+
+[1m== 2b. Stage flags through the operator lever (adopt mode writes no SQL)[0m
+   workforce.setup = on
+   workforce.publication = on
+   workforce.selfservice = on
+   workforce.exchange = on
+   workforce.clock = on
+   workforce.personnel-list NOT SET: {
+  "message": "Unknown feature flag: workforce.personnel-list"
+}
+   workforce.export = on
+   workforce.dispatch = on
+[31mFAILED: this store has no engagement carrying a legalEmployerId, so there is
+    nothing to adopt. A WorkforceLegalEmployer has no create-endpoint -- the world has to be bootstrapped
+    from empty (Scripts/demo/demo-up.sh) rather than adopted.[0m

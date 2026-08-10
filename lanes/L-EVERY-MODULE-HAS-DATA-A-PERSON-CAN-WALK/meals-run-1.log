@@ -1,0 +1,25 @@
+
+[1m== MEALS 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== MEALS 2. Turn the module on for this store (the operator lever)[0m
+   flag meals.module = on
+
+[1m== MEALS 3. The module answers for this store[0m
+   GET /v1/stores/1/meals/companies -> 200 [{"companyId":"59d1a90e-91b2-7de9-d950-1ade6deee09a","legalName":"Akersgata Arkitekter AS","displayName":"Akersgata Arkitekter","organizationNumber":"923456789","companyStatus":"Active","agreementId":"cc1379af-6a06-4cd4-a12d-acf618db12e0","currency":"NOK","agreementStatus":"Active","activeMemberCount":2}]
+
+[1m== MEALS 4. The company-create route, probed rather than assumed[0m
+   POST /v1/meals/companies -> 400 (not 200; the route is not usable)
+
+[1m== MEALS 5. Two buying companies (SQL -- the create route above is dark)[0m
+Error response from daemon: container ab2c8a21c93304a7426c05cf61601834aaff52af76aab1db95ff470d2d4d1fce is not running
+[31mFAILED: SQL failed: 
+    SELECT ISNULL(CAST((SELECT TOP 1 CompanyId FROM MealsCompanies
+                        WHERE OrganizationNumber = N'915001001') AS varchar(36)), '');[0m
+Error response from daemon: container ab2c8a21c93304a7426c05cf61601834aaff52af76aab1db95ff470d2d4d1fce is not running
+[31mFAILED: SQL failed: 
+    INSERT INTO MealsCompanies
+      (CompanyId, OrganizationNumber, CountryCode, LegalName, DisplayName,
+       BillingContactName, BillingContactEmail, BillingContactPhone, Status, CreatedAtUtc)
+    VALUES
+      ('6df0b127-6346-4aad-9b33-93d47ab00c26', N'915001001', N'NO', N'Nordsjo Consulting AS', N'Nordsjo Consulting', N'Ingrid Solberg', N'faktura@nordsjo.example', N'+4755000000', N'Active', SYSUTCDATETIME());[0m

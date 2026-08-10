@@ -1,0 +1,71 @@
+
+[1m== EVENTS 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== EVENTS 2. Turn the module on for this store[0m
+   flag Events.Core = on
+   flag Events.Settlement = on
+   GET /events/admin/1/events -> 200
+
+[1m== EVENTS 3. Five events, each stopped at a different stage[0m
+
+[1m==    (a) Forespoersel -- an enquiry nobody has answered yet[0m
+   event 11  Inquiry
+
+[1m==    (b) Tilbud sendt -- a proposal is out with the guest, unanswered[0m
+   event 12  ProposalSent  versjon 1  gjestelenke a6b35d1c-9385-4028-a5df-11c666a8bea4
+
+[1m==    (c) Venter paa depositum -- accepted, deposit REQUESTED, and it stops there[0m
+   guest accepted -> Accepted  (depositRequiredMinor > 0, so NOT auto-confirmed)
+   deposit issue REFUSED (500) -- expected without live Vipps credentials:
+     WebApi.Helpers.AppException: Vipps parse failed
+   at WebApi.Services.VippsService.ParseResponse[T](HttpResponseMessage response) in /Users/svendaneel/okam/wt-lwtwo-api/Services/VippsService.cs:line 281
+   at WebApi.Serv
+   event 13  Accepted
+
+[1m==    (d) Tapt -- an enquiry marked lost, so the off-ramp is on screen too[0m
+   event 14  Lost
+
+[1m==    (e) Oppgjort -- the whole journey, all the way to Settled[0m
+   guest accepted -> Confirmed  (T5+T8 in one transaction)
+   run sheet generated
+   -> InService
+   -> Settling  settlement Draft
+   line: {"lineNo":1,"kind":"Invoice","amountMinor":1558000}
+   reconcile -> {"status":"Reconciled","mismatched":0}
+   -> Settled  settlement Closed  sum 1558000
+
+[1m== EVENTS 4. The pipeline, read back off the wire[0m
+     id   dato        status          gjester  tittel
+     9     2026-08-07  InService        16       Lørdagskveld – privat selskap
+     6     2026-08-09  Confirmed        20       Barnedåp familien Vandvik
+     7     2026-08-13  Settled          24       Fagseminar Bergen Sjømat AS
+     15    2026-08-14  Settled          24       Tapasaften Sjomat AS
+     10    2026-08-18  Lost             22       Firmalunsj Vestkant Eiendom
+     5     2026-08-24  Lost             15       Utdrikningslag for Sindre
+     11    2026-08-28  Inquiry          18       Fagdag for Nordsjo Consulting
+     2     2026-08-29  Proposing        12       Bursdagsmiddag 40 ar - Kristoffer
+     8     2026-08-31  Cancelled        30       Klassetreff 2006-kullet
+     1     2026-09-06  Inquiry          30       Konfirmasjon for Mathilde
+     14    2026-09-06  Lost             45       Sommerfest Bryggen Sport
+     4     2026-09-10  Accepted         25       Jubileumsmiddag Fjordkraft Regnskap AS
+     12    2026-09-16  ProposalSent     60       Julebord Havnekontoret
+     13    2026-10-01  Accepted         12       Bryllupsmiddag Haug/Berg
+     3     2026-12-12  ProposalSent     45       Firmajulebord Nordane AS
+
+[1m== EVENTS DONE[0m
+
+  Open  /admin/events-pipeline  ("Selskap" in the nav -- it is in the PowerUser-only group).
+
+  Five rows, five stages:
+     Forespoersel        Fagdag for Nordsjo Consulting
+     Tilbud sendt        Julebord Havnekontoret
+     Venter paa depositum Bryllupsmiddag Haug/Berg      <- stops here, see the runbook
+     Tapt                Sommerfest Bryggen Sport
+     Oppgjort            Tapasaften Sjomat AS
+
+  Guest proposal links (open in a private window -- they are anonymous):
+     http://127.0.0.1:5971/events/proposals/a6b35d1c-9385-4028-a5df-11c666a8bea4
+     http://127.0.0.1:5971/events/proposals/5788397e-179e-4243-a26e-1d3ae286226f
+
+  storeId=1   flags: Events.Core=on, Events.Settlement=on, Events:Enabled=true (config)

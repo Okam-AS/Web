@@ -1,0 +1,475 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+<<<<<<< trunk
+=======
+using WebApi.Enums;
+using WebApi.Helpers;
+>>>>>>> lane/eod-credit-split
+using WebApi.Models.Kassa;
+
+namespace WebApi.Services.Kassa
+{
+    // Renders an X or Z report as ESC/POS bytes for the Surfboard UTF-8 print contract, using the
+    // same command subset and 32-column layout as EscPosReceiptBuilder. The section order mirrors
+    // XReportView (the on-screen report), so paper and screen show the same document: turnover per
+    // goods group, corrections, VAT summary, grand totals, payment means, cash reconciliation and
+    // the per-operator specification.
+    public static class EscPosXZReportBuilder
+    {
+        private const int Width = 32;
+
+        private static readonly byte[] Init = { 0x1B, 0x40 };
+        private static readonly byte[] AlignLeft = { 0x1B, 0x61, 0x00 };
+        private static readonly byte[] AlignCenter = { 0x1B, 0x61, 0x01 };
+        private static readonly byte[] BoldOn = { 0x1B, 0x21, 0x08 };
+        private static readonly byte[] StyleReset = { 0x1B, 0x21, 0x00 };
+        private static readonly byte[] FontB = { 0x1B, 0x21, 0x01 };
+        // 8 lines, same as the receipt builder: enough to clear the tear bar so the grand totals and
+        // the Z signature are not torn through.
+        private static readonly byte[] FeedOut = { 0x1B, 0x64, 0x08 };
+        private static readonly byte[] Cut = { 0x1D, 0x56, 0x00 };
+
+        public static byte[] Build(XReportModel report)
+        {
+            if (report == null)
+            {
+                throw new ArgumentNullException(nameof(report));
+            }
+
+            var z = report as ZReportModel;
+            var job = new List<byte>();
+            job.AddRange(Init);
+
+            job.AddRange(AlignCenter);
+            job.AddRange(BoldOn);
+            Line(job, z != null ? "Z-RAPPORT #" + z.ZNumber.ToString(CultureInfo.InvariantCulture) : "X-RAPPORT");
+            job.AddRange(StyleReset);
+            if (!string.IsNullOrEmpty(report.SellerLegalName))
+            {
+                Line(job, Fit(report.SellerLegalName, Width));
+            }
+            if (!string.IsNullOrEmpty(report.SellerOrgNumber))
+            {
+                Line(job, Fit(report.SellerOrgNumber, Width));
+            }
+
+            job.AddRange(AlignLeft);
+            Line(job, string.Empty);
+            Line(job, Row("Kasse", report.RegisterId ?? string.Empty));
+            Line(job, Row("Dato", (report.LocalDate + " " + report.LocalTime).Trim()));
+            Line(job, Row("Sekvens", report.FromSequenceNumber.ToString(CultureInfo.InvariantCulture)
+                + "-" + report.ToSequenceNumber.ToString(CultureInfo.InvariantCulture)));
+            Line(job, Row("Forrige Z", report.PreviousZNumber.ToString(CultureInfo.InvariantCulture)));
+            Line(job, Row("Kvitteringer", report.ReceiptCount.ToString(CultureInfo.InvariantCulture)));
+
+            Section(job, "OMSETNING");
+            foreach (var group in report.GoodsGroups ?? new List<GoodsGroupTotal>())
+            {
+                Line(job, Row(Fit(group.Name ?? "Uten varegruppe", 20)
+                    + " (" + group.Quantity.ToString(CultureInfo.InvariantCulture) + ")", Money(group.Amount)));
+                if (group.DiscountAmount != 0)
+                {
+                    job.AddRange(FontB);
+                    Line(job, Row("  herav rabatt", "-" + Money(group.DiscountAmount)));
+                    job.AddRange(StyleReset);
+                }
+            }
+            job.AddRange(BoldOn);
+            Line(job, Row("Salg (" + report.SalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.SalesAmount)));
+            job.AddRange(StyleReset);
+            // § 2-8-2: the registered sale split into kontantsalg and kredittsal. Printed
+            // unconditionally, so a period with no credit sales states nought rather than falling
+            // silent — a reader cannot tell an absent line from an unbuilt one.
+            job.AddRange(FontB);
+            Line(job, Row("herav kontantsalg (" + report.CashSalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.CashSalesAmount)));
+            Line(job, Row("herav kredittsalg (" + report.CreditSalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.CreditSalesAmount)));
+            job.AddRange(StyleReset);
+            Line(job, Row("Rabatt (" + report.DiscountCount.ToString(CultureInfo.InvariantCulture) + ")", "-" + Money(report.DiscountAmount)));
+            Line(job, Row("Negativt salg (" + report.NegativeSalesCount.ToString(CultureInfo.InvariantCulture) + ")", "-" + Money(report.NegativeSalesAmount)));
+            Line(job, Row("Retur (" + report.ReferencedReturnsCount.ToString(CultureInfo.InvariantCulture) + ")", "-" + Money(report.ReferencedReturnsAmount)));
+
+            var vatRates = report.VatRates ?? new List<VatRateTotal>();
+            if (vatRates.Count > 0)
+            {
+                Section(job, "MVA-SPESIFIKASJON");
+                job.AddRange(FontB);
+                Line(job, "MVA%     Grunnlag         MVA");
+                foreach (var vat in vatRates)
+                {
+                    Line(job,
+                        (vat.VatPercent.ToString(CultureInfo.InvariantCulture) + "%").PadRight(6)
+                        + Money(vat.Basis).PadLeft(11)
+                        + Money(vat.Amount).PadLeft(12));
+                }
+                job.AddRange(StyleReset);
+            }
+
+            var allMeans = report.PaymentMeans ?? new List<PaymentMeansTotal>();
+            // A company-account allocation is a receivable, not money the register took in, so it is
+            // stated in its own section below instead of inside "Sum mottatt" — a total that included
+            // it would claim the venue received money it has only invoiced.
+            var payments = allMeans.Where(p => !p.PaymentType.IsCompanyAccount()).ToList();
+            var creditMeans = allMeans.Where(p => p.PaymentType.IsCompanyAccount()).ToList();
+            if (payments.Count > 0)
+            {
+                Section(job, "MOTTATT BETALING");
+                foreach (var payment in payments)
+                {
+                    Line(job, Row(PaymentTenderLabels.Tender(payment.PaymentType)
+                        + " (" + payment.Count.ToString(CultureInfo.InvariantCulture) + ")", Money(payment.Amount)));
+                }
+                if (report.TipsAmount != 0)
+                {
+                    job.AddRange(FontB);
+                    Line(job, Row("  herav driks (" + report.TipsCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.TipsAmount)));
+                    job.AddRange(StyleReset);
+                }
+                job.AddRange(BoldOn);
+                Line(job, Row("Sum mottatt", Money(payments.Sum(p => p.Amount))));
+                job.AddRange(StyleReset);
+            }
+
+            // § 2-8-2 second paragraph: kredittsal specified by count and amount, with the
+            // utleveringskvitteringar issued for them. Printed whenever the register can have credit
+            // sales at all, so a nought here is a computed nought.
+            if (creditMeans.Count > 0 || report.CreditSalesCount != 0 || report.DeliveryReceiptCount != 0)
+            {
+                Section(job, "KREDITTSALG");
+                Line(job, Row("Kredittsalg (" + report.CreditSalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.CreditSalesAmount)));
+                if (report.CreditReturnsCount != 0)
+                {
+                    Line(job, Row("Kredittretur (" + report.CreditReturnsCount.ToString(CultureInfo.InvariantCulture) + ")", "-" + Money(report.CreditReturnsAmount)));
+                }
+                // Abbreviated so the whole row reads at 32 columns; Row protects the count itself, so a
+                // wide amount shortens these words rather than the figure beside them.
+                Line(job, Row("Utleveringskvitt. (" + report.DeliveryReceiptCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.DeliveryReceiptAmount)));
+                foreach (var means in creditMeans)
+                {
+                    Line(job, Row(PaymentLabel(means.PaymentType)
+                        + " (" + means.Count.ToString(CultureInfo.InvariantCulture) + ")", Money(means.Amount)));
+                }
+                job.AddRange(FontB);
+                Line(job, Fit("Faktureres, ikke mottatt", Width));
+                job.AddRange(StyleReset);
+            }
+
+            // Manual cash movements are their own § 2-8-2 element, kept apart from the payment means.
+            if (report.PayInCount != 0 || report.PayOutCount != 0)
+            {
+                Section(job, "KONTANTBEVEGELSER");
+                Line(job, Row("Innbetalt (" + report.PayInCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.PayInAmount)));
+                Line(job, Row("Utbetalt (" + report.PayOutCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.PayOutAmount)));
+            }
+
+            Section(job, "KORREKSJONER");
+            Line(job, Row("Negativt salg (" + report.NegativeSalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.NegativeSalesAmount)));
+            Line(job, Row("Retur (" + report.ReferencedReturnsCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.ReferencedReturnsAmount)));
+            Line(job, Row("Avbrutt salg (" + report.AbortedSalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.AbortedSalesAmount)));
+            Line(job, Row("Linjekorreksjon (" + report.LineCorrectionCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.LineCorrectionAmount)));
+            job.AddRange(BoldOn);
+            Line(job, Row("Sum korreksjoner", Money(
+                report.NegativeSalesAmount + report.ReferencedReturnsAmount
+                + report.CorrectionAmount + report.AbortedSalesAmount)));
+            job.AddRange(StyleReset);
+            Line(job, Row("Kopikvitteringer (" + report.CopyReceiptCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.CopyReceiptAmount)));
+            Line(job, Row("Foreløpige (" + report.ProvisionalReceiptCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.ProvisionalReceiptAmount)));
+            Line(job, Row("Trening (" + report.TrainingCount.ToString(CultureInfo.InvariantCulture) + ")", Money(report.TrainingAmount)));
+            Line(job, Row("Skuffåpninger", report.DrawerOpenCount.ToString(CultureInfo.InvariantCulture)));
+            if (report.ManualDrawerOpenCount != 0)
+            {
+                job.AddRange(FontB);
+                Line(job, Row("  herav manuelle", report.ManualDrawerOpenCount.ToString(CultureInfo.InvariantCulture)));
+                job.AddRange(StyleReset);
+            }
+
+            // The opening float belongs on a running X too (§ 2-8-2 bokstav k); the count and the
+            // difference exist only once the day has been settled, i.e. on the Z.
+            if (z != null || report.StartFloat.HasValue)
+            {
+                Section(job, "KONTANTOPPGJØR");
+                Line(job, Row("Vekslepenger", Money(report.StartFloat ?? 0)));
+                if (z != null)
+                {
+                    Line(job, Row("Forventet", Money(z.CashExpected ?? 0)));
+                    Line(job, Row("Opptalt", Money(z.CashCounted ?? 0)));
+                    job.AddRange(BoldOn);
+                    Line(job, Row("Differanse", Money(z.CashDifference ?? 0)));
+                    job.AddRange(StyleReset);
+                    if (z.BankDepositAmount.HasValue && z.BankDepositAmount.Value != 0)
+                    {
+                        Line(job, Row("Bankinnskudd", Money(z.BankDepositAmount.Value)));
+                    }
+                    if (!string.IsNullOrEmpty(z.DifferenceExplanation))
+                    {
+                        foreach (var part in Wrap("Forklaring: " + z.DifferenceExplanation, Width))
+                        {
+                            Line(job, part);
+                        }
+                    }
+                }
+            }
+
+            var operators = report.Operators ?? new List<OperatorTotal>();
+            if (operators.Count > 0)
+            {
+                Section(job, "PER BETJENT");
+                foreach (var op in operators)
+                {
+                    Line(job, Row(Fit(op.OperatorName ?? string.Empty, 20)
+                        + " (" + op.SalesCount.ToString(CultureInfo.InvariantCulture) + ")", Money(op.SalesAmount)));
+                    if (op.ReturnsCount != 0)
+                    {
+                        job.AddRange(FontB);
+                        Line(job, Row("  retur (" + op.ReturnsCount.ToString(CultureInfo.InvariantCulture) + ")", "-" + Money(op.ReturnsAmount)));
+                        job.AddRange(StyleReset);
+                    }
+                }
+            }
+
+            // § 2-8-3: the non-resettable from-day-one totals must be on the report itself.
+            Section(job, "GRAND TOTAL");
+            Line(job, Row("Salg", Money(report.GrandTotalSales)));
+            Line(job, Row("Retur", "-" + Money(report.GrandTotalReturns)));
+            Line(job, Row("Negativt salg", "-" + Money(report.GrandTotalNegativeSales)));
+            Line(job, Row("Feil/korreksjon", "-" + Money(report.GrandTotalErrors)));
+            if (report.GrandTotalTips != 0)
+            {
+                Line(job, Row("Driks", Money(report.GrandTotalTips)));
+            }
+            job.AddRange(BoldOn);
+            Line(job, Row("Netto", Money(report.GrandTotalNet)));
+            job.AddRange(StyleReset);
+
+            // The Z signature makes the printed report verifiable against the Z chain; an X has none.
+            if (z != null && !string.IsNullOrEmpty(z.Signature))
+            {
+                Line(job, string.Empty);
+                job.AddRange(FontB);
+                foreach (var part in Wrap("Signatur: " + z.Signature, Width))
+                {
+                    Line(job, part);
+                }
+                if (!string.IsNullOrEmpty(z.KeyVersion))
+                {
+                    Line(job, Fit("Nøkkel " + z.KeyVersion, Width));
+                }
+                job.AddRange(StyleReset);
+            }
+
+            job.AddRange(FeedOut);
+            job.AddRange(Cut);
+            return job.ToArray();
+        }
+
+        private static void Section(List<byte> job, string title)
+        {
+            Line(job, new string('-', Width));
+            job.AddRange(BoldOn);
+            Line(job, Fit(title, Width));
+            job.AddRange(StyleReset);
+        }
+
+        private static void Line(List<byte> job, string text)
+        {
+            job.AddRange(Encoding.UTF8.GetBytes(Clean(text)));
+            job.Add(0x0A);
+        }
+
+        // Same choke point as the receipt builder: an operator-controlled string (goods group name,
+        // operator name, difference explanation) must never reach the printer with a live command
+        // byte in it — a "GS V 0" inside a name would cut the paper before the grand totals.
+        private static string Clean(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return text ?? string.Empty;
+            }
+
+            char[] buffer = null;
+            for (var i = 0; i < text.Length; i++)
+            {
+                if (char.IsControl(text[i]))
+                {
+                    if (buffer == null)
+                    {
+                        buffer = text.ToCharArray();
+                    }
+                    buffer[i] = ' ';
+                }
+            }
+            return buffer == null ? text : new string(buffer);
+        }
+
+        private static string Row(string left, string right)
+        {
+            left = left ?? string.Empty;
+            right = right ?? string.Empty;
+            var available = Width - right.Length - 1;
+            if (available < 0)
+            {
+                return Fit(right, Width);
+            }
+            if (left.Length > available)
+            {
+                left = FitKeepingCount(left, available);
+            }
+            return left + new string(' ', Width - left.Length - right.Length) + right;
+        }
+
+        // A trailing "(n)" is a § 2-8-2 figure, not part of the label's prose, and it sits at the end of
+        // the label — which is the end Fit cuts. "Utleveringskvitt. (12)" beside a ten-character amount
+        // printed "Utleveringskvitt. (1… 999 999,99", restating a count of twelve as a plausible one; a
+        // wider amount dropped it entirely. Sizing the words to fit one world only moves the count at
+        // which it recurs, so the count is excluded from what may be shortened: the descriptive words
+        // give way, never the figures the document exists to state.
+        private static string FitKeepingCount(string label, int width)
+        {
+            var count = TrailingCount(label);
+            if (count == null || count.Length > width)
+            {
+                return Fit(label, width);
+            }
+            return Fit(label.Substring(0, label.Length - count.Length), width - count.Length) + count;
+        }
+
+        // The trailing " (digits)" group, including the space that separates it from the words, or null
+        // when the label has none. Only digits qualify, so a label that legitimately ends in parentheses
+        // — "Kort (Stripe)", "Vipps (Dintero)" — is shortened as prose like any other.
+        private static string TrailingCount(string label)
+        {
+            if (label.Length < 4 || label[label.Length - 1] != ')')
+            {
+                return null;
+            }
+
+            var open = label.LastIndexOf('(');
+            if (open < 2 || label[open - 1] != ' ' || open + 1 == label.Length - 1)
+            {
+                return null;
+            }
+
+            for (var i = open + 1; i < label.Length - 1; i++)
+            {
+                if (!char.IsDigit(label[i]))
+                {
+                    return null;
+                }
+            }
+            return label.Substring(open - 1);
+        }
+
+        private static string Fit(string text, int width)
+        {
+            if (string.IsNullOrEmpty(text) || text.Length <= width)
+            {
+                return text ?? string.Empty;
+            }
+            return width <= 1 ? text.Substring(0, Math.Max(0, width)) : text.Substring(0, width - 1) + "…";
+        }
+
+        private static IEnumerable<string> Wrap(string text, int width)
+        {
+            text = (text ?? string.Empty).Trim();
+            if (text.Length == 0)
+            {
+                yield break;
+            }
+
+            var current = new StringBuilder();
+            foreach (var word in text.Split(' ').Where(w => w.Length > 0))
+            {
+                if (current.Length > 0 && current.Length + 1 + word.Length > width)
+                {
+                    yield return current.ToString();
+                    current.Clear();
+                }
+                if (current.Length > 0)
+                {
+                    current.Append(' ');
+                }
+                var w = word;
+                while (w.Length > width)
+                {
+                    if (current.Length > 0)
+                    {
+                        yield return current.ToString();
+                        current.Clear();
+                    }
+                    yield return w.Substring(0, width);
+                    w = w.Substring(width);
+                }
+                current.Append(w);
+            }
+            if (current.Length > 0)
+            {
+                yield return current.ToString();
+            }
+        }
+
+        // Ore to "1 234,56", matching the receipt builder.
+        private static string Money(long ore)
+        {
+            var negative = ore < 0;
+            var abs = Math.Abs(ore);
+            var kroner = abs / 100;
+            var rest = abs % 100;
+            var grouped = kroner.ToString("N0", CultureInfo.InvariantCulture).Replace(",", " ");
+            return (negative ? "-" : string.Empty) + grouped + "," + rest.ToString("00", CultureInfo.InvariantCulture);
+        }
+<<<<<<< trunk
+=======
+
+        // Exhaustive over PaymentType. This used to fall back to paymentType.ToString(), which put the
+        // English enum identifier on a fiscal document the moment a tender arrived without a label —
+        // "CompanyAccount" printed on a Norwegian Z report. An unrecognised value is named as unknown
+        // WITH its code, so a reader sees a tender the register could not name rather than a plausible
+        // invented one; the suite derives its expectations from Enum.GetValues, so the next tender
+        // fails the build instead of reaching paper.
+        private static string PaymentLabel(PaymentType paymentType)
+        {
+            switch (paymentType)
+            {
+                case PaymentType.NotSet:
+                    return "Ikke satt";
+                case PaymentType.Cash:
+                    return "Kontant";
+                case PaymentType.SurfboardTerminal:
+                case PaymentType.DinteroTerminal:
+                    return "Kort";
+                case PaymentType.Giftcard:
+                    return "Gavekort";
+                case PaymentType.PayInStore:
+                    return "Betal i butikk";
+                case PaymentType.CompanyAccount:
+                    return "Bedriftskonto";
+                case PaymentType.Stripe:
+                    return "Kort (Stripe)";
+                case PaymentType.Vipps:
+                    return "Vipps";
+                case PaymentType.Dintero:
+                    return "Dintero";
+                case PaymentType.DinteroVipps:
+                    return "Vipps (Dintero)";
+                case PaymentType.DinteroBillie:
+                    return "Billie (Dintero)";
+                case PaymentType.DinteroKlarna:
+                    return "Klarna (Dintero)";
+                case PaymentType.DinteroKravia:
+                    return "Kravia (Dintero)";
+                case PaymentType.WoltMarketplace:
+                    return "Wolt";
+                case PaymentType.Surfboard:
+                    return "Surfboard";
+                case PaymentType.SurfboardVipps:
+                    return "Vipps (Surfboard)";
+                default:
+                    return "Ukjent kode "
+                        + ((int)paymentType).ToString(CultureInfo.InvariantCulture);
+            }
+        }
+>>>>>>> lane/eod-credit-split
+    }
+}

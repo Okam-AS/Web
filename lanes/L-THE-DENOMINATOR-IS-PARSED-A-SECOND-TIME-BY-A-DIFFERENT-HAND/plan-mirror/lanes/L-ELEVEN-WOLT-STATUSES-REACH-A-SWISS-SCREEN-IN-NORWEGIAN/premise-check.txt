@@ -1,0 +1,37 @@
+PREMISE VERIFICATION at trunk feature/restaurant-modules @ d4c308e, BEFORE any edit.
+(Standing instruction after three lanes were dispatched at already-fixed defects.)
+
+  $ sed -n '221p;231p' plugins/global-mixin.js
+        dineHomeDeliveryStatusLabel (dineHomeDeliveryTypeEnum) {
+        woltDeliveryStatusLabel (woltDeliveryStatusEnum) {          <- both HOLD
+
+  $ sed -n '69p;84p;310p' components/molecules/OrderCard.vue
+        <span>{{ dineHomeDeliveryStatusLabel(order.dineHomeStatus) }}</span>
+        <span>{{ woltDeliveryStatusLabel(order.woltDeliveryInfo.status) }}</span>
+        dineHomeDeliveryStatusLabel(dineHomeDeliveryTypeEnum) {     <- all three HOLD
+
+  $ grep -n woltDeliveryStatusLabel components/molecules/OrderCard.vue
+        84:  (the render, and nothing else)                          <- UNSHADOWED, confirmed
+
+Both switches carried Norwegian literals with no $i and no key. Every claim in the brief held.
+
+THE POPULATION, read from the backend write path rather than from the switch:
+  OkamAPI Enums/WoltStatus.cs            15 members declared
+  OkamAPI Services/OrderService.cs:424   writes NotSet at row creation
+  OkamAPI Services/WoltService.cs:338-349 statusesToSave allowlist, 9 members
+  => WoltDeliveryInfo.Status can hold exactly 10 values.
+  Not in the allowlist and never written: PickupEtaUpdated(3), DropoffCompleted(9),
+  LocationUpdated(12), DropoffEtaUpdated(13), HandshakeDelivery(14).
+  The switch had a case for DropoffCompleted -> carried. The other four get no invented word.
+  OkamAPI Enums/DineHomeStatus.cs        6 members, all named.
+
+SCOPE DECISION (the brief asked for one): there is NO missing-member hole to fix here, unlike the
+payment map's seventeen-against-ten. All ten reachable Wolt values already had correct wording via
+the switch's ten cases plus its default. This lane is therefore the LOOKUP only, plus naming NotSet
+explicitly so the map covers the column. Nothing is deferred to a follow-up.
+
+TIER
+  before, d4c308e   168 suites / 4007 / 0
+  after,  lane tip  169 suites / 4063 / 0   (+1 suite, +56 tests = exactly this lane's test file)
+
+MUTATIONS: 21 applied to source and reverted, 21 reddened the suite. See mut.json / mut.results.json.

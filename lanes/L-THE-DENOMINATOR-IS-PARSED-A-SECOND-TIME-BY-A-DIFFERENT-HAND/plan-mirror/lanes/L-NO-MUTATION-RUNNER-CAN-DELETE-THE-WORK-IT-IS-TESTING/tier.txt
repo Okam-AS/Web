@@ -1,0 +1,3 @@
+lane branch: lane/mutation-runner-cannot-delete-work @ c65b19c (off feature/restaurant-modules @ d4c308e)
+tier at lane tip: 169 suites / 4020 tests / 0 failed (baseline 168 / 4007 / 0)
+mutations: 6 of 6 applied-and-reverted mutations reddened the pin, incl. restoring the git-checkout defect

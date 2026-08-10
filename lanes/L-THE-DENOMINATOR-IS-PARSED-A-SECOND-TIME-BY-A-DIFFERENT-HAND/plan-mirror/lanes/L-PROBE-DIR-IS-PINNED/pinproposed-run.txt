@@ -1,0 +1,61 @@
+=================================================================
+  PROPOSED EDIT -- real plan text, real tool, real trees
+=================================================================
+
+--- 1. plan check, BEFORE the proposed lines ---
+    check: 1 error(s), 111 warning(s)
+
+--- 2. plan check, AFTER the proposed lines ---
+    check: 1 error(s), 111 warning(s)
+    the proposed lines add no violation and remove none
+
+--- 3. plan refresh: what the new facts read against the trees NOW ---
+        be.dir.repo      ok      present
+        be.dir.gitdir    ok      /Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules
+    RED be.dir.pin       unconf  pending
+        be.dir.ref       ok      lane/meals-grace-pins
+        fe.dir.repo      ok      present
+        fe.dir.gitdir    ok      /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-proposed/okam/Web/.git/worktrees/Web-modules
+        fe.dir.pin       ok      present
+        fe.dir.ref       ok      feature/restaurant-modules
+
+    the rendered sentences a reader sees:
+      - Backend `dir` `../OkamAPI-modules` is worktree /Users/svendaneel/okam/OkamAPI/.git/worktrees/OkamAPI-modules, repo pin present, declared ref `feature/restaurant-modules`, found ref lane/meals-grace-pins, ref pin pending
+      - Hub `dir` `.` is worktree /private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/L-PROBE-DIR-IS-PINNED-proposed/okam/Web/.git/worktrees/Web-modules, repo pin present, declared ref `feature/restaurant-modules`, found ref feature/restaurant-modules, ref pin present
+
+--- 4. coverage: pindirs before and after ---
+    real plan today:
+      declared world (world.config): feature/restaurant-modules
+      dir                      probes  lanes  pin
+      .                             8      0  UNPINNED -- no probe binds ./.git to a repo worktree
+      ../OkamAPI-modules           23     66  UNPINNED -- no probe binds ../OkamAPI-modules/.git to a repo worktree
+      
+      pindirs: 2 of 2 dirs UNPINNED -- a fact read from an unpinned dir is a
+               measurement of whatever ref somebody last checked out there.
+      exit=1
+    with the proposed lines:
+      declared world (world.config): feature/restaurant-modules
+      dir                      probes  lanes  pin
+      .                             8      0  pinned via fe.dir.repo
+      ../OkamAPI-modules           23     66  pinned via be.dir.repo
+      
+      pindirs: all 2 dirs pinned to a repo and to feature/restaurant-modules
+      exit=0
+
+    the coverage check goes RED -> GREEN because of these lines, and it is
+    the lines that did it: removing them puts it back to exit=1.
+
+--- 5. can the coverage check itself be made to fail? ---
+    injecting one probe reading a NEW sibling dir, with no pin for it:
+      newthing.x               wire      ../SomeOtherRepo/Services/Thing.cs   exists
+      declared world (world.config): feature/restaurant-modules
+      dir                      probes  lanes  pin
+      .                             8      0  pinned via fe.dir.repo
+      ../OkamAPI-modules           23     66  pinned via be.dir.repo
+      ../SomeOtherRepo              1      0  UNPINNED -- no probe binds ../SomeOtherRepo/.git to a repo worktree
+      
+      pindirs: 1 of 3 dirs UNPINNED -- a fact read from an unpinned dir is a
+               measurement of whatever ref somebody last checked out there.
+      exit=1
+    the coverage check CAN be made to fail: a dir nobody pinned reds on the
+    next run, which is the whole reason it exists next to the pin probes.

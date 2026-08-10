@@ -1,0 +1,80 @@
+
+[1m== MARGIN 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== MARGIN 2. Turn the module on (the operator lever, not a SQL insert)[0m
+   flag Margin.Module = on
+   status: {"module":true,"priceImport":true,"statements":true}
+
+[1m== MARGIN 3. The dishes (POST /Products -- the POS catalog, not a Margin table)[0m
+   Fiskesuppe = already in the catalog (adopted)
+   Safranrisotto = already in the catalog (adopted)
+   Husets vann = already in the catalog (adopted)
+   Kaffe = already in the catalog (adopted)
+
+[1m== MARGIN 4. Ingredients[0m
+   Laks, Fiskeavskjaer, Flote  -- priced below
+   Safran                      -- DELIBERATELY never priced
+
+[1m== MARGIN 5. Supplier, supplier items and effective-dated prices[0m
+   Laks: 279 fra 2026-06-01 til aapen  ->  249 fra 2026-01-01 til 2026-06-01
+   Fiskeavskjaer 445,00/5 kg   Flote 32,00/l
+
+[1m== MARGIN 6. Recipes[0m
+   Fiskekraft (grunnbase)     already active (adopted)
+   Fiskesuppe (oppskrift)     already active (adopted)
+   Safranrisotto (oppskrift)  already active (adopted)
+   Husets vann (oppskrift)    already active (adopted)
+   Dessertsaus (uten rett)    already active (adopted)
+
+[1m== MARGIN 7. Link the recipes to the dishes[0m
+   -> Fiskesuppe  0.125000 utbytte/enhet  aktiv=true brutt=false
+   -> Safranrisotto  0.125000 utbytte/enhet  aktiv=true brutt=false
+   -> Husets vann  0.250000 utbytte/enhet  aktiv=true brutt=false
+   Kaffe: deliberately linked to nothing -- a dish with a price and no cost side
+   Dessertsaus: deliberately linked to nothing -- a cost with no dish to sell it
+
+[1m== MARGIN 8. The margin, read back off the wire[0m
+     dish                  basis      net      plate   contrib   food%   complete  why
+     Avokadotoast          Base      8261     4182      4079     50.62    true      
+     Cappuccino            Base      4261     878      3383     20.61    true      
+     Cappuccino            Base      3914     -      -     0    false      The product is not linked to a recipe.
+     Cortado               Base      3392     -      -     0    false      The product is not linked to a recipe.
+     Croissant             Base      3305     -      -     0    false      The product is not linked to a recipe.
+     Dagens salat          Base      8609     -      -     0    false      The product is not linked to a recipe.
+     Dagens tomatsuppe m/  Base      12609     1393      11216     11.05    true      
+     Eplemost fra Hardang  Base      3392     -      -     0    false      The product is not linked to a recipe.
+     Espresso              Base      2783     -      -     0    false      The product is not linked to a recipe.
+     Farris                Base      2522     -      -     0    false      The product is not linked to a recipe.
+     Farris 0,5 l          Base      3653     -      -     0    false      The product is not linked to a recipe.
+     Fiskesuppe            Base      16435     2738      13697     16.66    true      
+     Fiskesuppe            Base      11218     -      -     0    false      The product is not linked to a recipe.
+     Gulrotkake            Base      4522     -      -     0    false      The product is not linked to a recipe.
+     Husets isvann         Base      1305     0      1305     0    true      
+     Husets vann           Base      3392     0      3392     0    true      
+     Kaffe                 Base      3653     -      -     0    false      The product is not linked to a recipe.
+     Kaffe latte           Base      4261     -      -     0    false      The product is not linked to a recipe.
+     Kanelbolle            Base      3653     -      -     0    false      The product is not linked to a recipe.
+     Kanelbolle            Base      3914     309      -     0    false      Ingredient 689b4d26-13a3-4088-a5f6-b483372c4df8 has no effective price at the priced instant.
+     Ostesmørbrød på surd  Base      10348     1851      8497     17.89    true      
+     Rundstykke med bruno  Base      5131     -      -     0    false      The product is not linked to a recipe.
+     Safranrisotto         Base      21305     698      -     0    false      Ingredient 0ff88801-6d32-4f56-80bd-caea078b5ece has no effective price at the priced instant.
+     Skolebolle            Base      3914     -      -     0    false      The product is not linked to a recipe.
+     Te (Kanel & eple)     Base      3044     -      -     0    false      The product is not linked to a recipe.
+     Toast med skinke og   Base      6870     -      -     0    false      The product is not linked to a recipe.
+   unsold recipes (a cost with no price to measure it against):
+     Dessertsaus (uten rett)  [Sellable]
+     Sommersuppe (utgått – demo)  [Sellable]
+     Vaniljesaus (uten rett)  [Sellable]
+     test  [Sellable]
+
+[1m== MARGIN DONE[0m
+
+  Open  /admin/margin-recipes  and click each recipe in "Oppskrifter":
+
+    Fiskesuppe (oppskrift)      a complete cost, and a real "Dekningsbidrag" + "Raavareandel"
+    Safranrisotto (oppskrift)   "minst kr ..." and a WITHHELD margin -- one line has no price
+    Husets vann (oppskrift)     "kr 0,00" that is a FACT, and a real 0 % food cost
+    Dessertsaus (uten rett)     "Ingen rett selger denne oppskriften"
+
+  storeId=1   flags: Margin.Module=on, Margin.PriceImport=off, Margin.Statements=off

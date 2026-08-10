@@ -1,0 +1,116 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4098
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3098/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+
+Running 1 test using 1 worker
+
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+probe base http://127.0.0.1:3098 api http://127.0.0.1:4098
+[WebServer] ✔ Server: Compiled successfully in 14.68s
+[WebServer] ✔ Client: Compiled successfully in 17.53s
+[WebServer] ↻ Updated components/organisms/AdminPageHeader.vue
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.22 GB (RSS: 1.88 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3098/
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 537.99ms
+[WebServer] ✔ Client: Compiled successfully in 418.59ms
+[WebServer] ↻ Updated components/organisms/AdminPageHeader.vue
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 1.06s
+[WebServer] ✔ Client: Compiled successfully in 1.15s
+
+=== STATE A — a single Draft row. Hash and published-at are both "—": the NARROWEST the
+=== versions table is ever drawn, and the only state the journey measures.
+--- STATE A @ 1024x720
+    button   : x=598-671 y=239 w=73
+    columns  : [{"left":67,"right":521,"w":455},{"left":545,"right":1000,"w":455}]
+    table    : width=607 scrollWidth=607 right=674 | column width=455 right=521 | OVERFLOWS BY 153px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":607,"clientWidth":455}
+    at centre: <p class="trn-form__hint"> "Dette er beviset på at de fem stegene over gjorde noe: oppsl"
+    VERDICT  : NOT REACHABLE by pointer
+--- STATE A @ 1280x720
+    button   : x=786-859 y=183 w=73
+    columns  : [{"left":262,"right":747,"w":485},{"left":771,"right":1256,"w":485}]
+    table    : width=607 scrollWidth=607 right=869 | column width=485 right=747 | OVERFLOWS BY 122px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":607,"clientWidth":485}
+    at centre: <p class="trn-form__hint"> "Dette er beviset på at de fem stegene over gjorde noe: oppsl"
+    VERDICT  : NOT REACHABLE by pointer
+--- STATE A @ 1440x720
+    button   : x=812-885 y=183 w=73
+    columns  : [{"left":288,"right":840,"w":552},{"left":864,"right":1416,"w":552}]
+    table    : width=607 scrollWidth=607 right=895 | column width=552 right=840 | OVERFLOWS BY 55px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":607,"clientWidth":552}
+    at centre: <button class="trn-btn trn-btn--small"> "Publiser"
+    VERDICT  : REACHABLE by pointer
+
+REAL POINTER CLICK on the STATE A publish button @1280 -> FAILED: locator.click: Timeout 5000ms exceeded. | Call log: |   - waiting for locator('[data-test="version-publish"]').first()
+  (falling back to dispatchEvent to REACH state B — recorded, not counted as a click)
+
+=== STATE B — v1 Publisert (real 12-char hash + full timestamp) beside v2 Utkast, which
+=== carries the publish button. THIS is the state a manager cutting a second version sees.
+--- STATE B @ 1024x720
+    button   : x=645-718 y=245 w=73
+    columns  : [{"left":83,"right":530,"w":446},{"left":554,"right":1000,"w":446}]
+    table    : width=635 scrollWidth=635 right=719 | column width=446 right=530 | OVERFLOWS BY 189px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":635,"clientWidth":446}
+    at centre: <h2 class="trn-completions__title"> "4. Gjennomføringer"
+    VERDICT  : NOT REACHABLE by pointer
+--- STATE B @ 1280x720
+    button   : x=829-902 y=189 w=73
+    columns  : [{"left":277,"right":754,"w":478},{"left":778,"right":1256,"w":478}]
+    table    : width=635 scrollWidth=635 right=912 | column width=478 right=754 | OVERFLOWS BY 158px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":635,"clientWidth":478}
+    at centre: <section class="trn-completions"> "4. Gjennomføringer Ingen gjennomføringer er ført. Før en gje"
+    VERDICT  : NOT REACHABLE by pointer
+--- STATE B @ 1440x720
+    button   : x=840-913 y=189 w=73
+    columns  : [{"left":288,"right":840,"w":552},{"left":864,"right":1416,"w":552}]
+    table    : width=635 scrollWidth=635 right=923 | column width=552 right=840 | OVERFLOWS BY 83px
+    wrapper  : {"tag":"section","cls":"trn-versions","overflowX":"visible","scrollWidth":635,"clientWidth":552}
+    at centre: <section class="trn-completions"> "4. Gjennomføringer Ingen gjennomføringer er ført. Før en gje"
+    VERDICT  : NOT REACHABLE by pointer
+
+REAL POINTER CLICK on the STATE B publish button @1280 -> FAILED: locator.click: Timeout 5000ms exceeded. | Call log: |   - waiting for locator('[data-test="version-publish"]').first()
+v2 published by that pointer click: false
+
+=== SIBLING SWEEP @1280 — every .trn-table on the surface
+  trn-courses (5 cols) overflow=164px overflowX=visible | no trailing control
+  trn-versions (6 cols) overflow=163px overflowX=visible | control version-publish: NOT REACHABLE <form class="trn-form">
+  trn-assign (6 cols) overflow=112px overflowX=visible | control assignment-revoke: NOT REACHABLE NULL (off-viewport)
+  real pointer click on assignment-revoke @1280 -> LANDED (trial — not actually revoked)
+
+==== SUMMARY ====
+  1024px  state A: NOT REACHABLE (overflow 153px)  |  state B: NOT REACHABLE (overflow 189px)
+  1280px  state A: NOT REACHABLE (overflow 122px)  |  state B: NOT REACHABLE (overflow 158px)
+  1440px  state A: reachable (overflow 55px)  |  state B: NOT REACHABLE (overflow 83px)
+  real pointer click @1280 state A: FAILED
+  real pointer click @1280 state B: FAILED, published=false
+  ✓  1 [chromium] › lanes/L-TRAIN-PUBLISH-UNCLICKABLE/probe.spec.js:161:1 › the Training publish control, measured at three widths in both table states (46.8s)
+
+  1 passed (49.4s)

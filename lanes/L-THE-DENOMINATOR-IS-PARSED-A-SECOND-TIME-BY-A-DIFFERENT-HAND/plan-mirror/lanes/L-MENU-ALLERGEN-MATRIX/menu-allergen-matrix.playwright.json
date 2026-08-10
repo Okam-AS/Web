@@ -1,0 +1,189 @@
+{
+  "journey": "menu-allergen-matrix",
+  "title": "A venue reads its own allergen labelling as one printable matrix, unlabelled dishes included",
+  "status": "passed",
+  "startedAtUtc": "2026-08-01T11:42:41.723Z",
+  "finishedAtUtc": "2026-08-01T11:42:44.132Z",
+  "durationMs": 2409,
+  "capabilities": [
+    "menu.allergens.read",
+    "menu.allergens.matrix",
+    "menu.allergens.print"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3385",
+  "apiBaseUrl": "http://127.0.0.1:4833",
+  "commit": "8a08b3634d04a40636598a0902a2ccd2b1470d2d",
+  "underTest": null,
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the allergen matrix as an anonymous visitor",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:41.724Z",
+      "durationMs": 948,
+      "detail": "redirected to ?redirect=%2Fadmin%2Fmenu-allergens",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:42.672Z",
+      "durationMs": 227,
+      "detail": "landed back on /admin/menu-allergens",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "the Menu group offers the matrix",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:42.899Z",
+      "durationMs": 14,
+      "detail": "Allergenoversikt Nyhet",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "the matrix renders, and names the venue as the author of the data",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:42.913Z",
+      "durationMs": 17,
+      "detail": "Allergenopplysningene i dette dokumentet er registrert av Fixture Kafé AS. Vi gjengir dem uendret og har ikke undersøkt hva rettene inneholder.",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the columns are the venue's own allergen codes",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:42.930Z",
+      "durationMs": 33,
+      "detail": "gluten, melk, egg, notter, selleri",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "a labelled dish carries the allergens the venue registered",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:42.963Z",
+      "durationMs": 77,
+      "detail": "Croissant: gluten, melk, egg marked; notter, selleri blank",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "an unlabelled dish says so, instead of rendering five empty cells",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.040Z",
+      "durationMs": 26,
+      "detail": "IKKE MERKET — stedet har ikke registrert allergener for denne retten. Det betyr ikke at den er fri for allergener. Spør personalet.",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "the sheet leads with how many dishes are unlabelled",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.066Z",
+      "durationMs": 29,
+      "detail": "2 av 6 retter er ikke merket. Dette er derfor ikke en fullstendig allergenoversikt over menyen. | 6 retter · 4 merket · 2 ikke merket",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "a blank cell is explained on the sheet itself",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.095Z",
+      "durationMs": 12,
+      "detail": "Slik leses tabellen: en prikk betyr at stedet har registrert allergenet på retten. Et tomt felt betyr at det ikke er registrert — det er ingen erklæring om at retten er fri for allergenet. Spør alltid personalet ved allergi.",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "a dish that is off the menu is marked, not dropped",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.107Z",
+      "durationMs": 10,
+      "detail": "Sesongsalat is on the sheet, marked hidden",
+      "error": null
+    },
+    {
+      "n": 11,
+      "name": "in print media the admin chrome comes off and the document stays",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.192Z",
+      "durationMs": 41,
+      "detail": "controls, page header and nudges hidden; the sheet remains; left gutter 0px",
+      "error": null
+    },
+    {
+      "n": 12,
+      "name": "the honest sentences survive the printer",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.233Z",
+      "durationMs": 22,
+      "detail": "author line, unlabelled alarm, reading rule, the unlabelled statement and the legend all on the paper",
+      "error": null
+    },
+    {
+      "n": 13,
+      "name": "render it to A4 and keep the PDF as the paper evidence",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.273Z",
+      "durationMs": 48,
+      "detail": "menu-allergen-matrix/print-preview.pdf, 205564 bytes",
+      "error": null
+    },
+    {
+      "n": 14,
+      "name": "a venue with no allergen list prints an alarm, not an empty matrix",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:43.332Z",
+      "durationMs": 737,
+      "detail": "Stedet har ikke satt opp noen allergenliste, så ingen rett kan være merket. Ingenting nedenfor sier at en rett er fri for noe.",
+      "error": null
+    },
+    {
+      "n": 15,
+      "name": "and the page tells the manager what to do about it",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:44.069Z",
+      "durationMs": 9,
+      "detail": "Stedet har ingen allergenliste ennå. Uten den kan ingen rett merkes.",
+      "error": null
+    },
+    {
+      "n": 16,
+      "name": "what the browser said while this ran",
+      "status": "passed",
+      "startedAtUtc": "2026-08-01T11:42:44.131Z",
+      "durationMs": 0,
+      "detail": "2 recorded as findings",
+      "error": null
+    }
+  ],
+  "findings": [
+    {
+      "severity": "defect",
+      "summary": "browser error during the allergen matrix journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmenu-allergens\" to \"/admin?redirect=%2Fadmin%2Fmenu-allergens&storeId=42\" with a new navigation."
+    },
+    {
+      "severity": "defect",
+      "summary": "browser error during the allergen matrix journey",
+      "detail": "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmenu-allergens\" to \"/admin?redirect=%2Fadmin%2Fmenu-allergens&storeId=42\" with a new navigation."
+    }
+  ],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmenu-allergens\" to \"/admin?redirect=%2Fadmin%2Fmenu-allergens&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fmenu-allergens\" to \"/admin?redirect=%2Fadmin%2Fmenu-allergens&storeId=42\" with a new navigation."
+  ],
+  "failedRequests": [],
+  "screenshots": [
+    "menu-allergen-matrix/01-the-matrix-on-screen.png",
+    "menu-allergen-matrix/02-the-matrix-in-print-media.png",
+    "menu-allergen-matrix/03-a-venue-with-no-allergen-list.png"
+  ],
+  "error": null
+}

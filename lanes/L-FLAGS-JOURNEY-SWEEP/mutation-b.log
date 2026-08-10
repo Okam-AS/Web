@@ -1,0 +1,51 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture (50.1s)
+
+
+  1) [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.ev-pipeline__notice')
+    Expected: visible
+    Timeout: 30000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 30000ms
+      - waiting for locator('.ev-pipeline__notice')
+
+
+      120 |     await journey.step('before any switch is flipped, the venue is dark', async () => {
+      121 |       const notice = page.locator('.ev-pipeline__notice');
+    > 122 |       await expect(notice).toBeVisible({ timeout: 30000 });
+          |                            ^
+      123 |       await expect(notice).toContainText(NOT_ENABLED);
+      124 |       // Not merely "the notice is present": there is no pipeline behind it either. A page that
+      125 |       // printed the sentence above a table of events would satisfy the locator and refuse nothing.
+        at fn (/Users/svendaneel/okam/Web-modules/test/e2e/journeys/events-runsheet-print.spec.js:122:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/Web-modules/test/e2e/support/journey.js:151:28)
+        at /Users/svendaneel/okam/Web-modules/test/e2e/journeys/events-runsheet-print.spec.js:120:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-runsheet-print-A-ho-94139-and-the-guest-links-are-not-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/events-runsheet-print.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/events-runsheet-print-A-ho-94139-and-the-guest-links-are-not-chromium/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/events-runsheet-print-A-ho-94139-and-the-guest-links-are-not-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/events-runsheet-print-A-ho-94139-and-the-guest-links-are-not-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/events-runsheet-print.spec.js:78:1 › A host prints the run sheet: the dietary requirement is on it and the guest links are not @fixture 

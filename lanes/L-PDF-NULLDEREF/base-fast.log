@@ -1,0 +1,400 @@
+      FROM "MealsOrderAttributions" AS "m"
+      WHERE "m"."OrderId" = @__orderId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?', @p3='?', @p4='?', @p5='?' (Size = 19), @p6='?' (Size = 27), @p7='?' (Size = 4), @p8='?', @p9='?', @p10='?', @p11='?' (Size = 11), @p12='?' (Size = 1), @p13='?', @p14='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "EventLogs" ("EventLogId", "AppName", "AppVersion", "DeviceMake", "DeviceModel", "EventName", "EventValue", "LaunchId", "ModalName", "Os", "OsVersion", "PageName", "ResumeId", "StackTrace", "TimeStamp")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p1='?' (DbType = Int32), @p2='?' (DbType = Int32), @p0='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "Orders" SET "Status" = @p0
+      WHERE "OrderId" = @p1 AND "ConcurrencyVersion" = @p2
+      RETURNING 1;
+warn: WebApi.Controllers.CartsController[0]
+      MEALS_RESERVATION_NOT_OWNED
+      WebApi.Helpers.AppException: MEALS_RESERVATION_NOT_OWNED
+         at WebApi.Services.CartService.PromoteToOrder(String userId, Int32 storeId, PaymentType overridePaymentType, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Services/CartService.cs:line 731
+         at WebApi.Controllers.CartsController.Complete(Int32 storeId, String reservationToken) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/CartsController.cs:line 169
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.CartsController.Complete (WebApi), returned result Microsoft.AspNetCore.Mvc.BadRequestObjectResult in 3.9522ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType0`1[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.CartsController.Complete (WebApi) in 4.2156ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.CartsController.Complete (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/carts/complete/4501?reservationToken=mealstok_NsMYuBhFtD719jxsSBmTo7MxLxtt7ZTUUG5eR8z0_cg - 400 41 application/json;+charset=utf-8 5.3434ms
+[xUnit.net 00:04:37.10]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+[xUnit.net 00:04:37.11]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+[xUnit.net 00:04:57.18]     WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane [SKIP]
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Consumer_employee_ordering_surface_is_a_separate_consumer_app_lane [1 ms]
+[xUnit.net 00:04:57.18]     WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow [SKIP]
+  Skipped WebApi.Tests.Meals.MealsConsumerSurfaceJourneyGapTests.Statement_pdf_export_is_a_documented_fast_follow [1 ms]
+[xUnit.net 00:05:09.00]     WebApi.Tests.Meals.MealsInvitationIdentityBindingTests.Only_the_account_the_company_meant_ends_up_holding_the_membership [SKIP]
+  Skipped WebApi.Tests.Meals.MealsInvitationIdentityBindingTests.Only_the_account_the_company_meant_ends_up_holding_the_membership [1 ms]
+[xUnit.net 00:05:14.57]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [SKIP]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [1 ms]
+[xUnit.net 00:05:14.73]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [SKIP]
+[xUnit.net 00:05:14.73]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [SKIP]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [1 ms]
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 67), @p3='?', @p4='?' (Size = 38), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 73), @p3='?', @p4='?' (Size = 16), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 87), @p3='?', @p4='?' (Size = 32), @p5='?', @p6='?' (Size = 17), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 106), @p3='?', @p4='?' (Size = 19), @p5='?', @p6='?' (Size = 20), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 13), @p3='?', @p4='?' (Size = 6), @p5='?' (Size = 36), @p6='?' (Size = 8), @p7='?' (Size = 13), @p8='?', @p9='?', @p10='?' (Size = 232), @p11='?', @p12='?', @p13='?' (Size = 145), @p14='?' (Size = 11), @p15='?' (Size = 55)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictApplications" ("Id", "ApplicationType", "ClientId", "ClientSecret", "ClientType", "ConcurrencyToken", "ConsentType", "DisplayName", "DisplayNames", "JsonWebKeySet", "Permissions", "PostLogoutRedirectUris", "Properties", "RedirectUris", "Requirements", "Settings")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[62]
+      User profile is available. Using '/Users/svendaneel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+      FROM "AspNetRoles" AS "a"
+      WHERE "a"."NormalizedName" = @__normalizedName_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+      FROM "AspNetRoles" AS "a"
+      WHERE "a"."NormalizedName" = @__normalizedName_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 13), @p3='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "AspNetRoles" ("Id", "ConcurrencyStamp", "Name", "NormalizedName")
+      VALUES (@p0, @p1, @p2, @p3);
+crit: WebApi.Program[0]
+      AppSettings:AdminUserPhoneNumber cannot name an account: it is empty or holds characters outside the set Identity allows in an account name (+0123456789), so the lookup can never match and NOBODY will ever hold PowerUserRole in this deployment. Every [Authorize(Roles = PowerUserRole)] endpoint refuses every caller and StoreAdminPolicy admits store admins only. Committed appsettings.json ships the "Set in Azure" placeholder, so an environment that does not override the value lands here: set it in Azure configuration or user secrets to the administrator's phone number in the exact form the account is registered with.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."DecisionTablesJson"
+      FROM "WorkforceRuleSetVersions" AS "w"
+      WHERE "w"."Jurisdiction" = 'NO' AND "w"."PackName" = 'NO-AML-2026-07' AND "w"."Version" = 2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (Size = 5065), @p6='?' (DbType = DateTime), @p7='?' (DbType = DateTime), @p8='?' (Size = 6), @p9='?' (Size = 2), @p10='?' (Size = 14), @p11='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "WorkforceRuleSetVersions" ("Id", "CounselSignatureRef", "CounselSignedAtUtc", "CounselSignedBy", "CreatedAtUtc", "DecisionTablesJson", "EffectiveFromUtc", "EffectiveToUtc", "EnforcementMode", "Jurisdiction", "PackName", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "GrowthConsentTextVersions" AS "g"
+          WHERE "g"."Locale" = 'nb-NO')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Boolean), @p1='?' (DbType = DateTimeOffset), @p2='?' (Size = 5), @p3='?' (Size = 152), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthConsentTextVersions" ("CoversOpenMeasurement", "EffectiveAt", "Locale", "Text", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4)
+      RETURNING "Id";
+warn: WebApi[0]
+      Seeded the SHIPPED BASELINE Growth consent text for locale nb-NO as v1. This wording is COUNSEL-UNSIGNED: guests are now being shown, and recorded as agreeing to, copy no human has signed off. Publish reviewed wording via POST /v1/growth/consent-texts (PowerUser) — it becomes a NEW version and v1 stays byte-unchanged, because live receipts pin it.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 67), @p3='?', @p4='?' (Size = 38), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 73), @p3='?', @p4='?' (Size = 16), @p5='?', @p6='?' (Size = 13), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 87), @p3='?', @p4='?' (Size = 32), @p5='?', @p6='?' (Size = 17), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__name_0='?' (Size = 20)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ConcurrencyToken", "o"."Description", "o"."Descriptions", "o"."DisplayName", "o"."DisplayNames", "o"."Name", "o"."Properties", "o"."Resources"
+      FROM "OpenIddictScopes" AS "o"
+      WHERE "o"."Name" = @__name_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?' (Size = 36), @p2='?' (Size = 106), @p3='?', @p4='?' (Size = 19), @p5='?', @p6='?' (Size = 20), @p7='?', @p8='?' (Size = 29)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictScopes" ("Id", "ConcurrencyToken", "Description", "Descriptions", "DisplayName", "DisplayNames", "Name", "Properties", "Resources")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__identifier_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "o"."Id", "o"."ApplicationType", "o"."ClientId", "o"."ClientSecret", "o"."ClientType", "o"."ConcurrencyToken", "o"."ConsentType", "o"."DisplayName", "o"."DisplayNames", "o"."JsonWebKeySet", "o"."Permissions", "o"."PostLogoutRedirectUris", "o"."Properties", "o"."RedirectUris", "o"."Requirements", "o"."Settings"
+      FROM "OpenIddictApplications" AS "o"
+      WHERE "o"."ClientId" = @__identifier_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 13), @p3='?', @p4='?' (Size = 6), @p5='?' (Size = 36), @p6='?' (Size = 8), @p7='?' (Size = 13), @p8='?', @p9='?', @p10='?' (Size = 232), @p11='?', @p12='?', @p13='?' (Size = 145), @p14='?' (Size = 11), @p15='?' (Size = 55)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "OpenIddictApplications" ("Id", "ApplicationType", "ClientId", "ClientSecret", "ClientType", "ConcurrencyToken", "ConsentType", "DisplayName", "DisplayNames", "JsonWebKeySet", "Permissions", "PostLogoutRedirectUris", "Properties", "RedirectUris", "Requirements", "Settings")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15);
+info: Microsoft.AspNetCore.DataProtection.KeyManagement.XmlKeyManager[62]
+      User profile is available. Using '/Users/svendaneel/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+      FROM "AspNetRoles" AS "a"
+      WHERE "a"."NormalizedName" = @__normalizedName_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__normalizedName_0='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."ConcurrencyStamp", "a"."Name", "a"."NormalizedName"
+      FROM "AspNetRoles" AS "a"
+      WHERE "a"."NormalizedName" = @__normalizedName_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (Size = 36), @p1='?', @p2='?' (Size = 13), @p3='?' (Size = 13)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "AspNetRoles" ("Id", "ConcurrencyStamp", "Name", "NormalizedName")
+      VALUES (@p0, @p1, @p2, @p3);
+crit: WebApi.Program[0]
+      AppSettings:AdminUserPhoneNumber cannot name an account: it is empty or holds characters outside the set Identity allows in an account name (+0123456789), so the lookup can never match and NOBODY will ever hold PowerUserRole in this deployment. Every [Authorize(Roles = PowerUserRole)] endpoint refuses every caller and StoreAdminPolicy admits store admins only. Committed appsettings.json ships the "Set in Azure" placeholder, so an environment that does not override the value lands here: set it in Azure configuration or user secrets to the administrator's phone number in the exact form the account is registered with.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT "w"."DecisionTablesJson"
+      FROM "WorkforceRuleSetVersions" AS "w"
+      WHERE "w"."Jurisdiction" = 'NO' AND "w"."PackName" = 'NO-AML-2026-07' AND "w"."Version" = 2
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?', @p2='?' (DbType = DateTime), @p3='?', @p4='?' (DbType = DateTime), @p5='?' (Size = 5065), @p6='?' (DbType = DateTime), @p7='?' (DbType = DateTime), @p8='?' (Size = 6), @p9='?' (Size = 2), @p10='?' (Size = 14), @p11='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "WorkforceRuleSetVersions" ("Id", "CounselSignatureRef", "CounselSignedAtUtc", "CounselSignedBy", "CreatedAtUtc", "DecisionTablesJson", "EffectiveFromUtc", "EffectiveToUtc", "EnforcementMode", "Jurisdiction", "PackName", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[], CommandType='Text', CommandTimeout='30']
+      SELECT EXISTS (
+          SELECT 1
+          FROM "GrowthConsentTextVersions" AS "g"
+          WHERE "g"."Locale" = 'nb-NO')
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Boolean), @p1='?' (DbType = DateTimeOffset), @p2='?' (Size = 5), @p3='?' (Size = 152), @p4='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "GrowthConsentTextVersions" ("CoversOpenMeasurement", "EffectiveAt", "Locale", "Text", "Version")
+      VALUES (@p0, @p1, @p2, @p3, @p4)
+      RETURNING "Id";
+warn: WebApi[0]
+      Seeded the SHIPPED BASELINE Growth consent text for locale nb-NO as v1. This wording is COUNSEL-UNSIGNED: guests are now being shown, and recorded as agreeing to, copy no human has signed off. Publish reviewed wording via POST /v1/growth/consent-texts (PowerUser) — it becomes a NEW version and v1 stays byte-unchanged, because live receipts pin it.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__userId_0
+      LIMIT 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a0"."Name"
+      FROM "AspNetUserRoles" AS "a"
+      INNER JOIN "AspNetRoles" AS "a0" ON "a"."RoleId" = "a0"."Id"
+      WHERE "a"."UserId" = @__userId_0
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/meals/me/companies - - -
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetMyCompanies", controller = "MealsFunding"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetMyCompanies() on controller WebApi.Controllers.Meals.MealsFundingController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi) - Validation state: Valid
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.0959ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi) in 2.216ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/meals/me/companies - 404 204 application/problem+json;+charset=utf-8 34.1137ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/meals/me/companies - - -
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetMyCompanies", controller = "MealsFunding"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetMyCompanies() on controller WebApi.Controllers.Meals.MealsFundingController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__userId_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."MembershipId", "m"."ApplicationUserId", "m"."ClaimedFromInvitationId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."EmployeeReference", "m"."Role", "m"."State"
+      FROM "MealsMemberships" AS "m"
+      WHERE "m"."ApplicationUserId" = @__userId_0
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 0.2782ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsMyCompaniesResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi) in 0.8789ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsFundingController.GetMyCompanies (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/meals/me/companies - 200 16 application/json;+charset=utf-8 28.6945ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/stores/4601/meals/quotes - application/json;+charset=utf-8 108
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 24)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "CreateQuote", controller = "MealsFunding"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateQuote(Int32, WebApi.Models.Meals.CreateMealsQuoteRequest) on controller WebApi.Controllers.Meals.MealsFundingController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi) - Validation state: Valid
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.146ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi) in 1.6049ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsFundingController.CreateQuote (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/stores/4601/meals/quotes - 404 204 application/problem+json;+charset=utf-8 13.1110ms
+[xUnit.net 00:06:07.68]     WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox [SKIP]
+  Skipped WebApi.Tests.Growth.GrowthPostmarkSandboxSmokeTests.A_double_opt_in_confirmation_is_accepted_by_the_postmark_sandbox [1 ms]
+Results File: /Users/svendaneel/okam/Web-modules/lanes/L-PDF-NULLDEREF/base-fast.trx
+
+Passed!  - Failed:     0, Passed:  4373, Skipped:    12, Total:  4385, Duration: 6 m 10 s - WebApi.Tests.dll (net8.0)
+EXIT=0

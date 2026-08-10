@@ -1,0 +1,60 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "deepLink": "/admin/overview",
+  "at": "2026-08-06T20:04:38.486Z",
+  "verificationRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:5971/user/sendverificationtoken"
+    }
+  ],
+  "click": {
+    "ms": 404,
+    "onModalId": "1",
+    "path": "/admin/overview"
+  },
+  "final": {
+    "path": "/admin",
+    "boxes": 0,
+    "modalId": "2",
+    "says": null,
+    "btn": true
+  },
+  "samples": [
+    {
+      "ms": 11,
+      "p": "/admin/overview",
+      "modalId": null,
+      "btn": false,
+      "boxes": 0
+    },
+    {
+      "ms": 404,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 0
+    },
+    {
+      "ms": 464,
+      "p": "/admin/overview",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 6
+    },
+    {
+      "ms": 495,
+      "p": "/admin",
+      "modalId": "1",
+      "btn": true,
+      "boxes": 6
+    },
+    {
+      "ms": 509,
+      "p": "/admin",
+      "modalId": "2",
+      "btn": true,
+      "boxes": 0
+    }
+  ]
+}

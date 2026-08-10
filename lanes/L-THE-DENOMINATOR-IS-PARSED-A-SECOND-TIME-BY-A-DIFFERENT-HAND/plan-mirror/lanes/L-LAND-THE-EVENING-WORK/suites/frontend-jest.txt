@@ -1,0 +1,18 @@
+# Frontend jest tier, feature/restaurant-modules @ 78ed84f (both landings on the trunk)
+#   cd Web-modules-wt/L-LAND-THE-EVENING-WORK && npx jest --ci   -> exit 0
+# core submodule pinned to 9626a561bb0442b0aed026be75b7f9419337ac6d before the run.
+
+## every FAIL / suite-did-not-run line
+   (no match)
+
+## summary
+Test Suites: 166 passed, 166 total
+Tests:       3950 passed, 3950 total
+Snapshots:   0 total
+Time:        9.601 s
+
+## the same tier at the intermediate tip 7a378e4 (guest exit only), for the delta
+Test Suites: 166 passed, 166 total
+Tests:       3939 passed, 3939 total
+Snapshots:   0 total
+Time:        10.527 s

@@ -1,0 +1,9 @@
+{
+  "web": "http://127.0.0.1:3971",
+  "at": "2026-08-07T15:39:35.022Z",
+  "leverCopyPresent": true,
+  "dispatchPrecondition": "Før denne slås på: hver lenke er en nøkkel — den som har den, åpner siden uten å logge inn. Å slå på sender ut hele køen som har samlet seg mens den sto av, ikke bare det som kommer etterpå; antallet står på Events-siden under «Gjestelenker». En sendt e-post kan ikke kalles tilbake. Utsendingen går over den e-postkontoen driften har satt opp for denne installasjonen — er den satt opp mot ekte mottakere, er det ekte gjesteadresser som får post.",
+  "confirmedStringInBundle": "Vaktplanen er bekreftet",
+  "failedRequests": [],
+  "consoleErrors": []
+}

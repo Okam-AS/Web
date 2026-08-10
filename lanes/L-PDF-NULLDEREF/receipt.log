@@ -1,0 +1,400 @@
+      Executed action method WebApi.Controllers.Meals.MealsStatementController.Get (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 0.9049ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsStatementDetailModel'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsStatementController.Get (WebApi) in 1.295ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsStatementController.Get (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/meals/statements/fea83953-bd02-48af-ac06-97faffa85552 - 200 474 application/json;+charset=utf-8 4.2826ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/meals/statements/fea83953-bd02-48af-ac06-97faffa85552/export?format=csv - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsStatementController.Export (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "Export", controller = "MealsStatement"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Export(System.Guid, System.String) on controller WebApi.Controllers.Meals.MealsStatementController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsStatementController.Export (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__statementId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."StatementRunId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."ContentHash", "m"."CreatedAtUtc", "m"."Currency", "m"."FinalizedAtUtc", "m"."LineCount", "m"."PeriodMonth", "m"."PeriodYear", "m"."Status", "m"."StoreId", "m"."TotalGrossMinor", "m"."TotalNetMinor", "m"."TotalVatMinor"
+      FROM "MealsStatementRuns" AS "m"
+      WHERE "m"."StatementRunId" = @__statementId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "s0"."ApplicationUserId", "s0"."StoreId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__runId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."StatementLineId", "m"."AllocationId", "m"."CompanyId", "m"."CreatedAtUtc", "m"."Currency", "m"."GrossMinor", "m"."Kind", "m"."MemberDisplayRef", "m"."NetMinor", "m"."OrderId", "m"."OrderOccurredAtUtc", "m"."SourceReceiptNumber", "m"."StatementRunId", "m"."VatLinesJson", "m"."VatMinor"
+      FROM "MealsStatementLines" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."StatementRunId" = @__runId_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."SourceReversalAllocationId", "m"."StatementRunId"
+      FROM "MealsCreditAdjustments" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsStatementController.Export (WebApi), returned result Microsoft.AspNetCore.Mvc.FileContentResult in 1.0741ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.FileContentResultExecutor[2]
+      Executing FileContentResult, sending file with download name 'meals-statement-2026-08-fea83953bd0248afac0697faffa85552.csv' ...
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsStatementController.Export (WebApi) in 1.8589ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsStatementController.Export (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/meals/statements/fea83953-bd02-48af-ac06-97faffa85552/export?format=csv - 200 469 text/csv;+charset=utf-8 6.1859ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/stores/4601/meals/orders - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.ListStoreOrders (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "ListStoreOrders", controller = "MealsReconciliation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListStoreOrders(Int32) on controller WebApi.Controllers.Meals.MealsReconciliationController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsReconciliationController.ListStoreOrders (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__flagKey_1='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Enabled"
+      FROM "StoreFeatureFlags" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0 AND "s"."FlagKey" = @__flagKey_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "s0"."ApplicationUserId", "s0"."StoreId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."OrderId", "m"."StoreId", "m"."CompanyId", "m0"."ReservationId", "m0"."State", "m0"."ReservedCapMinor", "m"."BoundCartTotalMinor", "m"."Currency", "m"."BoundAtUtc", "m"."CapturedAtUtc"
+      FROM "MealsOrderAttributions" AS "m"
+      INNER JOIN "MealsFundingReservations" AS "m0" ON "m"."CompanyId" = "m0"."CompanyId" AND "m"."ReservationId" = "m0"."ReservationId"
+      WHERE "m"."StoreId" = @__storeId_0
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsReconciliationController.ListStoreOrders (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 4.1921ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsStoreOrdersResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsReconciliationController.ListStoreOrders (WebApi) in 6.1543ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.ListStoreOrders (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/stores/4601/meals/orders - 200 13 application/json;+charset=utf-8 9.8933ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/v1/stores/4601/meals/reconciliation - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.ListStoreReconciliation (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "ListStoreReconciliation", controller = "MealsReconciliation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] ListStoreReconciliation(Int32) on controller WebApi.Controllers.Meals.MealsReconciliationController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsReconciliationController.ListStoreReconciliation (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32), @__flagKey_1='?' (Size = 12)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."Enabled"
+      FROM "StoreFeatureFlags" AS "s"
+      WHERE "s"."StoreId" = @__storeId_0 AND "s"."FlagKey" = @__flagKey_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "s0"."ApplicationUserId", "s0"."StoreId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ExceptionId", "m"."AcknowledgedAtUtc", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Kind", "m"."OwnerNote", "m"."ReasonCode", "m"."ResolvedAtUtc", "m"."SourceKey", "m"."State", "m"."StoreId"
+      FROM "MealsReconciliationExceptions" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0
+      ORDER BY "m"."State", "m"."CreatedAtUtc", "m"."ExceptionId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT DISTINCT "m"."CompanyId"
+      FROM "MealsAgreements" AS "m"
+      WHERE "m"."StoreId" = @__storeId_0
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__ids_0='?' (Size = 40), @__guardsCreatedOnOrAfterUtc_Value_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CompanyId", "m"."ProgramId", "m"."MembershipId", "m"."PeriodKey", "m"."ReservedMinor", "m"."CapturedMinor", (
+          SELECT COALESCE(SUM("m0"."GrossMinor"), 0)
+          FROM "MealsFundingAllocations" AS "m0"
+          WHERE "m0"."CompanyId" = "m"."CompanyId" AND "m0"."ProgramId" = "m"."ProgramId" AND "m0"."MembershipId" = "m"."MembershipId" AND "m0"."PeriodKey" = "m"."PeriodKey") AS "LedgerCaptured", (
+          SELECT COALESCE(SUM("m1"."ReservedCapMinor"), 0)
+          FROM "MealsFundingReservations" AS "m1"
+          WHERE "m1"."CompanyId" = "m"."CompanyId" AND "m1"."ProgramId" = "m"."ProgramId" AND "m1"."MembershipId" = "m"."MembershipId" AND "m1"."PeriodKey" = "m"."PeriodKey" AND "m1"."State" <> 'Released') AS "LedgerReserved"
+      FROM "MealsBudgetGuards" AS "m"
+      WHERE "m"."CompanyId" IN (
+          SELECT "i"."value"
+          FROM json_each(@__ids_0) AS "i"
+      ) AND "m"."CreatedAtUtc" >= @__guardsCreatedOnOrAfterUtc_Value_1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__ids_0='?' (Size = 40), @__occurredOnOrAfterUtc_Value_1='?' (DbType = DateTime)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CompanyId", "m"."ProgramId", "m"."MembershipId", "m"."PeriodKey", COALESCE(SUM("m"."GrossMinor"), 0) AS "LedgerCaptured"
+      FROM "MealsFundingAllocations" AS "m"
+      WHERE "m"."CompanyId" IN (
+          SELECT "i"."value"
+          FROM json_each(@__ids_0) AS "i"
+      ) AND "m"."OccurredAtUtc" >= @__occurredOnOrAfterUtc_Value_1 AND NOT EXISTS (
+          SELECT 1
+          FROM "MealsBudgetGuards" AS "m0"
+          WHERE "m0"."ProgramId" = "m"."ProgramId" AND "m0"."MembershipId" = "m"."MembershipId" AND "m0"."PeriodKey" = "m"."PeriodKey")
+      GROUP BY "m"."CompanyId", "m"."ProgramId", "m"."MembershipId", "m"."PeriodKey"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsReconciliationController.ListStoreReconciliation (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 8.7335ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsReconciliationListResponse'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsReconciliationController.ListStoreReconciliation (WebApi) in 10.515ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.ListStoreReconciliation (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/v1/stores/4601/meals/reconciliation - 200 33 application/json;+charset=utf-8 13.7660ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/meals/reconciliation/4ec04000-0000-0000-0000-0000000000e1/resolve - application/json;+charset=utf-8 61
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.Resolve (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "Resolve", controller = "MealsReconciliation"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Resolve(System.Guid, WebApi.Models.Meals.ResolveMealsReconciliationRequest) on controller WebApi.Controllers.Meals.MealsReconciliationController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsReconciliationController.Resolve (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exceptionId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ExceptionId", "m"."AcknowledgedAtUtc", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."Kind", "m"."OwnerNote", "m"."ReasonCode", "m"."ResolvedAtUtc", "m"."SourceKey", "m"."State", "m"."StoreId"
+      FROM "MealsReconciliationExceptions" AS "m"
+      WHERE "m"."ExceptionId" = @__exceptionId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "s0"."ApplicationUserId", "s0"."StoreId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime), @p3='?' (DbType = DateTime), @p4='?' (Size = 14), @p5='?' (Size = 64), @p6='?', @p7='?' (DbType = Int32), @p8='?' (Size = 61)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsCommandReceipts" ("CommandReceiptId", "CompanyId", "CompletedAtUtc", "CreatedAtUtc", "IdempotencyKey", "RequestHash", "ResponseSnapshotJson", "ResponseStatusCode", "ScopeKey")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8)
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__reservation_CommandReceiptId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CommandReceiptId", "m"."CompanyId", "m"."CompletedAtUtc", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."IdempotencyKey", "m"."RequestHash", "m"."ResponseSnapshotJson", "m"."ResponseStatusCode", "m"."ScopeKey"
+      FROM "MealsCommandReceipts" AS "m"
+      WHERE "m"."CommandReceiptId" = @__reservation_CommandReceiptId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 17), @p2='?' (Size = 36), @p3='?' (Size = 28), @p4='?' (DbType = Guid), @p5='?' (Size = 14), @p6='?' (Size = 22), @p7='?' (Size = 14), @p8='?' (DbType = DateTime), @p9='?' (Size = 37)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsAuditEvents" ("Id", "ActorReference", "AggregateId", "AggregateType", "CompanyId", "CorrelationId", "EventType", "IdempotencyKey", "OccurredAtUtc", "PayloadSnapshotJson")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p3='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p4='?' (DbType = Binary), @p1='?' (Size = 411), @p2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsCommandReceipts" SET "CompletedAtUtc" = @p0, "ResponseSnapshotJson" = @p1, "ResponseStatusCode" = @p2
+      WHERE "CommandReceiptId" = @p3 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p4='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p5='?' (DbType = Binary), @p1='?' (Size = 20), @p2='?' (DbType = DateTime), @p3='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsReconciliationExceptions" SET "AcknowledgedAtUtc" = @p0, "OwnerNote" = @p1, "ResolvedAtUtc" = @p2, "State" = @p3
+      WHERE "ExceptionId" = @p4 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__exceptionId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ConcurrencyVersion"
+      FROM "MealsReconciliationExceptions" AS "m"
+      WHERE "m"."ExceptionId" = @__exceptionId_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsReconciliationController.Resolve (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 25.2131ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsReconciliationExceptionModel'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsReconciliationController.Resolve (WebApi) in 27.798ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsReconciliationController.Resolve (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/meals/reconciliation/4ec04000-0000-0000-0000-0000000000e1/resolve - 200 444 application/json;+charset=utf-8 30.9438ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/meals/companies/b7c16d02-b25c-94d5-fa6a-a30ccab2718b/members/def51752-8d2d-4c62-a145-099fa32f6f16/revoke - application/json;+charset=utf-8 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsMembershipController.RevokeMembership (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "RevokeMembership", controller = "MealsMembership"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] RevokeMembership(System.Guid, System.Guid, WebApi.Models.Meals.RevokeMealsMembershipRequest) on controller WebApi.Controllers.Meals.MealsMembershipController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsMembershipController.RevokeMembership (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__userId_1='?' (Size = 17)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."MembershipId", "m"."ApplicationUserId", "m"."ClaimedFromInvitationId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."EmployeeReference", "m"."Role", "m"."State"
+      FROM "MealsMemberships" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."ApplicationUserId" = @__userId_1 AND "m"."State" = 'Active' AND "m"."Role" = 'CompanyAdmin'
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__membershipId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."MembershipId", "m"."ApplicationUserId", "m"."ClaimedFromInvitationId", "m"."CompanyId", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."EmployeeReference", "m"."Role", "m"."State"
+      FROM "MealsMemberships" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."MembershipId" = @__membershipId_1
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime), @p3='?' (DbType = DateTime), @p4='?' (Size = 14), @p5='?' (Size = 64), @p6='?', @p7='?' (DbType = Int32), @p8='?' (Size = 56)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsCommandReceipts" ("CommandReceiptId", "CompanyId", "CompletedAtUtc", "CreatedAtUtc", "IdempotencyKey", "RequestHash", "ResponseSnapshotJson", "ResponseStatusCode", "ScopeKey")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8)
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__reservation_CommandReceiptId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CommandReceiptId", "m"."CompanyId", "m"."CompletedAtUtc", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."IdempotencyKey", "m"."RequestHash", "m"."ResponseSnapshotJson", "m"."ResponseStatusCode", "m"."ScopeKey"
+      FROM "MealsCommandReceipts" AS "m"
+      WHERE "m"."CommandReceiptId" = @__reservation_CommandReceiptId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 36), @p2='?' (Size = 36), @p3='?' (Size = 15), @p4='?' (DbType = Guid), @p5='?' (Size = 14), @p6='?' (Size = 17), @p7='?' (Size = 14), @p8='?' (DbType = DateTime), @p9='?' (Size = 19)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsAuditEvents" ("Id", "ActorReference", "AggregateId", "AggregateType", "CompanyId", "CorrelationId", "EventType", "IdempotencyKey", "OccurredAtUtc", "PayloadSnapshotJson")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p3='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p4='?' (DbType = Binary), @p1='?' (Size = 318), @p2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsCommandReceipts" SET "CompletedAtUtc" = @p0, "ResponseSnapshotJson" = @p1, "ResponseStatusCode" = @p2
+      WHERE "CommandReceiptId" = @p3 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p6='?' (DbType = Guid), @p0='?' (Size = 20), @p1='?' (DbType = Guid), @p7='?' (DbType = Binary), @p2='?' (DbType = DateTime), @p3='?', @p4='?' (Size = 8), @p5='?' (Size = 7)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsMemberships" SET "ApplicationUserId" = @p0, "ClaimedFromInvitationId" = @p1, "CreatedAtUtc" = @p2, "EmployeeReference" = @p3, "Role" = @p4, "State" = @p5
+      WHERE "MembershipId" = @p6 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid), @__membershipId_1='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ConcurrencyVersion"
+      FROM "MealsMemberships" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0 AND "m"."MembershipId" = @__membershipId_1
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsMembershipController.RevokeMembership (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 7.0825ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsMemberModel'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsMembershipController.RevokeMembership (WebApi) in 7.9149ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsMembershipController.RevokeMembership (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/meals/companies/b7c16d02-b25c-94d5-fa6a-a30ccab2718b/members/def51752-8d2d-4c62-a145-099fa32f6f16/revoke - 200 335 application/json;+charset=utf-8 11.7990ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/v1/meals/companies/b7c16d02-b25c-94d5-fa6a-a30ccab2718b/archive - application/json;+charset=utf-8 2
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 21)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.Meals.MealsCompanyController.Archive (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "Archive", controller = "MealsCompany"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Archive(System.Guid, WebApi.Models.Meals.ArchiveMealsCompanyRequest) on controller WebApi.Controllers.Meals.MealsCompanyController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.Meals.MealsCompanyController.Archive (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CompanyId", "m"."BillingContactEmail", "m"."BillingContactName", "m"."BillingContactPhone", "m"."ConcurrencyVersion", "m"."CountryCode", "m"."CreatedAtUtc", "m"."DisplayName", "m"."LegalName", "m"."OrganizationNumber", "m"."Status"
+      FROM "MealsCompanies" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime), @p3='?' (DbType = DateTime), @p4='?' (Size = 14), @p5='?' (Size = 64), @p6='?', @p7='?' (DbType = Int32), @p8='?' (Size = 54)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsCommandReceipts" ("CommandReceiptId", "CompanyId", "CompletedAtUtc", "CreatedAtUtc", "IdempotencyKey", "RequestHash", "ResponseSnapshotJson", "ResponseStatusCode", "ScopeKey")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8)
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__reservation_CommandReceiptId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."CommandReceiptId", "m"."CompanyId", "m"."CompletedAtUtc", "m"."ConcurrencyVersion", "m"."CreatedAtUtc", "m"."IdempotencyKey", "m"."RequestHash", "m"."ResponseSnapshotJson", "m"."ResponseStatusCode", "m"."ScopeKey"
+      FROM "MealsCommandReceipts" AS "m"
+      WHERE "m"."CommandReceiptId" = @__reservation_CommandReceiptId_0
+      LIMIT 1
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (Size = 31), @p2='?' (Size = 36), @p3='?' (Size = 12), @p4='?' (DbType = Guid), @p5='?' (Size = 14), @p6='?' (Size = 15), @p7='?' (Size = 14), @p8='?' (DbType = DateTime), @p9='?' (Size = 21)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "MealsAuditEvents" ("Id", "ActorReference", "AggregateId", "AggregateType", "CompanyId", "CorrelationId", "EventType", "IdempotencyKey", "OccurredAtUtc", "PayloadSnapshotJson")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p3='?' (DbType = Guid), @p0='?' (DbType = DateTime), @p4='?' (DbType = Binary), @p1='?' (Size = 324), @p2='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsCommandReceipts" SET "CompletedAtUtc" = @p0, "ResponseSnapshotJson" = @p1, "ResponseStatusCode" = @p2
+      WHERE "CommandReceiptId" = @p3 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p9='?' (DbType = Guid), @p0='?', @p1='?', @p2='?', @p10='?' (DbType = Binary), @p3='?' (Size = 2), @p4='?' (DbType = DateTime), @p5='?' (Size = 19), @p6='?' (Size = 19), @p7='?' (Size = 9), @p8='?' (Size = 8)], CommandType='Text', CommandTimeout='30']
+      UPDATE "MealsCompanies" SET "BillingContactEmail" = @p0, "BillingContactName" = @p1, "BillingContactPhone" = @p2, "CountryCode" = @p3, "CreatedAtUtc" = @p4, "DisplayName" = @p5, "LegalName" = @p6, "OrganizationNumber" = @p7, "Status" = @p8
+      WHERE "CompanyId" = @p9 AND "ConcurrencyVersion" IS NULL
+      RETURNING "ConcurrencyVersion";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__companyId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "m"."ConcurrencyVersion"
+      FROM "MealsCompanies" AS "m"
+      WHERE "m"."CompanyId" = @__companyId_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.Meals.MealsCompanyController.Archive (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 0.9983ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'WebApi.Models.Meals.MealsCompanyModel'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.Meals.MealsCompanyController.Archive (WebApi) in 2.0166ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.Meals.MealsCompanyController.Archive (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/v1/meals/companies/b7c16d02-b25c-94d5-fa6a-a30ccab2718b/archive - 200 333 application/json;+charset=utf-8 6.5907ms
+[xUnit.net 00:04:46.39]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+[xUnit.net 00:04:46.39]     WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [SKIP]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Dintero_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+  Skipped WebApi.Tests.Events.EventsDepositRailJourneyGapTests.The_Stripe_deposit_rail_is_a_declared_gap_not_a_port_omission [1 ms]
+[xUnit.net 00:06:32.18]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [SKIP]
+[xUnit.net 00:06:32.33]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [SKIP]
+[xUnit.net 00:06:32.33]     WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [SKIP]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ11_give_away_exchange_approved_assignment_moves_atomically [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ15_disabled_export_flag_keeps_exports_readable [1 ms]
+  Skipped WebApi.Tests.Workforce.WorkforceEndToEndJourneyTests.WFJ14_correction_approval_export_batch_is_idempotent_and_immutable [1 ms]
+Results File: /Users/svendaneel/okam/Web-modules/lanes/L-PDF-NULLDEREF/2497ce9d-fast-tier.trx
+
+Passed!  - Failed:     0, Passed:  4399, Skipped:    12, Total:  4411, Duration: 6 m 35 s - WebApi.Tests.dll (net8.0)
+EXIT=0
+end 11:45 UTC

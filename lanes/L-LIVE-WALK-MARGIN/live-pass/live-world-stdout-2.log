@@ -1,0 +1,121 @@
+   target: Server=localhost,15436;Database=OkamLiveMargin;User Id=sa;Password=***;TrustServerCertificate=True;Encrypt=False;Connect Timeout=60
+
+[1m== 1/5  Stopping any API this script previously started on :5941[0m
+   :5941 is free
+
+[1m== 2/5  Recreating an EMPTY database [OkamLiveMargin][0m
+   empty: 0 tables
+
+[1m== 3/5  Applying the migration chain from empty[0m
+   built from OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8
+   137 migrations, 223 tables, 33 append-only triggers
+   C1 checked on sys.triggers: the 3 directly-seeded tables carry none
+
+[1m== 4/5  Starting the API on http://127.0.0.1:5941[0m
+   healthy (launcher pid 17008, log: /Users/svendaneel/okam/Web-modules-wt/L-LIVE-WALK-MARGIN/artifacts/live-world-api.log)
+   stamped: OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8  ->  artifacts/world/live/127-0-0-1-5941.json  (pid 17024, launched by 17008)
+
+[1m== 5/5  Seeding the smallest world a journey can run against[0m
+   manager signed in: applicationUserId = 018aea4d-d83f-4c02-8a28-60402bb60392
+   store 'Live Journey Kafé' = StoreId 1, registered through POST /Stores/register (unapproved), with the manager as its StoreAdmin
+   market NO / NOK / Europe/Oslo, set through PUT /stores/1/market under the manager's bearer
+
+[1m== 5b/5  The roster, employment terms and rates the two workforce journeys need[0m
+   legal employer + the manager's own engagement (bootstrap capabilities 6) — the 3 rows with no endpoint
+   capabilities 6 -> Self+Scheduler+Manager+PayrollApprover, granted by PATCH /staff under the manager's bearer
+   roles: Barista, Kjøkken  (workforce-schedule-publish picks 'Barista' by its label)
+   staff: Astrid Vik (ANS-002), Jonas Lie (ANS-003) — created through POST /staff, not INSERTed
+   employment terms for all three engagements (37.5h manager, 30h each colleague)
+   Barista role rate 220.00 NOK/h from 2024-01-01, written by the manager through PUT .../rates
+   the manager's adminIn carries store 1 -- the shell will let them in
+   GET /feature-flags/catalog -> 20 flags
+   GET /stores/1/feature-flags -> 20 states (the manager IS a StoreAdmin)
+   no flag overrides: every flag reads its module default, deny-closed
+   GET /context -> [WorkforceSelf,WorkforceScheduler,WorkforceManager,WorkforcePayrollApprover], timeZone Europe/Oslo
+   GET /staff -> 3 engagements; GET /roles -> [Barista,Kjøkken]
+   the current week 2026-08-03..2026-08-10 has no plan -- 'Opprett utkast' will be offered
+
+[1m== 5c/5  The Margin furniture margin-supplier-to-plate walks in on[0m
+   Margin.Module lit for the seed (override row, coalesces over the empty allow-list)
+   suppliers: Bergen Storkjøkken AS, Nordane Kaffe — the two the walk finds and then adds to
+   dish: Vaffel med rømme — kr 34,50 (15 %) take-away, kr 50,00 (25 %) served, via POST /Products
+   menu-margin: Vaffel net Base 3000 / Table 4000 minor, in 3 basis rows (live emits Delivery too)
+   Margin.Module override cleared: status is the module-invisible 404, 0 overrides — the walk starts at the blocker
+
+-------------------------------------------------------------------------------
+A LIVE world is up.
+
+    API        http://127.0.0.1:5941           (serving pid 17024, launcher 17008, log /Users/svendaneel/okam/Web-modules-wt/L-LIVE-WALK-MARGIN/artifacts/live-world-api.log)
+    build      OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8
+    database   OkamLiveMargin on localhost,15436   (137 migrations, 223 tables)
+    store      1  "Live Journey Kafé"   registered through POST /Stores/register, org.nr 912345678
+    market     NO / NOK / Europe/Oslo   (PUT /stores/1/market; currency derived)
+    published  no -- Approved is left false, which is what registration produces; see the header
+    manager    99999999 / 123123   (the app prefixes +47 itself)
+    roster     Astrid Vik, Ingrid Moen (the manager), Jonas Lie
+    roles      Barista (220.00 NOK/h from 2024-01-01), Kjøkken
+    week       2026-08-03..2026-08-10, no plan
+    margin     Bergen Storkjøkken AS + Nordane Kaffe; Vaffel med rømme kr 34,50/50,00 — module DARK, 0 overrides
+
+Run ONE live journey against it:
+
+    cd /Users/svendaneel/okam/Web-modules-wt/L-LIVE-WALK-MARGIN
+    E2E_API_BUILD="OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8" \
+    E2E_API_BASE_URL=http://127.0.0.1:5941 E2E_WEB_PORT=3941 \
+        npm run test:e2e -- test/e2e/journeys/events-deposit-precondition.spec.js
+
+THE ARTIFACT NAMES THIS BUILD WITHOUT THE E2E_API_BUILD LINE, because the world was stamped:
+
+    artifacts/world/live/127-0-0-1-5941.json   ->  OkamAPI-wt-L-LIVE-WALK-MARGIN@6d5328004b831b3ec99424b73c4d05e1d6077dc8   (serving pid 17024)
+
+That file is what a journey reads first, and it is refused the moment the process it names is gone --
+so it can lose its answer and cannot invent a wrong one. TWO THINGS MAKE THAT SENTENCE TRUE rather
+than merely printed: it names the build read when the binary was BUILT and refuses if this checkout
+has moved since, and it names the process HOLDING THE SOCKET rather than the `dotnet run` launcher
+that started it -- so a launcher outliving a dead server cannot keep the answer alive. E2E_API_BUILD
+is kept in the line above because it still carries the case where the runner is somewhere this file is
+not; when the two disagree the stamp wins and the artifact says which declaration it overrode.
+Inspect it with:
+
+    node test/e2e/support/world-stamp.js show http://127.0.0.1:5941
+
+ONE PER RUN, AND A RESET BETWEEN THEM -- NOT ONE WORLD PER JOURNEY. In fixture mode every journey gets
+a fresh backend from `POST /__fixture/reset`; live mode has nothing of the kind INSIDE THE HARNESS, so
+`@live` journeys selected together run in file order against this one database and inherit each
+other's writes. What actually reds is the FLAG, not the week: `workforce-schedule-publish` leaves a
+`workforce.publication` override behind, and `workforce-flag-lever` opens by asserting that badge
+reads "Av". The week alone does NOT red -- once a revision is published the draft view resolves none,
+so the second journey still finds "Ingen plan" and quietly authors Revisjon 2. That is worse than a
+failure, not better: it passes while proving less than its own header claims.
+
+THE ANSWER IS A RESTORE, NOT A SECOND WORLD. Take the image now, while nothing has run against it:
+
+    SQL_CONTAINER=okam-lwtwo-sql SQL_PORT=15436 DB_NAME=OkamLiveMargin API_PORT=5941 \
+        test/e2e/scripts/live-world-reset.sh snapshot
+
+and put the world back between journeys -- about nine seconds, and NOT the 137-migration replay
+this script just spent:
+
+    SQL_CONTAINER=okam-lwtwo-sql SQL_PORT=15436 DB_NAME=OkamLiveMargin API_PORT=5941 \
+        test/e2e/scripts/live-world-reset.sh restore
+
+It reads the same variable names with the same defaults this script does, so anything you overrode
+here you must pass there too. It refuses to image a world a journey has already used; every restore
+re-checks that all 33 append-only triggers came back ENABLED with the bodies the image carried
+(C1), and that the API is serving the restored catalog, before it returns. Take the snapshot BEFORE
+the first journey: afterwards there is nothing clean left to image and the chain does have to be
+replayed.
+
+(`events-deposit-precondition` removes the override it sets, so it leaves the world as it found it and
+can run either side of a restore, or be re-run against a used one.)
+
+Artifacts land in artifacts/journeys/ with "backend": "live", this API's origin on "apiBaseUrl" and
+"backendBuild" naming the build above -- and support/journey.js FAILS a live run in which the browser
+never reached that origin, so the label cannot be produced without the traffic. The canonical file is
+the STRONGEST run on record rather than the last one written, keyed by origin AND build, so a run
+against this world cannot overwrite the record of a different one. See support/artifact-store.js.
+
+Stop it with:   kill 17024 17008
+                (the server and the launcher that started it -- killing only the launcher can leave
+                 the server holding :5941, which is why step 1 of a rebuild kills by port)
+-------------------------------------------------------------------------------

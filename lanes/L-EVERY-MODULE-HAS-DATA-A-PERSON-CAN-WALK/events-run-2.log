@@ -1,0 +1,29 @@
+
+[1m== EVENTS 1. Sign in and find the store[0m
+   store 1 (Two Humans Kafé), manager +4799681931
+
+[1m== EVENTS 2. Turn the module on for this store[0m
+   flag Events.Core = on
+   flag Events.Settlement = on
+   GET /events/admin/1/events -> 200
+
+[1m== EVENTS 3. Five events, each stopped at a different stage[0m
+
+[1m==    (a) Forespoersel -- an enquiry nobody has answered yet[0m
+   «Fagdag for Nordsjo Consulting» already on the board as event 11 (Inquiry) -- adopted
+   event 11  Inquiry
+
+[1m==    (b) Tilbud sendt -- a proposal is out with the guest, unanswered[0m
+   «Julebord Havnekontoret» already on the board as event 12 (ProposalSent) -- adopted
+
+[1m==    (c) Venter paa depositum -- accepted, deposit REQUESTED, and it stops there[0m
+   «Bryllupsmiddag Haug/Berg» already on the board as event 13 (Accepted) -- adopted
+   event 13  Accepted
+
+[1m==    (d) Tapt -- an enquiry marked lost, so the off-ramp is on screen too[0m
+   «Sommerfest Bryggen Sport» already on the board as event 14 (Lost) -- adopted
+   event 14  Lost
+
+[1m==    (e) Oppgjort -- the whole journey, all the way to Settled[0m
+   «Tapasaften Sjomat AS» already on the board as event 15 (Settled) -- adopted
+Scripts/demo/seed-events-demo.sh: line 216: CLOSE: unbound variable

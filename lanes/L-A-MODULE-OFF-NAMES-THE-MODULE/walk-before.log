@@ -1,0 +1,15 @@
+signed in as 99681931
+board rows: 19
+workforce.* rows offered: ["workforce.clock","workforce.dispatch","workforce.exchange","workforce.export","workforce.module","workforce.publication","workforce.selfservice","workforce.setup"]
+offers workforce.personnel-list: false
+PUT workforce.personnel-list -> {"flagKey":"workforce.personnel-list","status":400,"body":"{\"message\":\"Unknown feature flag: workforce.personnel-list\"}"}
+PUT workforce.setup (control) -> {"flagKey":"workforce.setup","status":200,"body":"{\"flagKey\":\"workforce.setup\",\"module\":\"Workforce\",\"title\":\"Setup\",\"defaultEnabled\":true,\"isOverridden\":true,\"overrideEnabled\":true,\"effective\":true,\"updatedByReference\":\"6ba6dd27-42b0-4ba9-807b-96930c735f2f\",\"updatedAtUtc\":\"2026-08-07T11:52:46.366646Z\",\"note\":null}"}
+roster, module ON: ["200 /workforce/stores/1/context","404 /workforce/stores/1/invitations","200 /workforce/stores/1/roles","200 /workforce/stores/1/context","404 /workforce/stores/1/invitations","200 /workforce/stores/1/roles","200 /workforce/stores/1/staff","200 /workforce/stores/1/staff"]
+roster, module ON, first line: Ansatte | Hvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes. | Legg til person
+workforce.module switched OFF from the board -> {"badge":"Av","facts":["Standard: av","Overstyrt for butikken","Faktisk: av"]}
+roster, module OFF, wire: ["403 /workforce/stores/1/context","403 /workforce/stores/1/context"]
+   body 403 /workforce/stores/1/context :: {"type":"https://okam.no/problems/workforce/module-disabled","title":"Forbidden","status":403,"detail":"The Workforce module is not enabled for this store.","code":"workforce.module-disabled","traceId":"0HNNJTTMJ3H8A:00000009"}
+   body 403 /workforce/stores/1/context :: {"type":"https://okam.no/problems/workforce/module-disabled","title":"Forbidden","status":403,"detail":"The Workforce module is not enabled for this store.","code":"workforce.module-disabled","traceId":"0HNNJTTMJ3H89:00000012"}
+roster, module OFF, printed: Ansatte | Hvem som er ansatt i denne butikken, hva hver enkelt har fullmakt til, og hvordan et ansettelsesforhold avsluttes. | Du har ikke bemanningstilgang i denne butikken.
+workforce.module switched BACK ON -> {"badge":"På","facts":["Standard: av","Overstyrt for butikken","Faktisk: på"]}
+board after restore: 19 rows, 19 På

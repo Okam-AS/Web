@@ -1,0 +1,21 @@
+# Down() then Up() again on the chain-built catalog
+      WHERE [MigrationId] = N'20260806125642_Growth_AuditLedger';
+Done.
+table_after_down
+----------------
+0
+trigger_after_down
+------------------
+0
+-- re-apply --
+      VALUES (N'20260806125642_Growth_AuditLedger', N'8.0.26');
+Done.
+table_after_reapply
+-------------------
+1
+trigger_after_reapply
+---------------------
+1
+indexes_after_reapply
+---------------------
+3

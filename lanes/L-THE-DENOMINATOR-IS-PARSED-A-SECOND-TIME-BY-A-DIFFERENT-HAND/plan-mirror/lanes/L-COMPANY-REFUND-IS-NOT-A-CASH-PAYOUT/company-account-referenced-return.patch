@@ -1,0 +1,543 @@
+--- a/Helpers/ErrorMessages.cs
++++ b/Helpers/ErrorMessages.cs
+@@ -62,6 +62,12 @@
+         public const string ReturnCustomerPhoneRequired = "The customer's phone number is required for a refund";
+         public const string ReturnCustomerSignatureRequired = "The customer's signature is required for a refund";
+ 
++        // A referenced return credits the medium the sale was taken on (Company Meals spec 20 §7,
++        // §13.2). Each message names the control the operator should press instead, because the
++        // refusal is otherwise a dead end at the till.
++        public const string RefundOriginalIsCompanyAccount = "This sale was settled on a company account; return it through the company-account refund so no cash is paid out of the drawer";
++        public const string RefundOriginalIsNotCompanyAccount = "This sale was not settled on a company account; return it through the cash or card refund so the customer is actually paid back";
++
+         // Okam Kassa cash + day flow (WP4).
+         public const string CashLimitExceeded = "Cash payments of 20 000 kr or more are not accepted";
+         public const string DayAlreadyOpen = "A trading day is already open on this cash point";
+--- a/Models/Kassa/CardPaymentRequests.cs
++++ b/Models/Kassa/CardPaymentRequests.cs
+@@ -83,4 +83,27 @@
+         public string CustomerPhone { get; set; }
+         public string CustomerSignature { get; set; }
+     }
++
++    // Referenced return of a sale settled on a company account (Company Meals spec 20 §13.2). It
++    // carries no drawer fields and no signature: nothing is handed over the counter, so there is no
++    // cash point day to charge and no payee to sign (§ 5-3-7 second paragraph). What the operator
++    // must still supply is the § 5-3-7 first-paragraph reason.
++    public class CompanyAccountRefundRequest
++    {
++        public int CashPointId { get; set; }
++
++        // Required client-generated idempotency key, one fresh Guid per logical refund, for the same
++        // reason as the cash return: the cumulative-refund cap cannot tell a retry from a genuine
++        // repeat partial refund, so without it a lost response journals a second reversal and
++        // credits the company's allowance twice.
++        public Guid? ReturnId { get; set; }
++
++        // Ore. Omitted => the full original sale amount.
++        public int? Amount { get; set; }
++
++        // bokføringsforskriften § 5-3-7 first paragraph requires a reason. ReasonText is required by
++        // the UI only when ReasonType is Annet.
++        public PosReasonType ReasonType { get; set; }
++        public string ReasonText { get; set; }
++    }
+ }
+--- a/Services/Kassa/FinalizeService.cs
++++ b/Services/Kassa/FinalizeService.cs
+@@ -434,7 +434,7 @@
+                 ReferencedJournalEntryId = original.JournalEntryId
+             };
+ 
+-            ApplyReturnDocumentation(entry, request.Documentation);
++            ApplyReturnDocumentation(entry, request.Documentation, request.PaymentType);
+ 
+             foreach (var line in lines)
+             {
+@@ -570,7 +570,7 @@
+                 ReturnIdempotencyKey = request.PaymentTransactionId
+             };
+ 
+-            ApplyReturnDocumentation(entry, request.Documentation);
++            ApplyReturnDocumentation(entry, request.Documentation, request.PaymentType);
+ 
+             foreach (var line in lines)
+             {
+@@ -650,26 +650,40 @@
+         // bokføringsforskriften § 5-3-7: a refund must carry the reason, the customer's phone number
+         // and the customer's signature. For a card refund the signature is the cardholder's terminal
+         // approval, filled in by the orchestrator before this runs; a cash refund captures it on screen.
+-        private static void ApplyReturnDocumentation(JournalEntry entry, ReturnDocumentation documentation)
++        // § 5-3-7 has two paragraphs and they bind differently. The first ("angivelse av beløp og
++        // årsak") covers every korreksjonspost, so the reason is unconditional. The second attaches
++        // the signature and phone requirement specifically to a "tilbakebetaling til kunde, herunder
++        // ved returer" — the act of handing money back. A CompanyAccount return hands nothing back:
++        // it reverses a receivable the company has not been invoiced for yet, so there is no payee
++        // and nobody with standing to sign. Demanding a signature there would put a customer's
++        // attestation of a pay-out on a receipt where no pay-out happened, which is the same class of
++        // false statement as the drawer entry this branch exists to stop. The counterparty is still
++        // on the record: the RETREC carries the original sale's OrderId, which the Meals attribution
++        // resolves to the funding company.
++        private static void ApplyReturnDocumentation(JournalEntry entry, ReturnDocumentation documentation, PaymentType refundTender)
+         {
+             if (documentation == null || !PosReasonLabels.IsComplete(documentation.ReasonType, documentation.ReasonText))
+             {
+                 throw new AppException(ErrorMessages.ReturnReasonRequired);
+             }
+ 
+-            if (string.IsNullOrWhiteSpace(documentation.CustomerPhone))
++            var paysTheCustomerBack = !refundTender.IsCompanyAccount();
++
++            if (paysTheCustomerBack && string.IsNullOrWhiteSpace(documentation.CustomerPhone))
+             {
+                 throw new AppException(ErrorMessages.ReturnCustomerPhoneRequired);
+             }
+ 
+-            if (string.IsNullOrWhiteSpace(documentation.CustomerSignature))
++            if (paysTheCustomerBack && string.IsNullOrWhiteSpace(documentation.CustomerSignature))
+             {
+                 throw new AppException(ErrorMessages.ReturnCustomerSignatureRequired);
+             }
+ 
+             entry.ReturnReasonType = documentation.ReasonType;
+             entry.ReturnReason = PosReasonLabels.Label(documentation.ReasonType, documentation.ReasonText);
+-            entry.ReturnCustomerPhone = documentation.CustomerPhone.Trim();
++            entry.ReturnCustomerPhone = string.IsNullOrWhiteSpace(documentation.CustomerPhone)
++                ? null
++                : documentation.CustomerPhone.Trim();
+             entry.ReturnCustomerSignature = documentation.CustomerSignature;
+         }
+ 
+--- a/Controllers/PosController.cs
++++ b/Controllers/PosController.cs
+@@ -683,11 +683,22 @@
+                 var approver = await _operatorPinService.GetActingOperatorAsync(session);
+ 
+                 var original = await _context.JournalEntries.AsNoTracking()
++                    .Include(e => e.PaymentLines)
+                     .FirstOrDefaultAsync(e => e.JournalEntryId == journalEntryId);
+                 if (original == null)
+                 {
+                     return BadRequest(new { message = "Original sale receipt not found for the return." });
+                 }
++
++                // A company-account sale took no cash in, so it cannot pay cash out. Journalling the
++                // RETREC on this route would stamp PaymentType.Cash on a receipt for money that was
++                // never in the drawer and then pay the drawer down by it, leaving the till short on
++                // paper against a physical count that is correct. Refuse and name the right control.
++                if (IsCompanyAccountReceipt(original))
++                {
++                    return BadRequest(new { message = ErrorMessages.RefundOriginalIsCompanyAccount });
++                }
++
+                 var refundAmount = request.Amount ?? original.GrossAmount;
+ 
+                 // Reject before journalling: without an open day the RETREC would be written and the
+@@ -729,6 +740,80 @@
+                     refundDrawer.CashDrawerSessionId, CashDrawerTransactionType.PayOut, refundPayOut,
+                     approver.OperatorId, approver.DisplayName, "cashrefund-" + receipt.JournalEntryId,
+                     journalAsPayOut: false);
++
++                return Ok(receipt);
++            }
++            catch (AppException ex)
++            {
++                _logger.LogWarning(ex, ex.Message);
++                return BadRequest(new { message = ex.Message });
++            }
++        }
++
++        // Referenced return of a company-account (Company Meals) sale. The counterpart of RefundCash
++        // for a tender that is a receivable rather than money: the credit goes back to the account the
++        // sale was charged to, so this route touches NO cash drawer — it neither requires an open day
++        // nor records a pay-out. The company's allowance is restored downstream, not here: the Meals
++        // funding ledger appends its Reversal allocation from this RETREC through the read-only
++        // journal projection (spec 20 §3 step 5, §7), which is the module's only reversal origin. All
++        // this route owes it is a truthful journal entry.
++        [HttpPost("payment/company-account/{journalEntryId}/refund")]
++        public async Task<IActionResult> RefundCompanyAccount(long journalEntryId, [FromBody] CompanyAccountRefundRequest request)
++        {
++            try
++            {
++                if (request == null)
++                {
++                    return BadRequest(new { message = "A refund payload is required." });
++                }
++
++                if (!request.ReturnId.HasValue || request.ReturnId.Value == Guid.Empty)
++                {
++                    return BadRequest(new { message = ErrorMessages.ReturnIdRequired });
++                }
++
++                var session = await _sessionResolver.ResolveForCashPointAsync(request.CashPointId);
++                await _sessionResolver.EnsureStoreWriteAccessAsync(session.StoreId);
++
++                // § 2-7 (5): the authorizing operator is stamped onto the Return receipt. This is the
++                // actor a company refund carries — a till operator who verified their PIN, resolved
++                // here and nowhere else. The Meals ledger row that follows carries no actor of its
++                // own; it is traceable to this one through its SourceJournalEntryId.
++                var approver = await _operatorPinService.GetActingOperatorAsync(session);
++
++                var original = await _context.JournalEntries.AsNoTracking()
++                    .Include(e => e.PaymentLines)
++                    .FirstOrDefaultAsync(e => e.JournalEntryId == journalEntryId);
++                if (original == null)
++                {
++                    return BadRequest(new { message = "Original sale receipt not found for the return." });
++                }
++
++                // Without this the route is a way to close any sale with no money moving: a cash sale
++                // returned here would journal a receivable reversal and leave the customer unpaid and
++                // the drawer long.
++                if (!IsCompanyAccountReceipt(original))
++                {
++                    return BadRequest(new { message = ErrorMessages.RefundOriginalIsNotCompanyAccount });
++                }
++
++                var receipt = await _finalizeService.FinalizeReturnAsync(new FinalizeReturnRequest
++                {
++                    OriginalJournalEntryId = journalEntryId,
++                    RefundAmount = request.Amount ?? original.GrossAmount,
++                    CashPointId = request.CashPointId,
++                    OperatorId = approver.OperatorId,
++                    OperatorName = approver.DisplayName,
++                    // ReturnId doubles as the idempotency id on the journal payment line, so a
++                    // retried request returns the existing RETREC.
++                    PaymentTransactionId = request.ReturnId,
++                    PaymentType = PaymentType.CompanyAccount,
++                    Documentation = new ReturnDocumentation
++                    {
++                        ReasonType = request.ReasonType,
++                        ReasonText = request.ReasonText
++                    }
++                });
+ 
+                 return Ok(receipt);
+             }
+@@ -737,6 +822,15 @@
+                 _logger.LogWarning(ex, ex.Message);
+                 return BadRequest(new { message = ex.Message });
+             }
++        }
++
++        // A sale is a company-account sale when its own payment lines say so. The tender is read off
++        // the original receipt rather than off the order or the Meals attribution, because the journal
++        // is what an inspector reads and what the refund must agree with.
++        private static bool IsCompanyAccountReceipt(WebApi.Entities.JournalEntry entry)
++        {
++            return entry.PaymentLines != null
++                && entry.PaymentLines.Any(p => p.PaymentType.IsCompanyAccount());
+         }
+ 
+         // Unreferenced (open) cash return: a refund with no original sale to look up. Each line must
+--- a/WebApi.Tests/Meals/MealsCompanyAccountRefundJournalTests.cs
++++ b/WebApi.Tests/Meals/MealsCompanyAccountRefundJournalTests.cs
+@@ -0,0 +1,308 @@
++using System.Collections.Generic;
++using System.Xml.Linq;
++using Microsoft.AspNetCore.Mvc;
++using Microsoft.EntityFrameworkCore;
++using WebApi.Entities;
++using WebApi.Enums;
++using WebApi.Helpers;
++using WebApi.Models.Kassa;
++using WebApi.Services.Kassa;
++using WebApi.Tests.Kassa;
++using Xunit;
++
++namespace WebApi.Tests.Meals;
++
++/// <summary>
++/// A referenced return of a <see cref="PaymentType.CompanyAccount"/> sale credits the account the sale
++/// was charged to and leaves the cash drawer alone (Company Meals spec 20 §13.2: a company-funded order
++/// is "a typed company receivable allocation, never fake cash or card tender"; §7 names the refund paths
++/// among the payment-type switches that must classify it as a receivable).
++///
++/// <para>Before this existed the only referenced-return route was <c>payment/cash/{id}/refund</c>, which
++/// hardcodes <see cref="PaymentType.Cash"/>, demands an open cash-drawer day and books a drawer pay-out.
++/// A company lunch refunded through it put a cash tender on the RETREC for a sale no cash came in for and
++/// then paid the drawer down by money that never moved, so a correct physical count read as an overage.
++/// Each fact below is asserted against the PERSISTED journal, never the API response, because the journal
++/// is the document an inspector reads.</para>
++///
++/// <para><b>Scope.</b> These tests end at the fiscal journal. The company's allowance is restored
++/// downstream by the Meals funding ledger, which appends its <c>Reversal</c> allocation from this RETREC
++/// through the read-only journal projection (spec §3 step 5, §37) keyed on <c>ReceiptType == Return</c>,
++/// not on the tender — that limb is covered by <c>MealsCaptureLedgerTests</c>. What this file pins is the
++/// input that limb reads: a truthful return receipt.</para>
++/// </summary>
++public sealed class MealsCompanyAccountRefundJournalTests
++{
++    private const int Gross = 14900;
++    private const int OpeningFloat = 100000;
++
++    private static async Task<JournalEntry> SeedSaleAsync(PosHarness h, PaymentType tender)
++    {
++        var orderId = await h.SeedOrderAsync(finalAmount: Gross, unitAmount: Gross, taxPercent: 25);
++        var order = await h.LoadOrderAsync(orderId);
++
++        await h.Finalize.FinalizeSettlementAsync(new FinalizeSettlementRequest
++        {
++            Order = order,
++            CashPointId = PosHarness.CashPointId,
++            OperatorId = PosHarness.StandardOperatorId,
++            OperatorName = "Ola Nordmann",
++            Payments = new List<SettlementPaymentAllocation>
++            {
++                new SettlementPaymentAllocation { PaymentType = tender, Amount = Gross }
++            }
++        });
++
++        return await h.Context.JournalEntries.AsNoTracking()
++            .Include(e => e.PaymentLines)
++            .SingleAsync(e => e.EventType == KassaEventType.SALREC);
++    }
++
++    private static CompanyAccountRefundRequest RefundBody(Guid? returnId = null) => new CompanyAccountRefundRequest
++    {
++        CashPointId = PosHarness.CashPointId,
++        ReturnId = returnId ?? Guid.NewGuid(),
++        ReasonType = PosReasonType.AngretKjop
++    };
++
++    private static Task<JournalEntry> ReadRetrecAsync(PosHarness h) =>
++        h.Context.JournalEntries.AsNoTracking()
++            .Include(e => e.PaymentLines)
++            .SingleAsync(e => e.EventType == KassaEventType.RETREC);
++
++    // THE claim. This is the assertion that reds the moment the route hardcodes a tender the way the
++    // cash route does: the RETREC must name the medium the sale was actually settled on.
++    [Fact]
++    public async Task Return_of_a_company_sale_journals_the_company_account_tender()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++
++        var result = await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++        Assert.IsType<OkObjectResult>(result);
++
++        var retrec = await ReadRetrecAsync(h);
++        var paymentLine = Assert.Single(retrec.PaymentLines);
++        Assert.Equal(PaymentType.CompanyAccount, paymentLine.PaymentType);
++        Assert.NotEqual(PaymentType.Cash, paymentLine.PaymentType);
++        Assert.Equal(Gross, paymentLine.Amount);
++
++        // It is a real referenced return, not a bare marker: it reverses the gross and points at the sale.
++        Assert.Equal(Gross, retrec.GrossAmount);
++        Assert.Equal(sale.ReceiptNumber, retrec.ReferencedReceiptNumber);
++        Assert.Equal(sale.JournalEntryId, retrec.ReferencedJournalEntryId);
++        Assert.Equal(sale.OrderId, retrec.OrderId);
++    }
++
++    // The whole point of the lane: the drawer stops recording money that never left it.
++    [Fact]
++    public async Task Return_of_a_company_sale_leaves_the_cash_drawer_untouched()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++        await h.Drawer.BeginDayAsync(PosHarness.CashPointId, OpeningFloat, PosHarness.ApproverOperatorId, "Kari Hansen");
++
++        await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        Assert.Empty(await h.Context.CashDrawerTransactions
++            .Where(t => t.Type == CashDrawerTransactionType.PayOut).ToListAsync());
++
++        var session = await h.Context.CashDrawerSessions
++            .Include(s => s.Transactions)
++            .SingleAsync(s => s.CashPointId == PosHarness.CashPointId && s.ClosedAt == null);
++        Assert.Equal(OpeningFloat, CashDrawerService.ComputeExpectedCash(session, 0));
++    }
++
++    // An open cash day is a precondition of paying cash out. Nothing is paid out here, so a register
++    // that has taken no cash today can still refund a company lunch — the control finally exists.
++    [Fact]
++    public async Task Return_of_a_company_sale_needs_no_open_cash_day()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++        Assert.Null(await h.Drawer.GetOpenSessionAsync(PosHarness.CashPointId));
++
++        var result = await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        Assert.IsType<OkObjectResult>(result);
++        Assert.Equal(PaymentType.CompanyAccount, Assert.Single((await ReadRetrecAsync(h)).PaymentLines).PaymentType);
++        Assert.Empty(await h.Context.CashDrawerTransactions.ToListAsync());
++    }
++
++    // The day's cash takings are the reconciliation an operator counts against. A company refund must
++    // not appear in them at all; it belongs to the non-cash tender breakdown (spec §13.2).
++    [Fact]
++    public async Task Return_of_a_company_sale_does_not_move_the_X_report_cash_total()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++        await h.Drawer.BeginDayAsync(PosHarness.CashPointId, OpeningFloat, PosHarness.ApproverOperatorId, "Kari Hansen");
++
++        await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        var x = await h.Reports.GenerateXReportAsync(PosHarness.CashPointId);
++        Assert.Equal(0, x.CashTotal);
++        // Sale +149.00 and return -149.00 both land on the non-cash breakdown and net to nothing.
++        Assert.Equal(0, x.OtherTotal);
++        Assert.Contains(x.PaymentMeans, p => p.PaymentType == PaymentType.CompanyAccount);
++        Assert.DoesNotContain(x.PaymentMeans, p => p.PaymentType == PaymentType.Cash);
++    }
++
++    // What Skatteetaten actually reads. The return's payment medium must be the kundekonto code, not
++    // the cash code — the export derives it from the tender this route journals.
++    [Fact]
++    public async Task Return_of_a_company_sale_exports_as_the_kundekonto_payment_medium()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++
++        await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        var today = DateTime.Now.Date;
++        var export = await h.Saft.BuildExportAsync(PosHarness.StoreId, today, today.AddDays(1), today, today);
++        var doc = XDocument.Parse(export.Xml);
++        XNamespace ns = MealsSaftJournalKit.Ns;
++
++        var returnTransaction = doc.Descendants(ns + "cashtransaction")
++            .Single(t => t.Element(ns + "amntTp")!.Value == "D");
++        var mediumCode = returnTransaction.Element(ns + "payment")!.Element(ns + "paymentType")!.Value;
++
++        var mediumBasic = doc.Descendants(ns + "basic")
++            .Where(b => b.Element(ns + "basicType")!.Value == "12")
++            .Single(b => b.Element(ns + "basicID")!.Value == mediumCode);
++        Assert.Equal("12006", mediumBasic.Element(ns + "predefinedBasicID")!.Value);
++        Assert.NotEqual("CASH", mediumCode);
++    }
++
++    // The wrong control is now closed, and the refusal names the right one rather than dead-ending.
++    [Fact]
++    public async Task Cash_return_refuses_a_company_sale_and_names_the_company_route()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++        await h.Drawer.BeginDayAsync(PosHarness.CashPointId, OpeningFloat, PosHarness.ApproverOperatorId, "Kari Hansen");
++
++        var result = await h.CreatePosController().RefundCash(sale.JournalEntryId, new CashRefundRequest
++        {
++            CashPointId = PosHarness.CashPointId,
++            ReturnId = Guid.NewGuid(),
++            ReasonType = PosReasonType.AngretKjop,
++            CustomerPhone = "99999999",
++            CustomerSignature = "paa-skjerm"
++        });
++
++        var bad = Assert.IsType<BadRequestObjectResult>(result);
++        Assert.Contains(ErrorMessages.RefundOriginalIsCompanyAccount, bad.Value!.ToString());
++
++        // Nothing was journalled and nothing left the drawer.
++        Assert.Empty(await h.Context.JournalEntries.Where(e => e.EventType == KassaEventType.RETREC).ToListAsync());
++        Assert.Empty(await h.Context.CashDrawerTransactions
++            .Where(t => t.Type == CashDrawerTransactionType.PayOut).ToListAsync());
++    }
++
++    // The mirror guard. Without it the new route is a way to close a cash sale with no money moving:
++    // the customer would go unpaid and the drawer would be long.
++    [Fact]
++    public async Task Company_return_refuses_a_sale_that_was_not_on_a_company_account()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.Cash);
++
++        var result = await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        var bad = Assert.IsType<BadRequestObjectResult>(result);
++        Assert.Contains(ErrorMessages.RefundOriginalIsNotCompanyAccount, bad.Value!.ToString());
++        Assert.Empty(await h.Context.JournalEntries.Where(e => e.EventType == KassaEventType.RETREC).ToListAsync());
++    }
++
++    // A lost response must not credit the company twice: the cumulative-refund cap cannot tell a retry
++    // from a genuine repeat partial refund, so the client-generated ReturnId is the only guard.
++    [Fact]
++    public async Task Retrying_the_same_ReturnId_journals_exactly_one_reversal()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++        var returnId = Guid.NewGuid();
++        var controller = h.CreatePosController();
++
++        await controller.RefundCompanyAccount(sale.JournalEntryId, RefundBody(returnId));
++        var retry = await controller.RefundCompanyAccount(sale.JournalEntryId, RefundBody(returnId));
++
++        Assert.IsType<OkObjectResult>(retry);
++        var returns = await h.Context.JournalEntries
++            .Where(e => e.EventType == KassaEventType.RETREC).ToListAsync();
++        Assert.Single(returns);
++    }
++
++    [Fact]
++    public async Task A_company_return_without_a_ReturnId_is_refused()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++
++        var body = RefundBody();
++        body.ReturnId = null;
++        var result = await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, body);
++
++        Assert.IsType<BadRequestObjectResult>(result);
++        Assert.Empty(await h.Context.JournalEntries.Where(e => e.EventType == KassaEventType.RETREC).ToListAsync());
++    }
++
++    // § 5-3-7 first paragraph binds every korreksjonspost: amount and reason. Dropping the signature
++    // requirement (second paragraph, which is conditioned on a tilbakebetaling that does not happen
++    // here) must not drop the reason with it.
++    [Fact]
++    public async Task A_company_return_still_requires_a_reason()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++
++        var body = RefundBody();
++        body.ReasonType = PosReasonType.None;
++        var result = await h.CreatePosController().RefundCompanyAccount(sale.JournalEntryId, body);
++
++        var bad = Assert.IsType<BadRequestObjectResult>(result);
++        Assert.Contains(ErrorMessages.ReturnReasonRequired, bad.Value!.ToString());
++        Assert.Empty(await h.Context.JournalEntries.Where(e => e.EventType == KassaEventType.RETREC).ToListAsync());
++    }
++
++    // C4: the write names the actor that caused it. The operator who verified their PIN is stamped on
++    // the RETREC — the Meals reversal that follows carries no actor of its own and is traceable only
++    // through this entry.
++    [Fact]
++    public async Task The_return_names_the_operator_who_authorized_it()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.CompanyAccount);
++
++        await h.CreatePosController(PosHarness.ApproverOperatorId)
++            .RefundCompanyAccount(sale.JournalEntryId, RefundBody());
++
++        var retrec = await ReadRetrecAsync(h);
++        Assert.Equal(PosHarness.ApproverOperatorId, retrec.OperatorId);
++        Assert.False(string.IsNullOrWhiteSpace(retrec.OperatorName));
++        Assert.NotEqual(0, retrec.OperatorId);
++    }
++
++    // The cash and card paths must keep their § 5-3-7 second-paragraph documentation: money really is
++    // handed back there, so the signature requirement is untouched by the company-account carve-out.
++    [Fact]
++    public async Task A_cash_return_still_requires_the_customer_signature()
++    {
++        await using var h = await PosHarness.CreateAsync();
++        var sale = await SeedSaleAsync(h, PaymentType.Cash);
++        await h.Drawer.BeginDayAsync(PosHarness.CashPointId, OpeningFloat, PosHarness.ApproverOperatorId, "Kari Hansen");
++
++        var result = await h.CreatePosController().RefundCash(sale.JournalEntryId, new CashRefundRequest
++        {
++            CashPointId = PosHarness.CashPointId,
++            ReturnId = Guid.NewGuid(),
++            ReasonType = PosReasonType.AngretKjop,
++            CustomerPhone = "99999999",
++            CustomerSignature = null
++        });
++
++        var bad = Assert.IsType<BadRequestObjectResult>(result);
++        Assert.Contains(ErrorMessages.ReturnCustomerSignatureRequired, bad.Value!.ToString());
++    }
++}

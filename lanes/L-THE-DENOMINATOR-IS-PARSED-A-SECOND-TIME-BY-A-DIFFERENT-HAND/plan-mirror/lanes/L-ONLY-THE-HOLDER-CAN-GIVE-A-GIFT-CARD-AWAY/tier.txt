@@ -1,0 +1,4 @@
+branch: lane/only-the-holder-transfers @ 8637cdd51 (off lane/giftcard-transfer-one-wallet @ 71ac73af1)
+tier at lane tip: 4965 passed / 1 failed / 10 skipped / 4976 total, exit 1
+the single red is INHERITED: InvoiceDocumentTests arrives from b368d930e (blob 6d8fb9d96) unchanged on this base
+mutations: 4 of 6 red; the 2 survivors are a redundant pair, shown jointly load-bearing by a combined mutation (1/13 red)

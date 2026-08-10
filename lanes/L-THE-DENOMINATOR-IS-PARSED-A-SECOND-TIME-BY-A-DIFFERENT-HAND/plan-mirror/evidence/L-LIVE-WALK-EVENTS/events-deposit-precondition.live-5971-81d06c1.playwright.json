@@ -1,0 +1,76 @@
+{
+  "journey": "events-deposit-precondition",
+  "title": "the operator reads the deposit precondition on the row before arming the money path",
+  "status": "failed",
+  "startedAtUtc": "2026-08-09T08:57:47.076Z",
+  "finishedAtUtc": "2026-08-09T08:57:58.654Z",
+  "durationMs": 11578,
+  "capabilities": [
+    "platform.feature-flags.read",
+    "platform.feature-flags.write",
+    "events.deposits.arming-precondition-disclosed"
+  ],
+  "surface": "admin",
+  "backend": "live",
+  "baseUrl": "http://127.0.0.1:3971",
+  "apiBaseUrl": "http://127.0.0.1:5971",
+  "commit": "6cd3bccac6157df47a760dc7b109d352877d359f",
+  "underTest": null,
+  "backendProbe": {
+    "url": "http://127.0.0.1:5971/health",
+    "status": 200,
+    "body": "Healthy"
+  },
+  "backendBuild": {
+    "id": "wt-lwtwo-api@81d06c10a8b7e6b9861a871dad0db1806d5109c9",
+    "source": "process:127.0.0.1:5971",
+    "short": "81d06c1",
+    "detail": "branch HEAD"
+  },
+  "backendServed": 3,
+  "backendSubjectServed": 0,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:5971/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:5971/user/login -> 200",
+    "GET http://127.0.0.1:5971/user -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-09T08:57:47.096Z",
+      "durationMs": 1499,
+      "detail": "landed on /admin/feature-flags",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "the deposits row states the precondition, above its own switch",
+      "status": "failed",
+      "startedAtUtc": "2026-08-09T08:57:48.595Z",
+      "durationMs": 10018,
+      "detail": null,
+      "error": "\u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.ff-row').filter({ has: locator('code.ff-row__key').filter({ hasText: 'Events.Deposits' }) })\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').filter({ has: locator('code.ff-row__key').filter({ hasText: 'Events.Deposits' }) })\u001b[22m\n\u001b[2m    24 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n"
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [],
+  "failedRequests": [],
+  "screenshots": [],
+  "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  locator('.ff-row').filter({ has: locator('code.ff-row__key').filter({ hasText: 'Events.Deposits' }) })\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ff-row').filter({ has: locator('code.ff-row__key').filter({ hasText: 'Events.Deposits' }) })\u001b[22m\n\u001b[2m    24 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n",
+  "artifact": {
+    "key": "live-5971-81d06c1",
+    "file": "artifacts/journeys/runs/events-deposit-precondition.live-5971-81d06c1.playwright.json",
+    "canonical": false,
+    "canonicalHeldBy": "live-5961-unidentified",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

@@ -1,0 +1,29 @@
+Test run for /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/bin/Debug/net8.0/WebApi.Tests.dll (.NETCoreApp,Version=v8.0)
+Microsoft (R) Test Execution Command Line Tool Version 17.8.0 (arm64)
+Copyright (c) Microsoft Corporation.  All rights reserved.
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:05.80]     WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race [FAIL]
+[xUnit.net 00:00:06.00]     WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuinely_absent_audit_table_is_refused_as_itself_and_never_as_a_publish_race [FAIL]
+  Failed WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race [12 ms]
+  Error Message:
+   a missing-object failure was answered as growth.consent_text_version_race; the operator would re-read a register nobody changed and retry a publish that can never succeed
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race() in /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/Growth/GrowthDbFailureClassificationTests.cs:line 97
+   at WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race() in /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/Growth/GrowthDbFailureClassificationTests.cs:line 106
+   at WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_missing_object_failure_is_refused_as_itself_and_never_as_a_publish_race() in /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/Growth/GrowthDbFailureClassificationTests.cs:line 106
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuinely_absent_audit_table_is_refused_as_itself_and_never_as_a_publish_race [12 ms]
+  Error Message:
+   an absent audit ledger was answered as a concurrent-publish race; the operator would re-read a register nobody changed and retry a publish that can never succeed
+Expected: False
+Actual:   True
+  Stack Trace:
+     at WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuinely_absent_audit_table_is_refused_as_itself_and_never_as_a_publish_race() in /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/Growth/GrowthDbFailureClassificationTests.cs:line 132
+   at WebApi.Tests.Growth.GrowthConsentTextDbFailureClassificationTests.A_genuinely_absent_audit_table_is_refused_as_itself_and_never_as_a_publish_race() in /Users/svendaneel/okam/wt-growth-tells-operator/WebApi.Tests/Growth/GrowthDbFailureClassificationTests.cs:line 147
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:     2, Passed:     4, Skipped:     0, Total:     6, Duration: 1 s - WebApi.Tests.dll (net8.0)

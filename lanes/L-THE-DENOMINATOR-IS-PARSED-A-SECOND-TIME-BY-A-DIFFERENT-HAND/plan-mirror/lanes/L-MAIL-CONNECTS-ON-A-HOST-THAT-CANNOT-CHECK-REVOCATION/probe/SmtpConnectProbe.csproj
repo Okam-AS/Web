@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>SmtpConnectProbe</RootNamespace>
+    <AssemblyName>SmtpConnectProbe</AssemblyName>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(OkamApiProject)' == ''">
+    <!-- The lane worktree this was run against. It is removed after the run, so reproduction passes the
+         path of a checkout of lane/mail-revocation-lever:
+           dotnet run -p:OkamApiProject=/abs/path/WebApi.csproj followed by the host and port args. -->
+    <OkamApiProject>/Users/svendaneel/okam/OkamAPI-mailrevoc/WebApi.csproj</OkamApiProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The probe drives the product's own transport, so it references the product assembly rather than
+         reimplementing the client. -->
+    <ProjectReference Include="$(OkamApiProject)" />
+  </ItemGroup>
+
+</Project>

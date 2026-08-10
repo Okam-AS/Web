@@ -1,0 +1,400 @@
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.InvoicesController.GetPdf (WebApi), returned result Microsoft.AspNetCore.Mvc.FileContentResult in 2.4446ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.FileContentResultExecutor[2]
+      Executing FileContentResult, sending file with download name 'RAPPORT-990611.pdf' ...
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.InvoicesController.GetPdf (WebApi) in 3.1968ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.InvoicesController.GetPdf (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/invoices/pdf/990611 - 200 209 application/pdf 5.9428ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/giftcard/receipt/9df00001-0000-0000-0000-000000000001/force - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.GiftcardController.GetReceiptForce (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetReceiptForce", controller = "Giftcard"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetReceiptForce(System.Guid) on controller WebApi.Controllers.GiftcardController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.GiftcardController.GetReceiptForce (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__giftcardId_0='?' (DbType = Guid)], CommandType='Text', CommandTimeout='30']
+      SELECT "g"."GiftcardId", "g"."ApplicationFeeAmount", "g"."ApplicationFeePercent", "g"."BuyerMessageToReceiver", "g"."BuyerPhoneNumber", "g"."BuyerUserId", "g"."Completed", "g"."Created", "g"."DinteroSessionId", "g"."DinteroTransactionId", "g"."FinalAmount", "g"."GiftcardTransactionId", "g"."NotificationHub", "g"."PaymentIntentId", "g"."PaymentType", "g"."Platform", "g"."ReceiverPhoneNumber", "g"."ReceiverUserId", "g"."SmsCount", "g"."SmsFee", "g"."Status", "g"."StoreCity", "g"."StoreFullAddress", "g"."StoreId", "g"."StoreLegalName", "g"."StoreVAT", "g"."StoreZipCode", "g"."SurfboardOrderId", "g"."SurfboardPaymentId", "g"."TotalFeeAmount", "g"."VippsOrderId", "g0"."GiftcardTransactionId", "g0"."Amount", "g0"."ClientTheme", "g0"."Created", "g0"."GiftcardId", "g0"."OrderId", "g0"."Type", "g0"."UserId"
+      FROM "Giftcards" AS "g"
+      LEFT JOIN "GiftcardTransactions" AS "g0" ON "g"."GiftcardId" = "g0"."GiftcardId"
+      WHERE "g"."GiftcardId" = @__giftcardId_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.GiftcardController.GetReceiptForce (WebApi), returned result Microsoft.AspNetCore.Mvc.FileContentResult in 0.7592ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.FileContentResultExecutor[2]
+      Executing FileContentResult, sending file with download name 'Kvittering-9df00001-0000-0000-0000-000000000001.pdf' ...
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.GiftcardController.GetReceiptForce (WebApi) in 1.1586ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.GiftcardController.GetReceiptForce (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/giftcard/receipt/9df00001-0000-0000-0000-000000000001/force - 200 209 application/pdf 3.7757ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 POST http://localhost/invoices/creditnote/990611 - text/plain;+charset=utf-8 0
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(what: "order receipt (force)", method: "GET", url: "/orders/receipt/prjw85/force", userId: "wire-power-user") [15 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(String what, String method, String url, String userId) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 88
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(what: "giftcard receipt", method: "GET", url: "/giftcard/receipt/9df00001-0000-0000-0000-00000000"..., userId: "wire-pdf-outage-admin") [9 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(String what, String method, String url, String userId) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 88
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(what: "order receipt", method: "GET", url: "/orders/receipt/prjw85", userId: "wire-pdf-outage-admin") [9 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.A_renderer_outage_is_a_handled_502_on_every_download_route(String what, String method, String url, String userId) in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 88
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.A_credit_note_is_already_in_the_ledger_when_the_render_fails [17 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.A_credit_note_is_already_in_the_ledger_when_the_render_fails() in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 191
+--- End of stack trace from previous location ---
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.InvoicesController.CreateCreditNote (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "CreateCreditNote", controller = "Invoices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] CreateCreditNote(Int32) on controller WebApi.Controllers.InvoicesController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.InvoicesController.CreateCreditNote (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__invoiceId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."InvoiceId", "t"."BankAccountId", "t"."CreditInvoice", "t"."DinteroSettlementId", "t"."InvoiceDate", "t"."InvoiceFee", "t"."InvoicePeriodFrom", "t"."InvoicePeriodTo", "t"."IsCreditNote", "t"."OkamPayoutCreated", "t"."OkamPayoutId", "t"."PayoutAmount", "t"."PayoutCreated", "t"."PayoutId", "t"."RefundCount", "t"."RefundTotalAmount", "t"."SettlementId", "t"."SettlementReportFileName", "t"."StoreCity", "t"."StoreFullAddress", "t"."StoreId", "t"."StoreLegalName", "t"."StoreSendInvoiceToEmails", "t"."StoreVat", "t"."StoreZipCode", "t"."TaxMultiplier", "t"."VippsMsn", "t0"."InvoiceLineId", "t0"."ApplicationFeeAmount", "t0"."ApplicationFeePercent", "t0"."BasisAmount", "t0"."Completed", "t0"."DeliveryType", "t0"."DiscountAmount", "t0"."InvoiceId", "t0"."OrderId", "t0"."SmsCount", "t0"."SmsFee", "t0"."TotalAmount", "t0"."InvoiceLineTaxDetailId", "t0"."InvoiceLineId0", "t0"."TaxAmount", "t0"."TaxPercent"
+      FROM (
+          SELECT "i"."InvoiceId", "i"."BankAccountId", "i"."CreditInvoice", "i"."DinteroSettlementId", "i"."InvoiceDate", "i"."InvoiceFee", "i"."InvoicePeriodFrom", "i"."InvoicePeriodTo", "i"."IsCreditNote", "i"."OkamPayoutCreated", "i"."OkamPayoutId", "i"."PayoutAmount", "i"."PayoutCreated", "i"."PayoutId", "i"."RefundCount", "i"."RefundTotalAmount", "i"."SettlementId", "i"."SettlementReportFileName", "i"."StoreCity", "i"."StoreFullAddress", "i"."StoreId", "i"."StoreLegalName", "i"."StoreSendInvoiceToEmails", "i"."StoreVat", "i"."StoreZipCode", "i"."TaxMultiplier", "i"."VippsMsn"
+          FROM "Invoices" AS "i"
+          WHERE "i"."InvoiceId" = @__invoiceId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN (
+          SELECT "i0"."InvoiceLineId", "i0"."ApplicationFeeAmount", "i0"."ApplicationFeePercent", "i0"."BasisAmount", "i0"."Completed", "i0"."DeliveryType", "i0"."DiscountAmount", "i0"."InvoiceId", "i0"."OrderId", "i0"."SmsCount", "i0"."SmsFee", "i0"."TotalAmount", "i1"."InvoiceLineTaxDetailId", "i1"."InvoiceLineId" AS "InvoiceLineId0", "i1"."TaxAmount", "i1"."TaxPercent"
+          FROM "InvoiceLines" AS "i0"
+          LEFT JOIN "InvoiceLineTaxDetails" AS "i1" ON "i0"."InvoiceLineId" = "i1"."InvoiceLineId"
+      ) AS "t0" ON "t"."InvoiceId" = "t0"."InvoiceId"
+      ORDER BY "t"."InvoiceId", "t0"."InvoiceLineId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?', @p1='?' (DbType = Int32), @p2='?', @p3='?' (DbType = DateTime), @p4='?' (DbType = Int32), @p5='?' (DbType = DateTime), @p6='?' (DbType = DateTime), @p7='?' (DbType = Boolean), @p8='?' (DbType = DateTime), @p9='?' (DbType = Int32), @p10='?' (DbType = Int32), @p11='?' (DbType = DateTime), @p12='?', @p13='?' (DbType = Int32), @p14='?' (DbType = Int32), @p15='?' (DbType = Int32), @p16='?', @p17='?' (Size = 6), @p18='?' (Size = 12), @p19='?' (DbType = Int32), @p20='?' (Size = 15), @p21='?' (Size = 24), @p22='?' (DbType = Int64), @p23='?' (Size = 4), @p24='?' (DbType = Decimal), @p25='?'], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "Invoices" ("BankAccountId", "CreditInvoice", "DinteroSettlementId", "InvoiceDate", "InvoiceFee", "InvoicePeriodFrom", "InvoicePeriodTo", "IsCreditNote", "OkamPayoutCreated", "OkamPayoutId", "PayoutAmount", "PayoutCreated", "PayoutId", "RefundCount", "RefundTotalAmount", "SettlementId", "SettlementReportFileName", "StoreCity", "StoreFullAddress", "StoreId", "StoreLegalName", "StoreSendInvoiceToEmails", "StoreVat", "StoreZipCode", "TaxMultiplier", "VippsMsn")
+      VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, @p20, @p21, @p22, @p23, @p24, @p25)
+      RETURNING "InvoiceId";
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p26='?' (DbType = Guid), @p27='?' (DbType = Int32), @p28='?' (DbType = Decimal), @p29='?' (DbType = Int32), @p30='?' (DbType = DateTime), @p31='?' (Size = 10), @p32='?' (DbType = Int32), @p33='?' (DbType = Int32), @p34='?' (DbType = Int32), @p35='?' (DbType = Int32), @p36='?' (DbType = Int32), @p37='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "InvoiceLines" ("InvoiceLineId", "ApplicationFeeAmount", "ApplicationFeePercent", "BasisAmount", "Completed", "DeliveryType", "DiscountAmount", "InvoiceId", "OrderId", "SmsCount", "SmsFee", "TotalAmount")
+      VALUES (@p26, @p27, @p28, @p29, @p30, @p31, @p32, @p33, @p34, @p35, @p36, @p37);
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@p0='?' (DbType = Guid), @p1='?' (DbType = Guid), @p2='?' (DbType = Int32), @p3='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      INSERT INTO "InvoiceLineTaxDetails" ("InvoiceLineTaxDetailId", "InvoiceLineId", "TaxAmount", "TaxPercent")
+      VALUES (@p0, @p1, @p2, @p3);
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.InvoicesController.CreateCreditNote (WebApi), returned result Microsoft.AspNetCore.Mvc.FileContentResult in 3.7357ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.FileContentResultExecutor[2]
+      Executing FileContentResult, sending file with download name 'KREDITNOTA-990611.pdf' ...
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.InvoicesController.CreateCreditNote (WebApi) in 4.4185ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.InvoicesController.CreateCreditNote (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 POST http://localhost/invoices/creditnote/990611 - 200 209 application/pdf 6.2729ms
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/orders/receipt/prjw85 - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 21)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.OrdersController.GetReceipt (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetReceipt", controller = "Orders"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetReceipt(System.String) on controller WebApi.Controllers.OrdersController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.OrdersController.GetReceipt (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (1ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."OrderId", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."CanceledByStore", "t"."CashPointId", "t"."City", "t"."Comment", "t"."CompanyAddress", "t"."CompanyCity", "t"."CompanyEmail", "t"."CompanyName", "t"."CompanyPhone", "t"."CompanyVat", "t"."CompanyZipCode", "t"."Completed", "t"."ConcurrencyVersion", "t"."Couverts", "t"."Created", "t"."DeliveryAmount", "t"."DeliveryInstructions", "t"."DeliveryType", "t"."DineHomeOrderId", "t"."DineHomeStatus", "t"."DinteroSessionId", "t"."DinteroTransactionId", "t"."EstimatedProcessingEndTime", "t"."FinalAmount", "t"."FriendlyOrderId", "t"."FullAddress", "t"."GiftcardTransactionId", "t"."IsInPreorderMode", "t"."IsSelfPickup", "t"."IsWaiterOrder", "t"."ItemsAmount", "t"."ItemsAmountLineThrough", "t"."JournalEntryId", "t"."Kind", "t"."Lat", "t"."Lng", "t"."NotificationHub", "t"."OperatorId", "t"."OrderDiscountAmount", "t"."OriginalStoreId", "t"."PaymentIntentId", "t"."PaymentType", "t"."PayoutStoreId", "t"."Pickup", "t"."Platform", "t"."ProcessingEndTime", "t"."ProcessingStartTime", "t"."ReceiptNumber", "t"."RequestedCompletion", "t"."ReservationId", "t"."ServiceFeeAmount", "t"."SmsCount", "t"."SmsFee", "t"."Status", "t"."StoreCity", "t"."StoreDineHomeOutletId", "t"."StoreFullAddress", "t"."StoreId", "t"."StoreLegalName", "t"."StoreVAT", "t"."StoreZipCode", "t"."SurfboardOrderId", "t"."SurfboardPaymentId", "t"."TableId", "t"."TableName", "t"."TipAmount", "t"."TotalFeeAmount", "t"."UsedRewardAmount", "t"."UserFullName", "t"."UserId", "t"."UserIsMember", "t"."VippsOrderId", "t"."WoltDeliveryInfoId", "t"."WoltMarketplaceOrderId", "t"."WoltServiceFeeAmount", "t"."ZipCode", "t"."StoreId0", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount0", "t"."ApplicationFeePercent0", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId0", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount0", "t"."Id", "t"."WoltDeliveryInfoId0", "t"."Id0", "t0"."ApplicationUserId", "t0"."StoreId", "t0"."Id", "t0"."AccessFailedCount", "t0"."BirthDate", "t0"."City", "t0"."CommaSeparatedFavoriteProductIds", "t0"."ConcurrencyStamp", "t0"."Confirmed", "t0"."DeliveryInstructions", "t0"."Email", "t0"."EmailConfirmationCode", "t0"."EmailConfirmationCodeExpiry", "t0"."EmailConfirmed", "t0"."FirstName", "t0"."FullAddress", "t0"."IsKeyAccountDirector", "t0"."IsKeyAccountManager", "t0"."IsPowerUser", "t0"."KeyAccountDirectorId", "t0"."LastName", "t0"."LockoutEnabled", "t0"."LockoutEnd", "t0"."NormalizedEmail", "t0"."NormalizedUserName", "t0"."PasswordHash", "t0"."PhoneNumber", "t0"."PhoneNumberConfirmed", "t0"."Registered", "t0"."SecurityStamp", "t0"."ShowFeedback", "t0"."StripeCustomerId", "t0"."TwoFactorEnabled", "t0"."UserName", "t0"."ZipCode", "t"."AccountNumber0Percent", "t"."AccountNumber12Percent", "t"."AccountNumber15Percent", "t"."AccountNumber25Percent", "t"."AccountNumberReceivables", "t"."AccountNumberTips", "t"."CallbackUrl", "t"."CreatedAt", "t"."Enabled", "t"."ProductId", "t"."StoreId1", "t"."UpdatedAt", "t"."MerchantOrderReferenceId", "t"."OrderId0", "t"."OrderNumber", "t"."PickupEta", "t"."PriceAmount", "t"."PriceCurrency", "t"."ShipmentPromiseId", "t"."Status0", "t"."TrackingReference", "t"."TrackingUrl", "t"."WoltDriveMerchantId0", "t"."WoltDriveMerchantKey0", "t"."WoltDriveVenueId0", "t"."WoltOrderId", "t1"."OrderLineItemId", "t1"."Amount", "t1"."AmountPreDiscount", "t1"."Barcode", "t1"."CourseSequence", "t1"."Currency", "t1"."DeliveryAdditionalAmount", "t1"."DepositAmount", "t1"."Description", "t1"."DinteroMerchantAmount", "t1"."DinteroPlatformAmount", "t1"."DiscountAmount", "t1"."DiscountReason", "t1"."GoodsGroupId", "t1"."IsOpenPrice", "t1"."LineNumber", "t1"."Name", "t1"."Notes", "t1"."OrderId", "t1"."ProductId", "t1"."Quantity", "t1"."SeatNumber", "t1"."Status", "t1"."TableAdditionalAmount", "t1"."Tax", "t1"."OrderLineItemOptionId", "t1"."Amount0", "t1"."Name0", "t1"."NegativeAmount", "t1"."OrderLineItemId0", "t1"."ParentName", "t"."AccessFailedCount", "t"."BirthDate", "t"."City0", "t"."CommaSeparatedFavoriteProductIds", "t"."ConcurrencyStamp", "t"."Confirmed", "t"."DeliveryInstructions0", "t"."Email", "t"."EmailConfirmationCode", "t"."EmailConfirmationCodeExpiry", "t"."EmailConfirmed", "t"."FirstName", "t"."FullAddress0", "t"."IsKeyAccountDirector", "t"."IsKeyAccountManager", "t"."IsPowerUser", "t"."KeyAccountDirectorId", "t"."LastName", "t"."LockoutEnabled", "t"."LockoutEnd", "t"."NormalizedEmail", "t"."NormalizedUserName", "t"."PasswordHash", "t"."PhoneNumber0", "t"."PhoneNumberConfirmed", "t"."Registered0", "t"."SecurityStamp", "t"."ShowFeedback", "t"."StripeCustomerId", "t"."TwoFactorEnabled", "t"."UserName", "t"."ZipCode0", "r"."RewardTransactionId", "r"."Amount", "r"."Created", "r"."OrderId", "r"."RewardMembershipId", "r"."Type"
+      FROM (
+          SELECT "o"."OrderId", "o"."ApplicationFeeAmount", "o"."ApplicationFeePercent", "o"."CanceledByStore", "o"."CashPointId", "o"."City", "o"."Comment", "o"."CompanyAddress", "o"."CompanyCity", "o"."CompanyEmail", "o"."CompanyName", "o"."CompanyPhone", "o"."CompanyVat", "o"."CompanyZipCode", "o"."Completed", "o"."ConcurrencyVersion", "o"."Couverts", "o"."Created", "o"."DeliveryAmount", "o"."DeliveryInstructions", "o"."DeliveryType", "o"."DineHomeOrderId", "o"."DineHomeStatus", "o"."DinteroSessionId", "o"."DinteroTransactionId", "o"."EstimatedProcessingEndTime", "o"."FinalAmount", "o"."FriendlyOrderId", "o"."FullAddress", "o"."GiftcardTransactionId", "o"."IsInPreorderMode", "o"."IsSelfPickup", "o"."IsWaiterOrder", "o"."ItemsAmount", "o"."ItemsAmountLineThrough", "o"."JournalEntryId", "o"."Kind", "o"."Lat", "o"."Lng", "o"."NotificationHub", "o"."OperatorId", "o"."OrderDiscountAmount", "o"."OriginalStoreId", "o"."PaymentIntentId", "o"."PaymentType", "o"."PayoutStoreId", "o"."Pickup", "o"."Platform", "o"."ProcessingEndTime", "o"."ProcessingStartTime", "o"."ReceiptNumber", "o"."RequestedCompletion", "o"."ReservationId", "o"."ServiceFeeAmount", "o"."SmsCount", "o"."SmsFee", "o"."Status", "o"."StoreCity", "o"."StoreDineHomeOutletId", "o"."StoreFullAddress", "o"."StoreId", "o"."StoreLegalName", "o"."StoreVAT", "o"."StoreZipCode", "o"."SurfboardOrderId", "o"."SurfboardPaymentId", "o"."TableId", "o"."TableName", "o"."TipAmount", "o"."TotalFeeAmount", "o"."UsedRewardAmount", "o"."UserFullName", "o"."UserId", "o"."UserIsMember", "o"."VippsOrderId", "o"."WoltDeliveryInfoId", "o"."WoltMarketplaceOrderId", "o"."WoltServiceFeeAmount", "o"."ZipCode", "s"."StoreId" AS "StoreId0", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount" AS "ApplicationFeeAmount0", "s"."ApplicationFeePercent" AS "ApplicationFeePercent0", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId" AS "PayoutStoreId0", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount" AS "WoltServiceFeeAmount0", "a"."Id", "a"."AccountNumber0Percent", "a"."AccountNumber12Percent", "a"."AccountNumber15Percent", "a"."AccountNumber25Percent", "a"."AccountNumberReceivables", "a"."AccountNumberTips", "a"."CallbackUrl", "a"."CreatedAt", "a"."Enabled", "a"."ProductId", "a"."StoreId" AS "StoreId1", "a"."UpdatedAt", "w"."WoltDeliveryInfoId" AS "WoltDeliveryInfoId0", "w"."MerchantOrderReferenceId", "w"."OrderId" AS "OrderId0", "w"."OrderNumber", "w"."PickupEta", "w"."PriceAmount", "w"."PriceCurrency", "w"."ShipmentPromiseId", "w"."Status" AS "Status0", "w"."TrackingReference", "w"."TrackingUrl", "w"."WoltDriveMerchantId" AS "WoltDriveMerchantId0", "w"."WoltDriveMerchantKey" AS "WoltDriveMerchantKey0", "w"."WoltDriveVenueId" AS "WoltDriveVenueId0", "w"."WoltOrderId", "a0"."Id" AS "Id0", "a0"."AccessFailedCount", "a0"."BirthDate", "a0"."City" AS "City0", "a0"."CommaSeparatedFavoriteProductIds", "a0"."ConcurrencyStamp", "a0"."Confirmed", "a0"."DeliveryInstructions" AS "DeliveryInstructions0", "a0"."Email", "a0"."EmailConfirmationCode", "a0"."EmailConfirmationCodeExpiry", "a0"."EmailConfirmed", "a0"."FirstName", "a0"."FullAddress" AS "FullAddress0", "a0"."IsKeyAccountDirector", "a0"."IsKeyAccountManager", "a0"."IsPowerUser", "a0"."KeyAccountDirectorId", "a0"."LastName", "a0"."LockoutEnabled", "a0"."LockoutEnd", "a0"."NormalizedEmail", "a0"."NormalizedUserName", "a0"."PasswordHash", "a0"."PhoneNumber" AS "PhoneNumber0", "a0"."PhoneNumberConfirmed", "a0"."Registered" AS "Registered0", "a0"."SecurityStamp", "a0"."ShowFeedback", "a0"."StripeCustomerId", "a0"."TwoFactorEnabled", "a0"."UserName", "a0"."ZipCode" AS "ZipCode0"
+          FROM "Orders" AS "o"
+          INNER JOIN "Stores" AS "s" ON "o"."StoreId" = "s"."StoreId"
+          LEFT JOIN "AccountingConfigurations" AS "a" ON "s"."StoreId" = "a"."StoreId"
+          LEFT JOIN "WoltDeliveryInfos" AS "w" ON "o"."OrderId" = "w"."OrderId"
+          LEFT JOIN "AspNetUsers" AS "a0" ON "o"."UserId" = "a0"."Id"
+          WHERE "o"."Kind" = 'Consumer' AND "o"."OrderId" = @__orderId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN (
+          SELECT "s0"."ApplicationUserId", "s0"."StoreId", "a1"."Id", "a1"."AccessFailedCount", "a1"."BirthDate", "a1"."City", "a1"."CommaSeparatedFavoriteProductIds", "a1"."ConcurrencyStamp", "a1"."Confirmed", "a1"."DeliveryInstructions", "a1"."Email", "a1"."EmailConfirmationCode", "a1"."EmailConfirmationCodeExpiry", "a1"."EmailConfirmed", "a1"."FirstName", "a1"."FullAddress", "a1"."IsKeyAccountDirector", "a1"."IsKeyAccountManager", "a1"."IsPowerUser", "a1"."KeyAccountDirectorId", "a1"."LastName", "a1"."LockoutEnabled", "a1"."LockoutEnd", "a1"."NormalizedEmail", "a1"."NormalizedUserName", "a1"."PasswordHash", "a1"."PhoneNumber", "a1"."PhoneNumberConfirmed", "a1"."Registered", "a1"."SecurityStamp", "a1"."ShowFeedback", "a1"."StripeCustomerId", "a1"."TwoFactorEnabled", "a1"."UserName", "a1"."ZipCode"
+          FROM "StoreAdmins" AS "s0"
+          INNER JOIN "AspNetUsers" AS "a1" ON "s0"."ApplicationUserId" = "a1"."Id"
+      ) AS "t0" ON "t"."StoreId0" = "t0"."StoreId"
+      LEFT JOIN (
+          SELECT "o0"."OrderLineItemId", "o0"."Amount", "o0"."AmountPreDiscount", "o0"."Barcode", "o0"."CourseSequence", "o0"."Currency", "o0"."DeliveryAdditionalAmount", "o0"."DepositAmount", "o0"."Description", "o0"."DinteroMerchantAmount", "o0"."DinteroPlatformAmount", "o0"."DiscountAmount", "o0"."DiscountReason", "o0"."GoodsGroupId", "o0"."IsOpenPrice", "o0"."LineNumber", "o0"."Name", "o0"."Notes", "o0"."OrderId", "o0"."ProductId", "o0"."Quantity", "o0"."SeatNumber", "o0"."Status", "o0"."TableAdditionalAmount", "o0"."Tax", "o1"."OrderLineItemOptionId", "o1"."Amount" AS "Amount0", "o1"."Name" AS "Name0", "o1"."NegativeAmount", "o1"."OrderLineItemId" AS "OrderLineItemId0", "o1"."ParentName"
+          FROM "OrderLineItems" AS "o0"
+          LEFT JOIN "OrderLineItemOptions" AS "o1" ON "o0"."OrderLineItemId" = "o1"."OrderLineItemId"
+      ) AS "t1" ON "t"."OrderId" = "t1"."OrderId"
+      LEFT JOIN "RewardTransactions" AS "r" ON "t"."OrderId" = "r"."OrderId"
+      ORDER BY "t"."OrderId", "t"."StoreId0", "t"."Id", "t"."WoltDeliveryInfoId0", "t"."Id0", "t0"."ApplicationUserId", "t0"."StoreId", "t0"."Id", "t1"."OrderLineItemId", "t1"."OrderLineItemOptionId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__orderId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."OrderId", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."CanceledByStore", "t"."CashPointId", "t"."City", "t"."Comment", "t"."CompanyAddress", "t"."CompanyCity", "t"."CompanyEmail", "t"."CompanyName", "t"."CompanyPhone", "t"."CompanyVat", "t"."CompanyZipCode", "t"."Completed", "t"."ConcurrencyVersion", "t"."Couverts", "t"."Created", "t"."DeliveryAmount", "t"."DeliveryInstructions", "t"."DeliveryType", "t"."DineHomeOrderId", "t"."DineHomeStatus", "t"."DinteroSessionId", "t"."DinteroTransactionId", "t"."EstimatedProcessingEndTime", "t"."FinalAmount", "t"."FriendlyOrderId", "t"."FullAddress", "t"."GiftcardTransactionId", "t"."IsInPreorderMode", "t"."IsSelfPickup", "t"."IsWaiterOrder", "t"."ItemsAmount", "t"."ItemsAmountLineThrough", "t"."JournalEntryId", "t"."Kind", "t"."Lat", "t"."Lng", "t"."NotificationHub", "t"."OperatorId", "t"."OrderDiscountAmount", "t"."OriginalStoreId", "t"."PaymentIntentId", "t"."PaymentType", "t"."PayoutStoreId", "t"."Pickup", "t"."Platform", "t"."ProcessingEndTime", "t"."ProcessingStartTime", "t"."ReceiptNumber", "t"."RequestedCompletion", "t"."ReservationId", "t"."ServiceFeeAmount", "t"."SmsCount", "t"."SmsFee", "t"."Status", "t"."StoreCity", "t"."StoreDineHomeOutletId", "t"."StoreFullAddress", "t"."StoreId", "t"."StoreLegalName", "t"."StoreVAT", "t"."StoreZipCode", "t"."SurfboardOrderId", "t"."SurfboardPaymentId", "t"."TableId", "t"."TableName", "t"."TipAmount", "t"."TotalFeeAmount", "t"."UsedRewardAmount", "t"."UserFullName", "t"."UserId", "t"."UserIsMember", "t"."VippsOrderId", "t"."WoltDeliveryInfoId", "t"."WoltMarketplaceOrderId", "t"."WoltServiceFeeAmount", "t"."ZipCode", "t"."Id", "t"."WoltDeliveryInfoId0", "t"."StoreId0", "t"."AddressId0", "t0"."OrderLineItemId", "t0"."Amount", "t0"."AmountPreDiscount", "t0"."Barcode", "t0"."CourseSequence", "t0"."Currency", "t0"."DeliveryAdditionalAmount", "t0"."DepositAmount", "t0"."Description", "t0"."DinteroMerchantAmount", "t0"."DinteroPlatformAmount", "t0"."DiscountAmount", "t0"."DiscountReason", "t0"."GoodsGroupId", "t0"."IsOpenPrice", "t0"."LineNumber", "t0"."Name", "t0"."Notes", "t0"."OrderId", "t0"."ProductId", "t0"."Quantity", "t0"."SeatNumber", "t0"."Status", "t0"."TableAdditionalAmount", "t0"."Tax", "t0"."OrderLineItemOptionId", "t0"."Amount0", "t0"."Name0", "t0"."NegativeAmount", "t0"."OrderLineItemId0", "t0"."ParentName", "t"."AccessFailedCount", "t"."BirthDate", "t"."City0", "t"."CommaSeparatedFavoriteProductIds", "t"."ConcurrencyStamp", "t"."Confirmed", "t"."DeliveryInstructions0", "t"."Email", "t"."EmailConfirmationCode", "t"."EmailConfirmationCodeExpiry", "t"."EmailConfirmed", "t"."FirstName", "t"."FullAddress0", "t"."IsKeyAccountDirector", "t"."IsKeyAccountManager", "t"."IsPowerUser", "t"."KeyAccountDirectorId", "t"."LastName", "t"."LockoutEnabled", "t"."LockoutEnd", "t"."NormalizedEmail", "t"."NormalizedUserName", "t"."PasswordHash", "t"."PhoneNumber", "t"."PhoneNumberConfirmed", "t"."Registered", "t"."SecurityStamp", "t"."ShowFeedback", "t"."StripeCustomerId", "t"."TwoFactorEnabled", "t"."UserName", "t"."ZipCode0", "t"."MerchantOrderReferenceId", "t"."OrderId0", "t"."OrderNumber", "t"."PickupEta", "t"."PriceAmount", "t"."PriceCurrency", "t"."ShipmentPromiseId", "t"."Status0", "t"."TrackingReference", "t"."TrackingUrl", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltOrderId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount0", "t"."ApplicationFeePercent0", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId0", "t"."PhoneNumber0", "t"."PickupEstimatedMinutes", "t"."Registered0", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId0", "t"."WoltDriveMerchantKey0", "t"."WoltDriveVenueId0", "t"."WoltServiceFeeAmount0", "t"."City1", "t"."FullAddress1", "t"."Latitude", "t"."Longitude", "t"."ZipCode1"
+      FROM (
+          SELECT "o"."OrderId", "o"."ApplicationFeeAmount", "o"."ApplicationFeePercent", "o"."CanceledByStore", "o"."CashPointId", "o"."City", "o"."Comment", "o"."CompanyAddress", "o"."CompanyCity", "o"."CompanyEmail", "o"."CompanyName", "o"."CompanyPhone", "o"."CompanyVat", "o"."CompanyZipCode", "o"."Completed", "o"."ConcurrencyVersion", "o"."Couverts", "o"."Created", "o"."DeliveryAmount", "o"."DeliveryInstructions", "o"."DeliveryType", "o"."DineHomeOrderId", "o"."DineHomeStatus", "o"."DinteroSessionId", "o"."DinteroTransactionId", "o"."EstimatedProcessingEndTime", "o"."FinalAmount", "o"."FriendlyOrderId", "o"."FullAddress", "o"."GiftcardTransactionId", "o"."IsInPreorderMode", "o"."IsSelfPickup", "o"."IsWaiterOrder", "o"."ItemsAmount", "o"."ItemsAmountLineThrough", "o"."JournalEntryId", "o"."Kind", "o"."Lat", "o"."Lng", "o"."NotificationHub", "o"."OperatorId", "o"."OrderDiscountAmount", "o"."OriginalStoreId", "o"."PaymentIntentId", "o"."PaymentType", "o"."PayoutStoreId", "o"."Pickup", "o"."Platform", "o"."ProcessingEndTime", "o"."ProcessingStartTime", "o"."ReceiptNumber", "o"."RequestedCompletion", "o"."ReservationId", "o"."ServiceFeeAmount", "o"."SmsCount", "o"."SmsFee", "o"."Status", "o"."StoreCity", "o"."StoreDineHomeOutletId", "o"."StoreFullAddress", "o"."StoreId", "o"."StoreLegalName", "o"."StoreVAT", "o"."StoreZipCode", "o"."SurfboardOrderId", "o"."SurfboardPaymentId", "o"."TableId", "o"."TableName", "o"."TipAmount", "o"."TotalFeeAmount", "o"."UsedRewardAmount", "o"."UserFullName", "o"."UserId", "o"."UserIsMember", "o"."VippsOrderId", "o"."WoltDeliveryInfoId", "o"."WoltMarketplaceOrderId", "o"."WoltServiceFeeAmount", "o"."ZipCode", "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City" AS "City0", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions" AS "DeliveryInstructions0", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress" AS "FullAddress0", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode" AS "ZipCode0", "w"."WoltDeliveryInfoId" AS "WoltDeliveryInfoId0", "w"."MerchantOrderReferenceId", "w"."OrderId" AS "OrderId0", "w"."OrderNumber", "w"."PickupEta", "w"."PriceAmount", "w"."PriceCurrency", "w"."ShipmentPromiseId", "w"."Status" AS "Status0", "w"."TrackingReference", "w"."TrackingUrl", "w"."WoltDriveMerchantId", "w"."WoltDriveMerchantKey", "w"."WoltDriveVenueId", "w"."WoltOrderId", "s"."StoreId" AS "StoreId0", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount" AS "ApplicationFeeAmount0", "s"."ApplicationFeePercent" AS "ApplicationFeePercent0", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId" AS "PayoutStoreId0", "s"."PhoneNumber" AS "PhoneNumber0", "s"."PickupEstimatedMinutes", "s"."Registered" AS "Registered0", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId" AS "WoltDriveMerchantId0", "s"."WoltDriveMerchantKey" AS "WoltDriveMerchantKey0", "s"."WoltDriveVenueId" AS "WoltDriveVenueId0", "s"."WoltServiceFeeAmount" AS "WoltServiceFeeAmount0", "a0"."AddressId" AS "AddressId0", "a0"."City" AS "City1", "a0"."FullAddress" AS "FullAddress1", "a0"."Latitude", "a0"."Longitude", "a0"."ZipCode" AS "ZipCode1"
+          FROM "Orders" AS "o"
+          LEFT JOIN "AspNetUsers" AS "a" ON "o"."UserId" = "a"."Id"
+          LEFT JOIN "WoltDeliveryInfos" AS "w" ON "o"."OrderId" = "w"."OrderId"
+          INNER JOIN "Stores" AS "s" ON "o"."StoreId" = "s"."StoreId"
+          LEFT JOIN "Address" AS "a0" ON "s"."AddressId" = "a0"."AddressId"
+          WHERE "o"."Kind" = 'Consumer' AND "o"."OrderId" = @__orderId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN (
+          SELECT "o0"."OrderLineItemId", "o0"."Amount", "o0"."AmountPreDiscount", "o0"."Barcode", "o0"."CourseSequence", "o0"."Currency", "o0"."DeliveryAdditionalAmount", "o0"."DepositAmount", "o0"."Description", "o0"."DinteroMerchantAmount", "o0"."DinteroPlatformAmount", "o0"."DiscountAmount", "o0"."DiscountReason", "o0"."GoodsGroupId", "o0"."IsOpenPrice", "o0"."LineNumber", "o0"."Name", "o0"."Notes", "o0"."OrderId", "o0"."ProductId", "o0"."Quantity", "o0"."SeatNumber", "o0"."Status", "o0"."TableAdditionalAmount", "o0"."Tax", "o1"."OrderLineItemOptionId", "o1"."Amount" AS "Amount0", "o1"."Name" AS "Name0", "o1"."NegativeAmount", "o1"."OrderLineItemId" AS "OrderLineItemId0", "o1"."ParentName"
+          FROM "OrderLineItems" AS "o0"
+          LEFT JOIN "OrderLineItemOptions" AS "o1" ON "o0"."OrderLineItemId" = "o1"."OrderLineItemId"
+      ) AS "t0" ON "t"."OrderId" = "t0"."OrderId"
+      ORDER BY "t"."OrderId", "t"."Id", "t"."WoltDeliveryInfoId0", "t"."StoreId0", "t"."AddressId0", "t0"."OrderLineItemId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__order_StoreId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+      FROM "Stores" AS "s"
+      WHERE "s"."StoreId" = @__order_StoreId_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.OrdersController.GetReceipt (WebApi) in 4.1205ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.OrdersController.GetReceipt (WebApi)'
+fail: WebApi.Program[0]
+      Unhandled exception
+      System.NullReferenceException: Object reference not set to an instance of an object.
+         at WebApi.Controllers.OrdersController.GetReceipt(String orderCode) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/OrdersController.cs:line 170
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at WebApi.Middleware.DocumentRenderExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/DocumentRenderExceptionMiddleware.cs:line 29
+         at WebApi.Middleware.OperatorSessionExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/OperatorSessionExceptionMiddleware.cs:line 23
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpClientIdMetadataDocuments>b__2_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 76
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpAuthenticationChallenge>b__1_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 50
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpDisabledResponse>b__0_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 30
+      --- End of stack trace from previous location ---
+         at WebApi.Program.<>c.<<Main>b__4_10>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Program.cs:line 273
+fail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+      An unhandled exception has occurred while executing the request.
+      System.NullReferenceException: Object reference not set to an instance of an object.
+         at WebApi.Controllers.OrdersController.GetReceipt(String orderCode) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/OrdersController.cs:line 170
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at WebApi.Middleware.DocumentRenderExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/DocumentRenderExceptionMiddleware.cs:line 29
+         at WebApi.Middleware.OperatorSessionExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/OperatorSessionExceptionMiddleware.cs:line 23
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpClientIdMetadataDocuments>b__2_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 76
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpAuthenticationChallenge>b__1_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 50
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpDisabledResponse>b__0_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 30
+      --- End of stack trace from previous location ---
+         at WebApi.Program.<>c.<<Main>b__4_10>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Program.cs:line 273
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/orders/receipt/prjw85 - 500 - text/plain;+charset=utf-8 8.8086ms
+[xUnit.net 00:00:09.83]     WebApi.Tests.Wire.PdfRendererOutageWireTests.Nothing_is_recorded_as_rendered_while_the_renderer_is_down [FAIL]
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/invoices/pdf/990611 - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 21)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.InvoicesController.GetPdf (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "GetPdf", controller = "Invoices"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetPdf(Int32) on controller WebApi.Controllers.InvoicesController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.InvoicesController.GetPdf (WebApi) - Validation state: Valid
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__invoiceId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."InvoiceId", "t"."BankAccountId", "t"."CreditInvoice", "t"."DinteroSettlementId", "t"."InvoiceDate", "t"."InvoiceFee", "t"."InvoicePeriodFrom", "t"."InvoicePeriodTo", "t"."IsCreditNote", "t"."OkamPayoutCreated", "t"."OkamPayoutId", "t"."PayoutAmount", "t"."PayoutCreated", "t"."PayoutId", "t"."RefundCount", "t"."RefundTotalAmount", "t"."SettlementId", "t"."SettlementReportFileName", "t"."StoreCity", "t"."StoreFullAddress", "t"."StoreId", "t"."StoreLegalName", "t"."StoreSendInvoiceToEmails", "t"."StoreVat", "t"."StoreZipCode", "t"."TaxMultiplier", "t"."VippsMsn", "t0"."InvoiceLineId", "t0"."ApplicationFeeAmount", "t0"."ApplicationFeePercent", "t0"."BasisAmount", "t0"."Completed", "t0"."DeliveryType", "t0"."DiscountAmount", "t0"."InvoiceId", "t0"."OrderId", "t0"."SmsCount", "t0"."SmsFee", "t0"."TotalAmount", "t0"."InvoiceLineTaxDetailId", "t0"."InvoiceLineId0", "t0"."TaxAmount", "t0"."TaxPercent"
+      FROM (
+          SELECT "i"."InvoiceId", "i"."BankAccountId", "i"."CreditInvoice", "i"."DinteroSettlementId", "i"."InvoiceDate", "i"."InvoiceFee", "i"."InvoicePeriodFrom", "i"."InvoicePeriodTo", "i"."IsCreditNote", "i"."OkamPayoutCreated", "i"."OkamPayoutId", "i"."PayoutAmount", "i"."PayoutCreated", "i"."PayoutId", "i"."RefundCount", "i"."RefundTotalAmount", "i"."SettlementId", "i"."SettlementReportFileName", "i"."StoreCity", "i"."StoreFullAddress", "i"."StoreId", "i"."StoreLegalName", "i"."StoreSendInvoiceToEmails", "i"."StoreVat", "i"."StoreZipCode", "i"."TaxMultiplier", "i"."VippsMsn"
+          FROM "Invoices" AS "i"
+          WHERE "i"."InvoiceId" = @__invoiceId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN (
+          SELECT "i0"."InvoiceLineId", "i0"."ApplicationFeeAmount", "i0"."ApplicationFeePercent", "i0"."BasisAmount", "i0"."Completed", "i0"."DeliveryType", "i0"."DiscountAmount", "i0"."InvoiceId", "i0"."OrderId", "i0"."SmsCount", "i0"."SmsFee", "i0"."TotalAmount", "i1"."InvoiceLineTaxDetailId", "i1"."InvoiceLineId" AS "InvoiceLineId0", "i1"."TaxAmount", "i1"."TaxPercent"
+          FROM "InvoiceLines" AS "i0"
+          LEFT JOIN "InvoiceLineTaxDetails" AS "i1" ON "i0"."InvoiceLineId" = "i1"."InvoiceLineId"
+      ) AS "t0" ON "t"."InvoiceId" = "t0"."InvoiceId"
+      ORDER BY "t"."InvoiceId", "t0"."InvoiceLineId"
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__storeId_0='?' (DbType = Int32)], CommandType='Text', CommandTimeout='30']
+      SELECT "t"."StoreId", "t"."AddressId", "t"."AllowOrdersAfterOpeningHours", "t"."ApplicationFeeAmount", "t"."ApplicationFeePercent", "t"."Approved", "t"."BankAccountId", "t"."ContactEmails", "t"."Country", "t"."CurrencyCode", "t"."DeliveryEstimatedMinutes", "t"."DineHomeDeliveryEnabled", "t"."DineHomeOutletId", "t"."DinteroEnabled", "t"."FeedbackMessage", "t"."FeedbackUrl", "t"."GiftcardBankAccountNumber", "t"."GiftcardEnabled", "t"."HomeDeliveryEnabled", "t"."HomeDeliveryFromAddressId", "t"."LegalName", "t"."MinimumOrderPriceForHomeDelivery", "t"."Name", "t"."PayInStoreEnabled", "t"."PayoutStoreId", "t"."PhoneNumber", "t"."PickupEstimatedMinutes", "t"."Registered", "t"."RewardProgramId", "t"."SelfCheckout", "t"."SelfPickUp", "t"."SendInvoiceToEmails", "t"."SmsSenderName", "t"."StatusMessage", "t"."StripeEnabled", "t"."SurfboardEnabled", "t"."TableDeliveryEnabled", "t"."TableReservationEnabled", "t"."TerminalProvider", "t"."TimeZone", "t"."TipHeading", "t"."TipPercentEnabled", "t"."VAT", "t"."VippsEnabled", "t"."VippsMsn", "t"."WarningMessage", "t"."WoltCustomerDeliveryFeeAmount", "t"."WoltDriveEnabled", "t"."WoltDriveMerchantId", "t"."WoltDriveMerchantKey", "t"."WoltDriveVenueId", "t"."WoltServiceFeeAmount", "s0"."ApplicationUserId", "s0"."StoreId"
+      FROM (
+          SELECT "s"."StoreId", "s"."AddressId", "s"."AllowOrdersAfterOpeningHours", "s"."ApplicationFeeAmount", "s"."ApplicationFeePercent", "s"."Approved", "s"."BankAccountId", "s"."ContactEmails", "s"."Country", "s"."CurrencyCode", "s"."DeliveryEstimatedMinutes", "s"."DineHomeDeliveryEnabled", "s"."DineHomeOutletId", "s"."DinteroEnabled", "s"."FeedbackMessage", "s"."FeedbackUrl", "s"."GiftcardBankAccountNumber", "s"."GiftcardEnabled", "s"."HomeDeliveryEnabled", "s"."HomeDeliveryFromAddressId", "s"."LegalName", "s"."MinimumOrderPriceForHomeDelivery", "s"."Name", "s"."PayInStoreEnabled", "s"."PayoutStoreId", "s"."PhoneNumber", "s"."PickupEstimatedMinutes", "s"."Registered", "s"."RewardProgramId", "s"."SelfCheckout", "s"."SelfPickUp", "s"."SendInvoiceToEmails", "s"."SmsSenderName", "s"."StatusMessage", "s"."StripeEnabled", "s"."SurfboardEnabled", "s"."TableDeliveryEnabled", "s"."TableReservationEnabled", "s"."TerminalProvider", "s"."TimeZone", "s"."TipHeading", "s"."TipPercentEnabled", "s"."VAT", "s"."VippsEnabled", "s"."VippsMsn", "s"."WarningMessage", "s"."WoltCustomerDeliveryFeeAmount", "s"."WoltDriveEnabled", "s"."WoltDriveMerchantId", "s"."WoltDriveMerchantKey", "s"."WoltDriveVenueId", "s"."WoltServiceFeeAmount"
+          FROM "Stores" AS "s"
+          WHERE "s"."StoreId" = @__storeId_0
+          LIMIT 1
+      ) AS "t"
+      LEFT JOIN "StoreAdmins" AS "s0" ON "t"."StoreId" = "s0"."StoreId"
+      ORDER BY "t"."StoreId", "s0"."ApplicationUserId"
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.InvoicesController.GetPdf (WebApi) in 3.3112ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.InvoicesController.GetPdf (WebApi)'
+fail: WebApi.Program[0]
+      Unhandled exception
+      System.NullReferenceException: Object reference not set to an instance of an object.
+         at WebApi.Controllers.InvoicesController.GetPdf(Int32 invoiceId) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/InvoicesController.cs:line 162
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at WebApi.Middleware.DocumentRenderExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/DocumentRenderExceptionMiddleware.cs:line 29
+         at WebApi.Middleware.OperatorSessionExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/OperatorSessionExceptionMiddleware.cs:line 23
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpClientIdMetadataDocuments>b__2_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 76
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpAuthenticationChallenge>b__1_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 50
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpDisabledResponse>b__0_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 30
+      --- End of stack trace from previous location ---
+         at WebApi.Program.<>c.<<Main>b__4_10>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Program.cs:line 273
+fail: Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddleware[1]
+      An unhandled exception has occurred while executing the request.
+      System.NullReferenceException: Object reference not set to an instance of an object.
+         at WebApi.Controllers.InvoicesController.GetPdf(Int32 invoiceId) in /Users/svendaneel/okam/OkamAPI-pdfnull/Controllers/InvoicesController.cs:line 162
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Logged|12_1(ControllerActionInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+         at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+         at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+         at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+         at WebApi.Middleware.DocumentRenderExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/DocumentRenderExceptionMiddleware.cs:line 29
+         at WebApi.Middleware.OperatorSessionExceptionMiddleware.InvokeAsync(HttpContext context) in /Users/svendaneel/okam/OkamAPI-pdfnull/Middleware/OperatorSessionExceptionMiddleware.cs:line 23
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpClientIdMetadataDocuments>b__2_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 76
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpAuthenticationChallenge>b__1_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 50
+      --- End of stack trace from previous location ---
+         at WebApi.Mcp.McpMiddlewareExtensions.<>c.<<UseMcpDisabledResponse>b__0_0>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Mcp/McpMiddlewareExtensions.cs:line 30
+      --- End of stack trace from previous location ---
+         at WebApi.Program.<>c.<<Main>b__4_10>d.MoveNext() in /Users/svendaneel/okam/OkamAPI-pdfnull/Program.cs:line 273
+      --- End of stack trace from previous location ---
+         at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/invoices/pdf/990611 - 500 - text/plain;+charset=utf-8 7.0005ms
+[xUnit.net 00:00:09.84]     WebApi.Tests.Wire.PdfRendererOutageWireTests.The_outage_is_logged_by_status_and_function_and_by_nothing_else [FAIL]
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/1.1 GET http://localhost/user/send-sms - - -
+info: Microsoft.EntityFrameworkCore.Database.Command[20101]
+      Executed DbCommand (0ms) [Parameters=[@__p_0='?' (Size = 15)], CommandType='Text', CommandTimeout='30']
+      SELECT "a"."Id", "a"."AccessFailedCount", "a"."BirthDate", "a"."City", "a"."CommaSeparatedFavoriteProductIds", "a"."ConcurrencyStamp", "a"."Confirmed", "a"."DeliveryInstructions", "a"."Email", "a"."EmailConfirmationCode", "a"."EmailConfirmationCodeExpiry", "a"."EmailConfirmed", "a"."FirstName", "a"."FullAddress", "a"."IsKeyAccountDirector", "a"."IsKeyAccountManager", "a"."IsPowerUser", "a"."KeyAccountDirectorId", "a"."LastName", "a"."LockoutEnabled", "a"."LockoutEnd", "a"."NormalizedEmail", "a"."NormalizedUserName", "a"."PasswordHash", "a"."PhoneNumber", "a"."PhoneNumberConfirmed", "a"."Registered", "a"."SecurityStamp", "a"."ShowFeedback", "a"."StripeCustomerId", "a"."TwoFactorEnabled", "a"."UserName", "a"."ZipCode"
+      FROM "AspNetUsers" AS "a"
+      WHERE "a"."Id" = @__p_0
+      LIMIT 1
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'WebApi.Controllers.UserController.SendSms (WebApi)'
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[102]
+      Route matched with {action = "SendSms", controller = "User"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] SendSms() on controller WebApi.Controllers.UserController (WebApi).
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[101]
+      Executing action method WebApi.Controllers.UserController.SendSms (WebApi) - Validation state: Valid
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[103]
+      Executed action method WebApi.Controllers.UserController.SendSms (WebApi), returned result Microsoft.AspNetCore.Mvc.OkObjectResult in 1.1947ms.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ObjectResultExecutor[1]
+      Executing OkObjectResult, writing value of type 'System.Boolean'.
+info: Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker[105]
+      Executed action WebApi.Controllers.UserController.SendSms (WebApi) in 6.6274ms
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'WebApi.Controllers.UserController.SendSms (WebApi)'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/1.1 GET http://localhost/user/send-sms - 200 4 application/json;+charset=utf-8 12.1356ms
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.Nothing_is_recorded_as_rendered_while_the_renderer_is_down [10 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.Nothing_is_recorded_as_rendered_while_the_renderer_is_down() in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 160
+--- End of stack trace from previous location ---
+  Failed WebApi.Tests.Wire.PdfRendererOutageWireTests.The_outage_is_logged_by_status_and_function_and_by_nothing_else [8 ms]
+  Error Message:
+   Assert.Equal() Failure
+Expected: BadGateway
+Actual:   InternalServerError
+  Stack Trace:
+     at WebApi.Tests.Wire.PdfRendererOutageWireTests.The_outage_is_logged_by_status_and_function_and_by_nothing_else() in /Users/svendaneel/okam/OkamAPI-pdfnull/WebApi.Tests/Wire/PdfRendererOutageWireTests.cs:line 130
+--- End of stack trace from previous location ---
+
+Failed!  - Failed:    16, Passed:    30, Skipped:     0, Total:    46, Duration: 9 s - WebApi.Tests.dll (net8.0)

@@ -1,0 +1,89 @@
+[WebServer] [fixture] listening on http://127.0.0.1:4111
+[WebServer] [dev-server] borrowed core from /Users/svendaneel/okam/Web-modules/core
+[WebServer] 
+[WebServer]  WARN  You're using Nuxt 2.17.1, which includes built-in TypeScript runtime support
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  You can safely use nuxt instead of nuxt-ts and remove @nuxt/typescript-runtime package
+[WebServer] 
+[WebServer] 
+[WebServer]  WARN  Module @nuxt/image is disabled due to incompatibility issues:
+[WebServer]  - [nuxt] Nuxt version >=3.1.0 is required but currently using 2.17.1
+[WebServer] 
+[WebServer] ℹ Parsed 0 files in 0.0 seconds
+[WebServer] ℹ [HPM] Proxy created: /  -> http://127.0.0.1:5080
+[WebServer] ℹ [HPM] Proxy rewrite rule created: "^/okam-api" ~> ""
+[WebServer] ℹ Listening on: http://172.20.10.4:3111/
+[WebServer] ℹ Preparing project for development
+[WebServer] ℹ Initial build may take a while
+
+Running 1 test using 1 worker
+
+[WebServer] ℹ Discovered Components: .nuxt/components/readme.md
+[WebServer] ✔ Builder initialized
+[WebServer] ✔ Nuxt files generated
+[WebServer] 
+[WebServer]  WARN  Browserslist: browsers data (caniuse-lite) is 21 months old. Please run:
+[WebServer]   npx update-browserslist-db@latest
+[WebServer]   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+[WebServer] 
+[WebServer] ℹ Compiling Server
+[WebServer] ℹ Compiling Client
+[WebServer] ✔ Server: Compiled successfully in 17.08s
+[WebServer] ✔ Client: Compiled successfully in 19.45s
+[WebServer] ℹ Waiting for file changes
+[WebServer] ℹ Memory usage: 1.2 GB (RSS: 2.04 GB)
+[WebServer] ℹ Listening on: http://172.20.10.4:3111/
+  ✘  1 [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:40:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture (32.6s)
+[teardown] returned core/ to an empty submodule mount
+
+
+  1) [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:40:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.meals-picker .mls-note--warn')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" with timeout 10000ms
+      - waiting for locator('.meals-picker .mls-note--warn')
+
+
+      90 |     await journey.step('the venue is DARK before anybody flips its switch', async () => {
+      91 |       const notice = page.locator('.meals-picker .mls-note--warn');
+    > 92 |       await expect(notice).toBeVisible();
+         |                            ^
+      93 |       await expect(notice).toContainText(DARK_NOTICE);
+      94 |       // The refusal and its consequence, asserted separately. The notice alone would be satisfied by
+      95 |       // a page that showed the caveat AND the venue's companies; what a dark module owes is nothing.
+        at fn (/Users/svendaneel/okam/web-fixtureflags/test/e2e/journeys/meals-admin-setup.spec.js:92:28)
+        at JourneyRecorder.step (/Users/svendaneel/okam/web-fixtureflags/test/e2e/support/journey.js:347:28)
+        at /Users/svendaneel/okam/web-fixtureflags/test/e2e/journeys/meals-admin-setup.spec.js:90:19
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: journey (application/json) ──────────────────────────────────────────────────────
+    artifacts/journeys/runs/meals-admin-setup.fixture.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #3: journey (canonical) (application/json) ──────────────────────────────────────────
+    artifacts/journeys/meals-admin-setup.playwright.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/error-context.md
+
+    attachment #5: trace (application/zip) ─────────────────────────────────────────────────────────
+    artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace artifacts/playwright-output/meals-admin-setup-A-concie-fc342-me-and-issues-an-invitation-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › test/e2e/journeys/meals-admin-setup.spec.js:40:1 › A concierge creates a company, signs its corridor, runs a programme and issues an invitation @fixture 

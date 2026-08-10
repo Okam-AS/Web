@@ -1,0 +1,5353 @@
+{
+ "total_lines": 38658,
+ "class_counts": {
+  "other": 36750,
+  "section-heading": 9,
+  "block-heading": 1215,
+  "bullet-entity": 16,
+  "evidence-inline-bullet": 1,
+  "evidence-field": 573,
+  "evidence-mention-rejected": 21,
+  "fence-marker": 16,
+  "fenced": 57
+ },
+ "candidates": 595,
+ "accepted": [
+  {
+   "line": 701,
+   "shape": "inline-bullet",
+   "section": "Lanes \u2014 landed",
+   "owner_kind": "Lane(bullet)",
+   "owner_id": "L-ADMIN-NAV",
+   "owner_line": 701,
+   "value": "fact:nav.modules"
+  },
+  {
+   "line": 735,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BE-RECEIPT",
+   "owner_line": 728,
+   "value": "fact:be.tests"
+  },
+  {
+   "line": 767,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-MAIL",
+   "owner_line": 759,
+   "value": "artifacts/journeys/growth-doi-postmark-sandbox.json"
+  },
+  {
+   "line": 800,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-EMPREF",
+   "owner_line": 792,
+   "value": "fact:meals.empref"
+  },
+  {
+   "line": 815,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-FUNDED",
+   "owner_line": 809,
+   "value": "artifacts/journeys/meals-funded-checkout.playwright.json"
+  },
+  {
+   "line": 829,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-GATE",
+   "owner_line": 822,
+   "value": "fact:meals.gate"
+  },
+  {
+   "line": 843,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-IDREG",
+   "owner_line": 835,
+   "value": "fact:wf.idreg (../OkamAPI-modules/Entities/Workforce/WorkforceIdentityCodeRegisterIssue.cs) + backend a04f51ca, d22c84c9 on feature/restaurant-modules + frontend a649e08 on lane/wf-idreg (worktree /Us"
+  },
+  {
+   "line": 859,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VIPPS-LOG",
+   "owner_line": 852,
+   "value": "fact:vipps.token.guard"
+  },
+  {
+   "line": 876,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-DIETARY",
+   "owner_line": 869,
+   "value": "fact:ev.dietary"
+  },
+  {
+   "line": 892,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WOLT-SYNC",
+   "owner_line": 884,
+   "value": "lanes/L-WOLT-SYNC/evidence.md"
+  },
+  {
+   "line": 921,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FE-CI",
+   "owner_line": 915,
+   "value": "fact:fe.ci"
+  },
+  {
+   "line": 935,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-EVID-LAND",
+   "owner_line": 928,
+   "value": "OkamAPI-modules/artifacts/tests/f8b3a30f2ecfaf00beab1e903dd68193fbc8eca2/RUN.md"
+  },
+  {
+   "line": 947,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-LAND",
+   "owner_line": 940,
+   "value": "../OkamAPI-modules/artifacts/tests/99855b1d1d35ab35c1c09e072da0fc6d42421e56/RUN.md"
+  },
+  {
+   "line": 960,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-UTLKVIT",
+   "owner_line": 953,
+   "value": "fact:meals.utlkvit"
+  },
+  {
+   "line": 997,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-XZ-CREDIT",
+   "owner_line": 990,
+   "value": "/Users/svendaneel/okam/wt-xzcredit/WebApi.Tests/Meals/Fixtures/zreport-kredittsalg.txt"
+  },
+  {
+   "line": 1010,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-EXTDEP",
+   "owner_line": 1003,
+   "value": "fact:ev.deposit.external (Services/Events/EventsDepositService.cs contains ExternalRecorded) + ../OkamAPI-ev-extdep/artifacts/lanes/L-EV-EXTDEP/EVIDENCE.md \u00b7 lane/ev-extdep b10fc8a7, 7e9c38bf off feat"
+  },
+  {
+   "line": 1023,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-ACCEPT-RECEIPT",
+   "owner_line": 1016,
+   "value": "fact:ev.accept.receipt (Enums/Events/EventsNotificationKind.cs contains AcceptanceReceipt) + ../wt-ev-accept/artifacts/journeys/ev-accept-receipt/acceptance-receipt.html \u00b7 lane/ev-accept-receipt 9f161"
+  },
+  {
+   "line": 1064,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-W3-SCHEMA",
+   "owner_line": 1057,
+   "value": "artifacts/tests/1da15fb113ae72a8f71ed68ef758bb1a8a30d69b/RUN.md (SQL tier 557/557, fast 4313/0/9) + OkamAPI-modules 3993f797 in detached worktree /Users/svendaneel/okam/wt-trainw3, NOT pushed. fact:tr"
+  },
+  {
+   "line": 1115,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MENU-ALLERGEN-MATRIX",
+   "owner_line": 1109,
+   "value": "docs/plan/lanes/L-MENU-ALLERGEN-MATRIX/menu-allergen-matrix.playwright.json"
+  },
+  {
+   "line": 1135,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-OPLINK",
+   "owner_line": 1129,
+   "value": "artifacts/journeys/wf-operator-import-clock.playwright.json (11/11 steps passed, commit 3e811b2, 0 failed requests, 6 screenshots) in worktree ~/okam/web-wf-oplink, copied to lanes/L-WF-OPLINK/artifac"
+  },
+  {
+   "line": 1148,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-EXCHANGE-MOVE",
+   "owner_line": 1141,
+   "value": "fact:wf.journeys"
+  },
+  {
+   "line": 1178,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-W5-TIMESHEET",
+   "owner_line": 1171,
+   "value": "OkamAPI-modules lane/wf-w5-timesheet @ 9e82b286 (worktree ~/okam/wt-wfw5, cut from lane/margin-waste afcfddbc \u2014 the real chain tip, three migrations ahead of feature/restaurant-modules; local, not pus"
+  },
+  {
+   "line": 1236,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-STARTER-150",
+   "owner_line": 1228,
+   "value": "/Users/svendaneel/okam/wt-mrg150fill/lanes/L-MRG-STARTER-150/evidence.md"
+  },
+  {
+   "line": 1278,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE",
+   "owner_line": 1270,
+   "value": "/Users/svendaneel/okam/wt-mrgwaste/artifacts/tests/50b85657/RUN.md"
+  },
+  {
+   "line": 1299,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-REACHABLE",
+   "owner_line": 1291,
+   "value": "lane/meals-reachable-api@02f27b95 (backend 28/28 container-free); lane/meals-reachable-web@f65595d (frontend 55/55 flag suites)"
+  },
+  {
+   "line": 1328,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-STATUTE-HONESTY",
+   "owner_line": 1322,
+   "value": "Web-modules lane/statute-honesty @ f01886a (worktree ../web-statute) + OkamAPI-modules lane/statute-honesty @ 485959ab (worktree ../OkamAPI-statute); artifacts/journeys/statute-honesty/ incl. the A4 p"
+  },
+  {
+   "line": 1344,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-HEALTH-HONEST",
+   "owner_line": 1337,
+   "value": "OkamAPI-modules lane/growth-health-honest @ c11e78a6 (worktree ../wt-growth-health, off feature/restaurant-modules 24dec838); fast tier 4360 passed / 0 failed / 12 skipped, `dotnet test --filter \"Data"
+  },
+  {
+   "line": 1358,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VIPPS-REDACT-404",
+   "owner_line": 1351,
+   "value": "OkamAPI worktree /Users/svendaneel/okam/wt-vippsredact, branch lane/vipps-redact-404, commit cb18cab4, base feature/restaurant-modules 3579bbbc"
+  },
+  {
+   "line": 1377,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-CLOCK-WIRE",
+   "owner_line": 1370,
+   "value": "OkamAPI lane/wf-clock-wire f14c91ec (base feature/restaurant-modules 3579bbbc); container-free tier 4377/0/12 vs base 4369/0/12"
+  },
+  {
+   "line": 1394,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PUSH-SILENT",
+   "owner_line": 1387,
+   "value": "OkamAPI lane/wf-push-silent 991c21f6 (base lane/wf-push-notify f5305ced); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs"
+  },
+  {
+   "line": 1415,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-EXTDEP-GUARDS",
+   "owner_line": 1408,
+   "value": "/Users/svendaneel/okam/wt-evextguards/artifacts/lanes/L-EV-EXTDEP-GUARDS/EVIDENCE.md"
+  },
+  {
+   "line": 1430,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-STALE-TOKEN",
+   "owner_line": 1424,
+   "value": "artifacts/journeys/meals-stale-token-requote.playwright.json"
+  },
+  {
+   "line": 1443,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRINT-HOST",
+   "owner_line": 1437,
+   "value": "lane/print-host @ 6e6acd0 \u00b7 artifacts/journeys/admin-print-host/ (5 PDFs, read) \u00b7 artifacts/journeys/admin-print-host.playwright.json"
+  },
+  {
+   "line": 1460,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-RELEASE",
+   "owner_line": 1453,
+   "value": "OkamAPI-meals-release 0659666f (lane/meals-release, local, not pushed) \u00b7 WebApi.Tests/Wire/MealsQuoteReleaseWireTests.cs \u00b7 lanes/L-MEALS-RELEASE/red-no-route.txt \u00b7 lanes/L-MEALS-RELEASE/evidence.md \u00b7 "
+  },
+  {
+   "line": 1475,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORE-ORE-LABEL",
+   "owner_line": 1468,
+   "value": "lanes/L-CORE-ORE-LABEL/consumerapp-red-run.txt"
+  },
+  {
+   "line": 1493,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-VIOLATION-EXACT",
+   "owner_line": 1486,
+   "value": "/Users/svendaneel/okam/wt-wfviolexact @ cdb4c66c (lane/wf-violation-exact, parent 569887a5, unpushed)"
+  },
+  {
+   "line": 1507,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MODAL-SCROLLLOCK",
+   "owner_line": 1501,
+   "value": "artifacts/journeys/modal-scroll-lock.playwright.json"
+  },
+  {
+   "line": 1541,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-REVIEW-RESIDUALS",
+   "owner_line": 1534,
+   "value": "OkamAPI-modules lane/review-residuals-provider @ bd765c7d (worktree ../wt-resid-provider, off lane/growth-health-honest c11e78a6) and lane/review-residuals-rezone @ 15a1d0b7 (worktree ../wt-resid-rezo"
+  },
+  {
+   "line": 1615,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-STALE-CAUSE",
+   "owner_line": 1608,
+   "value": "../web-evstale/artifacts/journeys/events-stale-cause.playwright.json"
+  },
+  {
+   "line": 1652,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-RELEASE-RACE",
+   "owner_line": 1645,
+   "value": "lanes/L-MEALS-RELEASE-RACE/evidence.md"
+  },
+  {
+   "line": 1669,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-FLOOR-PINS",
+   "owner_line": 1662,
+   "value": "/Users/svendaneel/okam/OkamAPI-mealsfloor/lanes/L-MEALS-FLOOR-PINS/evidence.md"
+  },
+  {
+   "line": 1683,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DOWNLOAD-HEADERS",
+   "owner_line": 1676,
+   "value": "OkamAPI-dlhdr 9207f480 (lane/download-headers, local, not pushed) \u00b7 WebApi.Tests/Wire/DownloadHeaderWireTests.cs \u00b7 WebApi.Tests/Wire/MealsDownloadHeaderWireTests.cs \u00b7 Helpers/BrowserReadableHeaders.cs"
+  },
+  {
+   "line": 1702,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-DISCLOSURE",
+   "owner_line": 1695,
+   "value": "OkamAPI-modules 06b8b582 (lane/train-disclosure) + Web-modules 2d3488c; artifacts/tests/L-TRAIN-DISCLOSURE/after.trx"
+  },
+  {
+   "line": 1778,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-NEWSLETTER-WIRE",
+   "owner_line": 1771,
+   "value": "OkamAPI-modules lane/growth-newsletter-wire @ 87600a1c (worktree ../wt-gr-nlwire, off feature/restaurant-modules de1e5c5e); fast tier 4363 passed / 0 failed / 12 skipped, `dotnet test --filter \"Databa"
+  },
+  {
+   "line": 1794,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-GRACE-PINS",
+   "owner_line": 1787,
+   "value": "/Users/svendaneel/okam/OkamAPI-modules/lanes/L-MEALS-GRACE-PINS/evidence.md"
+  },
+  {
+   "line": 1813,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-SWEEP-GUARD",
+   "owner_line": 1806,
+   "value": "/Users/svendaneel/okam/OkamAPI-sweepguard/lanes/L-MEALS-SWEEP-GUARD/evidence.md"
+  },
+  {
+   "line": 1856,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-STATUTE-EVIDENCE-WORLD",
+   "owner_line": 1850,
+   "value": "worktree /Users/svendaneel/okam/web-statute-world @ 2ee3fd7 (branch lane/statute-evidence-world, off lane/statute-honesty f01886a, not pushed); artifacts/journeys/statute-honesty/01-personalliste-with"
+  },
+  {
+   "line": 1872,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-NULL-ZERO",
+   "owner_line": 1866,
+   "value": "lanes/L-PRICE-NULL-ZERO/before-after.txt"
+  },
+  {
+   "line": 1887,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DOWNLOAD-PDF-WIRE",
+   "owner_line": 1880,
+   "value": "OkamAPI-dlpdf a7b90cbd (lane/download-pdf-wire, local, not pushed) \u00b7 WebApi.Tests/Wire/PdfDownloadWireTests.cs \u00b7 Services/Interfaces/IDocumentRenderer.cs \u00b7 Services/OkamFunctionsDocumentRenderer.cs \u00b7 "
+  },
+  {
+   "line": 1904,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MODAL-BROKEN-TWO",
+   "owner_line": 1898,
+   "value": "lanes/L-MODAL-BROKEN-TWO/detail.md"
+  },
+  {
+   "line": 1921,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-APPROVAL-STATE",
+   "owner_line": 1914,
+   "value": "OkamAPI-modules lane/gr-approval-state @ 3ea531f5 (worktree ../wt-gr-approval, off feature/restaurant-modules de1e5c5e, local only); fast tier 4361 passed / 0 failed / 12 skipped; lanes/L-GR-APPROVAL-"
+  },
+  {
+   "line": 1953,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-REVIEW",
+   "owner_line": 1946,
+   "value": "docs/plan/reviews/L-WF-REVIEW.md"
+  },
+  {
+   "line": 1974,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVIEW",
+   "owner_line": 1967,
+   "value": "docs/plan/reviews/L-MRG-REVIEW.md"
+  },
+  {
+   "line": 1993,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVIEW",
+   "owner_line": 1967,
+   "value": "docs/plan/reviews/L-EV-REVIEW.md"
+  },
+  {
+   "line": 2014,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVIEW",
+   "owner_line": 1967,
+   "value": "docs/plan/reviews/L-MEALS-REVIEW.md"
+  },
+  {
+   "line": 2034,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVIEW",
+   "owner_line": 1967,
+   "value": "docs/plan/reviews/L-TRAIN-REVIEW.md"
+  },
+  {
+   "line": 2055,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVIEW",
+   "owner_line": 1967,
+   "value": "docs/plan/reviews/L-GR-REVIEW.md"
+  },
+  {
+   "line": 2079,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MODAL-LAND",
+   "owner_line": 2073,
+   "value": "artifacts/journeys/modal-scroll-lock.playwright.json"
+  },
+  {
+   "line": 2124,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-BOOTSTRAP",
+   "owner_line": 2118,
+   "value": "OkamAPI lane/wf-bootstrap @ 9d1719df (worktree ../wt-wfboot, off feature/restaurant-modules 3579bbbc); fast tier 4374 passed / 0 failed / 12 skipped vs BASE 4369 / 0 / 12 from a clean checkout of 3579"
+  },
+  {
+   "line": 2145,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PUNCH-UI",
+   "owner_line": 2139,
+   "value": "lanes/L-WF-PUNCH-UI/evidence.md"
+  },
+  {
+   "line": 2164,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-KODEOVERSIKT-UI",
+   "owner_line": 2158,
+   "value": "lanes/L-WF-KODEOVERSIKT-UI/{evidence.md,journey-green.json} on lane/wf-kodeoversikt-ui @ f4c355b (worktree /Users/svendaneel/okam/web-kodeui, 4 commits, nothing pushed) + test/e2e/journeys/workforce-k"
+  },
+  {
+   "line": 2181,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-DEMO-PRESENCE",
+   "owner_line": 2175,
+   "value": "OkamAPI worktree /Users/svendaneel/okam/wt-wfdemopres, branch lane/wf-demo-presence @ 8a9080c8 (local, not pushed; off feature/restaurant-modules de1e5c5e) \u00b7 six full `Scripts/demo/demo-up.sh` runs fr"
+  },
+  {
+   "line": 2217,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-ONBOARD",
+   "owner_line": 2211,
+   "value": "commit de0811f6 on lane/wf-onboard-claim in OkamAPI-modules (parent 8e2b57de, ff) + lanes/L-WF-ONBOARD/evidence.txt with evidence/{invitation-contract-suite,join-block-happy-path,join-block-mutations}"
+  },
+  {
+   "line": 2257,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-ROLES-UI",
+   "owner_line": 2251,
+   "value": "commit ff21e48 on refs/heads/lane/wf-roles-ui; journey artifacts/journeys/workforce-role-catalogue.playwright.json (passed, 10 steps, 4 shots); full detail in lanes/L-WF-ROLES-UI/NOTES.md"
+  },
+  {
+   "line": 2269,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-FLAGS-UI",
+   "owner_line": 2263,
+   "value": "artifacts/journeys/workforce-flag-lever.playwright.json"
+  },
+  {
+   "line": 2292,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-ADJUST-ADDRESS",
+   "owner_line": 2286,
+   "value": "OkamAPI-wfadjust f3887f9a + web-wf-adjust e9ba89e"
+  },
+  {
+   "line": 2306,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PUBHIST",
+   "owner_line": 2300,
+   "value": "lanes/L-WF-PUBHIST/evidence.md"
+  },
+  {
+   "line": 2317,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-DEGENERATE-TWO",
+   "owner_line": 2311,
+   "value": "/Users/svendaneel/okam/OkamAPI-mealsdegen2/lanes/L-MEALS-DEGENERATE-TWO/evidence.md"
+  },
+  {
+   "line": 2361,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-VIPPS-FALLBACK",
+   "owner_line": 2354,
+   "value": "lane/ev-vipps-fallback-2 @ fc09be1d off feature/restaurant-modules 3579bbbc, worktree ../wt-evvippsfb2, local, unpushed - container-free tier (Database!=SqlServer) 4380 passed / 0 failed / 12 skipped,"
+  },
+  {
+   "line": 2397,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-RUNSHEET-PRINT",
+   "owner_line": 2391,
+   "value": "artifacts/journeys/events-runsheet-print.playwright.json"
+  },
+  {
+   "line": 2412,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-INQUIRY-GATE",
+   "owner_line": 2406,
+   "value": "backend lane/ev-inquiry-gate 8ecb47df (174/174 SQLite-tier Events+Modules) \u00b7 frontend lane/fe-ev-inquiry-gate f7695bc (94 suites / 2199 tests)"
+  },
+  {
+   "line": 2511,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-WITHDRAW-ORIGIN",
+   "owner_line": 2504,
+   "value": "lanes/L-GR-WITHDRAW-ORIGIN/RUNS-2.md"
+  },
+  {
+   "line": 2540,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-PRIVACY-VENUE",
+   "owner_line": 2534,
+   "value": "artifacts/journeys/growth-privacy-queue.playwright.json"
+  },
+  {
+   "line": 2580,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-TESTSEND-GUARD",
+   "owner_line": 2574,
+   "value": "/Users/svendaneel/okam/wt-gr-testsend @ 5719fc96 \u00b7 WebApi.Tests/Growth/GrowthTestSendBindingTests.cs \u00b7 Growth 460/0/1 (SqlServer excluded, no slot held)"
+  },
+  {
+   "line": 2618,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-POSTMARK-WEBHOOK",
+   "owner_line": 2612,
+   "value": "lane/gr-postmark-webhook 5b895dc4 (worktree ../wt-gr-postmark) \u2014 Wire/GrowthPostmarkWebhookWireTests 8/8, Growth/GrowthPostmarkEventReaderTests 38/38, Growth non-SQL 544/0, Wire+Modules 377/0"
+  },
+  {
+   "line": 2656,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-RECIPE-REVISE-UI",
+   "owner_line": 2650,
+   "value": "lanes/L-MRG-RECIPE-REVISE-UI/evidence.md"
+  },
+  {
+   "line": 2699,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-COVERAGE-UNKNOWN",
+   "owner_line": 2693,
+   "value": "lanes/L-MRG-COVERAGE-UNKNOWN/evidence.md"
+  },
+  {
+   "line": 2758,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-EVIDENCE-NAMES-COURSE",
+   "owner_line": 2752,
+   "value": "OkamAPI wt-trn-names lane/trn-evidence-names fcb5181a + b560bc3a (artifacts/tests/L-TRAIN-EVIDENCE-NAMES-COURSE/RUN.md, base.trx, after.trx) . Web-modules cff41c8 . artifacts/journeys/training-course-"
+  },
+  {
+   "line": 2771,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-EVIDENCE-PACK-UI",
+   "owner_line": 2765,
+   "value": "commit af0a4a13 on refs/heads/lane/train-evidence-pack-ui; journey test/e2e/journeys/training-evidence-document.spec.js 18/18 green; full detail incl. what is NOT committed (artifacts/ is gitignored: "
+  },
+  {
+   "line": 2786,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-CROSSCURRENCY",
+   "owner_line": 2780,
+   "value": "commit 17fe84ae on refs/heads/lane/price-crosscurrency (baseline e34977ac, feature/restaurant-modules UNMOVED, never pushed) \u00b7 utils/cross-currency.js \u00b7 test/price-crosscurrency.test.js 30/30 \u00b7 lanes/"
+  },
+  {
+   "line": 2803,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-ENROL-UI",
+   "owner_line": 2797,
+   "value": "lanes/L-MEALS-ENROL-UI/evidence.md"
+  },
+  {
+   "line": 2821,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-CLAIM-RECEIPT",
+   "owner_line": 2815,
+   "value": "lanes/L-MEALS-CLAIM-RECEIPT/evidence.md"
+  },
+  {
+   "line": 2855,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-RECONCILE-UI",
+   "owner_line": 2849,
+   "value": "lanes/L-MEALS-RECONCILE-UI/evidence.md"
+  },
+  {
+   "line": 2911,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-REQUOTE-RELEASE",
+   "owner_line": 2905,
+   "value": "/Users/svendaneel/okam/wt-mealsrequote/lanes/L-MEALS-REQUOTE-RELEASE/evidence.md"
+  },
+  {
+   "line": 2929,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-DOCSYNC",
+   "owner_line": 2923,
+   "value": "lanes/L-MEALS-DOCSYNC/evidence.md"
+  },
+  {
+   "line": 2940,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-DOCSYNC",
+   "owner_line": 2923,
+   "value": "docs/plan/reviews/L-MRG-WASTE-REVIEW.md"
+  },
+  {
+   "line": 2957,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-DOCSYNC",
+   "owner_line": 2923,
+   "value": "docs/plan/reviews/L-PRICE-REVIEW.md"
+  },
+  {
+   "line": 2987,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-BYPASS-FIVE",
+   "owner_line": 2981,
+   "value": "refs/lanes/L-PRICE-BYPASS-FIVE = 8c6e91fa (parent e34977ac); 39/39 pins"
+  },
+  {
+   "line": 3036,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-SHADOW-GUARD",
+   "owner_line": 3030,
+   "value": "lanes/L-PRICE-SHADOW-GUARD/DETAIL.md"
+  },
+  {
+   "line": 3054,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-CLEANUP-TWO",
+   "owner_line": 3048,
+   "value": "lanes/L-PRICE-CLEANUP-TWO/notes.md"
+  },
+  {
+   "line": 3071,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PDF-NULLDEREF",
+   "owner_line": 3065,
+   "value": "OkamAPI-pdfnull 2497ce9d + receipt 17198f14 (lane/pdf-nullderef, local, not pushed) - WebApi.Tests/Wire/PdfRendererOutageWireTests.cs - WebApi.Tests/Services/DocumentRendererFailureTests.cs - artifact"
+  },
+  {
+   "line": 3112,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PDF-CREDITNOTE-NAME",
+   "owner_line": 3106,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-PDF-CREDITNOTE-NAME/receipt.md"
+  },
+  {
+   "line": 3146,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-ONBOARD-PRINT-BLEED",
+   "owner_line": 3140,
+   "value": "lanes/L-EV-ONBOARD-PRINT-BLEED/evidence.md"
+  },
+  {
+   "line": 3183,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE-FRONTEND",
+   "owner_line": 3177,
+   "value": "lanes/L-MRG-WASTE-FRONTEND/evidence.md"
+  },
+  {
+   "line": 3209,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE-500",
+   "owner_line": 3203,
+   "value": "/Users/svendaneel/okam/wt-mrgwaste500/artifacts/tests/L-MRG-WASTE-500/RUN.md"
+  },
+  {
+   "line": 3257,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE-RECEIPTS",
+   "owner_line": 3251,
+   "value": "/Users/svendaneel/okam/web-wastereceipts/lanes/L-MRG-WASTE-RECEIPTS/RUN.md"
+  },
+  {
+   "line": 3273,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-JOURNEY-SWEEP",
+   "owner_line": 3267,
+   "value": "lanes/L-FLAGS-JOURNEY-SWEEP/census.md"
+  },
+  {
+   "line": 3346,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-COVERAGE-THREE",
+   "owner_line": 3300,
+   "value": "docs/plan/reviews/L-UTLKVIT-REVIEW.md"
+  },
+  {
+   "line": 3364,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-COVERAGE-THREE",
+   "owner_line": 3300,
+   "value": "docs/plan/reviews/L-FLAGS-UI-REVIEW.md"
+  },
+  {
+   "line": 3391,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-TIMESHEET-UI",
+   "owner_line": 3385,
+   "value": "commit 618efc88 on refs/heads/lane/wf-timesheet-ui; journey artifacts/journeys/workforce-timesheet-export.playwright.json 15/15 steps + 6 screenshots (COMMITTED, force-added); full detail in lanes/L-W"
+  },
+  {
+   "line": 3406,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-CONTACT-IMPORTED",
+   "owner_line": 3400,
+   "value": "backend OkamAPI-wfcontact lane/wf-contact-imported @ 833fd2f1 (off feature/restaurant-modules 3579bbbc, local, not pushed), container-free tier 4376 passed / 0 failed / 12 skipped, post-commit wire+wo"
+  },
+  {
+   "line": 3424,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-EFFECTIVE-RESOLVERS",
+   "owner_line": 3418,
+   "value": "lane/flags-effective-resolvers @ e45ec4c1 (worktree /Users/svendaneel/okam/OkamAPI-flagseff); trx at lanes/L-FLAGS-EFFECTIVE-RESOLVERS/fast-tier.trx"
+  },
+  {
+   "line": 3472,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-NOTE-FALSIFIABLE",
+   "owner_line": 3466,
+   "value": "docs/plan/lanes/L-FLAGS-NOTE-FALSIFIABLE/workforce-flag-lever.playwright.json"
+  },
+  {
+   "line": 3513,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-DEPOSITS-PRECONDITION",
+   "owner_line": 3507,
+   "value": "artifacts/journeys/events-deposit-precondition.playwright.json"
+  },
+  {
+   "line": 3553,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-UTLKVIT-SALE-ROW",
+   "owner_line": 3547,
+   "value": "worktree /Users/svendaneel/okam/wt-utlkvit-salerow, branch lane/utlkvit-sale-row @ 1854f594 (local, not pushed, off lane/meals-utlkvit 1a03bc6c) - WebApi.Tests/Kassa/CreditSaleDocumentRoutingTests.cs "
+  },
+  {
+   "line": 3569,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-UTLKVIT-REPLAY-SOURCE",
+   "owner_line": 3563,
+   "value": "commit 3a509b68 on lane/utlkvit-replay-source (worktree /Users/svendaneel/okam/wt-utlkvitreplay); base 1a03bc6c fast tier 4366 passed / 0 failed / 12 skipped / 4378; after 3a509b68 fast tier 4368 / 0 "
+  },
+  {
+   "line": 3586,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TIER-ARTIFACTS",
+   "owner_line": 3579,
+   "value": "lanes/L-TIER-ARTIFACTS/DETAIL.md"
+  },
+  {
+   "line": 3628,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-TESTSEND-ERRORCODE",
+   "owner_line": 3622,
+   "value": "lanes/L-GR-TESTSEND-ERRORCODE/DETAIL.md"
+  },
+  {
+   "line": 3672,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-TESTSEND-RECORD",
+   "owner_line": 3665,
+   "value": "lane/growth-audit-ledger@bd3a840f (worktree /Users/svendaneel/okam/wt-gr-ledger)"
+  },
+  {
+   "line": 3693,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-DEADLINE-ONWIRE",
+   "owner_line": 3687,
+   "value": "artifacts/journeys/growth-privacy-queue.playwright.json"
+  },
+  {
+   "line": 3736,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-REFUND-FAKE-ARG",
+   "owner_line": 3730,
+   "value": "lanes/L-EV-REFUND-FAKE-ARG/commit-events-sqlserver.trx"
+  },
+  {
+   "line": 3782,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-URI-RELATIVE",
+   "owner_line": 3776,
+   "value": "lane/ev-uri-relative @ 6a7bf75b (wt-evuri) \u00b7 artifacts/lanes/L-EV-URI-RELATIVE/RUN.md"
+  },
+  {
+   "line": 3835,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-NOTE-OVERCAUTIOUS",
+   "owner_line": 3816,
+   "value": "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md"
+  },
+  {
+   "line": 3855,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-NOTE-OVERCAUTIOUS",
+   "owner_line": 3816,
+   "value": "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md"
+  },
+  {
+   "line": 3884,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-CONFIRMED-EMAIL",
+   "owner_line": 3878,
+   "value": "/Users/svendaneel/okam/wt-gr-confirmed @ 801d36a3 (lane/gr-confirmed-email, off 5719fc96, local, unpushed) \u00b7 WebApi.Tests/Growth/GrowthTestSendBindingTests.cs \u00b7 artifacts/tests/a7697121-fast-tier.trx "
+  },
+  {
+   "line": 3918,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-TESTSEND-RATELIMIT",
+   "owner_line": 3912,
+   "value": "/Users/svendaneel/okam/wt-gr-ratelimit @ c96cd21e (lane/gr-testsend-ratelimit, off 801d36a3, local, unpushed) \u00b7 artifacts/tests/lane-fast-tier.trx 4403/4391/0/12 \u00b7 artifacts/tests/base-801d36a3.trx 43"
+  },
+  {
+   "line": 3989,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-DEADLINE-COPY",
+   "owner_line": 3983,
+   "value": "lanes/L-GR-DEADLINE-COPY/DETAIL.md"
+  },
+  {
+   "line": 4039,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-DEADLINE-STATUTE",
+   "owner_line": 4033,
+   "value": "lane/gr-deadline-statute f7abfd8e (wt /Users/svendaneel/okam/wt-gr-statute, off 3b42da1d) \u00b7 lanes/L-GR-DEADLINE-STATUTE/growth-scoped.trx"
+  },
+  {
+   "line": 4098,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-ISOPEN-DOC",
+   "owner_line": 4081,
+   "value": "docs/plan/reviews/L-WF-W5-REVIEW.md"
+  },
+  {
+   "line": 4119,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-ISOPEN-DOC",
+   "owner_line": 4081,
+   "value": "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md"
+  },
+  {
+   "line": 4153,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-TIMESHEET-RACE",
+   "owner_line": 4147,
+   "value": "/Users/svendaneel/okam/wt-wftsrace/lanes/L-WF-TIMESHEET-RACE/{evidence.md,mutations.txt,mutate.py} - branch lane/wf-timesheet-race @ bc9c7e96, worktree wt-wftsrace, not pushed"
+  },
+  {
+   "line": 4171,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-EXPORT-DUPLICATE",
+   "owner_line": 4165,
+   "value": "/Users/svendaneel/okam/wt-wfexpdup/lanes/L-WF-EXPORT-DUPLICATE/{evidence.md,injection-probe-red.txt,sql-tier.txt,export-duplicate-race.trx,fast-tier.trx,sql-tier-workforce.trx} - lane/wf-export-duplic"
+  },
+  {
+   "line": 4212,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-DIGEST-TAUTOLOGY",
+   "owner_line": 4206,
+   "value": "OkamAPI-modules lane/wf-digest-tautology @ 4b911917 (worktree ~/okam/wt-wfdigest, cut from lane/wf-w5-timesheet 9e82b286; local, not pushed) \u00b7 WorkforceEndToEndJourneyTests + WorkforceTimesheetTests 3"
+  },
+  {
+   "line": 4258,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-TIMESHEET-WIRE",
+   "owner_line": 4252,
+   "value": "/Users/svendaneel/okam/wt-wftswire/lanes/L-WF-TIMESHEET-WIRE/evidence.md"
+  },
+  {
+   "line": 4276,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-EIGHTH-PIN",
+   "owner_line": 4270,
+   "value": "/Users/svendaneel/okam/wt-mealseighth/lanes/L-MEALS-EIGHTH-PIN/evidence.md"
+  },
+  {
+   "line": 4314,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-SUPERSEDE-SQL",
+   "owner_line": 4308,
+   "value": "/Users/svendaneel/okam/wt-mealssupsql/lanes/L-MEALS-SUPERSEDE-SQL/evidence.md"
+  },
+  {
+   "line": 4352,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-FOURWAY-TIER",
+   "owner_line": 4346,
+   "value": "/Users/svendaneel/okam/wt-meals-fourway-tier/lanes/L-MEALS-FOURWAY-TIER/ (commit 702d9481, trx f72c7a81-fourway-fast-tier.trx)"
+  },
+  {
+   "line": 4394,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-SEED",
+   "owner_line": 4388,
+   "value": "Web-modules feature/restaurant-modules @ 9a5900a (local, not pushed) \u00b7 artifact lanes/L-LIVE-WORLD-SEED/events-deposit-precondition.live.playwright.json = {\"backend\":\"live\",\"apiBaseUrl\":\"http://127.0."
+  },
+  {
+   "line": 4427,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-SEED",
+   "owner_line": 4388,
+   "value": "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md"
+  },
+  {
+   "line": 4445,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-SEED",
+   "owner_line": 4388,
+   "value": "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md"
+  },
+  {
+   "line": 4457,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-SEED",
+   "owner_line": 4388,
+   "value": "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md"
+  },
+  {
+   "line": 4474,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-CONFIRMED-PIN-FIX",
+   "owner_line": 4468,
+   "value": "/Users/svendaneel/okam/wt-gr-confirmed @ 48950702 (lane/gr-confirmed-email, local, unpushed) \u00b7 code 3cf288fb \u00b7 artifacts/tests/3cf288fb-fast-tier.trx + .../3cf288fb.../RUN.md = 4376 run / 4364 passed "
+  },
+  {
+   "line": 4523,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-CONFIRM-STALE",
+   "owner_line": 4517,
+   "value": "OkamAPI-modules lane/gr-confirm-stale @ 771c0fc0 (own worktree /Users/svendaneel/okam/wt-gr-confirm-stale, off 48950702) \u00b7 artifacts/tests/771c0fc0a6504971fb1cfdab5eed4ab878582ab5/RUN.md + artifacts/t"
+  },
+  {
+   "line": 4567,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-ADMIN-SURFACE",
+   "owner_line": 4561,
+   "value": "artifacts/journeys/account-email-confirm.playwright.json"
+  },
+  {
+   "line": 4597,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-ADMIN-SURFACE",
+   "owner_line": 4561,
+   "value": "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md"
+  },
+  {
+   "line": 4624,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-ADMIN-SURFACE",
+   "owner_line": 4561,
+   "value": "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md"
+  },
+  {
+   "line": 4666,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-QUOTE-RETRY",
+   "owner_line": 4660,
+   "value": "/Users/svendaneel/okam/wt-mealsqretry/lanes/L-MEALS-QUOTE-RETRY/evidence.md"
+  },
+  {
+   "line": 4730,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-STAFF",
+   "owner_line": 4724,
+   "value": "lanes/L-LIVE-WORLD-STAFF/live-world-run.txt"
+  },
+  {
+   "line": 4782,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-PUBLISH-UNCLICKABLE",
+   "owner_line": 4776,
+   "value": "commit 28548f96 on refs/heads/lane/train-publish-unclickable (base e34977ac, NOT pushed) - lanes/L-TRAIN-PUBLISH-UNCLICKABLE/{probe-before.txt,probe-after.txt,mutation-proof.txt,probe.spec.js,shot-128"
+  },
+  {
+   "line": 4796,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FE-JOURNEYS-MERGE",
+   "owner_line": 4790,
+   "value": "commit ddc27fa on feature/restaurant-modules (ff, no merge commit) - lanes/L-FE-JOURNEYS-MERGE/{bookkeeping.md,suite-18-of-18.log,mutation-proof.log,first-port-attempt-3-red.log}"
+  },
+  {
+   "line": 4840,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-EXCUSE-BYFLAG",
+   "owner_line": 4834,
+   "value": "/Users/svendaneel/okam/OkamAPI-flagsexcuse/lanes/L-FLAGS-EXCUSE-BYFLAG/mutation-receipt.md"
+  },
+  {
+   "line": 4882,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-IMPOSSIBLE-COMMENT",
+   "owner_line": 4876,
+   "value": "commit 89c2c1f on feature/restaurant-modules (base 35440cfb, local, not pushed) - lanes/L-FLAGS-IMPOSSIBLE-COMMENT/{notes.md,mutation-proof.txt,suite-base.txt,suite-after.txt}"
+  },
+  {
+   "line": 4898,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-READONLY-VISIBLE",
+   "owner_line": 4892,
+   "value": "lane/train-readonly-visible @ abef9aac \u00b7 lanes/L-TRAIN-READONLY-VISIBLE/shots/{before,after}-setup-row.png \u00b7 mutation-proof.txt"
+  },
+  {
+   "line": 4917,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-SERVER-HALVES",
+   "owner_line": 4911,
+   "value": "OkamAPI worktree /Users/svendaneel/okam/wt-confirm-halves, branch lane/confirm-server-halves @ 8704ff63 (off c96cd21e, local, unpushed) - lanes/L-CONFIRM-SERVER-HALVES/evidence.md - artifacts/tests/ba"
+  },
+  {
+   "line": 4958,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CLIENT-TRAILING-SLASH",
+   "owner_line": 4952,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-CLIENT-TRAILING-SLASH/mutation-receipt.md"
+  },
+  {
+   "line": 5030,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PIVOT-DEFECTS",
+   "owner_line": 5024,
+   "value": "lanes/L-WF-PIVOT-DEFECTS/{workforce-schedule-publish.live.playwright.json,live-run-after.txt,probe-fixed.txt,probe-mutant-defect1.txt,probe-mutant-defect2.txt,probe-restored.txt,shots-after/,shots-mut"
+  },
+  {
+   "line": 5076,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PIVOT-DEFECTS",
+   "owner_line": 5024,
+   "value": "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md"
+  },
+  {
+   "line": 5092,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PIVOT-DEFECTS",
+   "owner_line": 5024,
+   "value": "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md"
+  },
+  {
+   "line": 5114,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-PROVENANCE",
+   "owner_line": 5108,
+   "value": "lanes/L-ARTIFACT-PROVENANCE/evidence.md"
+  },
+  {
+   "line": 5164,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-RESTORE",
+   "owner_line": 5158,
+   "value": "lanes/L-LIVE-WORLD-RESTORE/live-world-reset-run.txt"
+  },
+  {
+   "line": 5215,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-SEED-VIA-PRODUCT",
+   "owner_line": 5209,
+   "value": "test/e2e/scripts/live-world.sh"
+  },
+  {
+   "line": 5261,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-ASSERTION-FLOORS",
+   "owner_line": 5255,
+   "value": "lanes/L-LIVE-ASSERTION-FLOORS/guard-proof.txt"
+  },
+  {
+   "line": 5287,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-RESERVATION-LIMITER-MOVE",
+   "owner_line": 5281,
+   "value": "/Users/svendaneel/okam/OkamAPI-reslimiter/lanes/L-RESERVATION-LIMITER-MOVE/evidence.md"
+  },
+  {
+   "line": 5319,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPOSITION-ROOT-CHECK",
+   "owner_line": 5313,
+   "value": "/Users/svendaneel/okam/wt-comproot @ bfe57c3c (lane/composition-root-check, off 8704ff63, local, unpushed) - WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs - artifacts/tests/lane-composition-roo"
+  },
+  {
+   "line": 5361,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-CONAT-RETIRE",
+   "owner_line": 5355,
+   "value": "OkamAPI 6771ba9a on lane/confirm-conat-retire (worktree /Users/svendaneel/okam/wt-conatretire, local, not pushed) + lanes/L-CONFIRM-CONAT-RETIRE/evidence.md"
+  },
+  {
+   "line": 5405,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CRYPTO-PIN-BYFORM",
+   "owner_line": 5399,
+   "value": "OkamAPI worktree /Users/svendaneel/okam/wt-cryptopin, branch lane/crypto-pin-byform @ cfb3b14a (code 35630600, off 6771ba9a, local, unpushed) - lanes/L-CRYPTO-PIN-BYFORM/evidence.md - artifacts/tests/"
+  },
+  {
+   "line": 5449,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FE-WF-ONBOARD-WALK",
+   "owner_line": 5443,
+   "value": "commit 35440cf on feature/restaurant-modules (ff, no merge commit) - artifacts/journeys/workforce-invitation-onboarding.playwright.json + lanes/L-FE-WF-ONBOARD-WALK/{mutation-proof,run-1,run-2,run-fin"
+  },
+  {
+   "line": 5464,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-PROJECTION-LAG-VISIBLE",
+   "owner_line": 5458,
+   "value": "lanes/L-MEALS-PROJECTION-LAG-VISIBLE/evidence.md"
+  },
+  {
+   "line": 5476,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-PROJECTION-LAG-VISIBLE",
+   "owner_line": 5458,
+   "value": "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md"
+  },
+  {
+   "line": 5508,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-PROJECTION-LAG-VISIBLE",
+   "owner_line": 5458,
+   "value": "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md"
+  },
+  {
+   "line": 5549,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPROOT-PIN-OVERDETERMINED",
+   "owner_line": 5543,
+   "value": "02c077cb on lane/confirm-postmerge-pin (/Users/svendaneel/okam/wt-postmergepin), WebApi.Tests/Wire/CompositionRootLimiterWireTests.cs"
+  },
+  {
+   "line": 5566,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GUARD-W0",
+   "owner_line": 5560,
+   "value": "lanes/L-GUARD-DEMO/demo-run.txt"
+  },
+  {
+   "line": 5636,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-INVOICE-RETRY-RETIREMENT",
+   "owner_line": 5630,
+   "value": "wt-invretire f18ffeda (fix+test) + receipt 1a0c0cbb, branch lane/invoice-retry-retirement off lane/pdf-nullderef (17198f14), local, not pushed - Services/InvoiceService.cs:89-102 - WebApi.Tests/Servic"
+  },
+  {
+   "line": 5664,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-POSTMERGE-PIN",
+   "owner_line": 5658,
+   "value": "/Users/svendaneel/okam/wt-postmergepin @ 02c077cb on lane/confirm-postmerge-pin off d9189fbd (1 file, pathspec commit, unpushed)"
+  },
+  {
+   "line": 5687,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-POS-TENDER-WIRE",
+   "owner_line": 5681,
+   "value": "worktree ~/okam/OkamAPI-postender, branch lane/meals-pos-tender-wire, commit 32fd5a86 off lane/meals-utlkvit 1a03bc6c, NOT pushed. Container-free tier (dotnet test --filter \"Database!=SqlServer\"): bas"
+  },
+  {
+   "line": 5711,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIG-COMPANY-RECEIVABLE",
+   "owner_line": 5704,
+   "value": "OkamAPI lane/mig-company-receivable @ 32c56fa4, off chain tip cff1c005; Migrations/20260803090036_Meals_CompanyReceivableAccount.cs; fast tier 4368/0/7"
+  },
+  {
+   "line": 5727,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-UTLKVIT-REPRINT-KIND",
+   "owner_line": 5720,
+   "value": "worktree /Users/svendaneel/okam/wt-utlkvit-reprint, branch lane/utlkvit-reprint-kind @ 88b7307f (local, never pushed, merge base fb522bdd = sale-row 1854f594 + replay-source 3a509b68) - fast tier base"
+  },
+  {
+   "line": 5747,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-FAMILY-MERGE",
+   "owner_line": 5741,
+   "value": "/Users/svendaneel/okam/wt-confirmfam/artifacts/tests/72cf3e0a34b278514bb6872c8803a52384a80000/RUN.md"
+  },
+  {
+   "line": 5813,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-INVOICE-AUTHORIZE",
+   "owner_line": 5807,
+   "value": "/Users/svendaneel/okam/wt-invauth @ d7ffdae9 (lane/invoice-authorize, off feature/restaurant-modules 3579bbbc, local, unpushed) - Controllers/InvoicesController.cs - WebApi.Tests/Wire/InvoicesAuthoriz"
+  },
+  {
+   "line": 5827,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AI-MIDDLEWARE-DELETE",
+   "owner_line": 5821,
+   "value": "OkamAPI lane/ai-middleware-delete @ 5b2e99c8 (worktree ~/okam/wt-aimw, cut from feature/restaurant-modules 3579bbbc; local, not pushed) - container-free tier 4370 passed / 0 failed / 12 skipped (5m49s"
+  },
+  {
+   "line": 5839,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-CORRECTION-PATH",
+   "owner_line": 5833,
+   "value": "OkamAPI lane/wf-correction-path @ 305dbe79 off feature/restaurant-modules a273e013; Web lane/fe-wf-correction-path @ 6a641bc7 off a1a1ec8; Controllers/WorkforcePersonnelListController.cs; WebApi.Tests"
+  },
+  {
+   "line": 5866,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-BLIND-BIND-NAME",
+   "owner_line": 5860,
+   "value": "backend OkamAPI lane/wf-blind-bind-name @ 3b593fef, worktree ~/okam/wt-wfblindbind, based on feature/restaurant-modules @ 3579bbbc, NOT pushed - container-free tier 4392/0/12 vs a 4369/0/12 baseline m"
+  },
+  {
+   "line": 5878,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-ACCEPT-GATE",
+   "owner_line": 5872,
+   "value": "worktree ~/okam/OkamAPI-ev-acceptgate, branch lane/ev-accept-gate, commit 8eee00f7, NOT pushed, based on feature/restaurant-modules @ 3579bbbc (the stated integration tip; OkamAPI-modules is on lane/m"
+  },
+  {
+   "line": 5890,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-GUEST-ORIGIN",
+   "owner_line": 5884,
+   "value": "OkamAPI lane/ev-guest-origin @ b0b501a5, NOT pushed, based on feature/restaurant-modules @ 3579bbbc - worktree ~/okam/OkamAPI-ev-guestorigin - container-free tier 4371/0/12 vs baseline 4369/0/12 measu"
+  },
+  {
+   "line": 5903,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-CALLBACK-SWEEP",
+   "owner_line": 5896,
+   "value": "lanes/L-EV-CALLBACK-SWEEP/flag-correction.md"
+  },
+  {
+   "line": 5921,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-XZ-CREDIT-FIELDS",
+   "owner_line": 5915,
+   "value": "lanes/L-XZ-CREDIT-FIELDS/evidence.md"
+  },
+  {
+   "line": 5934,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-LEVER-WITHHOLD",
+   "owner_line": 5927,
+   "value": "lanes/L-MEALS-LEVER-WITHHOLD/retitle-and-pin.md"
+  },
+  {
+   "line": 5982,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-EIGHTH-READ",
+   "owner_line": 5975,
+   "value": "/Users/svendaneel/okam/wt-meals-eighth-read/lanes/L-MEALS-EIGHTH-READ/evidence-2.md"
+  },
+  {
+   "line": 6032,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-DISPATCH-ACTOR",
+   "owner_line": 6026,
+   "value": "lane/gr-dispatch-actor@a1e2655f (worktree /Users/svendaneel/okam/wt-gr-dispatch-actor); detail in lanes/L-GR-DISPATCH-ACTOR/detail.md"
+  },
+  {
+   "line": 6064,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-NEWSLETTER-CROSS",
+   "owner_line": 6057,
+   "value": "lanes/L-GR-NEWSLETTER-CROSS/landing.md"
+  },
+  {
+   "line": 6084,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-GUARD-FAIL",
+   "owner_line": 6078,
+   "value": "test/e2e/scripts/guard-proof.js"
+  },
+  {
+   "line": 6097,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-FLAG-STORE",
+   "owner_line": 6090,
+   "value": "lanes/L-FIXTURE-FLAG-STORE/mutation-report.txt"
+  },
+  {
+   "line": 6113,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-DIVERGENCE",
+   "owner_line": 6107,
+   "value": "lanes/L-FIXTURE-DIVERGENCE/receipts.txt"
+  },
+  {
+   "line": 6123,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-RANK-KEY",
+   "owner_line": 6117,
+   "value": "lanes/L-ARTIFACT-RANK-KEY/evidence.md"
+  },
+  {
+   "line": 6202,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-GROWTH",
+   "owner_line": 6196,
+   "value": "docs/plan/lanes/L-JOURNEY-GROWTH/growth-guest-lifecycle.playwright.json"
+  },
+  {
+   "line": 6224,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-WORKFORCE",
+   "owner_line": 6218,
+   "value": "branch lane/journey-workforce @ eb8f412 (both artifacts force-added) + lanes/L-JOURNEY-WORKFORCE/mutation-proof.txt"
+  },
+  {
+   "line": 6246,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-EVENTS",
+   "owner_line": 6240,
+   "value": "artifacts/journeys/events-enquiry-to-settlement.playwright.json"
+  },
+  {
+   "line": 6320,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-MARGIN",
+   "owner_line": 6314,
+   "value": "artifacts/journeys/margin-supplier-to-plate.playwright.json"
+  },
+  {
+   "line": 6363,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-EVIDENCE-SWEEP",
+   "owner_line": 6357,
+   "value": "lanes/L-JOURNEY-EVIDENCE-SWEEP/verification-map.md"
+  },
+  {
+   "line": 6396,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-OUTBOX-GUID-SUBSTRING",
+   "owner_line": 6390,
+   "value": "OkamAPI-modules lane/ev-outbox-guid-substring 79f9dd7d (worktree /Users/svendaneel/okam/wt-evoutboxguid, off feature/restaurant-modules 3579bbbc, local, unpushed); after 4383/0/12 vs base 4369/0/12 me"
+  },
+  {
+   "line": 6441,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BLOCKER-RESTATE",
+   "owner_line": 6435,
+   "value": "lanes/L-BLOCKER-RESTATE/verdicts.md"
+  },
+  {
+   "line": 6469,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-REVIEW",
+   "owner_line": 6463,
+   "value": "docs/plan/reviews/L-EV-REVIEW.md"
+  },
+  {
+   "line": 6481,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-REVIEW",
+   "owner_line": 6475,
+   "value": "docs/plan/reviews/L-MEALS-REVIEW.md"
+  },
+  {
+   "line": 6493,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-REVIEW",
+   "owner_line": 6487,
+   "value": "docs/plan/reviews/L-TRAIN-REVIEW.md"
+  },
+  {
+   "line": 6505,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-REVIEW",
+   "owner_line": 6499,
+   "value": "docs/plan/reviews/L-GR-REVIEW.md"
+  },
+  {
+   "line": 6517,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE-REVIEW",
+   "owner_line": 6511,
+   "value": "docs/plan/reviews/L-MRG-WASTE-REVIEW.md"
+  },
+  {
+   "line": 6529,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRICE-REVIEW",
+   "owner_line": 6523,
+   "value": "docs/plan/reviews/L-PRICE-REVIEW.md"
+  },
+  {
+   "line": 6541,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-UTLKVIT-REVIEW",
+   "owner_line": 6535,
+   "value": "docs/plan/reviews/L-UTLKVIT-REVIEW.md"
+  },
+  {
+   "line": 6553,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-UI-REVIEW",
+   "owner_line": 6547,
+   "value": "docs/plan/reviews/L-FLAGS-UI-REVIEW.md"
+  },
+  {
+   "line": 6565,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-PRIVACY-REVIEW",
+   "owner_line": 6559,
+   "value": "docs/plan/reviews/L-GR-PRIVACY-REVIEW.md"
+  },
+  {
+   "line": 6577,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-TESTSEND-REVIEW",
+   "owner_line": 6571,
+   "value": "docs/plan/reviews/L-GR-TESTSEND-REVIEW.md"
+  },
+  {
+   "line": 6589,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-W5-REVIEW",
+   "owner_line": 6583,
+   "value": "docs/plan/reviews/L-WF-W5-REVIEW.md"
+  },
+  {
+   "line": 6601,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-RELEASE-CLUSTER-REVIEW",
+   "owner_line": 6595,
+   "value": "docs/plan/reviews/L-MEALS-RELEASE-CLUSTER-REVIEW.md"
+  },
+  {
+   "line": 6613,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-CONFIRMED-REVIEW",
+   "owner_line": 6607,
+   "value": "docs/plan/reviews/L-GR-CONFIRMED-REVIEW.md"
+  },
+  {
+   "line": 6625,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-SWEEP-REVIEW",
+   "owner_line": 6619,
+   "value": "docs/plan/reviews/L-MEALS-SWEEP-REVIEW.md"
+  },
+  {
+   "line": 6637,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-RESOLVERS-REVIEW",
+   "owner_line": 6631,
+   "value": "docs/plan/reviews/L-FLAGS-RESOLVERS-REVIEW.md"
+  },
+  {
+   "line": 6649,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-INQUIRY-REVIEW",
+   "owner_line": 6643,
+   "value": "docs/plan/reviews/L-EV-INQUIRY-REVIEW.md"
+  },
+  {
+   "line": 6661,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-HARNESS-REVIEW",
+   "owner_line": 6655,
+   "value": "docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md"
+  },
+  {
+   "line": 6673,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-RATELIMIT-REVIEW",
+   "owner_line": 6667,
+   "value": "docs/plan/reviews/L-GR-RATELIMIT-REVIEW.md"
+  },
+  {
+   "line": 6685,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONFIRM-CHAIN-REVIEW",
+   "owner_line": 6679,
+   "value": "docs/plan/reviews/L-CONFIRM-CHAIN-REVIEW.md"
+  },
+  {
+   "line": 6697,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MONEYPATH-PAIR-REVIEW",
+   "owner_line": 6691,
+   "value": "docs/plan/reviews/L-MONEYPATH-PAIR-REVIEW.md"
+  },
+  {
+   "line": 6709,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-BUILD-EXPORT",
+   "owner_line": 6703,
+   "value": "lanes/L-LIVE-BUILD-EXPORT/evidence.md"
+  },
+  {
+   "line": 6721,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-EXCHANGE-AWARD-UNGATED",
+   "owner_line": 6715,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-EXCHANGE-AWARD-UNGATED/EVIDENCE.md"
+  },
+  {
+   "line": 6733,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EXIT-INSTRUMENT-SWEEP",
+   "owner_line": 6727,
+   "value": "lanes/L-EXIT-INSTRUMENT-SWEEP/map.md"
+  },
+  {
+   "line": 6762,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ROLLBACK-TRACKED-SWEEP",
+   "owner_line": 6756,
+   "value": "/Users/svendaneel/okam/wt-rbtracked/lanes/L-ROLLBACK-TRACKED-SWEEP/evidence.md"
+  },
+  {
+   "line": 6808,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EF-INDEX-SHADOW-SWEEP",
+   "owner_line": 6802,
+   "value": "OkamAPI lane/ef-index-shadow-sweep @ 08309e39, off integration/mig-stack-land 4b37f81b; WebApi.Tests/Modules/IndexConfigurationSweep.cs + ModelIndexShadowSweepTests.cs + ModelIndexShadowGuardSelfTests"
+  },
+  {
+   "line": 6848,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CENSUS-FLOORS-DERIVED",
+   "owner_line": 6842,
+   "value": "OkamAPI worktree /Users/svendaneel/okam/OkamAPI-censusfloors, branch lane/census-floors-derived @ 75dcc2ff, base feature/restaurant-modules @ 3579bbbc"
+  },
+  {
+   "line": 6866,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PDF-FAMILY-LAND",
+   "owner_line": 6860,
+   "value": "lanes/L-PDF-FAMILY-LAND/merge-receipt.md"
+  },
+  {
+   "line": 6884,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPROOT-FAMILY-LAND",
+   "owner_line": 6878,
+   "value": "lanes/L-COMPROOT-FAMILY-LAND/merge-receipt.md"
+  },
+  {
+   "line": 6902,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-FAMILY-LAND",
+   "owner_line": 6896,
+   "value": "../OkamAPI-modules/lanes/L-GROWTH-FAMILY-LAND/merge-receipt.md"
+  },
+  {
+   "line": 6919,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-FAMILY-LAND",
+   "owner_line": 6913,
+   "value": "lanes/L-EV-FAMILY-LAND/merge-receipt.md"
+  },
+  {
+   "line": 6935,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-POSREL-LAND",
+   "owner_line": 6929,
+   "value": "lanes/L-MEALS-POSREL-LAND/merge-receipt.md"
+  },
+  {
+   "line": 6951,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-TIMEOFF-DECIDE-GATE",
+   "owner_line": 6945,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-WF-TIMEOFF-DECIDE-GATE/EVIDENCE.md"
+  },
+  {
+   "line": 7002,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-CONTACT-PINS",
+   "owner_line": 6996,
+   "value": "lanes/L-WF-CONTACT-PINS/mutation-log.md"
+  },
+  {
+   "line": 7134,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-PROXY-BLINDSPOT",
+   "owner_line": 7128,
+   "value": "lanes/L-JOURNEY-PROXY-BLINDSPOT/guard-proof.txt"
+  },
+  {
+   "line": 7160,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-LINK-DEADEND",
+   "owner_line": 7154,
+   "value": "backend OkamAPI lane/wf-link-deadend @ a3a526ae, worktree ~/okam/wt-wflinkdead, based on lane/wf-blind-bind-name @ 3b593fef, NOT pushed - container-free tier (--filter \"Database!=SqlServer\") 4397/0/12"
+  },
+  {
+   "line": 7184,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-IDEMPOTENCY-REFUSAL",
+   "owner_line": 7178,
+   "value": "backend OkamAPI lane/wf-idempotency-refusal @ a1d57208, worktree ~/okam/OkamAPI-wfidemref, based on feature/restaurant-modules @ 9888178f, NOT pushed - container-free tier (dotnet test --filter \"Datab"
+  },
+  {
+   "line": 7213,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-OPERATOR-UNIQUE",
+   "owner_line": 7206,
+   "value": "/Users/svendaneel/okam/wt-wfopuniq/lanes/L-WF-OPERATOR-UNIQUE/evidence.md"
+  },
+  {
+   "line": 7267,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORS-CREDENTIALED-ORIGIN",
+   "owner_line": 7261,
+   "value": "lanes/L-CORS-CREDENTIALED-ORIGIN/evidence.md"
+  },
+  {
+   "line": 7346,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PHONE-IN-PATH",
+   "owner_line": 7340,
+   "value": "../OkamAPI-modules/artifacts/security/L-VIPPS-LOG-mutation.md"
+  },
+  {
+   "line": 7421,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-CORRECTION-PINS",
+   "owner_line": 7415,
+   "value": "lanes/L-WF-CORRECTION-PINS/mutation-log.md"
+  },
+  {
+   "line": 7545,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-INVOICE-AUTHORIZE-LAND",
+   "owner_line": 7539,
+   "value": "../OkamAPI-modules/lanes/L-INVOICE-AUTHORIZE-LAND/merge-receipt.md"
+  },
+  {
+   "line": 7600,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-OUTBOX-FLAKE",
+   "owner_line": 7594,
+   "value": "OkamAPI lane/ev-outbox-flake 59a1d607 (base 5df07afa, worktree /Users/svendaneel/okam/OkamAPI-evoutboxflake)"
+  },
+  {
+   "line": 7628,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-IDEMPOTENCY-REFUSAL-REST",
+   "owner_line": 7622,
+   "value": "/Users/svendaneel/okam/OkamAPI-wfrefusalrest @ 02684ecc (branch lane/wf-idempotency-refusal-rest, base a1d57208 = the sibling lane; 0 Workforce files drifted between 9888178f and the tip, so it merges"
+  },
+  {
+   "line": 7744,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PUSH-LAND",
+   "owner_line": 7738,
+   "value": "lanes/L-WF-PUSH-LAND/merge-receipt.md"
+  },
+  {
+   "line": 7851,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ALIASING-NEEDLE-SWEEP",
+   "owner_line": 7845,
+   "value": "lanes/L-ALIASING-NEEDLE-SWEEP/census.md"
+  },
+  {
+   "line": 7888,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORS-FOLLOWUPS",
+   "owner_line": 7882,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-FOLLOWUPS/evidence.md"
+  },
+  {
+   "line": 7925,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CREDIT-NOTE-NUMBER",
+   "owner_line": 7919,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-CREDIT-NOTE-NUMBER/receipt.md"
+  },
+  {
+   "line": 7949,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-IDEMPOTENCY-REFUSAL",
+   "owner_line": 7943,
+   "value": "lanes/L-MEALS-IDEMPOTENCY-REFUSAL/mutation-log.md"
+  },
+  {
+   "line": 7979,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-IDEMPOTENCY-REFUSAL",
+   "owner_line": 7973,
+   "value": "lanes/L-TRAIN-IDEMPOTENCY-REFUSAL/mutation-log.md"
+  },
+  {
+   "line": 8062,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-JOURNEY-TIMEBOMB",
+   "owner_line": 8056,
+   "value": "lanes/L-EV-JOURNEY-TIMEBOMB/ at lane/ev-journey-timebomb b7a9f389 (parent 4b5c5c2; feature/restaurant-modules NOT moved, still 4b5c5c2)"
+  },
+  {
+   "line": 8093,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PUSH-STILL-LIES",
+   "owner_line": 8087,
+   "value": "OkamAPI lane/wf-push-still-lies 100ae000 (base feature/restaurant-modules 569887a5, unmoved); WebApi.Tests/Workforce/WorkforceNotificationTransportTests.cs, WebApi.Tests/Workforce/ScheduleAuditLedgerT"
+  },
+  {
+   "line": 8133,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-WITHHELD-BOUND",
+   "owner_line": 8127,
+   "value": "/Users/svendaneel/okam/wt-wfwithheld @ 74405b34 (lane/wf-withheld-bound off feature/restaurant-modules 569887a5); pin WebApi.Tests/Workforce/WorkforceNotificationBacklogBoundTests.cs; four-state recor"
+  },
+  {
+   "line": 8259,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DI-COLLECTION-SILENT",
+   "owner_line": 8253,
+   "value": "lanes/L-DI-COLLECTION-SILENT/census.md"
+  },
+  {
+   "line": 8373,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WORLD-STAMP-WINDOWS",
+   "owner_line": 8367,
+   "value": "lanes/L-WORLD-STAMP-WINDOWS/evidence.md"
+  },
+  {
+   "line": 8442,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ROUTE-GUARD-GAPS",
+   "owner_line": 8436,
+   "value": "lanes/L-ROUTE-GUARD-GAPS/mutation-log.md"
+  },
+  {
+   "line": 8486,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-FAILURES-SURFACE",
+   "owner_line": 8480,
+   "value": "lanes/L-WF-FAILURES-SURFACE/evidence.md"
+  },
+  {
+   "line": 8613,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-VIOLATION-EXACT",
+   "owner_line": 8607,
+   "value": "lanes/L-MEALS-VIOLATION-EXACT/mutation-log.md"
+  },
+  {
+   "line": 8648,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-TEARDOWN",
+   "owner_line": 8642,
+   "value": "lanes/L-JOURNEY-TEARDOWN/mutation-log.md"
+  },
+  {
+   "line": 8716,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DATED-TEST-OUTPUT",
+   "owner_line": 8710,
+   "value": "lanes/L-DATED-TEST-OUTPUT/evidence.md"
+  },
+  {
+   "line": 8748,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-BANNER",
+   "owner_line": 8742,
+   "value": "lanes/L-LIVE-WORLD-BANNER/evidence.md"
+  },
+  {
+   "line": 8780,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MARGIN-VIOLATION-ANCHOR",
+   "owner_line": 8774,
+   "value": "lanes/L-MARGIN-VIOLATION-ANCHOR/mutation-log.md"
+  },
+  {
+   "line": 8810,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VIOLATION-EXACT-LAND",
+   "owner_line": 8804,
+   "value": "../OkamAPI-modules/lanes/L-VIOLATION-EXACT-LAND/merge-receipt.md"
+  },
+  {
+   "line": 8844,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WORKTREE-BASENAME-PIN",
+   "owner_line": 8838,
+   "value": "lanes/L-WORKTREE-BASENAME-PIN/evidence.md"
+  },
+  {
+   "line": 8881,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PUSH-TOKEN-IN-PATH",
+   "owner_line": 8875,
+   "value": "../OkamAPI-modules/lanes/L-PUSH-TOKEN-IN-PATH/mutation-log.md"
+  },
+  {
+   "line": 8925,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-AGREEMENT-PIN-INVERTS",
+   "owner_line": 8918,
+   "value": "lanes/L-MEALS-AGREEMENT-PIN-INVERTS/adoption-review.md"
+  },
+  {
+   "line": 9027,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-XZ-PRINTED-DEFECTS",
+   "owner_line": 9021,
+   "value": "lanes/L-XZ-PRINTED-DEFECTS/mutation-log.md"
+  },
+  {
+   "line": 9052,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-MEMBERS-READ",
+   "owner_line": 9046,
+   "value": "lanes/L-MEALS-MEMBERS-READ/mutation-log.md"
+  },
+  {
+   "line": 9106,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-REPLAY-PINS-RECHECK",
+   "owner_line": 9100,
+   "value": "lanes/L-REPLAY-PINS-RECHECK/census.md"
+  },
+  {
+   "line": 9141,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ROW-FIT-GOODS-GROUPS",
+   "owner_line": 9135,
+   "value": "lanes/L-ROW-FIT-GOODS-GROUPS/mutation-log.md"
+  },
+  {
+   "line": 9207,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-ENROL-PRETICK",
+   "owner_line": 9201,
+   "value": "lanes/L-MEALS-ENROL-PRETICK/evidence.md"
+  },
+  {
+   "line": 9238,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ACCOUNTING-EXPORT-SILENT",
+   "owner_line": 9232,
+   "value": "lanes/L-ACCOUNTING-EXPORT-SILENT/mutation-log.md"
+  },
+  {
+   "line": 9271,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TELEMETRY-INITIALIZER-FLOOR",
+   "owner_line": 9265,
+   "value": "lanes/L-TELEMETRY-INITIALIZER-FLOOR/mutation-log.md"
+  },
+  {
+   "line": 9322,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FRAGILE-NEEDLES",
+   "owner_line": 9316,
+   "value": "lanes/L-FRAGILE-NEEDLES/mutation-log.md"
+  },
+  {
+   "line": 9391,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-REPLAY-PINS-CLOSE",
+   "owner_line": 9385,
+   "value": "lanes/L-REPLAY-PINS-CLOSE/mutation-log.md"
+  },
+  {
+   "line": 9513,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-XZ-SIGNED-COUNT",
+   "owner_line": 9507,
+   "value": "lanes/L-XZ-SIGNED-COUNT/mutation-log.md"
+  },
+  {
+   "line": 9549,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EOD-CREDIT-SPLIT",
+   "owner_line": 9543,
+   "value": "lanes/L-EOD-CREDIT-SPLIT/mutation-log.md"
+  },
+  {
+   "line": 9577,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CENSUS-CORRECTIONS",
+   "owner_line": 9571,
+   "value": "lanes/L-CENSUS-CORRECTIONS/evidence.md"
+  },
+  {
+   "line": 9695,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-PAGE-TEST-VACUOUS",
+   "owner_line": 9688,
+   "value": "lanes/L-MRG-PAGE-TEST-VACUOUS/mutation-log.md"
+  },
+  {
+   "line": 9753,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-HOSTED-SERVICE-FLOOR",
+   "owner_line": 9747,
+   "value": "lanes/L-HOSTED-SERVICE-FLOOR/mutation-log.md"
+  },
+  {
+   "line": 9826,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COERCION-WRITE-PATHS",
+   "owner_line": 9820,
+   "value": "lanes/L-COERCION-WRITE-PATHS/mutation-log.md"
+  },
+  {
+   "line": 9855,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-REVISE-LAND",
+   "owner_line": 9849,
+   "value": "lanes/L-MRG-REVISE-LAND/evidence.md"
+  },
+  {
+   "line": 9919,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LANES-OUT-OF-THE-ASSEMBLY",
+   "owner_line": 9913,
+   "value": "lanes/L-LANES-OUT-OF-THE-ASSEMBLY/mutation-log.md"
+  },
+  {
+   "line": 9973,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-PORT-HARDCODED",
+   "owner_line": 9967,
+   "value": "lanes/L-JOURNEY-PORT-HARDCODED/evidence.md"
+  },
+  {
+   "line": 10025,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-OFFER-PARTIAL-SUBTOTAL",
+   "owner_line": 10019,
+   "value": "lanes/L-OFFER-PARTIAL-SUBTOTAL/mutation-log.md"
+  },
+  {
+   "line": 10059,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-OFFERS-PAGE-HUNDREDFOLD",
+   "owner_line": 10053,
+   "value": "lanes/L-OFFERS-PAGE-HUNDREDFOLD/evidence.md"
+  },
+  {
+   "line": 10107,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-XZ-NEGATED-ABSENCE",
+   "owner_line": 10101,
+   "value": "lanes/L-XZ-NEGATED-ABSENCE/mutation-log.md"
+  },
+  {
+   "line": 10137,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GR-EXIT-WIRE-THE-MAIL",
+   "owner_line": 10131,
+   "value": "lanes/L-GR-EXIT-WIRE-THE-MAIL/evidence.md"
+  },
+  {
+   "line": 10218,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORS-LAND-FOLLOWUPS",
+   "owner_line": 10212,
+   "value": "lanes/L-CORS-LAND-FOLLOWUPS/evidence.md"
+  },
+  {
+   "line": 10293,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-INVITE-LIST-REVOKE",
+   "owner_line": 10287,
+   "value": "lanes/L-WF-INVITE-LIST-REVOKE/evidence.md"
+  },
+  {
+   "line": 10331,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-ONBOARD-DEMO-RUN",
+   "owner_line": 10325,
+   "value": "lanes/L-WF-ONBOARD-DEMO-RUN/evidence.md"
+  },
+  {
+   "line": 10445,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EXIT-INSTRUMENT-CENSUS",
+   "owner_line": 10439,
+   "value": "lanes/L-EXIT-INSTRUMENT-CENSUS/census.md"
+  },
+  {
+   "line": 10507,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-GUESTLINK-ONE-COMPOSER",
+   "owner_line": 10501,
+   "value": "lanes/L-EV-GUESTLINK-ONE-COMPOSER/evidence.md"
+  },
+  {
+   "line": 10544,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPOSE-CENSUS",
+   "owner_line": 10538,
+   "value": "lanes/L-COMPOSE-CENSUS/compose.md"
+  },
+  {
+   "line": 10638,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JEST-COLLECTS-LANES",
+   "owner_line": 10632,
+   "value": "lanes/L-JEST-COLLECTS-LANES/evidence.md"
+  },
+  {
+   "line": 10711,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPOSE-FE-CANDIDATE",
+   "owner_line": 10704,
+   "value": "lanes/L-COMPOSE-FE-CANDIDATE/compose-run.md"
+  },
+  {
+   "line": 10779,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVIDENCE-CITATIONS-RESOLVE",
+   "owner_line": 10772,
+   "value": "lanes/L-EVIDENCE-CITATIONS-RESOLVE/citations.md"
+  },
+  {
+   "line": 10817,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COLLECTED-PATHS",
+   "owner_line": 10810,
+   "value": "lanes/L-COLLECTED-PATHS/collected.txt"
+  },
+  {
+   "line": 10844,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ABSENCE-CLAIMS-AUDIT",
+   "owner_line": 10837,
+   "value": "lanes/L-ABSENCE-CLAIMS-AUDIT/absences.md"
+  },
+  {
+   "line": 10875,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAG-CONDITIONS-TESTABLE",
+   "owner_line": 10868,
+   "value": "lanes/L-FLAG-CONDITIONS-TESTABLE/conditions.md"
+  },
+  {
+   "line": 10911,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COLLECT-REVIEW-CONDITIONS",
+   "owner_line": 10904,
+   "value": "lanes/L-COLLECT-REVIEW-CONDITIONS/applied.md"
+  },
+  {
+   "line": 10978,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-XZ-RESIDUAL-SITES",
+   "owner_line": 10971,
+   "value": "lanes/L-XZ-RESIDUAL-SITES/mutation-log.md"
+  },
+  {
+   "line": 11014,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WFR-ACCESS-STRING-TRUTH",
+   "owner_line": 11007,
+   "value": "lanes/L-WFR-ACCESS-STRING-TRUTH/verdict.md"
+  },
+  {
+   "line": 11050,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BARE-PATHSPEC-SWEEP",
+   "owner_line": 11043,
+   "value": "lanes/L-BARE-PATHSPEC-SWEEP/pathspecs.md"
+  },
+  {
+   "line": 11076,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTHAUDIT-TABLE-ABSENT",
+   "owner_line": 11069,
+   "value": "lanes/L-GROWTHAUDIT-TABLE-ABSENT/finding.md"
+  },
+  {
+   "line": 11105,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-REGRESSION-BISECT",
+   "owner_line": 11098,
+   "value": "lanes/L-JOURNEY-REGRESSION-BISECT/bisect.md"
+  },
+  {
+   "line": 11146,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-SQL-CATCH-TYPED",
+   "owner_line": 11139,
+   "value": "lanes/L-GROWTH-SQL-CATCH-TYPED/mutation-log.md"
+  },
+  {
+   "line": 11180,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BLOCKER-RESTATE-RECHECK",
+   "owner_line": 11173,
+   "value": "lanes/L-BLOCKER-RESTATE-RECHECK/recheck.md"
+  },
+  {
+   "line": 11217,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ABSENCE-AUDIT-CONDITIONS",
+   "owner_line": 11210,
+   "value": "lanes/L-ABSENCE-AUDIT-CONDITIONS/applied.md"
+  },
+  {
+   "line": 11261,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-ENROL-JOURNEY-LOCATOR",
+   "owner_line": 11254,
+   "value": "lanes/L-MEALS-ENROL-JOURNEY-LOCATOR/mutation-log.md"
+  },
+  {
+   "line": 11297,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CHECK-DISCOUNT-SUM-COUPLED",
+   "owner_line": 11290,
+   "value": "lanes/L-CHECK-DISCOUNT-SUM-COUPLED/mutation-log.md"
+  },
+  {
+   "line": 11327,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIG-STACK-RECORD",
+   "owner_line": 11320,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-MIG-STACK-RECORD/stack.md"
+  },
+  {
+   "line": 11363,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CANDIDATE-JOURNEYS-ON-ARRIVAL",
+   "owner_line": 11356,
+   "value": "lanes/L-CANDIDATE-JOURNEYS-ON-ARRIVAL/triage.md"
+  },
+  {
+   "line": 11399,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BLOCKER-STALE-RERULE",
+   "owner_line": 11392,
+   "value": "lanes/L-BLOCKER-STALE-RERULE/rerule.md"
+  },
+  {
+   "line": 11436,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-PRETICK-NEVER-WALKED",
+   "owner_line": 11429,
+   "value": "lanes/L-MEALS-PRETICK-NEVER-WALKED/mutation-log.md"
+  },
+  {
+   "line": 11476,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIG-NUMBER-CLAIMS",
+   "owner_line": 11469,
+   "value": "lanes/L-MIG-NUMBER-CLAIMS/claims.md"
+  },
+  {
+   "line": 11515,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-RECEIPT-DISCOUNT-ROW-DROPPED",
+   "owner_line": 11508,
+   "value": "lanes/L-RECEIPT-DISCOUNT-ROW-DROPPED/mutation-log.md"
+  },
+  {
+   "line": 11551,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-DIVERGENCE-RECEIPT",
+   "owner_line": 11544,
+   "value": "/Users/svendaneel/okam/web-fixdiv/lanes/L-FIXTURE-DIVERGENCE-RECEIPT/receipt.md"
+  },
+  {
+   "line": 11586,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LEDGER-BUILD-STATE-RECONCILE",
+   "owner_line": 11579,
+   "value": "lanes/L-LEDGER-BUILD-STATE-RECONCILE/state.md"
+  },
+  {
+   "line": 11624,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED",
+   "owner_line": 11617,
+   "value": "lanes/L-JOURNEY-RECEIPT-RECORDS-WHAT-ANSWERED/mutation-log.md"
+  },
+  {
+   "line": 11660,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-SUPPRESSED-REFUSAL",
+   "owner_line": 11653,
+   "value": "lanes/L-FIXTURE-SUPPRESSED-REFUSAL/run.md"
+  },
+  {
+   "line": 11696,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CHECK-LINEAMOUNT-UNGATED-SUM",
+   "owner_line": 11689,
+   "value": "lanes/L-CHECK-LINEAMOUNT-UNGATED-SUM/mutation-log.md"
+  },
+  {
+   "line": 11731,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-MEMBERS-READ-LAND-CHECK",
+   "owner_line": 11724,
+   "value": "lanes/L-MEALS-MEMBERS-READ-LAND-CHECK/combinations.md"
+  },
+  {
+   "line": 11764,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-SUPPRESSED-ERROR-KEY",
+   "owner_line": 11757,
+   "value": "lanes/L-GROWTH-SUPPRESSED-ERROR-KEY/mutation-log.md"
+  },
+  {
+   "line": 11799,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-ARTIFACTS-UNWITNESSED",
+   "owner_line": 11792,
+   "value": "lanes/L-JOURNEY-ARTIFACTS-UNWITNESSED/witnessed.md"
+  },
+  {
+   "line": 11834,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-SHARED-DIRT-CENSUS",
+   "owner_line": 11827,
+   "value": "lanes/L-SHARED-DIRT-CENSUS/dirt.md"
+  },
+  {
+   "line": 11867,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WORKTREE-BASENAME-TAX",
+   "owner_line": 11860,
+   "value": "lanes/L-WORKTREE-BASENAME-TAX/run.md"
+  },
+  {
+   "line": 11898,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIX-BRANCH-MANIFEST",
+   "owner_line": 11891,
+   "value": "lanes/L-FIX-BRANCH-MANIFEST/manifest.md"
+  },
+  {
+   "line": 11934,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GUARD-REPAIR-LANDS",
+   "owner_line": 11927,
+   "value": "lanes/L-GUARD-REPAIR-LANDS/run.md"
+  },
+  {
+   "line": 11969,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANSLATIONS-COLLISION",
+   "owner_line": 11962,
+   "value": "lanes/L-TRANSLATIONS-COLLISION/keys.md"
+  },
+  {
+   "line": 12021,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARM-RECEIPTS-RECAPTURE",
+   "owner_line": 12013,
+   "value": "lanes/L-ARM-RECEIPTS-RECAPTURE/recaptured.md"
+  },
+  {
+   "line": 12081,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-FIELDS-VS-HARNESS",
+   "owner_line": 12074,
+   "value": "lanes/L-ARTIFACT-FIELDS-VS-HARNESS/mismatches.md"
+  },
+  {
+   "line": 12131,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CONSENT-REASON-VOCABULARY",
+   "owner_line": 12124,
+   "value": "/Users/svendaneel/okam/web-consentvocab/lanes/L-CONSENT-REASON-VOCABULARY/vocabulary.md"
+  },
+  {
+   "line": 12163,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DUPLICATE-KEY-GUARD",
+   "owner_line": 12156,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-GUARD/mutation-log.md"
+  },
+  {
+   "line": 12222,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VAT-KEYS-MONOLINGUAL",
+   "owner_line": 12215,
+   "value": "lanes/L-VAT-KEYS-MONOLINGUAL/keys.md"
+  },
+  {
+   "line": 12302,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-VOCABULARY-SWEEP",
+   "owner_line": 12295,
+   "value": "docs/plan/lanes/L-FIXTURE-VOCABULARY-SWEEP/vocabulary.md"
+  },
+  {
+   "line": 12343,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LINT-RUNNABLE",
+   "owner_line": 12336,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-LINT-RUNNABLE/run.md"
+  },
+  {
+   "line": 12378,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANSLATION-STALE-SWEEP",
+   "owner_line": 12371,
+   "value": "lanes/L-TRANSLATION-STALE-SWEEP/stale.md"
+  },
+  {
+   "line": 12417,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MODULES-PREFLIGHT-FAILS-LOUD",
+   "owner_line": 12410,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-MODULES-PREFLIGHT-FAILS-LOUD/run.md"
+  },
+  {
+   "line": 12448,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PROVENANCE-EXCLUDES-LANE-EVIDENCE",
+   "owner_line": 12441,
+   "value": "lanes/L-PROVENANCE-EXCLUDES-LANE-EVIDENCE/run.md"
+  },
+  {
+   "line": 12476,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-RENDERED-VALUES-FIX",
+   "owner_line": 12469,
+   "value": "docs/plan/lanes/L-FIXTURE-RENDERED-VALUES-FIX/mutation-log.md"
+  },
+  {
+   "line": 12539,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LINT-TWO-REAL-DEFECTS",
+   "owner_line": 12532,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-LINT-TWO-REAL-DEFECTS/mutation-log.md"
+  },
+  {
+   "line": 12594,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GERMAN-IDENTIFIER-LABELS",
+   "owner_line": 12587,
+   "value": "lanes/L-GERMAN-IDENTIFIER-LABELS/mutation-log.md"
+  },
+  {
+   "line": 12631,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MANIFEST-CONDITIONS",
+   "owner_line": 12624,
+   "value": "lanes/L-MANIFEST-CONDITIONS/applied.md"
+  },
+  {
+   "line": 12664,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-IDENTITY-STUB-TESTS",
+   "owner_line": 12657,
+   "value": "lanes/L-IDENTITY-STUB-TESTS/stubs.md"
+  },
+  {
+   "line": 12723,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BUILT-BUT-ON-NO-REF",
+   "owner_line": 12716,
+   "value": "lanes/L-BUILT-BUT-ON-NO-REF/onref.md"
+  },
+  {
+   "line": 12762,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ENUM-MIRROR-CENSUS",
+   "owner_line": 12755,
+   "value": "lanes/L-ENUM-MIRROR-CENSUS/mirrors.md"
+  },
+  {
+   "line": 12799,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-JOURNEY-AT-DE",
+   "owner_line": 12792,
+   "value": "lanes/L-JOURNEY-AT-DE/mutation-log.md"
+  },
+  {
+   "line": 12874,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PRESERVE-UNREFERENCED-WORK",
+   "owner_line": 12867,
+   "value": "lanes/L-PRESERVE-UNREFERENCED-WORK/preserved.md"
+  },
+  {
+   "line": 12915,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PAYMENT-LABEL-UKJENT",
+   "owner_line": 12908,
+   "value": "lanes/L-PAYMENT-LABEL-UKJENT/mutation-log.md"
+  },
+  {
+   "line": 12982,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-RECEIPT-JOURNEY-AT-DE",
+   "owner_line": 12975,
+   "value": "lanes/L-RECEIPT-JOURNEY-AT-DE/mutation-log.md"
+  },
+  {
+   "line": 13044,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-NAMES-ITS-LOCALE",
+   "owner_line": 13037,
+   "value": "lanes/L-ARTIFACT-NAMES-ITS-LOCALE/run.md"
+  },
+  {
+   "line": 13085,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DECLARATIONS-THE-FRAMEWORK-IGNORES",
+   "owner_line": 13078,
+   "value": "lanes/L-DECLARATIONS-THE-FRAMEWORK-IGNORES/ignored.md"
+  },
+  {
+   "line": 13161,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ATDE-REVIEW-CONDITIONS",
+   "owner_line": 13155,
+   "value": "lanes/L-JOURNEY-AT-DE/mutation-log.md"
+  },
+  {
+   "line": 13215,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FOCUSTRAP-TEARDOWN",
+   "owner_line": 13209,
+   "value": "lanes/L-FOCUSTRAP-TEARDOWN/01-red-before-fix.txt"
+  },
+  {
+   "line": 13297,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-NORWEGIAN-ONLY-KEYS-TRANSLATE",
+   "owner_line": 13291,
+   "value": "/Users/svendaneel/okam/web-noonly/lanes/L-NORWEGIAN-ONLY-KEYS-TRANSLATE/keys.md"
+  },
+  {
+   "line": 13353,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-RECEIPT-PAYER-LINE-LOCATE",
+   "owner_line": 13346,
+   "value": "lanes/L-RECEIPT-PAYER-LINE-LOCATE/finding.md"
+  },
+  {
+   "line": 13378,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIXIN-LABELS-TRANSLATE",
+   "owner_line": 13372,
+   "value": "lanes/L-MIXIN-LABELS-TRANSLATE/mutation-log.md"
+  },
+  {
+   "line": 13440,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ESCPOS-COMPANYACCOUNT-LABEL",
+   "owner_line": 13433,
+   "value": "lanes/L-ESCPOS-COMPANYACCOUNT-LABEL/finding.md"
+  },
+  {
+   "line": 13499,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VUE3-SHAPE-GUARD",
+   "owner_line": 13493,
+   "value": "lanes/L-VUE3-SHAPE-GUARD/vue3-shape-guard.md"
+  },
+  {
+   "line": 13561,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DUPLICATE-KEY-IN-THE-BUILD",
+   "owner_line": 13555,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-DUPLICATE-KEY-IN-THE-BUILD/finding.md"
+  },
+  {
+   "line": 13618,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ESCPOS-LADDER-NAMES-THE-TENDER",
+   "owner_line": 13610,
+   "value": "lanes/L-ESCPOS-LADDER-NAMES-THE-TENDER/finding.md"
+  },
+  {
+   "line": 13685,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED",
+   "owner_line": 13677,
+   "value": "lanes/L-PAYMENTTYPE-FROM-CLIENT-UNGUARDED/finding.md"
+  },
+  {
+   "line": 13793,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COLLAPSE-THE-TWO-HOOK-SWEEPS",
+   "owner_line": 13787,
+   "value": "lanes/L-COLLAPSE-THE-TWO-HOOK-SWEEPS/collapse.md"
+  },
+  {
+   "line": 13819,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE",
+   "owner_line": 13813,
+   "value": "lanes/L-WF-ACKNOWLEDGE-RECEIPT-VISIBLE/receipt-visible.md"
+  },
+  {
+   "line": 13876,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LINT-RUNS-ON-SOMETHING",
+   "owner_line": 13870,
+   "value": "lanes/L-LINT-RUNS-ON-SOMETHING/evidence.md"
+  },
+  {
+   "line": 13937,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE",
+   "owner_line": 13931,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-WHICH-EVIDENCE-CAME-FROM-A-BORROWED-TREE/census.md"
+  },
+  {
+   "line": 13965,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TESTS-THAT-WRITE-ARTIFACTS",
+   "owner_line": 13959,
+   "value": "lanes/L-TESTS-THAT-WRITE-ARTIFACTS/census.md"
+  },
+  {
+   "line": 14024,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIRROR-HOLDS-ONLY-REAL-MEMBERS",
+   "owner_line": 14018,
+   "value": "lanes/L-MIRROR-HOLDS-ONLY-REAL-MEMBERS/census.md"
+  },
+  {
+   "line": 14080,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CANONICAL-SLOT-SURVIVES-A-RERUN",
+   "owner_line": 14074,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-CANONICAL-SLOT-SURVIVES-A-RERUN/proof-hashes.txt"
+  },
+  {
+   "line": 14140,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ACK-RECEIPT-SURVIVES-A-RELOAD",
+   "owner_line": 14133,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD/finding.md"
+  },
+  {
+   "line": 14192,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-VUE-JEST-UPGRADE-MEASURED",
+   "owner_line": 14186,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-VUE-JEST-UPGRADE-MEASURED/finding.md"
+  },
+  {
+   "line": 14248,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-NAMES-ITS-MODULE-TREE",
+   "owner_line": 14242,
+   "value": "lanes/L-ARTIFACT-NAMES-ITS-MODULE-TREE/run.md"
+  },
+  {
+   "line": 14302,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PREFCENTRE-DEPLOY-EXEC",
+   "owner_line": 14296,
+   "value": "lanes/L-PREFCENTRE-DEPLOY-EXEC/deploy-state-2026-08-06.md"
+  },
+  {
+   "line": 14332,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-DISCLOSURE-LAND",
+   "owner_line": 14326,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAIN-DISCLOSURE-LAND/merge.md"
+  },
+  {
+   "line": 14358,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-LEVER-TITLE-NAMES-ITS-REACH",
+   "owner_line": 14350,
+   "value": "lanes/L-WF-LEVER-TITLE-NAMES-ITS-REACH/retitle-and-pin.md"
+  },
+  {
+   "line": 14442,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-RECIPE-TRANSITIONS-PINNED",
+   "owner_line": 14436,
+   "value": "/Users/svendaneel/okam/web-mrgtrans/lanes/L-MRG-RECIPE-TRANSITIONS-PINNED/mutation-log.md"
+  },
+  {
+   "line": 14500,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-TITLES-FOLLOW-THE-FLAGS",
+   "owner_line": 14494,
+   "value": "/Users/svendaneel/okam/web-fixtitles/lanes/L-FIXTURE-TITLES-FOLLOW-THE-FLAGS/receipt.md"
+  },
+  {
+   "line": 14560,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CLOCKOUT-STATE-IS-NOT-OPEN",
+   "owner_line": 14552,
+   "value": "/Users/svendaneel/okam/wt-clockoutstate/lanes/L-CLOCKOUT-STATE-IS-NOT-OPEN/evidence.md"
+  },
+  {
+   "line": 14648,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-WASTE-PANEL-SAYS-ABSENT",
+   "owner_line": 14642,
+   "value": "/Users/svendaneel/okam/web-wasteabsent/lanes/L-MRG-WASTE-PANEL-SAYS-ABSENT/evidence.md"
+  },
+  {
+   "line": 14675,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-COVERAGE-PANEL-SAYS-ABSENT",
+   "owner_line": 14669,
+   "value": "/Users/svendaneel/okam/web-mrgcovabsent/lanes/L-MRG-COVERAGE-PANEL-SAYS-ABSENT/evidence.md"
+  },
+  {
+   "line": 14734,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CLOCK-CLIENT-READS-THE-WIRE",
+   "owner_line": 14728,
+   "value": "/Users/svendaneel/okam/web-clockclient/lanes/L-CLOCK-CLIENT-READS-THE-WIRE/evidence.md"
+  },
+  {
+   "line": 14794,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PLAN-LIVES-IN-GIT",
+   "owner_line": 14788,
+   "value": "lanes/L-PLAN-LIVES-IN-GIT/evidence.md"
+  },
+  {
+   "line": 14820,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID",
+   "owner_line": 14812,
+   "value": "lanes/L-EMPLOYEE-REF-REFUSES-ANY-NATIONAL-ID/mutation-log.md"
+  },
+  {
+   "line": 14877,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PATH-EVIDENCE-IS-READ",
+   "owner_line": 14871,
+   "value": "lanes/L-PATH-EVIDENCE-IS-READ/finding.md"
+  },
+  {
+   "line": 14934,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FIXTURE-VALUES-ARE-ENUM-MEMBERS",
+   "owner_line": 14928,
+   "value": "/Users/svendaneel/okam/web-fixenums/lanes/L-FIXTURE-VALUES-ARE-ENUM-MEMBERS/repair.md"
+  },
+  {
+   "line": 14986,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CANNOT-BE-REBUILT-CENSUS",
+   "owner_line": 14980,
+   "value": "lanes/L-CANNOT-BE-REBUILT-CENSUS/finding.md"
+  },
+  {
+   "line": 15049,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FINALIZE-INDEX-OR-A-REASON",
+   "owner_line": 15041,
+   "value": "lanes/L-FINALIZE-INDEX-OR-A-REASON/evidence.md"
+  },
+  {
+   "line": 15108,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED",
+   "owner_line": 15102,
+   "value": "lanes/L-EVIDENCE-IS-CHECKED-WHEN-CLAIMED/finding.md"
+  },
+  {
+   "line": 15166,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BUILT-IS-CHECKED-TOO",
+   "owner_line": 15160,
+   "value": "lanes/L-BUILT-IS-CHECKED-TOO/finding.md"
+  },
+  {
+   "line": 15266,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-POS-CLOCK-CLIENT-OR-RECORDED",
+   "owner_line": 15260,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-POS-CLOCK-CLIENT-OR-RECORDED/finding.md"
+  },
+  {
+   "line": 15322,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION",
+   "owner_line": 15314,
+   "value": "lanes/L-EV-CONCURRENCY-REFUSES-A-STALE-REVISION/evidence.md"
+  },
+  {
+   "line": 15381,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-SUPERSEDE-RELEASE-IS-ATTRIBUTED",
+   "owner_line": 15373,
+   "value": "/Users/svendaneel/okam/wt-supattr/lanes/L-SUPERSEDE-RELEASE-IS-ATTRIBUTED/evidence.md"
+  },
+  {
+   "line": 15412,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MIG-STACK-MERGE",
+   "owner_line": 15404,
+   "value": "lanes/L-MIG-STACK-MERGE/evidence.md"
+  },
+  {
+   "line": 15447,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX",
+   "owner_line": 15441,
+   "value": "/Users/svendaneel/okam/web-ackreload/lanes/L-ACK-RECEIPT-SURVIVES-A-RELOAD-FIX/evidence.md"
+  },
+  {
+   "line": 15797,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAINING-WALK-IS-GREEN",
+   "owner_line": 15791,
+   "value": "artifacts/journeys/training-course-to-evidence.playwright.json"
+  },
+  {
+   "line": 15822,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-SEND-GATE-WALK-IS-GREEN",
+   "owner_line": 15816,
+   "value": "artifacts/journeys/growth-newsletter-send-gate.playwright.json"
+  },
+  {
+   "line": 15848,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ADMIN-JOURNEY-WAIT-DIAGNOSES",
+   "owner_line": 15842,
+   "value": "lanes/L-ADMIN-JOURNEY-WAIT-DIAGNOSES/kill-proof.txt"
+  },
+  {
+   "line": 15914,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-EFFECTIVE-RESOLVER",
+   "owner_line": 15906,
+   "value": "/Users/svendaneel/okam/OkamAPI-growthres/lanes/L-GROWTH-EFFECTIVE-RESOLVER/mutation-receipt.md"
+  },
+  {
+   "line": 15943,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LOGIN-MODAL-REPORTS-A-FAILED-SEND",
+   "owner_line": 15937,
+   "value": "lanes/L-LOGIN-MODAL-REPORTS-A-FAILED-SEND/kill-proof.txt"
+  },
+  {
+   "line": 15973,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LEDGER-NUMBERS-ARE-FREE",
+   "owner_line": 15966,
+   "value": "lanes/L-LEDGER-NUMBERS-ARE-FREE/finding.md"
+  },
+  {
+   "line": 16002,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EMPREF-WIDTH-OR-A-RULING",
+   "owner_line": 15995,
+   "value": "lanes/L-EMPREF-WIDTH-OR-A-RULING/finding.md"
+  },
+  {
+   "line": 16028,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORS-WILDCARD-MEASURED",
+   "owner_line": 16022,
+   "value": "lanes/L-CORS-WILDCARD-MEASURED/finding.md"
+  },
+  {
+   "line": 16055,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPOSE-AND-RUN-THE-STACK",
+   "owner_line": 16049,
+   "value": "/Users/svendaneel/okam/wt-composestack/lanes/L-COMPOSE-AND-RUN-THE-STACK/compose-7ac6f2b2-sql-tier.trx"
+  },
+  {
+   "line": 16081,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CENSUS-DERIVES-ITS-FLOOR",
+   "owner_line": 16075,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-CENSUS-DERIVES-ITS-FLOOR/detail.md"
+  },
+  {
+   "line": 16100,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GUESTLINK-ONE-COMPOSER",
+   "owner_line": 16094,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GUESTLINK-ONE-COMPOSER/RUN.md"
+  },
+  {
+   "line": 16122,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TENDER-WIRE-MERGE-IS-SAFE",
+   "owner_line": 16116,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TENDER-WIRE-MERGE-IS-SAFE/evidence.md"
+  },
+  {
+   "line": 16147,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FLAGS-RESOLVERS-COVER-THREE",
+   "owner_line": 16141,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-FLAGS-RESOLVERS-COVER-THREE/evidence.md"
+  },
+  {
+   "line": 16174,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PREF-COOKIE-HALF",
+   "owner_line": 16167,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PREF-COOKIE-HALF/evidence.md"
+  },
+  {
+   "line": 16208,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LOGINMODAL-MOUNTED-ONCE",
+   "owner_line": 16202,
+   "value": "/Users/svendaneel/okam/web-loginmodalonce/lanes/L-LOGINMODAL-MOUNTED-ONCE/kill-proof-browser.txt"
+  },
+  {
+   "line": 16230,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LOGINMODAL-SUCCESS-IS-SILENT",
+   "owner_line": 16224,
+   "value": "/Users/svendaneel/okam/web-loginsuccess/lanes/L-LOGINMODAL-SUCCESS-IS-SILENT/kill-proof.txt"
+  },
+  {
+   "line": 16254,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAINWIRE-ABORT",
+   "owner_line": 16247,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRAINWIRE-ABORT/finding.md"
+  },
+  {
+   "line": 16282,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRX-CONTAINS-WHAT-IT-CLAIMS",
+   "owner_line": 16276,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRX-CONTAINS-WHAT-IT-CLAIMS/trx-contains-what-it-claims.md"
+  },
+  {
+   "line": 16304,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-TWO-HUMANS-WALK",
+   "owner_line": 16298,
+   "value": "artifacts/journeys/workforce-week-run-two-humans.playwright.json"
+  },
+  {
+   "line": 16344,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTHAUDIT-MIGRATION",
+   "owner_line": 16338,
+   "value": "docs/plan/lanes/L-GROWTHAUDIT-MIGRATION/sys-catalog.txt"
+  },
+  {
+   "line": 16388,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE",
+   "owner_line": 16382,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-NEWSLETTER-DISPATCH-REPORTS-ITS-CAUSE/mutation-log.md"
+  },
+  {
+   "line": 16427,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ABORTED-TRX-CANNOT-BE-EVIDENCE",
+   "owner_line": 16421,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ABORTED-TRX-CANNOT-BE-EVIDENCE/aborted-trx-cannot-be-evidence.md"
+  },
+  {
+   "line": 16461,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DESTRUCTIVE-SAVES-LOAD-FIRST",
+   "owner_line": 16455,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-DESTRUCTIVE-SAVES-LOAD-FIRST/receipts/live-record-before-after.md"
+  },
+  {
+   "line": 16489,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ONGOING-SHOWS-EVERY-LIVE-ORDER",
+   "owner_line": 16483,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-ONGOING-SHOWS-EVERY-LIVE-ORDER/evidence.md"
+  },
+  {
+   "line": 16510,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-SETTINGS-SAVES-REPORT-FAILURE",
+   "owner_line": 16504,
+   "value": "lanes/L-SETTINGS-SAVES-REPORT-FAILURE/measurements.txt"
+  },
+  {
+   "line": 16533,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-RESERVATION-CONFLICT-SEES-EVERY-TABLE",
+   "owner_line": 16527,
+   "value": "lanes/L-RESERVATION-CONFLICT-SEES-EVERY-TABLE/evidence.md"
+  },
+  {
+   "line": 16551,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-DEV-DEFAULT-FAILS-CLOSED",
+   "owner_line": 16545,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-DEV-DEFAULT-FAILS-CLOSED/run.md"
+  },
+  {
+   "line": 16575,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN",
+   "owner_line": 16569,
+   "value": "lanes/L-KITCHEN-AND-BOARD-RECOVER-AFTER-LOGIN/notes.md"
+  },
+  {
+   "line": 16628,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MONEY-FIELDS-SHOW-THEIR-ORE",
+   "owner_line": 16622,
+   "value": "lanes/L-MONEY-FIELDS-SHOW-THEIR-ORE/reachability-census.md"
+  },
+  {
+   "line": 16684,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER",
+   "owner_line": 16677,
+   "value": "docs/plan/lanes/L-PENDING-MODEL-CHANGES-ON-THE-FAST-TIER/NOTES.md"
+  },
+  {
+   "line": 16711,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MEALS-ENROLMENT-HAS-A-BUTTON",
+   "owner_line": 16705,
+   "value": "docs/plan/lanes/L-MEALS-ENROLMENT-HAS-A-BUTTON/03-a-programme-somebody-is-enrolled-in.png"
+  },
+  {
+   "line": 16737,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MARGIN-WASTE-SURFACE-IS-HONEST",
+   "owner_line": 16731,
+   "value": "/Users/svendaneel/okam/Web/.claude/worktrees/agent-a14e83ac504f04840/lanes/L-MARGIN-WASTE-SURFACE-IS-HONEST/evidence.md"
+  },
+  {
+   "line": 16763,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING",
+   "owner_line": 16757,
+   "value": "docs/plan/lanes/L-ADMINPAGE-EMITS-INSTEAD-OF-NAVIGATING/evidence.md"
+  },
+  {
+   "line": 16789,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EF-DECLARES-EVERY-TRIGGER",
+   "owner_line": 16782,
+   "value": "docs/plan/lanes/L-EF-DECLARES-EVERY-TRIGGER/evidence.md"
+  },
+  {
+   "line": 16826,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-SECRETS-READ-FROM-CONFIG",
+   "owner_line": 16819,
+   "value": "docs/plan/lanes/L-SECRETS-READ-FROM-CONFIG/evidence.md"
+  },
+  {
+   "line": 16860,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-CI-RUNS-THE-FAST-TIER",
+   "owner_line": 16854,
+   "value": "docs/plan/lanes/L-CI-RUNS-THE-FAST-TIER/PROPOSAL.md"
+  },
+  {
+   "line": 16888,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT",
+   "owner_line": 16881,
+   "value": "docs/plan/lanes/L-COMPANY-REFUND-IS-NOT-A-CASH-PAYOUT/company-account-referenced-return.patch"
+  },
+  {
+   "line": 16915,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP",
+   "owner_line": 16909,
+   "value": "docs/plan/lanes/L-A-PUBLISHED-CATEGORY-REACHES-THE-SHOP/applied.md"
+  },
+  {
+   "line": 16939,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-OPEN-SHIFTS-EXCLUDE-SUPERSEDED",
+   "owner_line": 16932,
+   "value": "/Users/svendaneel/okam/OkamAPI-modules/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs"
+  },
+  {
+   "line": 16966,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-PLANNED-MINUTES-HONOUR-LINEAGE",
+   "owner_line": 16959,
+   "value": "/Users/svendaneel/okam/OkamAPI-wt-plannedmin/WebApi.Tests/Workforce/RepublishedWeekPlannedReadsTests.cs"
+  },
+  {
+   "line": 17000,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-BACKEND-PATCHES-ARE-APPLIED",
+   "owner_line": 16993,
+   "value": "/Users/svendaneel/okam/wt-bepatch/lanes/L-BACKEND-PATCHES-ARE-APPLIED/evidence.md"
+  },
+  {
+   "line": 17036,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LAND-THE-BACKEND-ON-THE-TRUNK",
+   "owner_line": 17029,
+   "value": "/Users/svendaneel/okam/wt-landbackend/lanes/L-LAND-THE-BACKEND-ON-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 17086,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LAND-THE-FRONTEND-ON-THE-TRUNK",
+   "owner_line": 17080,
+   "value": "lanes/L-LAND-THE-FRONTEND-ON-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 17122,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRIGGER-DECLARATIONS-REFRESHED",
+   "owner_line": 17115,
+   "value": "docs/plan/lanes/L-TRIGGER-DECLARATIONS-REFRESHED/detail.md"
+  },
+  {
+   "line": 17165,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-REVIEW-THE-BACKEND-PATCH-TREE",
+   "owner_line": 17158,
+   "value": "docs/plan/reviews/L-REVIEW-THE-BACKEND-PATCH-TREE.md"
+  },
+  {
+   "line": 17191,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK",
+   "owner_line": 17184,
+   "value": "docs/plan/reviews/L-GROWTHAUDIT-COMPOSES-OVER-THE-STACK.md"
+  },
+  {
+   "line": 17247,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING",
+   "owner_line": 17240,
+   "value": "docs/plan/reviews/L-WHAT-THE-TRUNK-WILL-STILL-BE-MISSING.md"
+  },
+  {
+   "line": 17285,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THREE-RETURNS-THE-TOOL-REFUSED",
+   "owner_line": 17278,
+   "value": "docs/plan/reviews/L-THREE-RETURNS-THE-TOOL-REFUSED.md"
+  },
+  {
+   "line": 17316,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LIVE-WORLD-RUNS-THE-BRANCH",
+   "owner_line": 17309,
+   "value": "/Users/svendaneel/okam/web-livewalk/artifacts/journeys/WALK-RECORD.md"
+  },
+  {
+   "line": 17353,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-TRUNK-AS-LANDED",
+   "owner_line": 17346,
+   "value": "docs/plan/reviews/L-READ-THE-TRUNK-AS-LANDED.md"
+  },
+  {
+   "line": 17429,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK",
+   "owner_line": 17422,
+   "value": "docs/plan/reviews/L-ONE-CREDIT-SALE-PREDICATE-AT-THE-TRUNK.md"
+  },
+  {
+   "line": 17466,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS",
+   "owner_line": 17459,
+   "value": "/Users/svendaneel/okam/web-orepad/lanes/L-ORE-PADDING-IN-TWO-OPERATOR-CLIENTS/EVIDENCE.txt"
+  },
+  {
+   "line": 17498,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-ACCEPTANCE-NAMES-SOMEBODY",
+   "owner_line": 17491,
+   "value": "/Users/svendaneel/okam/OkamAPI-acceptname/WebApi.Tests/Wire/EventsAcceptanceIdentityWireTests.cs"
+  },
+  {
+   "line": 17528,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE",
+   "owner_line": 17521,
+   "value": "lanes/L-ARTIFACT-STORE-TEST-IS-WORKTREE-FREE/evidence.md"
+  },
+  {
+   "line": 17562,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-ONLY-COPIES-REACH-A-REF",
+   "owner_line": 17555,
+   "value": "docs/plan/returns/L-THE-ONLY-COPIES-REACH-A-REF-1.md"
+  },
+  {
+   "line": 17601,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-INVITE-PAIR-LANDS",
+   "owner_line": 17594,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-WF-INVITE-PAIR-LANDS/evidence.md"
+  },
+  {
+   "line": 17637,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN",
+   "owner_line": 17630,
+   "value": "docs/plan/returns/L-EVERY-STARTER-RESUMES-AFTER-IN-PAGE-SIGN-IN-1.md"
+  },
+  {
+   "line": 17671,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE",
+   "owner_line": 17664,
+   "value": "docs/plan/lanes/L-THE-DEMO-RUNS-ON-A-MACHINE-THAT-IS-NOT-THIS-ONE/run-2-fixed-script-from-a-fresh-checkout.txt"
+  },
+  {
+   "line": 17703,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS",
+   "owner_line": 17696,
+   "value": "docs/plan/lanes/L-SECOND-WAVE-LANDS-ON-BOTH-TRUNKS/backend-landing-receipt.md"
+  },
+  {
+   "line": 17762,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-BACKEND-TRUNK-AS-LANDED",
+   "owner_line": 17755,
+   "value": "docs/plan/reviews/L-READ-THE-BACKEND-TRUNK-AS-LANDED.md"
+  },
+  {
+   "line": 17801,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHICH-JOURNEYS-ARE-REAL",
+   "owner_line": 17794,
+   "value": "docs/plan/reviews/L-WHICH-JOURNEYS-ARE-REAL.md"
+  },
+  {
+   "line": 17844,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-FLAG-BACKLOG-IS-A-WORK-LIST",
+   "owner_line": 17837,
+   "value": "docs/plan/reviews/L-THE-FLAG-BACKLOG-IS-A-WORK-LIST.md"
+  },
+  {
+   "line": 17886,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST",
+   "owner_line": 17879,
+   "value": "docs/plan/lanes/L-THE-SIGN-IN-FRONT-DOOR-IS-HONEST/walk-EXIT-WALK.json"
+  },
+  {
+   "line": 17930,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRAIN-DEMO-SEED-COMPLETES",
+   "owner_line": 17923,
+   "value": "lanes/L-TRAIN-DEMO-SEED-COMPLETES/walk-training-1-courses.png"
+  },
+  {
+   "line": 18012,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED",
+   "owner_line": 18005,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-GROWTH-TELLS-THE-OPERATOR-WHAT-ACTUALLY-FAILED/mutation-log.md"
+  },
+  {
+   "line": 18085,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK",
+   "owner_line": 18078,
+   "value": "docs/plan/lanes/L-THE-TOP-RANKED-FIXES-REACH-THE-TRUNK/landing-receipt.md"
+  },
+  {
+   "line": 18145,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS",
+   "owner_line": 18138,
+   "value": "/Users/svendaneel/okam/OkamAPI-refusalid/.lane/L-A-REFUSAL-STOPS-NAMING-THE-PERSON-IT-PROTECTS-detail.md"
+  },
+  {
+   "line": 18178,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-WORKER-IS-NOT-BLOCKED-BY-HER-SUPERSEDED-SELF",
+   "owner_line": 18171,
+   "value": "/Users/svendaneel/okam/OkamAPI-supersededself/WebApi.Tests/Workforce/WorkforceShiftExchangeTests.cs"
+  },
+  {
+   "line": 18213,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN",
+   "owner_line": 18206,
+   "value": "/Users/svendaneel/okam/OkamAPI-anerrbody/lanes/L-AN-ERROR-BODY-STOPS-HANDING-BACK-THE-CALLERS-TOKEN/finding.md"
+  },
+  {
+   "line": 18249,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION",
+   "owner_line": 18242,
+   "value": "lanes/L-A-LOGIN-TOKEN-EXPIRES-WITHIN-A-SESSION/evidence.md"
+  },
+  {
+   "line": 18283,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY",
+   "owner_line": 18276,
+   "value": "/Users/svendaneel/okam/wt-mrgsetupday/.lane/L-A-VENUE-THAT-SETS-MARGIN-UP-TODAY-SEES-A-REAL-NUMBER-TODAY.md"
+  },
+  {
+   "line": 18316,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-PRINTED-RECEIPT-NAMES-ITS-TENDER",
+   "owner_line": 18309,
+   "value": "/Users/svendaneel/okam/wt-printedtender/WebApi.Tests/Kassa/PrintedTenderNameTests.cs"
+  },
+  {
+   "line": 18358,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERYTHING-REACHES-THE-BRANCH",
+   "owner_line": 18351,
+   "value": "docs/plan/lanes/L-EVERYTHING-REACHES-THE-BRANCH/landing-evidence.md"
+  },
+  {
+   "line": 18428,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-UNREVIEWED-FRONTEND",
+   "owner_line": 18421,
+   "value": "docs/plan/reviews/L-READ-THE-UNREVIEWED-FRONTEND.md"
+  },
+  {
+   "line": 18471,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-UNREVIEWED-BACKEND",
+   "owner_line": 18464,
+   "value": "docs/plan/reviews/L-READ-THE-UNREVIEWED-BACKEND.md"
+  },
+  {
+   "line": 18513,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK",
+   "owner_line": 18506,
+   "value": "lanes/L-EVERY-MODULE-HAS-DATA-A-PERSON-CAN-WALK/EVIDENCE.txt"
+  },
+  {
+   "line": 18556,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-COVERAGE-MEASURED-PER-MODULE",
+   "owner_line": 18549,
+   "value": "docs/plan/reviews/L-COVERAGE-MEASURED-PER-MODULE.md"
+  },
+  {
+   "line": 18598,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHERE-THE-PLAN-STILL-HAS-GAPS",
+   "owner_line": 18591,
+   "value": "docs/plan/reviews/L-WHERE-THE-PLAN-STILL-HAS-GAPS.md"
+  },
+  {
+   "line": 18636,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN",
+   "owner_line": 18629,
+   "value": "docs/plan/lanes/L-EVERY-MODULE-CAN-BE-TURNED-ON-FROM-A-SCREEN/evidence.md"
+  },
+  {
+   "line": 18682,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED",
+   "owner_line": 18675,
+   "value": "docs/plan/reviews/L-THE-THREE-HUNDRED-BRANCHES-ARE-CLASSIFIED.md"
+  },
+  {
+   "line": 18785,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS",
+   "owner_line": 18778,
+   "value": "lanes/L-THE-COVERAGE-INSTRUMENT-MEASURES-WHAT-IT-CLAIMS/evidence.md"
+  },
+  {
+   "line": 18824,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES",
+   "owner_line": 18817,
+   "value": "/Users/svendaneel/okam/OkamAPI-roleupsert/lanes/L-A-ROLE-UPSERT-STOPS-MINTING-DUPLICATES/evidence.md"
+  },
+  {
+   "line": 18897,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-INSTRUMENT-AND-THE-UPSERT",
+   "owner_line": 18890,
+   "value": "docs/plan/reviews/L-READ-THE-INSTRUMENT-AND-THE-UPSERT.md"
+  },
+  {
+   "line": 19026,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-TILL-TESTS-ARE-RUN-AND-TRUE",
+   "owner_line": 19019,
+   "value": "docs/plan/lanes/L-THE-TILL-TESTS-ARE-RUN-AND-TRUE/mutation-log.md"
+  },
+  {
+   "line": 19073,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-DOCUMENTS-AND-CART-TESTS-FINISH",
+   "owner_line": 19066,
+   "value": "docs/plan/lanes/L-THE-DOCUMENTS-AND-CART-TESTS-FINISH/mutation-ledger.md"
+  },
+  {
+   "line": 19116,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-REVIEWED-INSTRUMENT-LANDS",
+   "owner_line": 19109,
+   "value": "docs/plan/lanes/L-THE-REVIEWED-INSTRUMENT-LANDS/evidence.md"
+  },
+  {
+   "line": 19156,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GUARD-STOPS-CRASHING-ON-THE-CASE-IT-GUARDS",
+   "owner_line": 19149,
+   "value": "/private/tmp/claude-501/-Users-svendaneel-okam/766072d3-8965-4c45-be67-76b407d86aaf/scratchpad/guard/Web-modules/test/guid-fallback-without-crypto.test.js"
+  },
+  {
+   "line": 19207,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-TEST-WRITING-LANES",
+   "owner_line": 19200,
+   "value": "docs/plan/reviews/L-READ-THE-TEST-WRITING-LANES.md"
+  },
+  {
+   "line": 19258,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVIDENCE-RECORD-CAN-BE-HANDED-OVER",
+   "owner_line": 19251,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-EVIDENCE-RECORD-CAN-BE-HANDED-OVER/evidence.md"
+  },
+  {
+   "line": 19299,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-CRYPTO-LADDER",
+   "owner_line": 19292,
+   "value": "docs/plan/reviews/L-READ-THE-CRYPTO-LADDER.md"
+  },
+  {
+   "line": 19344,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-TESTED-WORK-REACHES-THE-TRUNK",
+   "owner_line": 19337,
+   "value": "docs/plan/lanes/L-THE-TESTED-WORK-REACHES-THE-TRUNK/LANDING-DETAIL.md"
+  },
+  {
+   "line": 19390,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHICH-BACKEND-GREENS-MEASURED-NOTHING",
+   "owner_line": 19383,
+   "value": "docs/plan/reviews/L-WHICH-BACKEND-GREENS-MEASURED-NOTHING.md"
+  },
+  {
+   "line": 19430,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-PRINT-PATH",
+   "owner_line": 19423,
+   "value": "docs/plan/reviews/L-READ-THE-PRINT-PATH.md"
+  },
+  {
+   "line": 19477,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN",
+   "owner_line": 19470,
+   "value": "docs/plan/returns/L-THE-LAST-FOUR-PAGES-RESUME-AFTER-SIGN-IN-1.md"
+  },
+  {
+   "line": 19524,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH",
+   "owner_line": 19517,
+   "value": "docs/plan/lanes/L-LAND-THE-FRONT-DOOR-AND-THE-PRINT-PATH/LANDING.md"
+  },
+  {
+   "line": 19571,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-FOUR-PAGES",
+   "owner_line": 19564,
+   "value": "docs/plan/reviews/L-READ-THE-FOUR-PAGES.md"
+  },
+  {
+   "line": 19603,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVENTS-DISPATCH-GETS-A-SCREEN-REDO",
+   "owner_line": 19596,
+   "value": "docs/plan/lanes/L-EVENTS-DISPATCH-GETS-A-SCREEN-REDO/evidence.md"
+  },
+  {
+   "line": 19707,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-WORKER-SEES-WHAT-SHE-CONFIRMED",
+   "owner_line": 19700,
+   "value": "docs/plan/lanes/L-A-WORKER-SEES-WHAT-SHE-CONFIRMED/evidence.md"
+  },
+  {
+   "line": 19805,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-MANGLED-NEWSLETTER-IS-REFUSED",
+   "owner_line": 19798,
+   "value": "docs/plan/lanes/L-A-MANGLED-NEWSLETTER-IS-REFUSED/mutation-log.md"
+  },
+  {
+   "line": 19853,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS",
+   "owner_line": 19846,
+   "value": "docs/plan/lanes/L-THE-PRODUCT-LINK-ROUTE-SAYS-WHAT-IT-WANTS/EVIDENCE.md"
+  },
+  {
+   "line": 19899,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-FOUR-PAGES-LAND",
+   "owner_line": 19892,
+   "value": "docs/plan/lanes/L-THE-FOUR-PAGES-LAND/LANDING.md"
+  },
+  {
+   "line": 20047,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS",
+   "owner_line": 20040,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ACKNOWLEDGEMENT-RECEIPT-LANDS/evidence.md"
+  },
+  {
+   "line": 20096,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-DAYS-BUILDS-REDO",
+   "owner_line": 20089,
+   "value": "docs/plan/reviews/L-READ-THE-DAYS-BUILDS-REDO.md"
+  },
+  {
+   "line": 20152,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GUEST-EXIT-IS-FINISHED",
+   "owner_line": 20145,
+   "value": "/Users/svendaneel/okam/Web-modules-wt/L-THE-GUEST-EXIT-IS-FINISHED/lanes/L-THE-GUEST-EXIT-IS-FINISHED/evidence.md"
+  },
+  {
+   "line": 20203,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LIVE-WORLD-CATCHES-UP",
+   "owner_line": 20196,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-LIVE-WORLD-CATCHES-UP/WALK-RECORD.md"
+  },
+  {
+   "line": 20260,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-ACKNOWLEDGE-BUTTON-CANNOT-CONFIRM-THE-WRONG-WEEK",
+   "owner_line": 20253,
+   "value": "docs/plan/lanes/L-THE-ACKNOWLEDGE-BUTTON-CANNOT-CONFIRM-THE-WRONG-WEEK/evidence.md"
+  },
+  {
+   "line": 20306,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE",
+   "owner_line": 20299,
+   "value": "docs/plan/lanes/L-EVENTS-DELIVERY-IS-PROVEN-OR-RECORDED-UNPROVABLE/DELIVERY-RECORD.md"
+  },
+  {
+   "line": 20353,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION",
+   "owner_line": 20346,
+   "value": "docs/plan/lanes/L-MAIL-CONNECTS-ON-A-HOST-THAT-CANNOT-CHECK-REVOCATION/DECISION-RECORD.md"
+  },
+  {
+   "line": 20405,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LAND-THE-EVENING-WORK",
+   "owner_line": 20398,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-LAND-THE-EVENING-WORK/evidence.md"
+  },
+  {
+   "line": 20454,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-WRONG-WEEK-FIX",
+   "owner_line": 20447,
+   "value": "docs/plan/reviews/L-READ-THE-WRONG-WEEK-FIX.md"
+  },
+  {
+   "line": 20508,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED",
+   "owner_line": 20501,
+   "value": "docs/plan/lanes/L-THE-GROWTH-POWERUSER-PAGE-IS-TESTED"
+  },
+  {
+   "line": 20551,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-WORKFORCE-SCREENS-ARE-TESTED",
+   "owner_line": 20544,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-WORKFORCE-SCREENS-ARE-TESTED-1.md"
+  },
+  {
+   "line": 20620,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS",
+   "owner_line": 20613,
+   "value": "docs/plan/lanes/L-THE-LAST-UNTESTED-MEALS-AND-EVENTS-SCREENS/coverage-after.txt"
+  },
+  {
+   "line": 20664,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-BIGGEST-UNTESTED-BACKEND-FILES-ARE-NAMED-AND-THREE-ARE-COVERED",
+   "owner_line": 20657,
+   "value": "docs/plan/artifacts/pos-uncovered-twenty.md"
+  },
+  {
+   "line": 20712,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-REVOCATION-LEVER",
+   "owner_line": 20705,
+   "value": "docs/plan/reviews/L-READ-THE-REVOCATION-LEVER.md"
+  },
+  {
+   "line": 20775,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-ORPHANED-FIXES-REACH-A-BRANCH",
+   "owner_line": 20768,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-ORPHANED-FIXES-REACH-A-BRANCH/evidence.md"
+  },
+  {
+   "line": 20942,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID",
+   "owner_line": 20935,
+   "value": "docs/plan/lanes/L-THE-REGISTER-STOPS-TRUSTING-A-SESSION-ID/FINDING.md"
+  },
+  {
+   "line": 20988,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED",
+   "owner_line": 20981,
+   "value": "docs/plan/lanes/L-EVERY-REPORT-READ-SAYS-WHY-IT-FAILED"
+  },
+  {
+   "line": 21038,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN",
+   "owner_line": 21031,
+   "value": "docs/plan/lanes/L-ELEVEN-WOLT-STATUSES-REACH-A-SWISS-SCREEN-IN-NORWEGIAN/premise-check.txt"
+  },
+  {
+   "line": 21080,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK",
+   "owner_line": 21073,
+   "value": "docs/plan/reviews/L-READ-THE-MONEY-THAT-REACHED-THE-TRUNK.md"
+  },
+  {
+   "line": 21132,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL",
+   "owner_line": 21125,
+   "value": "docs/plan/reviews/L-READ-WHETHER-THE-NEW-TESTS-CAN-ACTUALLY-FAIL.md"
+  },
+  {
+   "line": 21185,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING",
+   "owner_line": 21178,
+   "value": "docs/plan/lanes/L-NO-MUTATION-RUNNER-CAN-DELETE-THE-WORK-IT-IS-TESTING/sweep.txt"
+  },
+  {
+   "line": 21234,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE",
+   "owner_line": 21227,
+   "value": "docs/plan/lanes/L-THE-OFFER-PAGE-STOPS-TELLING-A-GUEST-SOMETHING-UNTRUE/FINDING.md"
+  },
+  {
+   "line": 21289,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR",
+   "owner_line": 21282,
+   "value": "docs/plan/lanes/L-A-FAILED-REPORT-READ-REACHES-THE-OPERATOR"
+  },
+  {
+   "line": 21334,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ",
+   "owner_line": 21327,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-A-MANAGER-IS-TOLD-WHETHER-THE-EXPORT-FLAG-WAS-EVER-READ-1.md"
+  },
+  {
+   "line": 21476,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET",
+   "owner_line": 21469,
+   "value": "docs/plan/lanes/L-A-TRANSFERRED-GIFT-CARD-FUNDS-EXACTLY-ONE-WALLET/evidence.md"
+  },
+  {
+   "line": 21523,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-INVOICE-LISTS-EACH-ORDER-ONCE",
+   "owner_line": 21516,
+   "value": "docs/plan/lanes/L-AN-INVOICE-LISTS-EACH-ORDER-ONCE"
+  },
+  {
+   "line": 21565,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG",
+   "owner_line": 21558,
+   "value": "docs/plan/lanes/L-A-GUEST-WHOSE-CODE-WAS-RIGHT-IS-NOT-TOLD-IT-WAS-WRONG/FINDING.md"
+  },
+  {
+   "line": 21620,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LANDING-ORDER-IS-COMPUTED-AND-PROVEN",
+   "owner_line": 21613,
+   "value": "docs/plan/artifacts/landing-order.md"
+  },
+  {
+   "line": 21705,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-THREE-SURVIVORS-ARE-KILLED",
+   "owner_line": 21698,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/returns/L-THE-THREE-SURVIVORS-ARE-KILLED-1.md"
+  },
+  {
+   "line": 21760,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE",
+   "owner_line": 21753,
+   "value": "docs/plan/lanes/L-THE-MEALS-TESTS-ARE-PROVEN-FALSIFIABLE"
+  },
+  {
+   "line": 21815,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-TRANCHE-ONE",
+   "owner_line": 21808,
+   "value": "docs/plan/reviews/L-READ-TRANCHE-ONE.md"
+  },
+  {
+   "line": 21876,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK",
+   "owner_line": 21869,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-FIRST-TRANCHE-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 21941,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN",
+   "owner_line": 21934,
+   "value": "docs/plan/lanes/L-A-KILL-CERTIFICATE-REQUIRES-A-TEST-TO-HAVE-RUN"
+  },
+  {
+   "line": 21996,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES",
+   "owner_line": 21989,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WOLT-RECORD-SAYS-WHAT-THE-BACKEND-ACTUALLY-DOES/evidence.md"
+  },
+  {
+   "line": 22040,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANCHE-TWO-REACHES-THE-TRUNK",
+   "owner_line": 22033,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-TWO-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22095,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANCHE-THREE-REACHES-THE-TRUNK",
+   "owner_line": 22088,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-THREE-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22155,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-TWO-MONEY-FIXES",
+   "owner_line": 22147,
+   "value": "docs/plan/reviews/L-READ-THE-TWO-MONEY-FIXES.md"
+  },
+  {
+   "line": 22221,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-BACKEND-LANDING-ORDER-IS-COMPUTED",
+   "owner_line": 22213,
+   "value": "docs/plan/artifacts/backend-landing-order.md"
+  },
+  {
+   "line": 22279,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE",
+   "owner_line": 22271,
+   "value": "docs/plan/returns/L-THE-GUARD-SWEEPS-WHERE-THE-RUNNERS-ACTUALLY-LIVE-1.md"
+  },
+  {
+   "line": 22330,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANCHE-FOUR-REACHES-THE-TRUNK",
+   "owner_line": 22323,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FOUR-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22383,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TRANCHE-FIVE-REACHES-THE-TRUNK",
+   "owner_line": 22375,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-TRANCHE-FIVE-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22436,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY",
+   "owner_line": 22429,
+   "value": "docs/plan/lanes/L-ONLY-THE-HOLDER-CAN-GIVE-A-GIFT-CARD-AWAY/tier.txt"
+  },
+  {
+   "line": 22508,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK",
+   "owner_line": 22501,
+   "value": "docs/plan/reviews/L-READ-THE-THREE-TRANCHES-ON-THE-TRUNK.md"
+  },
+  {
+   "line": 22571,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK",
+   "owner_line": 22564,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-BACKEND-MONEY-TRANCHE-REACHES-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22637,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK",
+   "owner_line": 22630,
+   "value": "docs/plan/returns/L-THE-GIFT-CARD-HOLE-CLOSES-ON-THE-TRUNK-1.md"
+  },
+  {
+   "line": 22695,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK",
+   "owner_line": 22688,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-WIDENED-GUARD-AND-THE-BACKEND-CENSUS-REACH-THE-TRUNK/evidence.md"
+  },
+  {
+   "line": 22758,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-HUNDRED-AND-FORTY-THREE-ARE-RANKED",
+   "owner_line": 22751,
+   "value": "docs/plan/artifacts/backend-un-upstreamed-ranked.md"
+  },
+  {
+   "line": 22811,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY",
+   "owner_line": 22804,
+   "value": "docs/plan/reviews/L-READ-WHAT-REACHED-BOTH-TRUNKS-TODAY.md"
+  },
+  {
+   "line": 22863,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE",
+   "owner_line": 22856,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-A-GUEST-WHO-PAID-IS-RETURNED-SOMEWHERE/evidence.md"
+  },
+  {
+   "line": 22937,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED",
+   "owner_line": 22930,
+   "value": "docs/plan/returns/L-AN-XZ-REPORT-COUNTS-ONLY-MONEY-THAT-ARRIVED-1.md"
+  },
+  {
+   "line": 23023,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER",
+   "owner_line": 23016,
+   "value": "docs/plan/returns/L-A-CREDIT-NOTE-IS-ONE-DOCUMENT-WITH-ONE-NUMBER-1.md"
+  },
+  {
+   "line": 23144,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-XZ-SPLIT-REACHES-THE-TRUNK",
+   "owner_line": 23137,
+   "value": "docs/plan/returns/L-THE-XZ-SPLIT-REACHES-THE-TRUNK-1.md"
+  },
+  {
+   "line": 23196,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON",
+   "owner_line": 23189,
+   "value": "docs/plan/returns/L-THE-RUNNER-FINDS-ITS-ROOT-WITHOUT-A-PACKAGE-JSON-1.md"
+  },
+  {
+   "line": 23236,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK",
+   "owner_line": 23229,
+   "value": "docs/plan/returns/L-THE-RUNNER-ANCHOR-REACHES-THE-TRUNK-1.md"
+  },
+  {
+   "line": 23291,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY",
+   "owner_line": 23284,
+   "value": "docs/plan/returns/L-THE-LOSER-OF-A-RELEASE-RACE-IS-TOLD-WHY-1.md"
+  },
+  {
+   "line": 23333,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-THIRTY-SEVEN-UNREADABLE-ARE-OPENED",
+   "owner_line": 23326,
+   "value": "docs/plan/artifacts/backend-unreadable-thirtyseven.md"
+  },
+  {
+   "line": 23387,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP",
+   "owner_line": 23380,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-THE-GIFT-CARD-REFUSAL-IS-PROVEN-OVER-HTTP/evidence.md"
+  },
+  {
+   "line": 23437,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WHY-FOUR-HUNDRED-AND-SIXTY-NINE-LANES-CANNOT-VERIFY",
+   "owner_line": 23430,
+   "value": "docs/plan/artifacts/why-verification-is-refused.md"
+  },
+  {
+   "line": 23488,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-RELEASE-RACE-REACHES-THE-TRUNK",
+   "owner_line": 23481,
+   "value": "docs/plan/returns/L-THE-RELEASE-RACE-REACHES-THE-TRUNK-1.md"
+  },
+  {
+   "line": 23540,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TWO-HUNDRED-AND-SIX-EXITS-NAME-THEIR-OWN-EVIDENCE",
+   "owner_line": 23533,
+   "value": "docs/plan/artifacts/two-hundred-and-six-exits.md"
+  },
+  {
+   "line": 23585,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVIDENCE-A-STRANGER-CANNOT-REACH-IS-COMMITTED",
+   "owner_line": 23578,
+   "value": "docs/plan/artifacts/twenty-one-proofs-committed.md"
+  },
+  {
+   "line": 23631,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED",
+   "owner_line": 23624,
+   "value": "docs/plan/artifacts/eighty-two-mechanical-refusals.md"
+  },
+  {
+   "line": 23683,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN",
+   "owner_line": 23676,
+   "value": "docs/plan/artifacts/twenty-three-branches.md"
+  },
+  {
+   "line": 23733,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-SIX-UNLANDED-BRANCHES-REACH-THE-TRUNK",
+   "owner_line": 23726,
+   "value": "backend feature/restaurant-modules 7bf975572 -> d30c1c4d4 (4 merges, tier 5037/5048 green at the tip); frontend feature/restaurant-modules 914e593 -> de5e68c (184 suites/4484 green)"
+  },
+  {
+   "line": 23783,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK",
+   "owner_line": 23776,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-THE-CREDIT-SALE-SUITE-REACHES-THE-TRUNK/asserting-tests.txt (34 trunk tests asserting the capability, all passing, extracted by name from trunk-non-sql-tier."
+  },
+  {
+   "line": 23827,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-NO-CREDENTIAL-TRAVELS-IN-A-URL-PATH",
+   "owner_line": 23820,
+   "value": "fact:route.gc.transfer"
+  },
+  {
+   "line": 23923,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED",
+   "owner_line": 23916,
+   "value": "backend feature/restaurant-modules d30c1c4d4 -> bcfe0d893; lanes/L-THE-END-OF-DAY-CLOSE-COUNTS-ONLY-MONEY-THAT-ARRIVED/{before-arm.trx,tier.trx,after-arm-by-name.txt}"
+  },
+  {
+   "line": 24022,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-FIXTURE-CANNOT-TELL-A-NAME-FROM-AN-ID",
+   "owner_line": 24015,
+   "value": "docs/plan/artifacts/name-versus-id-census.md"
+  },
+  {
+   "line": 24066,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-VOID-RUN-COHORT-IS-RE-MEASURED",
+   "owner_line": 24059,
+   "value": "docs/plan/artifacts/void-run-cohort.md"
+  },
+  {
+   "line": 24110,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ",
+   "owner_line": 24103,
+   "value": "lanes/L-THE-EVENTS-DRAIN-STORE-COUNTER-IS-READ/{baseline.trx,mutation-a.trx} - executed=9 in both, passed 9/0 then 4/5"
+  },
+  {
+   "line": 24188,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST",
+   "owner_line": 24181,
+   "value": "backend feature/restaurant-modules ada218783 -> 28e60e6b8; lanes/L-A-STORE-CANNOT-GRANT-ITSELF-A-CUSTOMERS-REQUEST/{arms-clean.trx,arms-inverted.trx,tier.trx}"
+  },
+  {
+   "line": 24225,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVENTS-OUTBOX-BACKLOG-HAS-NO-CEILING",
+   "owner_line": 24218,
+   "value": "docs/plan/artifacts/events-outbox-retention.md"
+  },
+  {
+   "line": 24312,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-EXIT-NAMES-THE-FILE-ITS-OWN-LANE-DESIGNATED",
+   "owner_line": 24305,
+   "value": "docs/plan/artifacts/exits-that-name-their-file.md"
+  },
+  {
+   "line": 24367,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-MONTH-OLD-PROPOSAL-LINK-SAYS-WHY-IT-REFUSED",
+   "owner_line": 24360,
+   "value": "docs/plan/artifacts/superseded-link-refusal.md"
+  },
+  {
+   "line": 24410,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVIDENCE-THAT-EXISTS-ONLY-ON-A-BRANCH-REACHES-THE-TRUNK",
+   "owner_line": 24402,
+   "value": "docs/plan/artifacts/evidence-recovered-to-the-trunk.md"
+  },
+  {
+   "line": 24530,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-EVIDENCE-LINE-IS-ONE-PATH-A-SWEEP-CAN-OPEN",
+   "owner_line": 24523,
+   "value": "docs/plan/artifacts/evidence-lines-a-sweep-can-read.md"
+  },
+  {
+   "line": 24573,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EVIDENCE-INSIDE-A-WORKTREE-IS-MOVED-BEFORE-IT-IS-PRUNED",
+   "owner_line": 24566,
+   "value": "docs/plan/artifacts/evidence-off-the-worktrees.md"
+  },
+  {
+   "line": 24621,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-LANE-CITES-THE-EVIDENCE-THAT-SURVIVES-IT",
+   "owner_line": 24614,
+   "value": "docs/plan/artifacts/citations-that-outlive-a-worktree.md"
+  },
+  {
+   "line": 24662,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EIGHT-LANE-BRANCHES-EXIST-ONLY-ON-THIS-MACHINE",
+   "owner_line": 24655,
+   "value": "docs/plan/artifacts/branches-only-on-this-machine.md"
+  },
+  {
+   "line": 24699,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-FORTY-FOUR-BRANCHES-ARE-ASKED-WHETHER-ANYONE-STILL-WANTS-THEM",
+   "owner_line": 24692,
+   "value": "docs/plan/artifacts/branches-still-wanted.md"
+  },
+  {
+   "line": 24796,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-FOURTEEN-FRONTEND-BRANCHES-NEED-AN-INSTRUMENT-THAT-EXISTS",
+   "owner_line": 24789,
+   "value": "docs/plan/artifacts/frontend-branch-instrument.md"
+  },
+  {
+   "line": 24832,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THREE-BRANCHES-HAVE-MOVED-FILES-NOT-DELETED-ONES",
+   "owner_line": 24825,
+   "value": "docs/plan/artifacts/moved-not-deleted.md"
+  },
+  {
+   "line": 24874,
+   "shape": "field",
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-EVERY-SWEEP-TONIGHT-WAS-WRONG-THE-SAME-WAY",
+   "owner_line": 24867,
+   "value": "docs/plan/artifacts/how-a-sweep-lies.md"
+  },
+  {
+   "line": 35516,
+   "shape": "field",
+   "section": "Flags",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-WORLD-SECOND-HUMAN",
+   "owner_line": 35510,
+   "value": "OkamAPI-modules feature/restaurant-modules 8e2b57de -- Controllers/UserController.cs:178-180 + Helpers/ServiceCollectionExtensions.cs:182 + Services/UserService.cs:540,551,565"
+  },
+  {
+   "line": 35629,
+   "shape": "field",
+   "section": "Flags",
+   "owner_kind": "Lane",
+   "owner_id": "L-CORS-NARROW-THE-DEFAULT",
+   "owner_line": 35623,
+   "value": "/Users/svendaneel/okam/Web-modules/lanes/L-CORS-NARROW-THE-DEFAULT/evidence.md"
+  },
+  {
+   "line": 35677,
+   "shape": "field",
+   "section": "Flags",
+   "owner_kind": "Lane",
+   "owner_id": "L-PROBE-DIR-IS-PINNED",
+   "owner_line": 35671,
+   "value": "/Users/svendaneel/okam/Web-modules/docs/plan/lanes/L-PROBE-DIR-IS-PINNED/detail.md"
+  },
+  {
+   "line": 36041,
+   "shape": "field",
+   "section": "Flags",
+   "owner_kind": "Lane",
+   "owner_id": "L-PLAN-ARTIFACTS-ARE-SCRUBBED",
+   "owner_line": 36035,
+   "value": "lanes/L-PLAN-ARTIFACTS-ARE-SCRUBBED/evidence.md"
+  },
+  {
+   "line": 36596,
+   "shape": "field",
+   "section": "Flags",
+   "owner_kind": "Lane",
+   "owner_id": "L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN",
+   "owner_line": 36590,
+   "value": "docs/plan/lanes/L-ADMIN-LOGOUT-RETURNS-TO-SIGN-IN/evidence.md"
+  }
+ ],
+ "rejected": [
+  {
+   "line": 2724,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-MRG-COVERAGE-UNKNOWN",
+   "why": "prose",
+   "text": "**`evidence:` cannot say this, and that is the limitation worth writing down.** The field is a bare path"
+  },
+  {
+   "line": 5047,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-WF-PIVOT-DEFECTS",
+   "why": "blockquote",
+   "text": "> evidence: docs/plan/reviews/L-LIVE-HARNESS-REVIEW.md"
+  },
+  {
+   "line": 5234,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-LIVE-SEED-VIA-PRODUCT",
+   "why": "prose",
+   "text": "**It answered the open question with evidence:** **nothing these three journeys traverse reads the approval"
+  },
+  {
+   "line": 11232,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-ABSENCE-AUDIT-CONDITIONS",
+   "why": "prose",
+   "text": "mandatory `evidence:` field, and drop *healthiest*."
+  },
+  {
+   "line": 14011,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TESTS-THAT-WRITE-ARTIFACTS",
+   "why": "prose",
+   "text": "verified both. **Their lane's `evidence:` therefore passes an existence check while naming a file a `git"
+  },
+  {
+   "line": 23640,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED",
+   "why": "numbered-list",
+   "text": "1. **~60 lanes whose `evidence:` field holds a PROSE SENTENCE.** The tool takes the whole string as a path,"
+  },
+  {
+   "line": 23660,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED",
+   "why": "prose",
+   "text": "`plan verify` makes the tool **rewrite the lane's `evidence:` line itself**. That is how six lanes stopped"
+  },
+  {
+   "line": 23671,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-THE-EIGHTY-TWO-MECHANICAL-REFUSALS-ARE-CLEARED",
+   "why": "prose",
+   "text": "after. **L3 protects authored prose** \u2014 edit only `evidence:` and `exit:` lines, and **take a backup of"
+  },
+  {
+   "line": 23691,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN",
+   "why": "prose",
+   "text": "Their `evidence:` reads like this, and there is **no artifact path in it to extract** \u2014 the only"
+  },
+  {
+   "line": 23723,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-TWENTY-THREE-BRANCHES-GET-AN-ARTIFACT-A-STRANGER-CAN-OPEN",
+   "why": "prose",
+   "text": "`plan.md` first** so your diff is provable, and edit only `evidence:` and `exit:` lines. **Do not touch"
+  },
+  {
+   "line": 24545,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-EVIDENCE-LINE-IS-ONE-PATH-A-SWEEP-CAN-OPEN",
+   "why": "prose",
+   "text": "**Enumerate the forms, not the lanes.** Read every `evidence:` line in `docs/plan/returns/` and in the"
+  },
+  {
+   "line": 24556,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-AN-EVIDENCE-LINE-IS-ONE-PATH-A-SWEEP-CAN-OPEN",
+   "why": "prose",
+   "text": "brief can carry: what shape a RETURN's `evidence:` must take so a sweep can open it."
+  },
+  {
+   "line": 24628,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-LANE-CITES-THE-EVIDENCE-THAT-SURVIVES-IT",
+   "why": "prose",
+   "text": "**Nobody may fix that by editing a RETURN.** An `evidence:` line is an agent's own record and part of the"
+  },
+  {
+   "line": 24633,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-LANE-CITES-THE-EVIDENCE-THAT-SURVIVES-IT",
+   "why": "prose",
+   "text": "its durable path now is, and **whether reaching it would require the `exit:` to change, the `evidence:`"
+  },
+  {
+   "line": 24638,
+   "section": "Lanes \u2014 open",
+   "owner_kind": "Lane",
+   "owner_id": "L-A-LANE-CITES-THE-EVIDENCE-THAT-SURVIVES-IT",
+   "why": "prose",
+   "text": "may be amended only where the lane body designated the artifact **before** the work. An `evidence:` line is"
+  },
+  {
+   "line": 27492,
+   "section": "Decisions",
+   "owner_kind": "Flag",
+   "owner_id": "F-FIXTURE-BEHIND-BACKEND",
+   "why": "prose",
+   "text": "its return's `evidence:` line was **decorated, so `os.path.exists` returned False**. That last one is the trap"
+  },
+  {
+   "line": 29998,
+   "section": "Decisions",
+   "owner_kind": "Decision",
+   "owner_id": "D-MAY-AN-EXIT-CITE-A-RESCUED-COPY",
+   "why": "prose",
+   "text": "rewriting the `evidence:` line would not help because **`plan verify` reads the exit.**"
+  },
+  {
+   "line": 32185,
+   "section": "Flags",
+   "owner_kind": "Flag",
+   "owner_id": "F-CONDITIONS-HAVE-NO-RETURN-PATH",
+   "why": "prose",
+   "text": "gap is that the `evidence:` field is a bare path with no room for a ref, so **a plan can point at a file that"
+  },
+  {
+   "line": 33353,
+   "section": "Flags",
+   "owner_kind": "Flag",
+   "owner_id": "F-EXISTENCE-CHECKS-REPORT-PRESENT-FILES-ABSENT",
+   "why": "prose",
+   "text": "**One consequence for every lane and every brief written from here.** An `evidence:` line must be a bare path \u2014"
+  },
+  {
+   "line": 33359,
+   "section": "Flags",
+   "owner_kind": "Flag",
+   "owner_id": "F-EXISTENCE-CHECKS-REPORT-PRESENT-FILES-ABSENT",
+   "why": "prose",
+   "text": "the interesting part.** A lane committed its work on request, then **edited its own `evidence:` line to name"
+  },
+  {
+   "line": 34864,
+   "section": "Flags",
+   "owner_kind": "Flag",
+   "owner_id": "F-EVERY-LANE-DEPENDENCY-ENDS-AT-SVEN",
+   "why": "prose",
+   "text": "bare-path rule**, so its `evidence:` line is decorated and would be refused on admissibility even after the"
+  }
+ ]
+}
