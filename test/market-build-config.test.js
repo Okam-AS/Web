@@ -8,17 +8,38 @@
 const NO_FB_PIXEL = '2834635726843367'
 const NO_GA_ID = 'UA-167439729-2'
 
+// Appended to EVERY market's sitemap exclusions by nuxt.config.js rather than repeated in each
+// market row: the Growth guest pages are entered by spending a one-time credential in every market,
+// so a market row that forgot them would advertise pages that can only answer "this link is
+// incomplete". Listed here so the market-owned half of each expectation below stays readable.
+const GROWTH_GUEST_PAGES = [
+  '/subscribe/confirm', '/en/subscribe/confirm',
+  '/preferences/**', '/en/preferences/**'
+]
+
+// nuxt.config.js FAILS CLOSED on a missing API_BASE_URL: reading it under jest looks like a dev
+// build (NODE_ENV=test), and a dev build refuses to guess a backend rather than silently addressing
+// the deployed API. Naming the target is the convention every other harness here already follows
+// (test/e2e/scripts/dev-server.js, test/e2e/scripts/live-world.sh), so this one names it too.
+//
+// The value is never dialled by these assertions — nothing below reads env.API_BASE_URL — it only
+// has to be present and obviously not a real backend, so a copy-paste of it cannot reach anything.
+const TEST_API_BASE_URL = 'http://api-base-url.invalid'
+
 const loadConfig = (edition) => {
   const previousOkam = process.env.OKAM_EDITION
   const previousEdition = process.env.EDITION
+  const previousApi = process.env.API_BASE_URL
   if (edition === undefined) { delete process.env.OKAM_EDITION } else { process.env.OKAM_EDITION = edition }
   delete process.env.EDITION
+  process.env.API_BASE_URL = TEST_API_BASE_URL
   jest.resetModules()
   try {
     return require('~/nuxt.config').default
   } finally {
     if (previousOkam === undefined) { delete process.env.OKAM_EDITION } else { process.env.OKAM_EDITION = previousOkam }
     if (previousEdition === undefined) { delete process.env.EDITION } else { process.env.EDITION = previousEdition }
+    if (previousApi === undefined) { delete process.env.API_BASE_URL } else { process.env.API_BASE_URL = previousApi }
   }
 }
 
@@ -61,7 +82,7 @@ describe("the 'no' build is unchanged", () => {
       '/impressum', '/en/impressum',
       '/datenschutz', '/en/datenschutz',
       '/agb', '/en/agb'
-    ])
+    ].concat(GROWTH_GUEST_PAGES))
     expect(cfg.pwa.manifest.lang).toBe('no')
   })
 
@@ -86,7 +107,7 @@ describe("the 'ch' build is unchanged", () => {
     expect(cfg.i18n.vueI18n.fallbackLocale).toBe('de')
     expect(cfg.googleAnalytics.id).toBeUndefined()
     expect(cfg.sitemap.hostname).toBe('https://okam-swiss.ch')
-    expect(cfg.sitemap.exclude).toEqual(['/admin/**', '/import'])
+    expect(cfg.sitemap.exclude).toEqual(['/admin/**', '/import'].concat(GROWTH_GUEST_PAGES))
     expect(cfg.pwa.manifest.lang).toBe('de')
   })
 })
@@ -126,7 +147,15 @@ describe('a third market inherits none of Norway', () => {
         markets: { ...actual.markets, xa }
       }
     })
-    return require('~/nuxt.config').default
+    // Same fail-closed guard as loadConfig above: this helper reaches nuxt.config directly, so it
+    // has to name a backend too or the config throws before any market assertion runs.
+    const previousApi = process.env.API_BASE_URL
+    process.env.API_BASE_URL = TEST_API_BASE_URL
+    try {
+      return require('~/nuxt.config').default
+    } finally {
+      if (previousApi === undefined) { delete process.env.API_BASE_URL } else { process.env.API_BASE_URL = previousApi }
+    }
   }
 
   test('a market with no pixel emits no pixel, and never the Norwegian one', () => {

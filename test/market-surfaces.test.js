@@ -39,19 +39,28 @@ const {
 
 const REPO_ROOT = path.resolve(__dirname, '..')
 
+// nuxt.config.js FAILS CLOSED on a missing API_BASE_URL, and reading it under jest looks like a dev
+// build, so every helper below that reaches the config has to name a backend or the config throws
+// before a single market assertion runs. Nothing here reads env.API_BASE_URL — the value only has to
+// exist and be obviously unreachable, so copying it cannot address anything real.
+const TEST_API_BASE_URL = 'http://api-base-url.invalid'
+
 // --- loading a module for a given edition -----------------------------------
 
 const withEdition = (edition, fn) => {
   const previousOkam = process.env.OKAM_EDITION
   const previousEdition = process.env.EDITION
+  const previousApi = process.env.API_BASE_URL
   if (edition === undefined) { delete process.env.OKAM_EDITION } else { process.env.OKAM_EDITION = edition }
   delete process.env.EDITION
+  process.env.API_BASE_URL = TEST_API_BASE_URL
   jest.resetModules()
   try {
     return fn()
   } finally {
     if (previousOkam === undefined) { delete process.env.OKAM_EDITION } else { process.env.OKAM_EDITION = previousOkam }
     if (previousEdition === undefined) { delete process.env.EDITION } else { process.env.EDITION = previousEdition }
+    if (previousApi === undefined) { delete process.env.API_BASE_URL } else { process.env.API_BASE_URL = previousApi }
     jest.resetModules()
   }
 }
@@ -776,6 +785,8 @@ const THIRD_MARKET = {
  * production code running against this registry.
  */
 const asThirdMarket = (loader) => {
+  const previousApi = process.env.API_BASE_URL
+  process.env.API_BASE_URL = TEST_API_BASE_URL
   jest.resetModules()
   jest.doMock('~/config/edition', () => {
     const actual = jest.requireActual('~/config/edition')
@@ -796,6 +807,7 @@ const asThirdMarket = (loader) => {
   try {
     return loader()
   } finally {
+    if (previousApi === undefined) { delete process.env.API_BASE_URL } else { process.env.API_BASE_URL = previousApi }
     jest.dontMock('~/config/edition')
     jest.resetModules()
   }

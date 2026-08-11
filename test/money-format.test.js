@@ -2,7 +2,7 @@ import {
   market, markets, marketCodes, resolveMarket, runtimeMarketConfig,
   REQUIRED_MARKET_FIELDS, REQUIRED_CURRENCY_FORMAT_FIELDS
 } from '~/config/edition'
-import { formatAmount, formatMarketAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
+import { formatAmount, formatMarketAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore, UNKNOWN_AMOUNT } from '~/utils/price'
 
 // ---------------------------------------------------------------------------
 // GOLDEN BYTES.
@@ -44,11 +44,7 @@ const NO_GOLDEN = [
   [-5, 'kr 0,-5'],
   [-50, 'kr -,50'],
   [-100, 'kr -1,00'],
-  [-123450, 'kr -1 234,50'],
-  [null, 'kr 0,00'],
-  [undefined, 'kr 0,00'],
-  [NaN, 'kr 0,00'],
-  ['', 'kr 0,00']
+  [-123450, 'kr -1 234,50']
 ]
 
 const NO_GOLDEN_HIDE_FRACTION = [
@@ -77,11 +73,7 @@ const NO_GOLDEN_HIDE_FRACTION = [
   [-5, 'kr 0'],
   [-50, 'kr -,50'],
   [-100, 'kr -1'],
-  [-123450, 'kr -1 234,50'],
-  [null, 'kr 0'],
-  [undefined, 'kr 0'],
-  [NaN, 'kr 0'],
-  ['', 'kr 0']
+  [-123450, 'kr -1 234,50']
 ]
 
 const NO_SPLIT_GOLDEN = [
@@ -124,12 +116,49 @@ const CH_GOLDEN = [
   [-5, 'CHF -0.05'],
   [-50, 'CHF -0.50'],
   [-100, 'CHF -1.00'],
-  [-123450, "CHF -1'234.50"],
-  [null, 'CHF 0.00'],
-  [undefined, 'CHF 0.00'],
-  [NaN, 'CHF 0.00'],
-  ['', 'CHF 0.00']
+  [-123450, "CHF -1'234.50"]
 ]
+
+// THE ONE PLACE PARITY IS DELIBERATELY BROKEN.
+//
+// The tables above were captured from the two implementations this module replaced, and both of
+// those answered a confident zero to an amount nobody had stated: core's priceLabel returns "0" for
+// anything falsy, and the old formatChf began `Number(amountMinor) || 0`. Reproducing that byte for
+// byte would have re-shipped the defect the trunk's absence gate exists to close — a card-terminal
+// screen reading kr 0 while a customer's card is in the reader.
+//
+// So absence is NOT parity, on purpose, and it is listed here separately rather than edited into the
+// golden tables so that the exception is visible instead of looking like a captured byte.
+//
+// `splitAmount` is excluded from this rule and keeps its zero rows in NO_SPLIT_GOLDEN below: it is a
+// digit helper that seeds money INPUTS, where "—" would be typed into a field an operator saves.
+const UNSTATED = [null, undefined, NaN, '']
+
+describe('an amount nobody stated is refused in every market', () => {
+  test.each(UNSTATED)('no: formatMarketAmount(%p) is the unknown mark, not kr 0,00', (amount) => {
+    expect(formatMarketAmount('no', amount, false)).toBe(UNKNOWN_AMOUNT)
+    expect(formatMarketAmount('no', amount, true)).toBe(UNKNOWN_AMOUNT)
+  })
+
+  test.each(UNSTATED)('ch: formatMarketAmount(%p) is the unknown mark, not CHF 0.00', (amount) => {
+    expect(formatMarketAmount('ch', amount, false)).toBe(UNKNOWN_AMOUNT)
+  })
+
+  test('the mark carries no currency symbol, so it cannot be read as a price in either market', () => {
+    expect(UNKNOWN_AMOUNT).not.toMatch(/kr|CHF|\d/)
+  })
+
+  // The gate lives in formatAmount rather than at the call sites, so a market added later cannot
+  // opt out of it by construction. Asserted over every market the registry ships.
+  test.each(marketCodes)('%s: the gate is inside the formatter, not at the call site', (code) => {
+    expect(formatAmount(markets[code].currencyFormat, null, false)).toBe(UNKNOWN_AMOUNT)
+  })
+
+  test('a genuine zero is still a zero -- the gate withholds only the unstated', () => {
+    expect(formatMarketAmount('no', 0, false)).toBe('kr 0,00')
+    expect(formatMarketAmount('ch', 0, false)).toBe('CHF 0.00')
+  })
+})
 
 describe("'no' parity: every byte identical to core priceLabel + setCurrencyFormat({ prefix: 'kr ', suffix: '' })", () => {
   test.each(NO_GOLDEN)('priceLabel(%p) is %p', (amount, expected) => {

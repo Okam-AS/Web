@@ -1192,13 +1192,27 @@ export default {
       const store = this.allStores.find(s => s.id === storeId);
       // Prefill the onboarding form from the Okam store. The online webshop/terms/privacy URLs are
       // Okam's standard pages (privacy is shared; the webshop and store terms carry the Okam store id).
+      //
+      // THE HOSTS COME FROM THE MARKET, not from three okam.no literals. These three values are sent
+      // to Surfboard as the merchant's own webshop and legal documents, so hardcoding Norway pointed
+      // a Swiss venue's payment onboarding at a storefront and a privacy policy on a domain that does
+      // not serve it — and unlike a mis-formatted price, nothing on this screen would have looked
+      // wrong. `config/edition.js` is the single source for both hosts.
+      //
+      // STILL OPEN, and named here rather than left to be discovered: the /personvern and
+      // /vilkar-store DOCUMENTS are Norwegian-law text, and they are still built for the Swiss market
+      // (markets.ch.routeExclude is deliberately empty — see the note there). So this now sends a
+      // Swiss merchant their own market's URL for a document whose CONTENT is still Norwegian. That
+      // is the market's open legal-review item, not something this page can fix; pointing at the
+      // right host is the half that is this page's to get right.
+      const marketConfig = this.marketConfig;
       this.onboardForm = Object.assign(this.emptyOnboardForm(), {
         corporateId: store && store.vat ? String(store.vat) : '',
         legalName: store ? store.name : '',
         storeName: store ? store.name : '',
-        merchantWebshopUrl: 'https://shop.okam.no/shop?id=' + storeId,
-        privacyPolicyUrl: 'https://okam.no/personvern/',
-        termsAndConditionsUrl: 'https://okam.no/vilkar-store/?id=' + storeId
+        merchantWebshopUrl: marketConfig.shopUrl + '/shop?id=' + storeId,
+        privacyPolicyUrl: marketConfig.hostname + '/personvern/',
+        termsAndConditionsUrl: marketConfig.hostname + '/vilkar-store/?id=' + storeId
       });
 
       Promise.all([
