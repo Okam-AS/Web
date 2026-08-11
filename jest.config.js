@@ -19,11 +19,19 @@ module.exports = {
   // Both are run deliberately elsewhere or kept deliberately as evidence. The defect was that jest
   // collected them, not that they exist — so this excludes, and nothing here is deleted.
   //
+  // `.claude/worktrees/` is the third direction, and the loudest: it holds one working copy of this
+  // repository per sibling agent, each with its own `test/`. Measured on this checkout, `jest
+  // --listTests` collected 1,088 suites of which 898 were those copies — so a local run executes the
+  // whole estate, most of it against stale source, and one lane's red is every lane's red. The
+  // directory is gitignored and absent from a fresh checkout, so this changes nothing about CI; it
+  // makes the local run and the CI run collect the same 190 suites.
+  //
   // Anchored to `<rootDir>/` on purpose. These entries are regexes matched against the whole path,
   // so a bare `lanes` would also match `docs/plan/lanes/` (14 paths in this repo) and any future
   // file whose name merely contains the word.
   testPathIgnorePatterns: [
     '/node_modules/',
+    '<rootDir>/.claude/',
     '<rootDir>/test/e2e/',
     '<rootDir>/lanes/'
   ],

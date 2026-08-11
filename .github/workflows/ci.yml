@@ -1,0 +1,120 @@
+# The gate. `nuxtjs.yml` deploys `main` to GitHub Pages and runs `npm run generate` and nothing else —
+# so until this file existed, 190 Jest suites (4,650 tests) and 41 Playwright journeys gated nothing at
+# all, on any branch, including the one that deploys.
+#
+# What is deliberately NOT here:
+#   * eslint — `npx eslint` over the source directories reports 511 errors today. A gate that is red on
+#     arrival is a gate everybody learns to ignore; this belongs behind a ratchet, not behind a PR.
+#   * `npm run generate` — the build. Ordering matters and it is not obvious: `test/core-request-path-
+#     shape.test.js` scans the tree for request paths and its skip list does not include `dist/`, so a
+#     build in the same workspace makes the guard read the emitted bundle. Jest must not run after a
+#     build, and this workflow does not build at all — `nuxtjs.yml` still owns that.
+#   * the consumer journeys (`playwright.consumer.config.js`) — they drive the sibling ConsumerWeb
+#     checkout, which is a second repository this job does not have.
+#
+# `.claude/worktrees/` is gitignored and absent from a fresh checkout, so the 898 sibling-worktree test
+# copies that make a local `jest --listTests` report 1,088 suites do not exist here: `npm test` collects
+# exactly the 190 real ones. jest.config.js also ignores the path now, so the local and CI runs agree.
+name: CI
+
+on:
+  pull_request:
+  # Every branch, main included: the deploy workflow builds main but tests nothing, so a push straight
+  # to main would otherwise be the one commit nothing checks.
+  push:
+  workflow_dispatch:
+
+# NOT the "pages" group — `nuxtjs.yml` uses that one, and sharing it would make a test run queue behind
+# (or ahead of) a production deploy. Keyed on the branch name so a push and its pull request do not both
+# pay for the same commit.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: jest + static checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      # `core` is a submodule and Jest needs it on disk: twelve suites import `~/core/...`, which
+      # moduleNameMapper resolves into the submodule, and two more read its files directly. It is a
+      # public HTTPS remote, so the default token is enough and no deploy key is involved.
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: jest
+        run: npm test
+
+      - name: assistant vocabulary
+        run: npm run lint:assistant-vocab
+
+      # Three static checks over the live-world harness itself. They start no server and need no
+      # backend, and each exists because the harness had already drifted from what it claimed once.
+      - name: live-world operator banner describes the reset that exists
+        run: npm run test:e2e:live-world-banner
+
+      - name: live-world stamp is wired to both guards
+        run: npm run test:e2e:live-world-stamp
+
+      - name: the e2e fixture still refuses what the backend refuses
+        run: npm run test:e2e:fixture-divergence:prove
+
+  e2e:
+    name: playwright journeys (fixture backend)
+    runs-on: ubuntu-latest
+    # workers: 1 and fullyParallel: false in playwright.config.js, plus a cold webpack-4 `nuxt dev`
+    # boot the config allows five minutes for.
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-playwright-
+
+      - run: npm run test:e2e:install
+
+      # Proves the wrong-world guard still fails the process. It runs first on purpose: if the guard is
+      # broken, everything below is a run whose artifacts could name a world it never reached.
+      - name: the wrong-world guard still fails the process
+        run: npm run test:e2e:guard-proof
+
+      # These 42 journeys run against test/e2e/fixture/api-server.js, not against Okam's API. They
+      # prove the UI's own behaviour — routing, hydration, refusals, forms, guards — over canned
+      # payloads, which is a real regression net and is NOT evidence that the product works end to
+      # end. The live mode is `test/e2e/scripts/live-journeys.sh`; it needs a SQL Server world and is
+      # not run here.
+      - name: journeys
+        run: npm run test:e2e
+
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            artifacts/playwright-report/
+            artifacts/playwright-output/
+          if-no-files-found: ignore
