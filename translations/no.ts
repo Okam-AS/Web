@@ -5734,10 +5734,24 @@ export default {
   assistant_placeholder: 'Skriv spørsmålet ditt her',
   assistant_send: 'Send',
   assistant_sending: 'Sender …',
-  // The honest note under the composer. Every turn is an independent request — the endpoint takes a
-  // question and nothing else — and a merchant who assumes otherwise will write a follow-up that
-  // reads as nonsense on its own.
-  assistant_noMemory: 'Assistenten husker ikke tidligere spørsmål ennå.',
+  // ── THE MEMORY BLOCK ────────────────────────────────────────────────────────────────────────────
+  // `assistant_noMemory` — "Assistenten husker ikke tidligere spørsmål ennå" — stood here and was
+  // TRUE: the page posted every question to the stateless one-shot endpoint. It now holds a thread,
+  // so the note states what the memory actually covers, and the four lines under it say the things a
+  // transcript cannot show — that this thread was cut off, that it is finished, that the stores it
+  // was frozen to are not the ones now selected, or that one answer never made it into the context
+  // the next question is answered against.
+  //
+  // The scope is stated as a FACT about the conversation rather than as an apology: a thread cannot
+  // be rescoped, because every later turn replays history gathered under the scope it was verified
+  // for. Hedging that would invite the merchant to look for the setting that changes it.
+  assistant_memoryNote: 'Assistenten husker spørsmålene i denne samtalen.',
+  assistant_notRemembered: 'Dette svaret ble ikke lagret i samtalen, så neste spørsmål har det ikke med seg.',
+  assistant_newConversation: 'Start ny samtale',
+  assistant_newConversationStarted: 'Ny samtale — det over huskes ikke videre',
+  assistant_scopeChanged: 'Du har endret butikkene. Neste spørsmål starter en ny samtale, fordi en samtale er låst til butikkene den ble startet med.',
+  assistant_scopeNarrowed: 'Denne samtalen gjelder bare {stores}. Assistenten er ikke slått på for de andre butikkene du har valgt.',
+  assistant_threadEnded: 'Denne samtalen er avsluttet. Neste spørsmål starter en ny, uten det som ble sagt tidligere.',
   assistant_askFailed: 'Vi fikk ikke svar. Prøv igjen.',
   assistant_emptyTitle: 'Still det første spørsmålet',
   assistant_emptyBody: 'Assistenten leser tallene dine, og kan foreslå endringer som du godkjenner selv.',

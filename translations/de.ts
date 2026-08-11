@@ -5666,7 +5666,16 @@ export default {
   assistant_placeholder: 'Schreiben Sie Ihre Frage hier',
   assistant_send: 'Senden',
   assistant_sending: 'Wird gesendet …',
-  assistant_noMemory: 'Der Assistent erinnert sich noch nicht an frühere Fragen.',
+  // Siehe den Blockkommentar zu diesen sieben in `no.ts`. `assistant_noMemory` stand hier und traf
+  // auf den zustandslosen Endpunkt zu, an den die Seite früher gesendet hat; beschrieben wird jetzt
+  // das Gespräch, das sie führt.
+  assistant_memoryNote: 'Der Assistent erinnert sich an die Fragen in diesem Gespräch.',
+  assistant_notRemembered: 'Diese Antwort wurde nicht im Gespräch gespeichert, Ihre nächste Frage hat sie also nicht dabei.',
+  assistant_newConversation: 'Neues Gespräch beginnen',
+  assistant_newConversationStarted: 'Neues Gespräch — nichts von oben wird übernommen',
+  assistant_scopeChanged: 'Sie haben die Filialen geändert. Ihre nächste Frage beginnt ein neues Gespräch, denn ein Gespräch ist an die Filialen gebunden, mit denen es begonnen wurde.',
+  assistant_scopeNarrowed: 'Dieses Gespräch umfasst nur {stores}. Für die anderen gewählten Filialen ist der Assistent nicht eingeschaltet.',
+  assistant_threadEnded: 'Dieses Gespräch ist beendet. Ihre nächste Frage beginnt ein neues, ohne das zuvor Gesagte.',
   assistant_askFailed: 'Wir haben keine Antwort erhalten. Bitte erneut versuchen.',
   assistant_emptyTitle: 'Stellen Sie die erste Frage',
   assistant_emptyBody: 'Der Assistent liest Ihre Zahlen und kann Änderungen vorschlagen, die Sie selbst genehmigen.',

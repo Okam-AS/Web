@@ -49,6 +49,16 @@
       <template v-if="tab === 'ask'">
         <div v-if="thread.length" class="assistant-thread">
           <div v-for="(turn, index) in thread" :key="index" class="assistant-turn">
+            <!-- ── WHERE THE MEMORY RESTARTS ───────────────────────────────────────────────────────
+                 The transcript on screen outlives the thread behind it. A conversation is retired
+                 for three reasons — the merchant changed the stores, a refusal ended it, or they
+                 asked for a fresh one — and in all three the turns ABOVE this line are no longer in
+                 the assistant's context while still being right there to read. Without the rule, a
+                 merchant whose follow-up was suddenly misunderstood has no way to know why. -->
+            <p v-if="turn.startsNewConversation" class="assistant-thread__break" data-test="conversation-break">
+              {{ $i('assistant_newConversationStarted') }}
+            </p>
+
             <div class="assistant-turn__question">
               <span class="assistant-turn__who">{{ $i('assistant_you') }}</span>
               <p>{{ turn.question }}</p>
@@ -75,6 +85,17 @@
                      interpolation escapes; the CSS keeps the newlines. Same choice AIQueryBox made. -->
                 <p class="assistant-turn__text" data-test="answer">
                   {{ turn.answer }}
+                </p>
+
+                <!-- ── THE ANSWER IS REAL; REMEMBERING IT FAILED ───────────────────────────────────
+                     `AssistantConversationTurnModel.NotRemembered` is set when the turn ran and its
+                     two rows could not be appended — a concurrent append that took the same sequence
+                     number, or a genuine write failure. The server deliberately keeps the answer
+                     rather than failing the request, so the merchant has it; what they do not have
+                     is this turn in the context of the next one, and being left to infer that from a
+                     later misunderstanding is the whole failure mode this surface was built against. -->
+                <p v-if="turn.notRemembered" class="assistant-turn__unremembered" data-test="not-remembered">
+                  {{ $i('assistant_notRemembered') }}
                 </p>
 
                 <!-- Metrics ------------------------------------------------------------------ -->
@@ -322,6 +343,17 @@
           </button>
         </div>
 
+        <!-- ── SAID BEFORE THEY TYPE, NOT AFTER THEY ARE MISUNDERSTOOD ──────────────────────────
+             Three facts about the thread reach the merchant here, all of which are invisible in the
+             transcript itself: the picker has moved away from the stores this conversation was
+             frozen to, a refusal has ended it, or the server verified a NARROWER scope than the one
+             that was asked for. The last is the quiet one — a store whose assistant is switched off
+             is dropped at create, and without this line the merchant reads a two-store answer that
+             covers one. -->
+        <p v-if="threadNotice" class="assistant-composer__notice" data-test="thread-notice">
+          {{ $i(threadNotice.key, threadNotice.params) }}
+        </p>
+
         <div class="assistant-composer">
           <textarea
             v-model="draft"
@@ -343,12 +375,30 @@
           </button>
         </div>
 
-        <!-- The honest note. `POST /chat/ask` takes a question and nothing else — no conversation
-             id, no history — so every turn really is independent. Saying so is cheaper than a
-             merchant discovering it by being misunderstood. -->
-        <p class="assistant-composer__memory" data-test="memory-note">
-          {{ $i('assistant_noMemory') }}
-        </p>
+        <div class="assistant-composer__foot">
+          <!-- The note that used to stand here said the assistant remembers nothing, and it was
+               true: the page posted to the stateless `/chat/ask`. It now holds a thread, so the line
+               states what the memory actually covers — THIS conversation — rather than promising a
+               recall of everything ever asked, which is not what the server keeps either. -->
+          <p class="assistant-composer__memory" data-test="memory-note">
+            {{ $i('assistant_memoryNote') }}
+          </p>
+
+          <!-- The escape hatch the frozen scope makes necessary. A thread cannot be rescoped and
+               cannot be steered away from a context that has gone somewhere unhelpful, so the only
+               honest answer to both is a new one — and the merchant should not have to reload the
+               page to get it. -->
+          <button
+            v-if="conversation"
+            type="button"
+            class="assistant-composer__fresh"
+            :disabled="busy"
+            data-test="new-conversation"
+            @click="startNewConversation"
+          >
+            {{ $i('assistant_newConversation') }}
+          </button>
+        </div>
       </template>
 
       <!-- ========================= INBOX ========================= -->
@@ -372,8 +422,10 @@ import {
   isAssistantApiError,
   describeConflict,
   needsStoreChoice,
+  threadIsOver,
   pick,
-  pickList
+  pickList,
+  STATUS_CONVERSATION_FULL
 } from '~/utils/assistant/api-client';
 
 export default {
@@ -386,7 +438,20 @@ export default {
     thread: [],
     draft: '',
     busy: false,
-    suggestion: null
+    suggestion: null,
+    /**
+     * The open thread, or null when the next question must start one.
+     *
+     * `{ id, storeIds, storeNames, requestedStoreIds }`. The first three are the SERVER's answer —
+     * the verified, frozen scope — and `requestedStoreIds` is what the picker held when it was
+     * created. They are kept apart on purpose: the server may verify a narrower scope than was asked
+     * for (a store with the assistant switched off is dropped), and comparing the picker against the
+     * VERIFIED list would then read as a scope change on every keystroke and open a new thread that
+     * narrows to exactly the same place, forever.
+     */
+    conversation: null,
+    /** `{ key, params }` or null — what the merchant needs to know before they type again. */
+    threadNotice: null
   }),
   computed: {
     // The house idiom, present verbatim in a dozen admin pages. `AIQueryBox` hard-codes `'no'` and
@@ -407,6 +472,31 @@ export default {
         this.$i('assistant_example2'),
         this.$i('assistant_example3')
       ];
+    }
+  },
+  watch: {
+    /**
+     * The picker moved. A conversation CANNOT follow it: its scope was frozen at creation and every
+     * later turn replays history gathered under that scope, so widening or narrowing it would answer
+     * a later question with earlier data the new scope was never verified for. The server has no
+     * rescope route for exactly this reason.
+     *
+     * So this says so, and says it BEFORE the next question rather than after — the alternative is a
+     * merchant who selects a second venue, asks about it, and is answered about the first without
+     * anything on screen explaining why. The new thread is not opened here: opening one per
+     * dropdown click would spend a create on every intermediate selection, and the merchant may
+     * still change their mind back.
+     */
+    selectedStoreIds (next) {
+      if (!this.conversation) { return; }
+      if (this.sameScope(next, this.conversation.requestedStoreIds)) {
+        // Back where it started — including the case where the picker was only passing through.
+        if (this.threadNotice && this.threadNotice.key === 'assistant_scopeChanged') {
+          this.threadNotice = this.narrowedNotice(this.conversation);
+        }
+        return;
+      }
+      this.threadNotice = { key: 'assistant_scopeChanged', params: null };
     }
   },
   mounted () {
@@ -462,10 +552,113 @@ export default {
       const question = this.draft.trim();
       if (!question || this.busy) { return; }
       this.draft = '';
-      this.ask(question, this.selectedStoreIds);
+      // No scope argument: an ordinary question is asked over the thread's frozen scope. The picker's
+      // current selection reaches the server only when a thread is OPENED, which is why moving it
+      // starts a new conversation rather than steering this one.
+      this.ask(question, null);
     },
+    /**
+     * The merchant answered "which venue?".
+     *
+     * `targetStoreId` NARROWS this one turn to a store of the frozen scope; it does not rescope the
+     * thread and it cannot, which is the right shape here — the next question is about the same
+     * conversation, not about one venue forever. The buttons are built from the thread's own scope,
+     * so the id is always inside it and the server's "that store is not part of this conversation"
+     * refusal is unreachable from this surface.
+     */
     askForVenue (question, storeId) {
-      this.ask(question, [storeId]);
+      this.ask(question, storeId);
+    },
+    /**
+     * The stores ONE turn was answered over: the store it was narrowed to, or the thread's whole
+     * frozen scope. A `targetStoreId` outside the frozen scope cannot get here — the server refuses
+     * it with a 403 rather than answering — so the lookup either finds the name or the id is not the
+     * thread's, in which case nothing is claimed about it.
+     */
+    scopeOfTurn (scope, targetStoreId) {
+      if (typeof targetStoreId !== 'number') { return scope; }
+      const index = scope.storeIds.indexOf(targetStoreId);
+      return {
+        storeIds: [targetStoreId],
+        storeNames: index >= 0 && scope.storeNames[index] ? [scope.storeNames[index]] : []
+      };
+    },
+    /** Set-equality on store ids. Order is the picker's business and means nothing to the server. */
+    sameScope (left, right) {
+      const a = Array.isArray(left) ? left : [];
+      const b = Array.isArray(right) ? right : [];
+      return a.length === b.length && a.every(id => b.includes(id));
+    },
+    /**
+     * The line for a thread the server verified NARROWER than it was asked for, or null when it got
+     * everything it asked for.
+     *
+     * This is the `Assistant.Module` flag arriving as a partial refusal. A total one is a 403 with
+     * the server's own sentence; a partial one is silent — the store is simply not in the frozen
+     * scope — and the merchant would read a two-venue answer that covers one. `CreateAsync` drops a
+     * switched-off store before freezing, so the create response is where the truth is.
+     */
+    narrowedNotice (conversation) {
+      if (this.sameScope(conversation.storeIds, conversation.requestedStoreIds)) { return null; }
+      return {
+        key: 'assistant_scopeNarrowed',
+        params: { stores: conversation.storeNames.join(', ') }
+      };
+    },
+    /**
+     * The thread this turn belongs to, opening one if there is none or if the picker has moved off
+     * the one that is open.
+     *
+     * Answers `{ conversation, created }`; `created` is what the transcript's restart rule is drawn
+     * from. A failure to open is thrown to the caller and reported — there is deliberately no
+     * fallback to the stateless `/chat/ask`, because a fallback would make "the thread could not be
+     * opened" and "the thread was silently forgotten" look identical to the merchant.
+     */
+    async ensureConversation () {
+      if (this.conversation && this.sameScope(this.selectedStoreIds, this.conversation.requestedStoreIds)) {
+        return { conversation: this.conversation, created: false };
+      }
+
+      // The outgoing thread is closed rather than abandoned, and the result is not waited on: an
+      // Active thread nobody closes sits until the retention sweep expires it, but a close that
+      // fails must not stop the merchant from asking their next question. Its own memory is already
+      // gone from this page's point of view the moment a new one is opened.
+      this.retireConversation(null);
+
+      const requested = this.selectedStoreIds.slice();
+      const header = await this.service.StartConversation(requested);
+      const conversation = {
+        id: pick(header, 'id'),
+        storeIds: pickList(header, 'storeIds'),
+        storeNames: pickList(header, 'storeNames'),
+        requestedStoreIds: requested
+      };
+
+      this.conversation = conversation;
+      this.threadNotice = this.narrowedNotice(conversation);
+      return { conversation, created: true };
+    },
+    /**
+     * Let go of the open thread, optionally leaving a line saying why.
+     *
+     * The close is fire-and-forget on purpose — it is housekeeping for the retention sweep, and its
+     * failure changes nothing the merchant can act on. The rejection is swallowed rather than
+     * unhandled: an unhandled rejection here would surface as a console error about a request whose
+     * outcome this page has no opinion about.
+     */
+    retireConversation (notice) {
+      const open = this.conversation;
+      this.conversation = null;
+      this.threadNotice = notice || null;
+      if (open && open.id) {
+        const closing = this.service.CloseConversation(open.id);
+        if (closing && typeof closing.catch === 'function') { closing.catch(() => {}); }
+      }
+    },
+    /** The merchant asking for a clean slate. The transcript stays; the next turn marks the break. */
+    startNewConversation () {
+      if (this.busy) { return; }
+      this.retireConversation(null);
     },
     applySuggestion () {
       if (!this.suggestion) { return; }
@@ -494,14 +687,20 @@ export default {
       turn.conflict = null;
     },
     /**
-     * One turn.
+     * One turn, on the thread.
      *
      * The turn is pushed BEFORE the request so the thread shows the question immediately and the
-     * pending state belongs to a row rather than to the page. `scope` is passed explicitly and is
-     * always what the picker resolved — the server narrows it by the StoreAdmins intersection and
-     * nothing else, and no suggestion is ever folded in here.
+     * pending state belongs to a row rather than to the page. `targetStoreId` narrows THIS turn and
+     * is null for an ordinary question; the scope everything else is answered under was frozen when
+     * the thread was opened, and no suggestion is ever folded in here.
+     *
+     * Every field the template reads is declared on the literal, including the two that are only
+     * ever set later — Vue 2 does not make a property reactive by assigning it after the object is
+     * in `thread`, and `notRemembered` in particular would then be true in the data and absent from
+     * the screen, which is the precise failure this line is meant to prevent.
      */
-    async ask (question, scope) {
+    async ask (question, targetStoreId) {
+      const firstTurn = this.thread.length === 0;
       const turn = {
         question,
         pending: true,
@@ -524,36 +723,78 @@ export default {
         venues: [],
         conflict: null,
         // `{ tone, text }` or null. The tone is not optional: see the decided line in the template.
-        decided: null
+        decided: null,
+        startsNewConversation: false,
+        notRemembered: false
       };
       this.thread.push(turn);
       this.busy = true;
 
       try {
-        const response = await this.service.Ask(question, scope, this.locale);
-        this.fillTurn(turn, response);
+        const opened = await this.ensureConversation();
+        // A break is only worth drawing where something came before it to be cut off from.
+        turn.startsNewConversation = opened.created && !firstTurn;
+
+        const result = await this.service.AskInConversation(
+          opened.conversation.id, question, targetStoreId, this.locale);
+        this.fillTurn(turn, pick(result, 'answer'), opened.conversation, targetStoreId);
+
+        // ── A THREAD THAT ANSWERED AND THEN ENDED ────────────────────────────────────────────────
+        // `conversation_full` is a 200 with a merchant-facing sentence, not a status code: the turn
+        // had already run when the tail proved too large to replay even halved, so refusing it would
+        // have thrown away an answer somebody paid for. The thread is finished all the same, and the
+        // sentence it carries says to start a new one — so this makes that true, exactly as the
+        // catch below does for the refusals that never ran.
+        //
+        // `notRemembered` rides along on that same response and is deliberately NOT shown for it: it
+        // is true, but "this answer was not remembered" beside "this conversation is too long to
+        // remember any more" is one fact printed twice, and the second wording is the useful one.
+        if (pick(pick(result, 'answer'), 'status') === STATUS_CONVERSATION_FULL) {
+          this.retireConversation({ key: 'assistant_threadEnded', params: null });
+        } else {
+          // Reported, never inferred from a later misunderstanding. See the template's own note.
+          turn.notRemembered = pick(result, 'notRemembered') === true;
+        }
       } catch (error) {
-        // ⚠️ THIS IS WHERE A CHAT REFUSAL LANDS, AND IT USED TO RENDER AS "HTTP 403".
+        // ⚠️ THIS IS WHERE A REFUSAL LANDS, AND IT USED TO RENDER AS "HTTP 403".
         //
-        // `ChatController` answers 400/401/403/500 with a whole `ChatAskResponseModel` whose reason
-        // is in **`Answer`** — no `message`, no `detail`, no `title`. `AssistantApiError` built its
-        // message from exactly those three and fell back to `'HTTP ' + status`, so a merchant asking
-        // about a store they do not administer was shown a status line where the server had written
-        // them a sentence. The fix is in the error's fallback chain (`api-client.js`), which is why
-        // nothing here reads the body: every caller of every route gets the same repair.
+        // The two controllers on this path put their reason in different places and neither uses
+        // `detail` or `title`: `AssistantConversationsController` answers `{ message }`, and
+        // `ChatController` answered 400/401/403/500 with a whole `ChatAskResponseModel` carrying the
+        // sentence in **`Answer`**. `AssistantApiError` fell back to `'HTTP ' + status` for the
+        // second shape, so a merchant asking about a store they do not administer was shown a status
+        // line where the server had written them a sentence. The fix is in the error's fallback
+        // chain (`api-client.js`), which reads both — which is why nothing here reads the body.
         //
-        // It is rendered in the FAILURE slot rather than as an answer. A refusal is not an answer —
-        // the server set `Success: false` — and the styling is the only thing on screen that says
-        // so once the sentence itself is merchant-facing prose.
+        // It is rendered in the FAILURE slot rather than as an answer. A refusal is not an answer,
+        // and the styling is the only thing on screen that says so once the sentence itself is
+        // merchant-facing prose.
         turn.failure = isAssistantApiError(error) && error.message
           ? error.message
           : this.$i('assistant_askFailed');
+
+        // ⚠️ AND A REFUSAL THAT ENDS THE THREAD MUST ALSO END IT HERE. The server's sentence for all
+        // three of them finishes with "start a new conversation", and a client that keeps posting to
+        // a dead id makes that sentence a lie: every later question fails the same way, and the
+        // merchant has been told to do something the page will not let them do. Retiring it makes
+        // the next question open a fresh thread, which is exactly what they were just asked for.
+        //
+        // A 400 or a 500 is deliberately NOT this. A model outage says nothing about the thread, and
+        // discarding a working conversation's context over a blip is the expensive direction of this
+        // decision, because nothing restores it.
+        if (threadIsOver(error)) {
+          this.retireConversation({ key: 'assistant_threadEnded', params: null });
+        }
       } finally {
         turn.pending = false;
         this.busy = false;
       }
     },
-    fillTurn (turn, response) {
+    /**
+     * @param scope the thread's frozen scope, used ONLY where the response carries none of its own.
+     * @param targetStoreId the one store this turn was narrowed to, or null.
+     */
+    fillTurn (turn, response, scope, targetStoreId) {
       // ⚠️ THIS ONLY EVER SEES A 2xx, AND A COMMENT HERE USED TO CLAIM OTHERWISE. It said a refusal
       // body "also arrives as a ChatAskResponseModel … shown as the answer it is, not as a crash" —
       // describing an intent the code cannot reach, because `_request` throws on `!response.ok` and
@@ -582,8 +823,23 @@ export default {
       turn.assumptions = pickList(response, 'assumptions');
       turn.warnings = pickList(response, 'warnings');
 
-      const storeIds = pickList(response, 'storeIds');
-      const storeNames = pickList(response, 'storeNames');
+      // ⚠️ A CONVERSATION TURN CARRIES NO SCOPE OF ITS OWN, and reading one straight off the response
+      // would have quietly emptied both the basis drawer's "stores in the answer" row and the venue
+      // picker's buttons. `ChatController` fills `StoreIds`/`StoreNames` onto the response after the
+      // orchestrator returns; `AssistantConversationService` returns it untouched, so both arrive
+      // null (measured against the live host — see `api-client.js`).
+      //
+      // The fallback is not a guess. The thread's scope is the server-VERIFIED list handed back by
+      // create, frozen there and re-verified on every turn, and a turn narrowed to one store is
+      // narrowed to a store of that same list. So the label is the same fact the server holds; what
+      // is missing is only its restatement per turn.
+      const effective = this.scopeOfTurn(scope, targetStoreId);
+      const storeIds = pickList(response, 'storeIds').length
+        ? pickList(response, 'storeIds')
+        : effective.storeIds;
+      const storeNames = pickList(response, 'storeNames').length
+        ? pickList(response, 'storeNames')
+        : effective.storeNames;
       turn.scopeLabel = storeNames.length ? storeNames.join(', ') : storeIds.join(', ');
 
       const trace = pick(response, 'trace');
@@ -599,11 +855,14 @@ export default {
         turn.period = this.periodFrom(trace);
       }
 
-      turn.needsStore = needsStoreChoice(response);
+      // The thread's WHOLE scope, not this turn's: the buttons exist so a merchant can pick among the
+      // venues the conversation covers, and offering only the one a narrowed turn already ran against
+      // would be a picker with a single choice that changes nothing.
+      turn.needsStore = needsStoreChoice(response, scope.storeIds);
       if (turn.needsStore) {
-        turn.venues = storeIds.map((id, index) => ({
+        turn.venues = scope.storeIds.map((id, index) => ({
           id,
-          name: storeNames[index] || String(id)
+          name: scope.storeNames[index] || String(id)
         }));
       }
 
@@ -1123,11 +1382,81 @@ export default {
   }
 }
 
+.assistant-composer__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .assistant-composer__memory {
   margin: 8px 0 0 0;
   font-size: 0.8em;
   color: #64748b;
   font-style: italic;
+}
+
+/* The house secondary button at the compact size, deliberately not the green primary: starting over
+   is an escape hatch, and a CTA would read as the recommended move away from a thread that is
+   working. */
+.assistant-composer__fresh {
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #292c34;
+  font-weight: 600;
+  font-size: 0.85em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) { background: #f8f9fa; border-color: #cbd5e0; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+/* An amber advisory, the same one the store suggestion wears: something about the next question has
+   changed and the merchant may want to act on it. Deliberately not the red refusal chrome — nothing
+   has failed, and nothing they typed was rejected. */
+.assistant-composer__notice {
+  margin: 0 0 12px 0;
+  padding: 12px 16px;
+  background: #FFF3E0;
+  border-left: 4px solid #FF9800;
+  border-radius: 8px;
+  color: #92400e;
+  font-size: 0.9em;
+}
+
+/* Where the memory restarts. A labelled rule rather than a banner: it marks a boundary in the
+   transcript and must not compete with the turns on either side of it. */
+.assistant-thread__break {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 24px 0;
+  font-size: 0.78em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: #94a3b8;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #e2e8f0;
+  }
+}
+
+/* The answer stands; remembering it did not. Amber for the same reason as the notice above — the
+   merchant has their answer, and what is affected is only the question after it. */
+.assistant-turn__unremembered {
+  margin: -8px 0 16px 0;
+  font-size: 0.85em;
+  color: #92400e;
 }
 
 .empty-state {
