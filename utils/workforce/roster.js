@@ -218,6 +218,30 @@ export function buildEmployerRequest (form) {
 }
 
 /**
+ * The `POST /first-run` body. Same trimming rule as the employer request above, and the same reason:
+ * the organization number's internal spaces are the SERVER's to strip, because the duplicate guard is
+ * its rule and two implementations of one rule means one of them is not enforced.
+ *
+ * `confirmModuleActivation` is forced TRUE rather than copied from the form, and that is not a
+ * bypass: the form's checkbox governs whether `submit` fires at all (see `WorkforceFirstRunForm`),
+ * and a request that reached here having not been confirmed would be a bug in this page rather than a
+ * decision to respect. Sending `false` would only produce a 400 the operator cannot act on. The
+ * ACTUAL enforcement is the server's, which refuses an unconfirmed body outright — this field is the
+ * client saying it has shown the consequence, not the client granting itself permission.
+ *
+ * There is deliberately no field for WHO to engage. The endpoint takes no subject: it engages the
+ * caller, which is what stops the bootstrap being a way to hand Workforce capability to a third party.
+ */
+export function buildFirstRunRequest (form) {
+  return {
+    confirmModuleActivation: true,
+    organizationNumber: (form.organizationNumber || '').trim(),
+    legalEmployerName: (form.legalEmployerName || '').trim(),
+    displayName: (form.displayName || '').trim()
+  };
+}
+
+/**
  * The D1 pre-check: does this store already hold an ACTIVE engagement for this (person, employer)?
  *
  * Returns the conflicting row, or null. A null is NOT a guarantee that the write will succeed — the

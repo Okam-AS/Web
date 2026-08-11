@@ -87,6 +87,57 @@ export class WorkforceRosterService extends WorkforceClientBase {
   }
 
   /**
+   * FIRST RUN, read: whether this store may still be bootstrapped onto Workforce, and what running it
+   * would do.
+   *
+   * THE ONE ROUTE ON THIS SURFACE THAT IS NOT ABOUT A WORKFORCE CAPABILITY. Capability comes from
+   * holding an engagement, and creating the first engagement needs capability — so a store with zero
+   * Workforce staff had no caller who could pass any gate, and every world in production was
+   * bootstrapped by hand in SQL. This is the one-time way out, gated on being a STORE ADMINISTRATOR
+   * of the route store.
+   *
+   * It is a separate read from `GetContext` and is issued only when that one is refused: on a store
+   * that is already running, every caller who could see this is one who could see the context too, so
+   * asking first would be a second round trip on every page load to answer a question that is almost
+   * always "closed".
+   *
+   * The answer carries `isOpen`, `storeHasWorkforceStaff`, `moduleEnabled`, `moduleWillBeActivated`
+   * and `completedAtUtc`. A caller who does not administer the store gets 403 — the SAME 403 a store
+   * that does not exist gets, so nothing here can be used to discover which stores are on the
+   * platform.
+   */
+  GetFirstRunStatus (storeId) {
+    return this._request('GET', '/workforce/stores/' + storeId + '/first-run');
+  }
+
+  /**
+   * FIRST RUN, write: register the legal employer and mint this store's first engagement, in one
+   * commit.
+   *
+   * `request` is `{ confirmModuleActivation, organizationNumber, legalEmployerName, displayName,
+   * contactEmail?, contactPhone? }`. There is deliberately no field naming WHO to engage: the seam
+   * engages the CALLER, so it cannot be used to hand Workforce capability to somebody else.
+   *
+   * `confirmModuleActivation` MUST be true and the UI must have said what it means. Creating the
+   * first engagement switches `workforce.module` on for the store all by itself — the module gate
+   * grandfathers any store that has one — so the server refuses an unconfirmed call
+   * (`workforce.first-run-unconfirmed`, 400) rather than letting an operator activate a module by
+   * pressing a button labelled something else.
+   *
+   * IT WORKS EXACTLY ONCE PER STORE. The second call is `workforce.first-run-complete` (409), and so
+   * is a call to a store somebody bootstrapped by hand years ago — the door's condition is "this
+   * store has Workforce staff", not "somebody used this endpoint". That refusal is not retryable and
+   * the way forward is the roster, which the newly minted engagement can now reach.
+   *
+   * The grant is the setup closure and nothing more: `WorkforceManager | WorkforceScheduler`. No
+   * payroll approver, so whoever sets the store up cannot read wages until somebody deliberately
+   * grants it.
+   */
+  RunFirstRun (storeId, request) {
+    return this._mutate('POST', '/workforce/stores/' + storeId + '/first-run', request);
+  }
+
+  /**
    * L1: the legal employers available at this store — the NAMES `CreateStaff` needs an id from.
    *
    * This replaced mining employer ids out of the staff list, which is what this file and the add

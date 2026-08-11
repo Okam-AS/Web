@@ -16,7 +16,21 @@
         </div>
       </transition>
 
-      <div v-if="contextError" class="wfr-page__blocker">
+      <!-- THE DEADLOCK, and the one way out of it. A store administrator whose store has no Workforce
+           staff is refused by every route on this page including the context read, because capability
+           is resolved only from an engagement and nobody has one yet. Rather than telling them they
+           lack a permission — which is true and useless, since nobody in the world can grant it — the
+           page asks the first-run endpoint whether this store may still be bootstrapped, and offers to
+           do it. The probe runs ONLY after the context read has already been refused, so a store that
+           is running never pays for it. -->
+      <WorkforceFirstRunForm
+        v-if="firstRunStatus && firstRunStatus.isOpen"
+        :status="firstRunStatus"
+        :busy="busy"
+        @submit="runFirstRun"
+      />
+
+      <div v-else-if="contextError" class="wfr-page__blocker">
         {{ contextError }}
       </div>
 
@@ -133,8 +147,9 @@ import WorkforceRosterTable from '~/components/admin/workforce/WorkforceRosterTa
 import WorkforceAddPersonForm from '~/components/admin/workforce/WorkforceAddPersonForm.vue';
 import WorkforceEngagementPanel from '~/components/admin/workforce/WorkforceEngagementPanel.vue';
 import WorkforceLegalEmployerForm from '~/components/admin/workforce/WorkforceLegalEmployerForm.vue';
+import WorkforceFirstRunForm from '~/components/admin/workforce/WorkforceFirstRunForm.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
-import { contextRefusalKey } from '~/utils/workforce/context-refusal';
+import { CODE_MODULE_DISABLED, contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
 import {
   CAPABILITY_MANAGER,
@@ -145,6 +160,7 @@ import {
   buildEmployerRequest,
   buildEmployers,
   buildEndRequest,
+  buildFirstRunRequest,
   buildReactivateRequest,
   buildRoles,
   buildRoster,
@@ -173,7 +189,7 @@ const DAY_MS = 86400000;
 // opaque `workforce.hidden-engagement-conflict`, which names nothing — and neither does this page.
 export default {
   name: 'AdminWorkforceRoster',
-  components: { AdminPage, WorkforceRosterTable, WorkforceAddPersonForm, WorkforceEngagementPanel, WorkforceLegalEmployerForm },
+  components: { AdminPage, WorkforceRosterTable, WorkforceAddPersonForm, WorkforceEngagementPanel, WorkforceLegalEmployerForm, WorkforceFirstRunForm },
   data () {
     return {
       loading: false,
@@ -183,6 +199,10 @@ export default {
       registeringEmployer: false,
       employerFormKey: 0,
       contextError: '',
+      // The first-run door's state, or null for "not asked / not open to this caller". Only ever set
+      // from the SERVER's answer — whether a store may be bootstrapped is a fact about the store and
+      // the module gate, never something a page can infer from an empty roster it was refused.
+      firstRunStatus: null,
       timeZoneId: null,
       capabilities: [],
       // null everywhere means UNKNOWN. An empty array is a positive answer and a different claim;
@@ -268,6 +288,7 @@ export default {
       case 'workforce.invitation-not-revocable': return this.$i('wfr_conflict_revoke_claimed_title');
       case 'workforce.invitation-revoke-conflict': return this.$i('wfr_conflict_revoke_stale_title');
       case 'workforce.legal-employer-exists': return this.$i('wfr_conflict_employer_exists_title');
+      case 'workforce.first-run-complete': return this.$i('wfr_conflict_first_run_title');
       default: return this.$i('wfr_conflict_generic_title');
       }
     },
@@ -295,6 +316,12 @@ export default {
       // organization number and the refusal names the row. The list behind this band has been
       // re-read, so the employer the manager was about to create is now on screen to be used.
       case 'workforce.legal-employer-exists': return this.$i('wfr_conflict_employer_exists');
+      // NOT retryable, and the way forward is not this form. The store was set up between the probe
+      // and the press — by a colleague, or by whoever bootstrapped it long before this endpoint
+      // existed — so the page reloads behind this band and shows whatever the caller's real standing
+      // in the store now is, which for a store administrator with no engagement is the ordinary
+      // "you hold no workforce capability".
+      case 'workforce.first-run-complete': return this.$i('wfr_conflict_first_run');
       default: return this.conflict.message;
       }
     }
@@ -312,6 +339,7 @@ export default {
     async init () {
       if (!this.$store.getters.userIsLoggedIn || !this.storeId) { return; }
       this.contextError = '';
+      this.firstRunStatus = null;
       this.timeZoneId = null;
       this.capabilities = [];
       this.clearSelection();
@@ -330,9 +358,71 @@ export default {
           noCapability: 'wfr_no_capability',
           failed: 'wfr_context_failed'
         }));
+        // The refusal is set FIRST and the probe only replaces the screen if the door is genuinely
+        // open, so a failed or forbidden probe leaves the page saying exactly what it said before
+        // this existed. The probe runs only for the caller-side 403: a module-off store and a read
+        // that simply failed are different problems, and offering to bootstrap either one would be
+        // answering a question nobody asked.
+        await this.probeFirstRun(e);
         return;
       }
       await this.loadRoster();
+    },
+
+    /**
+     * Asks whether this store may still be bootstrapped onto Workforce.
+     *
+     * Only on a `workforce.forbidden` context refusal, and only ever ADDITIVE to the blocker already
+     * on screen: the endpoint answers 403 to anyone who does not administer the store — the same 403
+     * a store that does not exist gets — so a rejection here means "not your store to set up" and the
+     * page must go on saying what it already said.
+     */
+    async probeFirstRun (contextError) {
+      const callerRefusal = isWorkforceApiError(contextError) &&
+        contextError.status === 403 &&
+        contextError.code !== CODE_MODULE_DISABLED;
+      if (!callerRefusal) { return; }
+
+      try {
+        const status = await this._workforceRosterService.GetFirstRunStatus(this.storeId);
+        // `isOpen` is the server's answer and the only thing consulted. A store past its first run
+        // answers 200 with `isOpen: false`, and that must keep looking exactly like a permission
+        // problem to a caller who has one.
+        this.firstRunStatus = status && status.isOpen ? status : null;
+      } catch (e) {
+        this.firstRunStatus = null;
+      }
+    },
+
+    /**
+     * Runs the store's first run, then reloads the page as the engagement it just minted.
+     *
+     * `init()` rather than `loadRoster()`: the caller had NO capabilities a moment ago, so the whole
+     * context — capabilities, time zone, flags — has to be re-read before the roster means anything.
+     * Reloading only the roster would leave `canManage` false and the page read-only for the person
+     * who just became its manager.
+     */
+    async runFirstRun (form) {
+      if (this.busy) { return; }
+      this.busy = true;
+      this.conflict = null;
+      try {
+        const result = await this._workforceRosterService.RunFirstRun(this.storeId, buildFirstRunRequest(form));
+        this.notify(this.$i(result && result.moduleActivated ? 'wfr_first_done_activated' : 'wfr_first_done'));
+        this.firstRunStatus = null;
+        await this.init();
+      } catch (e) {
+        // A 409 here is the door having shut between the probe and the press — somebody else set the
+        // store up. Re-probing turns the form into the ordinary blocker rather than leaving a form on
+        // screen that can no longer succeed.
+        this.handleMutationError(e);
+        if (isWorkforceApiError(e) && e.status === 409) {
+          this.firstRunStatus = null;
+          await this.init();
+        }
+      } finally {
+        this.busy = false;
+      }
     },
 
     async loadRoster () {

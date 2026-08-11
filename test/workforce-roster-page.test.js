@@ -23,6 +23,14 @@ jest.mock('~/utils/workforce/roster-client', () => ({
       })
     }
 
+    // The first-run probe. Answers "shut" by default, which is what every store in this file is:
+    // a page whose context read was refused must go on saying so unless the SERVER says the store
+    // may still be bootstrapped. WorkforceFirstRun's own suite drives the open answer.
+    GetFirstRunStatus (storeId) {
+      calls.push(['GetFirstRunStatus', storeId])
+      return Promise.resolve({ storeId, isOpen: false, storeHasWorkforceStaff: true })
+    }
+
     ListStaff () {
       calls.push(['ListStaff'])
       return behaviour.staffFails ? Promise.reject(behaviour.staffFails) : Promise.resolve(behaviour.staff || [])
