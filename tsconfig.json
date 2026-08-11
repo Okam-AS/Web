@@ -13,6 +13,12 @@
     "sourceMap": true,
     "strict": false,
     "noEmit": true,
+    // Matches AdminApp and ConsumerApp. Without it the only errors this project
+    // reports are 24 in playwright-core's shipped .d.ts, which declares
+    // Symbol.asyncDispose that TypeScript 4.9.5 cannot parse -- third-party noise
+    // nothing in this repo can fix, and enough to keep `npm run typecheck`
+    // permanently red and therefore useless as a gate. With it, the baseline is 0.
+    "skipLibCheck": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
