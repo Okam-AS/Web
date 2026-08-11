@@ -51,7 +51,11 @@
 // only its OWN `JsonIgnore`, which has no `Condition`, so:
 //
 //   • over MCP, by System.Text.Json's `JsonSerializerDefaults.Web`   → camelCase, nulls OMITTED
-//   • over `/chat/ask` and `/staged-actions`, by MVC's Newtonsoft    → camelCase, nulls WRITTEN
+//   • over `/assistant/*` and `/staged-actions`, by MVC's Newtonsoft → camelCase, nulls WRITTEN
+//
+// The conversation routes are the same MVC pipeline and behave the same way, which is not a guess: a
+// live turn against `http://127.0.0.1:5080/assistant/conversations/{id}/messages` answers
+// `"storeIds": null, "storeNames": null, "storeSuggestion": null` — written, not omitted.
 //
 // Same casing, opposite null handling. `pick` treating `null` and absent as ONE answer is therefore
 // load-bearing: without it the same server state renders as "empty" from one pipeline and "absent"
@@ -411,31 +415,91 @@ export class AssistantClientBase {
 }
 
 /**
- * Ask Okam's routes, route-for-route with `ChatController` and `StagedActionController`.
+ * Ask Okam's routes, route-for-route with `AssistantConversationsController` and
+ * `StagedActionController`.
  *
- * THE THREAD IS SESSION-LOCAL AND THE TRANSPORT IS STATELESS. `POST /chat/ask` takes a question and
- * nothing else — no conversation id, no history, no turn list (`ChatRequestModel` has exactly three
- * members). Every turn is independent. The page renders a thread because that is the shape this will
- * keep when a conversation transport arrives; it says so on screen rather than implying a memory it
- * does not have.
+ * ── THE TRANSPORT IS A THREAD, AND `POST /chat/ask` IS NOT IT ────────────────────────────────────
+ *
+ * This client used to post every question to `/chat/ask`, whose `ChatRequestModel` has exactly three
+ * members and carries no conversation id, no history and no turn list. Every turn really was
+ * independent, and the page said so on screen. The multi-turn transport was BUILT and nothing called
+ * it: `rg -c "assistant/conversations"` over this repository returned 0, tests included.
+ *
+ * It is called now, and the stateless route is deliberately NOT kept as a fallback. A fallback would
+ * turn "the thread could not be opened" into "the thread was silently forgotten", which is the exact
+ * failure the on-screen note used to be honest about — and the merchant would have no way to tell
+ * the two apart. A refusal here is reported; it is never routed around.
+ *
+ * ── TWO THINGS THIS ROUTE DOES THAT `/chat/ask` DOES NOT ─────────────────────────────────────────
+ *
+ *  1. **The store scope is FROZEN at create** (`StoreScopeJson`) and re-verified every turn. There is
+ *     no rescope route and there will not be one: every later turn replays history gathered under the
+ *     frozen scope, so widening it would answer a later question with earlier data the new scope was
+ *     never verified for. A different selection is a different conversation — which is why
+ *     `StartConversation` takes the scope and `AskInConversation` cannot.
+ *  2. **The `Assistant.Module` feature flag is checked**, at create AND on every turn.
+ *     `ChatController` checks no flag at all, so a store with the module switched off could ask a
+ *     one-shot question and cannot hold a conversation. That is a real behavioural difference and it
+ *     is the server's ruling, not this client's to paper over.
+ *
+ * ⚠️ AND ONE THING IT DOES NOT DO THAT `/chat/ask` DOES. `ChatController` fills `StoreIds`,
+ * `StoreNames` and `StoreSuggestion` onto the response AFTER the orchestrator returns
+ * (`ChatController.cs:76-81`); `AssistantConversationService` returns the orchestrator's response
+ * untouched, so all three arrive NULL on a conversation turn. Measured against the live host, not
+ * inferred. The caller therefore labels a turn's scope from the thread's own frozen scope — which is
+ * the server-verified list `StartConversation` handed back, so nothing is invented — and the
+ * question-text store suggestion is simply absent, because it is computed by `ChatStoreNameResolver`
+ * server-side and cannot be reproduced here. Filed as backend work; the client refuses to fake it.
  */
 export class AssistantService extends AssistantClientBase {
   /**
-   * One turn. `selectedStoreIds` is the EXPLICIT scope and always wins: `ChatController` uses the
-   * caller's selection when one is supplied and the caller's full admin set otherwise, and the only
-   * thing that may narrow either is the StoreAdmins intersection the server already applied.
-   * Nothing read out of the question text takes part in that decision — which is why a
-   * `StoreSuggestion` is offered to the user and never applied for them.
+   * Open a thread and FREEZE its scope.
+   *
+   * `storeIds` empty is sent as null, exactly as the one-shot route's `SelectedStoreIds` was: the
+   * server reads absent as "every store I administer that has the assistant switched on", and an
+   * empty LIST is a supplied-but-empty selection, which it refuses with a 403.
+   *
+   * Answers an `AssistantConversationModel` — `{ id, status, storeIds, storeNames, … }`. The scope it
+   * reports is the VERIFIED one (requested ∩ administered ∩ assistant-enabled) and may legitimately
+   * be narrower than what was asked for.
    */
-  Ask (question, selectedStoreIds, languageCode) {
-    const scope = Array.isArray(selectedStoreIds) && selectedStoreIds.length > 0
-      ? selectedStoreIds
-      : null;
-    return this._request('POST', '/chat/ask', {
+  StartConversation (storeIds) {
+    const scope = Array.isArray(storeIds) && storeIds.length > 0 ? storeIds : null;
+    return this._request('POST', '/assistant/conversations', { StoreIds: scope });
+  }
+
+  /**
+   * One turn on an open thread.
+   *
+   * `targetStoreId` NARROWS this turn to one store of the frozen scope and can never widen it — a
+   * store outside the scope is refused with a 403 rather than added. It is what the venue picker
+   * answers with, and it is the whole of the per-turn scope vocabulary: a list would be a rescope.
+   *
+   * Answers an `AssistantConversationTurnModel` — `{ conversationId, sequence, answer, notRemembered }`
+   * — whose `answer` is the SAME `ChatAskResponseModel` the one-shot route returns, so a renderer
+   * that already reads that shape reads this one unchanged.
+   */
+  AskInConversation (conversationId, question, targetStoreId, languageCode) {
+    return this._request('POST', '/assistant/conversations/' + conversationId + '/messages', {
       Question: question,
-      SelectedStoreIds: scope,
+      TargetStoreId: typeof targetStoreId === 'number' ? targetStoreId : null,
       LanguageCode: languageCode || null
     });
+  }
+
+  /**
+   * End a thread the merchant is finished with.
+   *
+   * Worth calling rather than abandoning: an untouched Active thread sits until the retention sweep
+   * expires it (`IdleExpiryHours`, 24h by default), and only a terminal thread has its turns deleted
+   * by the sweep when `ChatPrivacy:PersistHistory` is off. Closing is therefore the merchant's own
+   * "I am done with this" and the thing that lets retention collect it early.
+   *
+   * Closing an already-terminal thread is not an error, and an EXPIRED thread stays Expired — the
+   * server refuses to relabel the clock's act as the merchant's.
+   */
+  CloseConversation (conversationId) {
+    return this._request('DELETE', '/assistant/conversations/' + conversationId);
   }
 
   /**
@@ -589,6 +653,54 @@ export function describeConflict (error) {
 }
 
 /**
+ * The in-band status a turn carries when the THREAD is too long to continue rather than the question
+ * being wrong. It arrives as a 200 with `notRemembered: true` and a merchant-facing sentence in
+ * `Answer` — deliberately not a status code, because "this thread is full and a new one will work" is
+ * information a 409 cannot carry once the turn has already run.
+ */
+export const STATUS_CONVERSATION_FULL = 'conversation_full';
+
+/**
+ * Is this refusal the END of the thread, or just a bad moment?
+ *
+ * The distinction decides whether the client throws away a working conversation's memory, so it is
+ * made from the STATUS the controller maps faults to (`AssistantConversationsController.Answer`) and
+ * never from prose:
+ *
+ *   403  Forbidden / ScopeLapsed — the caller lost admin on one of the thread's stores, or the
+ *        assistant was switched off for one of them, or a named target is outside the frozen scope.
+ *        The first two are recomputed identically on every later turn, so the thread is finished.
+ *   404  NotFound — the retention sweep took the header, or it was never this caller's. Existence and
+ *        ownership answer the same way on purpose, and neither is recoverable by asking again.
+ *   409  Terminal / Full — closed, expired, or at `MaxTurns`. The server's own sentence for all three
+ *        ends with "start a new conversation".
+ *
+ * A 400 and a 500 are deliberately NOT here. A malformed question or a model outage says nothing
+ * about the thread, and retiring one over a blip would discard the merchant's context to no purpose —
+ * the expensive direction of this decision, since nothing restores it.
+ *
+ * ⚠️ 403 IS COARSER THAN IT LOOKS, AND THE COARSENESS HAS ALREADY COST A CONVERSATION ONCE. A turn
+ * narrowed to a store outside the frozen scope is ALSO a 403, and that one is the CLIENT's mistake,
+ * not a dead thread — so reading it as "the thread is finished" retires a perfectly live one.
+ *
+ * This block used to dismiss that as unreachable, on the ground that "the venue picker only ever
+ * offers stores from the thread's own scope". It offers stores from the scope of the thread that was
+ * open WHEN THE TURN RAN, and the transcript keeps those buttons on screen after that thread has
+ * been replaced — at which point one click posted an old store id into the current conversation and
+ * ended it here. The picker is now gated on the thread it belongs to still being the current one
+ * (`pages/admin/assistant.vue`, `liveConversationId`), which is what actually makes this
+ * unreachable; the gate is the load-bearing part, not the shape of the buttons.
+ *
+ * SO THE CAVEAT STANDS, AND IT IS NOT THEORETICAL: any caller that can name an arbitrary store
+ * re-opens it, and this function cannot tell the two 403s apart because the body carries only a
+ * message. Telling them apart needs the fault name on the wire.
+ */
+export function threadIsOver (error) {
+  if (!isAssistantApiError(error)) { return false; }
+  return error.status === 403 || error.status === 404 || error.status === 409;
+}
+
+/**
  * The sentence the backend composes when a write needs ONE venue and the turn covers several.
  *
  * ⚠️ A STRING MATCH, WHICH IS NORMALLY A BUG, KEPT ONLY AS A FALLBACK. `store_choice_needed` is now
@@ -616,13 +728,22 @@ export const STORE_CHOICE_PROMPT = 'Hvilken butikk gjelder det?';
  * `store_choice_needed`, the prose is never consulted. The prose branch additionally requires more
  * than one store in scope, because a single-store answer that happens to open with those words has
  * nothing to choose between and must not grow buttons.
+ *
+ * ⚠️ `scopeStoreIds` IS WHY THIS PICKER STILL EXISTS ON THE CONVERSATION ROUTE. A conversation turn's
+ * response carries `storeIds: null` — the controller that filled that field is not in this path (see
+ * the note on `AssistantService`) — so the "more than one store" test read an empty list and answered
+ * false for every question, on every thread. The picker would not have failed loudly; it would simply
+ * never have appeared again, on the one turn where the backend refuses to choose a venue itself.
+ * The caller passes the THREAD'S OWN FROZEN SCOPE, which is the server-verified list the create
+ * response handed back, and it is consulted only when the response supplies none of its own.
  */
-export function needsStoreChoice (response) {
+export function needsStoreChoice (response, scopeStoreIds) {
   if (!response) { return false; }
   const status = pick(response, 'status');
   if (status === STATUS_STORE_CHOICE_NEEDED) { return true; }
   const answer = pick(response, 'answer');
   if (typeof answer !== 'string') { return false; }
-  return answer.trim().indexOf(STORE_CHOICE_PROMPT) === 0 &&
-    pickList(response, 'storeIds').length > 1;
+  const own = pickList(response, 'storeIds');
+  const scope = own.length ? own : (Array.isArray(scopeStoreIds) ? scopeStoreIds : []);
+  return answer.trim().indexOf(STORE_CHOICE_PROMPT) === 0 && scope.length > 1;
 }

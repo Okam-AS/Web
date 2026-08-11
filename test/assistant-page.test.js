@@ -10,13 +10,41 @@ const script = {}
 // The pure helpers (`pick`, `needsStoreChoice`, `describeConflict`) are the REAL ones — they are the
 // thing the page's rendering decisions are made of, and stubbing them would leave these tests
 // asserting against a second, friendlier implementation of the wire.
+//
+// ⚠️ `script.ask` STILL RETURNS A BARE `ChatAskResponseModel`, and the mock WRAPS it. That is not a
+// convenience: it is the wire. `AssistantConversationTurnModel` carries the identical response under
+// `answer`, beside `notRemembered`, so every fixture written against the one-shot route describes a
+// conversation turn without a word changed. Tests that care about the envelope set `script.turn`.
 jest.mock('~/utils/assistant/api-client', () => {
   const actual = jest.requireActual('~/utils/assistant/api-client')
+  // The names the SERVER returns for the scope it verified. A create answers with real store names
+  // (`StoreNames`), and the venue picker is built from them, so a mock inventing "Store 1" would
+  // leave those buttons asserting against a label no deployment produces.
+  const NAMES = { 1: 'Bryggen Bistro', 2: 'Torget' }
   return Object.assign({}, actual, {
     AssistantService: class {
-      Ask (question, storeIds, languageCode) {
-        calls.push(['Ask', question, storeIds, languageCode])
-        return script.ask ? script.ask() : Promise.resolve({ Answer: 'et svar', Status: 'answered', StoreIds: storeIds })
+      StartConversation (storeIds) {
+        calls.push(['Start', storeIds])
+        if (script.start) { return script.start() }
+        const ids = Array.isArray(storeIds) && storeIds.length ? storeIds : [1]
+        return Promise.resolve({
+          id: 'conv-' + calls.filter(call => call[0] === 'Start').length,
+          status: 'Active',
+          storeIds: ids,
+          storeNames: ids.map(id => NAMES[id] || String(id)),
+          messageCount: 0
+        })
+      }
+
+      AskInConversation (conversationId, question, targetStoreId, languageCode) {
+        calls.push(['Ask', question, targetStoreId, languageCode, conversationId])
+        return Promise.resolve(script.ask ? script.ask() : { Answer: 'et svar', Status: 'answered' })
+          .then(answer => (script.turn ? script.turn(answer) : { conversationId, sequence: 2, answer, notRemembered: false }))
+      }
+
+      CloseConversation (conversationId) {
+        calls.push(['Close', conversationId])
+        return script.close ? script.close() : Promise.resolve({ id: conversationId, status: 'Closed' })
       }
 
       Approve (id) {
@@ -86,8 +114,11 @@ describe('the store scope', () => {
     wrapper.vm.submit()
     await settled()
 
-    // The question names store 1 by name; the scope sent is the one the PICKER holds.
-    expect(calls[0]).toEqual(['Ask', 'hvor mye solgte Bryggen Bistro?', [2], 'no'])
+    // The question names store 1 by name; the scope sent is the one the PICKER holds — and it is
+    // sent when the THREAD is opened, because a conversation is frozen to the stores it started
+    // with. The turn itself names no scope at all.
+    expect(calls[0]).toEqual(['Start', [2]])
+    expect(calls[1].slice(0, 4)).toEqual(['Ask', 'hvor mye solgte Bryggen Bistro?', null, 'no'])
   })
 
   // `AIQueryBox` hard-coded `'no'`, so a German operator was answered in Norwegian.
@@ -99,7 +130,7 @@ describe('the store scope', () => {
     wrapper.vm.submit()
     await settled()
 
-    expect(calls[0][3]).toBe('de')
+    expect(calls[1][3]).toBe('de')
   })
 })
 
@@ -168,7 +199,11 @@ describe('the store suggestion', () => {
 
 // ── THE VENUE PICKER ─────────────────────────────────────────────────────────────────────────────
 describe('when the turn needs one venue', () => {
-  test('venue buttons are built from the response’s own scope, and re-ask with exactly one store', async () => {
+  // ⚠️ THE BUTTONS COME FROM THE THREAD'S FROZEN SCOPE, NOT FROM THE RESPONSE. A conversation turn
+  // answers `storeIds: null` — the controller that fills that field is not on this path — so a
+  // picker built from the response would have rendered zero buttons on the one turn where the
+  // backend refuses to choose a venue itself, without erroring anywhere.
+  test('venue buttons are built from the thread’s own scope, and re-ask narrowed to one store', async () => {
     script.ask = () => Promise.resolve({
       Status: 'answered',
       Answer: 'Hvilken butikk gjelder det? Velg én av Bryggen Bistro, Torget, så forbereder jeg forslaget.',
@@ -192,8 +227,11 @@ describe('when the turn needs one venue', () => {
     buttons.at(1).trigger('click')
     await settled()
 
-    // The SAME question, re-asked against one store.
-    expect(calls[1]).toEqual(['Ask', 'øk prisen på alle pizzaer med 25 %', [2], 'no'])
+    // The SAME question, re-asked NARROWED to one store of the frozen scope — and on the SAME
+    // thread. Re-opening one would throw away the turn the merchant is answering.
+    expect(calls[2].slice(0, 4)).toEqual(['Ask', 'øk prisen på alle pizzaer med 25 %', 2, 'no'])
+    expect(calls[2][4]).toBe(calls[1][4])
+    expect(calls.filter(call => call[0] === 'Start').length).toBe(1)
   })
 
   test('an ordinary answer grows no buttons', async () => {
@@ -228,11 +266,13 @@ describe('how the model’s answer is rendered', () => {
     expect(answer.element.querySelector('b')).toBeNull()
   })
 
-  test('the composer says the assistant has no memory, because it has none', async () => {
+  // The note used to say the assistant remembers nothing, and it was true of the stateless endpoint
+  // the page posted to. It holds a thread now, and the line says what that memory covers.
+  test('the composer states what the assistant remembers', async () => {
     const wrapper = mountPage()
     await settled()
 
-    expect(wrapper.find('[data-test="memory-note"]').text()).toBe('assistant_noMemory')
+    expect(wrapper.find('[data-test="memory-note"]').text()).toBe('assistant_memoryNote')
   })
 })
 
@@ -616,8 +656,9 @@ describe('the ?q= handoff', () => {
     const wrapper = mountPage({ query: { q: 'hvor mye solgte vi?' } })
     await settled()
 
-    expect(calls[0][0]).toBe('Ask')
-    expect(calls[0][1]).toBe('hvor mye solgte vi?')
+    expect(calls[0][0]).toBe('Start')
+    expect(calls[1][0]).toBe('Ask')
+    expect(calls[1][1]).toBe('hvor mye solgte vi?')
     // Cleared, so a reload does not silently re-ask a question already answered.
     expect(wrapper.vm._replaced).toContainEqual({ path: '/admin/assistant', query: {} })
   })
@@ -626,7 +667,7 @@ describe('the ?q= handoff', () => {
     mountPage({ query: { q: 'q', stores: '2' } })
     await settled()
 
-    expect(calls[0][2]).toEqual([2])
+    expect(calls[0]).toEqual(['Start', [2]])
   })
 
   // A store id in a URL is not a grant. The server re-checks it too, but a scope this admin does
@@ -635,7 +676,7 @@ describe('the ?q= handoff', () => {
     mountPage({ query: { q: 'q', stores: '99' } })
     await settled()
 
-    expect(calls[0][2]).toEqual([1, 2])
+    expect(calls[0]).toEqual(['Start', [1, 2]])
   })
 
   test('no question in the URL asks nothing', async () => {

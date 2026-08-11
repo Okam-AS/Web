@@ -5729,7 +5729,16 @@ export default {
   assistant_placeholder: 'Type your question here',
   assistant_send: 'Send',
   assistant_sending: 'Sending …',
-  assistant_noMemory: 'The assistant does not remember earlier questions yet.',
+  // See the block comment on these seven in `no.ts`. `assistant_noMemory` stood here and was true of
+  // the stateless endpoint the page used to post to; the thread it holds now is what these describe.
+  assistant_memoryNote: 'The assistant remembers the questions in this conversation.',
+  assistant_notRemembered: 'This answer was not saved to the conversation, so your next question will not have it.',
+  assistant_newConversation: 'Start a new conversation',
+  assistant_newConversationStarted: 'New conversation — nothing above is carried forward',
+  assistant_scopeChanged: 'You have changed the stores. Your next question starts a new conversation, because a conversation is fixed to the stores it was started with.',
+  assistant_scopeNarrowed: 'This conversation covers only {stores}. The assistant is not switched on for the other stores you selected.',
+  assistant_threadEnded: 'This conversation has ended. Your next question starts a new one, without what was said before.',
+  assistant_threadNotStarted: 'The conversation was not started, for the reason above. Your next question tries again.',
   assistant_askFailed: 'We did not get an answer. Try again.',
   assistant_emptyTitle: 'Ask the first question',
   assistant_emptyBody: 'The assistant reads your numbers, and can propose changes that you approve yourself.',

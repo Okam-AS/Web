@@ -4,6 +4,7 @@ import {
   isAssistantApiError,
   describeConflict,
   needsStoreChoice,
+  threadIsOver,
   pick,
   pickList,
   oreOf,
@@ -11,9 +12,10 @@ import {
   CONFLICT_KIND_DISABLED
 } from '~/utils/assistant/api-client'
 
-// Route-for-route with `ChatController` and `StagedActionController` on `feature/ask-okam`
-// @ b4f8fa817. These assert the wire contract: the exact paths, the request body's members, and the
-// way `pick` reads a response.
+// Route-for-route with `AssistantConversationsController` and `StagedActionController`. These assert
+// the wire contract: the exact paths, the request body's members, and the way `pick` reads a
+// response. The conversation routes were verified against a live host at `127.0.0.1:5080` as well —
+// including the one thing that cannot be read off the C#, that a turn answers `storeIds: null`.
 describe('AssistantService', () => {
   const originalFetch = global.fetch
   const ID = '11111111-1111-1111-1111-111111111111'
@@ -30,41 +32,86 @@ describe('AssistantService', () => {
 
   afterEach(() => { global.fetch = originalFetch })
 
-  describe('POST /chat/ask', () => {
+  // ── /assistant/conversations ───────────────────────────────────────────────────────────────────
+  // The multi-turn transport. It was built, DI-registered and reachable over HTTP while nothing in
+  // this repository called it: `rg -c "assistant/conversations"` returned 0, tests included.
+  describe('/assistant/conversations', () => {
     // The REQUEST body is PascalCase and that is a free choice, not a consequence of the wire's
     // casing: Newtonsoft matches an incoming member to a C# property by exact name FIRST and
-    // case-insensitively after, so `Question` and `question` both bind `ChatRequestModel.Question`.
-    // Sent as the C# spelling because that is what the model declares.
-    test('the request body names the model’s own members', async () => {
-      respondWith(200, { Answer: 'x' })
-      await service().Ask('hvor mye solgte vi?', [7], 'no')
+    // case-insensitively after, so `StoreIds` and `storeIds` both bind
+    // `AssistantConversationCreateModel.StoreIds`. Sent as the C# spelling because that is what the
+    // model declares.
+    test('opening a thread posts the scope, and only at creation', async () => {
+      respondWith(200, { id: 'c-1', storeIds: [7], storeNames: ['Bryggen Bistro'] })
+      await service().StartConversation([7])
 
       const [url, init] = global.fetch.mock.calls[0]
-      expect(url).toBe('/chat/ask')
+      expect(url).toBe('/assistant/conversations')
       expect(init.method).toBe('POST')
       expect(init.headers.Authorization).toBe('Bearer tok-123')
+      expect(JSON.parse(init.body)).toEqual({ StoreIds: [7] })
+    })
+
+    // `CreateAsync` branches on `resolution.RequestSupplied`. An EMPTY list is still "supplied", and
+    // the intersection of an empty selection with the admin's stores is empty — which it answers 403
+    // to. Sending null is what asks for "every store I administer that has the assistant on".
+    test('an empty scope is sent as null, not as []', async () => {
+      respondWith(200, { id: 'c-1' })
+      await service().StartConversation([])
+
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body).StoreIds).toBeNull()
+    })
+
+    test('a turn is posted to the thread’s own sub-route', async () => {
+      respondWith(200, { conversationId: 'c-1', sequence: 2, answer: { answer: 'x' } })
+      await service().AskInConversation('c-1', 'hvor mye solgte vi?', null, 'no')
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/assistant/conversations/c-1/messages')
+      expect(init.method).toBe('POST')
       expect(JSON.parse(init.body)).toEqual({
         Question: 'hvor mye solgte vi?',
-        SelectedStoreIds: [7],
+        TargetStoreId: null,
         LanguageCode: 'no'
       })
     })
 
-    // The controller branches on `resolution.RequestSupplied`. An EMPTY list is still "supplied",
-    // and the intersection of an empty selection with the admin's stores is empty — which the
-    // controller answers 403 to. Sending null is what asks for "all my stores".
-    test('an empty scope is sent as null, not as []', async () => {
-      respondWith(200, { Answer: 'x' })
-      await service().Ask('spørsmål', [], 'no')
+    // ⚠️ THE PER-TURN SCOPE VOCABULARY IS ONE STORE, AND THAT IS THE WHOLE OF IT. A list here would
+    // be a rescope, which the thread's frozen scope exists to forbid — every later turn replays
+    // history gathered under it. `TargetStoreId` can only narrow to a store already inside it.
+    test('a narrowed turn names ONE store, and a non-number is sent as null', async () => {
+      respondWith(200, { conversationId: 'c-1', sequence: 4, answer: { answer: 'x' } })
+      await service().AskInConversation('c-1', 'q', 2, 'no')
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body).TargetStoreId).toBe(2)
 
-      expect(JSON.parse(global.fetch.mock.calls[0][1].body).SelectedStoreIds).toBeNull()
+      respondWith(200, { conversationId: 'c-1', sequence: 6, answer: { answer: 'x' } })
+      await service().AskInConversation('c-1', 'q', undefined, 'no')
+      expect(JSON.parse(global.fetch.mock.calls[0][1].body).TargetStoreId).toBeNull()
     })
 
     test('the language is whatever the caller passed — never a hard-coded "no"', async () => {
-      respondWith(200, { Answer: 'x' })
-      await service().Ask('question', [1], 'de')
+      respondWith(200, { conversationId: 'c-1', answer: { answer: 'x' } })
+      await service().AskInConversation('c-1', 'question', null, 'de')
 
       expect(JSON.parse(global.fetch.mock.calls[0][1].body).LanguageCode).toBe('de')
+    })
+
+    test('closing a thread is a DELETE on the thread itself, with no body', async () => {
+      respondWith(200, { id: 'c-1', status: 'Closed' })
+      await service().CloseConversation('c-1')
+
+      const [url, init] = global.fetch.mock.calls[0]
+      expect(url).toBe('/assistant/conversations/c-1')
+      expect(init.method).toBe('DELETE')
+      expect(init.body).toBeUndefined()
+    })
+
+    // The stateless route is gone from this client and is deliberately NOT kept as a fallback: a
+    // fallback would make "the thread could not be opened" and "the thread was silently forgotten"
+    // look identical to the merchant, which is the exact failure the on-screen note used to be
+    // honest about.
+    test('nothing here posts to /chat/ask any more', () => {
+      expect(service().Ask).toBeUndefined()
     })
   })
 
@@ -304,13 +351,47 @@ describe('describeConflict', () => {
   })
 })
 
-// ── THE CHAT REFUSAL THAT RENDERED AS "HTTP 403" ─────────────────────────────────────────────────
+// ── THREAD-ENDING VS. BAD-MOMENT ─────────────────────────────────────────────────────────────────
+// This decides whether the client throws away a working conversation's memory, so it is made from
+// the STATUS `AssistantConversationsController.Answer` maps its typed faults to, never from prose.
+// Nothing restores a discarded thread, which is what makes the 500 row below the important one.
+describe('threadIsOver', () => {
+  const refusal = status => new AssistantApiError(status, { message: 'server prose' })
+
+  test('403, 404 and 409 all end the thread', () => {
+    // 403 = Forbidden / ScopeLapsed (admin lost, or the assistant switched off for a store in the
+    // frozen scope); 404 = the retention sweep took it, or it was never this caller's; 409 =
+    // Terminal / Full. The server's own sentence for every one of them says to start a new one.
+    expect(threadIsOver(refusal(403))).toBe(true)
+    expect(threadIsOver(refusal(404))).toBe(true)
+    expect(threadIsOver(refusal(409))).toBe(true)
+  })
+
+  // ⚠️ THE ROW THAT MATTERS. A model outage or a malformed question says NOTHING about the thread,
+  // and retiring one over a blip discards context nothing can give back.
+  test('a 400, a 500 and a transport failure leave the thread alone', () => {
+    expect(threadIsOver(refusal(400))).toBe(false)
+    expect(threadIsOver(refusal(500))).toBe(false)
+    expect(threadIsOver(refusal(503))).toBe(false)
+    expect(threadIsOver(new Error('socket hang up'))).toBe(false)
+    expect(threadIsOver(null)).toBe(false)
+  })
+})
+
+// ── A REFUSAL THAT RENDERED AS "HTTP 403" ────────────────────────────────────────────────────────
 // `ChatController` returns 400/401/403/500 as a whole `ChatAskResponseModel` and puts the reason in
 // `Answer` (`:40-57`, `Refusal` at `:124-131`). The error's message chain read `message`/`detail`/
 // `title` — none of which are on that body — and fell back to `'HTTP ' + status`, so a merchant
 // asking about a store they do not administer was shown a status line instead of the sentence the
 // server had written for exactly that moment.
-describe('a chat refusal carries its reason in `answer`', () => {
+//
+// ⚠️ NO ROUTE THIS CLIENT CALLS SENDS THAT SHAPE ANY MORE. `AssistantConversationsController`
+// answers `{ message }` for every fault it maps, so the `answer` link in the chain is now INSURANCE,
+// exactly like the PascalCase read above it — kept because it is one link, because `AssistantApiError`
+// is exported and generic, and because the failure it covers is silent and total: a caller pointed
+// back at `/chat/ask` would show merchants status lines again with nothing red anywhere. These tests
+// are therefore a pin on the error type, not on a live wire.
+describe('a chat-shaped refusal carries its reason in `answer`', () => {
   test('the 403 the merchant actually sees is the server’s sentence', () => {
     const error = new AssistantApiError(403, {
       question: 'hva solgte Torget?',
@@ -390,6 +471,33 @@ describe('needsStoreChoice', () => {
   test('an ordinary answer is not a picker', () => {
     expect(needsStoreChoice({ Status: 'answered', Answer: 'Dere solgte for kr 42 000.', StoreIds: [1, 2] })).toBe(false)
     expect(needsStoreChoice(null)).toBe(false)
+  })
+
+  // ⚠️ THE CONVERSATION ROUTE ANSWERS `storeIds: null`, WHICH KILLED THIS PICKER SILENTLY.
+  // `ChatController` fills `StoreIds`/`StoreNames` onto the response after the orchestrator returns;
+  // `AssistantConversationService` returns it untouched. So the "more than one store" test read an
+  // empty list and answered false for every question on every thread — no error, no red, the buttons
+  // simply never appeared again on the one turn where the backend refuses to pick a venue itself.
+  test('the thread’s frozen scope stands in when the response carries none', () => {
+    const turn = { Status: 'answered', Answer: 'Hvilken butikk gjelder det? Velg én.', StoreIds: null }
+
+    expect(needsStoreChoice(turn)).toBe(false)
+    expect(needsStoreChoice(turn, [1, 2])).toBe(true)
+  })
+
+  // Still one store, still nothing to choose between — the fallback must not manufacture a picker.
+  test('a single-store thread is not a choice either', () => {
+    expect(needsStoreChoice(
+      { Status: 'answered', Answer: 'Hvilken butikk gjelder det? Velg én.', StoreIds: null }, [1]
+    )).toBe(false)
+  })
+
+  // The RESPONSE wins wherever it has an opinion: a backend that starts filling the field is the
+  // better authority about the turn it just answered, and the fallback exists only for its absence.
+  test('the response’s own scope is preferred over the fallback', () => {
+    expect(needsStoreChoice(
+      { Status: 'answered', Answer: 'Hvilken butikk gjelder det? Velg én.', StoreIds: [1] }, [1, 2]
+    )).toBe(false)
   })
 })
 
