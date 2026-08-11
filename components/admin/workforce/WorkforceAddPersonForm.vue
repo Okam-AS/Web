@@ -55,24 +55,36 @@
       </select>
     </template>
 
-    <!-- THE LEGAL EMPLOYER. Required by the endpoint, and unnamed by every endpoint: nothing on
-         this surface returns a legal employer's name or organization number, so the only honest
-         label is the id plus how many of this store's engagements sit under it. -->
+    <!-- THE LEGAL EMPLOYER. Required by the endpoint, and now NAMED by it: the choice is the
+         registered company rather than the opaque id this form used to have to show, because the
+         only thing that knew an employer existed was somebody already being employed under it. -->
     <label class="wfr-add__label">{{ $i('wfr_add_employer') }}</label>
-    <select v-if="employers.length > 1" v-model="legalEmployerId" class="wfr-add__input">
-      <option v-for="employer in employers" :key="employer.legalEmployerId" :value="employer.legalEmployerId">
-        {{ employer.legalEmployerId }} ({{ $i('wfr_add_employer_count', { count: employer.activeCount }) }})
-      </option>
-    </select>
-    <p v-else-if="employers.length === 1" class="wfr-add__fixed">
-      {{ employers[0].legalEmployerId }}
+    <!-- A read that did not answer is not a store without an employer. Offering to register one here
+         would invite a second row for a company that already has one. -->
+    <p v-if="employersUnknown" class="wfr-add__blocker" data-wfr-add-employer-unknown>
+      {{ $i('wfr_add_employer_unknown') }}
     </p>
-    <p v-else class="wfr-add__blocker">
-      {{ $i('wfr_add_no_employer') }}
-    </p>
-    <p class="wfr-add__hint">
-      {{ $i('wfr_add_employer_hint') }}
-    </p>
+    <template v-else-if="employersEmpty">
+      <p class="wfr-add__blocker" data-wfr-add-no-employer>
+        {{ $i('wfr_add_no_employer') }}
+      </p>
+      <button class="wfr-add__link" type="button" data-wfr-add-register-employer @click="$emit('register-employer')">
+        {{ $i('wfr_add_register_employer') }}
+      </button>
+    </template>
+    <template v-else>
+      <select v-if="employers.rows.length > 1" v-model="legalEmployerId" class="wfr-add__input" data-wfr-add-employer>
+        <option v-for="employer in employers.rows" :key="employer.legalEmployerId" :value="employer.legalEmployerId">
+          {{ employerLabel(employer) }}
+        </option>
+      </select>
+      <p v-else class="wfr-add__fixed" data-wfr-add-employer>
+        {{ employerLabel(employers.rows[0]) }}
+      </p>
+      <p class="wfr-add__hint">
+        {{ $i('wfr_add_employer_hint') }}
+      </p>
+    </template>
 
     <!-- CAPABILITIES. What this engagement may DO — the only thing in the module that authorises
          anything. Job roles are set separately and grant nothing, which the label says. -->
@@ -122,7 +134,7 @@
 </template>
 
 <script>
-import { CAPABILITIES, activeEngagementConflict, legalEmployerOptions, personOptions } from '~/utils/workforce/roster';
+import { CAPABILITIES, EMPLOYERS_EMPTY, EMPLOYERS_LISTED, EMPLOYERS_UNKNOWN, activeEngagementConflict, personOptions } from '~/utils/workforce/roster';
 
 // Adding someone to a store. The form asks for an ENGAGEMENT; whether a person is created along
 // with it is a consequence of which mode is chosen, not a separate step.
@@ -134,6 +146,9 @@ export default {
   name: 'WorkforceAddPersonForm',
   props: {
     roster: { type: Object, required: true },
+    // `buildEmployers` output — the registered companies, with this store's engagement counts folded
+    // in. A three-state object rather than an array so an unread list cannot render as an empty one.
+    employers: { type: Object, required: true },
     busy: { type: Boolean, default: false }
   },
   data () {
@@ -152,7 +167,8 @@ export default {
   },
   computed: {
     allCapabilities () { return CAPABILITIES; },
-    employers () { return legalEmployerOptions(this.roster.rows || []); },
+    employersUnknown () { return this.employers.state === EMPLOYERS_UNKNOWN; },
+    employersEmpty () { return this.employers.state === EMPLOYERS_EMPTY; },
     people () { return personOptions(this.roster.rows || [], this.legalEmployerId); },
     conflict () {
       if (this.mode !== 'existing') { return null; }
@@ -165,10 +181,25 @@ export default {
   },
   created () {
     // One legal employer is the normal case for a store, so it is chosen rather than made a
-    // ceremony. Several is not — the manager picks, because the ids carry no name to guess from.
-    if (this.employers.length) { this.legalEmployerId = this.employers[0].legalEmployerId; }
+    // ceremony. Several is not — the manager picks, and now has names to pick between.
+    if (this.employers.state === EMPLOYERS_LISTED && this.employers.rows.length) {
+      this.legalEmployerId = this.employers.rows[0].legalEmployerId;
+    }
   },
   methods: {
+    /**
+     * The company, then how much of this store's roster sits under it. The count is what separates
+     * the live employer from one registered five minutes ago, and it is OMITTED rather than shown as
+     * zero when the roster read did not answer — a missing count and a count of nobody are different
+     * claims, and only the first is true of a failed read.
+     */
+    employerLabel (employer) {
+      const name = employer.name || employer.legalEmployerId;
+      const org = employer.organizationNumber ? ' · ' + employer.organizationNumber : '';
+      if (employer.activeCount === null) { return name + org; }
+      return name + org + ' (' + this.$i('wfr_add_employer_count', { count: employer.activeCount }) + ')';
+    },
+
     submit () {
       if (!this.canSubmit) { return; }
       this.$emit('submit', {
@@ -197,6 +228,7 @@ export default {
 .wfr-add__pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .wfr-add__fixed { margin: 0; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8f9fa; color: #64748b; font-size: 0.8rem; font-family: monospace; word-break: break-all; }
 .wfr-add__hint { margin: 6px 0 0; color: #64748b; font-size: 0.78rem; }
+.wfr-add__link { margin: 8px 0 0; padding: 0; border: none; background: none; color: #1bb776; font-weight: 600; font-size: 0.84rem; cursor: pointer; text-decoration: underline; }
 .wfr-add__blocker { margin: 10px 0 0; padding: 10px 14px; border-radius: 10px; background: rgba(239, 68, 68, 0.1); color: #b91c1c; font-size: 0.82rem; }
 .wfr-add__caps { display: flex; flex-direction: column; gap: 8px; }
 .wfr-add__cap { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; align-items: center; padding: 8px 12px; background: #f8f9fa; border-radius: 8px; font-size: 0.86rem; color: #292c34; cursor: pointer; }

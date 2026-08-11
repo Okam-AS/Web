@@ -1,5 +1,8 @@
 import {
   CAPABILITY_MANAGER,
+  EMPLOYERS_EMPTY,
+  EMPLOYERS_LISTED,
+  EMPLOYERS_UNKNOWN,
   ROSTER_COUNTED,
   ROSTER_EMPTY,
   ROSTER_UNKNOWN,
@@ -9,6 +12,8 @@ import {
   WAGE_WITHHELD,
   activeEngagementConflict,
   buildCreateRequest,
+  buildEmployerRequest,
+  buildEmployers,
   buildEndRequest,
   buildReactivateRequest,
   buildRoles,
@@ -21,7 +26,6 @@ import {
   contractHoursPerWeek,
   endEngagementEffects,
   formatDate,
-  legalEmployerOptions,
   localDateToInstant,
   openSessionCount,
   orDash,
@@ -194,20 +198,63 @@ describe('the unique index, as the UI honours it', () => {
   })
 })
 
-describe('legalEmployerOptions — derived from the roster because nothing else exposes them', () => {
-  test('distinct employers, with the counts that are the only way to tell two ids apart', () => {
-    const rows = buildRoster([
-      summary({ staffMemberId: 'a', legalEmployerId: 'le-1', isActive: true }),
-      summary({ staffMemberId: 'b', legalEmployerId: 'le-1', isActive: false }),
-      summary({ staffMemberId: 'c', legalEmployerId: 'le-2', isActive: true })
-    ]).rows
-    const options = legalEmployerOptions(rows)
-    expect(options).toHaveLength(2)
-    expect(options[0]).toMatchObject({ legalEmployerId: 'le-1', count: 2, activeCount: 1 })
+describe('buildEmployers — the registered companies, no longer mined out of the staff list', () => {
+  // What this replaced: the options used to be derived from the roster rows, so an employer only
+  // existed on screen once somebody was employed under it, and it was rendered as a bare GUID
+  // because no route returned a name. Both halves of that are now the endpoint's job.
+  const employers = [
+    { legalEmployerId: 'le-1', organizationNumber: '912345678', name: 'Bryggen Bistro AS', inUseHere: true },
+    { legalEmployerId: 'le-2', organizationNumber: '998877665', name: 'Bryggen Take Away AS', inUseHere: false }
+  ]
+  const rows = buildRoster([
+    summary({ staffMemberId: 'a', legalEmployerId: 'le-1', isActive: true }),
+    summary({ staffMemberId: 'b', legalEmployerId: 'le-1', isActive: false })
+  ]).rows
+
+  test('the server names them and the roster counts them', () => {
+    const built = buildEmployers(employers, rows)
+    expect(built.state).toBe(EMPLOYERS_LISTED)
+    expect(built.rows).toHaveLength(2)
+    expect(built.rows[0]).toMatchObject({
+      legalEmployerId: 'le-1',
+      name: 'Bryggen Bistro AS',
+      organizationNumber: '912345678',
+      count: 2,
+      activeCount: 1
+    })
   })
 
-  test('an unknown roster yields no employers rather than a guessed one', () => {
-    expect(legalEmployerOptions([])).toEqual([])
+  // The whole point of the endpoint: an employer nobody is employed under is still offerable.
+  test('an employer with no engagements is listed, counted at zero and marked not in use', () => {
+    const built = buildEmployers(employers, rows)
+    const unused = built.rows.find(e => e.legalEmployerId === 'le-2')
+    expect(unused).toMatchObject({ count: 0, activeCount: 0, inUseHere: false })
+  })
+
+  test('a store with no employer registered is a different answer from a read that failed', () => {
+    expect(buildEmployers([], rows).state).toBe(EMPLOYERS_EMPTY)
+    expect(buildEmployers(null, rows).state).toBe(EMPLOYERS_UNKNOWN)
+    expect(buildEmployers(undefined, rows).rows).toEqual([])
+  })
+
+  // A count of zero is a claim about the roster. A roster that did not load has not earned it, and
+  // the label drops the count rather than printing "0 active" over an unread list.
+  test('an unknown roster leaves the counts null rather than zero', () => {
+    const built = buildEmployers(employers, null)
+    expect(built.state).toBe(EMPLOYERS_LISTED)
+    expect(built.rows[0].count).toBeNull()
+    expect(built.rows[0].activeCount).toBeNull()
+  })
+})
+
+describe('buildEmployerRequest — trimmed here, normalised there', () => {
+  test('it trims the edges and leaves the organization number to the server', () => {
+    expect(buildEmployerRequest({ name: '  Bryggen Bistro AS ', organizationNumber: ' 912 345 678 ' }))
+      .toEqual({ name: 'Bryggen Bistro AS', organizationNumber: '912 345 678' })
+  })
+
+  test('missing fields become empty strings, which the server refuses as a typed 400', () => {
+    expect(buildEmployerRequest({})).toEqual({ name: '', organizationNumber: '' })
   })
 })
 

@@ -9,6 +9,8 @@
 // file references are `Controllers/WorkforceStaffController.cs` and `WorkforceAttendanceController.cs`
 // in the OkamAPI repo.
 //
+//   GET   /workforce/stores/{storeId}/legal-employers                  L1   (:60)
+//   POST  /workforce/stores/{storeId}/legal-employers                  L2   (:74)
 //   GET   /workforce/stores/{storeId}/context                          #1   (:52)
 //   GET   /workforce/stores/{storeId}/staff                            #2   (:67)
 //   POST  /workforce/stores/{storeId}/staff                            #3   (:82)
@@ -82,6 +84,54 @@ export class WorkforceRosterService extends WorkforceClientBase {
   /** #1: the caller's own capabilities in this store, plus the store timezone every date renders in. */
   GetContext (storeId) {
     return this._request('GET', '/workforce/stores/' + storeId + '/context');
+  }
+
+  /**
+   * L1: the legal employers available at this store — the NAMES `CreateStaff` needs an id from.
+   *
+   * This replaced mining employer ids out of the staff list, which is what this file and the add
+   * form both used to do because no route returned an employer at all. That workaround could only
+   * ever surface employers somebody was already employed under, so an employer registered five
+   * minutes ago was invisible until the first hire — and a manager who reloaded the page would
+   * register a second row for the same company.
+   *
+   * THE LIST IS A UNION AND THE ELEMENTS SAY WHICH HALF THEY CAME FROM. An employer is org-level and
+   * carries no owning store, so the server answers with the employers this store REGISTERED plus the
+   * employers its own engagements REFERENCE. `inUseHere` is the second half: false means the row
+   * exists and nobody here is employed under it yet, which is a real and normal state right after
+   * registering one — not an error and not an empty list.
+   *
+   * Requires `WorkforceScheduler`, the same read gate as the roster this feeds.
+   */
+  ListLegalEmployers (storeId) {
+    return this._request('GET', '/workforce/stores/' + storeId + '/legal-employers');
+  }
+
+  /**
+   * L2: register the legal entity this store's staff are employed by.
+   *
+   * The roster's FIRST step: `CreateStaff` requires a `legalEmployerId` and nothing else on this
+   * surface mints one.
+   *
+   * `request` is `{ organizationNumber, name, effectiveFromUtc? }`. The organization number is
+   * stripped of whitespace server-side, so "912 345 678" and "912345678" are one company.
+   *
+   * THE REFUSAL THAT IS NOT AN ERROR: `workforce.legal-employer-exists` (409) means THIS STORE has
+   * already registered that organization number, and the problem document carries the existing id in
+   * `aggregateId` — so the correct response is to use that employer, not to retry. Two rows for one
+   * company would let a person hold two active engagements with the same employer, which is the very
+   * thing the one-active-engagement index exists to prevent.
+   *
+   * The check is this store's registrations only. A company some OTHER store registered is never
+   * reported, because a global answer would make this endpoint an oracle for which companies are on
+   * the platform.
+   *
+   * Requires `WorkforceManager` and the `workforce.setup` stage flag. The `Idempotency-Key` is
+   * supplied by `_mutate`, and a retry under a FRESH key of a call that already succeeded is the
+   * 409 above rather than a duplicate.
+   */
+  CreateLegalEmployer (storeId, request) {
+    return this._mutate('POST', '/workforce/stores/' + storeId + '/legal-employers', request);
   }
 
   /**

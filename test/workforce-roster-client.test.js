@@ -42,6 +42,52 @@ describe('WorkforceRosterService', () => {
     expect(init.headers['Idempotency-Key']).toBeUndefined()
   })
 
+  test('ListLegalEmployers is a read on the store, and it names the companies', async () => {
+    respondWith(200, [{ legalEmployerId: 'le-1', organizationNumber: '912345678', name: 'Bryggen Bistro AS', inUseHere: false }])
+    const employers = await service().ListLegalEmployers(42)
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/legal-employers')
+    expect(init.method).toBe('GET')
+    expect(init.headers['Idempotency-Key']).toBeUndefined()
+    // `inUseHere: false` is a row nobody is employed under yet — the state this endpoint exists to
+    // make visible, and the one the old staff-derived list could not represent at all.
+    expect(employers[0]).toMatchObject({ name: 'Bryggen Bistro AS', inUseHere: false })
+  })
+
+  test('CreateLegalEmployer posts to /legal-employers with the key every workforce mutation needs', async () => {
+    respondWith(200, { legalEmployerId: 'le-1' })
+    await service().CreateLegalEmployer(42, { organizationNumber: '912 345 678', name: 'Bryggen Bistro AS' })
+
+    const [url, init] = global.fetch.mock.calls[0]
+    expect(url).toBe('/workforce/stores/42/legal-employers')
+    expect(init.method).toBe('POST')
+    expect(init.headers['Idempotency-Key']).toBe('idem-key')
+    expect(init.headers['If-Match']).toBeUndefined()
+    expect(JSON.parse(init.body)).toEqual({ organizationNumber: '912 345 678', name: 'Bryggen Bistro AS' })
+  })
+
+  // Not retryable, and the id in the document is the whole point: the caller carries on with the
+  // employer that already exists rather than pressing again.
+  test('a company this store already registered arrives typed and names the existing row', async () => {
+    respondWith(409, {
+      status: 409,
+      code: 'workforce.legal-employer-exists',
+      conflictKind: 'legal-employer-exists',
+      aggregateId: 'le-1',
+      retryable: false
+    })
+
+    await expect(service().CreateLegalEmployer(42, { organizationNumber: '912345678', name: 'x' }))
+      .rejects.toMatchObject({
+        isWorkforceApiError: true,
+        status: 409,
+        code: 'workforce.legal-employer-exists',
+        aggregateId: 'le-1',
+        retryable: false
+      })
+  })
+
   test('CreateStaff posts to /staff and carries the Idempotency-Key the surface demands', async () => {
     respondWith(200, { staffMemberId: 'sm-1' })
     await service().CreateStaff(42, { legalEmployerId: 'le-1', capabilities: ['WorkforceSelf'] })
