@@ -441,8 +441,10 @@ export default {
     selectedStore () {
       return this.$store.state.selectedAdminStore;
     },
+    // The shop origin comes from the market, not from a Norwegian constant: a Swiss merchant
+    // handed a shop.okam.no link is being sent to a storefront that does not serve them.
     generatedUrl () {
-      return this.selectedStore ? `https://shop.okam.no/shop?id=${this.selectedStore}` : '';
+      return this.selectedStore ? `${this.marketConfig.shopUrl}/shop?id=${this.selectedStore}` : '';
     },
     getOpeningHoursSummary () {
       const today = new Date().getDay();

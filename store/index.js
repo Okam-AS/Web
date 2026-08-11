@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import { MutationName, ActionName } from '~/core/enums'
-import { markets, EDITION } from '~/config/edition'
+import { market, EDITION, runtimeMarketConfig } from '~/config/edition'
 
 export const state = () => ({
   currentUser: {},
@@ -15,13 +15,15 @@ export const state = () => ({
   // Admin UI language: 'no' | 'en' | 'de'. Switchable live via the language
   // switcher in the admin sidebar. Defaults to the edition's locale and is
   // persisted to localStorage (both explicitly and via the generic state dump).
-  adminLocale: (markets[EDITION] && markets[EDITION].locale) || 'no',
+  adminLocale: market.locale,
 })
 
 export const getters = {
   clientPlatformName: () => 'Web',
   marketIsCh: state => state.market === 'ch',
-  marketConfig: state => markets[state.market] || markets.no,
+  // Unknown codes are handled by runtimeMarketConfig (loud, falls back to the
+  // build edition) -- never by a silent `|| markets.no`.
+  marketConfig: state => runtimeMarketConfig(state.market),
   userIsLoggedIn: state => state.currentUser && state.currentUser.id,
   cartByStoreId (state) {
     return (storeId) => {

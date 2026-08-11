@@ -40,23 +40,32 @@ import PageFooter from "~/components/organisms/PageFooter.vue";
 export default {
   components: { PageHeader, PageFooter },
   computed: {
+    // Hosts come from the market descriptor, never from the isCh fork below.
+    // The fork chooses LANGUAGE; if it also chose hosts, market #3 would take
+    // the `else` branch and be sent to Norway's admin panel and Norway's
+    // download page while reading its own language.
+    adminHost() {
+      return this.marketConfig.adminUrl.replace(/^https?:\/\//, "");
+    },
     copy() {
+      const adminUrl = this.marketConfig.adminUrl;
+      const downloadUrl = `${this.marketConfig.hostname}/last-ned`;
       return this.isCh
         ? {
             completed: "Die Registrierung ist abgeschlossen!",
-            subText: "Sie können Ihre Speisekarte jetzt auf admin.okam-swiss.ch oder in der Okam Admin-App erfassen",
-            goToAdmin: "Zu admin.okam-swiss.ch",
+            subText: `Sie können Ihre Speisekarte jetzt auf ${this.adminHost} oder in der Okam Admin-App erfassen`,
+            goToAdmin: `Zu ${this.adminHost}`,
             downloadApp: "Okam Admin-App herunterladen",
-            adminUrl: "https://admin.okam-swiss.ch",
-            downloadUrl: "https://okam-swiss.ch/last-ned",
+            adminUrl,
+            downloadUrl,
           }
         : {
             completed: "Registreringen er fullført!",
-            subText: "Du kan nå legge inn menyen din på admin.okam.no eller i Okam Admin-appen",
-            goToAdmin: "Gå til admin.okam.no",
+            subText: `Du kan nå legge inn menyen din på ${this.adminHost} eller i Okam Admin-appen`,
+            goToAdmin: `Gå til ${this.adminHost}`,
             downloadApp: "Last ned Okam Admin-appen",
-            adminUrl: "https://admin.okam.no",
-            downloadUrl: "https://okam.no/last-ned",
+            adminUrl,
+            downloadUrl,
           };
     },
   },

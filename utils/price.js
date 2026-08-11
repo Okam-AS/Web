@@ -21,15 +21,27 @@
 // off the wire should use `readMinor` first and this second; a surface formatting a figure it already
 // holds needs only this.
 
-// CHF price formatting helper for the Swiss ('ch') edition.
-// Amounts are in MINOR units (Rappen), matching core/helpers/tools priceLabel.
-// Produces strings like "CHF 1'234.50":
-//   - de-CH locale, always 2 decimals, point decimal separator
-//   - thousands separator normalised to an ASCII apostrophe (U+0027),
-//     since de-CH Intl may emit the typographic apostrophe (U+2019)
+//
+// AND WHICH MARKET IT IS IN.
+//
+// The formatting half of this module used to be two hardcoded implementations picked by a boolean:
+// core's `priceLabel` for Norway, `formatChf` for Switzerland. That shape has no answer for a third
+// market — it hands it Norway's — so the symbol, the separators, the fraction length and the split
+// algorithm are now a `currencyFormat` descriptor carried by each market row in `config/edition.js`,
+// and adding a market is a data entry. Byte-parity with both implementations this replaced is pinned
+// by `test/money-format.test.js`, so the deployed Norwegian output cannot move.
+//
+// THE GATE AND THE FORMATTER ARE STILL TWO DIFFERENT RULES, and both survive here. Parameterising the
+// formatter does not make an absent amount stated: `formatAmount` asks `isAmountStated` before it
+// touches the digits, exactly as the two implementations it replaced did.
+//
+// WHAT IS DELIBERATELY NOT GATED, and why the distinction is the same one the Norwegian branch drew:
+// `splitAmount` and `formatMoneyFromParts` are DIGIT helpers, not labels. `pages/admin/delivery.vue`
+// seeds the two halves of a money INPUT from them and composes a summary from parts an operator
+// typed, so answering "—" there would type a dash into a field that is then saved. Labels refuse;
+// digit helpers are asked only for digits somebody already has.
 
-const TYPOGRAPHIC_APOSTROPHE = String.fromCharCode(0x2019) // ’
-const ASCII_APOSTROPHE = String.fromCharCode(0x27) // '
+import { market, markets, resolveMarket } from '~/config/edition'
 
 /**
  * What this admin prints for a fact it does not have — U+2014, the same mark every module surface
@@ -228,19 +240,178 @@ export function amountInputValue (amountMinor) {
   return (Number(amountMinor) / 100).toFixed(2)
 }
 
-export function formatChf (amountMinor) {
-  // Before any arithmetic. `Number(null)` is 0 and `NaN || 0` is 0, so every absent amount used to
-  // arrive at the formatter already disguised as a genuine zero.
+// Core's grouping regex, verbatim from core/helpers/tools wholeAmountTool.
+const GROUP_PATTERN = /\B(?=(\d{3})+(?!\d))/g
+
+// 'digits' split: slice the last N characters off the decimal string. This is
+// core's behaviour, warts included (1-9 minor units render as ",00"; the sign is
+// mangled below one major unit). Reproduced exactly so the 'no' market cannot move.
+function splitDigits (amountMinor, fractionDigits) {
+  if (!amountMinor) {
+    return { whole: '0', fraction: '0'.repeat(fractionDigits) }
+  }
+  const digits = amountMinor.toString()
+  const whole = fractionDigits > 0 ? digits.slice(0, -fractionDigits) : digits
+  const fraction = fractionDigits > 0 ? digits.slice(-fractionDigits) : ''
+  return {
+    whole: whole || '0',
+    fraction: fraction.length < fractionDigits ? '0'.repeat(fractionDigits) : fraction
+  }
+}
+
+// 'exact' split: arithmetic on an integer minor-unit amount. Correct for every
+// input, and byte-identical to what Intl produced for 'ch'.
+function splitExact (amountMinor, fractionDigits) {
+  const raw = Number(amountMinor) || 0
+  const sign = raw < 0 ? '-' : ''
+  const abs = Math.round(Math.abs(raw))
+  const divisor = Math.pow(10, fractionDigits)
+  const whole = Math.floor(abs / divisor)
+  return {
+    whole: sign + whole.toString(),
+    fraction: fractionDigits > 0 ? String(abs - (whole * divisor)).padStart(fractionDigits, '0') : ''
+  }
+}
+
+/**
+ * Split a minor-unit amount into its grouped whole part and its fraction part,
+ * with no currency symbol. Replaces core's `wholeAmount` / `fractionAmount`,
+ * which were the only readers of the global currency format that this repo did
+ * not route through a market.
+ *
+ * @returns {{ whole: string, fraction: string }}
+ */
+export function splitAmount (currencyFormat, amountMinor) {
+  if (!currencyFormat) {
+    throw new Error('splitAmount: missing currencyFormat descriptor')
+  }
+  const parts = currencyFormat.amountSplit === 'exact'
+    ? splitExact(amountMinor, currencyFormat.fractionDigits)
+    : splitDigits(amountMinor, currencyFormat.fractionDigits)
+  return {
+    whole: parts.whole.replace(GROUP_PATTERN, currencyFormat.groupSeparator),
+    fraction: parts.fraction
+  }
+}
+
+/**
+ * Format a minor-unit amount with an explicit currency-format descriptor.
+ *
+ * @param {object} currencyFormat  a market's `currencyFormat` (config/edition.js)
+ * @param {number} amountMinor     amount in minor units
+ * @param {boolean} hideFractionIfZero  drop the fraction when it is all zeroes
+ *                                      (ignored by markets with supportsHideFraction: false)
+ *
+ * GATED, and the gate has to be here rather than at the call sites. This is the one label every
+ * money figure in the app resolves through, and both implementations it replaced already refused an
+ * unstated amount — core's helper answered "0" to anything falsy, the old `formatChf` began
+ * `Number(amountMinor) || 0`, and both were fixed. Parameterising the formatter by market must not
+ * quietly undo that: `splitAmount` below answers `{ whole: '0' }` to `null` (the `if (!amountMinor)`
+ * branch of `splitDigits`, and `Number(null) || 0` in `splitExact`), so without this line an amount
+ * nobody stated would print as `kr 0` in Norway and `CHF 0.00` in Switzerland — a real price, in the
+ * market's own notation, indistinguishable from a figure someone actually set.
+ *
+ * Zero still prints as zero. Only the unstated is withheld.
+ */
+export function formatAmount (currencyFormat, amountMinor, hideFractionIfZero) {
   if (!isAmountStated(amountMinor)) { return UNKNOWN_AMOUNT }
-  const minor = Number(amountMinor)
-  const formatted = new Intl.NumberFormat('de-CH', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  })
-    .format(minor / 100)
-    .split(TYPOGRAPHIC_APOSTROPHE)
-    .join(ASCII_APOSTROPHE)
-  return 'CHF ' + formatted
+  const parts = splitAmount(currencyFormat, amountMinor)
+
+  const hide = hideFractionIfZero && currencyFormat.supportsHideFraction !== false
+  let fraction = ''
+  if (currencyFormat.fractionDigits > 0 && (!hide || parseInt(parts.fraction, 10) > 0)) {
+    fraction = currencyFormat.decimalSeparator + parts.fraction
+  }
+
+  const money = parts.whole + fraction
+  return currencyFormat.symbolPosition === 'suffix'
+    ? money + currencyFormat.symbolSpace + currencyFormat.symbol
+    : currencyFormat.symbol + currencyFormat.symbolSpace + money
+}
+
+/**
+ * Compose one money string out of whole/fraction parts the USER TYPED, using a
+ * market's currencyFormat for the symbol and the decimal separator.
+ *
+ * Why this exists, and why it does NOT re-group the whole part:
+ *   pages/admin/delivery.vue's editor has two digit inputs -- kroner and øre --
+ *   and its summary sentence used to be assembled inside the translation
+ *   string as "kr {wholeAmount},{fractionAmount}". That hardcoded 'kr' and ','
+ *   into all three languages, so the Swiss build printed Norwegian currency in
+ *   German copy. The fix is one pre-formatted {price} token, built here.
+ *
+ *   The `whole` argument is the raw digit string from the input (delivery.vue
+ *   strips the group separator when it seeds the field), so routing it through
+ *   formatAmount would ADD grouping and move the deployed Norwegian bytes from
+ *   "kr 1234,50" to "kr 1 234,50". config/edition.js's standing rule is to keep
+ *   the Norwegian behaviour 100% intact, so this composes the parts as typed
+ *   and only the SYMBOL and SEPARATOR come from the market. Norwegian output is
+ *   therefore byte-identical to the old template for every input, by
+ *   construction -- pinned in test/money-format.test.js.
+ *
+ * @param {object} currencyFormat  a market's `currencyFormat` (config/edition.js)
+ * @param {string|number} whole    the whole part, already digits-only
+ * @param {string|number} fraction the fraction part, already digits-only
+ */
+export function formatMoneyFromParts (currencyFormat, whole, fraction) {
+  if (!currencyFormat) {
+    throw new Error('formatMoneyFromParts: missing currencyFormat descriptor')
+  }
+  const money = currencyFormat.fractionDigits > 0
+    ? String(whole) + currencyFormat.decimalSeparator + String(fraction)
+    : String(whole)
+  return currencyFormat.symbolPosition === 'suffix'
+    ? money + currencyFormat.symbolSpace + currencyFormat.symbol
+    : currencyFormat.symbol + currencyFormat.symbolSpace + money
+}
+
+/**
+ * Format a minor-unit amount for a market code. Throws on an unknown code.
+ */
+export function formatMarketAmount (marketCode, amountMinor, hideFractionIfZero) {
+  return formatAmount(resolveMarket(marketCode).currencyFormat, amountMinor, hideFractionIfZero)
+}
+
+/**
+ * The currency format for the RUNTIME market: the market switcher writes the
+ * active code into Vuex, and the store getter resolves it (loudly, never to a
+ * hardcoded Norway -- see runtimeMarketConfig in config/edition.js).
+ *
+ * With no store at all -- a component mounted bare in a test, or a call before
+ * the store is installed -- this falls back to the market this bundle was BUILT
+ * for. Absence of a runtime override is not an unknown market.
+ */
+export function currencyFormatForStore (store) {
+  const config = (store && store.getters && store.getters.marketConfig) || market
+  return config.currencyFormat || market.currencyFormat
+}
+
+/**
+ * Translate a market's currencyFormat into the override shape that
+ * core/helpers/tools `setCurrencyFormat` consumes:
+ * { prefix, suffix, decimalSeparator, thousandSeparator, fractionLength, symbol }.
+ *
+ * Core only actually reads prefix/suffix (its priceLabel hardcodes the rest), but
+ * the full descriptor is passed so any future core release picks the market up.
+ */
+export function coreCurrencyFormat (currencyFormat) {
+  const suffixed = currencyFormat.symbolPosition === 'suffix'
+  return {
+    prefix: suffixed ? '' : currencyFormat.symbol + currencyFormat.symbolSpace,
+    suffix: suffixed ? currencyFormat.symbolSpace + currencyFormat.symbol : '',
+    decimalSeparator: currencyFormat.decimalSeparator,
+    thousandSeparator: currencyFormat.groupSeparator,
+    fractionLength: currencyFormat.fractionDigits,
+    symbol: currencyFormat.symbol
+  }
+}
+
+/**
+ * CHF formatting. Kept as a named export because it is part of this module's
+ * shipped surface; it is now just the 'ch' entry of the market lookup.
+ */
+export function formatChf (amountMinor) {
+  return formatAmount(markets.ch.currencyFormat, amountMinor, false)
 }
 
 export default formatChf

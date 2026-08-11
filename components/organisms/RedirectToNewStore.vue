@@ -32,7 +32,7 @@ export default {
         newSearchParams.set(oldKey, newValue)
       }
     }
-    const newUrlObject = new URL('https://shop.okam.no' + this.path)
+    const newUrlObject = new URL(this.marketConfig.shopUrl + this.path)
     newUrlObject.search = newSearchParams.toString()
     window.location.href = newUrlObject.toString()
   }

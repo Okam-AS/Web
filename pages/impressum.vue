@@ -30,7 +30,7 @@
 
                 <h2>Kontakt</h2>
                 <p>
-                  E-Mail: hallo@okam.ch <em>[Platzhalter]</em><br>
+                  E-Mail: {{ marketConfig.legalEmail }} <em>[Platzhalter]</em><br>
                   Telefon: +41 00 000 00 00 <em>[Platzhalter]</em>
                 </p>
 
