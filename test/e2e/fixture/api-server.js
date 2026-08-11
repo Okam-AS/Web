@@ -149,6 +149,12 @@ function freshState () {
     // reason `proposals` is cloned. `VIRGIN_STORE_ID` starts as an EMPTY ARRAY rather than being
     // absent, which is the state this whole surface exists to get a store out of.
     roleCatalogue: world.seededRoleCatalogue(),
+    // The legal employers, `${storeId}` -> array, MUTABLE because `POST /legal-employers` writes it.
+    // Cloned like the role catalogue so a company registered in one journey is invisible to the next.
+    // `VIRGIN_STORE_ID` starts EMPTY rather than absent: "this store has registered no employer" is
+    // the positive answer the add form turns into an offer to register one, and it must stay
+    // distinguishable from a read that failed.
+    legalEmployers: world.seededLegalEmployers(),
     // The venue's privacy queue, cloned from the world so a resolution in one journey cannot be seen
     // by another. Mutable: `POST .../resolution` rewrites the row's state, resolvedAt and notice
     // receipt in place, which is what makes the queue a queue rather than a table.
@@ -262,6 +268,17 @@ function nextId (prefix) {
  * filters an ordinary table by store and a store nobody has written a role for simply has no rows.
  * There is no such thing as a store that has not been "set up" for roles.
  */
+/**
+ * This store's legal employers. Absent means EMPTY, the backend's own shape: the list is the union of
+ * the employers a store registered and the ones its engagements reference, and a store that has
+ * neither simply has no rows.
+ */
+function legalEmployers (storeId) {
+  const key = String(storeId);
+  if (!state.legalEmployers[key]) { state.legalEmployers[key] = []; }
+  return state.legalEmployers[key];
+}
+
 function roleCatalogue (storeId) {
   const key = String(storeId);
   if (!state.roleCatalogue[key]) { state.roleCatalogue[key] = []; }
@@ -1589,6 +1606,48 @@ async function route (req, res, url) {
         'Content-Disposition': 'attachment; filename=okam-kodeoversikt-' + storeId + '-' + list.businessDate + '.csv',
         'Access-Control-Expose-Headers': 'Content-Disposition'
       });
+    }
+
+    // L1/L2 — the roster's first step. `POST /staff` refuses without a `legalEmployerId`, so a store
+    // with no employer cannot hire at all; these two routes are what a browser now has to fix that.
+    if (rest === '/legal-employers' && req.method === 'GET') {
+      return send(res, 200, legalEmployers(storeId).slice());
+    }
+
+    if (rest === '/legal-employers' && req.method === 'POST') {
+      if (!req.headers['idempotency-key']) {
+        return problem(res, 400, 'workforce.idempotency-key-required', 'An Idempotency-Key header is required for this mutation.');
+      }
+
+      const organizationNumber = String((body && body.organizationNumber) || '').replace(/\s+/g, '');
+      const name = String((body && body.name) || '').trim();
+      if (!organizationNumber || !name) {
+        return problem(res, 400, 'workforce.invalid-legal-employer', 'Invalid legal employer: an organization number and a registered name are required.');
+      }
+
+      // The same-store duplicate guard, which is the whole reason the number is stripped of spaces
+      // first: "912 345 678" and "912345678" are one company, and two rows for one company would let
+      // a person hold two active engagements with the same employer.
+      const existing = legalEmployers(storeId).find(e => e.organizationNumber === organizationNumber);
+      if (existing) {
+        return problem(res, 409, 'workforce.legal-employer-exists',
+          'This store has already registered a legal employer with that organization number.',
+          { conflictKind: 'legal-employer-exists', aggregateId: existing.legalEmployerId, retryable: false });
+      }
+
+      const registered = {
+        legalEmployerId: newRoleId(),
+        organizationNumber,
+        name,
+        effectiveFromUtc: new Date().toISOString().replace(/\.\d+Z$/, ''),
+        effectiveToUtc: null,
+        // Nobody is employed under a company registered a moment ago, and the response says so
+        // rather than implying a live employer.
+        inUseHere: false,
+        createdAtUtc: new Date().toISOString().replace(/\.\d+Z$/, '')
+      };
+      legalEmployers(storeId).push(registered);
+      return send(res, 200, registered);
     }
 
     if (rest === '/staff' && req.method === 'GET') {

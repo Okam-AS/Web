@@ -262,6 +262,40 @@ const VIRGIN_STAFF = [
 ];
 
 /**
+ * The legal employers, PER STORE, and the reason `VIRGIN_STORE_ID`'s entry is an EMPTY ARRAY.
+ *
+ * `POST /staff` requires a `legalEmployerId` and, until `POST /legal-employers` existed, nothing in
+ * any browser could mint one — the admin web derived its picker from the staff list, so the only
+ * employers it could ever offer were ones somebody was already employed under. A store's SECOND
+ * legal entity was therefore unreachable, and its first was re-registrable by accident.
+ *
+ * `STORE_ID` is a venue in mid-life and has one; the newly opened store has none, which is the state
+ * this surface exists to get a store out of. Empty rather than absent, so "this store has registered
+ * no employer" stays a positive answer distinct from "the read failed" — the distinction the whole
+ * page turns on.
+ *
+ * `inUseHere` mirrors the server's own field: whether an engagement at THIS store references the row.
+ */
+const LEGAL_EMPLOYERS = [
+  {
+    legalEmployerId: 'employer-1',
+    organizationNumber: '923456789',
+    name: 'Okam Pilot Servering AS',
+    effectiveFromUtc: '2026-01-01T00:00:00',
+    effectiveToUtc: null,
+    inUseHere: true,
+    createdAtUtc: '2026-01-01T00:00:00'
+  }
+];
+
+function seededLegalEmployers () {
+  return {
+    [STORE_ID]: JSON.parse(JSON.stringify(LEGAL_EMPLOYERS)),
+    [VIRGIN_STORE_ID]: []
+  };
+}
+
+/**
  * The role catalogue, PER STORE — which is how the backend holds it
  * (`ListRolesAsync` filters `Where(r => r.StoreId == storeId)`).
  *
@@ -1291,6 +1325,8 @@ module.exports = {
   VIRGIN_STORE_ID,
   VIRGIN_STORE_NAME,
   VIRGIN_STAFF,
+  LEGAL_EMPLOYERS,
+  seededLegalEmployers,
   seededRoleCatalogue,
   staffFor,
   TIME_ZONE,

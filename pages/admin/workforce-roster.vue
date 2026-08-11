@@ -22,8 +22,11 @@
 
       <template v-else>
         <div class="wfr-page__controls">
-          <button v-if="canManage" class="wfr-page__btn" :disabled="busy" @click="adding = !adding">
+          <button v-if="canManage" class="wfr-page__btn" :disabled="busy" @click="toggleAdding">
             {{ adding ? $i('wfr_cancel') : $i('wfr_add_open') }}
+          </button>
+          <button v-if="canManage" class="wfr-page__btn wfr-page__btn--ghost" data-wfr-open-employer :disabled="busy" @click="toggleRegisteringEmployer">
+            {{ registeringEmployer ? $i('wfr_cancel') : $i('wfr_emp_open') }}
           </button>
           <button class="wfr-page__btn wfr-page__btn--ghost" :disabled="loading" @click="loadRoster">
             {{ $i('wfr_reload') }}
@@ -42,12 +45,23 @@
 
         <div class="wfr-page__body">
           <div class="wfr-page__main">
+            <WorkforceLegalEmployerForm
+              v-if="registeringEmployer && canManage"
+              :key="employerFormKey"
+              :employers="employers"
+              :busy="busy"
+              @submit="createLegalEmployer"
+              @cancel="registeringEmployer = false"
+            />
+
             <WorkforceAddPersonForm
               v-if="adding && canManage"
               :key="addFormKey"
               :roster="roster"
+              :employers="employers"
               :busy="busy"
               @submit="createStaff"
+              @register-employer="openEmployerForm"
               @cancel="adding = false"
             />
 
@@ -118,6 +132,7 @@ import AdminPage from '~/components/organisms/AdminPage.vue';
 import WorkforceRosterTable from '~/components/admin/workforce/WorkforceRosterTable.vue';
 import WorkforceAddPersonForm from '~/components/admin/workforce/WorkforceAddPersonForm.vue';
 import WorkforceEngagementPanel from '~/components/admin/workforce/WorkforceEngagementPanel.vue';
+import WorkforceLegalEmployerForm from '~/components/admin/workforce/WorkforceLegalEmployerForm.vue';
 import { isWorkforceApiError } from '~/utils/workforce/api-client';
 import { contextRefusalKey } from '~/utils/workforce/context-refusal';
 import { WorkforceRosterService } from '~/utils/workforce/roster-client';
@@ -127,6 +142,8 @@ import {
   ROSTER_UNKNOWN,
   activeEngagementConflict,
   buildCreateRequest,
+  buildEmployerRequest,
+  buildEmployers,
   buildEndRequest,
   buildReactivateRequest,
   buildRoles,
@@ -156,13 +173,15 @@ const DAY_MS = 86400000;
 // opaque `workforce.hidden-engagement-conflict`, which names nothing — and neither does this page.
 export default {
   name: 'AdminWorkforceRoster',
-  components: { AdminPage, WorkforceRosterTable, WorkforceAddPersonForm, WorkforceEngagementPanel },
+  components: { AdminPage, WorkforceRosterTable, WorkforceAddPersonForm, WorkforceEngagementPanel, WorkforceLegalEmployerForm },
   data () {
     return {
       loading: false,
       busy: false,
       adding: false,
       addFormKey: 0,
+      registeringEmployer: false,
+      employerFormKey: 0,
       contextError: '',
       timeZoneId: null,
       capabilities: [],
@@ -170,6 +189,11 @@ export default {
       // the two are never initialised to the same value.
       staff: null,
       roleCatalogue: null,
+      // `GET /legal-employers`, or null while unknown. This is the roster's PREREQUISITE, not a
+      // detail of it: POST /staff refuses without a legalEmployerId, so a store with none cannot hire
+      // at all — which is why the add form turns the empty answer into an offer to register one, and
+      // why a failed read must stay distinguishable from it.
+      legalEmployers: null,
       selectedId: null,
       detail: null,
       staffRoles: null,
@@ -217,6 +241,9 @@ export default {
     roster () {
       return buildRoster(this.staff);
     },
+    employers () {
+      return buildEmployers(this.legalEmployers, this.staff ? this.roster.rows : null);
+    },
     roles () {
       return buildRoles(this.roleCatalogue, this.asOf);
     },
@@ -240,6 +267,7 @@ export default {
       case 'workforce.invitation-issue-conflict': return this.$i('wfr_conflict_invitation_title');
       case 'workforce.invitation-not-revocable': return this.$i('wfr_conflict_revoke_claimed_title');
       case 'workforce.invitation-revoke-conflict': return this.$i('wfr_conflict_revoke_stale_title');
+      case 'workforce.legal-employer-exists': return this.$i('wfr_conflict_employer_exists_title');
       default: return this.$i('wfr_conflict_generic_title');
       }
     },
@@ -263,6 +291,10 @@ export default {
       // against a state that no longer holds, so they are sent back to the list rather than to the
       // button. The list behind them has already been re-read by the handler.
       case 'workforce.invitation-revoke-conflict': return this.$i('wfr_conflict_revoke_stale');
+      // NOT retryable, and not really a failure either: this store already registered that
+      // organization number and the refusal names the row. The list behind this band has been
+      // re-read, so the employer the manager was about to create is now on screen to be used.
+      case 'workforce.legal-employer-exists': return this.$i('wfr_conflict_employer_exists');
       default: return this.conflict.message;
       }
     }
@@ -310,13 +342,18 @@ export default {
       // claiming this store has no staff.
       this.staff = null;
       this.roleCatalogue = null;
+      this.legalEmployers = null;
       this.invitations = null;
 
-      const [staff, roles] = await Promise.all([
+      const [staff, roles, employers] = await Promise.all([
         this._workforceRosterService.ListStaff(this.storeId).catch((e) => { this.notifyError(e); return null; }),
         // The job-role catalogue is a separate read with the same capability. A failure leaves the
         // role list unknown; the panel then says so rather than showing a shorter one.
         this._workforceRosterService.ListRoles(this.storeId).catch(() => null),
+        // The legal employers. Silent on failure like the roles read: the add form already prints
+        // "we could not read this", and a toast for a list the manager is not looking at yet would
+        // fire on every page load a scheduler makes.
+        this._workforceRosterService.ListLegalEmployers(this.storeId).catch(() => null),
         // Outstanding invitations, read ONCE for the whole store rather than per engagement: the
         // route is store-scoped, and one read then serves every row the manager clicks through.
         this.loadInvitations()
@@ -324,6 +361,7 @@ export default {
 
       this.staff = Array.isArray(staff) ? staff : null;
       this.roleCatalogue = Array.isArray(roles) ? roles : null;
+      this.legalEmployers = Array.isArray(employers) ? employers : null;
       this.loading = false;
 
       if (this.selectedId) { await this.loadEngagement(this.selectedId); }
@@ -374,6 +412,62 @@ export default {
       this.staffRoles = Array.isArray(staffRoles) ? staffRoles : null;
       this.terms = buildTerms(terms, this.hasPayrollApprover);
       this.attendance = attendance;
+    },
+
+    /** The two forms are alternatives, not a stack: opening one closes the other. */
+    toggleAdding () {
+      this.adding = !this.adding;
+      if (this.adding) { this.registeringEmployer = false; }
+    },
+
+    toggleRegisteringEmployer () {
+      this.registeringEmployer = !this.registeringEmployer;
+      if (this.registeringEmployer) { this.adding = false; }
+    },
+
+    /** From the add form's empty-employer branch: swap the hiring form for the registration one. */
+    openEmployerForm () {
+      this.adding = false;
+      this.registeringEmployer = true;
+    },
+
+    /**
+     * Register the legal entity this store's staff are employed by — the roster's first step, and
+     * before this existed a step no customer could take: `POST /staff` requires a `legalEmployerId`
+     * and the only writer of `WorkforceLegalEmployer` was a raw SQL insert in the demo seed.
+     *
+     * The roster is re-read on EVERY outcome, refusals included, because both of them change what
+     * this page should be showing. On success the new employer must be in the picker the manager is
+     * about to use. On `workforce.legal-employer-exists` the row the refusal names already existed —
+     * and if it was missing from the list on screen, that list was stale, which is the one reading
+     * under which the manager would have pressed this button at all.
+     */
+    async createLegalEmployer (form) {
+      if (this.busy) { return; }
+      this.busy = true;
+      this.conflict = null;
+      let registered = false;
+      try {
+        await this._workforceRosterService.CreateLegalEmployer(this.storeId, buildEmployerRequest(form));
+        registered = true;
+        this.notify(this.$i('wfr_emp_registered_ok'));
+        this.registeringEmployer = false;
+        this.employerFormKey += 1;
+      } catch (e) {
+        this.handleMutationError(e);
+      } finally {
+        await this.loadRoster();
+        // Opened only AFTER the re-read, and re-keyed with it. The add form picks its default
+        // employer in `created`, so opening it first would build it against the list from before the
+        // registration — the one that did not contain the employer this call just made.
+        if (registered) {
+          this.addFormKey += 1;
+          // Straight on to hiring: registering an employer is never the goal, it is the thing in the
+          // way of the goal.
+          this.adding = true;
+        }
+        this.busy = false;
+      }
     },
 
     async createStaff (form) {

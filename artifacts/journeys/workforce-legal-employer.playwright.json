@@ -1,0 +1,163 @@
+{
+  "journey": "workforce-legal-employer",
+  "title": "A manager registers a legal employer on a store that has none, and it reaches the hiring form",
+  "status": "passed",
+  "startedAtUtc": "2026-08-11T11:33:37.966Z",
+  "finishedAtUtc": "2026-08-11T11:34:04.029Z",
+  "durationMs": 26063,
+  "capabilities": [
+    "workforce.legal-employer.read",
+    "workforce.legal-employer.register",
+    "workforce.staff.author"
+  ],
+  "surface": "admin",
+  "backend": "fixture",
+  "baseUrl": "http://127.0.0.1:3021",
+  "apiBaseUrl": "http://127.0.0.1:4021",
+  "commit": "5296dca83d42a36afeca7e16f5fa2d2e0f5657b0",
+  "underTest": null,
+  "backendProbe": null,
+  "backendBuild": {
+    "id": "fixture@5296dca83d42a36afeca7e16f5fa2d2e0f5657b0+dirty",
+    "source": "fixture:test/e2e/fixture/api-server.js",
+    "short": "5296dca-dirty",
+    "detail": "the in-repo fixture backend, not an API build (branch lane/wf-legal-employer-web)"
+  },
+  "backendServed": 38,
+  "backendSubjectServed": 30,
+  "foreignSubjectServed": 0,
+  "foreignSubjectSample": [],
+  "proxiedSubjectServed": 0,
+  "proxiedSubjectSample": [],
+  "backendSample": [
+    "POST http://127.0.0.1:4021/user/sendverificationtoken -> 200",
+    "POST http://127.0.0.1:4021/user/login -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/stores/42/market -> 200",
+    "GET http://127.0.0.1:4021/user -> 200",
+    "GET http://127.0.0.1:4021/workforce/stores/42/context -> 200",
+    "GET http://127.0.0.1:4021/stores/42 -> 200",
+    "GET http://127.0.0.1:4021/stores/42/specialopeninghours -> 200"
+  ],
+  "browser": "chromium",
+  "steps": [
+    {
+      "n": 1,
+      "name": "open the roster as an anonymous visitor",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:33:38.009Z",
+      "durationMs": 24288,
+      "detail": "redirected to ?redirect=%2Fadmin%2Fworkforce-roster",
+      "error": null
+    },
+    {
+      "n": 2,
+      "name": "sign in as the manager (99999999 / 123123)",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:02.297Z",
+      "durationMs": 240,
+      "detail": "landed back on /admin/workforce-roster",
+      "error": null
+    },
+    {
+      "n": 3,
+      "name": "switch to the newly opened venue",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:02.537Z",
+      "durationMs": 978,
+      "detail": "now administering Nyåpnet Filial",
+      "error": null
+    },
+    {
+      "n": 4,
+      "name": "THE DEFECT: the hiring form cannot name an employer, so nobody can be hired",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:03.515Z",
+      "durationMs": 71,
+      "detail": "the add form blocks: no legal employer, and the submit is disabled",
+      "error": null
+    },
+    {
+      "n": 5,
+      "name": "the form offers the way out rather than a dead end",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:03.655Z",
+      "durationMs": 35,
+      "detail": "the registration form opened from the hiring form's blocker",
+      "error": null
+    },
+    {
+      "n": 6,
+      "name": "register the company, typing the organization number the way it is written",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:03.690Z",
+      "durationMs": 61,
+      "detail": "registered \"Nyåpnet Filial AS\" (998 877 665)",
+      "error": null
+    },
+    {
+      "n": 7,
+      "name": "THE EXIT: the hiring form now names the company and will accept a hire",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:03.810Z",
+      "durationMs": 55,
+      "detail": "the picker offers \"Nyåpnet Filial AS · 998877665\" and the hire is submittable",
+      "error": null
+    },
+    {
+      "n": 8,
+      "name": "registering the same company twice is refused, and the refusal names the row",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:03.931Z",
+      "durationMs": 75,
+      "detail": "the second registration is refused on screen",
+      "error": null
+    },
+    {
+      "n": 9,
+      "name": "and nothing registered an employer before the manager clicked",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:04.007Z",
+      "durationMs": 1,
+      "detail": "4 employer reads, then the registration and the refused duplicate",
+      "error": null
+    },
+    {
+      "n": 10,
+      "name": "the register button is clickable at a laptop width",
+      "status": "passed",
+      "startedAtUtc": "2026-08-11T11:34:04.008Z",
+      "durationMs": 14,
+      "detail": "clear at 1280x720, no horizontal page overflow",
+      "error": null
+    }
+  ],
+  "findings": [],
+  "consoleErrors": [
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "pageerror: Navigation cancelled from \"/admin?redirect=%2Fadmin%2Fworkforce-roster\" to \"/admin?redirect=%2Fadmin%2Fworkforce-roster&storeId=42\" with a new navigation.",
+    "Failed to load resource: the server responded with a status of 409 (Conflict)"
+  ],
+  "failedRequests": [
+    {
+      "method": "POST",
+      "url": "http://127.0.0.1:4021/workforce/stores/44/legal-employers",
+      "status": 409
+    }
+  ],
+  "screenshots": [
+    "workforce-legal-employer/fixture/01-a-virgin-store-no-legal-employer-nobody-can-be-h.png",
+    "workforce-legal-employer/fixture/02-the-legal-employer-registered-in-the-browser.png",
+    "workforce-legal-employer/fixture/03-a-store-that-can-now-hire-its-first-person.png"
+  ],
+  "error": null,
+  "artifact": {
+    "key": "fixture",
+    "file": "artifacts/journeys/runs/workforce-legal-employer.fixture.playwright.json",
+    "canonical": true,
+    "canonicalHeldBy": "fixture",
+    "canonicalTracked": false,
+    "provisional": false,
+    "supersedes": null
+  }
+}

@@ -29,6 +29,17 @@ jest.mock('~/utils/workforce/roster-client', () => ({
     }
 
     ListRoles () { calls.push(['ListRoles']); return Promise.resolve([]) }
+
+    ListLegalEmployers () {
+      calls.push(['ListLegalEmployers'])
+      return behaviour.employersFails ? Promise.reject(behaviour.employersFails) : Promise.resolve(behaviour.employers || [])
+    }
+
+    CreateLegalEmployer (_s, request) {
+      calls.push(['CreateLegalEmployer', request])
+      return behaviour.createEmployerFails ? Promise.reject(behaviour.createEmployerFails) : Promise.resolve({ legalEmployerId: 'le-new' })
+    }
+
     GetStaff (_s, id) { calls.push(['GetStaff', id]); return Promise.resolve({ staffMemberId: id, revision: behaviour.revision === undefined ? 'AAAA' : behaviour.revision }) }
     ListStaffRoles (_s, id) { calls.push(['ListStaffRoles', id]); return Promise.resolve([]) }
     GetEmploymentTerms (_s, id) { calls.push(['GetEmploymentTerms', id]); return Promise.resolve([]) }
@@ -193,6 +204,72 @@ describe('the workforce roster page', () => {
     // Store-local midnight, bare, no `Z`.
     expect(request.activeFromUtc).toBe('2026-07-31T22:00:00')
     expect(calls.filter(c => c[0] === 'ListStaff')).toHaveLength(1)
+  })
+
+  // The roster's PREREQUISITE, not a detail of it: POST /staff refuses without a legalEmployerId, so
+  // a store whose employer list never loads cannot hire and the page has to know that before the
+  // manager opens the form.
+  test('it reads the legal employers alongside the roster', async () => {
+    behaviour.staff = [summary()]
+    behaviour.employers = [{ legalEmployerId: 'le-1', organizationNumber: '912345678', name: 'Bryggen Bistro AS', inUseHere: true }]
+    const wrapper = mountPage()
+    await settled()
+
+    expect(calls.filter(c => c[0] === 'ListLegalEmployers')).toHaveLength(1)
+    expect(wrapper.vm.employers.state).toBe('listed')
+    expect(wrapper.vm.employers.rows[0]).toMatchObject({ name: 'Bryggen Bistro AS', activeCount: 1 })
+  })
+
+  test('a failed employer read leaves the list UNKNOWN, never empty', async () => {
+    behaviour.staff = [summary()]
+    behaviour.employersFails = new Error('offline')
+    const wrapper = mountPage()
+    await settled()
+
+    // Empty would invite the manager to register an employer this store may already have.
+    expect(wrapper.vm.employers.state).toBe('unknown')
+  })
+
+  test('registering an employer sends the trimmed body, re-reads, and then opens the hiring form', async () => {
+    behaviour.staff = [summary()]
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    await wrapper.vm.createLegalEmployer({ name: '  Bryggen Bistro AS ', organizationNumber: ' 912 345 678 ' })
+    await settled()
+
+    const [, request] = calls.find(c => c[0] === 'CreateLegalEmployer')
+    expect(request).toEqual({ name: 'Bryggen Bistro AS', organizationNumber: '912 345 678' })
+
+    // The re-read has to happen BEFORE the hiring form opens: that form picks its default employer
+    // in `created`, so opening it first would build it against the list from before this call.
+    const employerCall = calls.findIndex(c => c[0] === 'CreateLegalEmployer')
+    const listCall = calls.findIndex(c => c[0] === 'ListLegalEmployers')
+    expect(listCall).toBeGreaterThan(employerCall)
+    expect(wrapper.vm.registeringEmployer).toBe(false)
+    expect(wrapper.vm.adding).toBe(true)
+  })
+
+  // Not a toast and not a retry: the company is already registered here and the refusal names the
+  // row, so the manager is sent to the list rather than to the button.
+  test('an already-registered company is a conflict band, and the list is re-read anyway', async () => {
+    behaviour.staff = [summary()]
+    behaviour.createEmployerFails = problem(409, 'workforce.legal-employer-exists')
+    const wrapper = mountPage()
+    await settled()
+    calls.length = 0
+
+    await wrapper.vm.createLegalEmployer({ name: 'Bryggen Bistro AS', organizationNumber: '912345678' })
+    await settled()
+
+    expect(wrapper.vm.conflict.code).toBe('workforce.legal-employer-exists')
+    expect(wrapper.vm.conflictDetail).toBe('wfr_conflict_employer_exists')
+    // The refusal means the row exists; if it was missing from the list on screen, that list was
+    // stale — which is the only reading under which this button was ever pressed.
+    expect(calls.filter(c => c[0] === 'ListLegalEmployers')).toHaveLength(1)
+    // And the hiring form is NOT opened on a refusal.
+    expect(wrapper.vm.adding).toBe(false)
   })
 
   // The two engagement conflicts are one rule with two answers, and only one of them may name

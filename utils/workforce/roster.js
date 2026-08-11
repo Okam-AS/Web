@@ -145,33 +145,76 @@ export function buildRoster (staff) {
   };
 }
 
+// The legal-employer list's three states, the same distinction the roster draws. `unknown` is a read
+// that did not answer; `empty` is the positive claim that this store has no legal employer
+// registered, which is what the add form turns into an offer to register one. Merging them would
+// mean offering to register a second employer to a manager whose network hiccuped — and the server
+// would then refuse it as a duplicate, or worse, not, because the hiccup hid a DIFFERENT company.
+export const EMPLOYERS_UNKNOWN = 'unknown';
+export const EMPLOYERS_EMPTY = 'empty';
+export const EMPLOYERS_LISTED = 'listed';
+
 /**
- * The legal employers this page can offer, derived from the roster because nothing else exposes
- * them.
+ * The legal employers this store may hire under, from `GET /legal-employers`, with this store's own
+ * engagement counts folded in.
  *
- * THE GAP THIS WORKS AROUND. `POST /staff` requires a `legalEmployerId`, and no endpoint in the
- * Workforce surface lists, names or searches legal employers — `WorkforceLegalEmployer` carries a
- * name and an organization number and neither ever reaches the wire. The only place an employer id
- * appears at all is on the roster rows themselves. So the choices offered here are exactly "the
- * employers this store already engages people under", and they are shown as opaque ids because
- * there is no name to show. A brand-new employer cannot be introduced from this screen at all.
+ * THE GAP THIS CLOSED. This used to derive the list from the roster rows, because `POST /staff`
+ * required a `legalEmployerId` and no route returned an employer — so the options were "employers
+ * somebody here is already employed under", rendered as bare GUIDs since no name reached the wire.
+ * An employer nobody was employed under yet could not be offered and could not be created, which
+ * made a store's second legal entity unreachable and its first re-registrable by accident.
  *
- * This is sound in practice rather than by luck: a caller reaches this page only by holding
- * WorkforceManager, which is resolved from their OWN active engagement in this store, so the
- * roster always contains at least their row and therefore at least one employer.
+ * `employers` is the endpoint's body, or null when the read did not answer. `rows` are the roster's
+ * rows and contribute ONLY the counts: how many of this store's engagements sit under each employer,
+ * which is what tells a manager which of two similar-looking companies is the live one. The counts
+ * are same-store by construction, like every other number on this page.
  *
- * `count` is how many engagements sit under each — the caller's only way to tell two ids apart.
+ * The server's own `inUseHere` is kept as well as the counts, and they are not the same claim: the
+ * counts come from the roster read, so they are null-shaped when THAT read failed, while `inUseHere`
+ * is the employer read's own answer. A row is offered whether or not it is in use — that is the
+ * whole point.
  */
-export function legalEmployerOptions (rows) {
-  const byId = new Map();
-  for (const row of rows) {
-    if (!row.legalEmployerId) { continue; }
-    const entry = byId.get(row.legalEmployerId) || { legalEmployerId: row.legalEmployerId, count: 0, activeCount: 0 };
-    entry.count += 1;
-    if (row.isActive) { entry.activeCount += 1; }
-    byId.set(row.legalEmployerId, entry);
+export function buildEmployers (employers, rows) {
+  if (!Array.isArray(employers)) {
+    return { state: EMPLOYERS_UNKNOWN, rows: [] };
   }
-  return Array.from(byId.values()).sort((a, b) => b.activeCount - a.activeCount || String(a.legalEmployerId).localeCompare(String(b.legalEmployerId)));
+
+  const counted = Array.isArray(rows);
+  const built = employers.map((employer) => {
+    const engaged = counted ? rows.filter(row => row.legalEmployerId === employer.legalEmployerId) : null;
+    return {
+      legalEmployerId: employer.legalEmployerId,
+      organizationNumber: employer.organizationNumber || null,
+      name: employer.name || null,
+      inUseHere: employer.inUseHere === true,
+      // Null, not zero, when the roster is unknown: "nobody is employed under this" is a claim a
+      // failed roster read has not earned.
+      count: engaged ? engaged.length : null,
+      activeCount: engaged ? engaged.filter(row => row.isActive).length : null
+    };
+  });
+
+  // Most engagements first so the store's working employer leads, then by name, then by id — a
+  // deterministic order even when two rows carry neither a count nor a name.
+  built.sort((a, b) =>
+    (b.activeCount || 0) - (a.activeCount || 0) ||
+    String(a.name || '').localeCompare(String(b.name || '')) ||
+    String(a.legalEmployerId).localeCompare(String(b.legalEmployerId)));
+
+  return { state: built.length ? EMPLOYERS_LISTED : EMPLOYERS_EMPTY, rows: built };
+}
+
+/**
+ * The `POST /legal-employers` body. Trimmed here so a stray space cannot become part of a company
+ * name; the organization number's INTERNAL spaces are left for the server, which strips them as part
+ * of the duplicate guard — normalising here as well would mean two implementations of one rule and
+ * only one of them enforced.
+ */
+export function buildEmployerRequest (form) {
+  return {
+    organizationNumber: (form.organizationNumber || '').trim(),
+    name: (form.name || '').trim()
+  };
 }
 
 /**

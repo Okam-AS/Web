@@ -2,7 +2,8 @@ import { mount } from '@vue/test-utils'
 import WorkforceRosterTable from '~/components/admin/workforce/WorkforceRosterTable.vue'
 import WorkforceAddPersonForm from '~/components/admin/workforce/WorkforceAddPersonForm.vue'
 import WorkforceEngagementPanel from '~/components/admin/workforce/WorkforceEngagementPanel.vue'
-import { buildRoster, buildRoles, buildTerms, endEngagementEffects } from '~/utils/workforce/roster'
+import WorkforceLegalEmployerForm from '~/components/admin/workforce/WorkforceLegalEmployerForm.vue'
+import { buildEmployers, buildRoster, buildRoles, buildTerms, endEngagementEffects } from '~/utils/workforce/roster'
 import translations from '~/translations'
 
 // These tests are meaningful only under a non-UTC TZ — run the suite with TZ=Europe/Oslo. Under
@@ -103,10 +104,20 @@ describe('WorkforceRosterTable — the three answers look different on screen', 
   })
 })
 
+const employer = over => Object.assign({
+  legalEmployerId: 'le-1',
+  organizationNumber: '912345678',
+  name: 'Bryggen Bistro AS',
+  inUseHere: true
+}, over)
+
 describe('WorkforceAddPersonForm — the index, honoured before the call', () => {
-  function mountForm (rows) {
+  function mountForm (rows, employers) {
     return mount(WorkforceAddPersonForm, {
-      propsData: { roster: buildRoster(rows) },
+      propsData: {
+        roster: buildRoster(rows),
+        employers: buildEmployers(employers === undefined ? [employer()] : employers, buildRoster(rows).rows)
+      },
       mocks: { $i }
     })
   }
@@ -115,14 +126,53 @@ describe('WorkforceAddPersonForm — the index, honoured before the call', () =>
     const wrapper = mountForm([summary()])
     expect(wrapper.vm.legalEmployerId).toBe('le-1')
     expect(wrapper.find('select').exists()).toBe(false)
+    // The company, not the GUID. Naming it is the whole reason the endpoint exists.
+    expect(wrapper.text()).toContain('Bryggen Bistro AS')
+    expect(wrapper.text()).toContain('912345678')
   })
 
-  test('several employers are a choice, labelled by count because they carry no name', () => {
-    const wrapper = mountForm([summary(), summary({ staffMemberId: 'sm-2', legalEmployerId: 'le-2' })])
+  test('several employers are a choice, named and counted', () => {
+    const wrapper = mountForm(
+      [summary(), summary({ staffMemberId: 'sm-2', legalEmployerId: 'le-2' })],
+      [employer(), employer({ legalEmployerId: 'le-2', name: 'Bryggen Take Away AS', organizationNumber: '998877665' })]
+    )
     const options = wrapper.findAll('select option')
     expect(options.length).toBe(2)
-    // No name is invented for an id the service never names.
+    expect(wrapper.text()).toContain('Bryggen Take Away AS')
     expect(wrapper.text()).toContain(translations.no.wfr_add_employer_hint)
+  })
+
+  // The defect the endpoint closed, seen from the form: an employer registered a minute ago that
+  // nobody is employed under yet is still offered. Deriving the list from the roster could not do
+  // this, and a manager who could not see it would register the company a second time.
+  test('an employer nobody is employed under yet is still offered', () => {
+    const wrapper = mountForm([summary()], [
+      employer(),
+      employer({ legalEmployerId: 'le-new', name: 'Nyregistrert AS', organizationNumber: '555444333', inUseHere: false })
+    ])
+    expect(wrapper.text()).toContain('Nyregistrert AS')
+    expect(wrapper.findAll('select option').length).toBe(2)
+  })
+
+  test('a store with no employer is offered the registration rather than told nothing can be done', async () => {
+    const wrapper = mountForm([summary()], [])
+
+    expect(wrapper.text()).toContain(translations.no.wfr_add_no_employer)
+    expect(wrapper.vm.canSubmit).toBe(false)
+
+    wrapper.find('[data-wfr-add-register-employer]').trigger('click')
+    expect(wrapper.emitted()['register-employer']).toHaveLength(1)
+  })
+
+  // A read that did not answer is NOT a store without an employer, and the difference decides
+  // whether the manager is invited to register one. Offering it here would mint a duplicate.
+  test('an unread employer list is not an empty one and offers no registration', () => {
+    const wrapper = mountForm([summary()], null)
+
+    expect(wrapper.text()).toContain(translations.no.wfr_add_employer_unknown)
+    expect(wrapper.text()).not.toContain(translations.no.wfr_add_no_employer)
+    expect(wrapper.find('[data-wfr-add-register-employer]').exists()).toBe(false)
+    expect(wrapper.vm.canSubmit).toBe(false)
   })
 
   test('a new person needs a name before it can be submitted', async () => {
@@ -162,6 +212,52 @@ describe('WorkforceAddPersonForm — the index, honoured before the call', () =>
       legalEmployerId: 'le-1',
       capabilities: ['WorkforceSelf', 'WorkforceScheduler']
     })
+  })
+})
+
+describe('WorkforceLegalEmployerForm — the roster\'s first step', () => {
+  function mountEmployerForm (employers) {
+    return mount(WorkforceLegalEmployerForm, {
+      propsData: { employers: buildEmployers(employers, []) },
+      mocks: { $i }
+    })
+  }
+
+  test('both fields are required before the company can be registered', async () => {
+    const wrapper = mountEmployerForm([])
+    expect(wrapper.vm.canSubmit).toBe(false)
+
+    await wrapper.setData({ name: 'Bryggen Bistro AS' })
+    expect(wrapper.vm.canSubmit).toBe(false)
+
+    await wrapper.setData({ organizationNumber: '912 345 678' })
+    expect(wrapper.vm.canSubmit).toBe(true)
+  })
+
+  test('submitting emits the typed values; the wire shape is built outside the component', async () => {
+    const wrapper = mountEmployerForm([])
+    await wrapper.setData({ name: 'Bryggen Bistro AS', organizationNumber: '912 345 678' })
+    wrapper.find('form').trigger('submit')
+
+    // The spacing is passed through: stripping it is the server's rule and duplicating it here would
+    // mean two implementations of one guard, only one of which is enforced.
+    expect(wrapper.emitted().submit[0][0]).toEqual({ name: 'Bryggen Bistro AS', organizationNumber: '912 345 678' })
+  })
+
+  // What is already registered belongs INSIDE this form: the server's duplicate refusal names the
+  // existing row, but it arrives after the typing, and the three states must stay three.
+  test('it shows what is already registered, and an unread list is not an empty one', () => {
+    const listed = mountEmployerForm([employer()])
+    expect(listed.find('[data-wfr-emp-existing]').exists()).toBe(true)
+    expect(listed.text()).toContain('Bryggen Bistro AS')
+
+    const none = mountEmployerForm([])
+    expect(none.text()).toContain(translations.no.wfr_emp_existing_none)
+    expect(none.find('[data-wfr-emp-existing]').exists()).toBe(false)
+
+    const unknown = mountEmployerForm(null)
+    expect(unknown.text()).toContain(translations.no.wfr_emp_existing_unknown)
+    expect(unknown.text()).not.toContain(translations.no.wfr_emp_existing_none)
   })
 })
 
