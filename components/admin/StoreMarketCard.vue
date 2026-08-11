@@ -223,8 +223,15 @@ export default {
     facts () {
       return marketFacts(this.market);
     },
+    // The platform's own `offeredCountries` is the offer; the registry supplies the currency each of
+    // them means. Passing it is what makes Switzerland selectable — before this the card intersected
+    // the registry with the Workforce rule-pack list and silently dropped every market but Norway.
     countryChoices () {
-      return countryOptions(markets, this.market && this.market.country);
+      return countryOptions(
+        markets,
+        this.market && this.market.country,
+        this.market && this.market.offeredCountries
+      );
     },
     chosenOption () {
       return optionFor(this.countryChoices, this.draft.country);

@@ -375,3 +375,66 @@ describe('the refusals that carry no code of their own', () => {
     expect(card.find('.market-card__refusal').text()).toContain(translations.no.sm_refuse_transport)
   })
 })
+
+// -------------------------------------------------------------------------------------------------
+// SWITZERLAND IS REACHABLE.
+//
+// This estate's signature defect is a capability with no caller, and the market card was most of one:
+// the endpoint accepted CH, the platform advertised CH in `offeredCountries`, the card rendered a
+// country dropdown — and the dropdown was built by intersecting this app's registry with the
+// Workforce rule-pack list, which is `['NO']`. So a venue owner could read a Swiss market but never
+// set one, and every test above this line passed while that was true.
+//
+// These assert the OPTION AN OWNER CAN CLICK, not the helper that computes it, because the helper was
+// never the thing that was wrong.
+describe('a venue owner can actually move a store to Switzerland', () => {
+  const offering = over => market(Object.assign({ offeredCountries: ['CH', 'NO'] }, over))
+
+  test('the country dropdown contains Switzerland when the platform offers it', async () => {
+    const card = await editing(offering())
+    const values = card.findAll('#store-market-country option').wrappers.map(o => o.attributes('value'))
+    expect(values).toContain('CH')
+    expect(values).toContain('NO')
+  })
+
+  test('choosing it announces CHF as the consequence, and says so before saving', async () => {
+    const card = await editing(offering(), { country: 'CH' })
+    expect(card.find('.market-card__consequence').text())
+      .toBe($i('sm_currency_consequence', { currency: 'CHF' }))
+  })
+
+  test('choosing it warns that Workforce has no rule pack, rather than hiding the market', async () => {
+    const card = await editing(offering(), { country: 'CH' })
+    expect(card.text()).toContain($i('sm_choice_no_rulepack_warning', { country: 'CH' }))
+  })
+
+  test('saving sends the country and the asserted currency to the platform', async () => {
+    const card = await editing(offering(), { country: 'CH', timeZone: 'Europe/Zurich' })
+    mockPutAnswer = () => Promise.resolve(offering({ country: 'CH', currencyCode: 'CHF', timeZone: 'Europe/Zurich' }))
+    card.find('form').trigger('submit')
+    await settled()
+
+    const [, , attempted] = mockCalls.find(call => call[0] === 'Update')
+    expect(attempted).toEqual({ country: 'CH', timeZone: 'Europe/Zurich', expectedCurrencyCode: 'CHF' })
+  })
+
+  test('the saved Swiss market is what the card then shows', async () => {
+    const card = await editing(offering(), { country: 'CH', timeZone: 'Europe/Zurich' })
+    mockPutAnswer = () => Promise.resolve(offering({ country: 'CH', currencyCode: 'CHF', timeZone: 'Europe/Zurich' }))
+    card.find('form').trigger('submit')
+    await settled()
+    await card.vm.$nextTick()
+
+    const facts = card.find('.market-card__facts').text()
+    expect(facts).toContain('CH')
+    expect(facts).toContain('CHF')
+    expect(facts).toContain('Europe/Zurich')
+  })
+
+  test('with no stated offer the dropdown stays as narrow as it was', async () => {
+    // An older platform that does not publish its offer must not have one invented for it.
+    const card = await editing(market())
+    const values = card.findAll('#store-market-country option').wrappers.map(o => o.attributes('value'))
+    expect(values).not.toContain('CH')
+  })
+})

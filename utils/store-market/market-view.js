@@ -184,28 +184,65 @@ export function marketFacts (market) {
 }
 
 /**
- * The countries the form offers: the platform's own market registry (`config/edition.js`), narrowed
- * to the markets a schedule can be published for (see `RULE_PACK_COUNTRIES`).
+ * The countries the form offers.
  *
- * The registry is the source rather than a fresh country list because it is already the single source
- * for what market this app is built for, and it carries the currency each market means — so the card
- * has an expectation to ASSERT without inventing a second country→currency derivation to compete with
- * `StoreMarketAuthority`.
+ * THE PLATFORM DECIDES WHAT IS ON OFFER, not this file. `GET /stores/{id}/market` answers with
+ * `offeredCountries` — `MarketRegistry.ProductionByCountry`, the markets that actually have a
+ * currency, a VAT rule and a legal identity behind them — and `StoreMarketService` refuses a country
+ * outside that list by name. So when the platform has stated its offer, that list IS the offer here.
  *
- * A store whose stored country is not in that offer keeps an option of its own, marked as such, so
- * the form can never silently propose to move it somewhere else — and its missing rule pack is
- * reported rather than hidden. That option asserts NO currency: the page holds no expectation for it,
- * and stating one it does not have would be a guess.
+ * WHY IT NO LONGER FILTERS BY RULE PACK, which is a behaviour change and the point of this function.
+ * It used to intersect the registry with `RULE_PACK_COUNTRIES` — `['NO']` — so Switzerland could not
+ * be CHOSEN even after the platform began offering it, and the only way a store could be Swiss was
+ * for something other than this admin to have set it. That is a capability with no caller: the market
+ * write existed, the card rendered, and the one country the whole market programme was built for was
+ * missing from the dropdown.
+ *
+ * The rule-pack concern was real and is KEPT — it is just a warning rather than a veto. A country
+ * with no seeded working-time pack configures cleanly and then refuses every Workforce schedule with
+ * `workforce.rule-pack-unresolved`, two screens away. So `hasRulePack` is now reported truthfully per
+ * option and the card says so beside the choice (`sm_choice_no_rulepack_warning`) — machinery that
+ * already existed and was unreachable, because the filter removed every option that could trigger it.
+ * Warning about a consequence is the honest instrument; hiding a market the platform sells is not.
+ *
+ * THE CURRENCY still comes from the registry (`config/edition.js`), because that is where this app
+ * holds what a market means, and it is submitted as `expectedCurrencyCode` so the platform refuses a
+ * disagreement loudly. A country the platform offers that this build has no row for asserts NO
+ * currency rather than a guessed one — the platform's own derivation then stands alone.
+ *
+ * WITH NO STATED OFFER — an older backend, or any answer without the field — this falls back to the
+ * previous behaviour (registry ∩ rule pack) rather than widening the offer on no authority. In
+ * practice the card does not render the form at all unless a read succeeded, so the fallback is for
+ * a platform that genuinely does not publish its offer.
+ *
+ * A store whose stored country is not in the offer keeps an option of its own, marked as such, so the
+ * form can never silently propose to move it somewhere else — and its missing rule pack is reported
+ * rather than hidden. That option asserts NO currency, for the same reason.
  */
-export function countryOptions (markets, currentCountry) {
-  const options = Object.keys(markets || NOTHING)
+export function countryOptions (markets, currentCountry, offeredCountries) {
+  const registry = Object.keys(markets || NOTHING)
     .map(key => markets[key])
-    .filter(entry => entry && entry.country && hasRulePack(entry.country))
-    .map(entry => ({
-      country: entry.country,
-      expectedCurrencyCode: entry.currency || null,
+    .filter(entry => entry && entry.country);
+
+  const currencyFor = (country) => {
+    const row = registry.find(entry => entry.country === country);
+    return (row && row.currency) || null;
+  };
+
+  const stated = Array.isArray(offeredCountries)
+    ? offeredCountries.filter(country => typeof country === 'string' && country.length > 0)
+    : null;
+
+  const countries = stated && stated.length
+    ? stated.filter((country, index) => stated.indexOf(country) === index)
+    : registry.filter(entry => hasRulePack(entry.country)).map(entry => entry.country);
+
+  const options = countries
+    .map(country => ({
+      country,
+      expectedCurrencyCode: currencyFor(country),
       offered: true,
-      hasRulePack: true
+      hasRulePack: hasRulePack(country)
     }))
     .sort((left, right) => (left.country < right.country ? -1 : left.country > right.country ? 1 : 0));
 

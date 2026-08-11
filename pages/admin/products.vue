@@ -422,8 +422,8 @@
             </div>
             <div v-if="showRawVat" class="form-group">
               <label>{{ $i('products_vat') }}</label>
-              <select v-model.number="selectedProduct.tax">
-                <option v-for="r in vatOptions(selectedProduct.tax)" :key="'tax' + r" :value="r">{{ r }} %</option>
+              <select v-model.number="vatTakeaway">
+                <option v-for="r in vatOptions(vatTakeaway)" :key="'tax' + r" :value="r">{{ r }} %</option>
               </select>
               <span class="helper-text">{{ $i('products_vatHelperTakeaway') }}</span>
             </div>
@@ -447,8 +447,8 @@
                 />
                 <template v-if="showRawVat">
                   <label class="mt-4">{{ $i('products_dineInVat') }}</label>
-                  <select v-model.number="selectedProduct.tableTax">
-                    <option v-for="r in vatOptions(selectedProduct.tableTax)" :key="'tableTax' + r" :value="r">{{ r }} %</option>
+                  <select v-model.number="vatDineIn">
+                    <option v-for="r in vatOptions(vatDineIn)" :key="'tableTax' + r" :value="r">{{ r }} %</option>
                   </select>
                   <span class="helper-text">{{ $i('products_vatHelperDineIn') }}</span>
                 </template>
@@ -475,8 +475,8 @@
                 />
                 <template v-if="showRawVat">
                   <label class="mt-4">{{ $i('products_deliveryVat') }}</label>
-                  <select v-model.number="selectedProduct.deliveryTax">
-                    <option v-for="r in vatOptions(selectedProduct.deliveryTax)" :key="'deliveryTax' + r" :value="r">{{ r }} %</option>
+                  <select v-model.number="vatDelivery">
+                    <option v-for="r in vatOptions(vatDelivery)" :key="'deliveryTax' + r" :value="r">{{ r }} %</option>
                   </select>
                   <span class="helper-text">{{ $i('products_vatHelperDelivery') }}</span>
                 </template>
@@ -786,6 +786,7 @@ import $config from "~/core/helpers/configuration";
 import { mergeVariantByName } from "~/core/helpers/variant-copy";
 import bodyScrollLock, { BODY_SCROLL_LOCK_CLASS_MOBILE } from "~/utils/body-scroll-lock";
 import { amountLabel, statedSum } from "~/utils/price";
+import { effectiveVatRate, setVatRate, vatRateOptions, VAT_FIELDS } from "~/utils/product-vat";
 
 export default {
   components: {
@@ -835,6 +836,45 @@ export default {
   }),
 
   computed: {
+    // ---- THE VAT RATE THE PLATFORM ACTUALLY CHARGES --------------------------------------------
+    //
+    // A product carries its VAT rate TWICE: a legacy `tax` integer and an additive `taxRate` decimal
+    // (OkamAPI Entities/Product/Product.cs:23,28). The decimal is the truth and the integer is a
+    // lossy shadow of it — the backend's own note is blunt about this: "a Swiss 8.1 shadows as 8 and
+    // must never be read for VAT" (Helpers/TaxRateExtensions.cs:22-26). Every register read goes
+    // through `EffectiveTaxRate`, which is `TaxRate ?? Tax` (:34).
+    //
+    // THIS EDITOR READ AND WROTE THE SHADOW, and that produced two distinct defects.
+    //
+    // It DISPLAYED the shadow: a Swiss product taxed at 8.1% rendered "8 %" in the dropdown, a rate
+    // presented as correct that the platform does not use.
+    //
+    // Worse, writing one field and not the other made them DISAGREE. `saveProduct` spreads the
+    // fetched product, so `taxRate` survived a save untouched as an undeclared property (core's
+    // Product model has no `taxRate` field at all — core/models/product/product.ts:26). So an
+    // operator on a Swiss product who picked "25 %" set `tax = 25` while `taxRate` stayed 8.1, and
+    // the platform then charged `TaxRate ?? Tax` = 8.1%. The screen said 25, the register said 8.1,
+    // and nothing anywhere reported a conflict. A wrong VAT rate that the UI actively confirms is
+    // the worst shape this can take.
+    //
+    // These three proxies are the fix, and they are deliberately the SAME rule the backend applies
+    // when it stamps a rate (`SetTaxRate`, :28-32): read the decimal and fall back to the integer;
+    // on write, set the decimal to what was chosen and the integer to its truncation, so the pair
+    // can never state two different rates again. `$set` because `taxRate` is absent entirely on a
+    // newly created product and a bare assignment would not be reactive.
+    vatTakeaway: {
+      get () { return effectiveVatRate(this.selectedProduct, ...VAT_FIELDS.takeaway); },
+      set (rate) { setVatRate(this.selectedProduct, rate, ...VAT_FIELDS.takeaway, this.$set); }
+    },
+    vatDineIn: {
+      get () { return effectiveVatRate(this.selectedProduct, ...VAT_FIELDS.dineIn); },
+      set (rate) { setVatRate(this.selectedProduct, rate, ...VAT_FIELDS.dineIn, this.$set); }
+    },
+    vatDelivery: {
+      get () { return effectiveVatRate(this.selectedProduct, ...VAT_FIELDS.delivery); },
+      set (rate) { setVatRate(this.selectedProduct, rate, ...VAT_FIELDS.delivery, this.$set); }
+    },
+
     // ---- THE EDITOR'S SCROLL LOCK -------------------------------------------------------------
     //
     // The editor is a side panel on a desktop and a full-screen sheet on a phone, so it locks the
@@ -1097,12 +1137,10 @@ export default {
     // The legal Norwegian VAT rates (must match AccountingHelper on the backend). A legacy
     // product may carry a non-standard rate; keep it in the list so opening the form does not
     // silently change a stored value.
+    // Delegates to utils/product-vat.js, where the offer and its caveat are documented. Kept as a
+    // method because the template calls it per option.
     vatOptions(current) {
-      const rates = [0, 12, 15, 25];
-      if (current != null && current !== '' && !rates.includes(current)) {
-        return [current, ...rates];
-      }
-      return rates;
+      return vatRateOptions(current);
     },
 
     isSoldOut(product) {

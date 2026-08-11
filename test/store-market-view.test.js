@@ -286,14 +286,65 @@ describe('the country offer', () => {
     ch: { country: 'CH', currency: 'CHF' }
   }
 
-  test('only countries with a working-time rule pack are offered — today, Norway', () => {
+  test('with no stated offer it falls back to the registry narrowed by rule pack', () => {
     expect(RULE_PACK_COUNTRIES).toEqual(['NO'])
     expect(hasRulePack('NO')).toBe(true)
     expect(hasRulePack('CH')).toBe(false)
     expect(hasRulePack(null)).toBe(false)
 
+    // No third argument = the platform did not say what it offers. Widening the offer on no
+    // authority would be a guess, so this stays exactly as narrow as it used to be.
     const offered = countryOptions(registry, null)
     expect(offered.map(o => o.country)).toEqual(['NO'])
+  })
+
+  // ---------------------------------------------------------------------------------------------
+  // THE PLATFORM'S OFFER IS THE OFFER.
+  //
+  // `GET /stores/{id}/market` answers with `offeredCountries` — MarketRegistry.ProductionByCountry,
+  // which is ["CH","NO"] — and StoreMarketService refuses anything outside it by name. The card used
+  // to ignore that field entirely and intersect the registry with RULE_PACK_COUNTRIES instead, so
+  // Switzerland was unselectable: the market write existed and the one market the whole programme was
+  // built for could not be reached from the admin. These pin that it can.
+  describe('the platform states what it offers, and the form offers exactly that', () => {
+    test('a country the platform offers is selectable even with no working-time rule pack', () => {
+      const options = countryOptions(registry, 'NO', ['CH', 'NO'])
+      expect(options.map(o => o.country)).toEqual(['CH', 'NO'])
+
+      const swiss = optionFor(options, 'CH')
+      expect(swiss.offered).toBe(true)
+      // Switzerland genuinely has no rule pack. That is REPORTED, not used to hide the option.
+      expect(swiss.hasRulePack).toBe(false)
+    })
+
+    test('an offered country still carries the currency to assert', () => {
+      const swiss = optionFor(countryOptions(registry, null, ['CH', 'NO']), 'CH')
+      expect(swiss.expectedCurrencyCode).toBe('CHF')
+    })
+
+    test('a country the platform offers that this build has no row for asserts no currency', () => {
+      const options = countryOptions(registry, null, ['NO', 'SE'])
+      expect(options.map(o => o.country)).toEqual(['NO', 'SE'])
+      // Inventing NOK for Sweden would be exactly the guess expectedCurrencyCode exists to prevent.
+      expect(optionFor(options, 'SE').expectedCurrencyCode).toBeNull()
+      expect(optionFor(options, 'NO').expectedCurrencyCode).toBe('NOK')
+    })
+
+    test('a repeated country is offered once', () => {
+      expect(countryOptions(registry, null, ['NO', 'CH', 'NO']).map(o => o.country)).toEqual(['CH', 'NO'])
+    })
+
+    test('the stored country is not duplicated when the platform already offers it', () => {
+      expect(countryOptions(registry, 'CH', ['CH', 'NO']).map(o => o.country)).toEqual(['CH', 'NO'])
+      expect(optionFor(countryOptions(registry, 'CH', ['CH', 'NO']), 'CH').offered).toBe(true)
+    })
+
+    test('an empty or malformed offer is treated as no offer, not as an empty one', () => {
+      // An empty list would otherwise render a dropdown with nothing in it and no explanation.
+      expect(countryOptions(registry, null, []).map(o => o.country)).toEqual(['NO'])
+      expect(countryOptions(registry, null, 'CH').map(o => o.country)).toEqual(['NO'])
+      expect(countryOptions(registry, null, [null, '']).map(o => o.country)).toEqual(['NO'])
+    })
   })
 
   test('an offered market carries the currency to ASSERT, so a disagreement surfaces', () => {
