@@ -20,10 +20,10 @@
          an organization number is exactly the person who needs to see that it is already registered,
          and the server's refusal — which names the existing row — arrives too late to prevent the
          typing. Three states, never two: a read that failed must not read as "this store has none". -->
-    <p v-if="employers.state === 'unknown'" class="wfr-emp__unknown" data-wfr-emp-unknown>
+    <p v-if="employersUnknown" class="wfr-emp__unknown" data-wfr-emp-unknown>
       {{ $i('wfr_emp_existing_unknown') }}
     </p>
-    <p v-else-if="employers.state === 'empty'" class="wfr-emp__none" data-wfr-emp-none>
+    <p v-else-if="employersEmpty" class="wfr-emp__none" data-wfr-emp-none>
       {{ $i('wfr_emp_existing_none') }}
     </p>
     <ul v-else class="wfr-emp__existing" data-wfr-emp-existing>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { EMPLOYERS_EMPTY, EMPLOYERS_UNKNOWN } from '~/utils/workforce/roster';
+
 // Registering the legal entity a store's staff are employed by.
 //
 // It is a separate form from "add a person" for the same reason the role catalogue is a separate
@@ -69,6 +71,8 @@ export default {
     };
   },
   computed: {
+    employersUnknown () { return this.employers.state === EMPLOYERS_UNKNOWN; },
+    employersEmpty () { return this.employers.state === EMPLOYERS_EMPTY; },
     canSubmit () {
       return !!this.name && !!this.organizationNumber;
     }

@@ -61,10 +61,10 @@
     <label class="wfr-add__label">{{ $i('wfr_add_employer') }}</label>
     <!-- A read that did not answer is not a store without an employer. Offering to register one here
          would invite a second row for a company that already has one. -->
-    <p v-if="employers.state === 'unknown'" class="wfr-add__blocker" data-wfr-add-employer-unknown>
+    <p v-if="employersUnknown" class="wfr-add__blocker" data-wfr-add-employer-unknown>
       {{ $i('wfr_add_employer_unknown') }}
     </p>
-    <template v-else-if="employers.state === 'empty'">
+    <template v-else-if="employersEmpty">
       <p class="wfr-add__blocker" data-wfr-add-no-employer>
         {{ $i('wfr_add_no_employer') }}
       </p>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { CAPABILITIES, EMPLOYERS_LISTED, activeEngagementConflict, personOptions } from '~/utils/workforce/roster';
+import { CAPABILITIES, EMPLOYERS_EMPTY, EMPLOYERS_LISTED, EMPLOYERS_UNKNOWN, activeEngagementConflict, personOptions } from '~/utils/workforce/roster';
 
 // Adding someone to a store. The form asks for an ENGAGEMENT; whether a person is created along
 // with it is a consequence of which mode is chosen, not a separate step.
@@ -167,6 +167,8 @@ export default {
   },
   computed: {
     allCapabilities () { return CAPABILITIES; },
+    employersUnknown () { return this.employers.state === EMPLOYERS_UNKNOWN; },
+    employersEmpty () { return this.employers.state === EMPLOYERS_EMPTY; },
     people () { return personOptions(this.roster.rows || [], this.legalEmployerId); },
     conflict () {
       if (this.mode !== 'existing') { return null; }
