@@ -153,7 +153,6 @@
 </template>
 
 <script>
-<<<<<<< HEAD
 // `priceLabel` in the template above is the GLOBAL MIXIN's (`plugins/global-mixin.js`), resolved off
 // the component instance. Naming it here because the structure said otherwise: this file imported
 // core's raw `priceLabel` from `~/core/helpers/tools` and never registered it in `methods`, and a

@@ -314,6 +314,11 @@ function mountPage (component, { selectedAdminStore = 0 } = {}) {
     mocks: {
       $i: key => key,
       $router: { push: () => {} },
+      // Surfboard onboarding prefills the merchant's webshop and legal-document URLs from the
+      // market now, instead of three okam.no literals, so a bare mount has to carry a market the
+      // way the app's market-mixin does. Norway's hosts, matching what this suite asserts about
+      // the Norwegian configuration.
+      marketConfig: { shopUrl: 'https://shop.okam.no', hostname: 'https://okam.no' },
       $store: {
         state: { selectedAdminStore, currentUser: { isPowerUser: true, name: 'n', title: 't' } },
         getters: { userIsLoggedIn: true }

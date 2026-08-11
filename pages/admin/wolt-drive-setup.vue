@@ -274,7 +274,19 @@ export default {
     },
   },
   mounted() {
-    if (this.$store.getters.userIsLoggedIn && !this.isPowerUser) {
+    // AUTHENTICATION IS THE SHELL'S ANSWER, NOT THIS PAGE'S. With nobody signed in this returns and
+    // lets <AdminPage> put the sign-in door on the page that keeps it, which is what every other
+    // admin page here does.
+    //
+    // The compound guard this replaces (`loggedIn && !isPowerUser`) already declined to BOUNCE an
+    // anonymous visitor, so the redirect was never the bug. What it did instead was fall through to
+    // the prefill below — reading localStorage and, with a ?storeId in the URL, issuing fetchStore()
+    // while signed out. Splitting the two conditions makes the anonymous case return before any of
+    // that, and the privilege bounce stays exactly as it was for someone who IS signed in.
+    if (!this.$store.getters.userIsLoggedIn) {
+      return;
+    }
+    if (!this.isPowerUser) {
       this.$router.push("/admin");
       return;
     }
