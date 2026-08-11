@@ -5752,6 +5752,7 @@ export default {
   assistant_scopeChanged: 'Du har endret butikkene. Neste spørsmål starter en ny samtale, fordi en samtale er låst til butikkene den ble startet med.',
   assistant_scopeNarrowed: 'Denne samtalen gjelder bare {stores}. Assistenten er ikke slått på for de andre butikkene du har valgt.',
   assistant_threadEnded: 'Denne samtalen er avsluttet. Neste spørsmål starter en ny, uten det som ble sagt tidligere.',
+  assistant_threadNotStarted: 'Samtalen ble ikke startet, av grunnen over. Neste spørsmål prøver på nytt.',
   assistant_askFailed: 'Vi fikk ikke svar. Prøv igjen.',
   assistant_emptyTitle: 'Still det første spørsmålet',
   assistant_emptyBody: 'Assistenten leser tallene dine, og kan foreslå endringer som du godkjenner selv.',

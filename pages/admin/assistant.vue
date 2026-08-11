@@ -131,8 +131,27 @@
                 <!-- ── THE VENUE PICKER ────────────────────────────────────────────────────────
                      Shown when the turn asked which store. The backend REFUSES to pick one itself
                      — a write that spans several venues has no single target — so the buttons here
-                     are the merchant answering, and answering re-asks with exactly one store. -->
-                <div v-if="turn.needsStore" class="assistant-venues" data-test="venue-picker">
+                     are the merchant answering, and answering re-asks with exactly one store.
+
+                     ⚠️ AND IT IS GATED ON THE THREAD THAT RAISED IT, WHICH IS THE ONLY PART OF THIS
+                     TRANSCRIPT THAT MAY NOT SIMPLY BE READ. Every other row up here is text; this
+                     one is a live control, and it holds store ids from the scope that was frozen
+                     when the turn ran. `ask` always posts to the CURRENT thread, so a click on a
+                     picker whose thread is gone sends an out-of-scope store into a conversation the
+                     merchant is in the middle of — the server refuses it with a 403, and 403 is
+                     (correctly, for a turn) how this client learns a thread is finished. It would
+                     retire and close a live, context-bearing conversation, off a button that looked
+                     no different from a current one.
+
+                     `liveConversationId` is null whenever the next question would have to OPEN a
+                     thread, so this also covers the window where the picker has moved and the old
+                     thread has not been retired yet. `needsStore` is only ever set on a turn that
+                     already has a `conversationId`, so the two nulls cannot meet. -->
+                <div
+                  v-if="turn.needsStore && turn.conversationId === liveConversationId"
+                  class="assistant-venues"
+                  data-test="venue-picker"
+                >
                   <p class="assistant-venues__prompt">
                     {{ $i('assistant_pickVenue') }}
                   </p>
@@ -472,6 +491,25 @@ export default {
         this.$i('assistant_example2'),
         this.$i('assistant_example3')
       ];
+    },
+    /**
+     * The id of the thread the NEXT question will actually be asked on, or null when the next
+     * question will have to open one.
+     *
+     * ⚠️ THIS IS NOT `conversation.id`, AND THE DIFFERENCE IS THE WHOLE POINT. Retirement on this
+     * page is DEFERRED: moving the picker posts a notice and leaves the thread open, and the
+     * replacement is not created until the next question runs `ensureConversation`. So there is a
+     * window in which a thread is open, current, and already superseded — and a per-turn control
+     * that trusted `conversation.id` alone would still be live through all of it, only to have its
+     * store id land in the thread that gets created a moment later. The condition below is the same
+     * one `ensureConversation` reuses on, so "live" here means exactly "the id this turn's answer
+     * would be posted to", which is the only reading a control can safely be gated on.
+     */
+    liveConversationId () {
+      if (!this.conversation) { return null; }
+      return this.sameScope(this.selectedStoreIds, this.conversation.requestedStoreIds)
+        ? this.conversation.id
+        : null;
     }
   },
   watch: {
@@ -562,9 +600,21 @@ export default {
      *
      * `targetStoreId` NARROWS this one turn to a store of the frozen scope; it does not rescope the
      * thread and it cannot, which is the right shape here — the next question is about the same
-     * conversation, not about one venue forever. The buttons are built from the thread's own scope,
-     * so the id is always inside it and the server's "that store is not part of this conversation"
-     * refusal is unreachable from this surface.
+     * conversation, not about one venue forever.
+     *
+     * ⚠️ THIS BLOCK USED TO CLAIM THE OUT-OF-SCOPE 403 WAS "unreachable from this surface", ON THE
+     * GROUND THAT THE BUTTONS ARE BUILT FROM THE THREAD'S OWN SCOPE. They are — from the scope of
+     * the thread that was open WHEN THE TURN RAN, which is not necessarily the one this posts to.
+     * The transcript keeps every turn on screen for as long as the merchant stays on the page, so a
+     * picker from a thread that has since been replaced was still a live control, still holding the
+     * old scope's store ids, and its click still went to whatever thread is current. That reached
+     * the refusal in one click, and — because a 403 is how a turn learns its thread is finished —
+     * retired and closed a live conversation as the price of it.
+     *
+     * It is unreachable now because the picker is GATED on `liveConversationId` (see the template),
+     * so the only pickers that can be clicked belong to the thread this posts to. The reachability
+     * lives at the render, not here, which is why this function is unchanged and unguarded: a
+     * second, silent refusal inside it would be a dead branch pretending to be a safety net.
      */
     askForVenue (question, storeId) {
       this.ask(question, storeId);
@@ -721,6 +771,11 @@ export default {
         basisOpen: false,
         needsStore: false,
         venues: [],
+        // The thread this turn was asked on, stamped once `ensureConversation` has answered. It is
+        // what makes the venue picker's liveness decidable at render time: a turn knows which
+        // conversation's frozen scope its buttons were built from, and the picker is offered only
+        // while that is still the conversation the next question goes to.
+        conversationId: null,
         conflict: null,
         // `{ tone, text }` or null. The tone is not optional: see the decided line in the template.
         decided: null,
@@ -730,8 +785,14 @@ export default {
       this.thread.push(turn);
       this.busy = true;
 
+      // Declared out here so the `catch` can tell WHICH of the two requests failed. Both funnel down
+      // the same handler and both can be a 403; only this says whether a thread ever opened. See the
+      // notice below.
+      let opened = null;
+
       try {
-        const opened = await this.ensureConversation();
+        opened = await this.ensureConversation();
+        turn.conversationId = opened.conversation.id;
         // A break is only worth drawing where something came before it to be cut off from.
         turn.startsNewConversation = opened.created && !firstTurn;
 
@@ -782,8 +843,23 @@ export default {
         // A 400 or a 500 is deliberately NOT this. A model outage says nothing about the thread, and
         // discarding a working conversation's context over a blip is the expensive direction of this
         // decision, because nothing restores it.
+        //
+        // ⚠️ AND "IT ENDED" IS NOT WHAT TO SAY WHEN IT NEVER BEGAN. A refused CREATE lands in this
+        // same handler with the same 403 — `Assistant.Module` is off for every selected store, or
+        // none of them is administered — and `assistant_threadEnded` makes three claims that are all
+        // false in that case: that a conversation ended, that one is being left behind, and that
+        // there was something said before which the next question will go without. A merchant is
+        // then told they have lost a context they never had, on the one surface built to stop that
+        // happening by accident. `opened` is the only thing that tells the two apart, since the
+        // status does not.
+        //
+        // Neither line explains WHY; the server's own sentence is already in the failure slot above,
+        // which is what both notices point at rather than paraphrase.
         if (threadIsOver(error)) {
-          this.retireConversation({ key: 'assistant_threadEnded', params: null });
+          this.retireConversation({
+            key: opened ? 'assistant_threadEnded' : 'assistant_threadNotStarted',
+            params: null
+          });
         }
       } finally {
         turn.pending = false;

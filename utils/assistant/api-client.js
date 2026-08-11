@@ -679,11 +679,21 @@ export const STATUS_CONVERSATION_FULL = 'conversation_full';
  * about the thread, and retiring one over a blip would discard the merchant's context to no purpose —
  * the expensive direction of this decision, since nothing restores it.
  *
- * ⚠️ 403 IS COARSER THAN IT LOOKS, and it is worth naming rather than discovering. A turn narrowed to
- * a store outside the frozen scope is also a 403, and that one is the CLIENT's mistake, not a dead
- * thread — the venue picker only ever offers stores from the thread's own scope, so it cannot be
- * reached from this surface. If a future caller can name an arbitrary store, this needs the fault
- * name on the wire to tell the two apart; today the body carries only a message.
+ * ⚠️ 403 IS COARSER THAN IT LOOKS, AND THE COARSENESS HAS ALREADY COST A CONVERSATION ONCE. A turn
+ * narrowed to a store outside the frozen scope is ALSO a 403, and that one is the CLIENT's mistake,
+ * not a dead thread — so reading it as "the thread is finished" retires a perfectly live one.
+ *
+ * This block used to dismiss that as unreachable, on the ground that "the venue picker only ever
+ * offers stores from the thread's own scope". It offers stores from the scope of the thread that was
+ * open WHEN THE TURN RAN, and the transcript keeps those buttons on screen after that thread has
+ * been replaced — at which point one click posted an old store id into the current conversation and
+ * ended it here. The picker is now gated on the thread it belongs to still being the current one
+ * (`pages/admin/assistant.vue`, `liveConversationId`), which is what actually makes this
+ * unreachable; the gate is the load-bearing part, not the shape of the buttons.
+ *
+ * SO THE CAVEAT STANDS, AND IT IS NOT THEORETICAL: any caller that can name an arbitrary store
+ * re-opens it, and this function cannot tell the two 403s apart because the body carries only a
+ * message. Telling them apart needs the fault name on the wire.
  */
 export function threadIsOver (error) {
   if (!isAssistantApiError(error)) { return false; }

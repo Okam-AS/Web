@@ -43,9 +43,15 @@ jest.mock('~/utils/assistant/api-client', () => {
         })
       }
 
+      // `script.ask` is handed the thread id and the narrowed store because the SERVER's answer
+      // depends on both: a target outside the thread's frozen scope is refused at scope verification,
+      // before the model is invoked. A script that could not see them could only ever return one
+      // answer per test and could not express that refusal at all.
       AskInConversation (conversationId, question, targetStoreId, languageCode) {
         calls.push(['Ask', question, targetStoreId, languageCode, conversationId])
-        return Promise.resolve(script.ask ? script.ask() : { Answer: 'et svar', Status: 'answered' })
+        return Promise.resolve(script.ask
+          ? script.ask(conversationId, targetStoreId, question)
+          : { Answer: 'et svar', Status: 'answered' })
           .then(answer => (script.turn ? script.turn(answer) : { conversationId, sequence: 2, answer, notRemembered: false }))
       }
 
@@ -365,6 +371,75 @@ describe('a refusal that ends the thread ends it here too', () => {
   })
 })
 
+// ── A THREAD THAT NEVER OPENED IS NOT A THREAD THAT ENDED ────────────────────────────────────────
+//
+// ⚠️ THE CREATE AND THE TURN FAIL DOWN THE SAME `catch`, AND FOR A WHILE THEY SAID THE SAME THING.
+// `assistant_threadEnded` reads "This conversation has ended. Your next question starts a new one,
+// without what was said before." — three claims, and for a refused CREATE all three are false: no
+// conversation ended, none is being left behind, and there is no "before" that will be missing. A
+// merchant reading it is told they have lost a context they never had, which is the one thing this
+// surface exists to stop happening by accident.
+//
+// The two are told apart by whether `ensureConversation` ever answered, which is the only fact that
+// distinguishes them — the status is 403 either way.
+describe('when the conversation could not be started at all', () => {
+  const REFUSED = { message: 'Assistenten er ikke slått på for denne butikken.' }
+
+  test('the merchant is told it did not start, not that it ended', async () => {
+    script.start = () => Promise.reject(new AssistantApiError(403, REFUSED))
+    const wrapper = mountPage()
+    await settled()
+    await ask(wrapper, 'hvor mye solgte vi?')
+
+    // The server's own sentence is still the reason, in the failure slot.
+    expect(wrapper.find('[data-test="turn-failure"]').text()).toBe(REFUSED.message)
+    // …and the forward-looking line names the state that is actually true.
+    expect(wrapper.find('[data-test="thread-notice"]').text()).toBe('assistant_threadNotStarted')
+
+    // Nothing opened, so there is nothing to close and nothing to offer leaving.
+    expect(calls).toEqual([['Start', [1, 2]]])
+    expect(wrapper.find('[data-test="new-conversation"]').exists()).toBe(false)
+  })
+
+  test('and the next question really does try again, as the line promises', async () => {
+    script.start = () => Promise.reject(new AssistantApiError(403, REFUSED))
+    const wrapper = mountPage()
+    await settled()
+    await ask(wrapper, 'q1')
+
+    delete script.start
+    await ask(wrapper, 'q2')
+
+    expect(starts().length).toBe(2)
+    expect(asks()[0][4]).toBe('conv-2')
+    expect(wrapper.find('[data-test="thread-notice"]').exists()).toBe(false)
+
+    // RECORDED, NOT ENDORSED, and deliberately left alone by the lane that added the notice above.
+    // A break IS drawn over the successful turn, because `startsNewConversation` asks only whether a
+    // thread was created and whether anything precedes it — and the refused attempt did leave a row
+    // in the transcript. The line it draws ("nothing above is carried forward") is TRUE here: the
+    // turn above never reached the assistant and is in nobody's context. It is merely redundant,
+    // which is a different and much cheaper kind of wrong than the notice this describe block fixes,
+    // and suppressing it would mean teaching `startsNewConversation` about failed turns for a
+    // cosmetic gain. Pinned so the next reader finds a decision rather than an accident.
+    expect(wrapper.find('[data-test="conversation-break"]').exists()).toBe(true)
+  })
+
+  // …and the sentence for a thread that DID open and then end is untouched by the distinction.
+  test('a thread that opened and then ended still says it ended', async () => {
+    const wrapper = mountPage()
+    await settled()
+    await ask(wrapper, 'q1')
+
+    script.ask = () => Promise.reject(new AssistantApiError(409, {
+      message: 'Denne samtalen er avsluttet. Start en ny for å spørre videre.'
+    }))
+    await ask(wrapper, 'q2')
+
+    expect(wrapper.find('[data-test="thread-notice"]').text()).toBe('assistant_threadEnded')
+  })
+})
+
 // ── THE TURN THE THREAD DID NOT KEEP ─────────────────────────────────────────────────────────────
 // The server writes the two rows AFTER the turn, never before, so a failed turn cannot leave a
 // question with no answer in the thread. The cost is that a turn which fails to persist is one the
@@ -419,6 +494,125 @@ describe('the new-conversation control', () => {
     // The transcript is kept. Deleting what the merchant already read would be a second, unrelated
     // loss on a button whose whole promise is about what happens NEXT.
     expect(wrapper.vm.thread.length).toBe(2)
+  })
+})
+
+// ── A BUTTON THAT OUTLIVED THE THREAD THAT OFFERED IT ────────────────────────────────────────────
+//
+// ⚠️ THE TRANSCRIPT OUTLIVES THE THREAD, AND THE VENUE PICKER IS THE ONLY PART OF IT THAT IS STILL A
+// LIVE CONTROL. Every other row up there is text. A picker left over from a retired thread is an
+// offer that can no longer be taken — and taking it is not a harmless no-op:
+//
+//   1. the click posts a store id from the OLD thread's frozen scope,
+//   2. into whatever thread is CURRENT, because `ask` always uses the open one,
+//   3. the server verifies the target against the current scope — before the model is invoked, so
+//      this costs nothing and fails fast — and refuses it with a 403,
+//   4. and 403 is, correctly for a turn, how this client learns a thread is finished. So it retires
+//      the live one and closes it server-side.
+//
+// One click on a stale button and a real, context-bearing conversation is gone, with nothing on
+// screen having suggested that button was anything but current. The turn therefore carries the id of
+// the thread that raised it and the picker renders only while that thread is the one the next
+// question will actually go to.
+describe('a venue button from a thread that is no longer current', () => {
+  const PICKER = {
+    Status: 'answered',
+    Answer: 'Hvilken butikk gjelder det? Velg én av Bryggen Bistro, Torget, så forbereder jeg forslaget.'
+  }
+
+  /** A thread over both venues, whose one turn ended in "which venue?". */
+  async function threadAwaitingAVenue () {
+    script.ask = () => Promise.resolve(PICKER)
+    const wrapper = mountPage()
+    await settled()
+    await ask(wrapper, 'øk prisen på alle pizzaer med 25 %')
+    expect(wrapper.findAll('[data-test="venue-picker"]').length).toBe(1)
+    return wrapper
+  }
+
+  // ⚠️ THE WINDOW THAT CLEARING A FLAG ON RETIREMENT WOULD NOT HAVE CLOSED. Retirement here is
+  // DEFERRED: moving the picker only posts a notice, and the old thread is not retired until the
+  // next question opens its replacement. So in this window the thread is still open, still current,
+  // and its buttons still point at a scope the next thread will not have — and the retirement that a
+  // `needsStore`-clearing fix hangs off happens INSIDE the click, long after the store id has been
+  // chosen. The gate is on what the button can still reach, so it closes here too.
+  test('goes quiet the moment the picker moves, before anything has been retired', async () => {
+    const wrapper = await threadAwaitingAVenue()
+
+    wrapper.setData({ selectedStoreIds: [2] })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.conversation.id).toBe('conv-1')
+    expect(calls).not.toContainEqual(['Close', 'conv-1'])
+    expect(wrapper.findAll('[data-test="venue-picker"]').length).toBe(0)
+  })
+
+  test('is withdrawn with the thread when a new one replaces it', async () => {
+    const wrapper = await threadAwaitingAVenue()
+
+    delete script.ask
+    wrapper.setData({ selectedStoreIds: [2] })
+    await ask(wrapper, 'og i forrige uke?')
+
+    expect(starts()).toEqual([['Start', [1, 2]], ['Start', [2]]])
+    expect(wrapper.findAll('[data-test="venue-picker"]').length).toBe(0)
+    // Only the CONTROL is gone. What the assistant asked is still readable in the transcript, which
+    // is where the record of the turn belongs.
+    expect(wrapper.findAll('[data-test="answer"]').at(0).text())
+      .toContain('Hvilken butikk gjelder det?')
+  })
+
+  // THE CONSEQUENCE, ASSERTED AS THE INVARIANT RATHER THAN AS ONE BUTTON'S ABSENCE: nothing on this
+  // screen may end the conversation the merchant is currently in.
+  test('cannot retire the live thread, because there is nothing left to click', async () => {
+    const wrapper = await threadAwaitingAVenue()
+
+    // The server as it really behaves: the target is checked against the thread's own frozen scope
+    // and a store outside it is a 403 — the same status a dead thread answers with, which is exactly
+    // why a stale button is expensive rather than merely useless.
+    script.ask = (conversationId, targetStoreId) => {
+      const frozen = conversationId === 'conv-1' ? [1, 2] : [2]
+      return typeof targetStoreId === 'number' && !frozen.includes(targetStoreId)
+        ? Promise.reject(new AssistantApiError(403, {
+          message: 'Butikken er ikke en del av denne samtalen. Start en ny samtale for å spørre om den.'
+        }))
+        : Promise.resolve({ Answer: 'et svar', Status: 'answered' })
+    }
+
+    wrapper.setData({ selectedStoreIds: [2] })
+    await ask(wrapper, 'og i forrige uke?')
+    expect(wrapper.vm.conversation.id).toBe('conv-2')
+
+    const buttons = wrapper.findAll('[data-test="venue-picker"] button')
+    for (let i = 0; i < buttons.length; i += 1) {
+      buttons.at(i).trigger('click')
+      await settled()
+      await wrapper.vm.$nextTick()
+    }
+
+    expect(wrapper.vm.conversation).not.toBeNull()
+    expect(wrapper.vm.conversation.id).toBe('conv-2')
+    expect(wrapper.find('[data-test="thread-notice"]').exists()).toBe(false)
+    expect(calls).not.toContainEqual(['Close', 'conv-2'])
+  })
+
+  // …AND THE GATE MUST NOT BE A DELETION. A picker on the thread the next question will go to is
+  // still the merchant answering a live question, however many turns have happened since.
+  test('a later turn on the SAME thread leaves the picker standing', async () => {
+    const wrapper = await threadAwaitingAVenue()
+
+    script.ask = () => Promise.resolve({ Answer: 'et svar', Status: 'answered' })
+    await ask(wrapper, 'noe helt annet')
+
+    expect(starts().length).toBe(1)
+    expect(wrapper.findAll('[data-test="venue-picker"]').length).toBe(1)
+
+    script.ask = () => Promise.resolve({ Answer: 'ok', Status: 'proposal_staged' })
+    wrapper.find('[data-test="venue-picker"]').findAll('button').at(0).trigger('click')
+    await settled()
+
+    expect(asks()[2][2]).toBe(1)
+    expect(asks()[2][4]).toBe('conv-1')
   })
 })
 

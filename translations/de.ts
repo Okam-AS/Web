@@ -5676,6 +5676,7 @@ export default {
   assistant_scopeChanged: 'Sie haben die Filialen geändert. Ihre nächste Frage beginnt ein neues Gespräch, denn ein Gespräch ist an die Filialen gebunden, mit denen es begonnen wurde.',
   assistant_scopeNarrowed: 'Dieses Gespräch umfasst nur {stores}. Für die anderen gewählten Filialen ist der Assistent nicht eingeschaltet.',
   assistant_threadEnded: 'Dieses Gespräch ist beendet. Ihre nächste Frage beginnt ein neues, ohne das zuvor Gesagte.',
+  assistant_threadNotStarted: 'Das Gespräch wurde nicht begonnen, aus dem oben genannten Grund. Ihre nächste Frage versucht es erneut.',
   assistant_askFailed: 'Wir haben keine Antwort erhalten. Bitte erneut versuchen.',
   assistant_emptyTitle: 'Stellen Sie die erste Frage',
   assistant_emptyBody: 'Der Assistent liest Ihre Zahlen und kann Änderungen vorschlagen, die Sie selbst genehmigen.',
