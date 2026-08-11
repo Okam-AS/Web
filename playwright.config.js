@@ -37,7 +37,11 @@
 //
 // ---- RUNNING AGAINST A REAL BACKEND -----------------------------------------------------------
 //
-//   test/e2e/scripts/live-world.sh          stands the world up and prints the next line
+//   npm run test:e2e:live-world             stands the world up and prints the next line
+//   npm run test:e2e:live                   runs EVERY live-eligible journey, resetting between them
+//
+// or, for one journey by hand:
+//
 //   E2E_API_BASE_URL=http://127.0.0.1:5951 E2E_WEB_PORT=3951 npm run test:e2e
 //
 // starts no fixture, points the app at the given origin, and AUTOMATICALLY excludes every journey
