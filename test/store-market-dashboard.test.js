@@ -20,6 +20,10 @@ function mountDashboard (selectedAdminStore) {
   return shallowMount(DashboardPage, {
     mocks: {
       $i,
+      // The dashboard's shop link is built from the market now (`shopUrl`), not from a
+      // shop.okam.no literal, so a bare mount has to carry a market the way the app's
+      // market-mixin does. Norway's row, because that is what this dashboard test is about.
+      marketConfig: { shopUrl: 'https://shop.okam.no' },
       $store: {
         getters: { userIsLoggedIn: true },
         state: { selectedAdminStore, adminLocale: 'no', currentUser: { fullName: 'Sven' } }

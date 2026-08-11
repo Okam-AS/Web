@@ -9,6 +9,7 @@ import SmsDriverModal from '~/components/molecules/SmsDriverModal.vue'
 import TransferOrderModal from '~/components/molecules/TransferOrderModal.vue'
 import TermsModal from '~/components/modals/TermsModal.vue'
 import PageHeader from '~/components/organisms/PageHeader.vue'
+import { markets } from '~/config/edition'
 
 // THE SCROLL LOCK ACROSS THE WHOLE ESTATE, not just the shared modal.
 //
@@ -136,7 +137,12 @@ const mounted = []
 function mountHost (children, props, options) {
   const wrapper = mount(hostFor(children), Object.assign({
     propsData: props,
-    mocks: { $i },
+    // `marketConfig` is the market-mixin's, and TermsModal reads it to decide WHICH merchant
+    // agreement it is titling — a market with no published document must not be given Norway's.
+    // A bare mount has no mixin, so the host supplies it the way the app does. Norway's real row
+    // rather than a stand-in, because a stand-in is what let the modal render a title for a market
+    // that has none. Tests that care about a different market pass their own `mocks`.
+    mocks: { $i, marketConfig: markets.no },
     stubs: { 'focus-trap': { template: '<div><slot /></div>' } }
   }, options || {}))
   mounted.push(wrapper)
@@ -203,7 +209,7 @@ describe('every modal locks through the one declared mechanism', () => {
     // on the signup page, which is a marketing page and therefore also a Swiss page.
     const wrapper = mountHost({ TermsModal }, {
       isCh: true, open: ['TermsModal'], childProps: { isVisible: true }
-    })
+    }, { mocks: { $i, marketConfig: markets.ch }, stubs: { 'focus-trap': { template: '<div><slot /></div>' } } })
     settle(wrapper)
 
     expect(bodyClasses().sort()).toEqual(['noscroll', 'okam-ch'])

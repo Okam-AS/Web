@@ -758,7 +758,9 @@ export default {
     },
     openDeliveryMethodEditor(deliveryMethod, createNew) {
       const local = JSON.parse(JSON.stringify(deliveryMethod));
-      local.wholeAmount = createNew ? "" : this.wholeAmount(local.amount).replace(/\s/g, "");
+      // Strip the market's group separator (a space in 'no', an apostrophe in
+      // 'ch', a dot elsewhere) -- this field is a plain numeric input.
+      local.wholeAmount = createNew ? "" : this.wholeAmount(local.amount).replace(/\D/g, "");
       local.fractionAmount = createNew ? "" : this.fractionAmount(local.amount);
       local.km = createNew ? "" : Math.round((local.maxDistance || 0) / 1000);
       this.editorDeliveryMethod = local;
@@ -779,11 +781,14 @@ export default {
       const maxKm = this.editorDeliveryMethod.km || "0";
       const wholeAmount = this.editorDeliveryMethod.wholeAmount || "0";
       const fractionAmount = this.editorDeliveryMethod.fractionAmount || "00";
+      // One pre-formatted token. The sentence used to carry "kr {wholeAmount},
+      // {fractionAmount}", which put a Norwegian symbol and separator inside
+      // the German string too; priceFromParts takes both from the runtime
+      // market's currencyFormat.
       this.deliveryMethodSummary = this.$i("delivery_methodSummary", {
         minKm,
         maxKm,
-        wholeAmount,
-        fractionAmount,
+        price: this.priceFromParts(wholeAmount, fractionAmount),
       });
     },
     numericInputValue(value) {

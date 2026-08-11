@@ -197,8 +197,26 @@
 // now instead of arithmetic in the template. The one-time column had the identical defect and is
 // fixed with it — it was never separately reported, only found by looking.
 
+// The MONEY LABEL is not imported here on purpose. The template's `priceLabel` resolves to the
+// market-driven mixin method in `plugins/global-mixin.js`, which reads the runtime market's
+// currencyFormat; importing core's `priceLabel` directly would pin this document to whatever the
+// global currency format happened to be set to. Only the absence helpers are imported, because they
+// are market-independent — whether somebody stated a figure is not a question about currency.
 import { isAmountStated, statedSum } from "~/utils/price";
 
+// NORWEGIAN VAT, AND THIS DOCUMENT IS NORWEGIAN-ONLY BECAUSE OF IT.
+//
+// 25% is Norway's rate. It is hardcoded here, the template says "25% mva" in Norwegian beside it,
+// and the surrounding document is Norwegian throughout ("Pris eks. mva.", "Totalt inkl. mva"). This
+// is a sales offer produced by Okam for Norwegian merchants, not a merchant-facing screen that a
+// Swiss venue reaches — see the merchant-facing VAT surfaces in pages/admin/, which take their rate
+// from the store.
+//
+// It is named here rather than left as a bare 0.25 so that the market assumption is visible to the
+// next reader instead of being discovered. If this document is ever put in front of a non-Norwegian
+// merchant, this constant and the three literal Norwegian VAT strings in the template above must
+// move to the market row together — changing one without the others produces a document that
+// computes one rate and prints another, which is worse than the present honest single-market form.
 const VAT_RATE = 0.25;
 
 export default {

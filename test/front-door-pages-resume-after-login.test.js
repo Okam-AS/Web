@@ -84,10 +84,16 @@ function signInThroughShell (wrapper) {
 
 // The global-mixin helpers these four templates call. `formatDate` and `priceLabel` are
 // `plugins/global-mixin.js` methods, not page methods, so a mounted page has to be given them.
+//
+// `marketConfig` is the market-mixin's (`plugins/market-mixin.js`) and is here for the same reason:
+// /admin/overview links each venue to its storefront from the market's `shopUrl` rather than a
+// shop.okam.no literal, so without it the link expression throws and the row — the venue NAME this
+// suite is asserting reached the screen — never renders.
 const mixinMocks = {
   $i: key => key,
   priceLabel: value => 'kr ' + String(value),
-  formatDate: value => String(value || '')
+  formatDate: value => String(value || ''),
+  marketConfig: { shopUrl: 'https://shop.okam.no' }
 }
 
 beforeEach(() => {

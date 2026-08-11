@@ -3,6 +3,7 @@ import path from 'path'
 import { mount } from '@vue/test-utils'
 import { globalMixin } from '~/plugins/global-mixin'
 import { formatChf, isAmountStated, UNKNOWN_AMOUNT } from '~/utils/price'
+import { markets } from '~/config/edition'
 import CardTerminalStatus from '~/components/admin/pos/CardTerminalStatus.vue'
 import OfferDocument from '~/components/shared/OfferDocument.vue'
 
@@ -18,9 +19,16 @@ import OfferDocument from '~/components/shared/OfferDocument.vue'
 // Importing `plugins/global-mixin.js` runs its module body, which installs this admin's currency
 // format (`kr ` prefix, no suffix) into core's singleton — so the Norwegian expectations below are
 // literally what an admin screen prints.
+//
+// HOW THE MARKET IS SELECTED, and why these two helpers changed shape. `priceLabel` used to fork on
+// an `isCh` boolean, which is a two-valued answer to a question that is not two-valued — market #3
+// got Norwegian kroner. It now reads the RUNTIME market out of Vuex, so the harness supplies a store
+// the way the app does instead of setting a flag. Calling it with no store at all falls back to the
+// market this bundle was built for (Norway), which is what the absence assertions below rely on.
 const money = globalMixin.methods.priceLabel
-const label = (value, hideFractionIfZero) => money.call({ isCh: false }, value, hideFractionIfZero)
-const swissLabel = value => money.call({ isCh: true }, value)
+const asMarket = marketRow => ({ $store: { getters: { marketConfig: marketRow } } })
+const label = (value, hideFractionIfZero) => money.call(asMarket(markets.no), value, hideFractionIfZero)
+const swissLabel = value => money.call(asMarket(markets.ch), value)
 
 // The four ways an amount fails to arrive. `NaN` is here because `Number('abc')` produced one and the
 // old `|| 0` swallowed it; the empty string because a cleared field is absence, not zero.

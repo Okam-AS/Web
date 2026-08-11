@@ -47,12 +47,15 @@ import {
   DinteroTerminalService
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
-import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
-import { formatChf, isAmountStated, UNKNOWN_AMOUNT } from '~/utils/price'
+import { formatString, setCurrencyFormat } from '~/core/helpers/tools'
+import { market } from '~/config/edition'
+import { formatAmount, splitAmount, formatMoneyFromParts, coreCurrencyFormat, currencyFormatForStore } from '~/utils/price'
 
 // Unified core formats prices via currencyInfo (consumer default "100,–").
-// Admin web keeps the legacy "kr 100" prefix format.
-setCurrencyFormat({ prefix: 'kr ', suffix: '' })
+// Admin web keeps the legacy "kr 100" prefix format. Driven by the market this
+// bundle was built for, so a new market needs no edit here: for 'no' this is
+// still exactly { prefix: 'kr ', suffix: '' } (plus core's own defaults).
+setCurrencyFormat(coreCurrencyFormat(market.currencyFormat))
 
 // Every member of the backend's `PaymentType` (OkamAPI `Enums/PaymentType.cs`, read by object at
 // `8e2b57de`) mapped to the dictionary key an operator reads back off an order.
@@ -334,20 +337,24 @@ const mixin = {
     // The one money label every screen in this app renders through, and therefore the one place the
     // difference between "costs nothing" and "nobody said" can be kept.
     //
-    // The gate is HERE, in front of both formatters, rather than inside either: `Number(null)` is 0
-    // on the Swiss side and core's own helper answers "0" to any falsy amount on the Norwegian side,
-    // so BOTH branches turned an absent figure into a real price indistinguishable from a genuine
-    // zero — the card-terminal screen saying kr 0 while a customer's card is in the reader, a cash
-    // point claiming it tolerates no difference at all. Core is a submodule pinned by four other
-    // checkouts (+D-CORE-PIN), so this repo's screens cannot wait on a fix landing there.
+    // TWO RULES MEET HERE, and both are load-bearing.
+    //
+    // WHICH MARKET. This used to be `if (this.isCh) formatChf(...) else core.priceLabel(...)` — a
+    // boolean fork over a set that is not boolean, which hands market #3 Norwegian kroner. The
+    // symbol and separators now come from the RUNTIME market's `currencyFormat`
+    // (`currencyFormatForStore` reads the market switcher's value out of Vuex and falls back to the
+    // market this bundle was built for, never to a hardcoded Norway).
+    //
+    // WHETHER ANYONE STATED IT. The gate lives inside `formatAmount` now rather than in front of it,
+    // because parameterising the formatter gave absence a new way through: `splitAmount` answers
+    // `{ whole: '0' }` to `null`, so an ungated market formatter prints `kr 0` / `CHF 0.00` for a
+    // figure nobody set — the card-terminal screen saying kr 0 while a customer's card is in the
+    // reader. Core is a submodule pinned by four other checkouts (+D-CORE-PIN), so this repo's
+    // screens cannot wait on a fix landing there; that is why the label does not call core at all.
     //
     // Zero still prints as zero. Only the unstated is withheld.
     priceLabel (totalPrice, hideFractionIfZero) {
-      if (!isAmountStated(totalPrice)) { return UNKNOWN_AMOUNT }
-      if (this.isCh) {
-        return formatChf(totalPrice)
-      }
-      return priceLabel(totalPrice, hideFractionIfZero)
+      return formatAmount(currencyFormatForStore(this.$store), totalPrice, hideFractionIfZero)
     },
     // NOT gated, deliberately. These two are digit helpers, not labels: `pages/admin/delivery.vue`
     // seeds the two halves of a money INPUT from them, so answering "—" here would type a dash into
@@ -369,10 +376,17 @@ const mixin = {
     // happened to guard it — which is why the hole survived this long and why it would have been
     // reopened by the first person to drop one of those guards for an unrelated reason.
     wholeAmount (amount) {
-      return wholeAmount(amount)
+      return splitAmount(currencyFormatForStore(this.$store), amount).whole
     },
     fractionAmount (amount) {
-      return fractionAmount(amount)
+      return splitAmount(currencyFormatForStore(this.$store), amount).fraction
+    },
+    // Money assembled from whole/fraction parts a user typed, so a translation string can take one
+    // {price} token instead of hardcoding a symbol and a decimal separator into every language.
+    // Follows the RUNTIME market. Ungated for the same reason the two above are: these are the parts
+    // an operator just typed into a form, not a fact the app is reporting back.
+    priceFromParts (whole, fraction) {
+      return formatMoneyFromParts(currencyFormatForStore(this.$store), whole, fraction)
     }
   },
   computed: {

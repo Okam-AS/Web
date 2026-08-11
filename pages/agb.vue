@@ -36,7 +36,7 @@
                 <p>Auf diese AGB und die Nutzung der Plattform ist ausschliesslich Schweizer Recht anwendbar, unter Ausschluss der Bestimmungen des internationalen Privatrechts sowie des UN-Kaufrechts (CISG). Ausschliesslicher Gerichtsstand ist, soweit gesetzlich zulässig, der Sitz der Okam AG in der Schweiz <em>[Platzhalter]</em>.</p>
 
                 <h2>Kontakt</h2>
-                <p>Bei Fragen zu diesen AGB erreichen Sie uns unter hallo@okam.ch <em>[Platzhalter]</em>.</p>
+                <p>Bei Fragen zu diesen AGB erreichen Sie uns unter {{ marketConfig.legalEmail }} <em>[Platzhalter]</em>.</p>
               </div>
             </article>
           </div>

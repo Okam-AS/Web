@@ -6,7 +6,7 @@
   >
     <div class="terms-modal-container">
       <div class="terms-modal-header">
-        <h2>Avtalevilkår for Okam AS</h2>
+        <h2>{{ terms.title }}</h2>
         <button
           class="close-button"
           @click="closeModal"
@@ -24,6 +24,7 @@
 <script>
 import TermsContent from "~/components/shared/TermsContent.vue";
 import bodyScrollLock from "~/utils/body-scroll-lock";
+import { merchantTermsFor } from "~/utils/merchant-terms";
 
 export default {
   name: "TermsModal",
@@ -44,6 +45,11 @@ export default {
     // comes off the body while the terms are open.
     bodyScrollLocked() {
       return this.isVisible;
+    },
+    // Same lookup the body uses, so the header cannot announce a Norwegian
+    // agreement over a market that has none.
+    terms() {
+      return merchantTermsFor(this.marketConfig);
     },
   },
   methods: {

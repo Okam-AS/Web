@@ -375,3 +375,164 @@ describe('the refusals that carry no code of their own', () => {
     expect(card.find('.market-card__refusal').text()).toContain(translations.no.sm_refuse_transport)
   })
 })
+
+// -------------------------------------------------------------------------------------------------
+// SWITZERLAND IS REACHABLE.
+//
+// This estate's signature defect is a capability with no caller, and the market card was most of one:
+// the endpoint accepted CH, the platform advertised CH in `offeredCountries`, the card rendered a
+// country dropdown — and the dropdown was built by intersecting this app's registry with the
+// Workforce rule-pack list, which is `['NO']`. So a venue owner could read a Swiss market but never
+// set one, and every test above this line passed while that was true.
+//
+// These assert the OPTION AN OWNER CAN CLICK, not the helper that computes it, because the helper was
+// never the thing that was wrong.
+describe('a venue owner can actually move a store to Switzerland', () => {
+  const offering = over => market(Object.assign({ offeredCountries: ['CH', 'NO'] }, over))
+
+  test('the country dropdown contains Switzerland when the platform offers it', async () => {
+    const card = await editing(offering())
+    const values = card.findAll('#store-market-country option').wrappers.map(o => o.attributes('value'))
+    expect(values).toContain('CH')
+    expect(values).toContain('NO')
+  })
+
+  test('choosing it announces CHF as the consequence, and says so before saving', async () => {
+    const card = await editing(offering(), { country: 'CH' })
+    expect(card.find('.market-card__consequence').text())
+      .toBe($i('sm_currency_consequence', { currency: 'CHF' }))
+  })
+
+  test('choosing it warns that Workforce has no rule pack, rather than hiding the market', async () => {
+    const card = await editing(offering(), { country: 'CH' })
+    expect(card.text()).toContain($i('sm_choice_no_rulepack_warning', { country: 'CH' }))
+  })
+
+  test('saving sends the country and the asserted currency to the platform', async () => {
+    const card = await editing(offering(), { country: 'CH', timeZone: 'Europe/Zurich' })
+    mockPutAnswer = () => Promise.resolve(offering({ country: 'CH', currencyCode: 'CHF', timeZone: 'Europe/Zurich' }))
+    card.find('form').trigger('submit')
+    await settled()
+
+    const [, , attempted] = mockCalls.find(call => call[0] === 'Update')
+    expect(attempted).toEqual({ country: 'CH', timeZone: 'Europe/Zurich', expectedCurrencyCode: 'CHF' })
+  })
+
+  test('the saved Swiss market is what the card then shows', async () => {
+    const card = await editing(offering(), { country: 'CH', timeZone: 'Europe/Zurich' })
+    mockPutAnswer = () => Promise.resolve(offering({ country: 'CH', currencyCode: 'CHF', timeZone: 'Europe/Zurich' }))
+    card.find('form').trigger('submit')
+    await settled()
+    await card.vm.$nextTick()
+
+    const facts = card.find('.market-card__facts').text()
+    expect(facts).toContain('CH')
+    expect(facts).toContain('CHF')
+    expect(facts).toContain('Europe/Zurich')
+  })
+
+  test('with no stated offer the dropdown stays as narrow as it was', async () => {
+    // An older platform that does not publish its offer must not have one invented for it.
+    const card = await editing(market())
+    const values = card.findAll('#store-market-country option').wrappers.map(o => o.attributes('value'))
+    expect(values).not.toContain('CH')
+  })
+})
+
+// -------------------------------------------------------------------------------------------------
+// WHAT THE PLATFORM REPORTS AND THIS CARD USED TO SWALLOW.
+//
+// The payload below is not invented — it is `GET /stores/1/market` from a backend built from
+// august-release, seeded by Scripts/demo/demo-up.sh and read on 2026-08-11. Three of its fields were
+// being ignored by this card, and each one is a thing the platform deliberately reports rather than
+// smooths over.
+const LIVE_AUGUST_RELEASE_PAYLOAD = {
+  storeId: 1,
+  marketId: 'NO',
+  country: 'NO',
+  countryIsFallback: false,
+  currencyCode: null,
+  effectiveCurrencyCode: 'NOK',
+  currencyIsFallback: true,
+  locale: null,
+  effectiveLocale: 'nb-NO',
+  localeIsFallback: true,
+  timeZone: 'Europe/Oslo',
+  effectiveTimeZone: 'Europe/Oslo',
+  timeZoneIsFallback: false,
+  timeZoneIsHonoured: false,
+  vatLabel: 'MVA',
+  vatStandardRate: 25.0,
+  marketRowInconsistent: false,
+  isConfigured: false,
+  offeredCountries: ['CH', 'NO']
+}
+
+describe('the card reports what the platform reports', () => {
+  test('a stored zone the platform does not read is marked as not read', async () => {
+    mockGetAnswer = () => Promise.resolve(LIVE_AUGUST_RELEASE_PAYLOAD)
+    const card = mountCard()
+    await settled()
+
+    // Both halves: the badge on the value, and the sentence saying what is cut on Oslo time instead.
+    expect(card.text()).toContain(translations.no.sm_zone_ignored_badge)
+    expect(card.text()).toContain(translations.no.sm_zone_ignored_warning)
+  })
+
+  test('a zone the platform DOES read is not marked', async () => {
+    mockGetAnswer = () => Promise.resolve(market({ timeZoneIsHonoured: true }))
+    const card = mountCard()
+    await settled()
+    expect(card.text()).not.toContain(translations.no.sm_zone_ignored_badge)
+  })
+
+  test('an older answer that says nothing about the zone is not read as a denial', async () => {
+    // `timeZoneIsHonoured` absent must not render "not read" — that would be this card inventing a
+    // claim the platform never made.
+    mockGetAnswer = () => Promise.resolve(market())
+    const card = mountCard()
+    await settled()
+    expect(card.text()).not.toContain(translations.no.sm_zone_ignored_badge)
+  })
+
+  test('a currency nobody chose shows what the platform actually charges, and says it is a default', async () => {
+    mockGetAnswer = () => Promise.resolve(LIVE_AUGUST_RELEASE_PAYLOAD)
+    const card = mountCard()
+    await settled()
+
+    const facts = card.find('.market-card__facts').text()
+    // The store trades in NOK. Rendering only the null stored choice printed "not set" for a store
+    // the platform was charging in kroner.
+    expect(facts).toContain('NOK')
+    expect(facts).not.toContain(translations.no.sm_not_set)
+    expect(facts).toContain(translations.no.sm_zone_is_platform_default)
+  })
+
+  test('a self-contradicting market row is reported, and names the repair', async () => {
+    mockGetAnswer = () => Promise.resolve(market({
+      country: 'CH', currencyCode: 'NOK', effectiveCurrencyCode: 'CHF', marketRowInconsistent: true
+    }))
+    const card = mountCard()
+    await settled()
+
+    // Every consumer money read throws for such a store, so this is a blocked-style panel, and it
+    // states the currency a repairing save will store.
+    const panel = card.find('.market-card__refusal--blocked')
+    expect(panel.exists()).toBe(true)
+    expect(panel.text()).toContain('CHF')
+  })
+
+  test('a consistent row shows no such panel', async () => {
+    mockGetAnswer = () => Promise.resolve(LIVE_AUGUST_RELEASE_PAYLOAD)
+    const card = mountCard()
+    await settled()
+    expect(card.find('.market-card__refusal--blocked').exists()).toBe(false)
+  })
+
+  test('the live payload offers CH, so the store can be moved there', async () => {
+    // The whole point, asserted against the real answer rather than a fixture I chose.
+    const card = await editing(LIVE_AUGUST_RELEASE_PAYLOAD)
+    const values = card.findAll('#store-market-country option').wrappers.map(o => o.attributes('value'))
+    expect(values).toContain('CH')
+  })
+})

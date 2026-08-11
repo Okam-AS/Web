@@ -120,11 +120,11 @@
           <h1>{{ $i('onboarding_storePublished', { storeName }) }}</h1>
 
           <a
-            :href="`https://shop.okam.no/store/${storeSlug}`"
+            :href="storeShopUrl"
             target="_blank"
             class="shop-url"
           >
-            https://shop.okam.no/store/{{ storeSlug }}
+            {{ storeShopUrl }}
           </a>
         </div>
 
@@ -271,6 +271,12 @@ export default {
     };
   },
   computed: {
+    // The public shop link handed to a merchant who just published. The host
+    // comes from the market descriptor, so a Swiss merchant is not sent to the
+    // Norwegian shop.
+    storeShopUrl() {
+      return `${this.marketConfig.shopUrl}/store/${this.storeSlug}`;
+    },
     steps() {
       return [
         {
