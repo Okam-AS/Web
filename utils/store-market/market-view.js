@@ -177,9 +177,33 @@ export function marketFacts (market) {
     hasCurrency: !!m.currencyCode,
     hasChosenZone: !!m.timeZone,
     usesPlatformDefaultZone: m.timeZoneIsFallback === true,
+
+    // Mirrors `usesPlatformDefaultZone` for the currency, which had no such fact and therefore no
+    // badge. Measured against a live august-release store: `currencyCode` is null and
+    // `effectiveCurrencyCode` is "NOK" with `currencyIsFallback` true, so the row showed "not set"
+    // for a store the platform was charging in kroner.
+    usesPlatformDefaultCurrency: m.currencyIsFallback === true,
     isConfigured: m.isConfigured === true,
     countryHasRulePack,
-    blocksSchedulePublish: !m.country || !countryHasRulePack
+    blocksSchedulePublish: !m.country || !countryHasRulePack,
+
+    // THE PLATFORM SAYS THE ZONE IS NOT READ, so this card must not present it as a setting that
+    // does something. `TimeZoneIsHonoured` is false on this lineage — every fiscal date is Oslo
+    // wall-clock (signed journal, SAF-T export, accounting day) and no production code reads
+    // Store.TimeZone. The backend's own words: "Reported rather than hidden, so an operator is not
+    // told a venue runs on a clock the platform is in fact ignoring."
+    //
+    // It was being hidden here. The card rendered the zone as a plain fact next to the country and
+    // the currency, which reads as "this venue's days are cut here" — the one thing it does not
+    // mean. Strictly false only when the platform SAYS false: an older answer with no such field
+    // must not be read as a denial.
+    zoneIsIgnored: m.timeZoneIsHonoured === false,
+
+    // A store whose two market columns contradict each other — a known country carrying another
+    // market's currency. The platform surfaces this instead of smoothing it over because such a row
+    // makes every consumer money read THROW (ConsumerStoreScope.ResolveCurrencyCode), and because
+    // the repair is something an operator can actually perform: re-saving the market.
+    rowIsInconsistent: m.marketRowInconsistent === true
   };
 }
 

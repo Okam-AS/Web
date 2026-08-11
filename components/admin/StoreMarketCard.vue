@@ -36,8 +36,15 @@
           </div>
           <div class="market-card__fact">
             <dt>{{ $i('sm_field_currency') }}</dt>
+            <!-- The EFFECTIVE currency, badged when nobody chose it — the same treatment the zone row
+                 below gets, and it was not getting it. This showed `currencyCode` alone, which is the
+                 STORED choice and is null on a store that has never been configured: a live NO store
+                 rendered its currency as "not set" while the platform was charging it in NOK. Neither
+                 half alone is the truth. What it trades in is money, so the figure it is trading in
+                 has to be on screen, and whether anyone chose it has to be on screen beside it. -->
             <dd>
-              {{ market.currencyCode || $i('sm_not_set') }}
+              {{ market.currencyCode || market.effectiveCurrencyCode || $i('sm_not_set') }}
+              <span v-if="facts.usesPlatformDefaultCurrency" class="market-card__badge">{{ $i('sm_zone_is_platform_default') }}</span>
               <span class="market-card__hint">{{ $i('sm_currency_is_derived') }}</span>
             </dd>
           </div>
@@ -46,9 +53,20 @@
             <dd>
               {{ market.timeZone || market.effectiveTimeZone || $i('sm_not_set') }}
               <span v-if="facts.usesPlatformDefaultZone" class="market-card__badge">{{ $i('sm_zone_is_platform_default') }}</span>
+              <!-- The platform reports that it does not read this column. Saying so ON the value,
+                   rather than only in the warning below, is the point: the row otherwise reads as a
+                   setting that governs something. -->
+              <span v-if="facts.zoneIsIgnored" class="market-card__badge">{{ $i('sm_zone_ignored_badge') }}</span>
             </dd>
           </div>
         </dl>
+
+        <!-- A self-contradicting market row is the most serious thing this card can be looking at:
+             every consumer money read throws until it is repaired. It goes ABOVE the other warnings
+             because it is the one an operator must act on, and it names the repair. -->
+        <p v-if="facts.rowIsInconsistent" class="market-card__refusal market-card__refusal--blocked">
+          {{ $i('sm_row_inconsistent_warning', { currency: market.effectiveCurrencyCode || $i('sm_not_set') }) }}
+        </p>
 
         <p v-if="!facts.hasCountry" class="market-card__warning">
           {{ $i('sm_no_country_warning') }}
@@ -60,6 +78,14 @@
 
         <p v-if="facts.usesPlatformDefaultZone" class="market-card__warning">
           {{ $i('sm_zone_fallback_warning', { zone: market.effectiveTimeZone }) }}
+        </p>
+
+        <!-- Not the same warning as the one above, and both can be true at once. That one says
+             nobody CHOSE a zone; this one says the platform does not READ the zone at all. An
+             operator who fixes the first and is not told the second has changed nothing and has
+             every reason to believe they have. -->
+        <p v-if="facts.zoneIsIgnored" class="market-card__warning">
+          {{ $i('sm_zone_ignored_warning') }}
         </p>
 
         <p v-if="saved" class="market-card__saved">
