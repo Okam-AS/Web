@@ -178,6 +178,83 @@
           </div>
         </div>
 
+        <section
+          v-if="isPowerUser && (isAccountingRefundEligibleOrder || refundResult)"
+          class="accounting-refund-section"
+        >
+          <div class="accounting-refund-heading">
+            <span class="material-icons">currency_exchange</span>
+            <div>
+              <h4>{{ $i('orderModal_accountingRefundTitle') }}</h4>
+              <p>{{ $i('orderModal_accountingRefundDescription') }}</p>
+            </div>
+          </div>
+
+          <div
+            v-if="refundResult"
+            :class="['accounting-refund-message', refundRequiresReconciliation ? 'warning' : 'success']"
+            role="status"
+          >
+            <span class="material-icons">{{ refundRequiresReconciliation ? 'warning' : 'check_circle' }}</span>
+            <p>{{ refundResult }}</p>
+          </div>
+
+          <template v-else>
+            <p class="accounting-refund-warning">
+              {{ $i('orderModal_accountingRefundWarning') }}
+            </p>
+
+            <label
+              class="accounting-refund-label"
+              for="accounting-refund-reason"
+            >
+              {{ $i('orderModal_accountingRefundReasonLabel') }}
+            </label>
+            <textarea
+              id="accounting-refund-reason"
+              v-model.trim="refundReason"
+              class="accounting-refund-reason"
+              :disabled="isRefunding || isRefundUnavailable"
+              :placeholder="$i('orderModal_accountingRefundReasonPlaceholder')"
+              rows="3"
+            />
+
+            <label class="accounting-refund-confirmation">
+              <input
+                v-model="refundConfirmed"
+                type="checkbox"
+                :disabled="isRefunding || isRefundUnavailable"
+              />
+              <span>{{ $i('orderModal_accountingRefundConfirm') }}</span>
+            </label>
+
+            <div
+              v-if="refundError"
+              class="accounting-refund-message error"
+              role="alert"
+            >
+              <span class="material-icons">error</span>
+              <p>{{ refundError }}</p>
+            </div>
+
+            <button
+              class="accounting-refund-btn"
+              :disabled="!canSubmitAccountingRefund"
+              @click="requestAccountingRefund"
+            >
+              <span
+                v-if="isRefunding"
+                class="loading-spinner-small"
+              />
+              <span
+                v-else
+                class="material-icons"
+              >currency_exchange</span>
+              {{ isRefunding ? $i('orderModal_accountingRefundSubmitting') : $i('orderModal_accountingRefundButton') }}
+            </button>
+          </template>
+        </section>
+
         <div class="modal-footer">
           <button
             class="download-receipt-btn"
@@ -231,6 +308,13 @@ export default {
       isLoading: false,
       showCustomerModal: false,
       isDownloadingReceipt: false,
+      refundReason: "",
+      refundConfirmed: false,
+      isRefunding: false,
+      refundError: "",
+      refundResult: "",
+      refundRequiresReconciliation: false,
+      isRefundUnavailable: false,
     };
   },
   computed: {
@@ -245,6 +329,23 @@ export default {
     },
     customerPhone() {
       return this.order?.user?.phoneNumber;
+    },
+    isPowerUser() {
+      return Boolean(this.$store.state.currentUser?.isPowerUser);
+    },
+    isDinteroOnlinePayment() {
+      return this.order?.paymentType && this.order.paymentType.startsWith("Dintero")
+        && this.order.paymentType !== "DinteroKravia";
+    },
+    isAccountingRefundEligibleOrder() {
+      return this.order?.status === "Completed" && this.isDinteroOnlinePayment;
+    },
+    canSubmitAccountingRefund() {
+      return this.isAccountingRefundEligibleOrder
+        && !this.isRefunding
+        && !this.isRefundUnavailable
+        && this.refundReason.length > 0
+        && this.refundConfirmed;
     },
   },
   async mounted() {
@@ -327,6 +428,49 @@ export default {
         console.error('Error downloading receipt:', error);
       } finally {
         this.isDownloadingReceipt = false;
+      }
+    },
+    async requestAccountingRefund() {
+      if (!this.canSubmitAccountingRefund) return;
+
+      this.isRefunding = true;
+      this.refundError = "";
+
+      try {
+        const token = this.$store.state.currentUser?.token;
+        const apiBaseUrl = process.env.API_BASE_URL || "";
+        const orderCode = this.order.orderCode || this.orderCode;
+        const response = await axios.post(
+          `${apiBaseUrl}/orders/${encodeURIComponent(orderCode)}/accounting-refund`,
+          { reason: this.refundReason },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        this.refundRequiresReconciliation = response.data?.requiresReconciliation === true
+          || response.data?.accountingCorrectionSent === false;
+        this.isRefundUnavailable = this.refundRequiresReconciliation;
+        this.refundResult = this.refundRequiresReconciliation
+          ? this.$i('orderModal_accountingRefundRequiresReconciliation')
+          : (response.data?.message || this.$i('orderModal_accountingRefundSuccess'));
+        this.refundReason = "";
+        this.refundConfirmed = false;
+
+        // The endpoint cancels the order after a successful full refund. Refreshing makes the
+        // history view authoritative rather than assuming the response contains the whole order.
+        await this.fetchOrder();
+      } catch (error) {
+        const status = error.response?.status;
+        this.refundError = error.response?.data?.message
+          || (typeof error.response?.data === "string" ? error.response.data : "")
+          || this.$i('orderModal_accountingRefundError');
+
+        // These responses mean the backend has conclusively determined that the order cannot be
+        // refunded through this flow (for example, it was already refunded or is not eligible).
+        if ([400, 404, 409, 422].includes(status)) {
+          this.isRefundUnavailable = true;
+        }
+      } finally {
+        this.isRefunding = false;
       }
     },
   },
@@ -650,6 +794,158 @@ export default {
       height: 600px;
     }
   }
+}
+
+.accounting-refund-section {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  background: #fff7f7;
+}
+
+.accounting-refund-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+
+  > .material-icons {
+    color: #b91c1c;
+    font-size: 22px;
+  }
+
+  h4 {
+    margin: 0 0 4px;
+    color: #7f1d1d;
+    font-size: 1.05rem;
+  }
+
+  p {
+    margin: 0;
+    color: #7f1d1d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+}
+
+.accounting-refund-warning {
+  margin: 16px 0;
+  color: #991b1b;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.accounting-refund-label {
+  display: block;
+  margin-bottom: 6px;
+  color: #4a5568;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.accounting-refund-reason {
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  color: #1f2937;
+  font: inherit;
+
+  &:focus {
+    outline: 2px solid #fca5a5;
+    outline-offset: 1px;
+    border-color: #dc2626;
+  }
+
+  &:disabled {
+    background: #f1f5f9;
+    cursor: not-allowed;
+  }
+}
+
+.accounting-refund-confirmation {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0;
+  color: #4a5568;
+  font-size: 0.9rem;
+  line-height: 1.4;
+
+  input {
+    margin-top: 3px;
+  }
+}
+
+.accounting-refund-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 14px 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+
+  p {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  &.success {
+    background: #dcfce7;
+    color: #166534;
+  }
+
+  &.error {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+
+  &.warning {
+    background: #fef3c7;
+    color: #92400e;
+  }
+}
+
+.accounting-refund-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 7px;
+  background: #b91c1c;
+  color: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: #991b1b;
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .material-icons {
+    font-size: 18px;
+  }
+}
+
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
 .items-table {
