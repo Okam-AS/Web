@@ -60,6 +60,31 @@
           </div>
         </div>
 
+        <div
+          v-if="myEarnings"
+          class="earnings"
+        >
+          <div class="earnings__header">
+            <h3 class="earnings__title">{{ $i('overview_myEarnings') }}</h3>
+            <span class="earnings__period">{{ earningsPeriodLabel }}</span>
+          </div>
+          <div class="earnings__figures">
+            <div class="earnings__figure">
+              <span class="earnings__label">{{ $i('overview_onetimeBonusEarned') }}</span>
+              <span class="earnings__value">{{ priceLabel(myEarnings.onetime) }}</span>
+            </div>
+            <div class="earnings__figure">
+              <span class="earnings__label">{{ $i('overview_monthlyBonusEarned') }}</span>
+              <span class="earnings__value">{{ priceLabel(myEarnings.monthly) }}</span>
+            </div>
+            <div class="earnings__figure earnings__figure--total">
+              <span class="earnings__label">{{ $i('overview_earningsTotal') }}</span>
+              <span class="earnings__value">{{ priceLabel(myEarnings.total) }}</span>
+            </div>
+          </div>
+          <p class="earnings__hint">{{ $i('overview_earningsHint') }}</p>
+        </div>
+
         <div class="overview__table-container">
           <table class="overview__table">
             <thead>
@@ -324,20 +349,38 @@
                   </span>
                 </td>
                 <td v-if="showKAMColumns">
-                  <select
-                    v-model="store.kamUserId"
-                    class="kam-input"
-                    @change="debouncedKeyAccountManagerUpdate(store)"
-                  >
-                    <option value="">{{ $i('overview_none') }}</option>
-                    <option
-                      v-for="kam in kams"
-                      :key="kam.id"
-                      :value="kam.id"
+                  <div class="kam-cell">
+                    <select
+                      v-model="store.kamUserId"
+                      class="kam-input"
+                      @change="debouncedKeyAccountManagerUpdate(store)"
                     >
-                      {{ kam.name }} ({{ kam.phoneNumber }})
-                    </option>
-                  </select>
+                      <option value="">{{ $i('overview_none') }}</option>
+                      <option
+                        v-for="kam in kams"
+                        :key="kam.id"
+                        :value="kam.id"
+                      >
+                        {{ kam.name }} ({{ kam.phoneNumber }})
+                      </option>
+                    </select>
+                    <span
+                      v-if="kamSaveStates[store.storeId] === 'saving'"
+                      class="kam-save kam-save--saving"
+                      :title="$i('overview_kamSaving')"
+                    />
+                    <span
+                      v-else-if="kamSaveStates[store.storeId] === 'saved'"
+                      class="kam-save kam-save--saved"
+                      >&#10003; {{ $i('overview_kamSaved') }}</span
+                    >
+                    <span
+                      v-else-if="kamSaveStates[store.storeId] === 'error'"
+                      class="kam-save kam-save--error"
+                      :title="$i('overview_kamSaveRetry')"
+                      >{{ $i('overview_kamNotSaved') }}</span
+                    >
+                  </div>
                 </td>
                 <td v-if="showKAMColumns">
                   <select
@@ -416,6 +459,17 @@
       :store-name="employeeModalStore.name"
       @close="employeeModalStore = null"
     />
+
+    <!-- Toast -->
+    <transition name="toast">
+      <div
+        v-if="toast.show"
+        class="toast"
+        :class="`toast--${toast.type}`"
+      >
+        {{ toast.message }}
+      </div>
+    </transition>
   </AdminPage>
 </template>
 
@@ -452,9 +506,42 @@ export default {
     totalAmountSum: 0,
     storeNameFilter: "",
     employeeModalStore: null,
+    // storeId -> "saving" | "saved" | "error" for the KAM assignment/status/notes save
+    kamSaveStates: {},
+    kamSaveTimers: {},
+    toast: { show: false, message: "", type: "success" },
   }),
 
   computed: {
+    // The signed-in KAM's own earnings for the selected date range. The API already
+    // sums both bonus legs over the requested window, so nothing is re-derived here.
+    // Deliberately scoped to the signed-in user: the response carries every KAM's
+    // figures, and one KAM must not be shown another's earnings.
+    myEarnings() {
+      const currentUserId = this.$store.state.currentUser && this.$store.state.currentUser.id;
+      if (!currentUserId || !Array.isArray(this.kams)) {
+        return null;
+      }
+      // Ids arrive as strings; normalise so a type change on either side cannot
+      // silently turn "my earnings" into "no earnings".
+      const me = this.kams.find((kam) => {
+        return String(kam.id) === String(currentUserId);
+      });
+      if (!me) {
+        return null;
+      }
+      const onetime = me.onetimeBonusEarned || 0;
+      const monthly = me.monthlyBonusEarned || 0;
+      return { onetime, monthly, total: onetime + monthly };
+    },
+    earningsPeriodLabel() {
+      if (!this.dateRange.from || !this.dateRange.to) {
+        return "";
+      }
+      const from = dayjs(this.dateRange.from).format("DD.MM.YYYY");
+      const to = dayjs(this.dateRange.to).format("DD.MM.YYYY");
+      return from === to ? from : from + " – " + to;
+    },
     kamStatusTranslations() {
       return {
         [KeyAccountManagerStatus.MissingSetup]: this.$i("overview_kamStatusMissingSetup"),
@@ -588,6 +675,12 @@ export default {
     window.removeEventListener("resize", this.setupTableScrollIndicators);
     document.removeEventListener("click", this.closeKamFilterDropdown);
     document.removeEventListener("click", this.closeKamStatusFilterDropdown);
+    Object.keys(this.kamSaveTimers).forEach((storeId) => {
+      clearTimeout(this.kamSaveTimers[storeId]);
+    });
+    if (this.toastTimer) {
+      clearTimeout(this.toastTimer);
+    }
   },
 
   methods: {
@@ -648,11 +741,57 @@ export default {
     },
     keyAccountManagerUpdate(store) {
       // this._storeService is a global mixin
-      this._storeService.KeyAccountManagerUpdate(store.storeId, {
-        kamUserId: store.kamUserId,
-        status: store.kamStatus,
-        notes: store.kamNotes,
-      });
+      this.setKamSaveState(store.storeId, "saving");
+      this._storeService
+        .KeyAccountManagerUpdate(store.storeId, {
+          kamUserId: store.kamUserId,
+          status: store.kamStatus,
+          notes: store.kamNotes,
+        })
+        .then((saved) => {
+          // RequestService.PostRequest swallows rejections (its .catch returns the
+          // error), so a failed save resolves false instead of throwing. The boolean
+          // is the only honest signal here — a bare .catch would never fire.
+          if (saved) {
+            this.setKamSaveState(store.storeId, "saved", 2500);
+          } else {
+            this.kamSaveFailed(store);
+          }
+        })
+        .catch(() => {
+          this.kamSaveFailed(store);
+        });
+    },
+    kamSaveFailed(store) {
+      // Leave the marker up until the next attempt: a lost note must not fade away.
+      this.setKamSaveState(store.storeId, "error");
+      this.showToast(this.$i("overview_kamSaveError", { name: store.name }), "error");
+    },
+    setKamSaveState(storeId, state, clearAfterMs) {
+      if (this.kamSaveTimers[storeId]) {
+        clearTimeout(this.kamSaveTimers[storeId]);
+        this.$delete(this.kamSaveTimers, storeId);
+      }
+      this.$set(this.kamSaveStates, storeId, state);
+      if (clearAfterMs) {
+        this.$set(
+          this.kamSaveTimers,
+          storeId,
+          setTimeout(() => {
+            this.$delete(this.kamSaveStates, storeId);
+            this.$delete(this.kamSaveTimers, storeId);
+          }, clearAfterMs)
+        );
+      }
+    },
+    showToast(message, type = "success") {
+      if (this.toastTimer) {
+        clearTimeout(this.toastTimer);
+      }
+      this.toast = { show: true, message, type };
+      this.toastTimer = setTimeout(() => {
+        this.toast.show = false;
+      }, 4000);
     },
     publishStore(store) {
       // Only ask for confirmation when unpublishing
@@ -1448,5 +1587,142 @@ export default {
 .manage-employees-btn svg {
   width: 16px;
   height: 16px;
+}
+.earnings {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.earnings__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.earnings__title {
+  margin: 0;
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #292c34;
+}
+
+.earnings__period {
+  font-size: 0.875rem;
+  color: #64748b;
+}
+
+.earnings__figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.earnings__figure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+.earnings__figure--total {
+  border-color: #1bb776;
+}
+
+.earnings__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.earnings__value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #292c34;
+}
+
+.earnings__figure--total .earnings__value {
+  color: #1bb776;
+}
+
+.earnings__hint {
+  margin: 0.75rem 0 0;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.kam-cell {
+  /* Column, not row: .kam-input is width:100% and would be squeezed to a bare
+     caret by a sibling on the same line. */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.kam-save {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.kam-save--saving {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border: 2px solid #e2e8f0;
+  border-top-color: #1bb776;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.kam-save--saved {
+  color: #1bb776;
+}
+
+.kam-save--error {
+  color: #dc2626;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1100;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.toast--success {
+  background: #1bb776;
+  color: white;
+}
+
+.toast--error {
+  background: #dc2626;
+  color: white;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s;
+}
+
+.toast-enter,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(12px);
 }
 </style>
