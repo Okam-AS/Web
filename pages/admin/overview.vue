@@ -61,28 +61,32 @@
         </div>
 
         <div
-          v-if="myEarnings"
-          class="earnings"
+          v-if="myBonus"
+          class="bonus"
         >
-          <div class="earnings__header">
-            <h3 class="earnings__title">{{ $i('overview_myEarnings') }}</h3>
-            <span class="earnings__period">{{ earningsPeriodLabel }}</span>
+          <div class="bonus__header">
+            <h3 class="bonus__title">{{ $i('overview_myCommission') }}</h3>
+            <span class="bonus__period">{{ bonusPeriodLabel }}</span>
           </div>
-          <div class="earnings__figures">
-            <div class="earnings__figure">
-              <span class="earnings__label">{{ $i('overview_onetimeBonusEarned') }}</span>
-              <span class="earnings__value">{{ priceLabel(myEarnings.onetime) }}</span>
+          <div class="bonus__figures">
+            <!-- Money. Green, and the only figure that carries the word "opptjent". -->
+            <div class="bonus__figure bonus__figure--earned">
+              <span class="bonus__label">{{ $i('overview_onetimeBonusEarned') }}</span>
+              <span class="bonus__value">{{ priceLabel(myBonus.onetime) }}</span>
+              <span class="bonus__note">{{ $i('overview_onetimeBonusNote') }}</span>
             </div>
-            <div class="earnings__figure">
-              <span class="earnings__label">{{ $i('overview_monthlyBonusEarned') }}</span>
-              <span class="earnings__value">{{ priceLabel(myEarnings.monthly) }}</span>
-            </div>
-            <div class="earnings__figure earnings__figure--total">
-              <span class="earnings__label">{{ $i('overview_earningsTotal') }}</span>
-              <span class="earnings__value">{{ priceLabel(myEarnings.total) }}</span>
+            <!-- A monthly rate, not money. Neutral, carries a per-month unit, and says so.
+                 Deliberately not summed with the figure above: they are different kinds. -->
+            <div class="bonus__figure">
+              <span class="bonus__label">{{ $i('overview_monthlyBonusEarned') }}</span>
+              <span class="bonus__value">
+                {{ priceLabel(myBonus.monthly) }}
+                <span class="bonus__unit">{{ $i('overview_perMonth') }}</span>
+              </span>
+              <span class="bonus__note">{{ $i('overview_monthlyBonusNote') }}</span>
             </div>
           </div>
-          <p class="earnings__hint">{{ $i('overview_earningsHint') }}</p>
+          <p class="bonus__hint">{{ $i('overview_commissionHint') }}</p>
         </div>
 
         <div class="overview__table-container">
@@ -513,28 +517,36 @@ export default {
   }),
 
   computed: {
-    // The signed-in KAM's own earnings for the selected date range. The API already
-    // sums both bonus legs over the requested window, so nothing is re-derived here.
+    // The signed-in KAM's own bonus figures for the selected date range. The API already
+    // sums both legs over the requested window, so nothing is re-derived here.
     // Deliberately scoped to the signed-in user: the response carries every KAM's
-    // figures, and one KAM must not be shown another's earnings.
-    myEarnings() {
+    // figures, and one KAM must not be shown another's.
+    //
+    // The two figures are NOT the same kind of number and there is deliberately no
+    // total here. onetime is commission earned on agreements accepted in the window.
+    // monthly is the recurring rate those signatures ADDED — nothing bills a restaurant
+    // yet, so no payment exists to attribute to a month, and a restaurant that signed
+    // and then churned still counts towards it. Adding them would state a payment that
+    // was never made. See KamUserModel.MonthlyBonusEarned in WebApi.
+    myBonus() {
       const currentUserId = this.$store.state.currentUser && this.$store.state.currentUser.id;
       if (!currentUserId || !Array.isArray(this.kams)) {
         return null;
       }
       // Ids arrive as strings; normalise so a type change on either side cannot
-      // silently turn "my earnings" into "no earnings".
+      // silently turn "my figures" into "no figures".
       const me = this.kams.find((kam) => {
         return String(kam.id) === String(currentUserId);
       });
       if (!me) {
         return null;
       }
-      const onetime = me.onetimeBonusEarned || 0;
-      const monthly = me.monthlyBonusEarned || 0;
-      return { onetime, monthly, total: onetime + monthly };
+      return {
+        onetime: me.onetimeBonusEarned || 0,
+        monthly: me.monthlyBonusEarned || 0,
+      };
     },
-    earningsPeriodLabel() {
+    bonusPeriodLabel() {
       if (!this.dateRange.from || !this.dateRange.to) {
         return "";
       }
@@ -1588,7 +1600,7 @@ export default {
   width: 16px;
   height: 16px;
 }
-.earnings {
+.bonus {
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
@@ -1596,7 +1608,7 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-.earnings__header {
+.bonus__header {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -1604,25 +1616,25 @@ export default {
   margin-bottom: 1rem;
 }
 
-.earnings__title {
+.bonus__title {
   margin: 0;
   font-size: 1.1em;
   font-weight: 600;
   color: #292c34;
 }
 
-.earnings__period {
+.bonus__period {
   font-size: 0.875rem;
   color: #64748b;
 }
 
-.earnings__figures {
+.bonus__figures {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
 
-.earnings__figure {
+.bonus__figure {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -1632,11 +1644,13 @@ export default {
   border: 1px solid #e2e8f0;
 }
 
-.earnings__figure--total {
+/* Green is this admin's colour for money. Only the earned figure gets it, so the
+   monthly rate beside it cannot be read as a second pile of cash. */
+.bonus__figure--earned {
   border-color: #1bb776;
 }
 
-.earnings__label {
+.bonus__label {
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.3px;
@@ -1644,17 +1658,30 @@ export default {
   color: #64748b;
 }
 
-.earnings__value {
+.bonus__value {
   font-size: 1.5rem;
   font-weight: 600;
   color: #292c34;
 }
 
-.earnings__figure--total .earnings__value {
+.bonus__figure--earned .bonus__value {
   color: #1bb776;
 }
 
-.earnings__hint {
+.bonus__unit {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.bonus__note {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #64748b;
+}
+
+.bonus__hint {
   margin: 0.75rem 0 0;
   font-size: 0.8rem;
   color: #64748b;
