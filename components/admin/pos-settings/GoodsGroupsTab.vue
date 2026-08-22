@@ -2,10 +2,7 @@
   <div class="crud">
     <div class="crud__bar">
       <h2 class="crud__heading">{{ $i('posset_tab_goods') }}</h2>
-      <div class="crud__bar-actions">
-        <button class="crud__seed" :disabled="seeding || loading" @click="seedStandard">{{ seeding ? $i('common_saving') : $i('posset_goods_seed') }}</button>
-        <button class="crud__add" @click="startNew">+ {{ $i('posset_goods_new') }}</button>
-      </div>
+      <button class="crud__add" @click="startNew">+ {{ $i('posset_goods_new') }}</button>
     </div>
     <p class="crud__hint">{{ $i('posset_goods_hint') }}</p>
 
@@ -82,13 +79,14 @@
 </template>
 
 <script>
-// Goods groups (SAF-T grouping; open-price lines require one). CRUD only.
+// Goods groups (SAF-T grouping; open-price lines require one). The backend creates the
+// standard VAT-profiled groups with the store's first cash point; this screen is for CRUD.
 export default {
   name: 'GoodsGroupsTab',
   props: { storeId: { type: [Number, String], required: true } },
   data () {
     // The supported Norwegian VAT rates (must match AccountingHelper on the backend).
-    return { items: [], loading: true, form: null, saving: false, seeding: false, vatRates: [0, 12, 15, 25] };
+    return { items: [], loading: true, form: null, saving: false, vatRates: [0, 12, 15, 25] };
   },
   computed: {
     // A VAT profile is either complete (all three rates set) or fully empty (legacy group). A
@@ -121,20 +119,6 @@ export default {
       }
     },
     errMsg (e) { return (e && e.response && e.response.data && e.response.data.message) || (e && e.message) || 'Feil'; },
-    // Seed the Norway default groups (with VAT profiles). Idempotent — skips codes the store
-    // already has — so it is safe to run on onboarding without duplicating.
-    async seedStandard () {
-      this.seeding = true;
-      try {
-        await this._goodsGroupService.SeedStandard(this.storeId);
-        this.$emit('notify', this.$i('posset_goods_seeded'), 'success');
-        await this.load();
-      } catch (e) {
-        this.$emit('notify', this.errMsg(e), 'error');
-      } finally {
-        this.seeding = false;
-      }
-    },
     applyPreset (takeAway, eatIn, delivery) {
       this.form.takeAwayVatPercent = takeAway;
       this.form.eatInVatPercent = eatIn;
@@ -196,9 +180,6 @@ export default {
 .crud__heading { font-size: 1.3rem; font-weight: 600; color: #292c34; margin: 0; }
 .crud__hint { color: #64748b; margin: 4px 0 16px; font-size: 0.9rem; }
 .crud__add { border: none; background: #1bb776; color: #fff; font-weight: 600; padding: 9px 16px; border-radius: 8px; cursor: pointer; }
-.crud__bar-actions { display: flex; gap: 8px; align-items: center; }
-.crud__seed { border: 1px solid #1bb776; background: #fff; color: #159f63; font-weight: 600; padding: 9px 14px; border-radius: 8px; cursor: pointer; }
-.crud__seed:disabled { border-color: #cbd5e0; color: #cbd5e0; cursor: not-allowed; }
 .crud__loading { color: #94a3b8; padding: 20px 0; }
 .crud__table { width: 100%; border-collapse: collapse; }
 .crud__table th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.03em; color: #94a3b8; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; }

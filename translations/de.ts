@@ -1877,7 +1877,7 @@ export default {
   pos_open_price_goods_group: 'Warengruppe',
   pos_open_price_pick_group: 'Warengruppe auswählen…',
   pos_goods_group_no_profile: 'Ohne Satzprofil',
-  pos_no_goods_groups: 'Das Geschäft hat keine Warengruppen. Erstelle die Standardgruppen unter Kasseneinstellungen → Warengruppen.',
+  pos_no_goods_groups: 'Das Geschäft hat keine Warengruppen. Erstelle eine Warengruppe unter Kasseneinstellungen → Warengruppen.',
   pos_open_price_vat: 'MwSt.-Satz',
   pos_open_price_amount: 'Betrag',
   pos_open_price_incomplete: 'Name, Betrag und Warengruppe eingeben.',

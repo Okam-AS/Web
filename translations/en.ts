@@ -1876,7 +1876,7 @@ export default {
   pos_open_price_goods_group: 'Goods group',
   pos_open_price_pick_group: 'Select goods group…',
   pos_goods_group_no_profile: 'No rate profile',
-  pos_no_goods_groups: 'The store has no goods groups. Create the default groups under Register settings → Goods groups.',
+  pos_no_goods_groups: 'The store has no goods groups. Create a goods group under Register settings → Goods groups.',
   pos_open_price_vat: 'VAT rate',
   pos_open_price_amount: 'Amount',
   pos_open_price_incomplete: 'Enter a name, amount and goods group.',
