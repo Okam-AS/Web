@@ -309,7 +309,8 @@ export default {
           items: [
             { label: this.$i('nav_payment'), path: '/admin/payment', icon: icons.payment },
             { label: this.$i('nav_settlements'), path: '/admin/settlements', icon: icons.settlements },
-            { label: this.$i('nav_terminals'), path: '/admin/terminals', icon: icons.terminals }
+            { label: this.$i('nav_terminals'), path: '/admin/terminals', icon: icons.terminals },
+            { label: this.$i('nav_accounting'), path: '/admin/accounting', icon: icons.invoice }
           ]
         },
         {

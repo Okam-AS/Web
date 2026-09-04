@@ -13,6 +13,15 @@
         kontooppsett, verifiser bilag mot Tripletex og kjør dem manuelt på nytt.
       </p>
 
+      <div class="tripletex__moved">
+        <strong>Denne siden er erstattet av «Regnskap».</strong>
+        Den nye siden dekker alle regnskapssystemer, ikke bare Tripletex, og eier kontooppsettet.
+        Bruk denne kun til bilagsverifisering mot Tripletex.
+        <nuxt-link to="/admin/accounting">
+          Gå til Regnskap
+        </nuxt-link>
+      </div>
+
       <div
         v-if="notification.show"
         :class="['notification', `notification--${notification.type}`]"
@@ -53,6 +62,56 @@
         <!-- ============================ TILKOBLING ============================ -->
         <template v-if="activeTab === 'tokens'">
           <section class="tripletex__section">
+            <div class="tripletex__section-head">
+              <h3>Regnskapsoppsett</h3>
+            </div>
+            <p class="sb-hint">
+              Butikken bokfører i ett regnskapssystem, og fakturaer utstedes gjennom én kanal. Kanalen
+              avgjør også om privatpersoner kan faktureres og om Okams fakturagebyr belastes.
+            </p>
+            <div class="tripletex__accounts">
+              <div class="form-group">
+                <label>Regnskapssystem</label>
+                <select v-model="accounting.form.accountingSystem" class="form-select">
+                  <option
+                    v-for="option in accountingSystemOptions"
+                    :key="option.value"
+                    :value="option.value"
+                    :disabled="option.disabled"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Fakturakanal</label>
+                <select v-model="accounting.form.invoiceChannel" class="form-select">
+                  <option
+                    v-for="option in invoiceChannelOptions"
+                    :key="option.value"
+                    :value="option.value"
+                    :disabled="option.disabled"
+                  >
+                    {{ option.label }}
+                  </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Betalingsfrist (dager)</label>
+                <input v-model.number="accounting.form.invoiceDueDays" type="number" min="0" max="365" class="form-control">
+              </div>
+            </div>
+            <p v-if="accountingChannelBlockedReason" class="tripletex__meta">
+              «Via regnskapssystem» er utilgjengelig: {{ accountingChannelBlockedReason }}
+            </p>
+            <div class="tripletex__actions">
+              <button class="btn btn-primary" :disabled="accounting.busy" @click="saveAccountingSettings">
+                {{ accounting.busy ? 'Lagrer…' : 'Lagre regnskapsoppsett' }}
+              </button>
+            </div>
+          </section>
+
+          <section class="tripletex__section" style="margin-top: 1.25rem">
             <div class="tripletex__section-head">
               <h3>Tilkobling</h3>
               <div class="sb-inline">
@@ -364,6 +423,11 @@ export default {
       rerun: { onlineDate: '', posDate: '', dinteroFrom: '', dinteroTo: '' },
       verify: { voucherId: null, result: null, reversal: null },
       failedVouchers: [],
+      accounting: {
+        busy: false,
+        effective: null,
+        form: { accountingSystem: 'None', invoiceChannel: 'Kravia', invoiceDueDays: 14 }
+      },
       busy: { save: false, validate: false, recon: false, online: false, pos: false, dintero: false, surfboard: false, verify: false, reverse: false, failed: false, rerun: false }
     };
   },
@@ -375,6 +439,35 @@ export default {
     },
     voucherIsBalanced () {
       return Math.abs(this.voucherBalance) < 0.005;
+    },
+    accountingSystemOptions () {
+      return [
+        { value: 'None', label: 'Ingen', disabled: false },
+        { value: 'Emonkey', label: 'eMonkey', disabled: false },
+        { value: 'Tripletex', label: 'Tripletex', disabled: false },
+        { value: 'Fiken', label: 'Fiken (kommer)', disabled: true }
+      ];
+    },
+    // The effective view answers whether the accounting system can issue an invoice today; the
+    // channel option stays selectable while it is the saved value, so a store is never shown a
+    // dropdown with no selected item.
+    accountingChannelBlockedReason () {
+      const effective = this.accounting.effective;
+      if (!effective) { return ''; }
+      if (effective.canInvoiceViaAccountingSystem) { return ''; }
+      return effective.blockedReason || 'Regnskapssystemet kan ikke sende faktura ennå';
+    },
+    invoiceChannelOptions () {
+      const blocked = !!this.accountingChannelBlockedReason;
+      const isSelected = this.accounting.form.invoiceChannel === 'AccountingSystem';
+      return [
+        { value: 'Kravia', label: 'Kravia (Okam fakturerer)', disabled: false },
+        {
+          value: 'AccountingSystem',
+          label: blocked ? 'Via regnskapssystem — ' + this.accountingChannelBlockedReason : 'Via regnskapssystem',
+          disabled: blocked && !isSelected
+        }
+      ];
     }
   },
   mounted () {
@@ -469,9 +562,12 @@ export default {
       this.results = [];
       this.verify = { voucherId: null, result: null, reversal: null };
       this.failedVouchers = [];
+      this.accounting.effective = null;
+      this.accounting.form = { accountingSystem: 'None', invoiceChannel: 'Kravia', invoiceDueDays: 14 };
       if (this.selectedStoreId > 0) {
         this.loadStatus();
         this.loadFailedVouchers();
+        this.loadAccountingSettings();
       }
     },
     // Jump to the verify tab and fetch the given voucher (from a "Siste bilag" row click).
@@ -533,6 +629,40 @@ export default {
         .then((r) => { this.results = r || []; this.showNotification('Re-kjørt — se resultater under «Kjør bilag».'); this.loadStatus(); this.loadFailedVouchers(); })
         .catch(e => this.apiError(e, 'Re-kjøring feilet'))
         .finally(() => { this.busy.rerun = false; });
+    },
+    loadAccountingSettings () {
+      const storeId = this.selectedStoreId;
+      Promise.all([
+        this._storeAccountingSettingsService.Get(storeId),
+        this._storeAccountingSettingsService.GetEffective(storeId)
+      ])
+        .then(([settings, effective]) => {
+          if (this.selectedStoreId !== storeId) { return; }
+          this.accounting.effective = effective;
+          this.accounting.form = {
+            accountingSystem: settings.accountingSystem,
+            invoiceChannel: settings.invoiceChannel,
+            invoiceDueDays: settings.invoiceDueDays
+          };
+        })
+        .catch(e => this.apiError(e, 'Kunne ikke hente regnskapsoppsett'));
+    },
+    saveAccountingSettings () {
+      const storeId = this.selectedStoreId;
+      this.accounting.busy = true;
+      this._storeAccountingSettingsService.Update(storeId, {
+        accountingSystem: this.accounting.form.accountingSystem,
+        invoiceChannel: this.accounting.form.invoiceChannel,
+        invoiceDueDays: Number(this.accounting.form.invoiceDueDays) || 0
+      })
+        .then(() => {
+          this.showNotification('Regnskapsoppsettet er lagret.');
+          this.loadAccountingSettings();
+        })
+        // A 400 carries the backend's own Norwegian explanation (unverified connection, unsupported
+        // system); apiError surfaces it verbatim rather than a generic message.
+        .catch(e => this.apiError(e, 'Kunne ikke lagre regnskapsoppsett'))
+        .finally(() => { this.accounting.busy = false; });
     },
     loadStatus () {
       this._tripletexService.getStatus(this.selectedStoreId)
@@ -649,6 +779,15 @@ export default {
 .tripletex__title {
   font-size: 1.6rem;
   font-weight: 700;
+}
+.tripletex__moved {
+  padding: 0.9rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  font-size: 0.92rem;
 }
 .tripletex__intro {
   color: #6b7280;

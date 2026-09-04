@@ -26,80 +26,133 @@
           </div>
 
           <div class="form-group form-group--lookup">
-            <label for="organizationNumber">{{ $i('kraviaInvoice_recipientOrgNumber') }}</label>
+            <label for="customerSearch">{{ $i('kraviaInvoice_customerSearch') }}</label>
             <div class="company-lookup">
               <div class="lookup-row">
                 <input
-                  id="organizationNumber"
-                  v-model="form.organizationNumber"
-                  inputmode="numeric"
-                  placeholder="999999999"
-                  @focus="focusCompanyLookup"
-                  @blur="blurCompanyLookup"
-                  @input="handleCompanyInput"
-                  @keyup.enter="lookupCompany"
+                  id="customerSearch"
+                  v-model="customerQuery"
+                  type="text"
+                  :placeholder="$i('kraviaInvoice_customerSearchPlaceholder')"
+                  @focus="focusCustomerSearch"
+                  @blur="blurCustomerSearch"
+                  @input="handleCustomerSearchInput"
                 />
-                <button type="button" class="btn btn-secondary" :disabled="companyLoading" @click="lookupCompany">
-                  {{ companyLoading ? $i('kraviaInvoice_fetching') : $i('kraviaInvoice_fetch') }}
-                </button>
               </div>
-              <div v-if="companyAutocompleteOpen" class="company-history-suggestions">
-                <div v-if="companyHistoryLoading" class="company-history-state">
-                  {{ $i('kraviaInvoice_loadingPreviousCompanies') }}
+              <div v-if="customerAutocompleteOpen" class="company-history-suggestions">
+                <div v-if="customerLoading" class="company-history-state">
+                  {{ $i('kraviaInvoice_searchingCustomers') }}
                 </div>
-                <template v-else-if="companyHistorySuggestions.length">
+                <template v-else-if="customerResults.length">
                   <button
-                    v-for="company in companyHistorySuggestions"
-                    :key="company.organizationNumber"
+                    v-for="customer in customerResults"
+                    :key="customer.id"
                     type="button"
-                    @mousedown.prevent="selectHistoricalCompany(company)"
+                    @mousedown.prevent="selectCustomer(customer)"
                   >
                     <span>
-                      <strong>{{ company.companyName }}</strong>
-                      <small>{{ company.organizationNumber }}</small>
+                      <strong>{{ customer.name }}</strong>
+                      <small>{{ customer.organizationNumber || $i('kraviaInvoice_privatePerson') }}</small>
                     </span>
-                    <small>{{ company.companyAddress }}, {{ company.companyZipCode }} {{ company.companyCity }}</small>
+                    <small>{{ customerSubtitle(customer) }}</small>
                   </button>
                 </template>
                 <div v-else class="company-history-state">
-                  {{ $i('kraviaInvoice_noPreviousCompanies') }}
+                  {{ $i('kraviaInvoice_noCustomersFound') }}
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="companyName">{{ $i('kraviaInvoice_companyName') }}</label>
-            <input id="companyName" v-model="form.companyName" type="text" />
+          <div v-if="viaAccountingSystem" class="form-group">
+            <label :class="['invoice-option', { 'invoice-option--active': isPerson }]">
+              <input v-model="isPerson" type="checkbox" @change="handlePersonToggle" />
+              <span class="invoice-option-copy">
+                <strong>{{ $i('kraviaInvoice_privatePerson') }}</strong>
+                <small>{{ $i('kraviaInvoice_privatePersonDescription') }}</small>
+              </span>
+            </label>
           </div>
-          <div class="form-group">
-            <label for="companyAddress">{{ $i('kraviaInvoice_address') }}</label>
-            <input id="companyAddress" v-model="form.companyAddress" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="companyZipCode">{{ $i('kraviaInvoice_zipCode') }}</label>
-            <input id="companyZipCode" v-model="form.companyZipCode" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="companyCity">{{ $i('kraviaInvoice_city') }}</label>
-            <input id="companyCity" v-model="form.companyCity" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="referenceFirstName">{{ $i('kraviaInvoice_firstName') }}</label>
-            <input id="referenceFirstName" v-model="form.referenceFirstName" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="referenceLastName">{{ $i('kraviaInvoice_lastName') }}</label>
-            <input id="referenceLastName" v-model="form.referenceLastName" type="text" />
-          </div>
-          <div class="form-group">
-            <label for="phone">{{ $i('kraviaInvoice_phone') }}</label>
-            <input id="phone" v-model="form.phone" type="tel" />
-          </div>
-          <div class="form-group">
-            <label for="email">{{ $i('kraviaInvoice_email') }}</label>
-            <input id="email" v-model="form.email" type="email" />
-          </div>
+
+          <template v-if="isPerson">
+            <div class="form-group">
+              <label for="personName">{{ $i('kraviaInvoice_name') }}</label>
+              <input id="personName" v-model="form.name" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="personAddress">{{ $i('kraviaInvoice_address') }}</label>
+              <input id="personAddress" v-model="form.address" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="personZipCode">{{ $i('kraviaInvoice_zipCode') }}</label>
+              <input id="personZipCode" v-model="form.zipCode" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="personCity">{{ $i('kraviaInvoice_city') }}</label>
+              <input id="personCity" v-model="form.city" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="personEmail">{{ $i('kraviaInvoice_email') }}</label>
+              <input id="personEmail" v-model="form.email" type="email" />
+            </div>
+            <div class="form-group">
+              <label for="personPhone">{{ $i('kraviaInvoice_phone') }}</label>
+              <input id="personPhone" v-model="form.phone" type="tel" />
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="form-group form-group--lookup">
+              <label for="organizationNumber">{{ $i('kraviaInvoice_recipientOrgNumber') }}</label>
+              <div class="company-lookup">
+                <div class="lookup-row">
+                  <input
+                    id="organizationNumber"
+                    v-model="form.organizationNumber"
+                    inputmode="numeric"
+                    placeholder="999999999"
+                    @keyup.enter="lookupCompany"
+                  />
+                  <button type="button" class="btn btn-secondary" :disabled="companyLoading" @click="lookupCompany">
+                    {{ companyLoading ? $i('kraviaInvoice_fetching') : $i('kraviaInvoice_fetch') }}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="companyName">{{ $i('kraviaInvoice_companyName') }}</label>
+              <input id="companyName" v-model="form.companyName" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="companyAddress">{{ $i('kraviaInvoice_address') }}</label>
+              <input id="companyAddress" v-model="form.companyAddress" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="companyZipCode">{{ $i('kraviaInvoice_zipCode') }}</label>
+              <input id="companyZipCode" v-model="form.companyZipCode" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="companyCity">{{ $i('kraviaInvoice_city') }}</label>
+              <input id="companyCity" v-model="form.companyCity" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="referenceFirstName">{{ $i('kraviaInvoice_firstName') }}</label>
+              <input id="referenceFirstName" v-model="form.referenceFirstName" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="referenceLastName">{{ $i('kraviaInvoice_lastName') }}</label>
+              <input id="referenceLastName" v-model="form.referenceLastName" type="text" />
+            </div>
+            <div class="form-group">
+              <label for="phone">{{ $i('kraviaInvoice_phone') }}</label>
+              <input id="phone" v-model="form.phone" type="tel" />
+            </div>
+            <div class="form-group">
+              <label for="email">{{ $i('kraviaInvoice_email') }}</label>
+              <input id="email" v-model="form.email" type="email" />
+            </div>
+          </template>
         </div>
       </section>
 
@@ -180,7 +233,7 @@
           </div>
 
           <div
-            v-if="!manualInvoice"
+            v-if="showInvoiceFee"
             class="line-row line-row--fee"
             tabindex="0"
             role="button"
@@ -244,9 +297,34 @@
         </div>
       </section>
 
+      <section v-if="lastResult" class="invoice-section invoice-result">
+        <h2>{{ $i('kraviaInvoice_resultHeading') }}</h2>
+        <div class="invoice-result__grid">
+          <div>
+            <span>{{ $i('kraviaInvoice_resultOrderId') }}</span>
+            <strong>{{ lastResult.friendlyOrderId || lastResult.orderId }}</strong>
+          </div>
+          <div v-if="lastResult.invoiceNumber">
+            <span>{{ $i('kraviaInvoice_resultInvoiceNumber') }}</span>
+            <strong>{{ lastResult.invoiceNumber }}</strong>
+          </div>
+          <div v-if="resultChannelLabel">
+            <span>{{ $i('kraviaInvoice_resultChannel') }}</span>
+            <strong>{{ resultChannelLabel }}</strong>
+          </div>
+          <div v-if="resultDispatchLabel">
+            <span>{{ $i('kraviaInvoice_resultDispatchMethod') }}</span>
+            <strong>{{ resultDispatchLabel }}</strong>
+          </div>
+        </div>
+        <a v-if="lastResult.invoiceUrl" class="btn btn-secondary" :href="lastResult.invoiceUrl" target="_blank" rel="noopener">
+          {{ $i('kraviaInvoice_resultOpenInvoice') }}
+        </a>
+      </section>
+
       <div class="submit-bar">
         <div class="submit-options">
-          <label :class="['invoice-option', { 'invoice-option--active': isPreorder }]">
+          <label v-if="!viaAccountingSystem" :class="['invoice-option', { 'invoice-option--active': isPreorder }]">
             <input v-model="isPreorder" type="checkbox" @change="handlePreorderToggle" />
             <span class="invoice-option-copy">
               <strong>{{ $i('kraviaInvoice_preorder') }}</strong>
@@ -273,13 +351,13 @@
         <div class="confirm-modal">
           <h2>{{ confirmTitle }}</h2>
           <p v-if="manualInvoice">
-            <span v-html="$i('kraviaInvoice_confirmManual', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmManual', { amount: priceLabel(totalInclVat), company: recipientName })" />
           </p>
           <p v-else-if="isPreorder">
-            <span v-html="$i('kraviaInvoice_confirmPreorder', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmPreorder', { amount: priceLabel(totalInclVat), company: recipientName })" />
           </p>
           <p v-else>
-            <span v-html="$i('kraviaInvoice_confirmInvoice', { amount: priceLabel(totalInclVat), company: form.companyName })" />
+            <span v-html="$i('kraviaInvoice_confirmInvoice', { amount: priceLabel(totalInclVat), company: recipientName })" />
           </p>
           <div v-if="sendError" class="notification notification--error">
             {{ sendError }}
@@ -306,11 +384,17 @@ export default {
   data: () => ({
     initialLoading: true,
     companyLoading: false,
-    companyHistoryLoading: false,
-    companyHistoryLoadedForStoreId: null,
-    companyHistory: [],
-    companyAutocompleteOpen: false,
-    companyAutocompleteCloseTimer: null,
+    customerLoading: false,
+    customerQuery: "",
+    customerResults: [],
+    customerAutocompleteOpen: false,
+    customerAutocompleteCloseTimer: null,
+    customerSearchTimer: null,
+    customerSearchSequence: 0,
+    selectedCustomerId: null,
+    isPerson: false,
+    effectiveAccounting: null,
+    lastResult: null,
     productsLoading: false,
     isSending: false,
     showConfirmModal: false,
@@ -334,6 +418,10 @@ export default {
       referenceLastName: "",
       phone: "",
       email: "",
+      name: "",
+      address: "",
+      zipCode: "",
+      city: "",
     },
     lines: [],
     notification: {
@@ -350,17 +438,40 @@ export default {
     selectedStoreObject() {
       return this.adminStores.find((store) => store.id === this.selectedStoreId) || null;
     },
-    companyHistorySuggestions() {
-      const query = (this.form.organizationNumber || "").trim().toLowerCase();
-      const normalizedQuery = this.normalizeOrgNo(query);
-      return (this.companyHistory || [])
-        .filter((company) => {
-          if (!query) return true;
-          const orgNo = this.normalizeOrgNo(company.organizationNumber || "");
-          const name = (company.companyName || "").toLowerCase();
-          return orgNo.includes(normalizedQuery) || name.includes(query);
-        })
-        .slice(0, 12);
+    // The store's effective invoice channel decides three things at once, exactly as the backend
+    // reads it: whether a private person may be invoiced, whether Okam's 20 kr fee applies, and
+    // whether a preorder is possible. Until it has loaded the page behaves as the Kravia channel.
+    viaAccountingSystem() {
+      return this.effectiveAccounting?.invoiceChannel === "AccountingSystem";
+    },
+    showInvoiceFee() {
+      return !this.manualInvoice && !this.viaAccountingSystem;
+    },
+    recipientName() {
+      return this.isPerson ? this.form.name : this.form.companyName;
+    },
+    resultChannelLabel() {
+      if (!this.lastResult || !this.lastResult.invoiceChannel) { return ""; }
+      return this.lastResult.invoiceChannel === "Kravia"
+        ? this.$i("kraviaInvoice_channelKravia")
+        : this.$i("kraviaInvoice_channelAccountingSystem");
+    },
+    // Every InvoiceSendMethod the backend can report, not only the ones Okam asks for: Efaktura,
+    // Sms, Letter and Auto are channels a provider may choose on its own and report back, and an
+    // unmapped one would otherwise be shown as "Kravia".
+    resultDispatchLabel() {
+      const method = this.lastResult && this.lastResult.invoiceDispatchMethod;
+      if (!method || method === "None") { return ""; }
+      const labels = {
+        Ehf: "kraviaInvoice_dispatchEhf",
+        Email: "kraviaInvoice_dispatchEmail",
+        Kravia: "kraviaInvoice_dispatchKravia",
+        Efaktura: "kraviaInvoice_dispatchEfaktura",
+        Sms: "kraviaInvoice_dispatchSms",
+        Letter: "kraviaInvoice_dispatchLetter",
+        Auto: "kraviaInvoice_dispatchAuto",
+      };
+      return labels[method] ? this.$i(labels[method]) : method;
     },
     totalExVat() {
       return this.lines.reduce((sum, line) => sum + this.lineExVat(line), 0) + this.invoiceFeeExVat;
@@ -372,7 +483,7 @@ export default {
       return Math.max(0, this.totalInclVat - this.totalExVat);
     },
     invoiceFeeAmount() {
-      return this.manualInvoice ? 0 : 2000;
+      return this.showInvoiceFee ? 2000 : 0;
     },
     invoiceFeeExVat() {
       return Math.round(this.invoiceFeeAmount / 1.25);
@@ -408,6 +519,7 @@ export default {
       this.selectedStoreId = this.$store.state.selectedAdminStore || this.adminStores[0]?.id || null;
       if (this.selectedStoreId) {
         this.loadProducts();
+        this.loadAccountingSettings();
       }
       if (!this.lines.length) {
         this.addLine();
@@ -419,68 +531,107 @@ export default {
       this.$store.dispatch("SetSelectedAdminStore", this.selectedStoreId);
       this.products = [];
       this.lines = [];
-      this.companyHistory = [];
-      this.companyHistoryLoading = false;
-      this.companyHistoryLoadedForStoreId = null;
-      this.companyAutocompleteOpen = false;
+      this.customerResults = [];
+      this.customerQuery = "";
+      this.customerLoading = false;
+      this.customerAutocompleteOpen = false;
+      this.selectedCustomerId = null;
+      this.isPerson = false;
+      this.effectiveAccounting = null;
+      this.lastResult = null;
       this.addLine();
       this.loadProducts();
+      this.loadAccountingSettings();
     },
     handlePreorderToggle() {
       if (this.isPreorder && (!this.preorderDate || !this.preorderTime)) {
         this.setDefaultPreorderDateTime();
       }
     },
-    focusCompanyLookup() {
-      if (this.companyAutocompleteCloseTimer) clearTimeout(this.companyAutocompleteCloseTimer);
-      this.companyAutocompleteOpen = true;
-      this.loadCompanyHistory();
+    loadAccountingSettings() {
+      const storeId = this.selectedStoreId;
+      if (!storeId) { return; }
+      this._storeAccountingSettingsService.GetEffective(storeId)
+        .then((effective) => {
+          if (this.selectedStoreId !== storeId) { return; }
+          this.effectiveAccounting = effective;
+          if (!this.viaAccountingSystem) {
+            this.isPerson = false;
+          }
+        })
+        .catch(error => this.showNotification(error.message || this.$i("kraviaInvoice_errorLoadAccountingSettings"), "error"));
     },
-    blurCompanyLookup() {
-      this.companyAutocompleteCloseTimer = setTimeout(() => {
-        this.companyAutocompleteOpen = false;
+    focusCustomerSearch() {
+      if (this.customerAutocompleteCloseTimer) { clearTimeout(this.customerAutocompleteCloseTimer); }
+      this.customerAutocompleteOpen = true;
+      this.searchCustomers();
+    },
+    blurCustomerSearch() {
+      this.customerAutocompleteCloseTimer = setTimeout(() => {
+        this.customerAutocompleteOpen = false;
       }, 150);
     },
-    handleCompanyInput() {
-      this.companyAutocompleteOpen = true;
-      this.loadCompanyHistory();
+    handleCustomerSearchInput() {
+      this.customerAutocompleteOpen = true;
+      if (this.customerSearchTimer) { clearTimeout(this.customerSearchTimer); }
+      this.customerSearchTimer = setTimeout(() => this.searchCustomers(), 250);
     },
-    loadCompanyHistory() {
-      if (!this.selectedStoreId || this.companyHistoryLoading || this.companyHistoryLoadedForStoreId === this.selectedStoreId) return;
+    // Search-as-you-type over name/orgnr/phone/email. Responses are sequence-stamped so a slow
+    // earlier request cannot overwrite the results of a later keystroke.
+    searchCustomers() {
       const storeId = this.selectedStoreId;
-      this.companyHistoryLoading = true;
-      this._kraviaInvoiceService.GetCompanyHistory(storeId)
-        .then((companies) => {
-          if (this.selectedStoreId !== storeId) return;
-          this.companyHistory = Array.isArray(companies) ? companies : [];
-          this.companyHistoryLoadedForStoreId = storeId;
+      if (!storeId) { return; }
+      const sequence = ++this.customerSearchSequence;
+      this.customerLoading = true;
+      this._invoiceCustomerService.Search(storeId, this.customerQuery)
+        .then((customers) => {
+          if (sequence !== this.customerSearchSequence || this.selectedStoreId !== storeId) { return; }
+          this.customerResults = Array.isArray(customers) ? customers.slice(0, 12) : [];
         })
         .catch(() => {
-          if (this.selectedStoreId !== storeId) return;
-          this.companyHistory = [];
-          this.showNotification(this.$i("kraviaInvoice_errorLoadCompanyHistory"), "error");
+          if (sequence !== this.customerSearchSequence || this.selectedStoreId !== storeId) { return; }
+          this.customerResults = [];
+          this.showNotification(this.$i("kraviaInvoice_errorSearchCustomers"), "error");
         })
         .finally(() => {
-          if (this.selectedStoreId === storeId) {
-            this.companyHistoryLoading = false;
+          if (sequence === this.customerSearchSequence) {
+            this.customerLoading = false;
           }
         });
     },
-    selectHistoricalCompany(company) {
-      this.form.organizationNumber = company.organizationNumber || "";
-      this.form.companyName = company.companyName || "";
-      this.form.companyAddress = company.companyAddress || "";
-      this.form.companyZipCode = company.companyZipCode || "";
-      this.form.companyCity = company.companyCity || "";
-      this.form.referenceFirstName = company.referenceFirstName || "";
-      this.form.referenceLastName = company.referenceLastName || "";
-      this.form.phone = company.phone || "";
-      this.form.email = company.email || "";
-      this.companyAutocompleteOpen = false;
-      this.showNotification(this.$i("kraviaInvoice_companySelected"), "success");
+    customerSubtitle(customer) {
+      return [customer.address, [customer.zipCode, customer.city].filter(Boolean).join(" "), customer.email]
+        .filter(part => part)
+        .join(", ");
     },
-    normalizeOrgNo(value) {
-      return (value || "").toString().toLowerCase().replace(/\s|-/g, "").replace("mva", "").trim();
+    // A stored customer wins over typed details: its id is what carries the accounting system's own
+    // customer reference, so it is sent along and the fields below are only the visible echo.
+    selectCustomer(customer) {
+      this.selectedCustomerId = customer.id;
+      this.isPerson = customer.kind === "Person";
+      this.customerQuery = customer.name || "";
+      this.form.phone = customer.phone || "";
+      this.form.email = customer.email || "";
+      if (this.isPerson) {
+        this.form.name = customer.name || "";
+        this.form.address = customer.address || "";
+        this.form.zipCode = customer.zipCode || "";
+        this.form.city = customer.city || "";
+      } else {
+        this.form.organizationNumber = customer.organizationNumber || "";
+        this.form.companyName = customer.name || "";
+        this.form.companyAddress = customer.address || "";
+        this.form.companyZipCode = customer.zipCode || "";
+        this.form.companyCity = customer.city || "";
+        this.form.referenceFirstName = customer.referenceFirstName || "";
+        this.form.referenceLastName = customer.referenceLastName || "";
+      }
+      this.customerAutocompleteOpen = false;
+      this.showNotification(this.$i("kraviaInvoice_customerSelected"), "success");
+    },
+    // Switching recipient kind drops the stored customer: the id belongs to the other kind's row.
+    handlePersonToggle() {
+      this.selectedCustomerId = null;
     },
     loadProducts() {
       if (!this.selectedStoreId) return;
@@ -500,7 +651,10 @@ export default {
         return;
       }
       this.companyLoading = true;
-      this._kraviaInvoiceService.GetCompany(this.form.organizationNumber)
+      // A fresh Brreg lookup means the recipient is being (re)typed, so any previously picked
+      // stored customer no longer applies — the upsert keys the company on its organisation number.
+      this.selectedCustomerId = null;
+      this._invoiceCustomerService.LookupBrreg(this.form.organizationNumber)
         .then((company) => {
           this.form.organizationNumber = company.organizationNumber || this.form.organizationNumber;
           this.form.companyName = company.name || "";
@@ -616,6 +770,11 @@ export default {
     },
     getValidationError() {
       if (!this.selectedStoreId) return this.$i("kraviaInvoice_validationSelectStore");
+      if (this.isPerson) {
+        const personError = this.getPersonValidationError();
+        if (personError) { return personError; }
+        return this.getLineValidationError();
+      }
       if (!this.form.organizationNumber) return this.$i("kraviaInvoice_validationEnterOrgNumber");
       if (!/^\d{9}$/.test((this.form.organizationNumber || "").replace(/\D/g, ""))) return this.$i("kraviaInvoice_validationOrgNumberFormat");
       if (!this.form.companyName) return this.$i("kraviaInvoice_validationCompanyNameMissing");
@@ -628,6 +787,18 @@ export default {
       if (!/^\+?\d{5,15}$/.test((this.form.phone || "").replace(/[\s\-()]/g, ""))) return this.$i("kraviaInvoice_validationPhoneFormat");
       if (!this.form.email) return this.$i("kraviaInvoice_validationEmailMissing");
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) return this.$i("kraviaInvoice_validationEmailInvalid");
+      return this.getLineValidationError();
+    },
+    // A person has no organisation number and therefore no Peppol identity: e-mail is the only way
+    // the invoice can reach them, so it is required rather than optional.
+    getPersonValidationError() {
+      if (!this.form.name) { return this.$i("kraviaInvoice_validationNameMissing"); }
+      if (!this.form.email) { return this.$i("kraviaInvoice_validationEmailMissing"); }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email)) { return this.$i("kraviaInvoice_validationEmailInvalid"); }
+      if (this.form.phone && !/^\+?\d{5,15}$/.test((this.form.phone || "").replace(/[\s\-()]/g, ""))) { return this.$i("kraviaInvoice_validationPhoneFormat"); }
+      return "";
+    },
+    getLineValidationError() {
       if (!this.lines.length) return this.$i("kraviaInvoice_validationAddLineItem");
       if (this.isPreorder) {
         const requestedCompletion = this.getRequestedCompletion();
@@ -667,12 +838,61 @@ export default {
       this.sendError = "";
       this.showConfirmModal = true;
     },
-    sendInvoice() {
-      this.isSending = true;
-      this.sendError = "";
-      const payload = {
+    buildCustomerUpsertModel() {
+      if (this.isPerson) {
+        return {
+          id: this.selectedCustomerId || undefined,
+          kind: "Person",
+          name: this.form.name,
+          address: this.form.address,
+          zipCode: this.form.zipCode,
+          city: this.form.city,
+          email: this.form.email,
+          phone: this.form.phone,
+        };
+      }
+      return {
+        id: this.selectedCustomerId || undefined,
+        kind: "Company",
+        organizationNumber: this.form.organizationNumber,
+        name: this.form.companyName,
+        address: this.form.companyAddress,
+        zipCode: this.form.companyZipCode,
+        city: this.form.companyCity,
+        email: this.form.email,
+        phone: this.form.phone,
+        referenceFirstName: this.form.referenceFirstName,
+        referenceLastName: this.form.referenceLastName,
+      };
+    },
+    buildInvoicePayload(invoiceCustomerId) {
+      const recipient = this.isPerson
+        ? {
+          kind: "Person",
+          name: this.form.name,
+          address: this.form.address,
+          zipCode: this.form.zipCode,
+          city: this.form.city,
+          phone: this.form.phone,
+          email: this.form.email,
+        }
+        : {
+          kind: "Company",
+          organizationNumber: this.form.organizationNumber,
+          companyName: this.form.companyName,
+          companyAddress: this.form.companyAddress,
+          companyZipCode: this.form.companyZipCode,
+          companyCity: this.form.companyCity,
+          referenceFirstName: this.form.referenceFirstName,
+          referenceLastName: this.form.referenceLastName,
+          phone: this.form.phone,
+          email: this.form.email,
+        };
+
+      return {
         storeId: this.selectedStoreId,
-        ...this.form,
+        invoiceCustomerId: invoiceCustomerId || null,
+        ...recipient,
         manualInvoice: this.manualInvoice,
         requestedCompletion: this.getRequestedCompletionPayload(),
         lines: this.lines.map((line) => ({
@@ -684,9 +904,27 @@ export default {
           vatRate: Number(line.vatRate) || 0,
         })),
       };
-      this._kraviaInvoiceService.SendInvoice(payload)
+    },
+    // The recipient is persisted before the invoice is sent, so the order is always tied to a stored
+    // customer row — that row is what carries the accounting system's own customer id on a retry.
+    // A manual invoice has no recipient to store.
+    persistCustomer() {
+      if (this.manualInvoice) { return Promise.resolve(null); }
+      return this._invoiceCustomerService.Upsert(this.selectedStoreId, this.buildCustomerUpsertModel())
+        .then((customer) => {
+          this.selectedCustomerId = customer.id;
+          return customer.id;
+        });
+    },
+    sendInvoice() {
+      this.isSending = true;
+      this.sendError = "";
+      this.lastResult = null;
+      this.persistCustomer()
+        .then(invoiceCustomerId => this._kraviaInvoiceService.SendInvoice(this.buildInvoicePayload(invoiceCustomerId)))
         .then((result) => {
           this.showConfirmModal = false;
+          this.lastResult = result;
           const orderId = result.friendlyOrderId || result.orderId;
           if (this.manualInvoice && this.isPreorder) {
             this.showNotification(this.$i("kraviaInvoice_successManualPreorder", { orderId }), "success");
@@ -718,7 +956,15 @@ export default {
         referenceLastName: "",
         phone: "",
         email: "",
+        name: "",
+        address: "",
+        zipCode: "",
+        city: "",
       };
+      this.customerQuery = "";
+      this.customerResults = [];
+      this.selectedCustomerId = null;
+      this.isPerson = false;
       this.isPreorder = false;
       this.manualInvoice = false;
       this.setDefaultPreorderDateTime();
@@ -775,6 +1021,19 @@ export default {
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-result__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+
+  span {
+    display: block;
+    color: #64748b;
+    font-size: 0.85em;
+  }
 }
 
 .invoice-section {
