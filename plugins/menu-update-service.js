@@ -76,6 +76,26 @@ export class MenuUpdateService {
       .catch((error) => { throw toError(error) })
   }
 
+  /**
+   * Re-merges documents that were already read against corrected column meanings. This calls no
+   * AI provider, so correcting a column costs nothing.
+   */
+  Remap (storeId, { documents = [], sourceMappings = [], sourceMetadata = [], sourceMetadataToken = '' } = {}, options = {}) {
+    return axios
+      .post(this._baseUrl + '/ai/menu-update/remap', {
+        storeId,
+        documents,
+        sourceMappings,
+        sourceMetadata,
+        sourceMetadataToken
+      }, {
+        headers: jsonHeaders(this._init),
+        signal: options.signal
+      })
+      .then(response => response.data)
+      .catch((error) => { throw toError(error) })
+  }
+
   Validate (plan, options = {}) {
     return axios
       .post(this._baseUrl + '/products/menu-update/validate', plan, {

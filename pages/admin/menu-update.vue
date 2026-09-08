@@ -47,15 +47,7 @@
             <div class="source-body">
               <strong>{{ file.name }}</strong>
               <small>{{ formatBytes(file.size) }}</small>
-              <label class="inline-field">
-                {{ $i('menuUpdate_columnMeaning') }}
-                <select v-model="mappingChoice[file.name]">
-                  <option value="auto">{{ $i('menuUpdate_columnsAuto') }}</option>
-                  <option value="sizes-takeaway">{{ $i('menuUpdate_columnsSizesTakeaway') }}</option>
-                  <option value="sizes-eatIn">{{ $i('menuUpdate_columnsSizesEatIn') }}</option>
-                  <option value="sizes-delivery">{{ $i('menuUpdate_columnsSizesDelivery') }}</option>
-                </select>
-              </label>
+              <small>{{ $i('menuUpdate_columnsAskedAfterReading') }}</small>
             </div>
             <button class="link-btn" type="button" @click="removeFile(index)">
               {{ $i('common_delete') }}
@@ -106,13 +98,115 @@
               <span class="pdf-tag">PDF</span>
               <div class="source-body">
                 <strong>{{ source.documentName }}</strong>
-                <small>{{ $i('menuUpdate_sourcePages', { pages: source.pageCount, rows: sourceRowCount(source) }) }}</small>
+                <small>{{ sourcePageSummary(source) }}</small>
                 <small v-if="source.proposedInterpretation">{{ source.proposedInterpretation }}</small>
               </div>
             </div>
           </div>
           <div v-for="warning in allSourceWarnings" :key="warning.key" class="note">
             {{ warning.message }}
+          </div>
+        </section>
+
+        <section v-if="analysis" class="panel columns-panel">
+          <div class="panel-head">
+            <h2>{{ $i('menuUpdate_columnsTitle') }}</h2>
+            <small>{{ $i('menuUpdate_columnsHelp') }}</small>
+          </div>
+
+          <div v-for="source in analysis.sources" :key="'map-' + source.documentName" class="column-doc">
+            <div class="column-doc-head">
+              <strong>{{ source.documentName }}</strong>
+              <label class="inline-field">
+                {{ $i('menuUpdate_documentDefaultChannel') }}
+                <select :value="defaultChannelFor(source.documentName)" @change="setDefaultChannel(source.documentName, $event.target.value)">
+                  <option value="">{{ $i('menuUpdate_noDefaultChannel') }}</option>
+                  <option value="Takeaway">{{ $i('menuUpdate_channelTakeaway') }}</option>
+                  <option value="EatIn">{{ $i('menuUpdate_channelEatIn') }}</option>
+                  <option value="Delivery">{{ $i('menuUpdate_channelDelivery') }}</option>
+                </select>
+              </label>
+            </div>
+
+            <table class="column-table">
+              <thead>
+                <tr>
+                  <th scope="col">
+                    {{ $i('menuUpdate_columnLabel') }}
+                  </th>
+                  <th scope="col">
+                    {{ $i('menuUpdate_columnKind') }}
+                  </th>
+                  <th scope="col">
+                    {{ $i('menuUpdate_columnChannel') }}
+                  </th>
+                  <th scope="col">
+                    {{ $i('menuUpdate_columnStatus') }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="column in source.columns" :key="source.documentName + '::' + column.label">
+                  <th scope="row">
+                    {{ column.label }}
+                  </th>
+                  <td>
+                    <select
+                      :value="columnKind(source.documentName, column)"
+                      :aria-label="$i('menuUpdate_columnKindFor', { label: column.label })"
+                      @change="setColumnKind(source.documentName, column, $event.target.value)"
+                    >
+                      <option value="Size">
+                        {{ $i('menuUpdate_kindSize') }}
+                      </option>
+                      <option value="Channel">
+                        {{ $i('menuUpdate_kindChannel') }}
+                      </option>
+                      <option value="Ignore">
+                        {{ $i('menuUpdate_kindIgnore') }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      :value="columnChannel(source.documentName, column)"
+                      :disabled="columnKind(source.documentName, column) === 'Ignore'"
+                      :aria-label="$i('menuUpdate_columnChannelFor', { label: column.label })"
+                      @change="setColumnChannel(source.documentName, column, $event.target.value)"
+                    >
+                      <option value="">
+                        {{ $i('menuUpdate_useDocumentDefault') }}
+                      </option>
+                      <option value="Takeaway">
+                        {{ $i('menuUpdate_channelTakeaway') }}
+                      </option>
+                      <option value="EatIn">
+                        {{ $i('menuUpdate_channelEatIn') }}
+                      </option>
+                      <option value="Delivery">
+                        {{ $i('menuUpdate_channelDelivery') }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <span v-if="column.ignored" class="badge skip">{{ $i('menuUpdate_kindIgnore') }}</span>
+                    <span v-else-if="column.unresolved" class="badge warn">{{ $i('menuUpdate_columnNeedsMeaning') }}</span>
+                    <span v-else class="badge">{{ $i('menuUpdate_channel' + column.resolvedChannel) }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div v-if="remapNotice" class="note">
+            {{ remapNotice }}
+          </div>
+
+          <div class="actions">
+            <button class="btn-primary" type="button" :disabled="!columnMappingChanged || isRemapping" @click="applyColumnMapping">
+              {{ isRemapping ? $i('menuUpdate_remapping') : $i('menuUpdate_applyColumnMapping') }}
+            </button>
+            <small class="helper-text">{{ $i('menuUpdate_remapFree') }}</small>
           </div>
         </section>
 
@@ -134,131 +228,142 @@
         <!-- price rules -->
         <section class="panel rules">
           <div class="panel-head">
-            <h2>{{ $i('menuUpdate_rulesTitle') }}</h2>
+            <button
+              class="disclosure"
+              type="button"
+              :aria-expanded="rulesExpanded ? 'true' : 'false'"
+              aria-controls="price-rules"
+              @click="rulesExpanded = !rulesExpanded"
+            >
+              <span class="chevron">{{ rulesExpanded ? '▾' : '▸' }}</span>
+              <h2>{{ $i('menuUpdate_rulesTitle') }}</h2>
+            </button>
             <small>{{ rulesSummary }}</small>
           </div>
 
-          <div class="rules-grid">
-            <label class="field">
-              {{ $i('menuUpdate_ruleMissingChannel') }}
-              <select v-model="draftRules.missingChannelRule">
-                <option value="KeepCurrent">{{ $i('menuUpdate_ruleKeepCurrent') }}</option>
-                <option value="SamePercent">{{ $i('menuUpdate_ruleSamePercent') }}</option>
-                <option value="KeepKroneDelta">{{ $i('menuUpdate_ruleKeepKroneDelta') }}</option>
-                <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
-              </select>
-            </label>
-
-            <label v-if="draftRules.missingChannelRule === 'CustomPercent'" class="field">
-              {{ $i('menuUpdate_rulePercent') }}
-              <input v-model.number="draftRules.missingChannelPercent" type="number" step="0.1">
-            </label>
-
-            <label class="field">
-              {{ $i('menuUpdate_ruleReferenceChannel') }}
-              <select v-model="draftRules.referenceChannel">
-                <option value="Takeaway">{{ $i('menuUpdate_channelTakeaway') }}</option>
-                <option value="EatIn">{{ $i('menuUpdate_channelEatIn') }}</option>
-                <option value="Delivery">{{ $i('menuUpdate_channelDelivery') }}</option>
-              </select>
-            </label>
-
-            <label class="field">
-              {{ $i('menuUpdate_ruleAbsentProducts') }}
-              <select v-model="draftRules.absentProductRule">
-                <option value="Keep">{{ $i('menuUpdate_ruleAbsentKeep') }}</option>
-                <option value="SuggestFromSimilar">{{ $i('menuUpdate_ruleAbsentSuggest') }}</option>
-                <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
-              </select>
-            </label>
-
-            <label v-if="draftRules.absentProductRule === 'CustomPercent'" class="field">
-              {{ $i('menuUpdate_rulePercent') }}
-              <input v-model.number="draftRules.absentProductPercent" type="number" step="0.1">
-            </label>
-
-            <label class="field">
-              {{ $i('menuUpdate_ruleScope') }}
-              <select v-model="ruleScope">
-                <option value="AllInFilter">{{ $i('menuUpdate_scopeAllInFilter') }}</option>
-                <option value="SelectedCategory">{{ $i('menuUpdate_scopeCategory') }}</option>
-                <option value="CheckedRows">{{ $i('menuUpdate_scopeChecked') }}</option>
-              </select>
-            </label>
-
-            <label v-if="ruleScope === 'SelectedCategory'" class="field">
-              {{ $i('menuUpdate_category') }}
-              <select v-model="scopeCategoryName">
-                <option v-for="name in categoryNames" :key="name" :value="name">{{ name }}</option>
-              </select>
-            </label>
-
-            <label class="field">
-              {{ $i('menuUpdate_ruleRounding') }}
-              <select v-model="draftRules.rounding">
-                <option value="NearestKrone">{{ $i('menuUpdate_roundingKrone') }}</option>
-                <option value="NearestFiveKroner">{{ $i('menuUpdate_roundingFiveKroner') }}</option>
-                <option value="KeepOre">{{ $i('menuUpdate_roundingOre') }}</option>
-              </select>
-            </label>
-
-            <label class="field">
-              {{ $i('menuUpdate_ruleNewProducts') }}
-              <select v-model="draftRules.newProductChannelRule">
-                <option value="RequireExplicit">{{ $i('menuUpdate_newProductExplicit') }}</option>
-                <option value="SameAsTakeaway">{{ $i('menuUpdate_newProductSameAsTakeaway') }}</option>
-                <option value="TakeawayPlusPercent">{{ $i('menuUpdate_newProductPlusPercent') }}</option>
-              </select>
-            </label>
-
-            <template v-if="draftRules.newProductChannelRule === 'TakeawayPlusPercent'">
+          <div v-show="rulesExpanded" id="price-rules">
+            <div class="rules-grid">
               <label class="field">
-                {{ $i('menuUpdate_newProductEatInPercent') }}
-                <input v-model.number="draftRules.newProductEatInPercent" type="number" step="0.1">
+                {{ $i('menuUpdate_ruleMissingChannel') }}
+                <select v-model="draftRules.missingChannelRule">
+                  <option value="KeepCurrent">{{ $i('menuUpdate_ruleKeepCurrent') }}</option>
+                  <option value="SamePercent">{{ $i('menuUpdate_ruleSamePercent') }}</option>
+                  <option value="KeepKroneDelta">{{ $i('menuUpdate_ruleKeepKroneDelta') }}</option>
+                  <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
+                </select>
               </label>
-              <label class="field">
-                {{ $i('menuUpdate_newProductDeliveryPercent') }}
-                <input v-model.number="draftRules.newProductDeliveryPercent" type="number" step="0.1">
-              </label>
-            </template>
-          </div>
 
-          <div v-if="rateSuggestions.length" class="rate-suggestions">
-            <div v-for="suggestion in rateSuggestions" :key="suggestionKey(suggestion)" class="rate">
-              <span v-if="suggestion.available">
-                {{ $i('menuUpdate_rateAvailable', {
-                  group: suggestionGroup(suggestion),
-                  percent: formatPercent(suggestion.percent),
-                  count: suggestion.observationCount
-                }) }}
-              </span>
-              <span v-else class="muted">
-                {{ suggestionGroup(suggestion) }}: {{ suggestion.reason }}
-              </span>
+              <label v-if="draftRules.missingChannelRule === 'CustomPercent'" class="field">
+                {{ $i('menuUpdate_rulePercent') }}
+                <input v-model.number="draftRules.missingChannelPercent" type="number" step="0.1">
+              </label>
+
+              <label class="field">
+                {{ $i('menuUpdate_ruleReferenceChannel') }}
+                <select v-model="draftRules.referenceChannel">
+                  <option value="Takeaway">{{ $i('menuUpdate_channelTakeaway') }}</option>
+                  <option value="EatIn">{{ $i('menuUpdate_channelEatIn') }}</option>
+                  <option value="Delivery">{{ $i('menuUpdate_channelDelivery') }}</option>
+                </select>
+              </label>
+
+              <label class="field">
+                {{ $i('menuUpdate_ruleAbsentProducts') }}
+                <select v-model="draftRules.absentProductRule">
+                  <option value="Keep">{{ $i('menuUpdate_ruleAbsentKeep') }}</option>
+                  <option value="SuggestFromSimilar">{{ $i('menuUpdate_ruleAbsentSuggest') }}</option>
+                  <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
+                </select>
+              </label>
+
+              <label v-if="draftRules.absentProductRule === 'CustomPercent'" class="field">
+                {{ $i('menuUpdate_rulePercent') }}
+                <input v-model.number="draftRules.absentProductPercent" type="number" step="0.1">
+              </label>
+
+              <label class="field">
+                {{ $i('menuUpdate_ruleScope') }}
+                <select v-model="ruleScope">
+                  <option value="AllInFilter">{{ $i('menuUpdate_scopeAllInFilter') }}</option>
+                  <option value="SelectedCategory">{{ $i('menuUpdate_scopeCategory') }}</option>
+                  <option value="CheckedRows">{{ $i('menuUpdate_scopeChecked') }}</option>
+                </select>
+              </label>
+
+              <label v-if="ruleScope === 'SelectedCategory'" class="field">
+                {{ $i('menuUpdate_category') }}
+                <select v-model="scopeCategoryName">
+                  <option v-for="name in categoryNames" :key="name" :value="name">{{ name }}</option>
+                </select>
+              </label>
+
+              <label class="field">
+                {{ $i('menuUpdate_ruleRounding') }}
+                <select v-model="draftRules.rounding">
+                  <option value="NearestKrone">{{ $i('menuUpdate_roundingKrone') }}</option>
+                  <option value="NearestFiveKroner">{{ $i('menuUpdate_roundingFiveKroner') }}</option>
+                  <option value="KeepOre">{{ $i('menuUpdate_roundingOre') }}</option>
+                </select>
+              </label>
+
+              <label class="field">
+                {{ $i('menuUpdate_ruleNewProducts') }}
+                <select v-model="draftRules.newProductChannelRule">
+                  <option value="RequireExplicit">{{ $i('menuUpdate_newProductExplicit') }}</option>
+                  <option value="SameAsTakeaway">{{ $i('menuUpdate_newProductSameAsTakeaway') }}</option>
+                  <option value="TakeawayPlusPercent">{{ $i('menuUpdate_newProductPlusPercent') }}</option>
+                </select>
+              </label>
+
+              <template v-if="draftRules.newProductChannelRule === 'TakeawayPlusPercent'">
+                <label class="field">
+                  {{ $i('menuUpdate_newProductEatInPercent') }}
+                  <input v-model.number="draftRules.newProductEatInPercent" type="number" step="0.1">
+                </label>
+                <label class="field">
+                  {{ $i('menuUpdate_newProductDeliveryPercent') }}
+                  <input v-model.number="draftRules.newProductDeliveryPercent" type="number" step="0.1">
+                </label>
+              </template>
             </div>
-          </div>
 
-          <div class="actions">
-            <button class="btn-secondary" type="button" :disabled="isValidating" @click="previewRules">
-              {{ $i('menuUpdate_previewRules', { count: rulePreviewImpact.productCount }) }}
-            </button>
-            <button class="btn-primary" type="button" :disabled="!rulePreview" @click="commitRulePreview">
-              {{ $i('menuUpdate_applyRules') }}
-            </button>
-            <button class="btn-secondary" type="button" :disabled="!undoSnapshot" @click="undoBulk">
-              {{ $i('menuUpdate_undoBulk') }}
-            </button>
-            <button class="btn-secondary" type="button" @click="resetRules">
-              {{ $i('menuUpdate_resetRules') }}
-            </button>
-          </div>
+            <div v-if="rateSuggestions.length" class="rate-suggestions">
+              <div v-for="suggestion in rateSuggestions" :key="suggestionKey(suggestion)" class="rate">
+                <span v-if="suggestion.available">
+                  {{ $i('menuUpdate_rateAvailable', {
+                    group: suggestionGroup(suggestion),
+                    percent: formatPercent(suggestion.percent),
+                    count: suggestion.observationCount
+                  }) }}
+                </span>
+                <span v-else class="muted">
+                  {{ suggestionGroup(suggestion) }}: {{ suggestion.reason }}
+                </span>
+              </div>
+            </div>
 
-          <div v-if="rulePreview" class="note">
-            {{ $i('menuUpdate_previewSummary', {
-              products: rulePreviewImpact.productCount,
-              fields: rulePreviewImpact.fieldCount,
-              scope: $i('menuUpdate_scope_' + ruleScope)
-            }) }}
+            <div class="actions">
+              <button class="btn-secondary" type="button" :disabled="isValidating" @click="previewRules">
+                {{ $i('menuUpdate_previewRules', { count: rulePreviewImpact.productCount }) }}
+              </button>
+              <button class="btn-primary" type="button" :disabled="!rulePreview" @click="commitRulePreview">
+                {{ $i('menuUpdate_applyRules') }}
+              </button>
+              <button class="btn-secondary" type="button" :disabled="!undoSnapshot" @click="undoBulk">
+                {{ $i('menuUpdate_undoBulk') }}
+              </button>
+              <button class="btn-secondary" type="button" @click="resetRules">
+                {{ $i('menuUpdate_resetRules') }}
+              </button>
+            </div>
+
+            <div v-if="rulePreview" class="note">
+              {{ $i('menuUpdate_previewSummary', {
+                products: rulePreviewImpact.productCount,
+                fields: rulePreviewImpact.fieldCount,
+                scope: $i('menuUpdate_scope_' + ruleScope)
+              }) }}
+            </div>
           </div>
         </section>
 
@@ -496,16 +601,24 @@
 
           <div v-if="applyError" class="error-box" role="alert">
             {{ applyError }}
-            <button v-if="lastOperationId" class="link-btn" type="button" @click="checkStatus">
-              {{ $i('menuUpdate_checkStatus') }}
-            </button>
+            <p v-if="outcomeUnknown">
+              {{ $i('menuUpdate_outcomeUnknown') }}
+            </p>
+            <div class="actions">
+              <button v-if="lastOperationId" class="btn-secondary" type="button" :disabled="isCheckingStatus" @click="checkStatus">
+                {{ isCheckingStatus ? $i('menuUpdate_checkingStatus') : $i('menuUpdate_checkStatus') }}
+              </button>
+              <button v-if="pendingApplyRequest" class="btn-secondary" type="button" :disabled="isApplying" @click="retryPendingApply">
+                {{ $i('menuUpdate_retrySameOperation') }}
+              </button>
+            </div>
           </div>
 
           <div class="actions">
             <button class="btn-secondary" type="button" @click="step = 2">
               {{ $i('common_back') }}
             </button>
-            <button class="btn-primary" type="button" :disabled="!canApply || isApplying" @click="applyPlan">
+            <button class="btn-primary" type="button" :disabled="!canApply || isApplying || outcomeUnknown" @click="applyPlan">
               {{ isApplying
                 ? $i('menuUpdate_applying')
                 : $i('menuUpdate_approveAndUpdate', { count: planCounts.updated + planCounts.new }) }}
@@ -597,7 +710,7 @@
             <h4>{{ $i('menuUpdate_targetProduct') }}</h4>
             <label v-if="detailRow.action !== 'Create'" class="field">
               {{ $i('menuUpdate_linkedProduct') }}
-              <select v-model="detailRow.targetProductId" @change="onPlanChanged">
+              <select v-model="detailRow.targetProductId" @change="onTargetChanged(detailRow)">
                 <option :value="null">{{ $i('menuUpdate_noLink') }}</option>
                 <option v-for="product in detailCandidates" :key="product.productId" :value="product.productId">
                   {{ candidateLabel(product) }}
@@ -611,6 +724,15 @@
               :placeholder="$i('menuUpdate_searchCatalogue')"
               :aria-label="$i('menuUpdate_searchCatalogue')"
             >
+
+            <label v-if="needsMatchConfirmation(detailRow)" class="checkbox-label confirm">
+              <input
+                type="checkbox"
+                :checked="detailRow.matchConfirmed"
+                @change="setMatchConfirmed(detailRow, $event.target.checked)"
+              >
+              {{ detailRow.matchConfirmed ? $i('menuUpdate_matchConfirmed') : $i('menuUpdate_confirmMatch') }}
+            </label>
 
             <h4>{{ $i('menuUpdate_prices') }}</h4>
             <div class="price-fields">
@@ -674,7 +796,10 @@ import {
   buildDraft,
   channelEnum,
   channelName,
+  carryDecisions,
+  clearRuleState,
   counts,
+  defaultRules,
   isUnresolved,
   money,
   percent,
@@ -684,21 +809,11 @@ import {
   setManualPrice,
   snapshot,
   toValidateRequest,
-  visibleRows
+  visibleRows,
+  withScopeApplied
 } from '~/utils/menu-update'
 
-const DEFAULT_RULES = () => ({
-  missingChannelRule: 'KeepCurrent',
-  referenceChannel: 'Takeaway',
-  missingChannelPercent: null,
-  absentProductRule: 'Keep',
-  absentProductPercent: null,
-  absentProductUseReferenceRateForAllChannels: false,
-  newProductChannelRule: 'RequireExplicit',
-  newProductEatInPercent: null,
-  newProductDeliveryPercent: null,
-  rounding: 'NearestKrone'
-})
+const DEFAULT_RULES = defaultRules
 
 export default {
   components: { AdminPage },
@@ -731,9 +846,22 @@ export default {
       validationError: '',
 
       isApplying: false,
+      isCheckingStatus: false,
       applyError: '',
       receipt: null,
       lastOperationId: '',
+      // Set when an apply ended with an unknown result. Until the operation's status is known
+      // the plan is frozen: re-validating would mint a new operation, and applying that could
+      // create a second copy of something the first call may already have written.
+      outcomeUnknown: false,
+
+      rulesExpanded: false,
+      columnMappings: {},
+      isRemapping: false,
+      remapNotice: '',
+      // The exact signed request of an apply whose result never came back. Retrying uses this
+      // and nothing else, so a retry can only ever repeat that one operation.
+      pendingApplyRequest: null,
 
       filter: 'all',
       query: '',
@@ -742,11 +870,16 @@ export default {
 
       channels: CHANNELS,
       filterKeys: ['all', 'updated', 'new', 'review', 'unchanged', 'notInSource'],
-      limits: { maxFiles: 8, maxFileMb: 20, maxTotalMb: 40 },
+      // Matches MenuUpdateAnalysisService and the extraction client, so a file can never pass
+      // here and then be refused by the reader.
+      limits: { maxFiles: 8, maxFileMb: 14, maxTotalMb: 56 },
 
       // Bumped on every store change so a response from the previous store is discarded
       // instead of quietly repopulating the screen.
       requestGeneration: 0,
+      // Bumped on every edit. A validate reply for an older revision is dropped: without this a
+      // slow earlier reply could land last and overwrite the current plan and its canApply.
+      planRevision: 0,
       abortController: null,
       validateTimer: null
     }
@@ -764,7 +897,23 @@ export default {
         : this.$i('menuUpdate_readingDocuments', { count: this.files.length + (this.pastedText.trim() ? 1 : 0) })
     },
     canAnalyze () {
-      return !this.isAnalyzing && this.selectedStore > 0 && (this.files.length > 0 || !!this.pastedText.trim())
+      return !this.isAnalyzing &&
+        this.selectedStore > 0 &&
+        !this.uploadTooLarge &&
+        (this.files.length > 0 || !!this.pastedText.trim())
+    },
+    /** True when the chosen files break a limit, which also disables analysing. */
+    uploadTooLarge () {
+      const total = this.files.reduce((sum, f) => sum + f.size, 0)
+      return this.files.length > this.limits.maxFiles ||
+        this.files.some(f => f.size > this.limits.maxFileMb * 1024 * 1024) ||
+        total > this.limits.maxTotalMb * 1024 * 1024
+    },
+    columnMappingChanged () {
+      return Object.keys(this.columnMappings).some((doc) => {
+        const mapping = this.columnMappings[doc]
+        return !!mapping.defaultChannel || Object.keys(mapping.columns).length > 0
+      })
     },
     resolvedMap () { return resolvedByKey(this.validation) },
     planCounts () { return counts(this.rows, this.resolvedMap) },
@@ -775,7 +924,11 @@ export default {
     },
     rateSuggestions () { return (this.validation && this.validation.rateSuggestions) || [] },
     blockers () { return (this.validation && this.validation.blockers) || [] },
-    canApply () { return !!(this.validation && this.validation.canApply) && !this.isApplying },
+    canApply () {
+      // Frozen while an apply's result is unknown: the only safe moves then are asking for the
+      // status or repeating that same operation.
+      return !!(this.validation && this.validation.canApply) && !this.isApplying && !this.outcomeUnknown
+    },
     canGoToReview () { return this.rows.length > 0 && !this.isValidating },
     newProductRows () { return this.rows.filter(r => r.action === ACTION.create && r.newProduct) },
     newProductsConfirmed () {
@@ -815,9 +968,13 @@ export default {
     },
     allSourceWarnings () {
       const warnings = []
-      ;((this.analysis && this.analysis.warnings) || []).forEach((w, i) => warnings.push({ key: 'a' + i, message: w.message }))
+      ;((this.analysis && this.analysis.warnings) || []).forEach((w, i) => {
+        warnings.push({ key: 'a' + i, message: this.issueText(w) })
+      })
       ;((this.analysis && this.analysis.sources) || []).forEach((source) => {
-        (source.warnings || []).forEach((w, i) => warnings.push({ key: source.documentName + i, message: source.documentName + ': ' + w.message }))
+        (source.warnings || []).forEach((w, i) => {
+          warnings.push({ key: source.documentName + i, message: source.documentName + ': ' + this.issueText(w) })
+        })
       })
       return warnings
     },
@@ -887,37 +1044,149 @@ export default {
     },
     /** Fails fast in the browser so the operator is not made to wait for a large upload. */
     checkLocalLimits () {
-      const total = this.files.reduce((sum, f) => sum + f.size, 0)
-      const tooManyFiles = this.files.length > this.limits.maxFiles
-      const tooBigFile = this.files.some(f => f.size > this.limits.maxFileMb * 1024 * 1024)
-      const tooBigTotal = total > this.limits.maxTotalMb * 1024 * 1024
+      const tooLarge = this.$i('menuUpdate_tooLarge', {
+        files: this.limits.maxFiles,
+        perFile: this.limits.maxFileMb,
+        total: this.limits.maxTotalMb
+      })
 
-      if (tooManyFiles || tooBigFile || tooBigTotal) {
-        this.analysisError = this.$i('menuUpdate_tooLarge', {
-          files: this.limits.maxFiles,
-          perFile: this.limits.maxFileMb,
-          total: this.limits.maxTotalMb
-        })
-      } else if (this.analysisError === this.$i('menuUpdate_tooLarge', {
-        files: this.limits.maxFiles, perFile: this.limits.maxFileMb, total: this.limits.maxTotalMb
-      })) {
+      if (this.uploadTooLarge) {
+        this.analysisError = tooLarge
+      } else if (this.analysisError === tooLarge) {
         this.analysisError = ''
       }
     },
+    // ------------------------------------------------------------ column mapping
+    /**
+     * What the operator has decided about each price column, keyed by document.
+     *
+     * The reading proposes, this decides. On the real takeaway menu the reading returns "Medium"
+     * and "Stor" as sizes with no channel at all and an "Extra" column it cannot classify, so
+     * without this none of that document's prices could be used.
+     */
+    mappingFor (documentName) {
+      if (!this.columnMappings[documentName]) {
+        this.$set(this.columnMappings, documentName, { defaultChannel: '', columns: {} })
+      }
+      return this.columnMappings[documentName]
+    },
+    defaultChannelFor (documentName) {
+      return (this.columnMappings[documentName] || {}).defaultChannel || ''
+    },
+    setDefaultChannel (documentName, value) {
+      this.$set(this.mappingFor(documentName), 'defaultChannel', value)
+    },
+    columnEntry (documentName, column) {
+      const mapping = this.columnMappings[documentName]
+      return (mapping && mapping.columns[column.label]) || null
+    },
+    columnKind (documentName, column) {
+      const entry = this.columnEntry(documentName, column)
+      if (entry) { return entry.kind }
+      if (column.ignored) { return 'Ignore' }
+      return column.resolvedKind === 'Size' ? 'Size' : 'Channel'
+    },
+    columnChannel (documentName, column) {
+      const entry = this.columnEntry(documentName, column)
+      if (entry) { return entry.channel || '' }
+      return column.resolvedChannel || ''
+    },
+    setColumnKind (documentName, column, kind) {
+      const mapping = this.mappingFor(documentName)
+      const entry = mapping.columns[column.label] || { kind, channel: this.columnChannel(documentName, column) }
+      entry.kind = kind
+      this.$set(mapping.columns, column.label, entry)
+    },
+    setColumnChannel (documentName, column, channel) {
+      const mapping = this.mappingFor(documentName)
+      const entry = mapping.columns[column.label] || { kind: this.columnKind(documentName, column), channel }
+      entry.channel = channel
+      this.$set(mapping.columns, column.label, entry)
+    },
     sourceMappings () {
-      return this.files
-        .filter(file => (this.mappingChoice[file.name] || 'auto') !== 'auto')
-        .map((file) => {
-          const choice = this.mappingChoice[file.name]
-          return {
-            documentName: file.name,
-            sizeColumns: [],
-            sizeColumnChannel: choice === 'sizes-eatIn'
-              ? 'EatIn'
-              : choice === 'sizes-delivery' ? 'Delivery' : 'Takeaway',
-            channelColumns: {}
-          }
+      return Object.keys(this.columnMappings).map((documentName) => {
+        const mapping = this.columnMappings[documentName]
+        return {
+          documentName,
+          defaultChannel: mapping.defaultChannel || null,
+          columns: Object.keys(mapping.columns).map((label) => {
+            const entry = mapping.columns[label]
+            return {
+              label,
+              kind: entry.kind === 'Ignore' ? 'Unknown' : entry.kind,
+              channel: entry.channel || null,
+              ignore: entry.kind === 'Ignore'
+            }
+          })
+        }
+      }).filter(m => m.defaultChannel || m.columns.length)
+    },
+    /**
+     * Re-merges the documents that were already read against the corrected mapping. This calls
+     * no AI provider, so fixing a column costs nothing and never forces a re-upload.
+     */
+    async applyColumnMapping () {
+      if (!this.analysis || this.isRemapping) { return }
+
+      const generation = this.requestGeneration
+      this.isRemapping = true
+      this.analysisError = ''
+      this.remapNotice = ''
+
+      // The plan in hand was built on the old column meanings, so it stops being applicable the
+      // moment a remap starts. Dropping it here closes the window where Apply could still fire.
+      this.validation = null
+      this.rulePreview = null
+      this.planRevision++
+
+      try {
+        const remapped = await this._menuUpdateService.Remap(this.selectedStore, {
+          documents: this.analysis.documents,
+          sourceMappings: this.sourceMappings(),
+          // Returned exactly as issued, so the coverage the server established survives.
+          sourceMetadata: this.analysis.sourceMetadata,
+          sourceMetadataToken: this.analysis.sourceMetadataToken
         })
+
+        if (generation !== this.requestGeneration) { return }
+
+        this.adoptAnalysis(remapped, { preserveDecisions: true })
+        await this.validate()
+      } catch (error) {
+        if (generation !== this.requestGeneration || error.cancelled) { return }
+        this.analysisError = error.message || this.$i('menuUpdate_remapFailed')
+      } finally {
+        if (generation === this.requestGeneration) { this.isRemapping = false }
+      }
+    },
+    /**
+     * Takes a fresh analysis, keeping the decisions the operator has already made where the new
+     * reading still has the same row. Anything that can no longer be carried is named, not
+     * silently dropped.
+     */
+    adoptAnalysis (analysis, { preserveDecisions = false } = {}) {
+      const previous = preserveDecisions ? this.rows : []
+      const fresh = buildDraft(analysis)
+      const merged = preserveDecisions ? carryDecisions(previous, fresh) : { rows: fresh, carried: 0, dropped: [] }
+
+      this.analysis = analysis
+      this.rows = merged.rows
+      this.initialRows = snapshot(this.rows)
+      this.prepareNewProducts()
+      this.checkedKeys = []
+      this.undoSnapshot = null
+      this.rulePreview = null
+      this.planRevision++
+
+      if (merged.dropped.length) {
+        this.remapNotice = this.$i('menuUpdate_remapDroppedDecisions', {
+          kept: merged.carried,
+          lost: merged.dropped.length,
+          names: merged.dropped.slice(0, 5).join(', ')
+        })
+      } else if (merged.carried) {
+        this.remapNotice = this.$i('menuUpdate_remapKeptDecisions', { kept: merged.carried })
+      }
     },
     async runAnalysis () {
       if (!this.canAnalyze) { return }
@@ -937,7 +1206,9 @@ export default {
             files: this.files,
             text: this.pastedText,
             textLabel: this.$i('menuUpdate_pastedTextLabel'),
-            sourceMappings: this.sourceMappings()
+            // The columns are mapped after the reading, against the labels it actually returns,
+            // rather than guessed from the file name beforehand.
+            sourceMappings: []
           },
           {
             signal: this.abortController && this.abortController.signal,
@@ -950,10 +1221,7 @@ export default {
         // A response that belongs to a store the operator has since left is discarded.
         if (generation !== this.requestGeneration) { return }
 
-        this.analysis = analysis
-        this.rows = buildDraft(analysis)
-        this.initialRows = snapshot(this.rows)
-        this.prepareNewProducts()
+        this.adoptAnalysis(analysis)
         this.step = 2
         await this.validate()
       } catch (error) {
@@ -967,77 +1235,108 @@ export default {
     // ------------------------------------------------------------ validation
     onPlanChanged () {
       // Any edit invalidates the previous server check, so the token is dropped immediately
-      // and a fresh validation is requested.
+      // and a fresh validation is requested for this revision of the plan.
       this.validation = null
       this.rulePreview = null
+      this.planRevision++
       if (this.validateTimer) { clearTimeout(this.validateTimer) }
       this.validateTimer = setTimeout(() => this.validate(), 250)
     },
-    async validate (rulesOverride) {
-      if (!this.rows.length || this.selectedStore <= 0) { return null }
+    /**
+     * Asks the server to recompute the plan.
+     *
+     * `rows` and `rules` let a preview be checked without touching the live draft. The result is
+     * only stored when it still belongs to the current store and the current revision, so a slow
+     * earlier reply can never overwrite a newer answer or its canApply.
+     */
+    async validate ({ rules, rows, store } = {}) {
+      const useRows = rows || this.rows
+      if (!useRows.length || this.selectedStore <= 0) { return null }
+      if (this.outcomeUnknown) { return null }
 
       const generation = this.requestGeneration
-      const rules = rulesOverride || this.activeRules
+      const revision = this.planRevision
       this.isValidating = true
       this.validationError = ''
 
       try {
         const result = await this._menuUpdateService.Validate(
-          toValidateRequest(this.selectedStore, rules, this.rows))
+          toValidateRequest(this.selectedStore, rules || this.activeRules, useRows))
 
-        if (generation !== this.requestGeneration) { return null }
-        if (!rulesOverride) { this.validation = result }
+        if (generation !== this.requestGeneration || revision !== this.planRevision) { return null }
+        if (store !== false) { this.validation = result }
         return result
       } catch (error) {
-        if (generation !== this.requestGeneration || error.cancelled) { return null }
+        if (generation !== this.requestGeneration || revision !== this.planRevision || error.cancelled) {
+          return null
+        }
         this.validationError = error.message || this.$i('menuUpdate_validationFailed')
         return null
       } finally {
-        if (generation === this.requestGeneration) { this.isValidating = false }
+        if (generation === this.requestGeneration && revision === this.planRevision) {
+          this.isValidating = false
+        }
       }
     },
 
     // ------------------------------------------------------------ bulk rules
+    /**
+     * Checks a candidate rule without touching the draft.
+     *
+     * The scope is applied to a copy, so abandoning a preview cannot leave rows permanently
+     * excluded from rules, and the live validation is left alone until the rule is committed.
+     */
     async previewRules () {
-      const scoped = new Set(this.currentScopeRows.map(r => r.rowKey))
-      const before = snapshot(this.rows)
+      const scopedKeys = this.currentScopeRows.map(r => r.rowKey)
+      const candidateRows = withScopeApplied(this.rows, scopedKeys)
+      const candidateRules = { ...this.draftRules }
 
-      this.rows.forEach((row) => { row.excludedFromRules = !scoped.has(row.rowKey) })
+      const result = await this.validate({ rules: candidateRules, rows: candidateRows, store: false })
+      if (!result) { return }
 
-      const result = await this.validate(this.draftRules)
-      if (!result) {
-        this.rows = before
-        return
+      this.rulePreview = {
+        validation: result,
+        rules: candidateRules,
+        rows: candidateRows,
+        scopedKeys
       }
-      this.rulePreview = result
-      this.validation = result
     },
+    /** Commits exactly the rule and scope that were previewed. */
     commitRulePreview () {
       if (!this.rulePreview) { return }
-      // The snapshot is taken before the rule becomes the active one, so undo restores exactly
-      // the draft the operator had.
-      this.undoSnapshot = { rows: snapshot(this.rows), rules: { ...this.activeRules } }
-      this.activeRules = { ...this.draftRules }
+
+      // Captured before anything changes, so undo restores the draft the operator actually had.
+      this.undoSnapshot = {
+        rows: snapshot(this.rows),
+        activeRules: { ...this.activeRules },
+        draftRules: { ...this.draftRules }
+      }
+
+      this.rows = this.rulePreview.rows.map(row => ({ ...row }))
+      this.activeRules = { ...this.rulePreview.rules }
+      this.draftRules = { ...this.rulePreview.rules }
       this.rulePreview = null
       this.onPlanChanged()
     },
     undoBulk () {
       if (!this.undoSnapshot) { return }
       this.rows = this.undoSnapshot.rows
-      this.activeRules = this.undoSnapshot.rules
-      this.draftRules = { ...this.undoSnapshot.rules }
+      this.activeRules = { ...this.undoSnapshot.activeRules }
+      this.draftRules = { ...this.undoSnapshot.draftRules }
       this.undoSnapshot = null
       this.onPlanChanged()
     },
-    /** Restores the draft the analysis produced. No document is read again. */
+    /**
+     * Clears the price rules and nothing else. Manual prices, chosen actions, catalogue links,
+     * accepted warnings and new product setup are the operator's own work, not rule output, so
+     * they survive. No document is read again.
+     */
     resetRules () {
-      this.rows = snapshot(this.initialRows)
-      this.prepareNewProducts()
+      this.rows = clearRuleState(this.rows)
       this.activeRules = DEFAULT_RULES()
       this.draftRules = DEFAULT_RULES()
       this.rulePreview = null
       this.undoSnapshot = null
-      this.checkedKeys = []
       this.onPlanChanged()
     },
 
@@ -1057,9 +1356,12 @@ export default {
       if (row.newProduct) { return }
       const category = this.categories.find(c => c.name === row.categoryName) || this.categories[0]
       row.newProduct = {
-        name: row.displayName,
-        description: '',
-        otherInformation: '',
+        // The number stays in the name so the next menu import can match this product again.
+        name: row.menuNumber ? row.menuNumber + '. ' + row.displayName : row.displayName,
+        // What the document said about it. Dropping these would create a product with no
+        // description and no allergens even though both were read off the menu.
+        description: row.description || '',
+        otherInformation: row.otherInformation || '',
         categoryId: category ? category.categoryId : null,
         // Proposed from what this store already charges in that category, never a fixed rate.
         tax: category ? category.suggestedTax : 0,
@@ -1109,6 +1411,20 @@ export default {
       if (!row.acceptedWarnings.includes(code)) { row.acceptedWarnings.push(code) }
       this.onPlanChanged()
     },
+    /** True when the reading was not sure this row belongs to the product it picked. */
+    needsMatchConfirmation (row) {
+      return row.action === ACTION.update &&
+        (row.sourceIssues || []).some(code => code === 'matchNotConfirmed')
+    },
+    setMatchConfirmed (row, confirmed) {
+      row.matchConfirmed = confirmed
+      this.onPlanChanged()
+    },
+    /** Choosing a different product is itself a confirmation of which product it is. */
+    onTargetChanged (row) {
+      if (this.needsMatchConfirmation(row)) { row.matchConfirmed = true }
+      this.onPlanChanged()
+    },
     setManual (row, channel, value) {
       const trimmed = String(value == null ? '' : value).trim()
       setManualPrice(row, channel, trimmed === '' ? null : Math.round(Number(trimmed) * 100))
@@ -1117,48 +1433,112 @@ export default {
 
     // ------------------------------------------------------------ apply
     async applyPlan () {
-      if (!this.canApply) { return }
+      if (!this.canApply || this.outcomeUnknown) { return }
 
       this.isApplying = true
       this.applyError = ''
       const generation = this.requestGeneration
+      const operationId = this.validation.operationId
 
       try {
-        // Always apply exactly the plan the server just validated.
+        // Exactly the plan the server normalised and signed, sent back untouched. Rebuilding it
+        // here would drop the ids the server generated for new products.
         const request = {
-          operationId: this.validation.operationId,
+          operationId,
           planToken: this.validation.planToken,
           expiresAt: this.validation.expiresAt,
           catalogueHash: this.validation.catalogueHash,
-          plan: toValidateRequest(this.selectedStore, this.activeRules, this.rows)
+          plan: this.validation.normalizedPlan
         }
-        this.lastOperationId = this.validation.operationId
+        this.lastOperationId = operationId
+        this.pendingApplyRequest = request
 
         const receipt = await this._menuUpdateService.Apply(request)
         if (generation !== this.requestGeneration) { return }
         this.receipt = receipt
+        this.pendingApplyRequest = null
       } catch (error) {
         if (generation !== this.requestGeneration || error.cancelled) { return }
         this.applyError = error.message || this.$i('menuUpdate_applyFailed')
-        // A plan the server refused as stale or expired is re-checked, never retried blindly.
-        if (error.status === 400) { await this.validate() }
+
+        if (error.status === 400) {
+          // The server answered and refused, so nothing was written. Re-checking is safe.
+          await this.validate()
+        } else {
+          // No answer, so whether the operation committed is unknown. The plan is frozen until
+          // the status says: validating again would mint a new operation, and applying that
+          // could create a second copy of something already written.
+          this.outcomeUnknown = true
+        }
       } finally {
         if (generation === this.requestGeneration) { this.isApplying = false }
       }
     },
-    /** After an unknown network result, ask whether the operation committed. Never retry. */
+    /**
+     * Asks whether the operation committed.
+     *
+     * A "not applied" answer is not a verdict. The status endpoint reads the ledger, and the
+     * ledger row is only written when the transaction commits, so an apply that is still in
+     * flight looks exactly like one that never happened. Treating that as failure and building a
+     * new plan would mint a second operation, and applying it could create a duplicate of
+     * something the first call was about to write. So the plan stays frozen either way, and the
+     * only ways forward are to ask again or to repeat the very same operation.
+     */
     async checkStatus () {
-      if (!this.lastOperationId) { return }
+      if (!this.lastOperationId || this.isCheckingStatus) { return }
+
+      const generation = this.requestGeneration
+      const operationId = this.lastOperationId
+      this.isCheckingStatus = true
+
       try {
-        const status = await this._menuUpdateService.GetStatus(this.selectedStore, this.lastOperationId)
+        const status = await this._menuUpdateService.GetStatus(this.selectedStore, operationId)
+        if (generation !== this.requestGeneration || operationId !== this.lastOperationId) { return }
+
         if (status.applied) {
           this.receipt = status.receipt
           this.applyError = ''
+          this.outcomeUnknown = false
+          this.pendingApplyRequest = null
         } else {
           this.applyError = this.$i('menuUpdate_statusNotApplied')
         }
       } catch (error) {
+        if (generation !== this.requestGeneration) { return }
         this.applyError = error.message || this.$i('menuUpdate_statusFailed')
+      } finally {
+        if (generation === this.requestGeneration) { this.isCheckingStatus = false }
+      }
+    },
+    /**
+     * Sends the very same signed request again. The server keys the operation in its ledger, so
+     * repeating it either commits the one operation or replays the receipt it already wrote. It
+     * can never produce a second set of products.
+     */
+    async retryPendingApply () {
+      if (!this.pendingApplyRequest || this.isApplying) { return }
+
+      const generation = this.requestGeneration
+      this.isApplying = true
+      this.applyError = ''
+
+      try {
+        const receipt = await this._menuUpdateService.Apply(this.pendingApplyRequest)
+        if (generation !== this.requestGeneration) { return }
+        this.receipt = receipt
+        this.outcomeUnknown = false
+        this.pendingApplyRequest = null
+      } catch (error) {
+        if (generation !== this.requestGeneration || error.cancelled) { return }
+        this.applyError = error.message || this.$i('menuUpdate_applyFailed')
+
+        // The frozen state survives every failure here, including a refusal. A refusal of the
+        // retry says this attempt was rejected, not that the original one was: the first call may
+        // still be in flight and about to commit, while the retry loses a race or finds the plan
+        // expired. Only a receipt proves the outcome, so the operation stays pending and the
+        // operator can ask for the status or repeat it again.
+      } finally {
+        if (generation === this.requestGeneration) { this.isApplying = false }
       }
     },
 
@@ -1181,13 +1561,16 @@ export default {
       }
     },
     startOver () {
+      // Everything, including the in-flight flags and the operation whose result was unknown.
+      // Leaving any of it behind is how a stale status lookup or a frozen plan would survive
+      // into work that has nothing to do with it.
       this.step = 1
       this.files = []
-      this.mappingChoice = {}
       this.pastedText = ''
       this.analysis = null
       this.rows = []
       this.initialRows = []
+      this.columnMappings = {}
       this.validation = null
       this.receipt = null
       this.applyError = ''
@@ -1200,6 +1583,19 @@ export default {
       this.query = ''
       this.activeRules = DEFAULT_RULES()
       this.draftRules = DEFAULT_RULES()
+      this.lastOperationId = ''
+      this.outcomeUnknown = false
+      this.pendingApplyRequest = null
+      this.remapNotice = ''
+      this.isApplying = false
+      this.isCheckingStatus = false
+      this.isAnalyzing = false
+      this.isRemapping = false
+      this.isValidating = false
+      this.uploadPercent = 0
+      this.rulesExpanded = false
+      this.planRevision++
+      if (this.validateTimer) { clearTimeout(this.validateTimer); this.validateTimer = null }
     },
 
     // ------------------------------------------------------------ presentation
@@ -1289,6 +1685,30 @@ export default {
     },
     sourceRowCount (source) {
       return (source.pages || []).reduce((sum, page) => sum + page.rowCount, 0)
+    },
+    /**
+     * How much of a document was read.
+     *
+     * Only a page count taken from the file itself is stated as fact. When the server could not
+     * establish one, the count is reported as unchecked rather than quietly showing the number
+     * the reading claimed for itself.
+     */
+    sourcePageSummary (source) {
+      const rows = this.sourceRowCount(source)
+
+      if (source.coverageVerified) {
+        return this.$i('menuUpdate_sourcePagesVerified', { pages: source.detectedPageCount, rows })
+      }
+
+      if (source.detectedPageCount) {
+        return this.$i('menuUpdate_sourcePagesIncomplete', {
+          returned: source.pagesReturned,
+          pages: source.detectedPageCount,
+          rows
+        })
+      }
+
+      return this.$i('menuUpdate_sourcePagesUnverified', { returned: source.pagesReturned, rows })
     },
     receiptPrice (price, channel) {
       const before = price['previous' + channel]

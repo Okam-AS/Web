@@ -1,6 +1,10 @@
 import {
   ACTION,
   buildDraft,
+  carryDecisions,
+  clearRuleState,
+  defaultRules,
+  withScopeApplied,
   channelEnum,
   channelName,
   counts,
@@ -281,5 +285,82 @@ describe('formatting', () => {
     expect(channelName('EatIn')).toBe('eatIn')
     expect(channelName('delivery')).toBe('delivery')
     expect(channelEnum('eatIn')).toBe('EatIn')
+  })
+})
+
+describe('withScopeApplied', () => {
+  it('returns a copy so an abandoned preview cannot leave rows excluded for good', () => {
+    const rows = buildDraft(analysis)
+    const scoped = withScopeApplied(rows, ['n:1#medium'])
+
+    expect(scoped[0].excludedFromRules).toBe(false)
+    expect(scoped[1].excludedFromRules).toBe(true)
+    // The draft the operator is looking at is untouched.
+    expect(rows.every(r => r.excludedFromRules === false)).toBe(true)
+  })
+})
+
+describe('clearRuleState', () => {
+  it('clears rule output and keeps everything the operator decided', () => {
+    const rows = buildDraft(analysis)
+    rows[0].action = ACTION.skip
+    rows[0].excludedFromRules = true
+    setManualPrice(rows[0], 'eatIn', 26500)
+    rows[0].acceptedWarnings = ['largePriceChange']
+    rows[0].matchConfirmed = true
+
+    const cleared = clearRuleState(rows)
+
+    expect(cleared[0].excludedFromRules).toBe(false)
+    expect(cleared[0].action).toBe(ACTION.skip)
+    expect(cleared[0].manualPrices).toEqual([{ channel: 'EatIn', amount: 26500 }])
+    expect(cleared[0].acceptedWarnings).toEqual(['largePriceChange'])
+    expect(cleared[0].matchConfirmed).toBe(true)
+  })
+
+  it('has defaults that really are the defaults', () => {
+    expect(defaultRules().absentProductRule).toBe('Keep')
+    expect(defaultRules().missingChannelRule).toBe('KeepCurrent')
+    expect(defaultRules().newProductChannelRule).toBe('RequireExplicit')
+  })
+})
+
+describe('carryDecisions', () => {
+  it('carries decisions onto rows the new reading still has', () => {
+    const before = buildDraft(analysis)
+    before[0].action = ACTION.skip
+    setManualPrice(before[1], 'takeaway', 23200)
+    before[1].matchConfirmed = true
+    before[1].acceptedWarnings = ['sizeAssumed']
+
+    const after = buildDraft(analysis)
+    const result = carryDecisions(before, after)
+
+    expect(result.rows[0].action).toBe(ACTION.skip)
+    expect(result.rows[1].manualPrices).toEqual([{ channel: 'Takeaway', amount: 23200 }])
+    expect(result.rows[1].matchConfirmed).toBe(true)
+    expect(result.rows[1].acceptedWarnings).toEqual(['sizeAssumed'])
+    expect(result.carried).toBe(2)
+    expect(result.dropped).toEqual([])
+  })
+
+  it('names the decisions it could not carry instead of dropping them quietly', () => {
+    const before = buildDraft(analysis)
+    before[1].action = ACTION.skip
+
+    // The new reading no longer produces that row, because the column meaning changed.
+    const after = buildDraft(analysis).filter(r => r.rowKey !== 'n:2#medium')
+    const result = carryDecisions(before, after)
+
+    expect(result.rows).toHaveLength(2)
+    expect(result.dropped).toEqual(['Rabarbra'])
+  })
+
+  it('leaves an untouched row alone rather than counting it as a decision', () => {
+    const before = buildDraft(analysis)
+    const result = carryDecisions(before, buildDraft(analysis))
+
+    expect(result.carried).toBe(0)
+    expect(result.dropped).toEqual([])
   })
 })

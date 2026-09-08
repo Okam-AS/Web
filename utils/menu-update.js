@@ -41,10 +41,17 @@ export function buildDraft (analysis) {
     sizeLabel: row.sizeLabel || null,
     menuNumber: row.menuNumber || '',
     categoryName: row.categoryName || '',
+    // The document's own words. They are what a new product is described by, and what the
+    // server matches on when a menu prints ingredients instead of dish names.
+    description: row.description || '',
+    otherInformation: row.otherInformation || '',
     sourcePrices: (row.sourcePrices || []).map(p => ({ ...p })),
     manualPrices: [],
     excludedFromRules: false,
     acceptedWarnings: [],
+    // Carried into the plan so the server keeps demanding a decision on them.
+    sourceIssues: (row.sourceIssues || []).slice(),
+    matchConfirmed: false,
     newProduct: null,
     candidates: row.candidates || [],
     reason: row.suggestedReason || '',
@@ -68,10 +75,14 @@ export function buildDraft (analysis) {
       sizeLabel: null,
       menuNumber: '',
       categoryName: product.categoryName || '',
+      description: product.description || '',
+      otherInformation: product.otherInformation || '',
       sourcePrices: [],
       manualPrices: [],
       excludedFromRules: false,
       acceptedWarnings: [],
+      sourceIssues: [],
+      matchConfirmed: false,
       newProduct: null,
       candidates: [],
       reason: '',
@@ -99,6 +110,8 @@ export function toValidateRequest (storeId, rules, rows) {
       sourcePrices: row.sourcePrices,
       manualPrices: row.manualPrices,
       excludedFromRules: !!row.excludedFromRules,
+      sourceIssues: row.sourceIssues || [],
+      matchConfirmed: !!row.matchConfirmed,
       newProduct: row.action === ACTION.create ? row.newProduct : null,
       acceptedWarnings: row.acceptedWarnings || []
     }))
@@ -243,6 +256,96 @@ export function channelEnum (channel) {
 /** A deep copy used for the undo snapshot of a bulk action. */
 export function snapshot (rows) {
   return JSON.parse(JSON.stringify(rows))
+}
+
+/**
+ * Returns a copy of the draft with the rule scope applied, leaving the draft alone.
+ *
+ * Previewing a rule must not edit the rows the operator is looking at: an abandoned preview
+ * would otherwise leave every out-of-scope row silently excluded from rules for good.
+ */
+export function withScopeApplied (rows, scopedKeys) {
+  const inScope = new Set(scopedKeys)
+  return rows.map(row => ({ ...row, excludedFromRules: !inScope.has(row.rowKey) }))
+}
+
+/**
+ * The default price rules. Resetting returns to these and touches nothing the operator typed.
+ */
+export function defaultRules () {
+  return {
+    missingChannelRule: 'KeepCurrent',
+    referenceChannel: 'Takeaway',
+    missingChannelPercent: null,
+    absentProductRule: 'Keep',
+    absentProductPercent: null,
+    absentProductUseReferenceRateForAllChannels: false,
+    newProductChannelRule: 'RequireExplicit',
+    newProductEatInPercent: null,
+    newProductDeliveryPercent: null,
+    rounding: 'NearestKrone'
+  }
+}
+
+/**
+ * Carries the operator's own decisions from one draft onto a freshly merged one.
+ *
+ * Re-reading the columns rebuilds every row, so without this a corrected mapping would quietly
+ * throw away chosen actions, typed prices, confirmed matches and new product setup. A row key
+ * encodes the product and its size, so a row whose key no longer exists genuinely refers to
+ * something the new mapping does not produce; those are reported rather than guessed at.
+ */
+export function carryDecisions (previousRows, nextRows) {
+  const previous = {}
+  previousRows.forEach((row) => { previous[row.rowKey] = row })
+
+  let carried = 0
+  const dropped = []
+
+  const rows = nextRows.map((row) => {
+    const before = previous[row.rowKey]
+    if (!before) { return row }
+
+    const decided = before.action !== ACTION.update ||
+      before.targetProductId !== row.targetProductId ||
+      (before.manualPrices || []).length > 0 ||
+      (before.acceptedWarnings || []).length > 0 ||
+      before.matchConfirmed ||
+      !!before.newProduct
+
+    if (decided) { carried++ }
+
+    return {
+      ...row,
+      action: before.action,
+      targetProductId: before.action === ACTION.create ? null : before.targetProductId,
+      manualPrices: (before.manualPrices || []).map(m => ({ ...m })),
+      acceptedWarnings: (before.acceptedWarnings || []).slice(),
+      matchConfirmed: !!before.matchConfirmed,
+      excludedFromRules: !!before.excludedFromRules,
+      newProduct: before.newProduct ? { ...before.newProduct } : null
+    }
+  })
+
+  const nextKeys = new Set(nextRows.map(r => r.rowKey))
+  previousRows.forEach((row) => {
+    const decided = row.action !== ACTION.update ||
+      (row.manualPrices || []).length > 0 ||
+      (row.acceptedWarnings || []).length > 0 ||
+      row.matchConfirmed ||
+      !!row.newProduct
+    if (decided && !nextKeys.has(row.rowKey)) { dropped.push(row.displayName || row.rowKey) }
+  })
+
+  return { rows, carried, dropped }
+}
+
+/**
+ * Clears only what a price rule produced. Manual prices, chosen actions, catalogue links,
+ * accepted warnings and new product setup are the operator's own work and survive.
+ */
+export function clearRuleState (rows) {
+  return rows.map(row => ({ ...row, excludedFromRules: false }))
 }
 
 export function resolvedByKey (validation) {
