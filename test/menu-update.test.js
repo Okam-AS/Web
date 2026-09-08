@@ -11,6 +11,7 @@ import {
   isUnresolved,
   matchesQuery,
   money,
+  newProductName,
   percent,
   resolvedByKey,
   ruleImpact,
@@ -362,5 +363,57 @@ describe('carryDecisions', () => {
 
     expect(result.carried).toBe(0)
     expect(result.dropped).toEqual([])
+  })
+})
+
+describe('newProductName', () => {
+  it('gives two sizes of one dish distinct names', () => {
+    // The catalogue keeps one product per size, so the size lives in the name and nowhere else.
+    // Without it both rows would create products called the same thing and the next import
+    // could not tell them apart.
+    const medium = newProductName({ menuNumber: '19', displayName: 'Vegansk potet og spinat', sizeLabel: 'Medium' })
+    const large = newProductName({ menuNumber: '19', displayName: 'Vegansk potet og spinat', sizeLabel: 'Stor' })
+
+    expect(medium).toBe('19. Vegansk potet og spinat Medium')
+    expect(large).toBe('19. Vegansk potet og spinat Stor')
+    expect(medium).not.toBe(large)
+  })
+
+  it('includes the number and the size exactly once each', () => {
+    // Wording that already carries the number, the size, or both.
+    expect(newProductName({ menuNumber: '1', displayName: '1. Jungel sterk salami', sizeLabel: 'Medium' }))
+      .toBe('1. Jungel sterk salami Medium')
+    expect(newProductName({ menuNumber: '1', displayName: 'Jungel sterk salami Medium', sizeLabel: 'Medium' }))
+      .toBe('1. Jungel sterk salami Medium')
+    expect(newProductName({ menuNumber: '1', displayName: '1. Jungel sterk salami Medium', sizeLabel: 'Medium' }))
+      .toBe('1. Jungel sterk salami Medium')
+  })
+
+  it('matches an existing size regardless of case or accents', () => {
+    expect(newProductName({ displayName: 'Pizza STOR', sizeLabel: 'Stor' })).toBe('Pizza STOR')
+    expect(newProductName({ displayName: 'Pizza Liten', sizeLabel: 'liten' })).toBe('Pizza Liten')
+  })
+
+  it('does not treat a size that is only part of a longer word as present', () => {
+    expect(newProductName({ displayName: 'Storfe og lok', sizeLabel: 'Stor' })).toBe('Storfe og lok Stor')
+  })
+
+  it('leaves out whatever it was not given', () => {
+    expect(newProductName({ displayName: 'Cola 0,5' })).toBe('Cola 0,5')
+    expect(newProductName({ menuNumber: '7', displayName: 'Cola 0,5' })).toBe('7. Cola 0,5')
+    expect(newProductName({ displayName: 'Cola 0,5', sizeLabel: 'Halvliter' })).toBe('Cola 0,5 Halvliter')
+    expect(newProductName({})).toBe('')
+  })
+
+  it('tolerates a menu number that already carries its punctuation', () => {
+    expect(newProductName({ menuNumber: '3.', displayName: 'Norsk Wagyu', sizeLabel: 'Medium' }))
+      .toBe('3. Norsk Wagyu Medium')
+  })
+
+  it('produces a name the planner can read the size back out of', () => {
+    // The no-migration fallback for per-size pricing depends on this round trip.
+    const name = newProductName({ menuNumber: '19', displayName: 'Vegansk potet og spinat', sizeLabel: 'Stor' })
+    expect(name.toLowerCase()).toContain('stor')
+    expect(name.toLowerCase()).not.toContain('medium')
   })
 })

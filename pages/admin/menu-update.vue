@@ -607,7 +607,7 @@
               {{ $i('menuUpdate_newProductSetupHelp') }}
             </p>
             <div v-for="row in newProductRows" :key="row.rowKey" class="new-product-row">
-              <strong>{{ row.displayName }}</strong>
+              <strong>{{ row.newProduct.name }}</strong>
               <div class="new-product-fields">
                 <label class="field">
                   {{ $i('menuUpdate_category') }}
@@ -859,6 +859,7 @@ import {
   defaultRules,
   isUnresolved,
   money,
+  newProductName,
   percent,
   resolvedByKey,
   ruleImpact,
@@ -1459,8 +1460,10 @@ export default {
       if (row.newProduct) { return }
       const category = this.categories.find(c => c.name === row.categoryName) || this.categories[0]
       row.newProduct = {
-        // The number stays in the name so the next menu import can match this product again.
-        name: row.menuNumber ? row.menuNumber + '. ' + row.displayName : row.displayName,
+        // The number and the size both stay in the name, because that is where the next import
+        // reads them back from. Two sizes of one dish must not become two products called the
+        // same thing.
+        name: newProductName(row),
         // What the document said about it. Dropping these would create a product with no
         // description and no allergens even though both were read off the menu.
         description: row.description || '',

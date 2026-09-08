@@ -659,8 +659,9 @@ describe('menu update page', () => {
     const row = wrapper.vm.rows.find(r => r.rowKey === 'n:2')
     wrapper.vm.changeAction(row, 'Create')
 
-    // The number stays in the name so a later import can match this product again.
-    expect(row.newProduct.name).toBe('2. Rabarbra')
+    // The number and the size both stay in the name, because that is where a later import reads
+    // them back from. This row is the Medium; the Stor of the same dish must not collide with it.
+    expect(row.newProduct.name).toBe('2. Rabarbra Medium')
     expect(row.newProduct.description).toBe('Rorosromme, mozzarella, rabarbrakompott')
     expect(row.newProduct.otherInformation).toBe('Gluten, kumelk')
   })

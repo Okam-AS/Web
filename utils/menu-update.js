@@ -253,6 +253,43 @@ export function channelEnum (channel) {
   return 'Delivery'
 }
 
+const escapeForRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+const fold = value => (value || '')
+  .toLowerCase()
+  .normalize('NFD')
+  .replace(/[\u0300-\u036F]/g, '')
+  .trim()
+
+/**
+ * The name a new product is created under.
+ *
+ * Both the number and the size have to be in it, each exactly once. The size matters because
+ * where a catalogue keeps one product per size, the size lives in the name and nowhere else:
+ * that is what the planner reads back to group a product with the right rate, and what the
+ * matcher uses to tell Medium from Stor on the next import. Without it two rows off the same
+ * dish would create two products called the same thing and neither could be matched again.
+ *
+ * Neither part is added when the wording already carries it, so a name is never doubled up.
+ */
+export function newProductName ({ menuNumber, displayName, sizeLabel } = {}) {
+  const base = (displayName || '').trim()
+  const number = (menuNumber || '').trim().replace(/[.)\s]+$/, '')
+  const size = (sizeLabel || '').trim()
+
+  // Any leading number counts as already numbered: a second one in front would read "1. 2. X".
+  const alreadyNumbered = /^\s*\d/.test(base)
+  let name = number && !alreadyNumbered ? number + '. ' + base : base
+  name = name.trim()
+
+  if (size) {
+    const hasSize = new RegExp('(^|\\s)' + escapeForRegex(fold(size)) + '($|\\s)').test(fold(name))
+    if (!hasSize) { name = (name + ' ' + size).trim() }
+  }
+
+  return name
+}
+
 /** A deep copy used for the undo snapshot of a bulk action. */
 export function snapshot (rows) {
   return JSON.parse(JSON.stringify(rows))
