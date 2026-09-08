@@ -724,6 +724,7 @@ export default {
   menuUpdate_issue_newProductSetupMissing: "Nye produkter trenger navn, kategori og gyldig mva.",
   menuUpdate_issue_newProductSetupUnconfirmed: "Bekreft oppsettet for de nye produktene.",
   menuUpdate_issue_noPricesFound: "Ingen brukbar pris ble lest for dette produktet.",
+  menuUpdate_issue_productHasVariants: "Dette produktet har tilvalg. Tillegget på et tilvalg er ett beløp, ikke ett per salgsmåte, og beholdes uendret.",
   menuUpdate_issue_ruleReferenceMissing: "Referansekanalen har ingen bekreftet pris, så regelen ble ikke brukt. Prisen beholdes.",
   menuUpdate_issue_sizeAssumed: "En pris uten størrelse ble plassert på én av størrelsene. Kontroller at det er riktig.",
   menuUpdate_issue_sourceConflict: "To menyer oppgir ulik pris for dette feltet. Velg hvilken som gjelder, eller hopp over raden.",

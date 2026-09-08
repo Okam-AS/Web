@@ -724,6 +724,7 @@ export default {
   menuUpdate_issue_newProductSetupMissing: "New products need a name, a category and a valid VAT rate.",
   menuUpdate_issue_newProductSetupUnconfirmed: "Confirm the setup for the new products.",
   menuUpdate_issue_noPricesFound: "No usable price was read for this product.",
+  menuUpdate_issue_productHasVariants: "This product has options. An option surcharge is a single amount, not one per channel, and is left unchanged.",
   menuUpdate_issue_ruleReferenceMissing: "The reference channel has no confirmed price, so the rule was not applied. The price is kept.",
   menuUpdate_issue_sizeAssumed: "A price without a size was placed on one of the sizes. Check that this is right.",
   menuUpdate_issue_sourceConflict: "Two menus give different prices for this field. Choose which one applies, or skip the row.",

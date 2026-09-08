@@ -724,6 +724,7 @@ export default {
   menuUpdate_issue_newProductSetupMissing: "Neue Produkte brauchen einen Namen, eine Kategorie und einen gültigen MwSt.-Satz.",
   menuUpdate_issue_newProductSetupUnconfirmed: "Bestätige die Einstellungen für die neuen Produkte.",
   menuUpdate_issue_noPricesFound: "Für dieses Produkt wurde kein brauchbarer Preis gelesen.",
+  menuUpdate_issue_productHasVariants: "Dieses Produkt hat Optionen. Ein Optionsaufschlag ist ein einzelner Betrag, nicht einer pro Verkaufsart, und bleibt unverändert.",
   menuUpdate_issue_ruleReferenceMissing: "Die Referenz-Verkaufsart hat keinen bestätigten Preis, daher wurde die Regel nicht angewendet. Der Preis bleibt.",
   menuUpdate_issue_sizeAssumed: "Ein Preis ohne Größe wurde einer der Größen zugeordnet. Bitte prüfen, ob das stimmt.",
   menuUpdate_issue_sourceConflict: "Zwei Menüs nennen unterschiedliche Preise für dieses Feld. Wähle den gültigen Preis oder überspringe die Zeile.",
