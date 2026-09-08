@@ -475,7 +475,7 @@
                   </td>
                   <td class="col-product">
                     <strong>
-                      <span v-if="row.menuNumber" class="num">{{ row.menuNumber }}.</span>
+                      <span v-if="rowNumberPrefix(row)" class="num">{{ rowNumberPrefix(row) }}</span>
                       {{ rowPrimaryName(row) }}
                       <span v-if="row.sizeLabel" class="size">· {{ row.sizeLabel }}</span>
                     </strong>
@@ -1744,6 +1744,17 @@ export default {
         return resolved.productName
       }
       return row.displayName
+    },
+    /**
+     * The menu number shown in front of the name, when it adds anything.
+     *
+     * A catalogue product usually carries its own number in its name, so once a matched row
+     * leads with that name, prefixing it again reads as "1. 1. Jungel sterk salami". The name's
+     * own number wins; the menu number is still searchable and still shown in the details.
+     */
+    rowNumberPrefix (row) {
+      if (!row.menuNumber) { return '' }
+      return /^\s*\d/.test(this.rowPrimaryName(row) || '') ? '' : row.menuNumber + '.'
     },
     /** The menu's own line, shown clamped under the name. The detail panel has all of it. */
     rowSourceText (row) {

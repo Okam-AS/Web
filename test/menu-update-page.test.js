@@ -838,6 +838,33 @@ describe('menu update page', () => {
     expect(wrapper.vm.rowSourceText(row)).toBe(ingredients)
     // And "linked to X" is not repeated once the name itself is X.
     expect(wrapper.vm.rowLinkText(row)).toBe('')
+    // The catalogue name already starts with the number, so it is not prefixed again.
+    expect(wrapper.vm.rowNumberPrefix(row)).toBe('')
+  })
+
+  it('prefixes the menu number only when the name does not already carry one', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+    await wrapper.vm.$nextTick()
+
+    const numbered = wrapper.vm.rows.find(r => r.rowKey === 'n:1')
+    expect(wrapper.vm.rowPrimaryName(numbered)).toBe('1. Jungel sterk salami')
+    expect(wrapper.vm.rowNumberPrefix(numbered)).toBe('')
+
+    // Rendered once, not twice.
+    const cell = wrapper.findAll('.review tbody tr').at(0).find('.col-product strong').text()
+    expect(cell).toContain('1. Jungel sterk salami')
+    expect(cell).not.toContain('1. 1.')
+
+    // A catalogue product with no number of its own still gets the menu number in front.
+    const unnumbered = { ...numbered, menuNumber: '7', targetProductId: null, displayName: 'Cola 0,5' }
+    expect(wrapper.vm.rowPrimaryName(unnumbered)).toBe('Cola 0,5')
+    expect(wrapper.vm.rowNumberPrefix(unnumbered)).toBe('7.')
+
+    // And a row with no menu number at all gets no prefix.
+    expect(wrapper.vm.rowNumberPrefix({ ...unnumbered, menuNumber: '' })).toBe('')
   })
 
   it('falls back to the menu wording when there is no catalogue product to name', async () => {
