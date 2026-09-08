@@ -440,67 +440,70 @@
             <table>
               <thead>
                 <tr>
-                  <th v-if="ruleScope === 'CheckedRows'" scope="col">
+                  <th v-if="ruleScope === 'CheckedRows'" scope="col" class="col-select">
                     <span class="sr-only">{{ $i('menuUpdate_select') }}</span>
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-product">
                     {{ $i('menuUpdate_colProduct') }}
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-suggestion">
                     {{ $i('menuUpdate_colSuggestion') }}
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-price">
                     {{ $i('menuUpdate_channelTakeaway') }}
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-price">
                     {{ $i('menuUpdate_channelEatIn') }}
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-price">
                     {{ $i('menuUpdate_channelDelivery') }}
                   </th>
-                  <th scope="col">
+                  <th scope="col" class="col-action">
                     {{ $i('menuUpdate_colAction') }}
                   </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="row in shownRows" :key="row.rowKey" :class="{ 'row-warning': isRowUnresolved(row) }">
-                  <td v-if="ruleScope === 'CheckedRows'">
+                  <td v-if="ruleScope === 'CheckedRows'" class="col-select">
                     <input
                       type="checkbox"
                       :checked="checkedKeys.includes(row.rowKey)"
-                      :aria-label="$i('menuUpdate_selectRow', { name: row.displayName })"
+                      :aria-label="$i('menuUpdate_selectRow', { name: rowPrimaryName(row) })"
                       @change="toggleChecked(row.rowKey)"
                     >
                   </td>
-                  <td>
+                  <td class="col-product">
                     <strong>
                       <span v-if="row.menuNumber" class="num">{{ row.menuNumber }}.</span>
-                      {{ row.displayName }}
+                      {{ rowPrimaryName(row) }}
                       <span v-if="row.sizeLabel" class="size">· {{ row.sizeLabel }}</span>
                     </strong>
-                    <small>{{ rowLinkText(row) }}</small>
+                    <small v-if="rowSourceText(row)" class="clamp" :title="rowSourceText(row)">{{ rowSourceText(row) }}</small>
+                    <small v-if="rowLinkText(row)">{{ rowLinkText(row) }}</small>
                     <button class="link-btn" type="button" @click="openDetail(row)">
                       {{ $i('menuUpdate_openDetail') }}
                     </button>
                   </td>
-                  <td>
+                  <td class="col-suggestion">
                     <span class="badge" :class="badgeClass(row)">{{ rowStateLabel(row) }}</span>
                     <small>{{ rowStateHint(row) }}</small>
                   </td>
-                  <td v-for="channel in channels" :key="channel" class="price">
+                  <td v-for="channel in channels" :key="channel" class="col-price price">
                     <template v-if="resolvedFor(row)">
-                      <del v-if="showsOldPrice(row, channel)">{{ formatMoney(resolvedFor(row)[channel].currentAmount) }}</del>
-                      <span class="newprice">{{ formatMoney(resolvedFor(row)[channel].newAmount) }}</span>
-                      <small class="origin">{{ originLabel(resolvedFor(row)[channel]) }}</small>
+                      <span class="amounts">
+                        <del v-if="showsOldPrice(row, channel)">{{ formatMoney(resolvedFor(row)[channel].currentAmount) }}</del>
+                        <span class="newprice">{{ formatMoney(resolvedFor(row)[channel].newAmount) }}</span>
+                      </span>
                       <small v-if="channelDelta(row, channel)" class="delta">{{ channelDelta(row, channel) }}</small>
+                      <small class="origin clamp" :title="originLabel(resolvedFor(row)[channel])">{{ originLabel(resolvedFor(row)[channel]) }}</small>
                     </template>
                     <span v-else class="muted">…</span>
                   </td>
-                  <td>
+                  <td class="col-action">
                     <select
                       :value="row.action"
-                      :aria-label="$i('menuUpdate_actionFor', { name: row.displayName })"
+                      :aria-label="$i('menuUpdate_actionFor', { name: rowPrimaryName(row) })"
                       @change="changeAction(row, $event.target.value)"
                     >
                       <option value="Update">
@@ -1727,12 +1730,31 @@ export default {
       const label = this.$i(key)
       return field.originDetail ? label + ' · ' + field.originDetail : label
     },
+    /**
+     * What the row is called in the table.
+     *
+     * A matched update is about a catalogue product, so it leads with that product's name. The
+     * menus this was built for print a number and an ingredient list and no dish name at all, so
+     * leading with the document's own wording filled the column with a paragraph and made the
+     * table impossible to scan.
+     */
+    rowPrimaryName (row) {
+      const resolved = this.resolvedFor(row)
+      if (row.action !== ACTION.create && row.targetProductId && resolved && resolved.productName) {
+        return resolved.productName
+      }
+      return row.displayName
+    },
+    /** The menu's own line, shown clamped under the name. The detail panel has all of it. */
+    rowSourceText (row) {
+      const primary = this.rowPrimaryName(row)
+      return row.displayName && row.displayName !== primary ? row.displayName : ''
+    },
     rowLinkText (row) {
       if (row.action === ACTION.create) { return this.$i('menuUpdate_willCreate') }
+      // A linked row already leads with the catalogue name, so saying it again adds nothing.
       if (!row.targetProductId) { return this.$i('menuUpdate_noLink') }
-      const resolved = this.resolvedFor(row)
-      const name = (resolved && resolved.productName) || ''
-      return this.$i('menuUpdate_linkedTo', { name })
+      return ''
     },
     rowStateLabel (row) {
       if (row.action === ACTION.skip) { return this.$i('menuUpdate_actionSkip') }
@@ -2219,7 +2241,25 @@ export default {
   &:hover { text-decoration: underline; }
 }
 
-.review { padding: 0; }
+.review {
+  padding: 0;
+
+  // Fixed layout makes the widths above authoritative. Otherwise the longest cell wins, which
+  // is how an ingredient paragraph came to own the product column and the price provenance came
+  // to own everything else.
+  table {
+    table-layout: fixed;
+    min-width: 900px;
+  }
+}
+
+// Two lines and then an ellipsis, with the full text on hover and in the details.
+.clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
 .tools {
   padding: 19px;
@@ -2279,9 +2319,24 @@ table {
     padding: 16px 15px;
     border-top: 1px solid #edf0ea;
     vertical-align: top;
+    // Ingredient lists and file names have no natural break points, so without this a single
+    // long token would widen its column and push the actions past the edge.
+    overflow-wrap: anywhere;
   }
 
-  td:nth-child(2) { min-width: 215px; }
+  // Columns are sized explicitly rather than by position. The old rule keyed off the second
+  // cell, which is the product only while the checkbox column is present; without it the width
+  // landed on Suggestion and squeezed the product to a sliver.
+  .col-select { width: 3%; }
+  .col-product { width: 26%; }
+  .col-suggestion { width: 11%; }
+  .col-price { width: 15%; }
+  .col-action { width: 14%; }
+
+  .col-action select {
+    width: 100%;
+    max-width: none;
+  }
   td strong { display: block; font-size: 1.05em; }
   td small { display: block; margin-top: 3px; font-size: 0.9em; color: #64748b; }
 }
@@ -2291,12 +2346,20 @@ table {
 .size { color: #64748b; font-weight: 400; }
 
 .price {
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
+
+  // Only the amounts stay on one line. The provenance underneath names a document, a page and a
+  // column, and keeping that unbreakable is what pushed the action column off the screen.
+  .amounts { white-space: nowrap; }
 
   del { color: #94a3b8; margin-right: 6px; }
   .newprice { color: #1bb776; font-weight: 600; }
-  .origin { font-style: italic; }
+
+  .origin {
+    font-style: italic;
+    white-space: normal;
+  }
+
   .delta { color: #64748b; }
 }
 

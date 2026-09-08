@@ -820,4 +820,75 @@ describe('menu update page', () => {
       expect(table.element.closest('.tablewrap')).not.toBeNull()
     })
   })
+
+  it('leads a matched row with the catalogue product name, not the menu paragraph', async () => {
+    // The real menus print a number and an ingredient list and no dish name, so the extracted
+    // name is a paragraph. Leading with it filled the product column and made rows 200px tall.
+    const ingredients = 'Rorosromme, mozzarella, rabarbrakompott, sjalottlok, spekepolse av lam og storfe, parmesan'
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    const row = wrapper.vm.rows.find(r => r.rowKey === 'n:2')
+    row.displayName = ingredients
+
+    expect(wrapper.vm.rowPrimaryName(row)).toBe('2. Rabarbra')
+    // The menu's own wording is kept, as secondary context rather than as the heading.
+    expect(wrapper.vm.rowSourceText(row)).toBe(ingredients)
+    // And "linked to X" is not repeated once the name itself is X.
+    expect(wrapper.vm.rowLinkText(row)).toBe('')
+  })
+
+  it('falls back to the menu wording when there is no catalogue product to name', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    const row = wrapper.vm.rows.find(r => r.rowKey === 'n:2')
+    wrapper.vm.changeAction(row, 'Create')
+
+    expect(wrapper.vm.rowPrimaryName(row)).toBe('Rabarbra')
+    // Nothing is duplicated underneath when the heading is already the menu's wording.
+    expect(wrapper.vm.rowSourceText(row)).toBe('')
+    expect(wrapper.vm.rowLinkText(row)).toBe('menuUpdate_willCreate')
+  })
+
+  it('gives every review column an explicit class so widths do not depend on position', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+    await wrapper.vm.$nextTick()
+
+    const headers = wrapper.findAll('.review thead th').wrappers.map(w => w.attributes('class'))
+    expect(headers).toEqual(['col-product', 'col-suggestion', 'col-price', 'col-price', 'col-price', 'col-action'])
+
+    const firstRow = wrapper.findAll('.review tbody tr').at(0)
+    expect(firstRow.find('.col-product').exists()).toBe(true)
+    expect(firstRow.find('.col-action select').exists()).toBe(true)
+
+    // The amounts stay together while the provenance beside them is free to wrap.
+    expect(firstRow.find('.col-price .amounts').exists()).toBe(true)
+    expect(firstRow.find('.col-price .origin.clamp').exists()).toBe(true)
+  })
+
+  it('keeps the column classes aligned when the checkbox column appears', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    wrapper.setData({ ruleScope: 'CheckedRows' })
+    await wrapper.vm.$nextTick()
+
+    const headers = wrapper.findAll('.review thead th').wrappers.map(w => w.attributes('class'))
+    expect(headers[0]).toBe('col-select')
+    expect(headers[1]).toBe('col-product')
+
+    const firstRow = wrapper.findAll('.review tbody tr').at(0)
+    expect(firstRow.findAll('td').at(0).attributes('class')).toBe('col-select')
+    expect(firstRow.findAll('td').at(1).attributes('class')).toBe('col-product')
+  })
 })
