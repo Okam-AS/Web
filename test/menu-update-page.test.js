@@ -31,7 +31,11 @@ const analysis = {
   documents: [{ documentName: 'torshov.pdf' }],
   sourceMetadata: [{ documentName: 'torshov.pdf', detectedPageCount: 2, sizeInBytes: 1000 }],
   sourceMetadataToken: 'meta-token',
-  warnings: [],
+  warnings: [
+    { code: 'documentNotice', message: 'Nr. 19 er trykket som 223 / 325 og kan vaere en kolonnefeil.' },
+    { code: 'documentNotice', message: 'Nr. 21 mangler pris for stor.' },
+    { code: 'documentNotice', message: 'Extra-kolonnen inneholder tillegg, ikke pizzapriser.' }
+  ],
   rows: [
     {
       rowKey: 'n:1',
@@ -87,7 +91,11 @@ const validation = (overrides = {}) => ({
   summary: { updateCount: 1, createCount: 0, skipCount: 0, unchangedCount: 0, channels: [] },
   rateSuggestions: [],
   blockers: [{ code: 'sourceConflict', rowKey: 'n:2' }],
-  warnings: [],
+  warnings: [
+    { code: 'documentNotice', message: 'Nr. 19 er trykket som 223 / 325 og kan vaere en kolonnefeil.' },
+    { code: 'documentNotice', message: 'Nr. 21 mangler pris for stor.' },
+    { code: 'documentNotice', message: 'Extra-kolonnen inneholder tillegg, ikke pizzapriser.' }
+  ],
   rows: [
     {
       rowKey: 'n:1',
@@ -131,7 +139,10 @@ function build ({ service = {}, selectedAdminStore = 7 } = {}) {
     localVue,
     store,
     mocks: {
-      $i: (key, params) => (params ? key + ':' + JSON.stringify(params) : key),
+      $i: (key, params) => {
+        if (TRANSLATED_KEYS.has(key)) { return 'T:' + key }
+        return params ? key + ':' + JSON.stringify(params) : key
+      },
       $router: { push: jest.fn() }
     },
     computed: {
@@ -143,6 +154,14 @@ function build ({ service = {}, selectedAdminStore = 7 } = {}) {
 }
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0))
+
+// The real $i returns the key only when a translation is missing. Most tests assert on raw keys,
+// so the mock keeps doing that, except for the few keys whose translated-or-not branch is itself
+// under test.
+const TRANSLATED_KEYS = new Set([
+  'menuUpdate_issue_documentNotice',
+  'menuUpdate_issue_sourceConflict'
+])
 
 const buildRows = () => analysis.rows.map(row => ({
   rowKey: row.rowKey,
@@ -670,5 +689,135 @@ describe('menu update page', () => {
     })
     expect(unchecked).toContain('menuUpdate_sourcePagesUnverified')
     expect(unchecked).not.toContain('undefined')
+  })
+
+  it('keeps each reading note distinct instead of collapsing them into one generic line', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    const messages = wrapper.vm.allSourceWarnings.map(w => w.message)
+
+    // Three different notes, still three different lines. The useful part is what the reading
+    // actually said, e.g. that product 19 is printed as 223 / 325.
+    expect(new Set(messages).size).toBe(messages.length)
+    expect(messages.some(m => m.includes('223 / 325'))).toBe(true)
+    expect(messages.some(m => m.includes('Extra-kolonnen'))).toBe(true)
+
+    // The localized heading introduces the note rather than replacing it.
+    expect(messages[0]).toContain('T:menuUpdate_issue_documentNotice')
+    expect(messages[0]).toContain('Nr. 19')
+  })
+
+  it('still localizes an issue whose message carries no information of its own', () => {
+    const { wrapper } = build()
+
+    expect(wrapper.vm.issueText({ code: 'sourceConflict', message: 'Two sources give different prices.' }))
+      .toBe('T:menuUpdate_issue_sourceConflict')
+    // An unknown code falls back to whatever the server said rather than showing nothing.
+    expect(wrapper.vm.issueText({ code: 'somethingNew', message: 'Server text' })).toBe('Server text')
+  })
+
+  it('shows the candidate prices from the preview, not from the untouched draft', async () => {
+    const previewValidation = validation({
+      canApply: true,
+      blockers: [],
+      rows: [
+        {
+          rowKey: 'n:1',
+          changed: true,
+          productName: '1. Jungel sterk salami',
+          blockers: [],
+          warnings: [],
+          takeaway: { channel: 'Takeaway', currentAmount: 24000, newAmount: 24200, origin: 'Source', changed: true },
+          eatIn: { channel: 'EatIn', currentAmount: 26000, newAmount: 26200, origin: 'Rule', changed: true },
+          delivery: { channel: 'Delivery', currentAmount: 26000, newAmount: 26000, origin: 'Unchanged', changed: false }
+        },
+        {
+          rowKey: 'n:2',
+          changed: false,
+          productName: '2. Rabarbra',
+          blockers: [],
+          warnings: [],
+          takeaway: { channel: 'Takeaway', currentAmount: 23500, newAmount: 23500, origin: 'Unchanged', changed: false },
+          eatIn: { channel: 'EatIn', currentAmount: 25500, newAmount: 25500, origin: 'Unchanged', changed: false },
+          delivery: { channel: 'Delivery', currentAmount: 25500, newAmount: 25500, origin: 'Unchanged', changed: false }
+        }
+      ]
+    })
+
+    let call = 0
+    const service = {
+      Validate: jest.fn(() => {
+        call++
+        return Promise.resolve(call === 1 ? validation() : previewValidation)
+      })
+    }
+
+    const { wrapper } = build({ service })
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    wrapper.setData({ draftRules: { ...wrapper.vm.draftRules, missingChannelRule: 'SamePercent' } })
+    await wrapper.vm.previewRules()
+    await wrapper.vm.$nextTick()
+
+    const diff = wrapper.vm.previewDiff
+    expect(diff.productCount).toBe(1)
+    expect(diff.scopeCount).toBe(2)
+    expect(diff.fromRule).toBe(1)
+    expect(diff.fromSource).toBe(1)
+    expect(diff.rows[0].rowKey).toBe('n:1')
+
+    // And it is actually on screen, with the real old and new amounts.
+    const rendered = wrapper.find('.preview-table').text()
+    expect(rendered).toContain('240')
+    expect(rendered).toContain('242')
+    expect(rendered).toContain('260')
+    expect(rendered).toContain('262')
+
+    // The live plan is still the committed one, so the preview only informs.
+    expect(wrapper.vm.activeRules.missingChannelRule).toBe('KeepCurrent')
+  })
+
+  it('counts the preview against the scope that was previewed', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    wrapper.setData({ ruleScope: 'CheckedRows', checkedKeys: ['n:1'] })
+    await wrapper.vm.previewRules()
+
+    // Only the checked row is in scope, whatever the draft looks like now.
+    expect(wrapper.vm.previewDiff.scopeCount).toBe(1)
+  })
+
+  it('has no preview to show before one has been asked for', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+
+    expect(wrapper.vm.previewDiff).toBeNull()
+    expect(wrapper.find('.preview').exists()).toBe(false)
+  })
+
+  it('keeps every wide table inside a bounded scroll container', async () => {
+    // The mapping and preview tables are wider than a phone. They have to scroll within their
+    // own panel rather than stretching the page sideways.
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])
+    await wrapper.vm.runAnalysis()
+    await flush()
+    await wrapper.vm.$nextTick()
+
+    const tables = wrapper.findAll('table').wrappers
+    expect(tables.length).toBeGreaterThan(0)
+    tables.forEach((table) => {
+      expect(table.element.closest('.tablewrap')).not.toBeNull()
+    })
   })
 })

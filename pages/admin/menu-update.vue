@@ -128,74 +128,76 @@
               </label>
             </div>
 
-            <table class="column-table">
-              <thead>
-                <tr>
-                  <th scope="col">
-                    {{ $i('menuUpdate_columnLabel') }}
-                  </th>
-                  <th scope="col">
-                    {{ $i('menuUpdate_columnKind') }}
-                  </th>
-                  <th scope="col">
-                    {{ $i('menuUpdate_columnChannel') }}
-                  </th>
-                  <th scope="col">
-                    {{ $i('menuUpdate_columnStatus') }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="column in source.columns" :key="source.documentName + '::' + column.label">
-                  <th scope="row">
-                    {{ column.label }}
-                  </th>
-                  <td>
-                    <select
-                      :value="columnKind(source.documentName, column)"
-                      :aria-label="$i('menuUpdate_columnKindFor', { label: column.label })"
-                      @change="setColumnKind(source.documentName, column, $event.target.value)"
-                    >
-                      <option value="Size">
-                        {{ $i('menuUpdate_kindSize') }}
-                      </option>
-                      <option value="Channel">
-                        {{ $i('menuUpdate_kindChannel') }}
-                      </option>
-                      <option value="Ignore">
-                        {{ $i('menuUpdate_kindIgnore') }}
-                      </option>
-                    </select>
-                  </td>
-                  <td>
-                    <select
-                      :value="columnChannel(source.documentName, column)"
-                      :disabled="columnKind(source.documentName, column) === 'Ignore'"
-                      :aria-label="$i('menuUpdate_columnChannelFor', { label: column.label })"
-                      @change="setColumnChannel(source.documentName, column, $event.target.value)"
-                    >
-                      <option value="">
-                        {{ $i('menuUpdate_useDocumentDefault') }}
-                      </option>
-                      <option value="Takeaway">
-                        {{ $i('menuUpdate_channelTakeaway') }}
-                      </option>
-                      <option value="EatIn">
-                        {{ $i('menuUpdate_channelEatIn') }}
-                      </option>
-                      <option value="Delivery">
-                        {{ $i('menuUpdate_channelDelivery') }}
-                      </option>
-                    </select>
-                  </td>
-                  <td>
-                    <span v-if="column.ignored" class="badge skip">{{ $i('menuUpdate_kindIgnore') }}</span>
-                    <span v-else-if="column.unresolved" class="badge warn">{{ $i('menuUpdate_columnNeedsMeaning') }}</span>
-                    <span v-else class="badge">{{ $i('menuUpdate_channel' + column.resolvedChannel) }}</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="tablewrap">
+              <table class="column-table">
+                <thead>
+                  <tr>
+                    <th scope="col">
+                      {{ $i('menuUpdate_columnLabel') }}
+                    </th>
+                    <th scope="col">
+                      {{ $i('menuUpdate_columnKind') }}
+                    </th>
+                    <th scope="col">
+                      {{ $i('menuUpdate_columnChannel') }}
+                    </th>
+                    <th scope="col">
+                      {{ $i('menuUpdate_columnStatus') }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="column in source.columns" :key="source.documentName + '::' + column.label">
+                    <th scope="row">
+                      {{ column.label }}
+                    </th>
+                    <td>
+                      <select
+                        :value="columnKind(source.documentName, column)"
+                        :aria-label="$i('menuUpdate_columnKindFor', { label: column.label })"
+                        @change="setColumnKind(source.documentName, column, $event.target.value)"
+                      >
+                        <option value="Size">
+                          {{ $i('menuUpdate_kindSize') }}
+                        </option>
+                        <option value="Channel">
+                          {{ $i('menuUpdate_kindChannel') }}
+                        </option>
+                        <option value="Ignore">
+                          {{ $i('menuUpdate_kindIgnore') }}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <select
+                        :value="columnChannel(source.documentName, column)"
+                        :disabled="columnKind(source.documentName, column) === 'Ignore'"
+                        :aria-label="$i('menuUpdate_columnChannelFor', { label: column.label })"
+                        @change="setColumnChannel(source.documentName, column, $event.target.value)"
+                      >
+                        <option value="">
+                          {{ $i('menuUpdate_useDocumentDefault') }}
+                        </option>
+                        <option value="Takeaway">
+                          {{ $i('menuUpdate_channelTakeaway') }}
+                        </option>
+                        <option value="EatIn">
+                          {{ $i('menuUpdate_channelEatIn') }}
+                        </option>
+                        <option value="Delivery">
+                          {{ $i('menuUpdate_channelDelivery') }}
+                        </option>
+                      </select>
+                    </td>
+                    <td>
+                      <span v-if="column.ignored" class="badge skip">{{ $i('menuUpdate_kindIgnore') }}</span>
+                      <span v-else-if="column.unresolved" class="badge warn">{{ $i('menuUpdate_columnNeedsMeaning') }}</span>
+                      <span v-else class="badge">{{ $i('menuUpdate_channel' + column.resolvedChannel) }}</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div v-if="remapNotice" class="note">
@@ -357,12 +359,64 @@
               </button>
             </div>
 
-            <div v-if="rulePreview" class="note">
-              {{ $i('menuUpdate_previewSummary', {
-                products: rulePreviewImpact.productCount,
-                fields: rulePreviewImpact.fieldCount,
-                scope: $i('menuUpdate_scope_' + ruleScope)
-              }) }}
+            <div v-if="previewDiff" class="preview" role="region" :aria-label="$i('menuUpdate_previewTitle')">
+              <div class="preview-head">
+                <strong>{{ $i('menuUpdate_previewTitle') }}</strong>
+                <small>
+                  {{ $i('menuUpdate_previewCounts', {
+                    products: previewDiff.productCount,
+                    scope: previewDiff.scopeCount,
+                    calculated: previewDiff.fromRule,
+                    fromSource: previewDiff.fromSource,
+                    manual: previewDiff.manual
+                  }) }}
+                </small>
+              </div>
+
+              <p v-if="!previewDiff.productCount" class="muted">
+                {{ $i('menuUpdate_previewNoChanges') }}
+              </p>
+
+              <div v-else class="tablewrap">
+                <table class="preview-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">
+                        {{ $i('menuUpdate_colProduct') }}
+                      </th>
+                      <th scope="col">
+                        {{ $i('menuUpdate_channelTakeaway') }}
+                      </th>
+                      <th scope="col">
+                        {{ $i('menuUpdate_channelEatIn') }}
+                      </th>
+                      <th scope="col">
+                        {{ $i('menuUpdate_channelDelivery') }}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="row in previewDiff.shown" :key="'preview-' + row.rowKey">
+                      <th scope="row">
+                        {{ row.productName || row.rowKey }}
+                      </th>
+                      <td v-for="channel in channels" :key="channel" class="price">
+                        <template v-if="row[channel] && row[channel].changed">
+                          <del>{{ formatMoney(row[channel].currentAmount) }}</del>
+                          <span class="newprice">{{ formatMoney(row[channel].newAmount) }}</span>
+                          <small class="origin">{{ $i('menuUpdate_origin' + row[channel].origin) }}</small>
+                        </template>
+                        <span v-else class="muted">{{ formatMoney(row[channel] && row[channel].newAmount) }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <small v-if="previewDiff.hidden" class="muted">
+                {{ $i('menuUpdate_previewMore', { count: previewDiff.hidden }) }}
+              </small>
+              <small class="helper-text">{{ $i('menuUpdate_previewNotAppliedYet') }}</small>
             </div>
           </div>
         </section>
@@ -815,6 +869,13 @@ import {
 
 const DEFAULT_RULES = defaultRules
 
+// Codes whose message is written by the reading rather than by us. Their text is already in the
+// operator's language and says something specific, so it is never swapped for a fixed string.
+const DYNAMIC_ISSUE_CODES = ['documentNotice']
+
+// How many changed products the preview lists before summarising the rest.
+const PREVIEW_ROW_LIMIT = 8
+
 export default {
   components: { AdminPage },
   data () {
@@ -943,6 +1004,45 @@ export default {
       })
     },
     rulePreviewImpact () { return ruleImpact(this.currentScopeRows) },
+    /**
+     * What the previewed rule would actually do, read off the plan the server returned for it.
+     *
+     * This comes from the preview snapshot rather than the current draft on purpose: the point
+     * of a preview is to show the candidate prices before anything is committed, and the draft
+     * has not changed yet. The counts follow the scope that was previewed, for the same reason.
+     */
+    previewDiff () {
+      if (!this.rulePreview) { return null }
+
+      const scoped = new Set(this.rulePreview.scopedKeys)
+      const rows = ((this.rulePreview.validation && this.rulePreview.validation.rows) || [])
+        .filter(row => scoped.has(row.rowKey))
+
+      const counts = { fromRule: 0, fromSource: 0, manual: 0 }
+      const changed = []
+
+      rows.forEach((row) => {
+        let touched = false
+        this.channels.forEach((channel) => {
+          const field = row[channel]
+          if (!field || !field.changed) { return }
+          touched = true
+          if (field.origin === 'Rule') { counts.fromRule++ }
+          if (field.origin === 'Source') { counts.fromSource++ }
+          if (field.origin === 'Manual') { counts.manual++ }
+        })
+        if (touched) { changed.push(row) }
+      })
+
+      return {
+        rows: changed,
+        shown: changed.slice(0, PREVIEW_ROW_LIMIT),
+        hidden: Math.max(0, changed.length - PREVIEW_ROW_LIMIT),
+        productCount: changed.length,
+        scopeCount: rows.length,
+        ...counts
+      }
+    },
     rulesSummary () {
       const missingLabels = {
         KeepCurrent: 'menuUpdate_ruleKeepCurrent',
@@ -1673,10 +1773,26 @@ export default {
       parts.push(this.$i('menuUpdate_channel' + suggestion.channel))
       return parts.join(' · ')
     },
+    /**
+     * The text shown for one issue.
+     *
+     * Most codes mean a fixed thing and read better in the page's own language. A few carry the
+     * reading's own words, and those words are the whole content: the note that product 19 is
+     * printed as 223 / 325 is the useful part, and replacing it with a generic heading turned
+     * three different warnings into three identical lines. For those the heading introduces the
+     * message rather than replacing it.
+     */
     issueText (issue) {
       const key = 'menuUpdate_issue_' + issue.code
       const translated = this.$i(key)
-      return translated === key ? issue.message : translated
+      const heading = translated === key ? '' : translated
+      const message = (issue.message || '').trim()
+
+      if (DYNAMIC_ISSUE_CODES.includes(issue.code) && message) {
+        return heading ? heading + ' ' + message : message
+      }
+
+      return heading || message
     },
     blockerText (blocker) {
       const row = this.rows.find(r => r.rowKey === blocker.rowKey)
@@ -1788,6 +1904,8 @@ export default {
 }
 
 .panel {
+  max-width: 100%;
+  min-width: 0;
   background: #fff;
   border: 1px solid #e2e8f0;
   border-radius: 12px;
@@ -1967,6 +2085,84 @@ export default {
   gap: 16px;
 }
 
+.column-doc {
+  max-width: 100%;
+  min-width: 0;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.column-doc-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.column-table {
+  min-width: 460px;
+  background: #fff;
+  border-radius: 6px;
+
+  th[scope="row"] {
+    background: transparent;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #292c34;
+    font-weight: 600;
+  }
+
+  select { max-width: 160px; }
+}
+
+.columns-panel {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.preview {
+  max-width: 100%;
+  min-width: 0;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8f9fa;
+
+  .helper-text { display: block; margin-top: 8px; }
+}
+
+.preview-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+
+  small { color: #64748b; }
+}
+
+.preview-table {
+  min-width: 420px;
+  background: #fff;
+  border-radius: 6px;
+
+  th[scope="row"] {
+    background: transparent;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #292c34;
+    font-weight: 600;
+  }
+
+  .origin { font-style: italic; }
+}
+
 .rate-suggestions {
   margin: 8px 0 16px;
   font-size: 0.8em;
@@ -2054,7 +2250,14 @@ export default {
   }
 }
 
-.tablewrap { overflow: auto; }
+.tablewrap {
+  overflow-x: auto;
+  max-width: 100%;
+  // A flex or grid child defaults to min-width:auto, which lets a wide table push the whole
+  // page sideways instead of scrolling within its own panel.
+  min-width: 0;
+  -webkit-overflow-scrolling: touch;
+}
 
 table {
   border-collapse: collapse;
