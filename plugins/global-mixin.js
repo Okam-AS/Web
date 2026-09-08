@@ -30,6 +30,7 @@ import {
   BankAccountService
 } from '~/core/services'
 import { AdminUserService, AdminCartService } from '~/plugins/admin-core-services'
+import { MenuUpdateService } from '~/plugins/menu-update-service'
 import { wholeAmount, fractionAmount, priceLabel, formatString, setCurrencyFormat } from '~/core/helpers/tools'
 import { formatChf } from '~/utils/price'
 
@@ -196,7 +197,9 @@ const mixin = {
     _woltVenueService() { return new WoltVenueService(this._coreInitializer) },
     _rewardService() { return new RewardService(this._coreInitializer) },
     _wrappedService() { return new WrappedService(this._coreInitializer) },
-    _bankAccountService() { return new BankAccountService(this._coreInitializer) }
+    _bankAccountService() { return new BankAccountService(this._coreInitializer) },
+    // New admin-only endpoints; kept local instead of changing the shared core submodule.
+    _menuUpdateService() { return new MenuUpdateService(this._coreInitializer) }
 
   }
 }

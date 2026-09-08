@@ -13,6 +13,8 @@
             <div class="button-group">
               <input class="emoji-btn" type="button" :value="$i('import_verifyAndImport')" @click="showModal = true">
               <input class="emoji-btn" type="button" :value="$i('import_aiImport')" @click="showAIModal = true">
+              <!-- Entry point for the newer flow. This page keeps working exactly as before. -->
+              <input class="emoji-btn" type="button" :value="$i('import_openMenuUpdate')" @click="$router.push('/admin/menu-update')">
               <input class="emoji-btn" type="button" :value="$i('import_clearAllRows')" @click="showClearRowsModal = true">
               <input class="emoji-btn" type="button" :value="$i('import_exportImport')" @click="showExportModal = true">
             </div>
