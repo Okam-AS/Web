@@ -902,6 +902,234 @@ describe('menu update page', () => {
     expect(firstRow.find('.col-price .origin.clamp').exists()).toBe(true)
   })
 
+  // ---------------------------------------------------------------- waiting for the reading
+
+  const pdf = () => ({ name: 'torshov.pdf', type: 'application/pdf', size: 1000 })
+
+  /** A promise the test settles by hand, to hold a request open or fail it late. */
+  const deferred = () => {
+    const box = {}
+    box.promise = new Promise((resolve, reject) => { box.resolve = resolve; box.reject = reject })
+    return box
+  }
+
+  // A run that never settles, so the screen can be inspected mid-wait.
+  const buildWaiting = (overrides = {}) => build({
+    service: { Analyze: jest.fn(() => new Promise(() => {})), ...overrides }
+  })
+
+  const startAnalysis = async (wrapper) => {
+    wrapper.vm.addFiles([pdf()])
+    wrapper.vm.runAnalysis()
+    await wrapper.vm.$nextTick()
+  }
+
+  describe('while an analysis is running', () => {
+    beforeEach(() => { jest.useFakeTimers() })
+    afterEach(() => { jest.useRealTimers() })
+
+    it('measures the upload and says so', async () => {
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      wrapper.vm.uploadPercent = 40
+      await wrapper.vm.$nextTick()
+
+      expect(wrapper.vm.analysisPhase).toBe('uploading')
+      expect(wrapper.find('.progress-bar').exists()).toBe(true)
+      expect(wrapper.find('.progress-bar').attributes('aria-valuenow')).toBe('40')
+      expect(wrapper.text()).toContain('menuUpdate_uploading:{"percent":40}')
+      expect(wrapper.find('.reading-spinner').exists()).toBe(false)
+    })
+
+    it('drops the bar for a spinner once the reading starts, with no percentage left on screen', async () => {
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      wrapper.setData({ analysisPhase: 'reading' })
+      await wrapper.vm.$nextTick()
+
+      // Nothing that could be read as a finished job, and nothing that predicts an end.
+      expect(wrapper.find('.progress-bar').exists()).toBe(false)
+      expect(wrapper.find('.reading-spinner').exists()).toBe(true)
+      expect(wrapper.text()).toContain('menuUpdate_readingWithAi')
+      expect(wrapper.text()).not.toContain('menuUpdate_uploading')
+      expect(wrapper.text()).not.toContain('%')
+    })
+
+    it('switches to the reading phase on the bytes, not on a percentage that rounds to 100', async () => {
+      const { wrapper, stub } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      const onUploadProgress = stub.Analyze.mock.calls[0][2].onUploadProgress
+
+      // 99.6 % rounds to 100 while the last bytes are still going out, so it is held at 99.
+      onUploadProgress({ loaded: 996, total: 1000 })
+      expect(wrapper.vm.uploadPercent).toBe(99)
+      expect(wrapper.vm.analysisPhase).toBe('uploading')
+
+      onUploadProgress({ loaded: 1000, total: 1000 })
+      expect(wrapper.vm.uploadPercent).toBe(100)
+      expect(wrapper.vm.analysisPhase).toBe('reading')
+    })
+
+    it('ignores upload progress from a run the operator has left behind', async () => {
+      const { wrapper, stub } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      const stale = stub.Analyze.mock.calls[0][2].onUploadProgress
+      wrapper.vm.requestGeneration++
+
+      stale({ loaded: 1000, total: 1000 })
+
+      expect(wrapper.vm.analysisPhase).toBe('uploading')
+      expect(wrapper.vm.uploadPercent).toBe(0)
+    })
+
+    it('counts the seconds that actually passed', async () => {
+      const started = 1757000000000
+      const now = jest.spyOn(Date, 'now').mockReturnValue(started)
+
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      expect(wrapper.vm.analysisElapsedSeconds).toBe(0)
+
+      // A throttled tab wakes up once after five seconds rather than five times.
+      now.mockReturnValue(started + 5000)
+      jest.advanceTimersByTime(1000)
+      expect(wrapper.vm.analysisElapsedSeconds).toBe(5)
+
+      now.mockRestore()
+    })
+
+    it('explains a long wait without promising when it ends', async () => {
+      const started = 1757000000000
+      const now = jest.spyOn(Date, 'now').mockReturnValue(started)
+
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+      wrapper.setData({ analysisPhase: 'reading' })
+
+      now.mockReturnValue(started + 19000)
+      jest.advanceTimersByTime(1000)
+      await wrapper.vm.$nextTick()
+      expect(wrapper.vm.analysisIsTakingLong).toBe(false)
+      expect(wrapper.find('.long-wait').exists()).toBe(false)
+
+      now.mockReturnValue(started + 20000)
+      jest.advanceTimersByTime(1000)
+      await wrapper.vm.$nextTick()
+      expect(wrapper.find('.long-wait').text()).toContain('menuUpdate_readingTakingLonger')
+
+      now.mockRestore()
+    })
+
+    it('never announces the ticking seconds to a screen reader', async () => {
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+      wrapper.setData({ analysisPhase: 'reading' })
+      await wrapper.vm.$nextTick()
+
+      // The container is not a live region, and the one part that changes every second says so
+      // itself, so it can still be read on demand without being announced each tick. Only the
+      // phase and the long-wait notice speak.
+      expect(wrapper.find('.progress').attributes('role')).toBeUndefined()
+
+      const elapsed = wrapper.findAll('.reading-body small').at(0)
+      expect(elapsed.text()).toContain('menuUpdate_readingElapsed')
+      expect(elapsed.attributes('aria-live')).toBe('off')
+      expect(elapsed.attributes('aria-hidden')).toBeUndefined()
+      expect(wrapper.find('.reading-body strong').attributes('role')).toBe('status')
+    })
+
+    it('stops the clock and the wait when the operator moves to another store', async () => {
+      window.alert = jest.fn()
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      wrapper.vm.onStoreChanged()
+
+      expect(wrapper.vm.analysisTimer).toBeNull()
+      expect(wrapper.vm.isAnalyzing).toBe(false)
+      expect(wrapper.vm.analysisPhase).toBe('idle')
+      expect(wrapper.vm.analysisElapsedSeconds).toBe(0)
+    })
+
+    it('stops the clock when the page goes away mid-reading', async () => {
+      const { wrapper } = buildWaiting()
+      await startAnalysis(wrapper)
+
+      expect(wrapper.vm.analysisTimer).not.toBeNull()
+
+      wrapper.destroy()
+
+      expect(clearInterval).toHaveBeenCalled()
+    })
+  })
+
+  describe('when an analysis ends', () => {
+    it('stops the clock once the reading finishes', async () => {
+      const { wrapper } = build()
+      wrapper.vm.addFiles([pdf()])
+
+      await wrapper.vm.runAnalysis()
+      await flush()
+
+      expect(wrapper.vm.analysisTimer).toBeNull()
+      expect(wrapper.vm.analysisPhase).toBe('idle')
+      expect(wrapper.find('.reading-spinner').exists()).toBe(false)
+    })
+
+    it('stops the clock when the reading fails', async () => {
+      const { wrapper } = build({
+        service: { Analyze: jest.fn(() => Promise.reject(new Error('boom'))) }
+      })
+      wrapper.vm.addFiles([pdf()])
+
+      await wrapper.vm.runAnalysis()
+      await flush()
+
+      expect(wrapper.vm.analysisError).toBe('boom')
+      expect(wrapper.vm.analysisTimer).toBeNull()
+      expect(wrapper.vm.analysisPhase).toBe('idle')
+    })
+
+    it('leaves a later run counting when an abandoned one settles', async () => {
+      // The operator switches store while a reading is running and starts another one. The
+      // first request then rejects, late, and must not stop the clock the second run owns.
+      window.alert = jest.fn()
+
+      const first = deferred()
+      const { wrapper, stub } = build({
+        service: {
+          Analyze: jest.fn()
+            .mockImplementationOnce(() => first.promise)
+            .mockImplementationOnce(() => new Promise(() => {}))
+        }
+      })
+
+      await startAnalysis(wrapper)
+      const firstTimer = wrapper.vm.analysisTimer
+      expect(firstTimer).not.toBeNull()
+
+      wrapper.vm.onStoreChanged()
+      await startAnalysis(wrapper)
+
+      expect(stub.Analyze).toHaveBeenCalledTimes(2)
+      const secondTimer = wrapper.vm.analysisTimer
+      expect(secondTimer).not.toBeNull()
+      expect(secondTimer).not.toBe(firstTimer)
+
+      first.reject(Object.assign(new Error('cancelled'), { cancelled: true }))
+      await flush()
+
+      expect(wrapper.vm.analysisTimer).toBe(secondTimer)
+      expect(wrapper.vm.isAnalyzing).toBe(true)
+      expect(wrapper.vm.analysisPhase).not.toBe('idle')
+    })
+  })
+
   it('keeps the column classes aligned when the checkbox column appears', async () => {
     const { wrapper } = build()
     wrapper.vm.addFiles([{ name: 'torshov.pdf', type: 'application/pdf', size: 1000 }])

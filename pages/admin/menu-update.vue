@@ -67,11 +67,37 @@
           </button>
         </div>
 
-        <div v-if="isAnalyzing" class="progress" role="status">
-          <div class="progress-bar">
-            <div :style="{ width: uploadPercent + '%' }" />
-          </div>
-          <small>{{ analysisProgressText }}</small>
+        <div v-if="isAnalyzing" class="progress">
+          <!-- Sending the files is measured, so it gets the bar and the percentage. -->
+          <template v-if="analysisPhase === 'uploading'">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :aria-valuenow="uploadPercent"
+            >
+              <div :style="{ width: uploadPercent + '%' }" />
+            </div>
+            <small role="status">{{ $i('menuUpdate_uploading', { percent: uploadPercent }) }}</small>
+          </template>
+
+          <!-- Reading is not measured by anything, so nothing here may look measured: no bar
+               to fill, no percentage and no estimate of when it will be done. -->
+          <template v-else>
+            <div class="reading">
+              <span class="reading-spinner" aria-hidden="true" />
+              <div class="reading-body">
+                <strong role="status">{{ $i('menuUpdate_readingWithAi') }}</strong>
+                <!-- Readable whenever someone goes looking, never announced: a live count
+                     would talk over a screen reader once a second. -->
+                <small aria-live="off">{{ $i('menuUpdate_readingElapsed', { seconds: analysisElapsedSeconds }) }}</small>
+                <small v-if="analysisIsTakingLong" class="long-wait" role="status">
+                  {{ $i('menuUpdate_readingTakingLonger') }}
+                </small>
+              </div>
+            </div>
+          </template>
         </div>
 
         <div class="actions">
@@ -880,6 +906,9 @@ const DYNAMIC_ISSUE_CODES = ['documentNotice']
 // How many changed products the preview lists before summarising the rest.
 const PREVIEW_ROW_LIMIT = 8
 
+// How long a reading has to run before the screen explains that this is normal.
+const LONG_WAIT_SECONDS = 20
+
 export default {
   components: { AdminPage },
   data () {
@@ -892,6 +921,12 @@ export default {
 
       isAnalyzing: false,
       uploadPercent: 0,
+      // Which half of the wait the operator is in. Sending the files can be measured; what the
+      // reader does with them afterwards cannot, and the two must not look alike.
+      analysisPhase: 'idle',
+      analysisStartedAt: 0,
+      analysisElapsedSeconds: 0,
+      analysisTimer: null,
       analysisError: '',
       analysis: null,
 
@@ -956,10 +991,13 @@ export default {
       return [this.$i('menuUpdate_step1'), this.$i('menuUpdate_step2'), this.$i('menuUpdate_step3')]
     },
     hasDraft () { return this.rows.length > 0 },
-    analysisProgressText () {
-      return this.uploadPercent < 100
-        ? this.$i('menuUpdate_uploading', { percent: this.uploadPercent })
-        : this.$i('menuUpdate_readingDocuments', { count: this.files.length + (this.pastedText.trim() ? 1 : 0) })
+    /**
+     * Whether the wait has gone on long enough to be worth explaining. It only decides whether
+     * a sentence is shown; nothing here predicts when the reading will finish, because nothing
+     * knows.
+     */
+    analysisIsTakingLong () {
+      return this.analysisPhase === 'reading' && this.analysisElapsedSeconds >= LONG_WAIT_SECONDS
     },
     canAnalyze () {
       return !this.isAnalyzing &&
@@ -1114,6 +1152,7 @@ export default {
   },
   beforeDestroy () {
     this.cancelInFlight()
+    this.stopAnalysisClock()
     if (this.validateTimer) { clearTimeout(this.validateTimer) }
   },
   methods: {
@@ -1302,6 +1341,9 @@ export default {
       this.isAnalyzing = true
       this.analysisError = ''
       this.uploadPercent = 0
+      // Pasted text has nothing worth measuring, so that run starts in the reading phase.
+      this.analysisPhase = this.files.length > 0 ? 'uploading' : 'reading'
+      this.startAnalysisClock()
 
       try {
         const analysis = await this._menuUpdateService.Analyze(
@@ -1317,7 +1359,15 @@ export default {
           {
             signal: this.abortController && this.abortController.signal,
             onUploadProgress: (event) => {
-              if (event.total) { this.uploadPercent = Math.round((event.loaded / event.total) * 100) }
+              // A callback from a run the operator has left behind must not move this one along.
+              if (generation !== this.requestGeneration || !event.total) { return }
+
+              // The bytes decide what finished, not the percentage they round to. Until the
+              // last byte is out the number is held below 100 and the phase stays uploading,
+              // so nothing on screen claims to be done while it is still sending.
+              const sent = event.loaded >= event.total
+              this.uploadPercent = sent ? 100 : Math.min(99, Math.floor((event.loaded / event.total) * 100))
+              if (sent) { this.analysisPhase = 'reading' }
             }
           }
         )
@@ -1332,7 +1382,33 @@ export default {
         if (generation !== this.requestGeneration || error.cancelled) { return }
         this.analysisError = error.message || this.$i('menuUpdate_analysisFailed')
       } finally {
-        if (generation === this.requestGeneration) { this.isAnalyzing = false }
+        // Not when a later run owns the screen: it started its own clock, and stopping it here
+        // would leave that run counting from a stopped one.
+        if (generation === this.requestGeneration) {
+          this.isAnalyzing = false
+          this.analysisPhase = 'idle'
+          this.stopAnalysisClock()
+        }
+      }
+    },
+
+    /**
+     * Counts the wait from the clock rather than by counting ticks, so a throttled background
+     * tab reports the time that actually passed instead of the number of times it woke up.
+     */
+    startAnalysisClock () {
+      this.stopAnalysisClock()
+      this.analysisStartedAt = Date.now()
+      this.analysisElapsedSeconds = 0
+      this.analysisTimer = setInterval(() => {
+        this.analysisElapsedSeconds = Math.round((Date.now() - this.analysisStartedAt) / 1000)
+      }, 1000)
+    },
+
+    stopAnalysisClock () {
+      if (this.analysisTimer) {
+        clearInterval(this.analysisTimer)
+        this.analysisTimer = null
       }
     },
 
@@ -1699,6 +1775,9 @@ export default {
       this.isRemapping = false
       this.isValidating = false
       this.uploadPercent = 0
+      this.analysisPhase = 'idle'
+      this.analysisElapsedSeconds = 0
+      this.stopAnalysisClock()
       this.rulesExpanded = false
       this.planRevision++
       if (this.validateTimer) { clearTimeout(this.validateTimer); this.validateTimer = null }
@@ -2021,6 +2100,7 @@ export default {
   &.dragging { border-color: #1bb776; background: #f4fbf7; }
   input[type="file"] { display: block; margin: 12px auto 0; }
   small { display: block; margin-top: 8px; color: #64748b; }
+
 }
 
 .source-list { list-style: none; padding: 0; margin: 16px 0; }
@@ -2086,6 +2166,37 @@ export default {
   }
 
   small { display: block; margin-top: 8px; color: #64748b; }
+
+  .reading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: #f8f9fa;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+  }
+
+  .reading-spinner {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    border: 3px solid #e2e8f0;
+    border-top-color: #1bb776;
+    border-radius: 50%;
+    animation: menu-update-spin 0.8s linear infinite;
+  }
+
+  .reading-body {
+    strong { display: block; font-size: 0.95em; color: #292c34; }
+    small { margin-top: 4px; }
+    small.long-wait { color: #92400e; }
+  }
+}
+
+@keyframes menu-update-spin {
+  to { transform: rotate(360deg); }
 }
 
 .stats {
