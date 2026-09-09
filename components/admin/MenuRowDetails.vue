@@ -25,28 +25,28 @@
           {{ $i('menuImport_detailsUntouchedNotice') }}
         </p>
 
-        <label class="field">
-          {{ $i('menuImport_colName') }}
+        <ProductFormField :label="$i('menuImport_colName')">
           <input
             type="text"
             :value="value('name')"
             @change="edit('name', $event.target.value)"
           >
-          <button
-            v-if="differs('name')"
-            type="button"
-            class="link-btn"
-            @click="edit('name', row.sourceMeta.name)"
-          >
-            {{ $i('menuImport_useSourceValue', { value: row.sourceMeta.name }) }}
-          </button>
-          <button v-if="!isCreate && edited('name')" type="button" class="link-btn" @click="reset('name')">
-            {{ $i('menuImport_keepExisting') }}
-          </button>
-        </label>
+          <template #actions>
+            <button
+              v-if="differs('name')"
+              type="button"
+              class="link-btn"
+              @click="edit('name', row.sourceMeta.name)"
+            >
+              {{ $i('menuImport_useSourceValue', { value: row.sourceMeta.name }) }}
+            </button>
+            <button v-if="!isCreate && edited('name')" type="button" class="link-btn" @click="reset('name')">
+              {{ $i('menuImport_keepExisting') }}
+            </button>
+          </template>
+        </ProductFormField>
 
-        <label class="field">
-          {{ $i('menuImport_colCategory') }}
+        <ProductFormField :label="$i('menuImport_colCategory')">
           <MenuProductSearch
             :value="value('categoryId')"
             :options="categoryOptions"
@@ -69,52 +69,58 @@
             </button>
           </div>
           <small v-if="pendingCategoryName" class="pending">{{ $i('menuImport_categoryWillBeCreated', { name: pendingCategoryName }) }}</small>
-        </label>
+        </ProductFormField>
 
-        <label class="field">
-          {{ $i('menuImport_colDescription') }}
+        <ProductFormField :label="$i('menuImport_colDescription')">
           <textarea
             rows="3"
             :value="value('description')"
             @change="edit('description', $event.target.value)"
           />
-          <button
-            v-if="differs('description')"
-            type="button"
-            class="link-btn"
-            @click="edit('description', row.sourceMeta.description)"
-          >
-            {{ $i('menuImport_useSourceText') }}
-          </button>
-          <button v-if="!isCreate && edited('description')" type="button" class="link-btn" @click="reset('description')">
-            {{ $i('menuImport_keepExisting') }}
-          </button>
-        </label>
+          <template #actions>
+            <button
+              v-if="differs('description')"
+              type="button"
+              class="link-btn"
+              @click="edit('description', row.sourceMeta.description)"
+            >
+              {{ $i('menuImport_useSourceText') }}
+            </button>
+            <button v-if="!isCreate && edited('description')" type="button" class="link-btn" @click="reset('description')">
+              {{ $i('menuImport_keepExisting') }}
+            </button>
+          </template>
+        </ProductFormField>
 
-        <label class="field">
-          {{ $i('menuImport_colAllergens') }}
+        <ProductFormField :label="$i('menuImport_colAllergens')">
           <input
             type="text"
             :value="value('otherInformation')"
             :placeholder="$i('menuImport_allergensPlaceholder')"
             @change="edit('otherInformation', $event.target.value)"
           >
-          <button
-            v-if="differs('otherInformation')"
-            type="button"
-            class="link-btn"
-            @click="edit('otherInformation', row.sourceMeta.otherInformation)"
-          >
-            {{ $i('menuImport_useSourceText') }}
-          </button>
-        </label>
+          <template #actions>
+            <button
+              v-if="differs('otherInformation')"
+              type="button"
+              class="link-btn"
+              @click="edit('otherInformation', row.sourceMeta.otherInformation)"
+            >
+              {{ $i('menuImport_useSourceText') }}
+            </button>
+          </template>
+        </ProductFormField>
 
         <details class="disclosure">
           <summary>{{ $i('menuImport_vatDepositAvailability') }}</summary>
 
           <div class="fields3">
-            <label v-for="channel in channels" :key="channel" class="field">
-              {{ $i('menuImport_vatFor', { channel: $i('menuImport_channel' + channelKey(channel)) }) }}
+            <ProductFormField
+              v-for="channel in channels"
+              :key="channel"
+              inline
+              :label="$i('menuImport_vatFor', { channel: $i('menuImport_channel' + channelKey(channel)) })"
+            >
               <input
                 type="number"
                 min="0"
@@ -123,13 +129,12 @@
                 :value="value(taxField(channel))"
                 @change="editNumber(taxField(channel), $event.target.value)"
               >
-            </label>
+            </ProductFormField>
           </div>
 
-          <label class="field">
-            {{ $i('menuImport_colDeposit') }}
-            <!-- Kept apart from the three totals on purpose: pant is added on top of a price,
-                 it is not one of them. -->
+          <!-- Kept apart from the three totals on purpose: pant is added on top of a price,
+               it is not one of them. -->
+          <ProductFormField :label="$i('menuImport_colDeposit')" :hint="$i('menuImport_depositHelp')">
             <input
               type="number"
               min="0"
@@ -137,8 +142,7 @@
               :value="depositInKroner"
               @change="editDeposit($event.target.value)"
             >
-            <small class="helper-text">{{ $i('menuImport_depositHelp') }}</small>
-          </label>
+          </ProductFormField>
 
           <label class="check">
             <input
@@ -242,11 +246,12 @@
 // until it is edited" means in practice.
 
 import MenuProductSearch from '~/components/admin/MenuProductSearch.vue'
+import ProductFormField from '~/components/admin/ProductFormField.vue'
 import { ACTION, CHANNELS, channelEnum, channelName, displayValue, hasMetadataPatch, sourceDiffers } from '~/utils/menu-workspace'
 
 export default {
   name: 'MenuRowDetails',
-  components: { MenuProductSearch },
+  components: { MenuProductSearch, ProductFormField },
   props: {
     row: { type: Object, required: true },
     categories: { type: Array, default: () => [] },
@@ -413,6 +418,16 @@ export default {
 }
 
 .check {
+  // Matches the product editor's checkbox row, so the same control does not look like two.
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+
+  &:hover { background: #f1f5f9; }
+
   display: flex; align-items: center; gap: 10px;
   min-height: 44px; padding: 12px; margin-bottom: 8px;
   background: #f8f9fa; border-radius: 8px; cursor: pointer;

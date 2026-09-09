@@ -23,14 +23,15 @@
       @blur="onBlur"
     >
     <ul
-v-if="open"
-:id="listId"
-ref="list"
-class="menu-product-search-list"
-role="listbox"
-:aria-label="$attrs['aria-label'] || label"
-:style="position"
-@mousedown.prevent>
+      v-if="open"
+      :id="listId"
+      ref="list"
+      class="menu-product-search-list"
+      role="listbox"
+      :aria-label="$attrs['aria-label'] || label"
+      :style="position"
+      @mousedown.prevent
+    >
       <li
         v-for="(option, index) in choices"
         :id="listId + '-' + index"
@@ -49,7 +50,12 @@ role="listbox"
 </template>
 
 <script>
+import popoverDismiss from '~/components/admin/popoverDismiss'
+
 export default {
+  // Closes on a click away, on Escape and when the page moves under it, and stays open while
+  // the operator scrolls the list of matches itself.
+  mixins: [popoverDismiss],
   inheritAttrs: false,
   props: {
     value: { type: [String, Number, Boolean], default: null },
@@ -60,7 +66,8 @@ export default {
     placeholder: { type: String, default: '—' }
   },
   data () {
-    return { open: false, active: -1, position: {}, label: '', query: '' }
+    // Names the element the shared dismissal treats as "inside".
+    return { popoverRef: 'list', open: false, active: -1, position: {}, label: '', query: '' }
   },
   computed: {
     listId () { return 'menu-product-search-' + this._uid },
@@ -76,26 +83,16 @@ export default {
     disabled (value) { if (value) { this.open = false } }
   },
   mounted () {
-    document.addEventListener('mousedown', this.outside)
-    window.addEventListener('resize', this.close)
-    window.addEventListener('scroll', this.onScroll, true)
     const label = this.$el.closest('label')
     if (label) {
       this.label = Array.from(label.childNodes).filter(node => node.nodeType === 3).map(node => node.textContent.trim()).join(' ')
     }
   },
-  beforeDestroy () {
-    document.removeEventListener('mousedown', this.outside)
-    window.removeEventListener('resize', this.close)
-    window.removeEventListener('scroll', this.onScroll, true)
-  },
   methods: {
     close () { this.open = false },
-    outside (event) { if (!this.$el.contains(event.target)) { this.close() } },
     onBlur () { this.close() },
-    onScroll (event) {
-      if (!this.$refs.list || !this.$refs.list.contains(event.target)) { this.close() }
-    },
+    /** Re-anchors the open list after the page moved beneath it. */
+    reposition () { if (this.open) { this.position = this.listPosition() } },
     onSearch (event) {
       this.query = event.target.value
       // Enter chooses a matching existing product, never the Create shortcut above it.
@@ -105,21 +102,32 @@ export default {
     beginSearch () { this.query = ''; this.show() },
     show () {
       if (this.disabled) { return }
-      const rect = this.$refs.trigger.getBoundingClientRect()
+      this.position = this.listPosition()
+      this.active = this.choices.findIndex(option => option.value === this.value && !option.disabled)
+      if (this.active < 0) { this.active = this.choices.findIndex(option => !option.disabled) }
+      this.open = true
+      this.reveal()
+    },
+    /**
+     * Where the list sits: under the trigger when there is room, above it when there is not,
+     * and never off the side of the screen.
+     */
+    listPosition () {
+      const trigger = this.$refs.trigger
+      if (!trigger || typeof trigger.getBoundingClientRect !== 'function') { return {} }
+
+      const rect = trigger.getBoundingClientRect()
       const below = window.innerHeight - rect.bottom - 12
       const above = rect.top - 12
       const upwards = below < 220 && above > below
       const width = Math.min(Math.max(rect.width, 240), window.innerWidth - 24)
-      this.position = {
+
+      return {
         left: Math.max(12, Math.min(rect.left, window.innerWidth - width - 12)) + 'px',
         width: width + 'px',
         maxHeight: Math.max(80, Math.min(300, upwards ? above : below)) + 'px',
         ...(upwards ? { bottom: window.innerHeight - rect.top + 6 + 'px' } : { top: rect.bottom + 6 + 'px' })
       }
-      this.active = this.choices.findIndex(option => option.value === this.value && !option.disabled)
-      if (this.active < 0) { this.active = this.choices.findIndex(option => !option.disabled) }
-      this.open = true
-      this.reveal()
     },
     reveal () {
       this.$nextTick(() => {

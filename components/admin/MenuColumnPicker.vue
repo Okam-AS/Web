@@ -67,9 +67,13 @@
 // enough to be a single click with no warning.
 
 import { COLUMNS, dropdownPosition } from '~/utils/menu-workspace'
+import popoverDismiss from '~/components/admin/popoverDismiss'
 
 export default {
   name: 'MenuColumnPicker',
+  // Closes on a click away, on Escape and when the page moves under it, and stays open while
+  // the operator scrolls the list of columns itself.
+  mixins: [popoverDismiss],
   props: {
     visible: { type: Array, default: () => [] },
     // How many rows actually carry something for each optional column, so the menu can say which
@@ -83,18 +87,10 @@ export default {
     panelId () { return 'menu-column-picker-' + this._uid },
     optional () { return COLUMNS.filter(column => !column.always) }
   },
-  mounted () {
-    document.addEventListener('mousedown', this.outside)
-    window.addEventListener('resize', this.close)
-    window.addEventListener('scroll', this.close, true)
-  },
-  beforeDestroy () {
-    document.removeEventListener('mousedown', this.outside)
-    window.removeEventListener('resize', this.close)
-    window.removeEventListener('scroll', this.close, true)
-  },
   methods: {
     isVisible (id) { return this.visible.includes(id) },
+    /** Re-anchors the open panel after the page moved beneath it. */
+    reposition () { this.position = this.panelPosition() },
     /**
      * Measures the trigger and hands back a position that keeps the whole panel on screen.
      *
@@ -123,9 +119,6 @@ export default {
       if (!this.open) { return }
       this.open = false
       if (this.$refs.trigger) { this.$refs.trigger.focus() }
-    },
-    outside (event) {
-      if (this.open && !this.$el.contains(event.target)) { this.open = false }
     },
     onTriggerKey (event) {
       if (['ArrowDown', 'Enter', ' '].includes(event.key) && !this.open) {
