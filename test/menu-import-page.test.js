@@ -733,6 +733,386 @@ describe('shared category options', () => {
   })
 })
 
+describe('a frozen plan cannot be edited from anywhere', () => {
+  const freeze = async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const built = build({ service: { Apply: jest.fn().mockRejectedValue(failure) } })
+    built.wrapper.vm.adoptAnalysis(analysis)
+    built.wrapper.vm.validation = validation()
+    await built.wrapper.vm.approve()
+    expect(built.wrapper.vm.isLocked).toBe(true)
+    return built
+  }
+
+  it('refuses every entry point that would change the draft, not just the table', async () => {
+    const { wrapper } = await freeze()
+    const before = JSON.stringify(wrapper.vm.rows)
+    const row = wrapper.vm.rows[0]
+
+    // Each of these is reachable from a different control, and a disabled attribute is only a
+    // hint: a keyboard activation or a stale render must hit the same answer.
+    wrapper.vm.addManualRow()
+    wrapper.vm.duplicateRow(row)
+    wrapper.vm.removeRow(row)
+    wrapper.vm.restoreRow(row)
+    wrapper.vm.linkProduct(row, 'p2')
+    wrapper.vm.setManual(row, 'takeaway', '999')
+    wrapper.vm.editMetadata(row, 'description', 'ny tekst')
+    wrapper.vm.resetMetadata(row, 'description')
+    wrapper.vm.createCategoryFor(row, 'Helt ny kategori')
+    wrapper.vm.clearVariantsOf(row)
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.acceptDraft(true)
+    wrapper.vm.clearDraft()
+    wrapper.vm.addFiles([{ name: 'ny.pdf', type: 'application/pdf', size: 1000 }])
+
+    expect(JSON.stringify(wrapper.vm.rows)).toBe(before)
+    expect(wrapper.vm.categoryVariants).toHaveLength(0)
+    expect(wrapper.vm.newCategories).toHaveLength(1)
+    expect(wrapper.vm.files).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('will not open a tool that exists to change the draft, but will still export it', async () => {
+    const { wrapper } = await freeze()
+
+    wrapper.vm.openTool('source')
+    wrapper.vm.openTool('categoryVariants')
+    wrapper.vm.openTool('clear')
+    expect(wrapper.vm.showSource).toBe(false)
+    expect(wrapper.vm.showCategoryVariants).toBe(false)
+    expect(wrapper.vm.showClear).toBe(false)
+
+    // Reading the draft out as JSON changes nothing.
+    wrapper.vm.openTool('draft')
+    expect(wrapper.vm.showDraft).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('will not read a document again while an operation is outstanding', async () => {
+    const { wrapper, stub } = await freeze()
+    wrapper.vm.pastedText = 'ny meny'
+
+    await wrapper.vm.runAnalysis()
+
+    expect(stub.Analyze).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('keeps each store\'s outstanding operation with that store', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const storage = makeStorage()
+    const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    await wrapper.vm.approve()
+    wrapper.destroy()
+
+    // Another store is not frozen by store 7's outstanding apply …
+    const { wrapper: other } = build({ storage, selectedAdminStore: 8 })
+    await flush()
+    expect(other.vm.outcomeUnknown).toBe(false)
+    other.destroy()
+
+    // … and coming back to store 7 picks it up again.
+    const { wrapper: back } = build({ storage })
+    await flush()
+    expect(back.vm.outcomeUnknown).toBe(true)
+    expect(back.vm.pendingApplyRequest.operationId).toBe('op-1')
+    back.destroy()
+  })
+})
+
+describe('stale answers from work the operator has left behind', () => {
+  it('drops a validate reply that belongs to an older revision of the plan', async () => {
+    let release
+    const slow = new Promise((resolve) => { release = resolve })
+    const Validate = jest.fn()
+      .mockReturnValueOnce(slow)
+      .mockResolvedValue(validation({ planToken: 'newer' }))
+    const { wrapper } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    const first = wrapper.vm.validate()
+    // An edit lands while the first check is still out, so its answer is about a plan that no
+    // longer exists and must not become the one Apply would be given.
+    wrapper.vm.setManual(wrapper.vm.rows[0], 'takeaway', '280')
+    await wrapper.vm.validate()
+
+    release(validation({ planToken: 'stale' }))
+    await first
+    await flush()
+
+    expect(wrapper.vm.validation.planToken).toBe('newer')
+    wrapper.destroy()
+  })
+
+  it('discards an analysis that came back after the store was changed', async () => {
+    let release
+    const slow = new Promise((resolve) => { release = resolve })
+    const { wrapper } = build({ service: { Analyze: jest.fn().mockReturnValue(slow) } })
+    wrapper.vm.pastedText = 'meny'
+
+    const running = wrapper.vm.runAnalysis()
+    wrapper.vm.onStoreChanged()
+
+    release(analysis)
+    await running
+    await flush()
+
+    expect(wrapper.vm.rows).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('ignores an upload progress callback from a run that was abandoned', async () => {
+    const { wrapper } = build()
+    wrapper.vm.addFiles([{ name: 'meny.pdf', type: 'application/pdf', size: 1000 }])
+    let progress
+    wrapper.vm._menuUpdateService.Analyze = jest.fn((_storeId, _payload, options) => {
+      progress = options.onUploadProgress
+      return Promise.resolve(analysis)
+    })
+
+    await wrapper.vm.runAnalysis()
+    const percentAfter = wrapper.vm.uploadPercent
+    wrapper.vm.requestGeneration++
+    progress({ loaded: 10, total: 1000 })
+
+    expect(wrapper.vm.uploadPercent).toBe(percentAfter)
+    wrapper.destroy()
+  })
+})
+
+describe('shared options for a whole category', () => {
+  it('brings the category\'s existing groups along, so adding one cannot delete the rest', () => {
+    // The API takes a sent list as the whole truth for that category.
+    const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }, { variantGroupId: 'cg2', name: 'Saus', options: [] }] }]
+    const { wrapper } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+
+    expect(wrapper.vm.categoryVariants[0].variants.map(group => group.variantGroupId)).toEqual(['cg1', 'cg2'])
+    wrapper.destroy()
+  })
+
+  it('merges an import\'s groups into what the category already has', () => {
+    const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
+    const { wrapper } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    // The analysis calls these `sourceCategoryVariants` and puts the list under `groups`, which
+    // is what MenuUpdateAnalysisModel and MenuExtractionCategoryVariants actually return.
+    wrapper.vm.adoptAnalysis({
+      ...analysis,
+      categories: withGroups,
+      sourceCategoryVariants: [{ categoryName: 'Pizza', groups: [{ name: 'Ekstra ost', options: [] }] }]
+    })
+
+    const names = wrapper.vm.categoryVariants[0].variants.map(group => group.name)
+    expect(names).toEqual(['Tilbehør', 'Ekstra ost'])
+    wrapper.destroy()
+  })
+
+  it('can remove a category\'s last group, which an empty list alone could never say', async () => {
+    const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+
+    wrapper.vm.clearCategoryGroups(0)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0]
+    expect(sent.categoryVariants[0]).toEqual({ categoryId: 'c1', newCategoryKey: null, clearGroups: true })
+    wrapper.destroy()
+  })
+
+  it('treats discarding the entry as saying nothing about the category at all', () => {
+    const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
+    const { wrapper } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+
+    wrapper.vm.discardCategoryEntry(0)
+
+    // No entry means no instruction, so the category keeps the group it has.
+    expect(wrapper.vm.categoryVariants).toHaveLength(0)
+    expect(wrapper.vm.hasSaveableIntent).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('keeps category edits through a re-read after a corrected column mapping', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+    wrapper.vm.categoryVariants[0].variants = [{ name: 'Min egen gruppe', options: [] }]
+
+    wrapper.vm.adoptAnalysis(analysis, { preserveDecisions: true })
+
+    expect(wrapper.vm.categoryVariants[0].variants.map(group => group.name)).toContain('Min egen gruppe')
+    wrapper.destroy()
+  })
+})
+
+describe('duplicating a linked row', () => {
+  const duplicate = () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+    wrapper.vm.beginVariantEdit(row)
+    wrapper.vm.duplicateRow(row)
+    return { wrapper, original: row, copy: wrapper.vm.rows[1] }
+  }
+
+  it('carries what was on screen into the copy rather than leaving it blank', () => {
+    // The copy has no linked product behind it any more, so anything it was reading from that
+    // product has to become its own.
+    const { wrapper, copy } = duplicate()
+
+    expect(copy.action).toBe('Create')
+    expect(copy.metadataEdits.name).toBe('1. Vegetar')
+    expect(copy.metadataEdits.description).toBe('Ost og tomat')
+    expect(wrapper.vm.priceValue(copy, 'takeaway')).toBe(245)
+    wrapper.destroy()
+  })
+
+  it('drops every group and option id, which belong to the product it was copied from', () => {
+    const { wrapper, copy, original } = duplicate()
+
+    expect(original.variantGroups[0].variantGroupId).toBe('v1')
+    expect(copy.variantGroups[0].variantGroupId).toBeNull()
+    expect(copy.variantGroups[0].name).toBe('Størrelse')
+    wrapper.destroy()
+  })
+})
+
+describe('a draft left behind by the old import page', () => {
+  const withLegacy = (extra = {}) => {
+    const storage = makeStorage()
+    storage.setItem('importRows', JSON.stringify([
+      { categoryName: 'Pizza', name: 'Gammel rad', priceAmount: 12000, tax: 15, tableAdditionalAmount: 2000, tableTax: 25, soldOut: false, depositAmount: 0 }
+    ]))
+    storage.setItem('importCategoryVariants', JSON.stringify([
+      { categoryName: 'Pizza', variants: [{ name: 'Tilbehør', options: [] }] }
+    ]))
+    return build({ storage, ...extra })
+  }
+
+  it('is offered rather than adopted, because those keys record no store', async () => {
+    const { wrapper } = withLegacy()
+    await flush()
+
+    expect(wrapper.vm.legacyDraft.rows).toHaveLength(1)
+    // Nothing has been taken into the work list on its own.
+    expect(wrapper.vm.rows).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('asks where it should land before anything is loaded', async () => {
+    const { wrapper } = withLegacy()
+    await flush()
+
+    wrapper.vm.offerLegacyDraft()
+
+    expect(wrapper.vm.showDraft).toBe(true)
+    expect(wrapper.vm.pendingDraft.rows).toHaveLength(1)
+    expect(wrapper.vm.rows).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('leaves the old keys alone when the offer is declined', async () => {
+    const { wrapper, storage } = withLegacy()
+    await flush()
+
+    wrapper.vm.dismissLegacyDraft()
+
+    // Declining is not deleting: this may be the only copy of that work.
+    expect(storage.contents.importRows).toBeDefined()
+    expect(storage.contents.importCategoryVariants).toBeDefined()
+    wrapper.destroy()
+  })
+
+  it('releases the old keys only once it has been taken into a store', async () => {
+    const { wrapper, storage } = withLegacy()
+    await flush()
+    wrapper.vm.offerLegacyDraft()
+
+    wrapper.vm.acceptDraft(true)
+
+    expect(wrapper.vm.rows).toHaveLength(1)
+    expect(storage.contents.importRows).toBeUndefined()
+    expect(storage.contents.importCategoryVariants).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('carries the old row\'s prices, taxes and options across', async () => {
+    const { wrapper } = withLegacy()
+    await flush()
+    wrapper.vm.offerLegacyDraft()
+    wrapper.vm.acceptDraft(true)
+
+    const row = wrapper.vm.rows[0]
+    expect(wrapper.vm.priceValue(row, 'takeaway')).toBe(120)
+    // The old eat-in addition becomes an eat-in total, never a third addition.
+    expect(wrapper.vm.priceValue(row, 'eatIn')).toBe(140)
+    expect(row.metadataEdits.tax).toBe(15)
+    expect(row.metadataEdits.eatInTax).toBe(25)
+    expect(wrapper.vm.categoryVariants[0].variants[0].name).toBe('Tilbehør')
+    wrapper.destroy()
+  })
+})
+
+describe('what the analysis actually returns', () => {
+  // These names are the API's, from MenuUpdateAnalysisModel and MenuUpdateExtractedRowModel.
+  // Reading the wrong one loses a whole menu's worth of work without any error.
+  const rich = {
+    ...analysis,
+    sourceCategoryVariants: [{ categoryName: 'Dessert', groups: [{ name: 'Topping', options: [{ name: 'Karamell', amount: 1000 }] }] }],
+    rows: [{
+      ...analysis.rows[1],
+      depositAmount: 300,
+      variants: [
+        { name: 'Størrelse', required: true, multiSelect: false, options: [{ name: 'Stor', amount: 2000 }] },
+        { name: 'Rabatt', options: [{ name: 'Uten krem', amount: 1500, negativeAmount: true }] }
+      ]
+    }]
+  }
+
+  it('reads shared groups from sourceCategoryVariants and their list from groups', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(rich)
+
+    expect(wrapper.vm.categoryVariants).toHaveLength(1)
+    expect(wrapper.vm.categoryVariants[0].variants[0].name).toBe('Topping')
+    wrapper.destroy()
+  })
+
+  it('keeps an extracted row\'s option groups on the product it creates', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(rich)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows[0]
+    expect(sent.newProduct.variants).toHaveLength(2)
+    // A discount stays a discount on the way through.
+    expect(sent.newProduct.variants[1].options[0]).toMatchObject({ amount: 1500, negativeAmount: true })
+    wrapper.destroy()
+  })
+
+  it('offers an extracted deposit without writing it to a product nobody asked to change', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({ ...rich, rows: [{ ...analysis.rows[0], depositAmount: 300 }] })
+
+    const row = wrapper.vm.rows[0]
+    expect(row.sourceMeta.depositAmount).toBe(300)
+    expect(row.metadataEdits.depositAmount).toBeUndefined()
+    wrapper.destroy()
+  })
+})
+
 describe('the receipt', () => {
   it('reports what was written without assuming any list is present', async () => {
     const { wrapper } = build()

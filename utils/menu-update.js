@@ -45,6 +45,12 @@ export function buildDraft (analysis) {
     // server matches on when a menu prints ingredients instead of dish names.
     description: row.description || '',
     otherInformation: row.otherInformation || '',
+    // Choices and a deposit the document printed for this dish. Carried through so the workspace
+    // can offer them; like everything read out of a document they are a suggestion until the
+    // operator sends them, and dropping them here is how a rich import silently loses its
+    // option groups on the way to the screen.
+    variants: row.variants || null,
+    depositAmount: row.depositAmount === undefined ? null : row.depositAmount,
     sourcePrices: (row.sourcePrices || []).map(p => ({ ...p })),
     manualPrices: [],
     excludedFromRules: false,

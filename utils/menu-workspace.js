@@ -265,6 +265,42 @@ const finite = (value) => {
 }
 
 /** What an exact lower bound means as the plain "must be chosen" flag. */
+/**
+ * Strips the ids that tie a group and its options to one particular product or category.
+ *
+ * A duplicated row is a different product, and the server checks that a group id belongs to the
+ * thing being written. Carrying the original's ids over would either be refused or, worse,
+ * edit the product that was copied from.
+ */
+export function stripVariantIds (groups) {
+  if (!Array.isArray(groups)) { return null }
+  return groups.map(group => ({
+    ...group,
+    variantGroupId: null,
+    options: (group.options || []).map(option => ({ ...option, variantOptionId: null }))
+  }))
+}
+
+/**
+ * Adds groups to a set without dropping the ones already there.
+ *
+ * The API treats a sent list as the whole truth for that product or category, so an additive
+ * import has to carry the existing groups along with the new ones. A group that names the same
+ * thing replaces its match rather than appearing twice.
+ */
+export function mergeVariantGroups (existing, incoming) {
+  const result = (existing || []).map(group => ({ ...group }))
+
+  ;(incoming || []).forEach((group) => {
+    const at = result.findIndex(item =>
+      (group.variantGroupId && item.variantGroupId === group.variantGroupId) ||
+      (item.name || '').trim().toLowerCase() === (group.name || '').trim().toLowerCase())
+    if (at >= 0) { result[at] = { ...group, variantGroupId: result[at].variantGroupId || group.variantGroupId } } else { result.push(group) }
+  })
+
+  return result.map((group, index) => ({ ...group, orderIndex: index }))
+}
+
 export const requiredFromBounds = minimum => minimum !== null && minimum >= 1
 
 /** `maximumSelectedOptions` of 0 means unbounded, so anything but exactly 1 is multi-select. */
@@ -717,6 +753,43 @@ export function draftStorageKey (userId, storeId) {
   return 'menuImport.draft.' + (userId || 'anon') + '.' + (storeId || 0)
 }
 
+/** The keys the previous import page wrote. Read to offer a recovery, never written. */
+export const LEGACY_ROWS_KEY = 'importRows'
+export const LEGACY_CATEGORY_VARIANTS_KEY = 'importCategoryVariants'
+
+/**
+ * Looks for a draft left behind by the old import page.
+ *
+ * Those keys carry no store and no user, so nothing here is adopted on sight: this only reports
+ * what is there, and the caller asks where it should go. The keys are left in place until the
+ * operator accepts, so declining an offer cannot lose the only copy of their work.
+ */
+export function findLegacyDraft (storage) {
+  if (!storage) { return null }
+  try {
+    const rows = JSON.parse(storage.getItem(LEGACY_ROWS_KEY) || 'null')
+    const categoryVariants = JSON.parse(storage.getItem(LEGACY_CATEGORY_VARIANTS_KEY) || 'null')
+    const hasRows = Array.isArray(rows) && rows.length > 0
+    const hasVariants = Array.isArray(categoryVariants) && categoryVariants.length > 0
+    if (!hasRows && !hasVariants) { return null }
+    // Deliberately no storeId: the old page never recorded one, and inventing the current store
+    // here is the silent migration this exists to avoid.
+    return { rows: rows || [], categoryVariants: categoryVariants || [] }
+  } catch (error) {
+    return null
+  }
+}
+
+export function forgetLegacyDraft (storage) {
+  if (!storage) { return }
+  try {
+    storage.removeItem(LEGACY_ROWS_KEY)
+    storage.removeItem(LEGACY_CATEGORY_VARIANTS_KEY)
+  } catch (error) {
+    // Nothing depends on the removal succeeding.
+  }
+}
+
 /**
  * Where an apply whose result was never seen is remembered.
  *
@@ -753,13 +826,24 @@ export function toValidateRequest (storeId, rules, rows, extras = {}) {
     if (row.newProduct && row.newProduct.newCategoryKey) { usedKeys.add(row.newProduct.newCategoryKey) }
   })
 
+  // An entry with no groups left is only sent when it says so explicitly. Filtering on the list
+  // being non-empty is what makes a category's last group impossible to remove: the entry that
+  // asks for the removal is exactly the one with nothing in it.
   const groups = (categoryVariants || [])
-    .filter(group => (group.categoryId || group.newCategoryKey) && (group.variants || []).length)
-    .map(group => ({
-      categoryId: group.categoryId || null,
-      newCategoryKey: group.categoryId ? null : (group.newCategoryKey || null),
-      groups: normalizeVariantGroups(group.variants) || []
-    }))
+    .filter(group => (group.categoryId || group.newCategoryKey) &&
+      ((group.variants || []).length || group.clearGroups))
+    .map((group) => {
+      const entry = {
+        categoryId: group.categoryId || null,
+        newCategoryKey: group.categoryId ? null : (group.newCategoryKey || null)
+      }
+      if (group.clearGroups && !(group.variants || []).length) {
+        entry.clearGroups = true
+      } else {
+        entry.groups = normalizeVariantGroups(group.variants) || []
+      }
+      return entry
+    })
 
   groups.forEach((group) => { if (group.newCategoryKey) { usedKeys.add(group.newCategoryKey) } })
 

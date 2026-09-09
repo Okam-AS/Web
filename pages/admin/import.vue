@@ -66,6 +66,23 @@
       </template>
 
       <template v-else>
+        <!-- A draft the old import page left behind. Offered, never taken: those keys record no
+             store, so where it lands is the operator's to say. -->
+        <div v-if="legacyDraft" class="notice-box legacy-offer" role="status">
+          <div>
+            <strong>{{ $i('menuImport_legacyDraftFound') }}</strong>
+            <p>{{ $i('menuImport_legacyDraftBody', { rows: legacyDraft.rows.length, groups: legacyDraft.categoryVariants.length }) }}</p>
+          </div>
+          <div class="legacy-actions">
+            <button class="link-btn" type="button" @click="dismissLegacyDraft">
+              {{ $i('menuImport_legacyDraftDismiss') }}
+            </button>
+            <button class="btn-secondary" type="button" :disabled="isLocked" @click="offerLegacyDraft">
+              {{ $i('menuImport_legacyDraftOpen') }}
+            </button>
+          </div>
+        </div>
+
         <!-- ------------------------------------------------------------ source bar -->
         <div class="sourcebar">
           <div class="source-left">
@@ -75,7 +92,7 @@
               <small>{{ sourceDetail }}</small>
             </div>
           </div>
-          <button class="link-btn" type="button" :disabled="isApproving || outcomeUnknown" @click="showSource = true">
+          <button class="link-btn" type="button" :disabled="isLocked" @click="showSource = true">
             {{ $i('menuImport_changeSource') }}
           </button>
         </div>
@@ -135,7 +152,7 @@
                 @toggle="onColumnToggle"
                 @preset="onColumnPreset"
               />
-              <button class="btn-secondary" type="button" @click="addManualRow">
+              <button class="btn-secondary" type="button" :disabled="isLocked" @click="addManualRow">
                 {{ $i('menuImport_newRow') }}
               </button>
               <div class="more">
@@ -146,6 +163,7 @@
                   :aria-expanded="String(showMore)"
                   aria-haspopup="true"
                   :aria-label="$i('menuImport_moreTools')"
+                  :disabled="isLocked"
                   @click="showMore = !showMore"
                 >
                   ⋯
@@ -183,7 +201,7 @@
             </div>
           </div>
 
-          <fieldset :disabled="isApproving || isApplying || outcomeUnknown" class="table-fieldset">
+          <fieldset :disabled="isLocked" class="table-fieldset">
             <div class="tablewrap">
               <table class="workspace-table">
                 <thead>
@@ -229,7 +247,7 @@
                             :create-label="$i('menuImport_createSeparate')"
                             :placeholder="$i('menuImport_findProduct')"
                             :aria-label="$i('menuImport_linkFor', { name: row.displayName })"
-                            :disabled="isApproving || outcomeUnknown"
+                            :disabled="isLocked"
                             @input="linkProduct(row, $event)"
                           />
                           <small class="row-intent" :class="{ 'new-intent': row.action === 'Create' }">
@@ -273,7 +291,7 @@
                           :allow-create="false"
                           :placeholder="pendingCategoryFor(row) || $i('menuImport_findCategory')"
                           :aria-label="$i('menuImport_categoryFor', { name: row.displayName })"
-                          :disabled="isApproving || outcomeUnknown"
+                          :disabled="isLocked"
                           @input="editMetadata(row, 'categoryId', $event)"
                         />
                       </template>
@@ -374,6 +392,7 @@
                         v-if="row.action !== 'Skip'"
                         type="button"
                         class="icon-btn"
+                        :disabled="isLocked"
                         :aria-label="$i('menuImport_editDetailsFor', { name: row.displayName })"
                         @click="openDetails(row)"
                       >
@@ -383,6 +402,7 @@
                         v-if="row.action !== 'Skip'"
                         type="button"
                         class="icon-btn remove"
+                        :disabled="isLocked"
                         :aria-label="$i('menuImport_removeFromImport', { name: row.displayName })"
                         @click="removeRow(row)"
                       >
@@ -396,7 +416,7 @@
               <div v-if="!rows.length" class="empty">
                 <h3>{{ $i('menuImport_emptyTitle') }}</h3>
                 <p>{{ $i('menuImport_emptyBody') }}</p>
-                <button class="btn-primary" type="button" @click="showSource = true">
+                <button class="btn-primary" type="button" :disabled="isLocked" @click="showSource = true">
                   {{ $i('menuImport_emptyAction') }}
                 </button>
               </div>
@@ -404,10 +424,10 @@
           </fieldset>
 
           <div class="bottom-add">
-            <button class="link-btn" type="button" @click="addManualRow">
+            <button class="link-btn" type="button" :disabled="isLocked" @click="addManualRow">
               {{ $i('menuImport_addRow') }}
             </button>
-            <button v-if="removedRows.length" class="link-btn" type="button" @click="undoRemove">
+            <button v-if="removedRows.length" class="link-btn" type="button" :disabled="isLocked" @click="undoRemove">
               {{ $i('menuImport_undoRemove') }}
             </button>
           </div>
@@ -444,7 +464,7 @@
 
         <div class="supportline">
           <span>{{ $i('menuImport_supportLine') }}</span>
-          <button class="link-btn" type="button" @click="openTool('categoryVariants')">
+          <button class="link-btn" type="button" :disabled="isLocked" @click="openTool('categoryVariants')">
             {{ $i('menuImport_toolCategoryVariants') }}
           </button>
         </div>
@@ -683,8 +703,9 @@
               <button
                 type="button"
                 class="icon-btn"
-                :aria-label="$i('menuImport_removeCategoryGroup')"
-                @click="categoryVariants.splice(groupIndex, 1)"
+                :aria-label="$i('menuImport_discardCategoryEntry')"
+                :title="$i('menuImport_discardCategoryEntry')"
+                @click="discardCategoryEntry(groupIndex)"
               >
                 ×
               </button>
@@ -710,9 +731,22 @@
               {{ $i('menuImport_noGroupsYet') }}
             </p>
 
-            <button class="link-btn" type="button" @click="addCategoryVariant(groupIndex)">
-              {{ $i('menuImport_addGroup') }}
-            </button>
+            <div class="category-group-actions">
+              <button class="link-btn" type="button" @click="addCategoryVariant(groupIndex)">
+                {{ $i('menuImport_addGroup') }}
+              </button>
+              <!-- Taking the entry out of the draft changes nothing in the store. Emptying the
+                   category's options is a different instruction, so it gets its own control. -->
+              <button
+                v-if="group.categoryId && (group.variants.length || group.clearGroups)"
+                class="link-btn danger"
+                type="button"
+                :aria-pressed="String(!!group.clearGroups)"
+                @click="clearCategoryGroups(groupIndex)"
+              >
+                {{ $i(group.clearGroups ? 'menuImport_categoryGroupsWillBeCleared' : 'menuImport_clearCategoryGroups') }}
+              </button>
+            </div>
           </div>
 
           <button class="btn-secondary" type="button" @click="addCategoryVariantGroup">
@@ -814,6 +848,7 @@ import {
 import {
   COLUMNS,
   COMPACT_COLUMNS,
+  METADATA_FIELDS,
   COLUMN_IDS,
   adoptCurrentPrices,
   attachCurrent,
@@ -823,10 +858,14 @@ import {
   displayValue,
   draftStorageKey,
   eatInAddition,
+  findLegacyDraft,
+  forgetLegacyDraft,
   fromEditorVariant,
+  fromLegacyDraft,
   hasMetadataPatch,
   makeRow,
   mergeForAppend,
+  mergeVariantGroups,
   nextRowKey,
   normalizeVariantGroups,
   normalizeVisibleColumns,
@@ -837,6 +876,7 @@ import {
   recommendedColumns,
   setMetadata,
   sourceDiffers,
+  stripVariantIds,
   toDraftFile,
   toEditorVariant,
   toValidateRequest,
@@ -917,6 +957,8 @@ export default {
       draftImportText: '',
       draftError: '',
       pendingDraft: null,
+      // A draft found under the old import page's keys. Reported, never adopted on sight.
+      legacyDraft: null,
 
       removalPreview: null,
       replaceConfirmation: '',
@@ -1020,6 +1062,18 @@ export default {
       return !!(this.validation && this.validation.canApply) && !this.isApplying && !this.outcomeUnknown
     },
     /**
+     * Whether the draft may be changed at all right now.
+     *
+     * It may not while an approval is in flight, and it may not at all once an apply's result is
+     * unknown. In that second state the plan is frozen deliberately: editing it would produce a
+     * different plan for an operation that may already have committed. Disabling the table alone
+     * was not enough — the toolbar, the source modal, the details drawer, the category editor and
+     * loading or clearing a draft all change the same thing, so they are all held together.
+     */
+    isLocked () {
+      return this.isApproving || this.isApplying || this.outcomeUnknown
+    },
+    /**
      * Whether this draft asks for anything at all.
      *
      * Usually that means product rows. Shared category options are their own intent, though:
@@ -1029,7 +1083,8 @@ export default {
      */
     hasSaveableIntent () {
       return this.rows.some(row => row.action !== ACTION.skip) ||
-        this.categoryVariants.some(group => (group.categoryId || group.newCategoryKey) && (group.variants || []).length)
+        this.categoryVariants.some(group => (group.categoryId || group.newCategoryKey) &&
+          ((group.variants || []).length || group.clearGroups))
     },
     canApprove () {
       return !this.isApproving && !this.isValidating && !!this.validation &&
@@ -1082,6 +1137,7 @@ export default {
       // Before anything else can be started: an apply whose result was never seen leaves the
       // page frozen until its status is known, exactly as it was before the reload.
       this.restorePendingApply()
+      this.legacyDraft = findLegacyDraft(this.storage())
       this.loadCatalogue()
     },
     handleLoginSuccess () { this.init() },
@@ -1160,6 +1216,17 @@ export default {
 
     // ---------------------------------------------------------------- rows
     countBy (action) { return this.rows.filter(row => row.action === action).length },
+    /**
+     * The single gate every change to the draft passes through.
+     *
+     * Checked in the handlers as well as reflected in `disabled` attributes, because a disabled
+     * button is a hint and this is a rule: a keyboard activation, a stale render or a method
+     * called from anywhere else must hit the same answer.
+     */
+    guardEdit () {
+      if (this.isLocked) { return false }
+      return true
+    },
     productOptions (row) {
       const ranks = new Map((row.candidates || []).map((candidate, index) => [candidate.productId, index]))
       return [...this.catalogue]
@@ -1174,6 +1241,7 @@ export default {
      * operator's own typed prices are never overwritten by this.
      */
     linkProduct (row, productId) {
+      if (!this.guardEdit()) { return }
       row.targetProductId = productId
       row.matchConfirmed = productId !== null
       this.changeAction(row, productId === null ? ACTION.create : ACTION.update)
@@ -1198,6 +1266,7 @@ export default {
       row.newProduct = buildNewProduct(row, this.categories, row.newProduct)
     },
     addManualRow () {
+      if (!this.guardEdit()) { return }
       const row = makeRow({ rowKey: nextRowKey('manual'), origin: 'manual', action: ACTION.create })
       this.ensureNewProduct(row)
       this.rows.push(row)
@@ -1207,8 +1276,15 @@ export default {
     },
     /**
      * A copy that becomes its own new product, never a second write to the same one.
+     *
+     * Two things have to happen for that to be true. The copy loses its link, and with it the
+     * `current` values it was reading from — so everything that was on screen is written into
+     * the copy as its own, or duplicating a linked row would produce a blank product. And every
+     * group and option id is dropped: those belong to the product that was copied, the server
+     * checks that they do, and reusing them would either be refused or edit the original.
      */
     duplicateRow (row) {
+      if (!this.guardEdit()) { return }
       const copy = makeRow({
         ...JSON.parse(JSON.stringify(row)),
         rowKey: nextRowKey('copy'),
@@ -1216,9 +1292,26 @@ export default {
         targetProductId: null,
         plannedProductId: null,
         current: null,
+        inferredPrices: [],
         matchConfirmed: false,
-        newProduct: null
+        newProduct: null,
+        variantGroups: stripVariantIds(this.variantGroupsOf(row)),
+        clearVariantGroups: false
       })
+
+      // What the original showed becomes what the copy holds, since there is no linked product
+      // behind it any more to fall back on.
+      METADATA_FIELDS.forEach((field) => {
+        const value = displayValue(row, field)
+        if (value !== null && value !== undefined) { setMetadata(copy, field, value) }
+      })
+
+      // The prices it inherited from the product are now this row's own asking price.
+      CHANNELS.forEach((channel) => {
+        const amount = priceFor(row, channel)
+        if (amount !== null) { setManualPrice(copy, channel, amount) }
+      })
+
       this.ensureNewProduct(copy)
       this.rows.splice(this.rows.indexOf(row) + 1, 0, copy)
       this.detailRow = copy
@@ -1226,6 +1319,7 @@ export default {
     },
     /** Removing takes the row out of this draft. It never deletes anything in the store. */
     removeRow (row) {
+      if (!this.guardEdit()) { return }
       const index = this.rows.indexOf(row)
       if (index < 0) { return }
       this.removedRows.push({ row, index })
@@ -1234,12 +1328,14 @@ export default {
       this.onPlanChanged()
     },
     undoRemove () {
+      if (!this.guardEdit()) { return }
       const last = this.removedRows.pop()
       if (!last) { return }
       this.rows.splice(Math.min(last.index, this.rows.length), 0, last.row)
       this.onPlanChanged()
     },
     restoreRow (row) {
+      if (!this.guardEdit()) { return }
       this.changeAction(row, row.targetProductId ? ACTION.update : ACTION.create)
       this.onPlanChanged()
     },
@@ -1266,6 +1362,7 @@ export default {
      * which is what keeps an existing product untouched until someone actually edits it.
      */
     editMetadata (row, field, value) {
+      if (!this.guardEdit()) { return }
       setMetadata(row, field, value)
       if (field === 'categoryId' && value) {
         // Choosing a real category retires any pending new one for this row.
@@ -1285,6 +1382,7 @@ export default {
       this.editMetadata(row, field, trimmed === '' ? null : Math.round(Number(trimmed) * 100))
     },
     resetMetadata (row, field) {
+      if (!this.guardEdit()) { return }
       clearMetadata(row, field)
       if (row.action === ACTION.create) { this.ensureNewProduct(row) }
       this.onPlanChanged()
@@ -1298,6 +1396,7 @@ export default {
     },
     /** Declares a category to create. Explicitly typed, never inferred from an unmatched name. */
     createCategoryFor (row, name) {
+      if (!this.guardEdit()) { return }
       const existing = this.categories.find(category => (category.name || '').toLowerCase() === name.toLowerCase())
       if (existing) {
         this.editMetadata(row, 'categoryId', existing.categoryId)
@@ -1354,15 +1453,27 @@ export default {
 
       return { declared, keyByName }
     },
-    /** A category group from a reading, resolved to an id or to a category to be created. */
+    /**
+     * A category group from a reading, resolved to an id or to a category to be created.
+     *
+     * An existing category's own groups come along, because a sent list replaces the category's
+     * groups wholesale: an import that adds "choose a side" must not remove the three groups the
+     * category already had.
+     */
     resolveCategoryGroup (group) {
       const name = String(group.categoryName || '').trim()
       const existing = this.categoryByName(name)
+      const current = (existing && normalizeVariantGroups(existing.variants)) || []
+      // `groups` is what analyze returns; `variants` is what a draft file of ours holds.
+      const incoming = normalizeVariantGroups(group.groups || group.variants) || []
+
       return {
         categoryName: name,
         categoryId: existing ? existing.categoryId : null,
         newCategoryKey: null,
-        variants: normalizeVariantGroups(group.variants) || []
+        clearGroups: false,
+        loaded: !!existing,
+        variants: mergeVariantGroups(current, incoming)
       }
     },
     /**
@@ -1406,6 +1517,7 @@ export default {
      * others.
      */
     beginVariantEdit (row) {
+      if (!this.guardEdit()) { return row.variantGroups || [] }
       if (row.variantGroups === null) {
         row.variantGroups = JSON.parse(JSON.stringify((row.current && row.current.variants) || []))
       }
@@ -1413,6 +1525,7 @@ export default {
       return row.variantGroups
     },
     async addVariantTo (row) {
+      if (!this.guardEdit()) { return }
       const edited = await this.$refs.variantEditor.open(null)
       if (!edited) { return }
       const groups = this.beginVariantEdit(row)
@@ -1420,6 +1533,7 @@ export default {
       this.onPlanChanged()
     },
     async editVariantOf (row, index) {
+      if (!this.guardEdit()) { return }
       const groups = this.beginVariantEdit(row)
       const edited = await this.$refs.variantEditor.open(toEditorVariant(groups[index]))
       if (!edited) { return }
@@ -1427,6 +1541,7 @@ export default {
       this.onPlanChanged()
     },
     removeVariantOf (row, index) {
+      if (!this.guardEdit()) { return }
       const groups = this.beginVariantEdit(row)
       groups.splice(index, 1)
       // An empty list is refused by the API precisely because it is what a bug looks like, so
@@ -1435,6 +1550,7 @@ export default {
       this.onPlanChanged()
     },
     clearVariantsOf (row) {
+      if (!this.guardEdit()) { return }
       row.variantGroups = []
       row.clearVariantGroups = true
       this.onPlanChanged()
@@ -1448,26 +1564,93 @@ export default {
 
     // ---------------------------------------------------------------- category variants
     addCategoryVariantGroup () {
-      this.categoryVariants.push({ categoryId: null, newCategoryKey: null, categoryName: '', variants: [] })
+      if (!this.guardEdit()) { return }
+      this.categoryVariants.push({ categoryId: null, newCategoryKey: null, categoryName: '', variants: [], loaded: false })
     },
+    /**
+     * Points a shared-options entry at a category, bringing that category's existing groups with
+     * it.
+     *
+     * The API takes a sent list as the whole truth for the category, so adding one group to a
+     * category that already has three would otherwise delete the other three. Loading them here
+     * means the list on screen is the list that will be saved.
+     */
     setCategoryVariantCategory (index, categoryId) {
-      const group = this.categoryVariants[index]
-      group.categoryId = categoryId
-      group.newCategoryKey = null
+      if (!this.guardEdit()) { return }
+      const entry = this.categoryVariants[index]
       const category = this.categories.find(item => item.categoryId === categoryId)
-      group.categoryName = category ? category.name : ''
+
+      entry.categoryId = categoryId
+      entry.newCategoryKey = null
+      entry.categoryName = category ? category.name : ''
+
+      const existing = (category && normalizeVariantGroups(category.variants)) || []
+      // Anything already typed here is kept and placed after what the category already has.
+      this.$set(entry, 'variants', mergeVariantGroups(existing, entry.variants))
+      entry.loaded = true
+    },
+    /**
+     * Takes a shared-options entry out of the draft.
+     *
+     * This is the plain "I did not mean to add this" action: the category keeps whatever options
+     * it already had, because a plan that says nothing about a category changes nothing about it.
+     */
+    discardCategoryEntry (index) {
+      if (!this.guardEdit()) { return }
+      this.categoryVariants.splice(index, 1)
+      this.onPlanChanged()
+    },
+    /**
+     * Asks for a category's option groups to be removed.
+     *
+     * A different instruction from discarding the entry, and it has to be said explicitly:
+     * an entry with an empty list would otherwise be indistinguishable from one nobody filled
+     * in, so the removal is carried as its own flag all the way to the request.
+     */
+    clearCategoryGroups (index) {
+      if (!this.guardEdit()) { return }
+      const entry = this.categoryVariants[index]
+      entry.clearGroups = !entry.clearGroups
+      if (entry.clearGroups) { this.$set(entry, 'variants', []) }
+      this.onPlanChanged()
     },
     async addCategoryVariant (groupIndex) {
+      if (!this.guardEdit()) { return }
       const edited = await this.$refs.variantEditor.open(null)
       if (!edited) { return }
-      const variants = this.categoryVariants[groupIndex].variants
-      variants.push(fromEditorVariant(edited, variants.length))
+      const entry = this.categoryVariants[groupIndex]
+      entry.variants.push(fromEditorVariant(edited, entry.variants.length))
+      this.onPlanChanged()
     },
     async editCategoryVariant (groupIndex, index) {
+      if (!this.guardEdit()) { return }
       const variants = this.categoryVariants[groupIndex].variants
       const edited = await this.$refs.variantEditor.open(toEditorVariant(variants[index]))
       if (!edited) { return }
       this.$set(variants, index, fromEditorVariant({ ...variants[index], ...edited }, index))
+      this.onPlanChanged()
+    },
+    /**
+     * Merges freshly read shared options into what is already on screen.
+     *
+     * An import that mentions a category is adding to it, not redefining it, so the groups the
+     * category already has and the ones the operator has edited both survive. Removing one is a
+     * deliberate act through the × beside it.
+     */
+    mergeIncomingCategoryVariants (incoming) {
+      ;(incoming || []).forEach((group) => {
+        const at = this.categoryVariants.findIndex(entry =>
+          (group.categoryId && entry.categoryId === group.categoryId) ||
+          (group.newCategoryKey && entry.newCategoryKey === group.newCategoryKey) ||
+          (!!group.categoryName && (entry.categoryName || '').toLowerCase() === group.categoryName.toLowerCase()))
+
+        if (at >= 0) {
+          this.$set(this.categoryVariants[at], 'variants',
+            mergeVariantGroups(this.categoryVariants[at].variants, group.variants))
+        } else {
+          this.categoryVariants.push(group)
+        }
+      })
     },
     closeCategoryVariants () {
       this.showCategoryVariants = false
@@ -1477,6 +1660,9 @@ export default {
     // ---------------------------------------------------------------- tools menu
     openTool (tool) {
       this.showMore = false
+      // Reading the draft out as JSON changes nothing, so that stays open while frozen. Every
+      // other tool here exists to change the draft.
+      if (tool !== 'draft' && !this.guardEdit()) { return }
       if (tool === 'source') { this.showSource = true }
       if (tool === 'categoryVariants') { this.showCategoryVariants = true }
       if (tool === 'draft') { this.showDraft = true }
@@ -1544,6 +1730,7 @@ export default {
       }
     },
     acceptDraft (replace) {
+      if (!this.guardEdit()) { return }
       if (!this.pendingDraft) { return }
 
       if (replace) {
@@ -1560,14 +1747,43 @@ export default {
         this.newCategories = [...this.newCategories, ...merged.newCategories]
       }
 
+      // Only now, once it has actually been taken into this store, are the old keys released.
+      if (this.pendingDraft.fromLegacyStorage) {
+        forgetLegacyDraft(this.storage())
+        this.legacyDraft = null
+      }
+
       this.pendingDraft = null
       this.draftImportText = ''
       this.showDraft = false
       this.applyRecommendedColumns()
       this.onPlanChanged()
     },
+    /**
+     * Offers the old import page's draft, without taking it.
+     *
+     * It goes through the same confirmation a pasted file does, because it has the same problem:
+     * those keys record no store, so the only honest thing to do is show what is in them and ask
+     * where it should land.
+     */
+    offerLegacyDraft () {
+      if (!this.legacyDraft || !this.guardEdit()) { return }
+      this.pendingDraft = {
+        ...fromLegacyDraft(this.legacyDraft, { categories: this.categories }),
+        fromLegacyStorage: true
+      }
+      this.showDraft = true
+    },
+    /**
+     * Leaves the old keys exactly where they are.
+     *
+     * Declining is not deleting: the old page's draft may be the only copy of that work, and it
+     * is not this page's to throw away.
+     */
+    dismissLegacyDraft () { this.legacyDraft = null },
     /** Empties the work list. Store products are untouched, which the dialog says outright. */
     clearDraft () {
+      if (!this.guardEdit()) { return }
       this.rows = []
       this.removedRows = []
       this.categoryVariants = []
@@ -1590,6 +1806,7 @@ export default {
       this.addFiles(Array.from((event.dataTransfer && event.dataTransfer.files) || []))
     },
     addFiles (incoming) {
+      if (!this.guardEdit()) { return }
       const pdfs = incoming.filter(file => file.type === 'application/pdf' || /\.pdf$/i.test(file.name))
       if (incoming.length - pdfs.length > 0) { this.analysisError = this.$i('menuImport_onlyPdf') }
       pdfs.forEach((file) => {
@@ -1672,7 +1889,7 @@ export default {
     },
     /** Re-merges documents already read against corrected columns. No AI provider is called. */
     async applyColumnMapping () {
-      if (!this.analysis || this.isRemapping) { return }
+      if (!this.analysis || this.isRemapping || !this.guardEdit()) { return }
       const generation = this.requestGeneration
       this.isRemapping = true
       this.analysisError = ''
@@ -1725,11 +1942,12 @@ export default {
             description: row.description || null,
             otherInformation: row.otherInformation || null,
             soldOut: row.soldOut === undefined ? null : row.soldOut,
+            // The reading returns this in ore, and null when the document printed none.
             depositAmount: row.depositAmount === undefined ? null : row.depositAmount
           },
           // Extracted option groups are a proposal for a new product and a suggestion for an
           // existing one; a linked row keeps `null` so nothing replaces groups it already has.
-          variantGroups: row.targetProductId ? null : (row.variants ? row.variants : null)
+          variantGroups: row.targetProductId ? null : normalizeVariantGroups(row.variants)
         }))
 
       const merged = preserveDecisions ? carryDecisions(previous, fresh) : { rows: fresh, carried: 0, dropped: [] }
@@ -1757,10 +1975,11 @@ export default {
         this.activeRules = rules
       }
 
-      // What the old AI import understood about shared category options still arrives here, so
-      // it is kept rather than dropped on the way into the unified draft.
-      const incomingCategoryVariants = (analysis.categoryVariants || [])
-        .filter(group => (group.variants || []).length)
+      // What the reading understood about shared category options. The analysis calls these
+      // `sourceCategoryVariants` and puts the list under `groups`; both names are the API's, and
+      // reading the wrong one is how a whole menu's shared choices disappear silently.
+      const incomingCategoryVariants = (analysis.sourceCategoryVariants || [])
+        .filter(group => (group.groups || []).length)
         .map(group => this.resolveCategoryGroup(group))
 
       const incoming = {
@@ -1769,12 +1988,14 @@ export default {
         newCategories: this.pendingFromRows(merged.rows, incomingCategoryVariants)
       }
 
-      if (append) {
+      if (append || preserveDecisions) {
         // Row keys and new-category keys from two separate readings collide, so both are renamed
         // and every reference to them moved before the lists are joined.
-        const rekeyed = mergeForAppend(this.rows, this.newCategories, incoming)
-        this.rows = [...this.rows, ...rekeyed.rows]
-        this.categoryVariants = [...this.categoryVariants, ...rekeyed.categoryVariants]
+        const rekeyed = mergeForAppend(append ? this.rows : [], this.newCategories, incoming)
+        this.rows = append ? [...this.rows, ...rekeyed.rows] : rekeyed.rows
+        // Merged, not replaced. A re-read after a corrected column mapping must not throw away
+        // the shared option groups the operator set up in between.
+        this.mergeIncomingCategoryVariants(rekeyed.categoryVariants)
         this.newCategories = [...this.newCategories, ...rekeyed.newCategories]
       } else {
         this.rows = incoming.rows
@@ -1800,7 +2021,7 @@ export default {
       }
     },
     async runAnalysis () {
-      if (!this.canAnalyze) { return }
+      if (!this.canAnalyze || !this.guardEdit()) { return }
 
       this.cancelInFlight()
       const generation = ++this.requestGeneration
@@ -2232,6 +2453,7 @@ export default {
       this.remapNotice = ''
       this.detailRow = null
       this.pendingDraft = null
+      this.legacyDraft = null
       this.draftImportText = ''
       this.draftError = ''
       this.removalPreview = null
@@ -2272,6 +2494,7 @@ export default {
       return source === null ? '' : source / 100
     },
     setManual (row, channel, value) {
+      if (!this.guardEdit()) { return }
       const trimmed = String(value == null ? '' : value).trim()
       setManualPrice(row, channel, trimmed === '' ? null : Math.round(Number(trimmed) * 100))
       this.onPlanChanged()
@@ -2686,6 +2909,16 @@ export default {
   color: #292c34; font-size: 0.9em;
 }
 
+.legacy-offer {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+
+  p { margin: 4px 0 0; color: #64748b; }
+}
+
+.legacy-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+.category-group-actions { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+
 .warning-box {
   padding: 12px 16px; margin: 16px 0;
   background: #fffbeb; border-left: 3px solid #92400e; border-radius: 6px;
@@ -2887,6 +3120,8 @@ export default {
 
   &:hover:not(:disabled) { color: #116a44; }
   &:disabled { color: #94a3b8; cursor: not-allowed; }
+  &.danger { color: #ef4444; }
+  &.danger[aria-pressed="true"] { font-weight: 600; }
   &:focus-visible { outline: 2px solid #1bb776; outline-offset: 2px; }
 }
 
