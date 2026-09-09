@@ -873,6 +873,126 @@ describe('an apply whose result was never seen', () => {
   })
 })
 
+describe('when the browser cannot record the save', () => {
+  // An operation whose id was never written down cannot be asked about and cannot be settled.
+  // A lost response would leave products that may already exist, a draft that still wants to
+  // create them, and no way to tell which.
+  const withStorage = (storage) => {
+    const built = build({ storage })
+    built.wrapper.vm.adoptAnalysis(analysis)
+    built.wrapper.vm.validation = validation()
+    return built
+  }
+
+  const full = () => {
+    const storage = makeStorage()
+    storage.setItem = () => { throw new Error('quota') }
+    return storage
+  }
+
+  it('does not send the apply at all when storage is full', async () => {
+    const { wrapper, stub } = withStorage(full())
+
+    await approveThroughDialog(wrapper)
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('leaves the draft editable rather than freezing it', async () => {
+    const { wrapper } = withStorage(full())
+    const rowsBefore = wrapper.vm.rows.length
+
+    await approveThroughDialog(wrapper)
+
+    // Nothing was sent, so there is nothing to be uncertain about.
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(wrapper.vm.pendingApplyRequest).toBeNull()
+    expect(wrapper.vm.rows).toHaveLength(rowsBefore)
+
+    // The dialog stays up saying why, and closing it leaves an ordinary editable draft.
+    expect(wrapper.vm.applyError).toBeTruthy()
+    wrapper.vm.closeApproval()
+    expect(wrapper.vm.isLocked).toBe(false)
+
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'fortsatt redigerbar')
+    expect(wrapper.vm.rows[0].metadataEdits.description).toBe('fortsatt redigerbar')
+    wrapper.destroy()
+  })
+
+  it('says so, in the operator\'s language', async () => {
+    const { wrapper } = withStorage(full())
+
+    await approveThroughDialog(wrapper)
+
+    expect(wrapper.vm.applyError).toBe('T:menuImport_cannotRecordSave')
+    wrapper.destroy()
+  })
+
+  it('refuses just as firmly when there is no storage at all', async () => {
+    const { wrapper, stub } = withStorage(null)
+
+    await approveThroughDialog(wrapper)
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('refuses when the write is accepted but reads back as something else', async () => {
+    // A storage that lies is as dangerous as one that throws, and only a readback catches it.
+    const storage = makeStorage()
+    const realSet = storage.setItem
+    storage.setItem = (key, value) => {
+      if (key.indexOf('menuImport.pending.') === 0) { return }
+      realSet(key, value)
+    }
+    const { wrapper, stub } = withStorage(storage)
+
+    await approveThroughDialog(wrapper)
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('never clears the operator\'s draft to make room', async () => {
+    const storage = full()
+    const { wrapper } = withStorage(storage)
+    storage.contents['menuImport.draft.u1.7'] = '{"rows":[]}'
+
+    await approveThroughDialog(wrapper)
+
+    expect(storage.contents['menuImport.draft.u1.7']).toBeDefined()
+    wrapper.destroy()
+  })
+
+  it('sends normally once the record can be written', async () => {
+    const { wrapper, stub, storage } = withStorage(makeStorage())
+
+    await approveThroughDialog(wrapper)
+
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    // Written before the call, and cleared by the receipt that followed.
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    expect(wrapper.vm.receipt).toBeTruthy()
+    wrapper.destroy()
+  })
+
+  it('records the envelope before sending, when the answer never comes', async () => {
+    const failure = Object.assign(new Error('lost response'), { status: 0 })
+    const storage = makeStorage()
+    const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await approveThroughDialog(wrapper)
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(JSON.parse(storage.contents['menuImport.pending.u1.7']).operationId).toBe('op-1')
+    wrapper.destroy()
+  })
+})
+
 describe('settling an apply that was never answered', () => {
   const frozen = async (service = {}) => {
     const failure = Object.assign(new Error('network'), { status: 0 })

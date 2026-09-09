@@ -668,6 +668,7 @@ export default {
   menuImport_applyFailed: "Der Plan konnte nicht gespeichert werden.",
   menuImport_applying: "Speichert …",
   menuImport_approve: "Bestätigen und speichern",
+  menuImport_cannotRecordSave: "Der Browser hat keinen Platz, dieses Speichern nachzuhalten, deshalb haben wir es nicht gestartet. Ihr Entwurf ist unberührt. Schaffen Sie etwas Platz im Browser oder schließen Sie einige Tabs und versuchen Sie es erneut.",
   menuImport_categoryFor: "Kategorie für {name}",
   menuImport_categoryGroupsWillBeCleared: "Alle Optionsgruppen werden entfernt — rückgängig",
   menuImport_categoryVariantsHelp: "Gemeinsame Auswahl für alle Produkte einer Kategorie, damit Sie sie nicht in jede Menüzeile eintragen müssen.",

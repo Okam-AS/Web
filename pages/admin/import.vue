@@ -549,6 +549,12 @@
             {{ $i('menuImport_confirmRefreshed') }}
           </div>
 
+          <!-- A save that did not start has to say so here. The operator is looking at this
+               dialog, and a message behind it is a message nobody reads. -->
+          <div v-if="applyError" class="error-box" role="alert">
+            {{ applyError }}
+          </div>
+
           <div v-if="confirmErrors.length" class="warning-box" role="alert">
             <strong>{{ $i('menuImport_confirmBlockedTitle') }}</strong>
             <ul class="confirm-errors">
@@ -2571,6 +2577,7 @@ export default {
       this.confirmReplacement = options.catalogueReplacement || null
       this.confirmStale = false
       this.validationError = ''
+      this.applyError = ''
       // Cleared first: until the fresh check lands there is nothing here anyone has confirmed.
       this.confirmSignature = ''
       this.showConfirm = true
@@ -2679,12 +2686,24 @@ export default {
         catalogueHash: this.validation.catalogueHash,
         plan: this.validation.normalizedPlan
       }
-      this.lastOperationId = operationId
-      this.pendingApplyRequest = request
       // Written before the call, not after it fails. A tab that closes or reloads mid-apply must
       // come back knowing this operation is outstanding; coming back clean is what would let the
       // operator build a second plan for work this one may already have committed.
-      this.rememberPendingApply(request)
+      //
+      // And if it cannot be written, the apply is not sent at all. An operation whose id was
+      // never recorded cannot be asked about and cannot be settled: a lost response would leave
+      // products that may already exist, a draft that still wants to create them, and no way to
+      // tell. Not starting is the only outcome that is recoverable by hand.
+      if (!this.rememberPendingApply(request)) {
+        this.applyError = this.$i('menuImport_cannotRecordSave')
+        this.isApplying = false
+        // Deliberately not frozen: nothing was sent, so there is nothing to be uncertain about.
+        // The draft stays exactly as it is and stays editable.
+        return
+      }
+
+      this.lastOperationId = operationId
+      this.pendingApplyRequest = request
 
       try {
         const receipt = await this._menuUpdateService.Apply(request)
@@ -2731,13 +2750,29 @@ export default {
       this.clearAutosave()
       this.forgetPendingApply()
     },
+    /**
+     * Records the operation about to be sent, and says whether it really landed.
+     *
+     * Read back and compared, not just written. A storage that is full throws, but one that is
+     * merely unreliable can accept a write and hand back something else, and both cases have the
+     * same consequence: an operation nobody can name afterwards.
+     *
+     * Nothing is evicted to make room. The other things under these keys are this operator's own
+     * drafts, and clearing their work to make space for a marker would be a worse bargain than
+     * refusing to send.
+     */
     rememberPendingApply (request) {
       const storage = this.storage()
-      if (!storage || this.selectedStore <= 0) { return }
+      if (!storage || this.selectedStore <= 0) { return false }
+
+      const key = pendingApplyKey(this.userId, this.selectedStore)
+      const payload = JSON.stringify(request)
+
       try {
-        storage.setItem(pendingApplyKey(this.userId, this.selectedStore), JSON.stringify(request))
+        storage.setItem(key, payload)
+        return storage.getItem(key) === payload
       } catch (error) {
-        // Best effort. The in-memory freeze still holds for this tab.
+        return false
       }
     },
     forgetPendingApply () {

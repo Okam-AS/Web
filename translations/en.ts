@@ -668,6 +668,7 @@ export default {
   menuImport_applyFailed: "Could not save the plan.",
   menuImport_applying: "Saving …",
   menuImport_approve: "Approve and save",
+  menuImport_cannotRecordSave: "The browser has no room to keep track of this save, so we did not start it. Your draft is untouched. Free up a little browser space, or close some tabs, and try again.",
   menuImport_categoryFor: "Category for {name}",
   menuImport_categoryGroupsWillBeCleared: "Every option group will be removed — undo",
   menuImport_categoryVariantsHelp: "Shared choices for every product in a category, so you do not add them to each menu line.",

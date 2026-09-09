@@ -668,6 +668,7 @@ export default {
   menuImport_applyFailed: "Kunne ikke lagre planen.",
   menuImport_applying: "Lagrer …",
   menuImport_approve: "Godkjenn og lagre",
+  menuImport_cannotRecordSave: "Nettleseren har ikke plass til å holde styr på lagringen, så vi startet den ikke. Utkastet er urørt. Frigjør litt plass i nettleseren, eller lukk noen faner, og prøv igjen.",
   menuImport_categoryFor: "Kategori for {name}",
   menuImport_categoryGroupsWillBeCleared: "Alle valggruppene fjernes — angre",
   menuImport_categoryVariantsHelp: "Felles valg for alle produktene i en kategori. Du slipper å legge dem inn på hver menylinje.",
