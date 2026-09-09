@@ -42,13 +42,15 @@ export const METADATA_FIELDS = [
  * are never hidden. Everything else is the operator's choice and is remembered.
  */
 export const COLUMNS = [
-  { id: 'identity', labelKey: 'menuImport_colSource', always: true, kind: 'identity' },
+  // `link` and `name` are structural. Between them they say which product a row is about — the
+  // one it is linked to, or the one it will create — so neither can be hidden. A separate
+  // identity column restating the document's own wording sat beside them repeating it.
   { id: 'link', labelKey: 'menuImport_colTarget', always: true, kind: 'link' },
+  { id: 'name', labelKey: 'menuImport_colName', always: true, kind: 'text', field: 'name' },
   { id: 'takeaway', labelKey: 'menuImport_channelTakeaway', kind: 'price', channel: 'takeaway', recommended: true },
   { id: 'eatIn', labelKey: 'menuImport_channelEatIn', kind: 'price', channel: 'eatIn', recommended: true },
   { id: 'delivery', labelKey: 'menuImport_channelDelivery', kind: 'price', channel: 'delivery', recommended: true },
   { id: 'category', labelKey: 'menuImport_colCategory', kind: 'category', field: 'categoryId' },
-  { id: 'name', labelKey: 'menuImport_colName', kind: 'text', field: 'name' },
   { id: 'description', labelKey: 'menuImport_colDescription', kind: 'text', field: 'description', wide: true },
   { id: 'otherInformation', labelKey: 'menuImport_colAllergens', kind: 'text', field: 'otherInformation' },
   { id: 'eatInAddition', labelKey: 'menuImport_colEatInAddition', kind: 'derived' },
@@ -67,6 +69,14 @@ const ALWAYS_VISIBLE = COLUMNS.filter(c => c.always).map(c => c.id)
 
 /** The compact view: what a price update needs and nothing more. */
 export const COMPACT_COLUMNS = [...ALWAYS_VISIBLE, 'takeaway', 'eatIn', 'delivery']
+
+/**
+ * The column that carries a row's identity down the table.
+ *
+ * It is kept in view while the optional columns scroll sideways, because a price with nothing
+ * naming it belongs to no one.
+ */
+export const IDENTITY_COLUMN = 'name'
 
 export const columnById = id => COLUMNS.find(c => c.id === id) || null
 
@@ -97,7 +107,6 @@ export function recommendedColumns (rows) {
     return value !== undefined && value !== null && value !== ''
   })
 
-  if (creates || present('name')) { visible.push('name') }
   if (creates || present('categoryId')) { visible.push('category') }
 
   ;['description', 'otherInformation', 'tax', 'eatInTax', 'deliveryTax', 'depositAmount', 'soldOut', 'hide']
@@ -627,13 +636,16 @@ export const DRAFT_VERSION = 2
  * The price rules are part of the draft. They decide what an unpriced channel is proposed as, so
  * a draft reopened without them would come back showing different money than it was saved with.
  */
-export function toDraftFile (storeId, rows, categoryVariants, newCategories, rules) {
+export function toDraftFile (storeId, rows, categoryVariants, newCategories, rules, migratedFrom) {
   return {
     format: DRAFT_FORMAT,
     version: DRAFT_VERSION,
     storeId,
     savedAt: new Date().toISOString(),
     rules: rules ? { ...rules } : null,
+    // Which pieces of a legacy draft were folded into this one. Written in the same call as the
+    // rows they brought, so the record and the rows cannot disagree.
+    migratedFrom: migratedFrom || [],
     rows: (rows || []).map(row => ({
       rowKey: row.rowKey,
       action: row.action,
@@ -678,6 +690,7 @@ export function readWorkspaceDraft (data) {
     })),
     newCategories: data.newCategories || [],
     rules: data.rules || null,
+    migratedFrom: data.migratedFrom || [],
     declaredStoreId: data.storeId === undefined ? null : data.storeId,
     declaredReplaceAll: false
   }
@@ -799,27 +812,143 @@ export const LEGACY_CATEGORY_VARIANTS_KEY = 'importCategoryVariants'
 export function findLegacyDraft (storage) {
   if (!storage) { return null }
   try {
-    const rows = JSON.parse(storage.getItem(LEGACY_ROWS_KEY) || 'null')
-    const categoryVariants = JSON.parse(storage.getItem(LEGACY_CATEGORY_VARIANTS_KEY) || 'null')
+    const rowsText = storage.getItem(LEGACY_ROWS_KEY)
+    const categoryVariantsText = storage.getItem(LEGACY_CATEGORY_VARIANTS_KEY)
+    const rows = JSON.parse(rowsText || 'null')
+    const categoryVariants = JSON.parse(categoryVariantsText || 'null')
     const hasRows = Array.isArray(rows) && rows.length > 0
     const hasVariants = Array.isArray(categoryVariants) && categoryVariants.length > 0
     if (!hasRows && !hasVariants) { return null }
-    // Deliberately no storeId: the old page never recorded one, and inventing the current store
-    // here is the silent migration this exists to avoid.
-    return { rows: rows || [], categoryVariants: categoryVariants || [] }
+    // The raw text rides along so the fingerprint can cover every field, including the ones a
+    // parsed summary would leave out.
+    return {
+      rows: rows || [],
+      categoryVariants: categoryVariants || [],
+      rowsText: rowsText || '',
+      categoryVariantsText: categoryVariantsText || ''
+    }
   } catch (error) {
     return null
   }
 }
 
-export function forgetLegacyDraft (storage) {
-  if (!storage) { return }
-  try {
-    storage.removeItem(LEGACY_ROWS_KEY)
-    storage.removeItem(LEGACY_CATEGORY_VARIANTS_KEY)
-  } catch (error) {
-    // Nothing depends on the removal succeeding.
+/**
+ * A fingerprint per old key, rather than one for both together.
+ *
+ * The two keys are deleted one at a time, and the second delete can fail. A single combined
+ * fingerprint would then no longer match what is left behind, and the half that survived would
+ * be adopted a second time. Fingerprinting each key on its own means each is recognised whatever
+ * happened to the other.
+ *
+ * The raw stored text is used rather than a parsed summary, so nothing can be left out of it: a
+ * summary of names and prices collides between two drafts differing only in a description or a
+ * VAT rate, and the second would be discarded as already taken.
+ */
+export function legacyParts (raw) {
+  if (!raw) { return { rows: '', groups: '' } }
+  const rowsText = typeof raw.rowsText === 'string' ? raw.rowsText : JSON.stringify(raw.rows || [])
+  const groupsText = typeof raw.categoryVariantsText === 'string'
+    ? raw.categoryVariantsText
+    : JSON.stringify(raw.categoryVariants || [])
+  return {
+    rows: rowsText ? 'rows:' + rowsText.length + ':' + rowsText : '',
+    groups: groupsText ? 'groups:' + groupsText.length + ':' + groupsText : ''
   }
+}
+
+/**
+ * Where completed adoptions are noted.
+ *
+ * Deliberately NOT scoped to a store. The keys it guards are not scoped either, so a per-store
+ * note would let the same untouched draft be adopted again in the next store the operator opens
+ * whenever clearing the old keys failed.
+ *
+ * This is written only AFTER the rows have been safely written somewhere. It is a record of
+ * something that happened, never a claim on something about to happen — a claim would authorise
+ * deleting the old keys for an adoption that then failed, and those keys are the only copy.
+ */
+export function migrationReceiptKey (userId) {
+  return 'menuImport.migrated.' + (userId || 'anon')
+}
+
+// Enough to survive a few failed cleanups without growing without bound. Two entries per
+// adoption, so this holds several.
+const MIGRATION_HISTORY = 8
+
+const readMigrations = (storage, userId) => {
+  try {
+    const parsed = JSON.parse(storage.getItem(migrationReceiptKey(userId)) || '[]')
+    return Array.isArray(parsed) ? parsed : []
+  } catch (error) {
+    return []
+  }
+}
+
+/**
+ * Looks through every saved draft for one that already absorbed this piece of a legacy draft.
+ *
+ * This is the authoritative answer, because a draft carries what it absorbed in the same write
+ * as the rows themselves: if it is recorded there, the rows are there. The shared note is only a
+ * shortcut, and is not trusted on its own for anything destructive.
+ */
+export function draftRecordsMigration (storage, part) {
+  if (!storage || !part || typeof storage.length !== 'number' || typeof storage.key !== 'function') {
+    return false
+  }
+  try {
+    for (let index = 0; index < storage.length; index++) {
+      const key = storage.key(index)
+      if (!key || key.indexOf('menuImport.draft.') !== 0) { continue }
+      const parsed = JSON.parse(storage.getItem(key) || 'null')
+      const taken = (parsed && parsed.migratedFrom) || []
+      if (Array.isArray(taken) && taken.includes(part)) { return true }
+    }
+  } catch (error) {
+    return false
+  }
+  return false
+}
+
+/**
+ * True when this exact piece of a legacy draft has demonstrably been taken in somewhere.
+ *
+ * "Demonstrably" is the whole point: a draft that records it, or a note written after such a
+ * draft was saved. Nothing here is satisfied by an intention.
+ */
+export function alreadyMigrated (storage, userId, part, taken) {
+  if (!storage || !part) { return false }
+  if (Array.isArray(taken) && taken.includes(part)) { return true }
+  if (readMigrations(storage, userId).includes(part)) { return true }
+  return draftRecordsMigration(storage, part)
+}
+
+/** Notes completed adoptions, one entry per old key. Called only once the rows are saved. */
+export function rememberMigration (storage, userId, parts) {
+  if (!storage) { return false }
+  const taken = (Array.isArray(parts) ? parts : [parts]).filter(Boolean)
+  if (!taken.length) { return false }
+  try {
+    const history = [...taken, ...readMigrations(storage, userId).filter(item => !taken.includes(item))]
+    storage.setItem(migrationReceiptKey(userId), JSON.stringify(history.slice(0, MIGRATION_HISTORY)))
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+/**
+ * Clears the old keys, each independently.
+ *
+ * Separately, because a single try block that fails on the second leaves the first deleted and
+ * the second not — which is the state the per-key fingerprints exist to survive. Nothing depends
+ * on either succeeding.
+ */
+export function forgetLegacyDraft (storage, keys) {
+  if (!storage) { return }
+  const wanted = keys || [LEGACY_ROWS_KEY, LEGACY_CATEGORY_VARIANTS_KEY]
+  wanted.forEach((key) => {
+    try { storage.removeItem(key) } catch (error) { /* leftover is recognised next time */ }
+  })
 }
 
 /**

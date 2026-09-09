@@ -66,23 +66,6 @@
       </template>
 
       <template v-else>
-        <!-- A draft the old import page left behind. Offered, never taken: those keys record no
-             store, so where it lands is the operator's to say. -->
-        <div v-if="legacyDraft" class="notice-box legacy-offer" role="status">
-          <div>
-            <strong>{{ $i('menuImport_legacyDraftFound') }}</strong>
-            <p>{{ $i('menuImport_legacyDraftBody', { rows: legacyDraft.rows.length, groups: legacyDraft.categoryVariants.length }) }}</p>
-          </div>
-          <div class="legacy-actions">
-            <button class="link-btn" type="button" @click="dismissLegacyDraft">
-              {{ $i('menuImport_legacyDraftDismiss') }}
-            </button>
-            <button class="btn-secondary" type="button" :disabled="isLocked" @click="offerLegacyDraft">
-              {{ $i('menuImport_legacyDraftOpen') }}
-            </button>
-          </div>
-        </div>
-
         <!-- ------------------------------------------------------------ source bar -->
         <div class="sourcebar">
           <div class="source-left">
@@ -182,21 +165,11 @@
                 </button>
                 <ul v-if="showMore" class="more-menu" role="menu" @keydown.esc="closeMore">
                   <li role="none">
-                    <button role="menuitem" type="button" @click="openTool('source')">
-                      {{ $i('menuImport_toolAddSource') }}
-                    </button>
-                  </li>
-                  <li role="none">
                     <button role="menuitem" type="button" @click="openTool('categoryVariants')">
                       {{ $i('menuImport_toolCategoryVariants') }}
                     </button>
                   </li>
                   <li class="separator" role="separator" />
-                  <li role="none">
-                    <button role="menuitem" type="button" @click="openTool('draft')">
-                      {{ $i('menuImport_toolDraft') }}
-                    </button>
-                  </li>
                   <li role="none">
                     <button role="menuitem" type="button" @click="openTool('clear')">
                       {{ $i('menuImport_toolClear') }}
@@ -222,7 +195,7 @@
                       v-for="column in shownColumns"
                       :key="column.id"
                       scope="col"
-                      :class="['col-' + column.id, { sticky: column.id === 'identity', wide: column.wide }]"
+                      :class="['col-' + column.id, { sticky: column.id === identityColumn, wide: column.wide }]"
                     >
                       {{ $i(column.labelKey) }}
                     </th>
@@ -237,189 +210,201 @@
                       v-for="column in shownColumns"
                       :key="column.id"
                       :data-label="$i(column.labelKey)"
-                      :class="['col-' + column.id, 'kind-' + column.kind, { sticky: column.id === 'identity' }]"
+                      :class="['col-' + column.id, 'kind-' + column.kind, { sticky: column.id === identityColumn }]"
                     >
-                      <!-- identity ------------------------------------------------ -->
-                      <template v-if="column.id === 'identity'">
-                        <strong>
-                          <span v-if="row.menuNumber">{{ row.menuNumber }}.</span>
-                          {{ row.displayName || $i('menuImport_untitledRow') }}
-                          <span v-if="row.sizeLabel" class="size">{{ row.sizeLabel }}</span>
-                        </strong>
-                        <span v-if="row.description" class="clamp" :title="row.description">{{ row.description }}</span>
-                        <small v-for="(issue, index) in rowIssues(row)" :key="index" class="inline-issue">{{ issueText(issue) }}</small>
-                      </template>
+                      <div class="cell">
+                        <!-- link --------------------------------------------------- -->
+                        <template v-if="column.id === 'link'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <template v-if="row.action !== 'Skip'">
+                            <MenuProductSearch
+                              :value="row.targetProductId"
+                              :options="productOptions(row)"
+                              :create-label="$i('menuImport_createSeparate')"
+                              :placeholder="$i('menuImport_findProduct')"
+                              :aria-label="$i('menuImport_linkFor', { name: row.displayName })"
+                              :disabled="isLocked"
+                              @input="linkProduct(row, $event)"
+                            />
+                            <small class="cell-after row-intent" :class="{ 'new-intent': row.action === 'Create' }">
+                              {{ $i(row.action === 'Create' ? 'menuImport_willCreate' : 'menuImport_willUpdate') }}
+                              <!-- Only meaningful for a product that already exists. On a row that
+                                 creates one, every field is part of creating it, so saying its
+                                 details "also change" would mark every new row for nothing. -->
+                              <span v-if="row.action === 'Update' && hasMetadataPatch(row)" class="modified">{{ $i('menuImport_alsoChangesDetails') }}</span>
+                            </small>
+                          </template>
+                          <button v-else type="button" class="link-btn" @click="restoreRow(row)">
+                            {{ $i('menuImport_restoreRow') }}
+                          </button>
+                          <span v-if="row.action === 'Skip'" class="cell-after" aria-hidden="true" />
+                        </template>
 
-                      <!-- link --------------------------------------------------- -->
-                      <template v-else-if="column.id === 'link'">
-                        <template v-if="row.action !== 'Skip'">
+                        <!-- prices ------------------------------------------------- -->
+                        <template v-else-if="column.kind === 'price'">
+                          <template v-if="row.action !== 'Skip'">
+                            <!-- Always present, empty when there is no earlier price. A line that
+                               appears only sometimes pushes its own input a row down and leaves
+                               the three prices sitting at three different heights. -->
+                            <del class="cell-before">{{ showsOldPrice(row, column.channel) ? formatMoney(resolvedFor(row)[column.channel].currentAmount) : '' }}</del>
+                            <input
+                              type="number"
+                              step="0.01"
+                              min="0"
+                              :value="priceValue(row, column.channel)"
+                              :aria-label="$i('menuImport_priceFor', { channel: $i(column.labelKey), name: row.displayName })"
+                              :placeholder="isValidating ? '…' : '—'"
+                              @change="setManual(row, column.channel, $event.target.value)"
+                            >
+                            <small class="cell-after delta">{{ channelDelta(row, column.channel) }}</small>
+                          </template>
+                        </template>
+
+                        <!-- category ----------------------------------------------- -->
+                        <template v-else-if="column.kind === 'category'">
+                          <span class="cell-before" aria-hidden="true" />
                           <MenuProductSearch
-                            :value="row.targetProductId"
-                            :options="productOptions(row)"
-                            :create-label="$i('menuImport_createSeparate')"
-                            :placeholder="$i('menuImport_findProduct')"
-                            :aria-label="$i('menuImport_linkFor', { name: row.displayName })"
+                            v-if="row.action !== 'Skip'"
+                            :value="metadataValue(row, 'categoryId')"
+                            :options="categoryOptions"
+                            :allow-create="false"
+                            :placeholder="pendingCategoryFor(row) || $i('menuImport_findCategory')"
+                            :aria-label="$i('menuImport_categoryFor', { name: row.displayName })"
                             :disabled="isLocked"
-                            @input="linkProduct(row, $event)"
+                            @input="editMetadata(row, 'categoryId', $event)"
                           />
-                          <small class="row-intent" :class="{ 'new-intent': row.action === 'Create' }">
-                            {{ $i(row.action === 'Create' ? 'menuImport_willCreate' : 'menuImport_willUpdate') }}
-                          </small>
-                          <!-- Only meaningful for a product that already exists. On a row that
-                               creates one, every field is part of creating it, so saying its
-                               details "also change" would mark every new row for nothing. -->
-                          <small v-if="row.action === 'Update' && hasMetadataPatch(row)" class="row-intent modified">
-                            {{ $i('menuImport_alsoChangesDetails') }}
-                          </small>
+                          <small class="cell-after">{{ pendingCategoryFor(row) }}</small>
                         </template>
-                        <button v-else type="button" class="link-btn" @click="restoreRow(row)">
-                          {{ $i('menuImport_restoreRow') }}
-                        </button>
-                      </template>
 
-                      <!-- prices ------------------------------------------------- -->
-                      <template v-else-if="column.kind === 'price'">
-                        <template v-if="row.action !== 'Skip'">
-                          <del v-if="showsOldPrice(row, column.channel)">{{ formatMoney(resolvedFor(row)[column.channel].currentAmount) }}</del>
-                          <input
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            :value="priceValue(row, column.channel)"
-                            :aria-label="$i('menuImport_priceFor', { channel: $i(column.labelKey), name: row.displayName })"
-                            :placeholder="isValidating ? '…' : '—'"
-                            @change="setManual(row, column.channel, $event.target.value)"
-                          >
-                          <small v-if="channelDelta(row, column.channel)" class="delta">{{ channelDelta(row, column.channel) }}</small>
-                        </template>
-                      </template>
-
-                      <!-- category ----------------------------------------------- -->
-                      <template v-else-if="column.kind === 'category'">
-                        <MenuProductSearch
-                          v-if="row.action !== 'Skip'"
-                          :value="metadataValue(row, 'categoryId')"
-                          :options="categoryOptions"
-                          :allow-create="false"
-                          :placeholder="pendingCategoryFor(row) || $i('menuImport_findCategory')"
-                          :aria-label="$i('menuImport_categoryFor', { name: row.displayName })"
-                          :disabled="isLocked"
-                          @input="editMetadata(row, 'categoryId', $event)"
-                        />
-                      </template>
-
-                      <!-- free text ---------------------------------------------- -->
-                      <template v-else-if="column.kind === 'text'">
-                        <!-- A menu description is a paragraph, so it gets a box that shows one
+                        <!-- free text ---------------------------------------------- -->
+                        <template v-else-if="column.kind === 'text'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <!-- A menu description is a paragraph, so it gets a box that shows one
                              and can be dragged taller, the way the old import table did. -->
-                        <textarea
-                          v-if="row.action !== 'Skip' && column.wide"
-                          rows="2"
-                          :value="metadataValue(row, column.field)"
-                          :class="{ edited: isEdited(row, column.field) }"
-                          :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
-                          @change="editMetadata(row, column.field, $event.target.value)"
-                        />
-                        <input
-                          v-else-if="row.action !== 'Skip'"
-                          type="text"
-                          :value="metadataValue(row, column.field)"
-                          :class="{ edited: isEdited(row, column.field) }"
-                          :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
-                          @change="editMetadata(row, column.field, $event.target.value)"
-                        >
-                        <button
-                          v-if="row.action !== 'Skip' && sourceDiffers(row, column.field)"
-                          type="button"
-                          class="suggest-btn"
-                          :title="row.sourceMeta[column.field]"
-                          @click="editMetadata(row, column.field, row.sourceMeta[column.field])"
-                        >
-                          {{ $i('menuImport_useSourceShort') }}
-                        </button>
-                      </template>
+                          <textarea
+                            v-if="row.action !== 'Skip' && column.wide"
+                            rows="2"
+                            :value="metadataValue(row, column.field)"
+                            :class="{ edited: isEdited(row, column.field) }"
+                            :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
+                            @change="editMetadata(row, column.field, $event.target.value)"
+                          />
+                          <input
+                            v-else-if="row.action !== 'Skip'"
+                            type="text"
+                            :value="metadataValue(row, column.field)"
+                            :class="{ edited: isEdited(row, column.field) }"
+                            :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
+                            @change="editMetadata(row, column.field, $event.target.value)"
+                          >
+                          <small class="cell-after">
+                            <button
+                              v-if="row.action !== 'Skip' && sourceDiffers(row, column.field)"
+                              type="button"
+                              class="suggest-btn"
+                              :title="row.sourceMeta[column.field]"
+                              @click="editMetadata(row, column.field, row.sourceMeta[column.field])"
+                            >
+                              {{ $i('menuImport_useSourceShort') }}
+                            </button>
+                          </small>
+                        </template>
 
-                      <!-- whole numbers (VAT) ------------------------------------ -->
-                      <template v-else-if="column.kind === 'number'">
-                        <input
-                          v-if="row.action !== 'Skip'"
-                          type="number"
-                          min="0"
-                          max="99"
-                          step="1"
-                          :value="metadataValue(row, column.field)"
-                          :class="{ edited: isEdited(row, column.field) }"
-                          :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
-                          @change="editMetadataNumber(row, column.field, $event.target.value)"
-                        >
-                      </template>
+                        <!-- whole numbers (VAT) ------------------------------------ -->
+                        <template v-else-if="column.kind === 'number'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <input
+                            v-if="row.action !== 'Skip'"
+                            type="number"
+                            min="0"
+                            max="99"
+                            step="1"
+                            :value="metadataValue(row, column.field)"
+                            :class="{ edited: isEdited(row, column.field) }"
+                            :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
+                            @change="editMetadataNumber(row, column.field, $event.target.value)"
+                          >
+                          <span class="cell-after" aria-hidden="true" />
+                        </template>
 
-                      <!-- money (deposit) ---------------------------------------- -->
-                      <template v-else-if="column.kind === 'money'">
-                        <input
-                          v-if="row.action !== 'Skip'"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          :value="metadataMoney(row, column.field)"
-                          :class="{ edited: isEdited(row, column.field) }"
-                          :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
-                          @change="editMetadataMoney(row, column.field, $event.target.value)"
-                        >
-                      </template>
+                        <!-- money (deposit) ---------------------------------------- -->
+                        <template v-else-if="column.kind === 'money'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <input
+                            v-if="row.action !== 'Skip'"
+                            type="number"
+                            min="0"
+                            step="0.01"
+                            :value="metadataMoney(row, column.field)"
+                            :class="{ edited: isEdited(row, column.field) }"
+                            :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
+                            @change="editMetadataMoney(row, column.field, $event.target.value)"
+                          >
+                          <span class="cell-after" aria-hidden="true" />
+                        </template>
 
-                      <!-- flags -------------------------------------------------- -->
-                      <template v-else-if="column.kind === 'boolean'">
-                        <input
-                          v-if="row.action !== 'Skip'"
-                          type="checkbox"
-                          :checked="!!metadataValue(row, column.field)"
-                          :class="{ edited: isEdited(row, column.field) }"
-                          :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
-                          @change="editMetadata(row, column.field, $event.target.checked)"
-                        >
-                      </template>
+                        <!-- flags -------------------------------------------------- -->
+                        <template v-else-if="column.kind === 'boolean'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <input
+                            v-if="row.action !== 'Skip'"
+                            type="checkbox"
+                            :checked="!!metadataValue(row, column.field)"
+                            :class="{ edited: isEdited(row, column.field) }"
+                            :aria-label="$i(column.labelKey) + ' — ' + row.displayName"
+                            @change="editMetadata(row, column.field, $event.target.checked)"
+                          >
+                          <span class="cell-after" aria-hidden="true" />
+                        </template>
 
-                      <!-- derived eat-in surcharge ------------------------------- -->
-                      <template v-else-if="column.id === 'eatInAddition'">
-                        <span class="derived-value">{{ eatInAdditionText(row) }}</span>
-                      </template>
+                        <!-- derived eat-in surcharge ------------------------------- -->
+                        <template v-else-if="column.id === 'eatInAddition'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <span class="derived-value">{{ eatInAdditionText(row) }}</span>
+                          <span class="cell-after" aria-hidden="true" />
+                        </template>
 
-                      <!-- variants ----------------------------------------------- -->
-                      <template v-else-if="column.id === 'variants'">
-                        <button
-                          v-if="row.action !== 'Skip'"
-                          type="button"
-                          class="variant-chip"
-                          :aria-label="$i('menuImport_variantsFor', { name: row.displayName })"
-                          @click="openDetails(row)"
-                        >
-                          {{ variantCount(row) }}
-                        </button>
-                      </template>
+                        <!-- variants ----------------------------------------------- -->
+                        <template v-else-if="column.id === 'variants'">
+                          <span class="cell-before" aria-hidden="true" />
+                          <button
+                            v-if="row.action !== 'Skip'"
+                            type="button"
+                            class="variant-chip"
+                            :aria-label="$i('menuImport_variantsFor', { name: row.displayName })"
+                            @click="openDetails(row)"
+                          >
+                            {{ variantCount(row) }}
+                          </button>
+                          <span class="cell-after" aria-hidden="true" />
+                        </template>
+                      </div>
                     </td>
 
                     <td class="col-tools" :data-label="$i('menuImport_rowActions')">
-                      <button
-                        v-if="row.action !== 'Skip'"
-                        type="button"
-                        class="icon-btn"
-                        :disabled="isLocked"
-                        :aria-label="$i('menuImport_editDetailsFor', { name: row.displayName })"
-                        @click="openDetails(row)"
-                      >
-                        ⋯
-                      </button>
-                      <button
-                        v-if="row.action !== 'Skip'"
-                        type="button"
-                        class="icon-btn remove"
-                        :disabled="isLocked"
-                        :aria-label="$i('menuImport_removeFromImport', { name: row.displayName })"
-                        @click="removeRow(row)"
-                      >
-                        ×
-                      </button>
+                      <div class="cell">
+                        <span class="cell-before" aria-hidden="true" />
+                        <button
+                          v-if="row.action !== 'Skip'"
+                          type="button"
+                          class="icon-btn"
+                          :disabled="isLocked"
+                          :aria-label="$i('menuImport_editDetailsFor', { name: row.displayName })"
+                          @click="openDetails(row)"
+                        >
+                          ⋯
+                        </button>
+                        <button
+                          v-if="row.action !== 'Skip'"
+                          type="button"
+                          class="icon-btn remove"
+                          :disabled="isLocked"
+                          :aria-label="$i('menuImport_removeFromImport', { name: row.displayName })"
+                          @click="removeRow(row)"
+                        >
+                          ×
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -463,11 +448,13 @@
               <strong>{{ $i('menuImport_totals', { update: countBy('Update'), create: countBy('Create') }) }}</strong>
               <p>{{ $i('menuImport_saveHint') }}</p>
             </div>
+            <!-- Deliberately not disabled while the plan is blocked: someone who cannot save
+                 needs to be told why, and the dialog is where that is said. -->
             <button
               type="button"
               class="btn-primary"
-              :disabled="!canApprove"
-              @click="approve"
+              :disabled="isApproving || isApplying || outcomeUnknown || !hasSaveableIntent"
+              @click="openApproval"
             >
               {{ isApproving ? $i('menuImport_applying') : $i('menuImport_approve') }}
             </button>
@@ -481,6 +468,81 @@
           </button>
         </div>
       </template>
+
+      <!-- ------------------------------------------------------------ confirmation -->
+      <Modal v-if="showConfirm" class="confirm-dialog" @close="closeApproval">
+        <div class="confirm-modal">
+          <h2>{{ $i('menuImport_confirmTitle') }}</h2>
+          <p class="helper-text">
+            {{ $i('menuImport_confirmStore', { store: confirmSummary.storeName }) }}
+          </p>
+
+          <ul class="confirm-counts">
+            <li v-if="confirmSummary.create">
+              {{ countText('menuImport_confirmCreates', confirmSummary.create) }}
+            </li>
+            <li v-if="confirmSummary.changed">
+              {{ countText('menuImport_confirmChanges', confirmSummary.changed) }}
+            </li>
+            <li v-if="confirmSummary.newCategories">
+              {{ countText('menuImport_confirmCategories', confirmSummary.newCategories) }}
+            </li>
+            <li v-if="confirmSummary.categoryGroups">
+              {{ countText('menuImport_confirmCategoryGroups', confirmSummary.categoryGroups) }}
+            </li>
+            <li v-if="confirmSummary.removals" class="danger-text">
+              {{ countText('menuImport_confirmRemovals', confirmSummary.removals) }}
+            </li>
+            <!-- Said out loud, because "nothing happens to these" is the reassurance that makes
+                 the rest of the list readable. -->
+            <li v-if="confirmSummary.unchanged" class="muted">
+              {{ countText('menuImport_confirmUnchanged', confirmSummary.unchanged) }}
+            </li>
+            <li v-if="confirmSummary.skipped" class="muted">
+              {{ countText('menuImport_confirmSkipped', confirmSummary.skipped) }}
+            </li>
+          </ul>
+
+          <p v-if="isValidating" role="status">
+            {{ $i('menuImport_confirmChecking') }}
+          </p>
+
+          <div v-if="confirmStale" class="notice-box" role="alert">
+            {{ $i('menuImport_confirmRefreshed') }}
+          </div>
+
+          <div v-if="confirmErrors.length" class="warning-box" role="alert">
+            <strong>{{ $i('menuImport_confirmBlockedTitle') }}</strong>
+            <ul class="confirm-errors">
+              <li v-for="error in confirmErrors" :key="error.key">
+                <span>{{ error.message }}</span>
+                <small v-if="error.names.length">
+                  {{ $i('menuImport_confirmAffects', { names: error.names.slice(0, 4).join(', ') }) }}
+                  <template v-if="error.names.length > 4">{{ $i('menuImport_confirmAffectsMore', { count: error.names.length - 4 }) }}</template>
+                </small>
+              </li>
+            </ul>
+          </div>
+
+          <p v-else-if="!isValidating && !confirmStale" class="helper-text">
+            {{ $i('menuImport_confirmFinal') }}
+          </p>
+
+          <div class="modal-actions">
+            <button class="btn-secondary" type="button" @click="closeApproval">
+              {{ $i('common_cancel') }}
+            </button>
+            <button
+              class="btn-primary"
+              type="button"
+              :disabled="!canConfirmApply"
+              @click="confirmApproval"
+            >
+              {{ isApproving ? $i('menuImport_applying') : $i('menuImport_confirmApply') }}
+            </button>
+          </div>
+        </div>
+      </Modal>
 
       <!-- ------------------------------------------------------------ details drawer -->
       <MenuRowDetails
@@ -627,66 +689,6 @@
               {{ isAnalyzing ? $i('menuImport_analyzing') : $i('menuImport_analyze') }}
             </button>
           </div>
-        </div>
-      </Modal>
-
-      <!-- ------------------------------------------------------------ draft transfer -->
-      <Modal v-if="showDraft" @close="showDraft = false">
-        <div class="draft-modal">
-          <h2>{{ $i('menuImport_draftTitle') }}</h2>
-          <p class="helper-text">
-            {{ $i('menuImport_draftHelp') }}
-          </p>
-
-          <label class="field">
-            {{ $i('menuImport_draftExportLabel') }}
-            <textarea :value="draftJson" readonly rows="6" @focus="$event.target.select()" />
-          </label>
-          <button class="btn-secondary" type="button" @click="copyDraft">
-            {{ $i('menuImport_copyToClipboard') }}
-          </button>
-
-          <label class="field">
-            {{ $i('menuImport_draftImportLabel') }}
-            <textarea v-model="draftImportText" rows="6" :placeholder="$i('menuImport_draftImportPlaceholder')" />
-          </label>
-
-          <!-- An old draft carries a store id that may be another store entirely, so where it
-               lands is asked rather than assumed. -->
-          <div v-if="pendingDraft" class="draft-confirm">
-            <p>{{ $i('menuImport_draftFrom', { store: pendingDraft.declaredStoreId === null ? $i('menuImport_draftNoStore') : pendingDraft.declaredStoreId, count: pendingDraft.rows.length }) }}</p>
-            <p v-if="pendingDraft.declaredStoreId !== null && pendingDraft.declaredStoreId !== selectedStore" class="warn">
-              {{ $i('menuImport_draftOtherStore', { from: pendingDraft.declaredStoreId, to: selectedStore }) }}
-            </p>
-            <p v-if="pendingDraft.declaredReplaceAll" class="warn">
-              {{ $i('menuImport_draftReplaceAllIgnored') }}
-            </p>
-            <p v-if="pendingDraft.newCategories.length" class="helper-text">
-              {{ $i('menuImport_draftNewCategories', { names: pendingDraft.newCategories.map(c => c.name).join(', ') }) }}
-            </p>
-            <div class="modal-actions">
-              <button class="btn-secondary" type="button" @click="pendingDraft = null">
-                {{ $i('common_cancel') }}
-              </button>
-              <button class="btn-secondary" type="button" @click="acceptDraft(false)">
-                {{ $i('menuImport_appendToDraft') }}
-              </button>
-              <button class="btn-primary" type="button" @click="acceptDraft(true)">
-                {{ $i('menuImport_draftLoadInto', { store: selectedStore }) }}
-              </button>
-            </div>
-          </div>
-          <div v-else class="modal-actions">
-            <button class="btn-secondary" type="button" @click="showDraft = false">
-              {{ $i('common_close') }}
-            </button>
-            <button class="btn-primary" type="button" :disabled="!draftImportText.trim()" @click="readDraft">
-              {{ $i('menuImport_draftRead') }}
-            </button>
-          </div>
-          <p v-if="draftError" class="error-box" role="alert">
-            {{ draftError }}
-          </p>
         </div>
       </Modal>
 
@@ -880,10 +882,15 @@ import {
   displayValue,
   draftStorageKey,
   eatInAddition,
+  IDENTITY_COLUMN,
+  alreadyMigrated,
   findLegacyDraft,
   forgetLegacyDraft,
   fromEditorVariant,
   fromLegacyDraft,
+  LEGACY_CATEGORY_VARIANTS_KEY,
+  LEGACY_ROWS_KEY,
+  legacyParts,
   hasMetadataPatch,
   makeRow,
   mergeForAppend,
@@ -895,6 +902,7 @@ import {
   priceFor,
   readColumnPreference,
   readDraftFile,
+  rememberMigration,
   recommendedColumns,
   setMetadata,
   sourceDiffers,
@@ -971,16 +979,21 @@ export default {
       detailRow: null,
       showSource: false,
       showMore: false,
-      showDraft: false,
       showClear: false,
       showCategoryVariants: false,
       showReplace: false,
 
-      draftImportText: '',
-      draftError: '',
-      pendingDraft: null,
-      // A draft found under the old import page's keys. Reported, never adopted on sight.
-      legacyDraft: null,
+      // How many rows the last automatic adoption brought in, so it can be mentioned once.
+      migratedRowCount: 0,
+      // Which pieces of a legacy draft this store's saved draft already absorbed.
+      draftMigratedFrom: [],
+
+      // The confirmation step. `confirmSignature` is what the operator was actually shown; the
+      // apply is refused if a fresh validation no longer matches it.
+      showConfirm: false,
+      confirmSignature: '',
+      confirmStale: false,
+      confirmReplacement: null,
 
       removalPreview: null,
       replaceConfirmation: '',
@@ -1013,7 +1026,137 @@ export default {
     categoryOptions () {
       return this.categories.map(category => ({ value: category.categoryId, label: category.name }))
     },
+    identityColumn () { return IDENTITY_COLUMN },
+    /**
+     * What this store is called.
+     *
+     * The analysis and the catalogue bootstrap both return it, and either may be the one that is
+     * loaded. Falling through to the number is a last resort: a confirmation that says "saved in
+     * 7" is asking someone to agree to something it has not named.
+     */
+    storeName () {
+      const named = (this.analysis && this.analysis.storeName) ||
+        (this.catalogueOnly && this.catalogueOnly.storeName) || ''
+      if (named) { return named }
+      const store = ((this.$store.state.currentUser || {}).adminIn || [])
+        .find(item => item.id === this.selectedStore)
+      return (store && store.name) || String(this.selectedStore)
+    },
     resolvedMap () { return resolvedByKey(this.validation) },
+    /**
+     * What the confirmation says is about to happen, counted off the validated plan rather than
+     * off the draft: the server decides what actually changes, and a row whose price works out
+     * the same is not a change however it was edited.
+     */
+    confirmSummary () {
+      const rows = this.rows.filter(row => row.action !== ACTION.skip)
+      const resolved = this.resolvedMap
+
+      let changed = 0
+      let unchanged = 0
+      rows.filter(row => row.action === ACTION.update).forEach((row) => {
+        const plan = resolved[row.rowKey]
+        const touched = !!(plan && (plan.changed || (plan.metadataChanges || []).length))
+        if (touched) { changed++ } else { unchanged++ }
+      })
+
+      return {
+        storeName: this.storeName || String(this.selectedStore),
+        create: rows.filter(row => row.action === ACTION.create).length,
+        changed,
+        unchanged,
+        skipped: this.rows.length - rows.length,
+        newCategories: (this.validation && this.validation.plannedCategories)
+          ? this.validation.plannedCategories.length
+          : this.newCategories.length,
+        categoryGroups: this.categoryVariants.filter(group => (group.categoryId || group.newCategoryKey) &&
+          ((group.variants || []).length || group.clearGroups)).length,
+        removals: this.confirmReplacement ? (this.confirmReplacement.expectedRemovedProductIds || []).length : 0
+      }
+    },
+    /**
+     * Blockers the confirmation itself resolves.
+     *
+     * "We are not sure this is the right product" and "this new product has not been reviewed"
+     * are questions, and confirming the dialog is the answer to them — the flags that clear them
+     * are set as part of approving. Treating them as reasons the dialog cannot be confirmed
+     * would be a deadlock: the button that sets the flags would be disabled until the flags were
+     * set. They are also not shown as errors, because the dialog is the place they get settled.
+     */
+    confirmableCodes () { return ['matchNotConfirmed', 'newProductSetupUnconfirmed'] },
+    /**
+     * Every blocker the plan has, from the plan-wide list and from each row.
+     *
+     * Both are read because the two lists do not have to agree: a row can carry a blocker the
+     * top-level summary leaves out, and a reason the save will fail must not be invisible just
+     * because it was reported in the other place.
+     */
+    allBlockers () {
+      const seen = new Set()
+      const blockers = []
+
+      const take = (blocker) => {
+        if (!blocker || !blocker.code) { return }
+        const key = blocker.code + '|' + (blocker.rowKey || '') + '|' + (blocker.channel || '')
+        if (seen.has(key)) { return }
+        seen.add(key)
+        blockers.push(blocker)
+      }
+
+      ;((this.validation && this.validation.blockers) || []).forEach(take)
+      ;((this.validation && this.validation.rows) || []).forEach((row) => {
+        (row.blockers || []).forEach(blocker => take({ ...blocker, rowKey: blocker.rowKey || row.rowKey }))
+      })
+
+      return blockers
+    },
+    /** What actually stops the save, as opposed to what the confirmation is there to settle. */
+    blockingErrors () {
+      return this.allBlockers.filter(blocker => !this.confirmableCodes.includes(blocker.code))
+    },
+    /**
+     * Why the plan cannot be saved, in the operator's language and said once each.
+     *
+     * The server reports a blocker per row, so a menu with twenty rows priced the same way
+     * produced twenty identical lines. They are grouped by what is wrong, and each group names
+     * the rows it affects. A code the page knows is always phrased here; only a code it has
+     * never heard of falls back to the server's own sentence, which is at least specific.
+     */
+    confirmErrors () {
+      const groups = new Map()
+
+      this.blockingErrors.forEach((blocker) => {
+        const key = blocker.code + '|' + (blocker.channel || '')
+        if (!groups.has(key)) {
+          groups.set(key, { code: blocker.code, channel: blocker.channel || '', names: [], raw: blocker.message || '' })
+        }
+        const row = this.rows.find(item => item.rowKey === blocker.rowKey)
+        const name = row ? this.rowLabel(row) : ''
+        if (name && !groups.get(key).names.includes(name)) { groups.get(key).names.push(name) }
+      })
+
+      return [...groups.values()].map(group => ({
+        key: group.code + group.channel,
+        message: this.errorText(group),
+        names: group.names
+      }))
+    },
+    /**
+     * Whether the dialog's own button may be pressed.
+     *
+     * Deliberately not `validation.canApply`: that is false while the plan still holds the
+     * questions this dialog exists to answer, and requiring it here would disable the only
+     * control that answers them. The hard checks are not being skipped — approving re-validates,
+     * and `applyPlan` still refuses unless the server says the plan may be applied.
+     *
+     * `confirmSignature` is only set once a fresh check has come back, so a previous check's
+     * verdict cannot enable the button while the new one is still out.
+     */
+    canConfirmApply () {
+      return !!this.validation && !!this.confirmSignature && !this.isValidating &&
+        !this.isApproving && !this.isApplying && !this.outcomeUnknown &&
+        !this.confirmStale && this.blockingErrors.length === 0
+    },
     shownColumns () { return COLUMNS.filter(column => this.visibleColumns.includes(column.id)) },
     /** How many rows would actually have something to show in each optional column. */
     columnCounts () {
@@ -1121,7 +1264,10 @@ export default {
      * loading or clearing a draft all change the same thing, so they are all held together.
      */
     isLocked () {
-      return this.isApproving || this.isApplying || this.outcomeUnknown
+      // The confirmation counts too: it states what is about to happen, and a draft that could
+      // be edited underneath it would make that statement stop being true while it was read.
+      // The approve path itself does not go through this, so confirming still works.
+      return this.isApproving || this.isApplying || this.outcomeUnknown || this.showConfirm
     },
     /**
      * Whether this draft asks for anything at all.
@@ -1139,9 +1285,6 @@ export default {
     canApprove () {
       return !this.isApproving && !this.isValidating && !!this.validation &&
         !this.outcomeUnknown && this.hasSaveableIntent
-    },
-    draftJson () {
-      return JSON.stringify(toDraftFile(this.selectedStore, this.rows, this.categoryVariants, this.newCategories, this.activeRules), null, 2)
     },
     replaceWord () { return this.$i('menuImport_replaceWord') },
     canConfirmReplace () {
@@ -1187,7 +1330,6 @@ export default {
       // Before anything else can be started: an apply whose result was never seen leaves the
       // page frozen until its status is known, exactly as it was before the reload.
       this.restorePendingApply()
-      this.legacyDraft = findLegacyDraft(this.storage())
       this.loadCatalogue()
     },
     handleLoginSuccess () { this.init() },
@@ -1206,6 +1348,9 @@ export default {
         if (generation !== this.requestGeneration) { return }
         this.catalogueOnly = result
         this.rows.forEach(row => attachCurrent(row, this.catalogue))
+        // Only now, with the categories in hand: an old row names its category by text, and
+        // matching that against the store is what decides whether one has to be created.
+        this.migrateLegacyDraft()
       } catch (error) {
         // The workspace still works from a document, so a failed bootstrap is not fatal.
         if (generation !== this.requestGeneration) { return }
@@ -1734,12 +1879,9 @@ export default {
     // ---------------------------------------------------------------- tools menu
     openTool (tool) {
       this.showMore = false
-      // Reading the draft out as JSON changes nothing, so that stays open while frozen. Every
-      // other tool here exists to change the draft.
-      if (tool !== 'draft' && !this.guardEdit()) { return }
+      if (!this.guardEdit()) { return }
       if (tool === 'source') { this.showSource = true }
       if (tool === 'categoryVariants') { this.showCategoryVariants = true }
-      if (tool === 'draft') { this.showDraft = true }
       if (tool === 'clear') { this.showClear = true }
       if (tool === 'replace') { this.showReplace = true }
     },
@@ -1753,16 +1895,24 @@ export default {
       if (this.autosaveTimer) { clearTimeout(this.autosaveTimer) }
       this.autosaveTimer = setTimeout(() => this.saveDraft(), 500)
     },
-    saveDraft () {
+    saveDraft () { this.writeDraft(this.rows, this.categoryVariants, this.newCategories, this.draftMigratedFrom) },
+    /**
+     * Writes the scoped draft, reporting whether it actually landed.
+     *
+     * Autosave does not care about the answer — a full storage must never block the work. The
+     * legacy adoption does: it will not consume the old keys until this has succeeded.
+     */
+    writeDraft (rows, categoryVariants, newCategories, migratedFrom) {
       const storage = this.storage()
-      if (!storage || this.selectedStore <= 0) { return }
+      if (!storage || this.selectedStore <= 0) { return false }
       try {
         storage.setItem(
           draftStorageKey(this.userId, this.selectedStore),
-          JSON.stringify(toDraftFile(this.selectedStore, this.rows, this.categoryVariants, this.newCategories, this.activeRules))
+          JSON.stringify(toDraftFile(this.selectedStore, rows, categoryVariants, newCategories, this.activeRules, migratedFrom))
         )
+        return true
       } catch (error) {
-        // Autosave is a convenience; a full storage must never block the work.
+        return false
       }
     },
     restoreDraft () {
@@ -1779,82 +1929,97 @@ export default {
         // Restored with the draft, because they decide what an unpriced channel is proposed as:
         // reopening under the defaults would show different money than was saved.
         if (draft.rules) { this.activeRules = { ...DEFAULT_RULES(), ...draft.rules } }
+        this.draftMigratedFrom = draft.migratedFrom || []
         this.applyRecommendedColumns()
         this.onPlanChanged()
       } catch (error) {
         // A corrupt autosave is dropped rather than shown as a broken work list.
       }
     },
-    copyDraft () {
-      if (navigator && navigator.clipboard) { navigator.clipboard.writeText(this.draftJson) }
-    },
     /**
-     * Reads a pasted draft without applying it.
+     * Takes a draft the old import page left behind into the store on screen, once.
      *
-     * Nothing lands until the destination is confirmed: an old file names a store that may not
-     * be this one, and its `replaceAll` flag must never become a deletion here.
+     * The operator asked for this to happen without being consulted, so there is no offer and no
+     * destination question. What that costs is a duplicate if this runs twice, and the old keys
+     * carry no id to recognise them by, so the sequence matters:
+     *
+     *   1. Never while an apply's result is unknown. That plan is frozen, and rows appearing
+     *      underneath it would change what a retry means.
+     *   2. Merge into whatever is already here, rekeying rows and categories, so nothing this
+     *      store already had is displaced.
+     *   3. Write the scoped draft and the record of the adoption BEFORE clearing the old keys.
+     *      A storage that refuses the write leaves the old keys untouched and nothing adopted,
+     *      which is recoverable; the reverse would lose the only copy.
+     *   4. The record is keyed by content, so a `removeItem` that fails still cannot produce a
+     *      second import on the next load or in another store.
      */
-    readDraft () {
-      this.draftError = ''
-      try {
-        this.pendingDraft = readDraftFile(this.draftImportText, { categories: this.categories })
-      } catch (error) {
-        this.pendingDraft = null
-        this.draftError = this.$i('menuImport_draftInvalid')
-      }
-    },
-    acceptDraft (replace) {
-      if (!this.guardEdit()) { return }
-      if (!this.pendingDraft) { return }
+    migrateLegacyDraft () {
+      const storage = this.storage()
+      if (!storage || this.selectedStore <= 0) { return false }
+      // A frozen plan takes precedence over everything, including this.
+      if (this.outcomeUnknown || this.pendingApplyRequest) { return false }
 
-      if (replace) {
-        this.rows = this.pendingDraft.rows.map(row => attachCurrent(row, this.catalogue))
-        this.categoryVariants = this.pendingDraft.categoryVariants
-        this.newCategories = this.pendingDraft.newCategories
-        if (this.pendingDraft.rules) { this.activeRules = { ...DEFAULT_RULES(), ...this.pendingDraft.rules } }
-      } else {
-        // Every legacy file numbers its own categories from newcat-1, so appending a second one
-        // without renaming would point its rows at the first file's category.
-        const merged = mergeForAppend(this.rows, this.newCategories, this.pendingDraft)
-        this.rows = [...this.rows, ...merged.rows.map(row => attachCurrent(row, this.catalogue))]
-        this.categoryVariants = [...this.categoryVariants, ...merged.categoryVariants]
-        this.newCategories = [...this.newCategories, ...merged.newCategories]
+      const legacy = findLegacyDraft(storage)
+      if (!legacy) { return false }
+
+      // Each old key is judged on its own. They are deleted one at a time and the second delete
+      // can fail, so a draft whose rows were taken and whose option groups were left behind has
+      // to be recognised as exactly that — not adopted whole a second time, and not written off
+      // whole either.
+      const parts = legacyParts(legacy)
+      const takeRows = !!parts.rows && !alreadyMigrated(storage, this.userId, parts.rows, this.draftMigratedFrom)
+      const takeGroups = !!parts.groups && !alreadyMigrated(storage, this.userId, parts.groups, this.draftMigratedFrom)
+
+      if (!takeRows && !takeGroups) {
+        // Both pieces are proven to be in a saved draft, so what is left here is the residue of
+        // a cleanup that failed. Nothing is deleted on the strength of an intention.
+        forgetLegacyDraft(storage)
+        return false
       }
 
-      // Only now, once it has actually been taken into this store, are the old keys released.
-      if (this.pendingDraft.fromLegacyStorage) {
-        forgetLegacyDraft(this.storage())
-        this.legacyDraft = null
+      const incoming = fromLegacyDraft({
+        rows: takeRows ? legacy.rows : [],
+        categoryVariants: takeGroups ? legacy.categoryVariants : []
+      }, { categories: this.categories })
+      if (!incoming.rows.length && !incoming.categoryVariants.length) { return false }
+
+      // The store and the replaceAll flag in an old file are ignored, as they always were: this
+      // adopts content, never a destination and never a deletion.
+      const merged = mergeForAppend(this.rows, this.newCategories, incoming)
+      const rows = [...this.rows, ...merged.rows.map(row => attachCurrent(row, this.catalogue))]
+      const categoryVariants = [...this.categoryVariants, ...merged.categoryVariants]
+      const newCategories = [...this.newCategories, ...merged.newCategories]
+
+      const taken = [takeRows ? parts.rows : '', takeGroups ? parts.groups : ''].filter(Boolean)
+      const record = [...(this.draftMigratedFrom || []), ...taken]
+
+      // The rows and the record of where they came from are written together, in one call.
+      // Nothing is claimed beforehand: a claim would be a record of an intention, and a record
+      // of an intention is enough to authorise deleting the old keys for an adoption that then
+      // failed. Those keys are the only copy of that work.
+      if (!this.writeDraft(rows, categoryVariants, newCategories, record)) {
+        // Storage refused. Nothing adopted, nothing noted, nothing consumed — the old draft is
+        // exactly as it was and will be offered again on the next load.
+        return false
       }
 
-      this.pendingDraft = null
-      this.draftImportText = ''
-      this.showDraft = false
+      this.rows = rows
+      this.categoryVariants = categoryVariants
+      this.newCategories = newCategories
+      this.draftMigratedFrom = record
+
+      // Only now, with the rows demonstrably saved. The shared note is a shortcut for other
+      // stores; the draft itself is the proof, and either one is enough to stop a second import.
+      rememberMigration(storage, this.userId, taken)
+      forgetLegacyDraft(storage, [
+        takeRows ? LEGACY_ROWS_KEY : null,
+        takeGroups ? LEGACY_CATEGORY_VARIANTS_KEY : null
+      ].filter(Boolean))
+      this.migratedRowCount = merged.rows.length
       this.applyRecommendedColumns()
       this.onPlanChanged()
+      return true
     },
-    /**
-     * Offers the old import page's draft, without taking it.
-     *
-     * It goes through the same confirmation a pasted file does, because it has the same problem:
-     * those keys record no store, so the only honest thing to do is show what is in them and ask
-     * where it should land.
-     */
-    offerLegacyDraft () {
-      if (!this.legacyDraft || !this.guardEdit()) { return }
-      this.pendingDraft = {
-        ...fromLegacyDraft(this.legacyDraft, { categories: this.categories }),
-        fromLegacyStorage: true
-      }
-      this.showDraft = true
-    },
-    /**
-     * Leaves the old keys exactly where they are.
-     *
-     * Declining is not deleting: the old page's draft may be the only copy of that work, and it
-     * is not this page's to throw away.
-     */
-    dismissLegacyDraft () { this.legacyDraft = null },
     /** Empties the work list. Store products are untouched, which the dialog says outright. */
     clearDraft () {
       if (!this.guardEdit()) { return }
@@ -2238,6 +2403,52 @@ export default {
 
     // ---------------------------------------------------------------- approval
     /**
+     * Opens the confirmation. Nothing is saved by this.
+     *
+     * It opens even when the plan cannot be applied, because someone who has just pressed save
+     * and had nothing happen needs to be told why — and the errors are here rather than under
+     * every row, where twenty rows priced the same way produced twenty identical lines.
+     */
+    async openApproval (options = {}) {
+      if (this.isApproving || this.isApplying || this.outcomeUnknown) { return }
+
+      this.confirmReplacement = options.catalogueReplacement || null
+      this.confirmStale = false
+      this.validationError = ''
+      // Cleared first: until the fresh check lands there is nothing here anyone has confirmed.
+      this.confirmSignature = ''
+      this.showConfirm = true
+
+      // A fresh check, so the numbers being confirmed are the ones the server would write.
+      if (this.validateTimer) { clearTimeout(this.validateTimer); this.validateTimer = null }
+      const result = await this.validate({ catalogueReplacement: this.confirmReplacement })
+      this.confirmSignature = result ? this.priceSignature(result) : ''
+    },
+    closeApproval () {
+      // Not while the save is actually in flight: closing then would drop the review state that
+      // an unknown outcome is recovered through. A receipt is the one thing that releases it.
+      if ((this.isApproving || this.isApplying) && !this.receipt) { return }
+      this.showConfirm = false
+      this.confirmStale = false
+      this.confirmSignature = ''
+      this.confirmReplacement = null
+    },
+    /**
+     * The only thing that saves.
+     *
+     * The plan is checked once more and compared against what the dialog is showing. If the
+     * answer has moved, nothing is applied and the dialog says so: the point of confirming is
+     * that what was read is what gets written.
+     */
+    async confirmApproval () {
+      if (!this.canConfirmApply) { return }
+      await this.approve({
+        catalogueReplacement: this.confirmReplacement,
+        displayed: this.confirmSignature
+      })
+      if (this.receipt) { this.closeApproval() }
+    },
+    /**
      * The one approval path. Every way of saving — the ordinary button and the catalogue
      * replacement — comes through here, so the lock, the freshness check and the confirmation of
      * links all apply to each of them. A second entry point is how two clicks mint two
@@ -2247,7 +2458,8 @@ export default {
       if (!this.canApprove || this.isApproving || this.isApplying) { return }
       if (options.catalogueReplacement && !this.removalPreview) { return }
 
-      const displayed = this.priceSignature(this.validation)
+      // What the operator actually read, captured when the dialog opened rather than now.
+      const displayed = options.displayed || this.priceSignature(this.validation)
       this.isApproving = true
       if (this.validateTimer) { clearTimeout(this.validateTimer) }
 
@@ -2267,9 +2479,12 @@ export default {
         const result = await this.validate({ catalogueReplacement: options.catalogueReplacement || null })
         if (!result) { return }
 
-        // What was reviewed has to be what is saved. Anything else needs another look.
+        // What was reviewed has to be what is saved. Anything else needs another look, and the
+        // dialog stays open showing the new numbers so the second confirmation is an informed one.
         if (displayed !== this.priceSignature(result)) {
           this.validationError = this.$i('menuImport_pricesRefreshed')
+          this.confirmStale = true
+          this.confirmSignature = this.priceSignature(result)
           return
         }
 
@@ -2475,13 +2690,16 @@ export default {
      */
     async confirmReplace () {
       if (!this.canConfirmReplace || this.isApproving || this.isApplying) { return }
-      await this.approve({
+      // Into the same confirmation every other save goes through, carrying the exact ids that
+      // were read. The typed word above is about agreeing to delete; this is about what is
+      // written, and both are required.
+      this.showReplace = false
+      await this.openApproval({
         catalogueReplacement: {
           requested: true,
           expectedRemovedProductIds: this.removalPreview.productIds
         }
       })
-      if (this.receipt) { this.closeReplace() }
     },
     closeReplace () {
       this.showReplace = false
@@ -2526,10 +2744,8 @@ export default {
       this.validationError = ''
       this.remapNotice = ''
       this.detailRow = null
-      this.pendingDraft = null
-      this.legacyDraft = null
-      this.draftImportText = ''
-      this.draftError = ''
+      this.migratedRowCount = 0
+      this.draftMigratedFrom = []
       this.removalPreview = null
       this.replaceConfirmation = ''
       this.activeRules = DEFAULT_RULES()
@@ -2597,6 +2813,42 @@ export default {
         ...(resolved.blockers || []),
         ...(resolved.warnings || []).filter(issue => issue.requiresAcceptance && !issue.accepted)
       ].filter(issue => !['matchNotConfirmed', 'newProductSetupUnconfirmed'].includes(issue.code))
+    },
+    /**
+     * A counted line, in the singular when there is one of something.
+     *
+     * "1 nye produkter" is the kind of thing that makes a confirmation feel machine-written at
+     * exactly the moment someone is deciding whether to trust it.
+     */
+    countText (key, count) {
+      return this.$i(key + (count === 1 ? 'One' : 'Many'), { count })
+    },
+    /** How a row is named when an error has to point at it. */
+    rowLabel (row) {
+      return displayValue(row, 'name') || row.displayName || this.$i('menuImport_unnamedRow')
+    },
+    /**
+     * One error, phrased for the person who has to fix it.
+     *
+     * Every code the API defines is phrased here, in the page's language. The server's own
+     * sentence is English and written for whoever is reading a log, so it is used only for a
+     * code this page has never heard of — where a specific English sentence still beats a
+     * generic local one.
+     */
+    errorText (group) {
+      const key = 'menuImport_error_' + group.code
+      const translated = this.$i(key)
+      if (translated === key) { return group.raw || this.$i('menuImport_error_unknown') }
+
+      if (group.code === 'unsupportedNegativeSurcharge') {
+        // The stored model holds one price plus a surcharge per channel, and a surcharge cannot
+        // be negative. Which channel it is depends on how the totals project through their VAT
+        // rates, so the channel the server names is the one to say — and the fix is that
+        // channel's own price or rate, not a rule about all totals exceeding takeaway.
+        return this.$i(key, { channel: this.$i('menuImport_channel' + (group.channel || 'EatIn')) })
+      }
+
+      return translated
     },
     /**
      * The text shown for one issue. Most codes read better in the page's own language; a few
@@ -2770,6 +3022,10 @@ export default {
 }
 
 .workspace-table {
+  // The height of the two reserved bands, named once so every cell agrees on them.
+  --cell-before: 16px;
+  --cell-after: 15px;
+
   width: 100%;
   border-collapse: collapse;
   font-size: 0.92em;
@@ -2777,9 +3033,39 @@ export default {
   th, td {
     padding: 12px;
     text-align: left;
-    vertical-align: top;
     border-bottom: 1px solid #f1f5f9;
   }
+
+  // Every cell is the same three bands: what the value was, the control, and a note about it.
+  // The bands are reserved whether or not they have anything in them, because a line that
+  // appears only when there is something to say drops its own control a row lower than its
+  // neighbours — a changed takeaway price sat one line below an unchanged eat-in one.
+  //
+  // The grid is on a wrapper rather than on the cell itself: a `td` that stops being a table
+  // cell stops taking part in the table's column widths, and the layout comes apart.
+  td { vertical-align: top; }
+
+  .cell {
+    display: grid;
+    grid-template-rows: var(--cell-before) minmax(44px, auto) var(--cell-after);
+    align-content: start;
+    justify-items: stretch;
+    row-gap: 2px;
+    min-width: 0;
+  }
+
+  .cell-before,
+  .cell-after {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    line-height: 1.15;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .cell-before { align-self: end; }
+  .cell-after { align-self: start; }
 
   thead th {
     position: sticky; top: 0; z-index: 2;
@@ -2809,7 +3095,9 @@ export default {
   .col-tools { width: 96px; white-space: nowrap; }
 
   input[type="text"], input[type="number"] {
-    width: 100%; min-width: 80px; min-height: 40px; padding: 8px 10px;
+    // The same 44px as the product search and every other single-line control in a row, so a
+    // line of them reads as one line rather than as several that nearly agree.
+    width: 100%; min-width: 80px; min-height: 44px; padding: 10px;
     border: 1px solid #cbd5e1; border-radius: 8px; background: #fff;
     font: inherit; color: #292c34;
 
@@ -2821,7 +3109,7 @@ export default {
 
   input[type="checkbox"] { width: 20px; height: 20px; accent-color: #1bb776; }
 
-  del { display: block; color: #94a3b8; font-size: 0.85em; }
+  del { color: #94a3b8; font-size: 0.85em; }
 
   .size {
     padding: 1px 6px; margin-left: 4px; border-radius: 6px;
@@ -2834,12 +3122,13 @@ export default {
     margin-top: 4px; color: #64748b; font-size: 0.85em;
   }
 
-  .row-intent { display: block; margin-top: 4px; color: #64748b; font-size: 0.8em; }
+  .row-intent { color: #64748b; font-size: 0.8em; }
   .row-intent.new-intent { color: #159f63; }
-  .row-intent.modified { color: #92400e; }
+  .row-intent .modified { color: #92400e; }
+  .row-intent .modified::before { content: ' · '; color: #cbd5e1; }
 
-  .inline-issue { display: block; margin-top: 4px; color: #92400e; font-size: 0.8em; }
-  .delta { display: block; margin-top: 2px; color: #64748b; font-size: 0.8em; }
+  .delta { color: #64748b; font-size: 0.8em; }
+  .col-category .cell-after { color: #92400e; font-size: 0.78em; }
   .derived-value { color: #64748b; font-variant-numeric: tabular-nums; }
 
   .omitted-row { opacity: 0.55; }
@@ -2917,6 +3206,10 @@ export default {
       &.kind-boolean { grid-template-columns: minmax(96px, 34%) auto; justify-content: start; }
     }
 
+    // A card has no columns to line up with, so the reserved bands only add empty space.
+    .cell { display: contents; }
+    .cell-before:empty, .cell-after:empty { display: none; }
+
     // Nothing is pinned on a phone: there is no second axis to pin against.
     .sticky {
       position: static;
@@ -2938,7 +3231,7 @@ export default {
 }
 
 .variant-chip {
-  min-height: 36px; padding: 6px 12px;
+  min-height: 44px; padding: 6px 12px;
   background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px;
   color: #292c34; font: inherit; font-size: 0.85em; cursor: pointer; white-space: nowrap;
 
@@ -3027,6 +3320,56 @@ export default {
 }
 
 // ------------------------------------------------------------------ modals
+// The shared Modal fills the screen with white, which is right for a page-sized form and wrong
+// for a question with six lines in it. Scoped through this dialog's own class: the same Modal is
+// used for the source, clear, category and replacement flows and is left alone there.
+.confirm-dialog {
+  ::v-deep .modal-container {
+    width: min(560px, calc(100vw - 32px));
+    max-width: none;
+    max-height: min(80vh, 720px);
+    overflow-y: auto;
+    padding: 28px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+
+    @media (max-width: 640px) {
+      width: calc(100vw - 24px);
+      max-height: calc(100vh - 24px);
+      padding: 20px;
+      border-radius: 12px;
+    }
+  }
+
+  // The work list stays visible behind it, dimmed: the numbers being confirmed are about that
+  // table, and hiding it makes them harder to trust rather than easier.
+  ::v-deep .modal-mask { background: rgba(41, 44, 52, 0.45); }
+}
+
+.confirm-modal {
+  width: auto;
+
+  h2 { margin: 0 0 4px; font-size: 1.15em; font-weight: 600; color: #292c34; }
+}
+
+.confirm-counts {
+  margin: 16px 0; padding: 16px; list-style: none;
+  background: #f8f9fa; border-radius: 10px;
+
+  li { padding: 3px 0; color: #292c34; font-size: 0.95em; }
+  li.muted { color: #64748b; }
+  li.danger-text { color: #ef4444; font-weight: 600; }
+}
+
+.confirm-errors {
+  margin: 8px 0 0; padding: 0; list-style: none;
+
+  li + li { margin-top: 10px; }
+  span { display: block; color: #292c34; font-size: 0.92em; }
+  small { display: block; margin-top: 2px; color: #64748b; font-size: 0.82em; }
+}
+
 .source-modal, .draft-modal, .category-variants-modal, .replace-modal {
   width: min(640px, 100%);
 

@@ -413,12 +413,14 @@ describe('columns', () => {
     const visible = recommendedColumns([row])
 
     expect(visible).toEqual(expect.arrayContaining(['name', 'category', 'description', 'otherInformation', 'variants']))
+    // The identity column is gone; `name` is the structural one that replaced it.
+    expect(visible).not.toContain('identity')
     // Nothing in this row says anything about a deposit, so that column stays off.
     expect(visible).not.toContain('depositAmount')
   })
 
   it('never drops a structural column and never keeps an unknown one', () => {
-    expect(normalizeVisibleColumns(['takeaway', 'nonsense'])).toEqual(['identity', 'link', 'takeaway'])
+    expect(normalizeVisibleColumns(['takeaway', 'nonsense'])).toEqual(['link', 'name', 'takeaway'])
   })
 
   it('remembers a chosen set per user and store, and only when it was chosen', () => {
@@ -429,7 +431,7 @@ describe('columns', () => {
     }
 
     writeColumnPreference(storage, 'u1', 7, { chosen: true, visible: ['takeaway', 'soldOut'] })
-    expect(readColumnPreference(storage, 'u1', 7)).toEqual({ chosen: true, visible: ['identity', 'link', 'takeaway', 'soldOut'] })
+    expect(readColumnPreference(storage, 'u1', 7)).toEqual({ chosen: true, visible: ['link', 'name', 'takeaway', 'soldOut'] })
     // Another store, and another person on the same browser, get their own.
     expect(readColumnPreference(storage, 'u1', 8)).toBeNull()
     expect(readColumnPreference(storage, 'u2', 7)).toBeNull()

@@ -1,6 +1,17 @@
+import fs from 'fs'
+import path from 'path'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import MenuImportPage from '~/pages/admin/import.vue'
+
+// The real $i returns the key itself when a translation is missing, and the page relies on that
+// to tell a code it has phrased from one it has never heard of. The mock therefore has to know
+// which keys actually exist, so it reads them from the Norwegian file — which also means a test
+// fails if a key the page asks for was never written.
+const TRANSLATED = new Set(
+  (fs.readFileSync(path.join(__dirname, '..', 'translations', 'no.ts'), 'utf8')
+    .match(/^ {2}[A-Za-z0-9_]+:/gm) || []).map(line => line.trim().replace(':', ''))
+)
 
 const localVue = createLocalVue()
 localVue.use(Vuex)
@@ -176,7 +187,10 @@ function build ({ service = {}, selectedAdminStore = 7, storage = makeStorage() 
     localVue,
     store,
     mocks: {
-      $i: (key, params) => (params ? key + ':' + JSON.stringify(params) : key),
+      $i: (key, params) => {
+        if (!TRANSLATED.has(key)) { return key }
+        return params ? key + ':' + JSON.stringify(params) : 'T:' + key
+      },
       $router: { push: jest.fn(), replace: jest.fn() },
       $route: { path: '/admin/import', query: {} }
     },
@@ -189,6 +203,14 @@ function build ({ service = {}, selectedAdminStore = 7, storage = makeStorage() 
 }
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0))
+
+// Saving is a two-step act now: the button opens a confirmation, and only its own button
+// applies. Every test that used to call approve() goes through both, so the dialog is on the
+// path of every assertion about what does and does not reach the API.
+const approveThroughDialog = async (wrapper) => {
+  await wrapper.vm.openApproval()
+  await wrapper.vm.confirmApproval()
+}
 
 describe('one workspace, one plan', () => {
   it('asks for a store before offering anything to import', () => {
@@ -236,51 +258,146 @@ describe('one workspace, one plan', () => {
     wrapper.vm.validation = ready
     stub.Validate.mockResolvedValue(ready)
 
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
 
     expect(stub.Apply).toHaveBeenCalledTimes(1)
     expect(stub.Apply.mock.calls[0][0].plan).toBe(ready.normalizedPlan)
     wrapper.destroy()
   })
 
-  it('refuses to apply when the fresh prices differ from the ones on screen', async () => {
-    const changed = validation()
-    changed.rows[0].takeaway.newAmount = 29900
-    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(changed) } })
+  it('refuses to apply when the prices move between the dialog and the confirmation', async () => {
+    const reviewed = validation()
+    const moved = validation()
+    moved.rows[0].takeaway.newAmount = 29900
+    // The first answer is what the dialog shows; the second is what is true when it is confirmed.
+    const Validate = jest.fn().mockResolvedValueOnce(reviewed).mockResolvedValue(moved)
+    const { wrapper, stub } = build({ service: { Validate } })
     wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
 
     expect(stub.Apply).not.toHaveBeenCalled()
-    expect(wrapper.vm.validationError).toBe('menuImport_pricesRefreshed')
+    expect(wrapper.vm.confirmStale).toBe(true)
+    // The dialog stays open showing the new numbers, so the second confirmation is informed.
+    expect(wrapper.vm.showConfirm).toBe(true)
     wrapper.destroy()
   })
 
-  it('refuses to apply when a metadata change appears between the review and the approval', async () => {
-    // A different write is a different plan, whether the number that changed is a price or not.
-    const changed = validation()
-    changed.rows[0].metadataChanges = [{ field: 'name', from: '1. Vegetar', to: 'Vegetar deluxe' }]
-    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(changed) } })
+  it('refuses when a metadata change appears between the dialog and the confirmation', async () => {
+    const reviewed = validation()
+    const moved = validation()
+    moved.rows[0].metadataChanges = [{ field: 'name', from: '1. Vegetar', to: 'Vegetar deluxe' }]
+    const Validate = jest.fn().mockResolvedValueOnce(reviewed).mockResolvedValue(moved)
+    const { wrapper, stub } = build({ service: { Validate } })
     wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
 
     expect(stub.Apply).not.toHaveBeenCalled()
-    expect(wrapper.vm.validationError).toBe('menuImport_pricesRefreshed')
+    expect(wrapper.vm.confirmStale).toBe(true)
     wrapper.destroy()
   })
 
-  it('will not approve before the current draft has been validated', async () => {
+  it('cannot be confirmed until a fresh check has come back', async () => {
+    let release
+    const slow = new Promise((resolve) => { release = resolve })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockReturnValue(slow) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    const opening = wrapper.vm.openApproval()
+    // The dialog is up, but nothing has been checked yet, so there is nothing to agree to.
+    expect(wrapper.vm.showConfirm).toBe(true)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+    await wrapper.vm.confirmApproval()
+    expect(stub.Apply).not.toHaveBeenCalled()
+
+    release(validation())
+    await opening
+    expect(wrapper.vm.canConfirmApply).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('applies nothing at all when the confirmation is cancelled', async () => {
     const { wrapper, stub } = build()
     wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.validation = validation()
-    wrapper.vm.setManual(wrapper.vm.rows[0], 'takeaway', '280')
 
-    expect(wrapper.vm.validation).toBeNull()
-    await wrapper.vm.approve()
+    await wrapper.vm.openApproval()
+    wrapper.vm.closeApproval()
+
     expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.showConfirm).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('says what is about to happen, counted off the validated plan', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.confirmSummary).toMatchObject({ create: 1, changed: 1, unchanged: 0 })
+    wrapper.destroy()
+  })
+
+  it('opens even when the plan is blocked, and explains why in the operator\'s language', async () => {
+    const blocked = validation({
+      canApply: false,
+      blockers: [
+        { code: 'unsupportedNegativeSurcharge', rowKey: 'n:1', channel: 'EatIn' },
+        { code: 'unsupportedNegativeSurcharge', rowKey: 'n:2', channel: 'EatIn' }
+      ]
+    })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(blocked) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.showConfirm).toBe(true)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+    // Grouped: one reason, naming the rows, not the same sentence twice.
+    expect(wrapper.vm.confirmErrors).toHaveLength(1)
+    expect(wrapper.vm.confirmErrors[0].names).toHaveLength(2)
+    // Localised through a key, and it names the channel the server named.
+    expect(wrapper.vm.confirmErrors[0].message).toContain('menuImport_error_unsupportedNegativeSurcharge')
+    expect(wrapper.vm.confirmErrors[0].message).toContain('menuImport_channelEatIn')
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('is not deadlocked by the very questions it exists to answer', async () => {
+    // canApply is false until the matches are confirmed, and confirming them is what this
+    // dialog does. Requiring canApply to enable its button would disable it for good.
+    const unconfirmed = validation({
+      canApply: false,
+      blockers: [{ code: 'matchNotConfirmed', rowKey: 'n:1' }]
+    })
+    const ready = validation({ canApply: true })
+    const Validate = jest.fn().mockResolvedValueOnce(unconfirmed).mockResolvedValue(ready)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    expect(wrapper.vm.confirmErrors).toHaveLength(0)
+    expect(wrapper.vm.canConfirmApply).toBe(true)
+
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    expect(Validate.mock.calls.pop()[0].rows[0].matchConfirmed).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('reads blockers reported on a row as well as on the plan', async () => {
+    const rowOnly = validation({ canApply: false, blockers: [] })
+    rowOnly.rows[0].blockers = [{ code: 'invalidAmount', rowKey: 'n:1' }]
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(rowOnly) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.confirmErrors).toHaveLength(1)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
     wrapper.destroy()
   })
 })
@@ -424,44 +541,6 @@ describe('appending a second reading', () => {
   })
 })
 
-describe('drafts', () => {
-  it('never takes the store from a file, and never its replaceAll flag', async () => {
-    const { wrapper } = build()
-    wrapper.vm.draftImportText = JSON.stringify({
-      storeId: 999,
-      replaceAll: true,
-      rows: [{ name: 'Gammel rad', priceAmount: 12000, tax: 15 }]
-    })
-    wrapper.vm.readDraft()
-
-    expect(wrapper.vm.pendingDraft.declaredStoreId).toBe(999)
-    expect(wrapper.vm.pendingDraft.declaredReplaceAll).toBe(true)
-
-    wrapper.vm.acceptDraft(true)
-    await flush()
-
-    expect(wrapper.vm.selectedStore).toBe(7)
-    expect(wrapper.vm.removalPreview).toBeNull()
-    wrapper.destroy()
-  })
-
-  it('keeps the price rules with the draft, so it reopens showing the same money', async () => {
-    const { wrapper, storage } = build()
-    wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.activeRules = { ...wrapper.vm.activeRules, rounding: 'NearestFiveKroner' }
-    wrapper.vm.saveDraft()
-
-    const saved = JSON.parse(storage.contents['menuImport.draft.u1.7'])
-    expect(saved.rules.rounding).toBe('NearestFiveKroner')
-
-    const { wrapper: reopened } = build({ storage })
-    await flush()
-    expect(reopened.vm.activeRules.rounding).toBe('NearestFiveKroner')
-    reopened.destroy()
-    wrapper.destroy()
-  })
-})
-
 describe('an apply whose result was never seen', () => {
   it('freezes the plan and offers only status or the same operation again', async () => {
     const failure = Object.assign(new Error('network'), { status: 0 })
@@ -469,7 +548,7 @@ describe('an apply whose result was never seen', () => {
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
 
     expect(wrapper.vm.outcomeUnknown).toBe(true)
     expect(wrapper.vm.canApprove).toBe(false)
@@ -483,7 +562,7 @@ describe('an apply whose result was never seen', () => {
     const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure) } })
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
     wrapper.destroy()
 
     // A fresh page, the same person, the same store: still frozen on that operation.
@@ -505,7 +584,7 @@ describe('an apply whose result was never seen', () => {
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
     const sent = Apply.mock.calls[0][0]
     await wrapper.vm.retryPendingApply()
 
@@ -522,13 +601,13 @@ describe('an apply whose result was never seen', () => {
     })
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
 
     await wrapper.vm.checkStatus()
 
     // "Not applied" is not a verdict: the ledger row only exists once the transaction commits.
     expect(wrapper.vm.outcomeUnknown).toBe(true)
-    expect(wrapper.vm.applyError).toBe('menuImport_statusNotApplied')
+    expect(wrapper.vm.applyError).toBe('T:menuImport_statusNotApplied')
     wrapper.destroy()
   })
 
@@ -542,7 +621,7 @@ describe('an apply whose result was never seen', () => {
     })
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
 
     await wrapper.vm.checkStatus()
 
@@ -559,7 +638,7 @@ describe('an apply whose result was never seen', () => {
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
 
     expect(wrapper.vm.outcomeUnknown).toBe(false)
     expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
@@ -586,21 +665,26 @@ describe('replacing the whole store menu', () => {
     expect(wrapper.vm.removalPreview.productIds).toEqual(['p2'])
     expect(wrapper.vm.canConfirmReplace).toBe(false)
 
-    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
+    wrapper.vm.replaceConfirmation = wrapper.vm.replaceWord
     expect(wrapper.vm.canConfirmReplace).toBe(true)
     wrapper.destroy()
   })
 
-  it('sends back exactly the ids that were shown', async () => {
+  it('sends back exactly the ids that were shown, through the shared confirmation', async () => {
     const withRemoval = validation({ removal: { requested: true, productIds: ['p2'], products: [{ productId: 'p2', name: '2. Kjøtt' }] } })
     const Validate = jest.fn().mockResolvedValue(withRemoval)
     const { wrapper, stub } = build({ service: { Validate } })
     wrapper.vm.adoptAnalysis(analysis)
     await wrapper.vm.previewRemoval()
-    wrapper.vm.validation = withRemoval
-    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
+    wrapper.vm.replaceConfirmation = wrapper.vm.replaceWord
 
+    // The typed word agrees to the deletion; the confirmation agrees to what gets written.
     await wrapper.vm.confirmReplace()
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.showConfirm).toBe(true)
+    expect(wrapper.vm.confirmSummary.removals).toBe(1)
+
+    await wrapper.vm.confirmApproval()
 
     const sent = Validate.mock.calls.pop()[0]
     expect(sent.catalogueReplacement).toEqual({ requested: true, expectedRemovedProductIds: ['p2'] })
@@ -611,18 +695,17 @@ describe('replacing the whole store menu', () => {
   it('stops and re-shows the list when what would be removed has changed', async () => {
     const shown = validation({ removal: { requested: true, productIds: ['p2'], products: [{ productId: 'p2', name: '2. Kjøtt' }] } })
     const moved = validation({ removal: { requested: true, productIds: ['p2', 'p3'], products: [{ productId: 'p2', name: '2. Kjøtt' }, { productId: 'p3', name: '3. Ny rett' }] } })
-    const Validate = jest.fn().mockResolvedValueOnce(shown).mockResolvedValue(moved)
+    const Validate = jest.fn().mockResolvedValueOnce(shown).mockResolvedValueOnce(shown).mockResolvedValue(moved)
     const { wrapper, stub } = build({ service: { Validate } })
     wrapper.vm.adoptAnalysis(analysis)
     await wrapper.vm.previewRemoval()
-    wrapper.vm.validation = shown
-    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
-
+    wrapper.vm.replaceConfirmation = wrapper.vm.replaceWord
     await wrapper.vm.confirmReplace()
+
+    await wrapper.vm.confirmApproval()
 
     // A product created between the preview and the confirmation must not be swept up silently.
     expect(stub.Apply).not.toHaveBeenCalled()
-    expect(wrapper.vm.validationError).toBe('menuImport_replaceChanged')
     expect(wrapper.vm.removalPreview.productIds).toEqual(['p2', 'p3'])
     wrapper.destroy()
   })
@@ -632,10 +715,11 @@ describe('columns', () => {
   it('opens compact for a price update and rich for an import that creates products', () => {
     const { wrapper } = build()
     wrapper.vm.adoptAnalysis({ ...analysis, rows: [analysis.rows[0]] })
-    expect(wrapper.vm.visibleColumns).toEqual(['identity', 'link', 'takeaway', 'eatIn', 'delivery'])
+    expect(wrapper.vm.visibleColumns).toEqual(['link', 'name', 'takeaway', 'eatIn', 'delivery'])
 
     wrapper.vm.adoptAnalysis(analysis)
     expect(wrapper.vm.visibleColumns).toEqual(expect.arrayContaining(['name', 'category', 'description']))
+    expect(wrapper.vm.visibleColumns).not.toContain('identity')
     wrapper.destroy()
   })
 
@@ -660,6 +744,46 @@ describe('columns', () => {
 
     expect(wrapper.vm.columnChoiceMade).toBe(false)
     expect(wrapper.vm.visibleColumns).not.toContain('soldOut')
+    wrapper.destroy()
+  })
+
+  it('remembers a manual choice across closing and reopening the browser', async () => {
+    // Same person, same store, nothing on the server: the choice lives in local storage and has
+    // to survive the component being torn down and built again from that storage alone.
+    const storage = makeStorage()
+    const first = build({ storage })
+    first.wrapper.vm.adoptAnalysis(analysis)
+    first.wrapper.vm.onColumnToggle({ id: 'soldOut', visible: true })
+    first.wrapper.vm.onColumnToggle({ id: 'description', visible: false })
+    const chosen = [...first.wrapper.vm.visibleColumns]
+    first.wrapper.destroy()
+
+    const { wrapper } = build({ storage })
+    await flush()
+
+    expect(wrapper.vm.columnChoiceMade).toBe(true)
+    expect(wrapper.vm.visibleColumns).toEqual(chosen)
+
+    // And a fresh import does not quietly rearrange it afterwards.
+    wrapper.vm.adoptAnalysis(analysis)
+    expect(wrapper.vm.visibleColumns).toEqual(chosen)
+    expect(wrapper.vm.visibleColumns).toContain('soldOut')
+    expect(wrapper.vm.visibleColumns).not.toContain('description')
+    wrapper.destroy()
+  })
+
+  it('keeps the structural columns even when an older saved choice left them out', async () => {
+    // A preference saved before the identity column was removed must not leave a create row
+    // with nothing naming it.
+    const storage = makeStorage()
+    storage.setItem('menuImport.columns.u1.7', JSON.stringify({ chosen: true, visible: ['identity', 'takeaway'] }))
+
+    const { wrapper } = build({ storage })
+    await flush()
+
+    expect(wrapper.vm.visibleColumns).toContain('name')
+    expect(wrapper.vm.visibleColumns).toContain('link')
+    expect(wrapper.vm.visibleColumns).not.toContain('identity')
     wrapper.destroy()
   })
 
@@ -779,7 +903,6 @@ describe('a frozen plan cannot be edited from anywhere', () => {
     wrapper.vm.createCategoryFor(row, 'Helt ny kategori')
     wrapper.vm.clearVariantsOf(row)
     wrapper.vm.addCategoryVariantGroup()
-    wrapper.vm.acceptDraft(true)
     wrapper.vm.clearDraft()
     wrapper.vm.addFiles([{ name: 'ny.pdf', type: 'application/pdf', size: 1000 }])
 
@@ -790,19 +913,16 @@ describe('a frozen plan cannot be edited from anywhere', () => {
     wrapper.destroy()
   })
 
-  it('will not open a tool that exists to change the draft, but will still export it', async () => {
+  it('will not open a tool that exists to change the draft', async () => {
     const { wrapper } = await freeze()
 
     wrapper.vm.openTool('source')
     wrapper.vm.openTool('categoryVariants')
     wrapper.vm.openTool('clear')
+
     expect(wrapper.vm.showSource).toBe(false)
     expect(wrapper.vm.showCategoryVariants).toBe(false)
     expect(wrapper.vm.showClear).toBe(false)
-
-    // Reading the draft out as JSON changes nothing.
-    wrapper.vm.openTool('draft')
-    expect(wrapper.vm.showDraft).toBe(true)
     wrapper.destroy()
   })
 
@@ -822,7 +942,7 @@ describe('a frozen plan cannot be edited from anywhere', () => {
     const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure) } })
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
     wrapper.destroy()
 
     // Another store is not frozen by store 7's outstanding apply …
@@ -1053,77 +1173,161 @@ describe('duplicating a linked row', () => {
 })
 
 describe('a draft left behind by the old import page', () => {
-  const withLegacy = (extra = {}) => {
-    const storage = makeStorage()
-    storage.setItem('importRows', JSON.stringify([
-      { categoryName: 'Pizza', name: 'Gammel rad', priceAmount: 12000, tax: 15, tableAdditionalAmount: 2000, tableTax: 25, soldOut: false, depositAmount: 0 }
-    ]))
-    storage.setItem('importCategoryVariants', JSON.stringify([
-      { categoryName: 'Pizza', variants: [{ name: 'Tilbehør', options: [] }] }
-    ]))
-    return build({ storage, ...extra })
+  const LEGACY_ROWS = [
+    { categoryName: 'Pizza', name: 'Gammel rad', priceAmount: 12000, tax: 15, tableAdditionalAmount: 2000, tableTax: 25, soldOut: false, depositAmount: 0 }
+  ]
+  const LEGACY_GROUPS = [{ categoryName: 'Pizza', variants: [{ name: 'Tilbehør', options: [] }] }]
+
+  const seeded = (storage = makeStorage()) => {
+    storage.setItem('importRows', JSON.stringify(LEGACY_ROWS))
+    storage.setItem('importCategoryVariants', JSON.stringify(LEGACY_GROUPS))
+    return storage
   }
 
-  it('is offered rather than adopted, because those keys record no store', async () => {
-    const { wrapper } = withLegacy()
+  it('is adopted into the selected store without asking, once the catalogue is known', async () => {
+    const storage = seeded()
+    const { wrapper } = build({ storage })
     await flush()
 
-    expect(wrapper.vm.legacyDraft.rows).toHaveLength(1)
-    // Nothing has been taken into the work list on its own.
-    expect(wrapper.vm.rows).toHaveLength(0)
+    expect(wrapper.vm.rows).toHaveLength(1)
+    expect(wrapper.vm.priceValue(wrapper.vm.rows[0], 'takeaway')).toBe(120)
+    // The old eat-in addition becomes an eat-in total, never a third addition.
+    expect(wrapper.vm.priceValue(wrapper.vm.rows[0], 'eatIn')).toBe(140)
+    expect(wrapper.vm.categoryVariants[0].variants.some(group => group.name === 'Tilbehør')).toBe(true)
+    expect(storage.contents.importRows).toBeUndefined()
     wrapper.destroy()
   })
 
-  it('asks where it should land before anything is loaded', async () => {
-    const { wrapper } = withLegacy()
+  it('does not adopt the same draft a second time on reload', async () => {
+    const storage = seeded()
+    const first = build({ storage })
+    await flush()
+    first.wrapper.destroy()
+
+    const { wrapper } = build({ storage })
     await flush()
 
-    wrapper.vm.offerLegacyDraft()
-
-    expect(wrapper.vm.showDraft).toBe(true)
-    expect(wrapper.vm.pendingDraft.rows).toHaveLength(1)
-    expect(wrapper.vm.rows).toHaveLength(0)
+    expect(wrapper.vm.rows).toHaveLength(1)
     wrapper.destroy()
   })
 
-  it('leaves the old keys alone when the offer is declined', async () => {
-    const { wrapper, storage } = withLegacy()
+  it('appends to a draft this store already has, rekeying what would collide', async () => {
+    const storage = seeded()
+    const first = build({ storage })
+    await flush()
+    const existingKey = first.wrapper.vm.rows[0].rowKey
+    first.wrapper.destroy()
+
+    // The same old keys turn up again — a cleanup that failed — with a scoped draft in place.
+    seeded(storage)
+    delete storage.contents['menuImport.migrated.u1']
+    const draft = JSON.parse(storage.contents['menuImport.draft.u1.7'])
+    draft.migratedFrom = []
+    storage.setItem('menuImport.draft.u1.7', JSON.stringify(draft))
+
+    const { wrapper } = build({ storage })
     await flush()
 
-    wrapper.vm.dismissLegacyDraft()
+    expect(wrapper.vm.rows).toHaveLength(2)
+    expect(new Set(wrapper.vm.rows.map(row => row.rowKey)).size).toBe(2)
+    expect(wrapper.vm.rows[0].rowKey).toBe(existingKey)
+    wrapper.destroy()
+  })
 
-    // Declining is not deleting: this may be the only copy of that work.
+  it('never touches the old keys when the draft cannot be saved', async () => {
+    // The exact sequence that would otherwise delete the only copy: the write fails, and
+    // whatever was recorded beforehand must not authorise a cleanup.
+    const storage = seeded()
+    storage.setItem = () => { throw new Error('quota') }
+
+    const { wrapper } = build({ storage })
+    await flush()
+
     expect(storage.contents.importRows).toBeDefined()
     expect(storage.contents.importCategoryVariants).toBeDefined()
+    expect(storage.contents['menuImport.migrated.u1']).toBeUndefined()
     wrapper.destroy()
   })
 
-  it('releases the old keys only once it has been taken into a store', async () => {
-    const { wrapper, storage } = withLegacy()
+  it('recovers the old rows on a later load once storage works again', async () => {
+    const storage = seeded()
+    const failing = { ...storage, setItem: () => { throw new Error('quota') } }
+    const first = build({ storage: failing })
     await flush()
-    wrapper.vm.offerLegacyDraft()
+    first.wrapper.destroy()
 
-    wrapper.vm.acceptDraft(true)
+    const { wrapper } = build({ storage })
+    await flush()
 
     expect(wrapper.vm.rows).toHaveLength(1)
     expect(storage.contents.importRows).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('does not adopt it a second time in another store when the cleanup failed', async () => {
+    const storage = seeded()
+    const first = build({ storage })
+    await flush()
+    first.wrapper.destroy()
+
+    // The rows were saved, but clearing the old keys did not take.
+    seeded(storage)
+
+    const { wrapper } = build({ storage, selectedAdminStore: 8 })
+    await flush()
+
+    expect(wrapper.vm.rows).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('recognises the half of a failed cleanup that was already taken', async () => {
+    // The rows key was deleted and the groups key was not. The surviving half must be seen as
+    // already adopted, not appended a second time.
+    const storage = seeded()
+    const first = build({ storage })
+    await flush()
+    first.wrapper.destroy()
+
+    storage.setItem('importCategoryVariants', JSON.stringify(LEGACY_GROUPS))
+
+    const { wrapper } = build({ storage })
+    await flush()
+
+    expect(wrapper.vm.rows).toHaveLength(1)
+    expect(wrapper.vm.categoryVariants).toHaveLength(1)
     expect(storage.contents.importCategoryVariants).toBeUndefined()
     wrapper.destroy()
   })
 
-  it('carries the old row\'s prices, taxes and options across', async () => {
-    const { wrapper } = withLegacy()
+  it('still takes option groups that are genuinely new after a partial cleanup', async () => {
+    const storage = seeded()
+    const first = build({ storage })
     await flush()
-    wrapper.vm.offerLegacyDraft()
-    wrapper.vm.acceptDraft(true)
+    first.wrapper.destroy()
 
-    const row = wrapper.vm.rows[0]
-    expect(wrapper.vm.priceValue(row, 'takeaway')).toBe(120)
-    // The old eat-in addition becomes an eat-in total, never a third addition.
-    expect(wrapper.vm.priceValue(row, 'eatIn')).toBe(140)
-    expect(row.metadataEdits.tax).toBe(15)
-    expect(row.metadataEdits.eatInTax).toBe(25)
-    expect(wrapper.vm.categoryVariants[0].variants[0].name).toBe('Tilbehør')
+    // Different content under the same key: this has not been adopted and must not be skipped.
+    storage.setItem('importCategoryVariants', JSON.stringify([
+      { categoryName: 'Dessert', variants: [{ name: 'Topping', options: [] }] }
+    ]))
+
+    const { wrapper } = build({ storage })
+    await flush()
+
+    expect(wrapper.vm.categoryVariants).toHaveLength(2)
+    wrapper.destroy()
+  })
+
+  it('waits while an apply of unknown outcome is outstanding', async () => {
+    const storage = seeded()
+    storage.setItem('menuImport.pending.u1.7', JSON.stringify({ operationId: 'op-1', plan: {} }))
+
+    const { wrapper } = build({ storage })
+    await flush()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(wrapper.vm.rows).toHaveLength(0)
+    // Still there, to be adopted once that operation is settled.
+    expect(storage.contents.importRows).toBeDefined()
     wrapper.destroy()
   })
 })
@@ -1261,7 +1465,7 @@ describe('the receipt', () => {
     const { wrapper } = build()
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
     await wrapper.vm.$nextTick()
 
     expect(wrapper.text()).toContain('menuImport_receiptTitle')
@@ -1273,7 +1477,7 @@ describe('the receipt', () => {
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.validation = validation()
 
-    await wrapper.vm.approve()
+    await approveThroughDialog(wrapper)
     await wrapper.vm.$nextTick()
 
     expect(wrapper.vm.receiptUpdatedIds).toEqual([])
