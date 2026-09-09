@@ -928,6 +928,27 @@ describe('shared options for a whole category', () => {
     wrapper.destroy()
   })
 
+  it('takes back a pending removal as soon as a group is added, never sending both', async () => {
+    // The API refuses a request that both replaces and removes, so the two cannot coexist.
+    const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+    wrapper.vm.clearCategoryGroups(0)
+    expect(wrapper.vm.categoryVariants[0].clearGroups).toBe(true)
+
+    wrapper.vm.$refs.variantEditor.open = () => Promise.resolve({ name: 'Ny gruppe', options: [] })
+    await wrapper.vm.addCategoryVariant(0)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.categoryVariants[0].clearGroups).toBe(false)
+    const sent = stub.Validate.mock.calls.pop()[0].categoryVariants[0]
+    expect(sent.clearGroups).toBeUndefined()
+    expect(sent.groups).toHaveLength(1)
+    wrapper.destroy()
+  })
+
   it('treats discarding the entry as saying nothing about the category at all', () => {
     const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
     const { wrapper } = build()

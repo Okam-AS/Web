@@ -1619,6 +1619,9 @@ export default {
       const edited = await this.$refs.variantEditor.open(null)
       if (!edited) { return }
       const entry = this.categoryVariants[groupIndex]
+      // Adding a group takes back a pending "remove them all": the two are opposite
+      // instructions, and the API refuses a request that carries both.
+      entry.clearGroups = false
       entry.variants.push(fromEditorVariant(edited, entry.variants.length))
       this.onPlanChanged()
     },
