@@ -3,6 +3,9 @@ import path from 'path'
 import { mount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import MenuImportPage from '~/pages/admin/import.vue'
+import { COLUMN_IDS } from '~/utils/menu-workspace'
+
+const COLUMN_IDS_FOR_TEST = COLUMN_IDS
 
 // The real $i returns the key itself when a translation is missing, and the page relies on that
 // to tell a code it has phrased from one it has never heard of. The mock therefore has to know
@@ -136,19 +139,43 @@ const validation = (overrides = {}) => ({
   ...overrides
 })
 
-// A real receipt, not `{}`. The page reads its lists to say what happened, and a fixture that
-// omits them tests a shape the API never returns.
+// The shape the API actually returns: previous* is null for a product that did not exist, every
+// new* is a plain integer, and 0 is a real price. A fixture with a `channels` array tested a
+// shape that never existed, which is how the receipt shipped showing dashes.
 const receipt = (overrides = {}) => ({
   operationId: 'op-1',
+  storeId: 7,
   replayed: false,
   updatedProductIds: ['p1'],
   createdProductIds: ['p9'],
   metadataUpdatedProductIds: [],
   createdCategoryIds: [],
   removedProductIds: [],
+  skippedRowCount: 0,
+  unchangedRowCount: 0,
   prices: [
-    { productId: 'p1', productName: '1. Vegetar', created: false, channels: [{ channel: 'Takeaway', amount: 24500 }] },
-    { productId: 'p9', productName: 'Pistasjdessert', created: true, channels: [{ channel: 'Takeaway', amount: 10900 }] }
+    {
+      productId: 'p1',
+      productName: '1. Vegetar',
+      created: false,
+      previousTakeaway: 24000,
+      previousEatIn: 26000,
+      previousDelivery: 26000,
+      newTakeaway: 24500,
+      newEatIn: 26000,
+      newDelivery: 26000
+    },
+    {
+      productId: 'p9',
+      productName: 'Pistasjdessert',
+      created: true,
+      previousTakeaway: null,
+      previousEatIn: null,
+      previousDelivery: null,
+      newTakeaway: 10900,
+      newEatIn: 10900,
+      newDelivery: 10900
+    }
   ],
   ...overrides
 })
@@ -427,7 +454,7 @@ describe('existing metadata stays untouched until it is edited', () => {
   it('does not patch anything just because a column was made visible', async () => {
     const { wrapper, stub } = build()
     wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.onColumnPreset('all')
+    wrapper.vm.setColumns(COLUMN_IDS_FOR_TEST, true)
     await wrapper.vm.validate()
 
     const sent = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
@@ -734,19 +761,6 @@ describe('columns', () => {
     wrapper.destroy()
   })
 
-  it('hands the decision back when the recommended view is asked for again', () => {
-    const { wrapper } = build()
-    wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.onColumnToggle({ id: 'soldOut', visible: true })
-    expect(wrapper.vm.columnChoiceMade).toBe(true)
-
-    wrapper.vm.onColumnPreset('recommended')
-
-    expect(wrapper.vm.columnChoiceMade).toBe(false)
-    expect(wrapper.vm.visibleColumns).not.toContain('soldOut')
-    wrapper.destroy()
-  })
-
   it('remembers a manual choice across closing and reopening the browser', async () => {
     // Same person, same store, nothing on the server: the choice lives in local storage and has
     // to survive the component being torn down and built again from that storage alone.
@@ -791,7 +805,7 @@ describe('columns', () => {
     const { wrapper, stub } = build()
     wrapper.vm.adoptAnalysis(analysis)
     wrapper.vm.editMetadata(wrapper.vm.rows[0], 'otherInformation', 'Nøtter')
-    wrapper.vm.onColumnPreset('compact')
+    wrapper.vm.setColumns(['takeaway'], true)
     await wrapper.vm.validate()
 
     const sent = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
@@ -1461,27 +1475,315 @@ describe('what the reading could not use', () => {
 })
 
 describe('the receipt', () => {
-  it('reports what was written without assuming any list is present', async () => {
-    const { wrapper } = build()
+  const shown = async (overrides) => {
+    const { wrapper } = build({ service: { Apply: jest.fn().mockResolvedValue(receipt(overrides)) } })
     wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.validation = validation()
     await approveThroughDialog(wrapper)
     await wrapper.vm.$nextTick()
+    return wrapper
+  }
 
-    expect(wrapper.text()).toContain('menuImport_receiptTitle')
+  it('shows what each price actually went from and to', async () => {
+    const wrapper = await shown()
+    const changed = wrapper.vm.receiptChannels(wrapper.vm.receiptPrices[0])
+
+    expect(changed[0]).toMatchObject({ before: 24000, after: 24500, changed: true })
+    // Same before and after is not a change, and is not marked as one.
+    expect(changed[1]).toMatchObject({ before: 26000, after: 26000, changed: false })
+    expect(wrapper.text()).toContain('245')
     wrapper.destroy()
   })
 
-  it('renders a receipt that omits every optional list rather than crashing on it', async () => {
-    const { wrapper } = build({ service: { Apply: jest.fn().mockResolvedValue({ operationId: 'op-1' }) } })
-    wrapper.vm.adoptAnalysis(analysis)
-    wrapper.vm.validation = validation()
+  it('shows a created product as prices without a before', async () => {
+    const wrapper = await shown()
+    const created = wrapper.vm.receiptChannels(wrapper.vm.receiptPrices[1])
 
-    await approveThroughDialog(wrapper)
-    await wrapper.vm.$nextTick()
+    expect(created.every(field => field.before === null)).toBe(true)
+    expect(created.every(field => field.changed === false)).toBe(true)
+    expect(created[0].after).toBe(10900)
+    wrapper.destroy()
+  })
 
-    expect(wrapper.vm.receiptUpdatedIds).toEqual([])
-    expect(wrapper.text()).toContain('menuImport_receiptTitle')
+  it('treats zero as a real price rather than as a missing one', async () => {
+    const wrapper = await shown({
+      prices: [{ productId: 'p1', productName: 'Gratis kaffe', created: false, previousTakeaway: 2000, previousEatIn: 0, previousDelivery: 0, newTakeaway: 0, newEatIn: 0, newDelivery: 0 }]
+    })
+    const fields = wrapper.vm.receiptChannels(wrapper.vm.receiptPrices[0])
+
+    expect(fields[0]).toMatchObject({ before: 2000, after: 0, changed: true })
+    // 0 to 0 is unchanged, not absent.
+    expect(fields[1]).toMatchObject({ after: 0, changed: false })
+    expect(wrapper.text()).not.toContain('—')
+    wrapper.destroy()
+  })
+
+  it('copes with a receipt that omits a field instead of crashing on it', async () => {
+    const wrapper = await shown({
+      prices: [{ productId: 'p1', productName: 'Delvis', created: false, newTakeaway: 1000 }]
+    })
+    const fields = wrapper.vm.receiptChannels(wrapper.vm.receiptPrices[0])
+
+    expect(fields[0]).toMatchObject({ before: null, after: 1000 })
+    expect(fields[1].after).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('says how many rows were left alone, once, rather than per row', async () => {
+    const wrapper = await shown({ unchangedRowCount: 30, skippedRowCount: 4 })
+
+    expect(wrapper.vm.receiptQuietCount).toBe(34)
+    expect(wrapper.text()).toContain('menuImport_receiptUntouched')
+    wrapper.destroy()
+  })
+
+  it('never puts a product id on screen', async () => {
+    const wrapper = await shown({
+      prices: [{ productId: 'b2c3d4e5-1111-2222-3333-444455556666', productName: 'Vegetar', created: false, previousTakeaway: 100, newTakeaway: 200, newEatIn: 200, newDelivery: 200 }]
+    })
+
+    expect(wrapper.text()).not.toContain('b2c3d4e5')
+    expect(wrapper.text()).toContain('Vegetar')
+    wrapper.destroy()
+  })
+
+  it('writes a changed price as a move, and an unchanged one as a single number', async () => {
+    const wrapper = await shown()
+    const text = wrapper.text()
+
+    // The old price, the arrow and the new one, so the change reads as a change.
+    expect(text).toContain('→')
+    expect(wrapper.findAll('.channel-summary del').length).toBeGreaterThan(0)
+    expect(wrapper.findAll('.channel-summary .now').length).toBeGreaterThan(0)
+    // And a quiet cell is one plain number with no struck-through partner.
+    expect(wrapper.findAll('.channel-summary .same').length).toBeGreaterThan(0)
+    expect(text).toContain('menuImport_receiptLegend')
+    wrapper.destroy()
+  })
+
+  it('reports a replayed receipt as the same operation, not a second one', async () => {
+    const wrapper = await shown({ replayed: true })
+
+    expect(wrapper.vm.receipt.replayed).toBe(true)
+    expect(wrapper.text()).toContain('menuImport_receiptReplayed')
+    // Still the real prices, not dashes.
+    expect(wrapper.vm.receiptChannels(wrapper.vm.receiptPrices[0])[0].after).toBe(24500)
     wrapper.destroy()
   })
 })
+
+describe('re-importing a menu that has not changed', () => {
+  // Every row matches and none of them moves. Reading "36 oppdateres" off the match rather than
+  // off the diff tells the operator 36 products are about to change when nothing is.
+  const quiet = () => {
+    const noDiff = validation({ canApply: false, summary: { updateCount: 0, createCount: 0 } })
+    noDiff.rows.forEach((row) => {
+      row.changed = false
+      row.metadataChanges = []
+      ;['takeaway', 'eatIn', 'delivery'].forEach((channel) => {
+        row[channel] = { currentAmount: 24000, newAmount: 24000, changed: false, origin: 'Unchanged' }
+      })
+    })
+    return noDiff
+  }
+
+  const linkedOnly = { ...analysis, rows: [{ ...analysis.rows[0] }, { ...analysis.rows[1], suggestedAction: 'Update', suggestedProductId: 'p2' }] }
+
+  it('counts nothing as changing, and says so on each row', async () => {
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(quiet()) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.updateSplit).toEqual({ changed: 0, unchanged: 2, checking: 0 })
+    expect(wrapper.vm.rowIntentKey(wrapper.vm.rows[0])).toBe('menuImport_rowNoChanges')
+    // The rows stay visible, so any of them can still be overridden.
+    expect(wrapper.vm.rows).toHaveLength(2)
+    wrapper.destroy()
+  })
+
+  it('refuses to offer a save that would write nothing', async () => {
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(quiet()) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+
+    await wrapper.vm.openApproval()
+
+    // The server refuses an empty plan with no blockers attached, so without asking here the
+    // dialog would show a confident button that quietly did nothing.
+    expect(wrapper.vm.nothingToWrite).toBe(true)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+    expect(wrapper.vm.confirmErrors).toHaveLength(0)
+    await wrapper.vm.confirmApproval()
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('counts one edited price as one change and leaves the rest quiet', async () => {
+    const oneMoved = quiet()
+    oneMoved.canApply = true
+    oneMoved.summary = { updateCount: 1, createCount: 0 }
+    oneMoved.rows[0].changed = true
+    oneMoved.rows[0].takeaway = { currentAmount: 24000, newAmount: 28000, changed: true, deltaPercent: 16.7 }
+
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(oneMoved) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.updateSplit).toEqual({ changed: 1, unchanged: 1, checking: 0 })
+    expect(wrapper.vm.nothingToWrite).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('does not badge a row whose edit resolves to no change', async () => {
+    // An edit that the server works out to nothing is not a change, and the badge saying so
+    // beside "Ingen endringer" would contradict it.
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(quiet()) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'noe annet')
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.hasMetadataPatch(wrapper.vm.rows[0])).toBe(true)
+    expect(wrapper.vm.rowMetadataChanged(wrapper.vm.rows[0])).toBe(false)
+    expect(wrapper.vm.rowIntentKey(wrapper.vm.rows[0])).toBe('menuImport_rowNoChanges')
+    wrapper.destroy()
+  })
+
+  it('marks the price field that actually moves', async () => {
+    const oneMoved = quiet()
+    oneMoved.rows[0].changed = true
+    oneMoved.rows[0].takeaway = { currentAmount: 24000, newAmount: 28000, changed: true }
+
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(oneMoved) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.isPriceChanged(wrapper.vm.rows[0], 'takeaway')).toBe(true)
+    expect(wrapper.vm.isPriceChanged(wrapper.vm.rows[0], 'eatIn')).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('counts a metadata-only change as a change', async () => {
+    const metadataOnly = quiet()
+    metadataOnly.canApply = true
+    metadataOnly.summary = { updateCount: 1, createCount: 0 }
+    metadataOnly.rows[0].metadataChanges = [{ field: 'description', from: 'a', to: 'b' }]
+
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(metadataOnly) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.updateSplit.changed).toBe(1)
+    expect(wrapper.vm.nothingToWrite).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('does not turn an untaken suggestion into a change', async () => {
+    // "Bruk fra menyen" is an offer. Until it is pressed nothing is sent, so nothing counts.
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(quiet()) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+
+    expect(wrapper.vm.sourceDiffers(wrapper.vm.rows[0], 'description')).toBe(true)
+    expect(wrapper.vm.updateSplit.changed).toBe(0)
+    wrapper.destroy()
+  })
+
+  it('says it is still checking rather than claiming nothing changed', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(linkedOnly)
+
+    // No validation has come back yet.
+    expect(wrapper.vm.updateSplit).toMatchObject({ changed: 0, unchanged: 0, checking: 2 })
+    expect(wrapper.vm.rowIntentKey(wrapper.vm.rows[0])).toBe('menuImport_rowChecking')
+    wrapper.destroy()
+  })
+})
+
+describe('while a menu is being read', () => {
+  const reading = () => {
+    let release
+    const slow = new Promise((resolve) => { release = resolve })
+    const built = build({ service: { Analyze: jest.fn().mockReturnValue(slow) } })
+    built.wrapper.vm.pastedText = 'meny'
+    const running = built.wrapper.vm.runAnalysis()
+    return { ...built, running, release }
+  }
+
+  it('closes the tool while the reading is in flight', () => {
+    const { wrapper } = reading()
+
+    expect(wrapper.vm.isAnalyzing).toBe(true)
+    expect(wrapper.vm.isLocked).toBe(true)
+    expect(wrapper.vm.canApprove).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('refuses every mutation until it lands', async () => {
+    const { wrapper, running, release } = reading()
+    wrapper.vm.rows = [makeManualRow(wrapper)]
+    const before = JSON.stringify(wrapper.vm.rows)
+
+    wrapper.vm.addManualRow()
+    wrapper.vm.removeRow(wrapper.vm.rows[0])
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'ny')
+    wrapper.vm.setManual(wrapper.vm.rows[0], 'takeaway', '999')
+    wrapper.vm.openTool('clear')
+
+    expect(JSON.stringify(wrapper.vm.rows)).toBe(before)
+    expect(wrapper.vm.showClear).toBe(false)
+
+    release(analysis)
+    await running
+  })
+
+  it('will not start a second reading on top of the first', async () => {
+    const { wrapper, stub, running, release } = reading()
+
+    await wrapper.vm.runAnalysis()
+
+    expect(stub.Analyze).toHaveBeenCalledTimes(1)
+    release(analysis)
+    await running
+    wrapper.destroy()
+  })
+
+  it('will not open the save dialog on a plan that is being rebuilt', async () => {
+    const { wrapper, stub, running, release } = reading()
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.showConfirm).toBe(false)
+    expect(stub.Apply).not.toHaveBeenCalled()
+    release(analysis)
+    await running
+    wrapper.destroy()
+  })
+
+  it('adopts the result and unlocks once it arrives', async () => {
+    const { wrapper, running, release } = reading()
+
+    release(analysis)
+    await running
+    await flush()
+
+    expect(wrapper.vm.isAnalyzing).toBe(false)
+    expect(wrapper.vm.isLocked).toBe(false)
+    expect(wrapper.vm.rows).toHaveLength(2)
+    wrapper.destroy()
+  })
+
+  it('unlocks after a reading that fails', async () => {
+    const { wrapper } = build({ service: { Analyze: jest.fn().mockRejectedValue(new Error('nope')) } })
+    wrapper.vm.pastedText = 'meny'
+
+    await wrapper.vm.runAnalysis()
+
+    expect(wrapper.vm.isAnalyzing).toBe(false)
+    expect(wrapper.vm.isLocked).toBe(false)
+    expect(wrapper.vm.analysisError).toBe('nope')
+    wrapper.destroy()
+  })
+})
+
+// A manual row built without going through the lock, for tests that need a row to poke at.
+function makeManualRow (wrapper) {
+  return { ...wrapper.vm.rows[0] || {}, rowKey: 'manual-test', action: 'Create', metadataEdits: {}, sourceMeta: {}, manualPrices: [], sourcePrices: [], variantGroups: null, acceptedWarnings: [], sourceIssues: [] }
+}

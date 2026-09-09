@@ -1,5 +1,7 @@
 <template>
-  <AdminPage @login-success="handleLoginSuccess">
+  <!-- The shell's centred column is meant for forms. This page is a wide table whose optional
+       columns need every pixel, so it takes the full content width and does its own padding. -->
+  <AdminPage full-width @login-success="handleLoginSuccess">
     <div class="menu-import-page">
       <div class="page-header">
         <h1>{{ $i('menuImport_pageTitle') }}</h1>
@@ -33,6 +35,10 @@
             {{ $i('menuImport_receiptRemoved', { count: receiptRemovedIds.length }) }}
           </p>
 
+          <p v-if="receiptPrices.length" class="receipt-legend">
+            {{ $i('menuImport_receiptLegend') }}
+          </p>
+
           <table v-if="receiptPrices.length" class="channel-summary">
             <thead>
               <tr>
@@ -48,14 +54,33 @@
               <tr v-for="price in receiptPrices" :key="price.productId">
                 <th scope="row">
                   {{ price.productName }}
-                  <small>{{ price.created ? $i('menuImport_created') : price.productId }}</small>
+                  <!-- A product id is not something anyone reading a receipt can use. What is
+                       worth saying about a row is whether it is new. -->
+                  <small v-if="price.created" class="new-badge">{{ $i('menuImport_created') }}</small>
                 </th>
-                <td v-for="channel in channels" :key="channel">
-                  {{ receiptPrice(price, channelKey(channel)) }}
+                <td v-for="field in receiptChannels(price)" :key="field.key" :class="{ changed: field.changed }">
+                  <template v-if="field.after === null">—</template>
+                  <!-- A price that moved is written out as the move, not as two numbers next to
+                       each other: the old one muted and struck, an arrow, the new one carrying
+                       the weight. -->
+                  <template v-else-if="field.changed">
+                    <del>{{ formatMoney(field.before) }}</del>
+                    <span aria-hidden="true" class="arrow">→</span>
+                    <span class="now">{{ formatMoney(field.after) }}</span>
+                  </template>
+                  <!-- One plain number where nothing happened. Repeating "unchanged" in every
+                       cell of every quiet row is how a receipt stops being readable. -->
+                  <span v-else class="same">{{ formatMoney(field.after) }}</span>
                 </td>
               </tr>
             </tbody>
           </table>
+
+          <!-- Said once, at the bottom, rather than repeated as a word on every row that did
+               not move. -->
+          <p v-if="receiptQuietCount" class="muted">
+            {{ $i('menuImport_receiptUntouched', { count: receiptQuietCount }) }}
+          </p>
 
           <div class="actions">
             <button class="btn-primary" type="button" @click="startOver">
@@ -144,8 +169,8 @@
               <MenuColumnPicker
                 :visible="visibleColumns"
                 :counts="columnCounts"
+                :disabled="isLocked"
                 @toggle="onColumnToggle"
-                @preset="onColumnPreset"
               />
               <button class="btn-secondary" type="button" :disabled="isLocked" @click="addManualRow">
                 {{ $i('menuImport_newRow') }}
@@ -226,8 +251,8 @@
                               :disabled="isLocked"
                               @input="linkProduct(row, $event)"
                             />
-                            <small class="cell-after row-intent" :class="{ 'new-intent': row.action === 'Create' }">
-                              {{ $i(row.action === 'Create' ? 'menuImport_willCreate' : 'menuImport_willUpdate') }}
+                            <small class="cell-after row-intent" :class="{ 'new-intent': row.action === 'Create', quiet: rowChanged(row) === false && row.action !== 'Create' }">
+                              {{ $i(rowIntentKey(row)) }}
                               <!-- Only meaningful for a product that already exists. On a row that
                                  creates one, every field is part of creating it, so saying its
                                  details "also change" would mark every new row for nothing. -->
@@ -384,26 +409,31 @@
                     <td class="col-tools" :data-label="$i('menuImport_rowActions')">
                       <div class="cell">
                         <span class="cell-before" aria-hidden="true" />
-                        <button
-                          v-if="row.action !== 'Skip'"
-                          type="button"
-                          class="icon-btn"
-                          :disabled="isLocked"
-                          :aria-label="$i('menuImport_editDetailsFor', { name: row.displayName })"
-                          @click="openDetails(row)"
-                        >
-                          ⋯
-                        </button>
-                        <button
-                          v-if="row.action !== 'Skip'"
-                          type="button"
-                          class="icon-btn remove"
-                          :disabled="isLocked"
-                          :aria-label="$i('menuImport_removeFromImport', { name: row.displayName })"
-                          @click="removeRow(row)"
-                        >
-                          ×
-                        </button>
+                        <!-- One band, both buttons. As direct children of the cell grid they
+                             became two stacked rows, and the second was pushed out of the row. -->
+                        <div class="row-tools">
+                          <button
+                            v-if="row.action !== 'Skip'"
+                            type="button"
+                            class="icon-btn"
+                            :disabled="isLocked"
+                            :aria-label="$i('menuImport_editDetailsFor', { name: row.displayName })"
+                            @click="openDetails(row)"
+                          >
+                            ⋯
+                          </button>
+                          <button
+                            v-if="row.action !== 'Skip'"
+                            type="button"
+                            class="icon-btn remove"
+                            :disabled="isLocked"
+                            :aria-label="$i('menuImport_removeFromImport', { name: row.displayName })"
+                            @click="removeRow(row)"
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <span class="cell-after" aria-hidden="true" />
                       </div>
                     </td>
                   </tr>
@@ -445,7 +475,7 @@
 
           <div class="savebar">
             <div>
-              <strong>{{ $i('menuImport_totals', { update: countBy('Update'), create: countBy('Create') }) }}</strong>
+              <strong>{{ $i('menuImport_totals', { update: updateSplit.changed, create: countBy('Create'), unchanged: updateSplit.unchanged }) }}</strong>
               <p>{{ $i('menuImport_saveHint') }}</p>
             </div>
             <!-- Deliberately not disabled while the plan is blocked: someone who cannot save
@@ -453,7 +483,7 @@
             <button
               type="button"
               class="btn-primary"
-              :disabled="isApproving || isApplying || outcomeUnknown || !hasSaveableIntent"
+              :disabled="isApproving || isApplying || outcomeUnknown || isAnalyzing || isRemapping || !hasSaveableIntent"
               @click="openApproval"
             >
               {{ isApproving ? $i('menuImport_applying') : $i('menuImport_approve') }}
@@ -522,6 +552,12 @@
                 </small>
               </li>
             </ul>
+          </div>
+
+          <!-- Said plainly rather than left as a button that does nothing: this is the ordinary
+               outcome of importing the same menu twice, and it is good news, not an error. -->
+          <div v-else-if="nothingToWrite && !isValidating" class="notice-box" role="status">
+            {{ $i('menuImport_confirmNothingToWrite') }}
           </div>
 
           <p v-else-if="!isValidating && !confirmStale" class="helper-text">
@@ -873,7 +909,6 @@ import {
   COLUMNS,
   COMPACT_COLUMNS,
   METADATA_FIELDS,
-  COLUMN_IDS,
   adoptCurrentPrices,
   attachCurrent,
   buildNewProduct,
@@ -1044,21 +1079,30 @@ export default {
     },
     resolvedMap () { return resolvedByKey(this.validation) },
     /**
+     * Update rows split by whether they actually change anything.
+     *
+     * Being linked to a product is not the same as writing to it: re-importing an unchanged menu
+     * matches every row and moves none of them.
+     */
+    updateSplit () {
+      const split = { changed: 0, unchanged: 0, checking: 0 }
+      this.rows.filter(row => row.action === ACTION.update).forEach((row) => {
+        const changed = this.rowChanged(row)
+        // Three states, not two. A row the server has not answered for yet is not known to be
+        // unchanged, and counting it as such would report "nothing to do" about work that may
+        // well have plenty — briefly, but at exactly the moment someone is reading the total.
+        if (changed === null) { split.checking++ } else if (changed) { split.changed++ } else { split.unchanged++ }
+      })
+      return split
+    },
+    /**
      * What the confirmation says is about to happen, counted off the validated plan rather than
      * off the draft: the server decides what actually changes, and a row whose price works out
      * the same is not a change however it was edited.
      */
     confirmSummary () {
       const rows = this.rows.filter(row => row.action !== ACTION.skip)
-      const resolved = this.resolvedMap
-
-      let changed = 0
-      let unchanged = 0
-      rows.filter(row => row.action === ACTION.update).forEach((row) => {
-        const plan = resolved[row.rowKey]
-        const touched = !!(plan && (plan.changed || (plan.metadataChanges || []).length))
-        if (touched) { changed++ } else { unchanged++ }
-      })
+      const { changed, unchanged } = this.updateSplit
 
       return {
         storeName: this.storeName || String(this.selectedStore),
@@ -1152,10 +1196,29 @@ export default {
      * `confirmSignature` is only set once a fresh check has come back, so a previous check's
      * verdict cannot enable the button while the new one is still out.
      */
+    /**
+     * Whether this plan would write anything at all.
+     *
+     * The server refuses a plan with nothing in it, and refuses it with no blockers attached —
+     * so without asking the question here the dialog would offer a confident-looking save button
+     * that quietly did nothing. Re-importing an unchanged menu is exactly how someone arrives
+     * here. A metadata-only or category-only change is still a change and is not caught by this.
+     */
+    nothingToWrite () {
+      if (!this.validation) { return false }
+      const summary = this.validation.summary
+      if (summary && Number.isFinite(summary.updateCount) && Number.isFinite(summary.createCount)) {
+        if (summary.updateCount || summary.createCount) { return false }
+      } else if (this.confirmSummary.create || this.confirmSummary.changed) {
+        return false
+      }
+      return !this.confirmSummary.newCategories && !this.confirmSummary.categoryGroups &&
+        !this.confirmSummary.removals
+    },
     canConfirmApply () {
       return !!this.validation && !!this.confirmSignature && !this.isValidating &&
         !this.isApproving && !this.isApplying && !this.outcomeUnknown &&
-        !this.confirmStale && this.blockingErrors.length === 0
+        !this.confirmStale && !this.nothingToWrite && this.blockingErrors.length === 0
     },
     shownColumns () { return COLUMNS.filter(column => this.visibleColumns.includes(column.id)) },
     /** How many rows would actually have something to show in each optional column. */
@@ -1176,8 +1239,9 @@ export default {
     rowSummary () {
       return this.$i('menuImport_rowSummary', {
         total: this.rows.length,
-        update: this.countBy(ACTION.update),
-        create: this.countBy(ACTION.create)
+        update: this.updateSplit.changed,
+        create: this.countBy(ACTION.create),
+        unchanged: this.updateSplit.unchanged
       })
     },
     sourceHeadline () {
@@ -1264,10 +1328,15 @@ export default {
      * loading or clearing a draft all change the same thing, so they are all held together.
      */
     isLocked () {
-      // The confirmation counts too: it states what is about to happen, and a draft that could
-      // be edited underneath it would make that statement stop being true while it was read.
-      // The approve path itself does not go through this, so confirming still works.
-      return this.isApproving || this.isApplying || this.outcomeUnknown || this.showConfirm
+      // Reading a menu counts: the answer replaces or extends the work list, so a row edited
+      // while it is in flight is edited into something that is about to be rebuilt. The
+      // confirmation counts too — it states what is about to happen, and a draft that could be
+      // changed underneath it would make that statement stop being true while it was read.
+      //
+      // Neither the analysis's own completion nor the approve path goes through this gate, so
+      // adopting a result and confirming a save both still work while it is closed.
+      return this.isApproving || this.isApplying || this.outcomeUnknown ||
+        this.showConfirm || this.isAnalyzing || this.isRemapping
     },
     /**
      * Whether this draft asks for anything at all.
@@ -1284,7 +1353,7 @@ export default {
     },
     canApprove () {
       return !this.isApproving && !this.isValidating && !!this.validation &&
-        !this.outcomeUnknown && this.hasSaveableIntent
+        !this.outcomeUnknown && !this.isAnalyzing && !this.isRemapping && this.hasSaveableIntent
     },
     replaceWord () { return this.$i('menuImport_replaceWord') },
     canConfirmReplace () {
@@ -1295,7 +1364,15 @@ export default {
     receiptMetadataIds () { return (this.receipt && this.receipt.metadataUpdatedProductIds) || [] },
     receiptRemovedIds () { return (this.receipt && this.receipt.removedProductIds) || [] },
     receiptCreatedCategories () { return (this.receipt && this.receipt.createdCategoryIds) || [] },
-    receiptPrices () { return (this.receipt && this.receipt.prices) || [] }
+    receiptPrices () { return (this.receipt && this.receipt.prices) || [] },
+    /**
+     * Rows the save deliberately did nothing to: the ones it found unchanged and the ones that
+     * were left out. The server counts both, so neither is inferred here.
+     */
+    receiptQuietCount () {
+      const receipt = this.receipt || {}
+      return (receipt.unchangedRowCount || 0) + (receipt.skippedRowCount || 0)
+    }
   },
   watch: {
     selectedStore (newValue, oldValue) {
@@ -1384,14 +1461,6 @@ export default {
         ? [...this.visibleColumns, id]
         : this.visibleColumns.filter(column => column !== id)
       this.setColumns(next, true)
-    },
-    onColumnPreset (preset) {
-      if (preset === 'all') { this.setColumns([...COLUMN_IDS], true) } else if (preset === 'compact') { this.setColumns([...COMPACT_COLUMNS], true) } else {
-        // "Recommended" hands the decision back to the page, including for future imports.
-        this.visibleColumns = recommendedColumns(this.rows)
-        this.columnChoiceMade = false
-        writeColumnPreference(this.storage(), this.userId, this.selectedStore, { chosen: false, visible: this.visibleColumns })
-      }
     },
     setColumns (ids, chosen) {
       this.visibleColumns = normalizeVisibleColumns(ids)
@@ -2260,7 +2329,9 @@ export default {
       }
     },
     async runAnalysis () {
-      if (!this.canAnalyze || !this.guardEdit()) { return }
+      // Not `guardEdit`: this is the one action the lock is closed *for*, so it checks only that
+      // no reading is already running. `canAnalyze` is false while one is.
+      if (!this.canAnalyze || this.isRemapping || this.outcomeUnknown || this.showConfirm) { return }
 
       this.cancelInFlight()
       const generation = ++this.requestGeneration
@@ -2411,6 +2482,8 @@ export default {
      */
     async openApproval (options = {}) {
       if (this.isApproving || this.isApplying || this.outcomeUnknown) { return }
+      // A plan built on a reading that has not landed yet is not the plan that would be saved.
+      if (this.isAnalyzing || this.isRemapping) { return }
 
       this.confirmReplacement = options.catalogueReplacement || null
       this.confirmStale = false
@@ -2771,6 +2844,46 @@ export default {
     formatMoney: money,
     channelKey (channel) { return channelEnum(channelName(channel)) },
     resolvedFor (row) { return row ? this.resolvedMap[row.rowKey] : null },
+    /**
+     * Whether this row actually writes anything, as opposed to merely being linked to a product.
+     *
+     * Re-importing the same menu matches every row and changes none of them, and a screen that
+     * reads "36 oppdateres" off the match rather than off the diff is telling the operator that
+     * 36 products are about to move when nothing is. Only the validated plan knows, so `null`
+     * means the answer has not come back yet — which is a third state, not a quiet "no".
+     *
+     * A suggestion the operator has not taken is not a change: it lives in `sourceMeta` and
+     * never reaches the request, so the server never reports it here either.
+     */
+    rowChanged (row) {
+      const plan = this.resolvedMap[row.rowKey]
+      if (!plan) { return null }
+      return !!(plan.changed || (plan.metadataChanges || []).length)
+    },
+    /**
+     * Whether this row's own fields really move, as opposed to merely carrying an edit.
+     *
+     * The client knows an edit exists; only the server knows whether it amounts to anything, and
+     * `metadataChanges` is empty when it does not. Null while that answer is still out, so the
+     * badge stays off rather than guessing — and never contradicts "Ingen endringer" beside it.
+     */
+    rowMetadataChanged (row) {
+      const plan = this.resolvedMap[row.rowKey]
+      if (!plan) { return null }
+      return (plan.metadataChanges || []).length > 0
+    },
+    /** True when the plan moves this particular price. Drives the marker on the field itself. */
+    isPriceChanged (row, channel) {
+      const field = this.resolvedChannel(row, channel)
+      return !!(field && field.changed)
+    },
+    /** What the row column says about itself: linked is not the same as changing. */
+    rowIntentKey (row) {
+      if (row.action === ACTION.create) { return 'menuImport_willCreate' }
+      const changed = this.rowChanged(row)
+      if (changed === null) { return 'menuImport_rowChecking' }
+      return changed ? 'menuImport_willUpdate' : 'menuImport_rowNoChanges'
+    },
     resolvedChannel (row, channel) {
       const resolved = this.resolvedFor(row)
       return resolved ? resolved[channel] : null
@@ -2864,9 +2977,30 @@ export default {
       }
       return heading || message
     },
-    receiptPrice (price, channel) {
-      const field = (price.channels || []).find(item => item.channel === channel)
-      return field ? money(field.amount) : '—'
+    /**
+     * One receipt row, read from the fields the API actually returns.
+     *
+     * `previous*` is null for a product that did not exist before, and every `new*` is a plain
+     * integer where 0 is a real price. Nothing here is reconstructed from the catalogue: the
+     * receipt is the record of what was written, and a screen that recomputed it would be
+     * reporting a guess about the past.
+     */
+    receiptChannels (price) {
+      return [
+        { key: 'Takeaway', before: price.previousTakeaway, after: price.newTakeaway },
+        { key: 'EatIn', before: price.previousEatIn, after: price.newEatIn },
+        { key: 'Delivery', before: price.previousDelivery, after: price.newDelivery }
+      ].map((field) => {
+        const before = field.before === undefined ? null : field.before
+        const after = field.after === undefined ? null : field.after
+        return {
+          key: field.key,
+          before,
+          after,
+          // A created product has no earlier price, so it is new rather than changed.
+          changed: before !== null && after !== null && before !== after
+        }
+      })
     }
   }
 }
@@ -2874,8 +3008,11 @@ export default {
 
 <style lang="scss" scoped>
 .menu-import-page {
-  max-width: 1400px;
-  margin: 0 auto;
+  // No max-width: this page is a wide table with optional columns, and centring it inside a
+  // 1400px column left the columns cramped while the screen still had room. No explicit width
+  // either — a block already fills its parent, and `width: 100%` plus padding is how a
+  // full-width shell ends up 48px wider than the window.
+  box-sizing: border-box;
   padding: 24px;
 
   @media (max-width: 768px) { padding: 16px; }
@@ -3094,6 +3231,14 @@ export default {
   .col-takeaway, .col-eatIn, .col-delivery { min-width: 110px; }
   .col-tools { width: 96px; white-space: nowrap; }
 
+  .row-tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    min-height: 44px;
+  }
+
   input[type="text"], input[type="number"] {
     // The same 44px as the product search and every other single-line control in a row, so a
     // line of them reads as one line rather than as several that nearly agree.
@@ -3124,6 +3269,7 @@ export default {
 
   .row-intent { color: #64748b; font-size: 0.8em; }
   .row-intent.new-intent { color: #159f63; }
+  .row-intent.quiet { color: #94a3b8; }
   .row-intent .modified { color: #92400e; }
   .row-intent .modified::before { content: ' · '; color: #cbd5e1; }
 
@@ -3192,9 +3338,7 @@ export default {
       }
 
       &.col-tools {
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
+        display: block;
         width: auto;
         padding-top: 12px;
         margin-top: 4px;
@@ -3533,11 +3677,29 @@ export default {
   .danger-text { color: #ef4444; }
 }
 
+.receipt-legend {
+  margin: 16px 0 4px;
+  color: #64748b; font-size: 0.85em;
+}
+
 .channel-summary {
-  width: 100%; margin: 16px 0; border-collapse: collapse; font-size: 0.9em;
+  width: 100%; margin: 4px 0 16px; border-collapse: collapse; font-size: 0.9em;
 
   th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #f1f5f9; }
   thead th { background: #f8f9fa; font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.3px; }
+
+  td { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+  del { margin-right: 6px; color: #94a3b8; font-size: 0.95em; }
+  .arrow { margin-right: 6px; color: #cbd5e1; }
+  .now { color: #116a44; font-weight: 600; }
+  .same { color: #64748b; }
+
+  .new-badge {
+    display: inline-block; padding: 1px 8px; margin-top: 4px; border-radius: 6px;
+    background: #eaf7f0; color: #116a44; font-size: 0.78em; font-weight: 600;
+  }
+
   small { display: block; color: #64748b; font-size: 0.85em; font-weight: 400; }
 }
 

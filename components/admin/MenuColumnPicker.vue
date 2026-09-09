@@ -7,6 +7,7 @@
       :aria-expanded="String(open)"
       :aria-controls="open ? panelId : undefined"
       aria-haspopup="true"
+      :disabled="disabled"
       @click="toggle"
       @keydown="onTriggerKey"
     >
@@ -24,18 +25,6 @@
       :aria-label="$i('menuImport_showColumns')"
       @keydown.esc.stop.prevent="close"
     >
-      <div class="column-picker-presets">
-        <button type="button" @click="emitPreset('recommended')">
-          {{ $i('menuImport_columnsRecommended') }}
-        </button>
-        <button type="button" @click="emitPreset('all')">
-          {{ $i('menuImport_columnsAll') }}
-        </button>
-        <button type="button" @click="emitPreset('compact')">
-          {{ $i('menuImport_columnsCompact') }}
-        </button>
-      </div>
-
       <ul class="column-picker-list" role="group">
         <li v-for="column in optional" :key="column.id">
           <label class="column-picker-option">
@@ -76,6 +65,7 @@ export default {
   mixins: [popoverDismiss],
   props: {
     visible: { type: Array, default: () => [] },
+    disabled: Boolean,
     // How many rows actually carry something for each optional column, so the menu can say which
     // ones are worth showing for this particular import.
     counts: { type: Object, default: () => ({}) }
@@ -86,6 +76,11 @@ export default {
   computed: {
     panelId () { return 'menu-column-picker-' + this._uid },
     optional () { return COLUMNS.filter(column => !column.always) }
+  },
+  watch: {
+    // A trigger that goes away mid-choice must not leave its panel floating over a page that is
+    // busy doing something else.
+    disabled (value) { if (value) { this.open = false } }
   },
   methods: {
     isVisible (id) { return this.visible.includes(id) },
@@ -108,10 +103,11 @@ export default {
     },
     toggle () { this.open ? this.close() : this.show() },
     show () {
+      if (this.disabled) { return }
       this.position = this.panelPosition()
       this.open = true
       this.$nextTick(() => {
-        const first = this.$refs.panel && this.$refs.panel.querySelector('button, input')
+        const first = this.$refs.panel && this.$refs.panel.querySelector('input')
         if (first) { first.focus() }
       })
     },
@@ -126,11 +122,7 @@ export default {
         this.show()
       }
     },
-    emitToggle (id, checked) { this.$emit('toggle', { id, visible: checked }) },
-    emitPreset (preset) {
-      this.$emit('preset', preset)
-      this.close()
-    }
+    emitToggle (id, checked) { this.$emit('toggle', { id, visible: checked }) }
   }
 }
 </script>
@@ -159,21 +151,6 @@ export default {
   padding: 12px; background: #fff; box-sizing: border-box;
   border: 1px solid #e2e8f0; border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-.column-picker-presets {
-  display: flex; flex-wrap: wrap; gap: 6px;
-  padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0;
-
-  button {
-    flex: 1 1 auto; min-height: 36px; padding: 6px 10px;
-    background: #f8f9fa; color: #292c34;
-    border: 1px solid #e2e8f0; border-radius: 6px;
-    font: inherit; font-size: 0.85em; font-weight: 600; cursor: pointer;
-
-    &:hover { background: #f1f5f9; border-color: #cbd5e0; }
-    &:focus-visible { outline: 2px solid #1bb776; outline-offset: 1px; }
-  }
 }
 
 .column-picker-list { margin: 0; padding: 0; list-style: none; }
