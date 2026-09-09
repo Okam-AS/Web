@@ -1571,6 +1571,45 @@ describe('shared options for a whole category', () => {
     wrapper.destroy()
   })
 
+  it('keeps option identities when an unchanged menu is imported again', async () => {
+    // Astra's path: resolveCategoryGroup merges the store's groups with extracted ones, and the
+    // request that results is what the API replaces the group's options with. An identity lost
+    // here is a basket selection deleted by a reimport that changed nothing.
+    const withGroups = [{
+      ...categories[0],
+      variants: [{
+        variantGroupId: 'cg1',
+        name: 'Tilbehør',
+        required: false,
+        multiSelect: false,
+        orderIndex: 0,
+        options: [
+          { variantOptionId: 'o1', name: 'Pommes', amount: 0, negativeAmount: false, orderIndex: 0 },
+          { variantOptionId: 'o2', name: 'Salat', amount: 1500, negativeAmount: false, orderIndex: 1 }
+        ]
+      }]
+    }]
+
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: withGroups }
+    wrapper.vm.adoptAnalysis({
+      ...analysis,
+      categories: withGroups,
+      sourceCategoryVariants: [{
+        categoryName: 'Pizza',
+        groups: [{ name: 'Tilbehør', options: [{ name: 'Pommes', amount: 0 }, { name: 'Salat', amount: 1500 }] }]
+      }]
+    })
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].categoryVariants[0]
+    expect(sent.categoryId).toBe('c1')
+    expect(sent.groups[0].variantGroupId).toBe('cg1')
+    // The whole point: the ids the customers' baskets point at go back unchanged.
+    expect(sent.groups[0].options.map(option => option.variantOptionId)).toEqual(['o1', 'o2'])
+    wrapper.destroy()
+  })
+
   it('can remove a category\'s last group, which an empty list alone could never say', async () => {
     const withGroups = [{ ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] }]
     const { wrapper, stub } = build()

@@ -19,6 +19,8 @@ import {
   fromLegacyDraft,
   makeRow,
   mergeForAppend,
+  mergeVariantGroups,
+  mergeVariantOptions,
   metadataFor,
   normalizeVariantGroup,
   normalizeVisibleColumns,
@@ -446,6 +448,106 @@ describe('columns', () => {
     const storage = { getItem: () => { throw new Error('blocked') }, setItem: () => { throw new Error('blocked') } }
     expect(() => writeColumnPreference(storage, 'u1', 7, { chosen: true, visible: [] })).not.toThrow()
     expect(readColumnPreference(storage, 'u1', 7)).toBeNull()
+  })
+})
+
+describe('reconciling the options of a group that already exists', () => {
+  // An option's id is what a basket points at, and the API replaces a group's options with
+  // exactly the list it is sent. An id dropped here is a customer's selection deleted.
+  const option = (name, amount, variantOptionId = null, extra = {}) => ({
+    variantOptionId, name, amount, negativeAmount: false, orderIndex: 0, otherInformation: '', ...extra
+  })
+
+  const stored = [option('Pommes', 0, 'o1'), option('Salat', 1500, 'o2')]
+
+  it('keeps every identity when the import changes nothing', () => {
+    // The case that was destroying baskets: same group, same options, same prices.
+    const merged = mergeVariantOptions(stored, [option('Pommes', 0), option('Salat', 1500)])
+
+    expect(merged.map(item => item.variantOptionId)).toEqual(['o1', 'o2'])
+    expect(merged).toHaveLength(2)
+  })
+
+  it('keeps the identity while taking a new price', () => {
+    const merged = mergeVariantOptions(stored, [option('Salat', 1900)])
+
+    const salat = merged.find(item => item.name === 'Salat')
+    expect(salat).toMatchObject({ variantOptionId: 'o2', amount: 1900 })
+    // And the one the reading did not mention is still here.
+    expect(merged.find(item => item.name === 'Pommes').variantOptionId).toBe('o1')
+  })
+
+  it('adds a genuinely new choice without disturbing the others', () => {
+    const merged = mergeVariantOptions(stored, [option('Pommes', 0), option('Løk', 500)])
+
+    expect(merged).toHaveLength(3)
+    expect(merged.map(item => item.variantOptionId)).toEqual(['o1', 'o2', null])
+    expect(merged[2].name).toBe('Løk')
+  })
+
+  it('matches on an id it already holds, whatever the name says', () => {
+    const merged = mergeVariantOptions(stored, [option('Pommes frites', 0, 'o1')])
+
+    expect(merged.find(item => item.variantOptionId === 'o1').name).toBe('Pommes frites')
+    expect(merged).toHaveLength(2)
+  })
+
+  it('never rebinds an identity when the name means more than one thing', () => {
+    // Two stored options share a name, so nothing here can say which one is meant. Guessing
+    // would overwrite one of them and take its selections with it.
+    const duplicated = [option('Ekstra', 1000, 'a1'), option('Ekstra', 2000, 'a2')]
+    const merged = mergeVariantOptions(duplicated, [option('Ekstra', 3000)])
+
+    expect(merged.find(item => item.variantOptionId === 'a1').amount).toBe(1000)
+    expect(merged.find(item => item.variantOptionId === 'a2').amount).toBe(2000)
+    // Added instead, which is visible and undoes cleanly.
+    expect(merged.filter(item => item.variantOptionId === null)).toHaveLength(1)
+  })
+
+  it('does nothing when an ambiguous name already offers exactly that', () => {
+    const duplicated = [option('Ekstra', 1000, 'a1'), option('Ekstra', 2000, 'a2')]
+    const merged = mergeVariantOptions(duplicated, [option('Ekstra', 2000)])
+
+    expect(merged).toHaveLength(2)
+    expect(merged.map(item => item.variantOptionId)).toEqual(['a1', 'a2'])
+  })
+
+  it('does not rebind when the import itself repeats a name', () => {
+    const merged = mergeVariantOptions([option('Ekstra', 1000, 'a1')], [option('Ekstra', 1000), option('Ekstra', 2000)])
+
+    expect(merged.find(item => item.variantOptionId === 'a1').amount).toBe(1000)
+    expect(merged.filter(item => item.variantOptionId === null)).toHaveLength(1)
+  })
+
+  it('carries the reconciliation through a whole matched group', () => {
+    const existingGroups = [{
+      variantGroupId: 'g1',
+      name: 'Tilbehør',
+      required: false,
+      multiSelect: false,
+      orderIndex: 0,
+      options: stored
+    }]
+    const extracted = [normalizeVariantGroup({
+      name: 'Tilbehør',
+      options: [{ name: 'Pommes', amount: 0 }, { name: 'Salat', amount: 1500 }]
+    })]
+
+    const merged = mergeVariantGroups(existingGroups, extracted)
+
+    expect(merged).toHaveLength(1)
+    expect(merged[0].variantGroupId).toBe('g1')
+    expect(merged[0].options.map(item => item.variantOptionId)).toEqual(['o1', 'o2'])
+  })
+
+  it('leaves a group the import does not mention completely alone', () => {
+    const existingGroups = [
+      { variantGroupId: 'g1', name: 'Tilbehør', options: stored, orderIndex: 0 },
+      { variantGroupId: 'g2', name: 'Saus', options: [option('Aioli', 900, 'o3')], orderIndex: 1 }
+    ]
+    const merged = mergeVariantGroups(existingGroups, [normalizeVariantGroup({ name: 'Tilbehør', options: [{ name: 'Pommes', amount: 0 }] })])
+
+    expect(merged.find(group => group.variantGroupId === 'g2').options[0].variantOptionId).toBe('o3')
   })
 })
 

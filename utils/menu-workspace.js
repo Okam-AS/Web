@@ -427,10 +427,91 @@ export function mergeVariantGroups (existing, incoming) {
     const at = result.findIndex(item =>
       (group.variantGroupId && item.variantGroupId === group.variantGroupId) ||
       (item.name || '').trim().toLowerCase() === (group.name || '').trim().toLowerCase())
-    if (at >= 0) { result[at] = { ...group, variantGroupId: result[at].variantGroupId || group.variantGroupId } } else { result.push(group) }
+
+    if (at >= 0) {
+      result[at] = {
+        ...group,
+        variantGroupId: result[at].variantGroupId || group.variantGroupId,
+        // Reconciled, not replaced. Taking the incoming list wholesale threw away the id of
+        // every option in a matched group, including ones nothing had changed about.
+        options: mergeVariantOptions(result[at].options, group.options)
+      }
+    } else {
+      result.push(group)
+    }
   })
 
   return result.map((group, index) => ({ ...group, orderIndex: index }))
+}
+
+const foldName = value => String(value === null || value === undefined ? '' : value).trim().toLowerCase()
+
+const sameOffer = (a, b) => Math.round(Number(a.amount) || 0) === Math.round(Number(b.amount) || 0) &&
+  !!a.negativeAmount === !!b.negativeAmount
+
+/**
+ * Reconciles the options of one group that already exists against the ones a reading produced.
+ *
+ * An option's id is what a customer's basket points at. The API replaces a group's options with
+ * exactly the list it is sent, and the database cascades from an option to the basket lines that
+ * chose it — so an id dropped here is a selection deleted out from under someone mid-order.
+ * Re-importing an unchanged menu did precisely that: same group, same option, same price, and
+ * every identity replaced for nothing.
+ *
+ * A reading knows no ids, so matching is by name, and only where the name means one thing:
+ *
+ * - An incoming option carrying an id that exists here updates that option.
+ * - A name that appears exactly once on each side updates that option and keeps its id.
+ * - Anything else is ambiguous, and nothing is rebound on a guess. If an existing option under
+ *   that name already offers the same thing, the import is asking for something that is already
+ *   there and nothing happens; otherwise it is added, which is visible and undoes cleanly. What
+ *   is never done is picking one of several same-named options and overwriting its identity.
+ *
+ * Existing options the reading does not mention are kept. This merge is how an import adds to a
+ * category, not how anything is deleted; removing an option is its own deliberate act.
+ */
+export function mergeVariantOptions (existing, incoming) {
+  const result = (existing || []).map(option => ({ ...option }))
+  if (!incoming || !incoming.length) { return result }
+
+  const countBy = (list, key) => list.reduce((counts, option) => {
+    const name = key(option)
+    counts[name] = (counts[name] || 0) + 1
+    return counts
+  }, {})
+
+  const existingByName = countBy(result, option => foldName(option.name))
+  const incomingByName = countBy(incoming, option => foldName(option.name))
+
+  incoming.forEach((option) => {
+    const name = foldName(option.name)
+
+    // An id the group already holds is the most direct answer there is.
+    if (option.variantOptionId) {
+      const byId = result.findIndex(item => item.variantOptionId === option.variantOptionId)
+      if (byId >= 0) {
+        result[byId] = { ...option, variantOptionId: result[byId].variantOptionId }
+        return
+      }
+    }
+
+    const unambiguous = existingByName[name] === 1 && incomingByName[name] === 1
+    if (unambiguous) {
+      const at = result.findIndex(item => foldName(item.name) === name)
+      // Keeps the identity, takes the new price. An unchanged option comes through untouched.
+      result[at] = { ...option, variantOptionId: result[at].variantOptionId || option.variantOptionId || null }
+      return
+    }
+
+    // Ambiguous. If one of the same-named options already offers this exact thing, the import
+    // is asking for what is there.
+    const alreadyOffered = result.some(item => foldName(item.name) === name && sameOffer(item, option))
+    if (alreadyOffered) { return }
+
+    result.push({ ...option, variantOptionId: null })
+  })
+
+  return result.map((option, index) => ({ ...option, orderIndex: index }))
 }
 
 export const requiredFromBounds = minimum => minimum !== null && minimum >= 1
