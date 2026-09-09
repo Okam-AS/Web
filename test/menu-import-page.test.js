@@ -1075,6 +1075,61 @@ describe('settling an apply that was never answered', () => {
     wrapper.destroy()
   })
 
+  it('reports everything a recovered receipt now carries, not just the prices', async () => {
+    // The ledger used to drop these three lists, so a recovered receipt always had them empty.
+    // They are populated on this path now, and the rendering must not have assumed otherwise.
+    const complete = receipt({
+      removedProductIds: ['p7', 'p8'],
+      createdCategoryIds: [{ key: 'newcat-1', categoryId: 'c9' }],
+      metadataUpdatedProductIds: ['p1']
+    })
+    const { wrapper } = await frozen({
+      Cancel: jest.fn().mockResolvedValue({ operationId: 'op-1', storeId: 7, outcome: 'Applied', receipt: complete, cancelledAt: null })
+    })
+
+    await wrapper.vm.settleOperation()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.receiptRemovedIds).toHaveLength(2)
+    expect(wrapper.vm.receiptCreatedCategories).toHaveLength(1)
+    expect(wrapper.vm.receiptMetadataIds).toHaveLength(1)
+    const text = wrapper.text()
+    expect(text).toContain('menuImport_receiptRemoved')
+    expect(text).toContain('menuImport_receiptCategories')
+    expect(text).toContain('menuImport_receiptMetadata')
+    wrapper.destroy()
+  })
+
+  it('reports the same completeness when the status check is what found it', async () => {
+    const complete = receipt({ removedProductIds: ['p7'], createdCategoryIds: [{ key: 'newcat-1', categoryId: 'c9' }], metadataUpdatedProductIds: ['p1'] })
+    const { wrapper } = await frozen({
+      GetStatus: jest.fn().mockResolvedValue({ applied: true, cancelled: false, receipt: complete })
+    })
+
+    await wrapper.vm.checkStatus()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('menuImport_receiptRemoved')
+    expect(wrapper.vm.receiptCreatedCategories).toHaveLength(1)
+    wrapper.destroy()
+  })
+
+  it('settles the same way when asked twice', async () => {
+    // The server returns the identical answer, including cancelledAt, so a retry after a
+    // dropped connection needs nothing special here.
+    const { wrapper, stub } = await frozen()
+
+    await wrapper.vm.settleOperation()
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+
+    await wrapper.vm.settleOperation()
+
+    // Nothing left to settle, so it does not ask again.
+    expect(stub.Cancel).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    wrapper.destroy()
+  })
+
   it('stays frozen when settling it fails', async () => {
     const refused = Object.assign(new Error('bad signature'), { status: 400 })
     const { wrapper, storage } = await frozen({ Cancel: jest.fn().mockRejectedValue(refused) })
