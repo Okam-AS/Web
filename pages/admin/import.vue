@@ -1777,22 +1777,38 @@ export default {
       return this.categories.find(category => (category.name || '').toLowerCase() === trimmed.toLowerCase()) || null
     },
     /**
+     * A key no category in this draft is already using.
+     *
+     * Counting declarations is not enough to make one unique. A carried row can already point at
+     * `newcat-1` meaning one thing while a proposal made a moment later is handed `newcat-1`
+     * meaning another — and the row then belongs to a category nobody put it in, silently.
+     */
+    nextCategoryKey (used) {
+      let index = used.size + 1
+      let key = 'newcat-' + index
+      while (used.has(key)) {
+        index += 1
+        key = 'newcat-' + index
+      }
+      used.add(key)
+      return key
+    },
+    /**
      * Proposes a category for the rows a reading wants to create.
      *
-     * A menu names its categories, so a new product should arrive already sorted into the one it
-     * came from. Making the operator retype "Burger Meals" for each of eight rows is the busywork
-     * this replaces. It is a proposal on a row that has to be approved anyway, and it is only
-     * ever applied to rows that create a product — an existing product keeps the category it is
-     * already in unless someone moves it deliberately.
+     * A menu names its sections, so a new product should arrive already sorted into the one it
+     * came from; making the operator retype the same section for each of eight rows is the
+     * busywork this replaces. It is a proposal on a row that has to be approved anyway, and only
+     * ever on a row that creates a product — an existing product keeps the category it is in
+     * unless someone moves it deliberately.
+     *
+     * Writes into the caller's state, which already holds every key that is spoken for.
      */
-    proposeCategories (rows) {
-      const declared = []
-      const keyByName = {}
-
+    proposeCategories (rows, { declared, keyByName, used }) {
       rows.forEach((row) => {
         if (row.action !== ACTION.create) { return }
         // A proposal, and only ever a first one. Correcting a column re-reads the menu, and the
-        // menu still says Pizza however many times somebody has moved the dish to Burger.
+        // menu still says what it always said however often the dish has been moved.
         if (row.categoryChosen) { return }
         const name = String(row.categoryName || '').trim()
         if (!name) { return }
@@ -1805,13 +1821,11 @@ export default {
 
         const lower = name.toLowerCase()
         if (!keyByName[lower]) {
-          keyByName[lower] = 'newcat-' + (declared.length + 1)
+          keyByName[lower] = this.nextCategoryKey(used)
           declared.push({ key: keyByName[lower], name })
         }
         setMetadata(row, 'newCategoryKey', keyByName[lower])
       })
-
-      return { declared, keyByName }
     },
     /**
      * A category group from a reading, resolved to an id or to a category to be created.
@@ -1843,25 +1857,39 @@ export default {
      * rows use, so one category is created and both refer to it.
      */
     pendingFromRows (rows, categoryVariants) {
-      const { declared, keyByName } = this.proposeCategories(rows)
+      const declared = []
+      const keyByName = {}
+
+      // Every key anything already refers to, reserved before a single new one is handed out.
+      const used = new Set()
+      const reserve = (key) => { if (key) { used.add(key) } }
+      this.newCategories.forEach(category => reserve(category.key))
+      rows.forEach(row => reserve(row.metadataEdits && row.metadataEdits.newCategoryKey))
+      ;(categoryVariants || []).forEach(group => reserve(group.newCategoryKey))
 
       // A row whose category is still waiting to be created keeps pointing at its key, so that
-      // declaration has to come through the re-read with it. Dropping it would leave the row
-      // referring to a category the request no longer asks for, which the server refuses.
+      // declaration comes through the re-read with it — and comes through FIRST. Declaring it
+      // after the proposals let a proposal take the key it owns, and the row then pointed at
+      // whichever category happened to be proposed instead.
       rows.forEach((row) => {
         const key = row.metadataEdits && row.metadataEdits.newCategoryKey
         if (!key || declared.some(category => category.key === key)) { return }
         const existing = this.newCategories.find(category => category.key === key)
         if (!existing) { return }
         declared.push({ key: existing.key, name: existing.name })
-        keyByName[existing.name.toLowerCase()] = existing.key
+        keyByName[existing.name.trim().toLowerCase()] = existing.key
       })
 
+      this.proposeCategories(rows, { declared, keyByName, used })
+
+      // A shared option group for a category that does not exist yet points at the same key the
+      // rows use, so one category is created and both refer to it.
       ;(categoryVariants || []).forEach((group) => {
         if (group.categoryId || !group.categoryName) { return }
-        const lower = group.categoryName.toLowerCase()
+        const lower = group.categoryName.trim().toLowerCase()
         if (!keyByName[lower]) {
-          keyByName[lower] = 'newcat-' + (declared.length + 1)
+          const carried = group.newCategoryKey && !declared.some(category => category.key === group.newCategoryKey)
+          keyByName[lower] = carried ? group.newCategoryKey : this.nextCategoryKey(used)
           declared.push({ key: keyByName[lower], name: group.categoryName })
         }
         group.newCategoryKey = keyByName[lower]

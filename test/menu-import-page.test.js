@@ -987,6 +987,92 @@ describe('a category the operator chose', () => {
     wrapper.destroy()
   })
 
+  it('does not let a proposal steal the key a chosen row already means', () => {
+    // The collision: a carried row means newcat-1, a fresh proposal is handed newcat-1 for a
+    // different section, and the carried declaration is then skipped because "the key exists".
+    // The chosen row silently ends up in the proposed category.
+    const mixed = {
+      ...analysis,
+      rows: [
+        { ...analysis.rows[1], rowKey: 'm:1', name: 'Valgt rett', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null },
+        { ...analysis.rows[1], rowKey: 'm:2', name: 'Uavklart rett', categoryName: 'Snacks', suggestedAction: 'Create', suggestedProductId: null }
+      ]
+    }
+
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(mixed)
+    // The operator declares a brand new category for the first row only.
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[0], 'Burger')
+    const burgerKey = wrapper.vm.rows[0].metadataEdits.newCategoryKey
+
+    wrapper.vm.adoptAnalysis(mixed, { preserveDecisions: true })
+
+    const chosen = wrapper.vm.rows.find(row => row.rowKey === 'm:1')
+    const inferred = wrapper.vm.rows.find(row => row.rowKey === 'm:2')
+
+    // The chosen row still means Burger, and Burger is still declared under that key.
+    expect(chosen.metadataEdits.newCategoryKey).toBe(burgerKey)
+    const burger = wrapper.vm.newCategories.find(category => category.key === burgerKey)
+    expect(burger.name).toBe('Burger')
+
+    // The inferred one got a key of its own, not Burger's.
+    expect(inferred.metadataEdits.newCategoryKey).not.toBe(burgerKey)
+    expect(wrapper.vm.newCategories.find(category => category.key === inferred.metadataEdits.newCategoryKey).name).toBe('Snacks')
+
+    // And no key means two things.
+    const keys = wrapper.vm.newCategories.map(category => category.key)
+    expect(new Set(keys).size).toBe(keys.length)
+    wrapper.destroy()
+  })
+
+  it('keeps a pending category shared with an option group pointing at one key', () => {
+    const withGroup = {
+      ...analysis,
+      rows: [{ ...analysis.rows[1], rowKey: 'm:1', categoryName: 'Snacks', suggestedAction: 'Create', suggestedProductId: null }],
+      sourceCategoryVariants: [{ categoryName: 'Snacks', groups: [{ name: 'Tilbehør', options: [{ name: 'Dip', amount: 500 }] }] }]
+    }
+
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(withGroup)
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[0], 'Burger')
+
+    wrapper.vm.adoptAnalysis(withGroup, { preserveDecisions: true })
+
+    const groupKey = wrapper.vm.categoryVariants[0].newCategoryKey
+    const rowKey = wrapper.vm.rows[0].metadataEdits.newCategoryKey
+    // The group's category and the row's chosen category are different things, under different
+    // keys, and both are declared.
+    expect(groupKey).not.toBe(rowKey)
+    expect(wrapper.vm.newCategories.find(category => category.key === groupKey).name).toBe('Snacks')
+    expect(wrapper.vm.newCategories.find(category => category.key === rowKey).name).toBe('Burger')
+    wrapper.destroy()
+  })
+
+  it('sends every referenced pending category, and no key twice', async () => {
+    const mixed = {
+      ...analysis,
+      rows: [
+        { ...analysis.rows[1], rowKey: 'm:1', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null },
+        { ...analysis.rows[1], rowKey: 'm:2', categoryName: 'Snacks', suggestedAction: 'Create', suggestedProductId: null }
+      ]
+    }
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(mixed)
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[0], 'Burger')
+    wrapper.vm.adoptAnalysis(mixed, { preserveDecisions: true })
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0]
+    const declaredKeys = sent.newCategories.map(category => category.key)
+    expect(new Set(declaredKeys).size).toBe(declaredKeys.length)
+    // Every key a row points at is actually declared; the server refuses one that is not.
+    sent.rows.forEach((row) => {
+      const key = row.newProduct && row.newProduct.newCategoryKey
+      if (key) { expect(declaredKeys).toContain(key) }
+    })
+    wrapper.destroy()
+  })
+
   it('still proposes one for a row nobody has decided about', () => {
     const { wrapper } = build()
     wrapper.vm.adoptAnalysis(newDish)
