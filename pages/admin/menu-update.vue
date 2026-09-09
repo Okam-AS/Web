@@ -166,12 +166,11 @@
               <strong>{{ source.documentName }}</strong>
               <label class="inline-field">
                 {{ $i('menuUpdate_documentDefaultChannel') }}
-                <select :value="defaultChannelFor(source.documentName)" @change="setDefaultChannel(source.documentName, $event.target.value)">
-                  <option value="">{{ $i('menuUpdate_noDefaultChannel') }}</option>
-                  <option value="Takeaway">{{ $i('menuUpdate_channelTakeaway') }}</option>
-                  <option value="EatIn">{{ $i('menuUpdate_channelEatIn') }}</option>
-                  <option value="Delivery">{{ $i('menuUpdate_channelDelivery') }}</option>
-                </select>
+                <MenuSelect
+                  :value="defaultChannelFor(source.documentName)"
+                  @change="setDefaultChannel(source.documentName, $event)"
+                  :options="[{ value: '', label: $i('menuUpdate_noDefaultChannel') }, { value: 'Takeaway', label: $i('menuUpdate_channelTakeaway') }, { value: 'EatIn', label: $i('menuUpdate_channelEatIn') }, { value: 'Delivery', label: $i('menuUpdate_channelDelivery') }]"
+                />
               </label>
             </div>
 
@@ -199,42 +198,21 @@
                       {{ column.label }}
                     </th>
                     <td>
-                      <select
+                      <MenuSelect
                         :value="columnKind(source.documentName, column)"
                         :aria-label="$i('menuUpdate_columnKindFor', { label: column.label })"
-                        @change="setColumnKind(source.documentName, column, $event.target.value)"
-                      >
-                        <option value="Size">
-                          {{ $i('menuUpdate_kindSize') }}
-                        </option>
-                        <option value="Channel">
-                          {{ $i('menuUpdate_kindChannel') }}
-                        </option>
-                        <option value="Ignore">
-                          {{ $i('menuUpdate_kindIgnore') }}
-                        </option>
-                      </select>
+                        @change="setColumnKind(source.documentName, column, $event)"
+                        :options="[{ value: 'Size', label: $i('menuUpdate_kindSize') }, { value: 'Channel', label: $i('menuUpdate_kindChannel') }, { value: 'Ignore', label: $i('menuUpdate_kindIgnore') }]"
+                      />
                     </td>
                     <td>
-                      <select
+                      <MenuSelect
                         :value="columnChannel(source.documentName, column)"
                         :disabled="columnKind(source.documentName, column) === 'Ignore'"
                         :aria-label="$i('menuUpdate_columnChannelFor', { label: column.label })"
-                        @change="setColumnChannel(source.documentName, column, $event.target.value)"
-                      >
-                        <option value="">
-                          {{ $i('menuUpdate_useDocumentDefault') }}
-                        </option>
-                        <option value="Takeaway">
-                          {{ $i('menuUpdate_channelTakeaway') }}
-                        </option>
-                        <option value="EatIn">
-                          {{ $i('menuUpdate_channelEatIn') }}
-                        </option>
-                        <option value="Delivery">
-                          {{ $i('menuUpdate_channelDelivery') }}
-                        </option>
-                      </select>
+                        @change="setColumnChannel(source.documentName, column, $event)"
+                        :options="[{ value: '', label: $i('menuUpdate_useDocumentDefault') }, { value: 'Takeaway', label: $i('menuUpdate_channelTakeaway') }, { value: 'EatIn', label: $i('menuUpdate_channelEatIn') }, { value: 'Delivery', label: $i('menuUpdate_channelDelivery') }]"
+                      />
                     </td>
                     <td>
                       <span v-if="column.ignored" class="badge skip">{{ $i('menuUpdate_kindIgnore') }}</span>
@@ -284,97 +262,103 @@
               aria-controls="price-rules"
               @click="rulesExpanded = !rulesExpanded"
             >
-              <span class="chevron">{{ rulesExpanded ? '▾' : '▸' }}</span>
-              <h2>{{ $i('menuUpdate_rulesTitle') }}</h2>
+              <span>{{ $i('menuUpdate_rulesTitle') }}</span>
+              <span class="chevron" aria-hidden="true">{{ rulesExpanded ? '−' : '+' }}</span>
             </button>
-            <small>{{ rulesSummary }}</small>
+            <p class="rules-intro">{{ $i('menuUpdate_rulesIntro') }}</p>
+            <small v-if="!rulesExpanded">{{ rulesSummary }}</small>
           </div>
 
           <div v-show="rulesExpanded" id="price-rules">
             <div class="rules-grid">
-              <label class="field">
-                {{ $i('menuUpdate_ruleMissingChannel') }}
-                <select v-model="draftRules.missingChannelRule">
-                  <option value="KeepCurrent">{{ $i('menuUpdate_ruleKeepCurrent') }}</option>
-                  <option value="SamePercent">{{ $i('menuUpdate_ruleSamePercent') }}</option>
-                  <option value="KeepKroneDelta">{{ $i('menuUpdate_ruleKeepKroneDelta') }}</option>
-                  <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
-                </select>
-              </label>
-
-              <label v-if="draftRules.missingChannelRule === 'CustomPercent'" class="field">
-                {{ $i('menuUpdate_rulePercent') }}
-                <input v-model.number="draftRules.missingChannelPercent" type="number" step="0.1">
-              </label>
-
-              <label class="field">
-                {{ $i('menuUpdate_ruleReferenceChannel') }}
-                <select v-model="draftRules.referenceChannel">
-                  <option value="Takeaway">{{ $i('menuUpdate_channelTakeaway') }}</option>
-                  <option value="EatIn">{{ $i('menuUpdate_channelEatIn') }}</option>
-                  <option value="Delivery">{{ $i('menuUpdate_channelDelivery') }}</option>
-                </select>
-              </label>
-
-              <label class="field">
-                {{ $i('menuUpdate_ruleAbsentProducts') }}
-                <select v-model="draftRules.absentProductRule">
-                  <option value="Keep">{{ $i('menuUpdate_ruleAbsentKeep') }}</option>
-                  <option value="SuggestFromSimilar">{{ $i('menuUpdate_ruleAbsentSuggest') }}</option>
-                  <option value="CustomPercent">{{ $i('menuUpdate_ruleCustomPercent') }}</option>
-                </select>
-              </label>
-
-              <label v-if="draftRules.absentProductRule === 'CustomPercent'" class="field">
-                {{ $i('menuUpdate_rulePercent') }}
-                <input v-model.number="draftRules.absentProductPercent" type="number" step="0.1">
-              </label>
-
-              <label class="field">
-                {{ $i('menuUpdate_ruleScope') }}
-                <select v-model="ruleScope">
-                  <option value="AllInFilter">{{ $i('menuUpdate_scopeAllInFilter') }}</option>
-                  <option value="SelectedCategory">{{ $i('menuUpdate_scopeCategory') }}</option>
-                  <option value="CheckedRows">{{ $i('menuUpdate_scopeChecked') }}</option>
-                </select>
-              </label>
-
-              <label v-if="ruleScope === 'SelectedCategory'" class="field">
-                {{ $i('menuUpdate_category') }}
-                <select v-model="scopeCategoryName">
-                  <option v-for="name in categoryNames" :key="name" :value="name">{{ name }}</option>
-                </select>
-              </label>
-
-              <label class="field">
-                {{ $i('menuUpdate_ruleRounding') }}
-                <select v-model="draftRules.rounding">
-                  <option value="NearestKrone">{{ $i('menuUpdate_roundingKrone') }}</option>
-                  <option value="NearestFiveKroner">{{ $i('menuUpdate_roundingFiveKroner') }}</option>
-                  <option value="KeepOre">{{ $i('menuUpdate_roundingOre') }}</option>
-                </select>
-              </label>
-
-              <label class="field">
-                {{ $i('menuUpdate_ruleNewProducts') }}
-                <select v-model="draftRules.newProductChannelRule">
-                  <option value="RequireExplicit">{{ $i('menuUpdate_newProductExplicit') }}</option>
-                  <option value="SameAsTakeaway">{{ $i('menuUpdate_newProductSameAsTakeaway') }}</option>
-                  <option value="TakeawayPlusPercent">{{ $i('menuUpdate_newProductPlusPercent') }}</option>
-                </select>
-              </label>
-
-              <template v-if="draftRules.newProductChannelRule === 'TakeawayPlusPercent'">
+              <div class="rule-card">
+                <span class="rule-number">1</span>
+                <h3>{{ $i('menuUpdate_sourcePricesTitle') }}</h3>
+                <p>{{ $i('menuUpdate_sourcePricesHelp') }}</p>
                 <label class="field">
-                  {{ $i('menuUpdate_newProductEatInPercent') }}
-                  <input v-model.number="draftRules.newProductEatInPercent" type="number" step="0.1">
+                  {{ $i('menuUpdate_sourceChannelLabel') }}
+                  <MenuSelect
+                    v-model="draftRules.referenceChannel"
+                    :options="[{ value: 'Takeaway', label: $i('menuUpdate_channelTakeaway') }, { value: 'EatIn', label: $i('menuUpdate_channelEatIn') }, { value: 'Delivery', label: $i('menuUpdate_channelDelivery') }]"
+                  />
                 </label>
+              </div>
+              <div class="rule-card">
+                <span class="rule-number">2</span>
+                <h3>{{ $i('menuUpdate_otherChannelsTitle') }}</h3>
+                <p>{{ $i('menuUpdate_otherChannelsHelp') }}</p>
                 <label class="field">
-                  {{ $i('menuUpdate_newProductDeliveryPercent') }}
-                  <input v-model.number="draftRules.newProductDeliveryPercent" type="number" step="0.1">
+                  {{ $i('menuUpdate_otherChannelsLabel') }}
+                  <MenuSelect
+                    v-model="draftRules.missingChannelRule"
+                    :options="[{ value: 'KeepCurrent', label: $i('menuUpdate_ruleKeepCurrent') }, { value: 'SamePercent', label: $i('menuUpdate_ruleSamePercent') }, { value: 'KeepKroneDelta', label: $i('menuUpdate_ruleKeepKroneDelta') }, { value: 'CustomPercent', label: $i('menuUpdate_ruleCustomPercent') }]"
+                  />
                 </label>
-              </template>
+                <label v-if="draftRules.missingChannelRule === 'CustomPercent'" class="field">
+                  {{ $i('menuUpdate_rulePercent') }}
+                  <input v-model.number="draftRules.missingChannelPercent" type="number" step="0.1">
+                </label>
+              </div>
+              <div class="rule-card">
+                <span class="rule-number">3</span>
+                <h3>{{ $i('menuUpdate_outsideMenuTitle') }}</h3>
+                <p>{{ $i('menuUpdate_outsideMenuHelp') }}</p>
+                <label class="field">
+                  {{ $i('menuUpdate_outsideMenuLabel') }}
+                  <MenuSelect
+                    v-model="draftRules.absentProductRule"
+                    :options="[{ value: 'Keep', label: $i('menuUpdate_ruleAbsentKeep') }, { value: 'SuggestFromSimilar', label: $i('menuUpdate_ruleAbsentSuggest') }, { value: 'CustomPercent', label: $i('menuUpdate_ruleCustomPercent') }]"
+                  />
+                </label>
+                <label v-if="draftRules.absentProductRule === 'CustomPercent'" class="field">
+                  {{ $i('menuUpdate_rulePercent') }}
+                  <input v-model.number="draftRules.absentProductPercent" type="number" step="0.1">
+                </label>
+              </div>
             </div>
+            <details class="rules-advanced">
+              <summary>{{ $i('menuUpdate_moreSettings') }}</summary>
+              <div class="advanced-grid">
+                <label class="field">
+                  {{ $i('menuUpdate_ruleScope') }}
+                  <MenuSelect
+                    v-model="ruleScope"
+                    :options="[{ value: 'AllInFilter', label: $i('menuUpdate_scopeAllInFilter') }, { value: 'SelectedCategory', label: $i('menuUpdate_scopeCategory') }, { value: 'CheckedRows', label: $i('menuUpdate_scopeChecked') }]"
+                  />
+                </label>
+                <label v-if="ruleScope === 'SelectedCategory'" class="field">
+                  {{ $i('menuUpdate_category') }}
+                  <MenuSelect
+                    v-model="scopeCategoryName"
+                    :options="categoryNames.map(name => ({ value: name, label: name }))"
+                  />
+                </label>
+                <label class="field">
+                  {{ $i('menuUpdate_ruleRounding') }}
+                  <MenuSelect
+                    v-model="draftRules.rounding"
+                    :options="[{ value: 'NearestKrone', label: $i('menuUpdate_roundingKrone') }, { value: 'NearestFiveKroner', label: $i('menuUpdate_roundingFiveKroner') }, { value: 'KeepOre', label: $i('menuUpdate_roundingOre') }]"
+                  />
+                </label>
+                <label class="field">
+                  {{ $i('menuUpdate_ruleNewProducts') }}
+                  <MenuSelect
+                    v-model="draftRules.newProductChannelRule"
+                    :options="[{ value: 'RequireExplicit', label: $i('menuUpdate_newProductExplicit') }, { value: 'SameAsTakeaway', label: $i('menuUpdate_newProductSameAsTakeaway') }, { value: 'TakeawayPlusPercent', label: $i('menuUpdate_newProductPlusPercent') }]"
+                  />
+                </label>
+                <template v-if="draftRules.newProductChannelRule === 'TakeawayPlusPercent'">
+                <label class="field">
+                    {{ $i('menuUpdate_newProductEatInPercent') }}
+                    <input v-model.number="draftRules.newProductEatInPercent" type="number" step="0.1">
+                  </label>
+                <label class="field">
+                    {{ $i('menuUpdate_newProductDeliveryPercent') }}
+                    <input v-model.number="draftRules.newProductDeliveryPercent" type="number" step="0.1">
+                  </label>
+                </template>
+              </div>
+            </details>
 
             <div v-if="rateSuggestions.length" class="rate-suggestions">
               <div v-for="suggestion in rateSuggestions" :key="suggestionKey(suggestion)" class="rate">
@@ -391,20 +375,22 @@
               </div>
             </div>
 
-            <div class="actions">
-              <button class="btn-secondary" type="button" :disabled="isValidating" @click="previewRules">
-                {{ $i('menuUpdate_previewRules', { count: rulePreviewImpact.productCount }) }}
+            <div class="actions rule-actions">
+              <button class="btn-primary" type="button" :disabled="isValidating" @click="previewRules">
+                {{ $i('menuUpdate_previewPrices', { count: rulePreviewImpact.productCount }) }}
               </button>
-              <button class="btn-primary" type="button" :disabled="!rulePreview" @click="commitRulePreview">
+              <button v-if="rulePreview" class="btn-primary" type="button" @click="commitRulePreview">
                 {{ $i('menuUpdate_applyRules') }}
               </button>
-              <button class="btn-secondary" type="button" :disabled="!undoSnapshot" @click="undoBulk">
+              <button v-if="undoSnapshot" class="btn-secondary" type="button" @click="undoBulk">
                 {{ $i('menuUpdate_undoBulk') }}
               </button>
-              <button class="btn-secondary" type="button" @click="resetRules">
+              <button class="link-btn" type="button" @click="resetRules">
                 {{ $i('menuUpdate_resetRules') }}
               </button>
             </div>
+
+            <p class="rules-footnote">{{ $i('menuUpdate_rulesPreviewHelp') }}</p>
 
             <div v-if="previewDiff" class="preview" role="region" :aria-label="$i('menuUpdate_previewTitle')">
               <div class="preview-head">
@@ -548,21 +534,12 @@
                     <span v-else class="muted">…</span>
                   </td>
                   <td class="col-action">
-                    <select
+                    <MenuSelect
                       :value="row.action"
                       :aria-label="$i('menuUpdate_actionFor', { name: rowPrimaryName(row) })"
-                      @change="changeAction(row, $event.target.value)"
-                    >
-                      <option value="Update">
-                        {{ $i('menuUpdate_actionUpdate') }}
-                      </option>
-                      <option value="Create">
-                        {{ $i('menuUpdate_actionCreate') }}
-                      </option>
-                      <option value="Skip">
-                        {{ $i('menuUpdate_actionSkip') }}
-                      </option>
-                    </select>
+                      @change="changeAction(row, $event)"
+                      :options="[{ value: 'Update', label: $i('menuUpdate_actionUpdate') }, { value: 'Create', label: $i('menuUpdate_actionCreate') }, { value: 'Skip', label: $i('menuUpdate_actionSkip') }]"
+                    />
                   </td>
                 </tr>
                 <tr v-if="!shownRows.length">
@@ -658,11 +635,11 @@
               <div class="new-product-fields">
                 <label class="field">
                   {{ $i('menuUpdate_category') }}
-                  <select v-model="row.newProduct.categoryId" @change="onNewProductCategoryChange(row)">
-                    <option v-for="category in categories" :key="category.categoryId" :value="category.categoryId">
-                      {{ category.name }}
-                    </option>
-                  </select>
+                  <MenuSelect
+                    v-model="row.newProduct.categoryId"
+                    @change="onNewProductCategoryChange(row)"
+                    :options="categories.map(category => ({ value: category.categoryId, label: category.name }))"
+                  />
                 </label>
                 <label class="field">
                   {{ $i('menuUpdate_vatTakeaway') }}
@@ -814,12 +791,11 @@
             <h4>{{ $i('menuUpdate_targetProduct') }}</h4>
             <label v-if="detailRow.action !== 'Create'" class="field">
               {{ $i('menuUpdate_linkedProduct') }}
-              <select v-model="detailRow.targetProductId" @change="onTargetChanged(detailRow)">
-                <option :value="null">{{ $i('menuUpdate_noLink') }}</option>
-                <option v-for="product in detailCandidates" :key="product.productId" :value="product.productId">
-                  {{ candidateLabel(product) }}
-                </option>
-              </select>
+              <MenuSelect
+                v-model="detailRow.targetProductId"
+                @change="onTargetChanged(detailRow)"
+                :options="[{ value: null, label: $i('menuUpdate_noLink') }, ...detailCandidates.map(product => ({ value: product.productId, label: candidateLabel(product) }))]"
+              />
             </label>
             <input
               v-if="detailRow.action !== 'Create'"
@@ -893,6 +869,7 @@
 </template>
 
 <script>
+import MenuSelect from '~/components/admin/MenuSelect.vue'
 import AdminPage from '~/components/organisms/AdminPage.vue'
 import {
   ACTION,
@@ -931,7 +908,7 @@ const PREVIEW_ROW_LIMIT = 8
 const LONG_WAIT_SECONDS = 20
 
 export default {
-  components: { AdminPage },
+  components: { AdminPage, MenuSelect },
   data () {
     return {
       step: 1,
@@ -976,7 +953,7 @@ export default {
       // create a second copy of something the first call may already have written.
       outcomeUnknown: false,
 
-      rulesExpanded: false,
+      rulesExpanded: true,
       columnMappings: {},
       isRemapping: false,
       remapNotice: '',
@@ -1828,7 +1805,7 @@ export default {
       this.analysisPhase = 'idle'
       this.analysisElapsedSeconds = 0
       this.stopAnalysisClock()
-      this.rulesExpanded = false
+      this.rulesExpanded = true
       this.planRevision++
       if (this.validateTimer) { clearTimeout(this.validateTimer); this.validateTimer = null }
     },
@@ -2276,10 +2253,35 @@ export default {
   &:focus-visible { outline: 3px solid rgba(27, 183, 118, 0.4); outline-offset: 2px; }
 }
 
-.rules-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+.rules {
+  .panel-head { display: block; }
+  .disclosure { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0; border: 0; background: transparent; font: inherit; font-size: 1.15em; font-weight: 600; color: #292c34; cursor: pointer; text-align: left; }
+  .chevron { display: grid; place-items: center; width: 32px; height: 32px; border: 1px solid #e2e8f0; border-radius: 50%; color: #64748b; }
+  .rules-intro { margin: 8px 0 20px; color: #64748b; font-size: 14px; }
+  .field { font-size: 13px; text-transform: none; letter-spacing: 0; margin-bottom: 0; }
+  .menu-select { margin-top: 8px; font-size: 14px; }
+}
+.rules-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.rule-card {
+  min-width: 0; padding: 20px; border: 1px solid #e2e8f0; border-radius: 14px; background: #fafcfb;
+  h3 { margin: 14px 0 8px; font-size: 16px; font-weight: 600; color: #292c34; }
+  p { font-size: 13px; line-height: 1.6; color: #64748b; min-height: 84px; margin: 0 0 18px; }
+  .field + .field { margin-top: 14px; }
+}
+.rule-number { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: #e6f5ed; color: #116a44; font-weight: 600; font-size: 13px; }
+.rules-advanced { margin-top: 20px; border-top: 1px solid #e2e8f0; padding-top: 16px; }
+.rules-advanced summary { cursor: pointer; color: #475569; font-size: 14px; font-weight: 600; padding: 8px 0; }
+.advanced-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; padding-top: 16px; }
+.rule-actions { border-top: 1px solid #e2e8f0; padding-top: 20px; align-items: center; }
+.rules-footnote { font-size: 13px; color: #64748b; margin: 12px 0 0; }
+.field > .menu-select { margin-top: 8px; }
+@media (max-width: 1000px) {
+  .rules-grid { grid-template-columns: 1fr; }
+  .rule-card p { min-height: 0; }
+}
+@media (max-width: 600px) {
+  .advanced-grid { grid-template-columns: 1fr; }
+  .rule-actions button { width: 100%; }
 }
 
 .column-doc {

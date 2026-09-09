@@ -895,7 +895,7 @@ describe('menu update page', () => {
 
     const firstRow = wrapper.findAll('.review tbody tr').at(0)
     expect(firstRow.find('.col-product').exists()).toBe(true)
-    expect(firstRow.find('.col-action select').exists()).toBe(true)
+    expect(firstRow.find('.col-action [role=combobox]').exists()).toBe(true)
 
     // The amounts stay together while the provenance beside them is free to wrap.
     expect(firstRow.find('.col-price .amounts').exists()).toBe(true)
