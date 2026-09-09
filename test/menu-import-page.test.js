@@ -328,6 +328,23 @@ describe('existing metadata stays untouched until it is edited', () => {
     wrapper.destroy()
   })
 
+  it('changes nothing when a group is opened and the edit is cancelled', async () => {
+    // Taking the working copy before the modal is answered is enough to turn a row that leaves
+    // the product's groups alone into one that replaces them.
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+    wrapper.vm.$refs.variantEditor.open = () => Promise.resolve(null)
+
+    await wrapper.vm.editVariantOf(row, 0)
+    await wrapper.vm.validate()
+
+    expect(row.variantGroups).toBeNull()
+    const sent = stub.Validate.mock.calls.pop()[0].rows.find(item => item.rowKey === 'n:1')
+    expect(sent.metadata).toBeUndefined()
+    wrapper.destroy()
+  })
+
   it('copies the current groups in before the first edit, so editing one cannot delete the rest', () => {
     const { wrapper } = build()
     wrapper.vm.adoptAnalysis(analysis)
@@ -925,6 +942,31 @@ describe('shared options for a whole category', () => {
 
     const sent = stub.Validate.mock.calls.pop()[0]
     expect(sent.categoryVariants[0]).toEqual({ categoryId: 'c1', newCategoryKey: null, clearGroups: true })
+    wrapper.destroy()
+  })
+
+  it('never carries one category\'s group ids into a write aimed at another', async () => {
+    // The server checks that a group id belongs to what is being written, and if it did not,
+    // this would be editing the category the operator just navigated away from.
+    const twoCategories = [
+      { ...categories[0], variants: [{ variantGroupId: 'cg1', name: 'Tilbehør', options: [] }] },
+      { categoryId: 'c2', name: 'Dessert', suggestedTax: 15, suggestedEatInTax: 25, suggestedDeliveryTax: 15, taxSuggestionAvailable: true, variants: [{ variantGroupId: 'cg2', name: 'Topping', options: [] }] }
+    ]
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories: twoCategories }
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+    wrapper.vm.$refs.variantEditor.open = () => Promise.resolve({ name: 'Min egen gruppe', options: [] })
+    await wrapper.vm.addCategoryVariant(0)
+
+    wrapper.vm.setCategoryVariantCategory(0, 'c2')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].categoryVariants[0]
+    expect(sent.categoryId).toBe('c2')
+    // Dessert's own group is there; Pizza's is not, by id or by name.
+    expect(sent.groups.map(group => group.variantGroupId)).toEqual(['cg2', null])
+    expect(sent.groups.map(group => group.name)).toEqual(['Topping', 'Min egen gruppe'])
     wrapper.destroy()
   })
 

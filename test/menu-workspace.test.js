@@ -8,6 +8,7 @@ import {
   buildNewProduct,
   carryWorkspaceState,
   displayValue,
+  dropdownPosition,
   eatInAddition,
   fromEditorVariant,
   fromLegacyDraft,
@@ -438,6 +439,54 @@ describe('columns', () => {
     const storage = { getItem: () => { throw new Error('blocked') }, setItem: () => { throw new Error('blocked') } }
     expect(() => writeColumnPreference(storage, 'u1', 7, { chosen: true, visible: [] })).not.toThrow()
     expect(readColumnPreference(storage, 'u1', 7)).toBeNull()
+  })
+})
+
+describe('where a dropdown panel lands', () => {
+  // The panel is wider than the gap between a wrapped toolbar's trigger and the left edge of a
+  // phone, so anchoring it to the trigger's right edge pushed it off screen: on a 390px viewport
+  // it sat at left -54, taking the checkboxes with it.
+  const parse = position => ({
+    left: parseFloat(position.left),
+    width: parseFloat(position.width),
+    maxHeight: parseFloat(position.maxHeight)
+  })
+
+  const trigger = (left, width = 160) => ({ left, right: left + width, top: 200, bottom: 244, width, height: 44 })
+
+  it('stays inside a 390px viewport when the trigger sits near the left edge', () => {
+    const { left, width } = parse(dropdownPosition(trigger(16), { width: 390, height: 844 }))
+
+    expect(left).toBeGreaterThanOrEqual(0)
+    expect(left + width).toBeLessThanOrEqual(390)
+  })
+
+  it('stays inside the narrowest phone at 320px', () => {
+    const { left, width } = parse(dropdownPosition(trigger(12), { width: 320, height: 568 }))
+
+    expect(left).toBeGreaterThanOrEqual(0)
+    expect(left + width).toBeLessThanOrEqual(320)
+    // Narrower than the panel's natural width, so it gives way rather than overflowing.
+    expect(width).toBeLessThanOrEqual(320 - 24)
+  })
+
+  it('still lines up with the trigger when there is room for it', () => {
+    const { left, width } = parse(dropdownPosition(trigger(900, 160), { width: 1400, height: 900 }))
+
+    // Right edges meet: 900 + 160 = 1060.
+    expect(left + width).toBe(1060)
+  })
+
+  it('opens upwards when the trigger is near the bottom of a short window', () => {
+    const position = dropdownPosition(trigger(16), { width: 390, height: 300 })
+
+    expect(position.bottom).toBeDefined()
+    expect(position.top).toBeUndefined()
+  })
+
+  it('always leaves enough height for the presets and some choices', () => {
+    const { maxHeight } = parse(dropdownPosition(trigger(16), { width: 390, height: 260 }))
+    expect(maxHeight).toBeGreaterThanOrEqual(160)
   })
 })
 

@@ -116,6 +116,38 @@ export function normalizeVisibleColumns (ids) {
 
 const hasOwn = (object, key) => !!object && Object.prototype.hasOwnProperty.call(object, key)
 
+/**
+ * Where a dropdown panel goes so that all of it is on screen.
+ *
+ * Anchoring a fixed-width panel to the right edge of its trigger only works while the trigger is
+ * far enough from the left edge of the window. On a phone the toolbar wraps and the trigger ends
+ * up near the left, so `right: 0` on a 280px panel put its left edge at -54 and took the
+ * checkboxes off screen with it.
+ *
+ * The panel is therefore placed against the viewport rather than the trigger: it prefers to line
+ * up with the trigger's right edge, and is clamped into the window when that would overflow
+ * either side. It flips above the trigger when there is more room there.
+ */
+export function dropdownPosition (rect, viewport, { width = 280, margin = 12, gap = 6, minHeight = 160 } = {}) {
+  const panelWidth = Math.min(width, viewport.width - margin * 2)
+  const preferredLeft = rect.right - panelWidth
+  const maxLeft = viewport.width - panelWidth - margin
+  const left = Math.max(margin, Math.min(preferredLeft, Math.max(margin, maxLeft)))
+
+  const below = viewport.height - rect.bottom - margin
+  const above = rect.top - margin
+  const upwards = below < minHeight && above > below
+
+  return {
+    left: Math.round(left) + 'px',
+    width: Math.round(panelWidth) + 'px',
+    maxHeight: Math.round(Math.max(minHeight, Math.min(420, upwards ? above : below))) + 'px',
+    ...(upwards
+      ? { bottom: Math.round(viewport.height - rect.top + gap) + 'px' }
+      : { top: Math.round(rect.bottom + gap) + 'px' })
+  }
+}
+
 // ---------------------------------------------------------------- column preferences
 
 /**

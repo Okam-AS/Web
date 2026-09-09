@@ -1532,11 +1532,23 @@ export default {
       groups.push(fromEditorVariant(edited, groups.length))
       this.onPlanChanged()
     },
+    /**
+     * Opens one group in the editor.
+     *
+     * The editor is handed a detached copy, and the row is not touched until the operator has
+     * actually saved something. Taking the copy first — before the modal is even answered — is
+     * enough to turn a row that leaves the product's groups alone into one that replaces them,
+     * so opening a group to look at it and pressing Cancel would have rewritten the product.
+     */
     async editVariantOf (row, index) {
       if (!this.guardEdit()) { return }
-      const groups = this.beginVariantEdit(row)
-      const edited = await this.$refs.variantEditor.open(toEditorVariant(groups[index]))
+      const target = this.variantGroupsOf(row)[index]
+      if (!target) { return }
+
+      const edited = await this.$refs.variantEditor.open(toEditorVariant(JSON.parse(JSON.stringify(target))))
       if (!edited) { return }
+
+      const groups = this.beginVariantEdit(row)
       this.$set(groups, index, fromEditorVariant({ ...groups[index], ...edited }, index))
       this.onPlanChanged()
     },
@@ -1579,15 +1591,24 @@ export default {
       if (!this.guardEdit()) { return }
       const entry = this.categoryVariants[index]
       const category = this.categories.find(item => item.categoryId === categoryId)
+      const leavingAnother = entry.loaded && entry.categoryId && entry.categoryId !== categoryId
 
       entry.categoryId = categoryId
       entry.newCategoryKey = null
       entry.categoryName = category ? category.name : ''
+      entry.clearGroups = false
+
+      // Groups that belong to the category being left stay with it. Carrying their ids across
+      // would name another category's groups in a write aimed at this one, which the server
+      // refuses on ownership — and if it did not, it would be editing the wrong category.
+      // Groups the operator wrote themselves have no id and are theirs to take along.
+      const carried = leavingAnother
+        ? stripVariantIds((entry.variants || []).filter(group => !group.variantGroupId)) || []
+        : (entry.variants || [])
 
       const existing = (category && normalizeVariantGroups(category.variants)) || []
-      // Anything already typed here is kept and placed after what the category already has.
-      this.$set(entry, 'variants', mergeVariantGroups(existing, entry.variants))
-      entry.loaded = true
+      this.$set(entry, 'variants', mergeVariantGroups(existing, carried))
+      entry.loaded = !!category
     },
     /**
      * Takes a shared-options entry out of the draft.

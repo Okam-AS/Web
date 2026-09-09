@@ -40,7 +40,7 @@
           >
             {{ $i('menuImport_useSourceValue', { value: row.sourceMeta.name }) }}
           </button>
-          <button v-if="edited('name')" type="button" class="link-btn" @click="reset('name')">
+          <button v-if="!isCreate && edited('name')" type="button" class="link-btn" @click="reset('name')">
             {{ $i('menuImport_keepExisting') }}
           </button>
         </label>
@@ -86,7 +86,7 @@
           >
             {{ $i('menuImport_useSourceText') }}
           </button>
-          <button v-if="edited('description')" type="button" class="link-btn" @click="reset('description')">
+          <button v-if="!isCreate && edited('description')" type="button" class="link-btn" @click="reset('description')">
             {{ $i('menuImport_keepExisting') }}
           </button>
         </label>
@@ -209,7 +209,7 @@
           </p>
         </details>
 
-        <ul v-if="changedFields.length" class="change-summary">
+        <ul v-if="!isCreate && changedFields.length" class="change-summary">
           <li class="change-summary-title">
             {{ $i('menuImport_willChange') }}
           </li>

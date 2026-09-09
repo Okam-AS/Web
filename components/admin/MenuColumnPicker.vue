@@ -19,6 +19,7 @@
       :id="panelId"
       ref="panel"
       class="column-picker-panel"
+      :style="position"
       role="dialog"
       :aria-label="$i('menuImport_showColumns')"
       @keydown.esc.stop.prevent="close"
@@ -65,7 +66,7 @@
 // still written if the operator had already edited it. That is why turning a column off is safe
 // enough to be a single click with no warning.
 
-import { COLUMNS } from '~/utils/menu-workspace'
+import { COLUMNS, dropdownPosition } from '~/utils/menu-workspace'
 
 export default {
   name: 'MenuColumnPicker',
@@ -76,7 +77,7 @@ export default {
     counts: { type: Object, default: () => ({}) }
   },
   data () {
-    return { open: false }
+    return { open: false, position: {} }
   },
   computed: {
     panelId () { return 'menu-column-picker-' + this._uid },
@@ -85,15 +86,33 @@ export default {
   mounted () {
     document.addEventListener('mousedown', this.outside)
     window.addEventListener('resize', this.close)
+    window.addEventListener('scroll', this.close, true)
   },
   beforeDestroy () {
     document.removeEventListener('mousedown', this.outside)
     window.removeEventListener('resize', this.close)
+    window.removeEventListener('scroll', this.close, true)
   },
   methods: {
     isVisible (id) { return this.visible.includes(id) },
+    /**
+     * Measures the trigger and hands back a position that keeps the whole panel on screen.
+     *
+     * Guarded because a test environment reports no layout at all; falling back to the plain
+     * anchored position there is harmless, since nothing is being looked at.
+     */
+    panelPosition () {
+      const trigger = this.$refs.trigger
+      if (!trigger || typeof trigger.getBoundingClientRect !== 'function' || typeof window === 'undefined') {
+        return {}
+      }
+      const rect = trigger.getBoundingClientRect()
+      if (!rect.width && !rect.height) { return {} }
+      return dropdownPosition(rect, { width: window.innerWidth, height: window.innerHeight })
+    },
     toggle () { this.open ? this.close() : this.show() },
     show () {
+      this.position = this.panelPosition()
       this.open = true
       this.$nextTick(() => {
         const first = this.$refs.panel && this.$refs.panel.querySelector('button, input')
@@ -139,9 +158,12 @@ export default {
 }
 
 .column-picker-panel {
-  position: absolute; z-index: 60; top: calc(100% + 6px); right: 0;
-  width: 280px; max-height: 420px; overflow-y: auto;
-  padding: 12px; background: #fff;
+  position: fixed; z-index: 60;
+  // Overridden by the measured position as soon as there is a layout to measure. These are the
+  // fallback for a first paint, and they still land inside the window on the narrowest phone.
+  top: auto; right: 12px; left: auto;
+  width: min(280px, calc(100vw - 24px)); max-height: 420px; overflow-y: auto;
+  padding: 12px; background: #fff; box-sizing: border-box;
   border: 1px solid #e2e8f0; border-radius: 12px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 }
