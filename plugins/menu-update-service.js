@@ -98,6 +98,22 @@ export class MenuUpdateService {
       .catch((error) => { throw toError(error) })
   }
 
+  /**
+   * The store's catalogue, categories and their option groups, with no document and no AI call.
+   *
+   * A manually typed row needs the same product list an analysed one has, and the detail panel
+   * needs the current metadata to show what a field holds today. Neither is worth a PDF.
+   */
+  Catalogue (storeId, options = {}) {
+    return axios
+      .get(this._baseUrl + '/products/menu-update/catalogue/' + storeId, {
+        headers: jsonHeaders(this._init),
+        signal: options.signal
+      })
+      .then(response => response.data)
+      .catch((error) => { throw toError(error) })
+  }
+
   Validate (plan, options = {}) {
     return axios
       .post(this._baseUrl + '/products/menu-update/validate', plan, {

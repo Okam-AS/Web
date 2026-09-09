@@ -1,0 +1,760 @@
+import { mount, createLocalVue } from '@vue/test-utils'
+import Vuex from 'vuex'
+import MenuImportPage from '~/pages/admin/import.vue'
+
+const localVue = createLocalVue()
+localVue.use(Vuex)
+
+// The page renders inside AdminPage, which pulls in the whole admin shell. The flow itself is
+// what is under test, so the shell is replaced by a pass-through wrapper.
+jest.mock('~/components/organisms/AdminPage.vue', () => ({
+  name: 'AdminPage',
+  render (h) { return h('div', this.$slots.default) }
+}))
+
+jest.mock('~/components/atoms/Modal.vue', () => ({
+  name: 'Modal',
+  render (h) { return h('div', this.$slots.default) }
+}))
+
+// vuedraggable reaches for browser APIs jsdom does not provide, and nothing here edits a
+// variant through the real modal.
+jest.mock('~/components/admin/VariantEditorModal.vue', () => ({
+  name: 'VariantEditorModal',
+  render (h) { return h('div') },
+  methods: { open: () => Promise.resolve(null) }
+}))
+
+const catalogue = [
+  {
+    productId: 'p1',
+    name: '1. Vegetar',
+    categoryId: 'c1',
+    categoryName: 'Pizza',
+    takeaway: 24000,
+    eatIn: 26000,
+    delivery: 26000,
+    description: 'Ost og tomat',
+    otherInformation: 'Gluten',
+    tax: 15,
+    eatInTax: 25,
+    deliveryTax: 15,
+    depositAmount: 0,
+    soldOut: false,
+    hide: false,
+    variants: [{ variantGroupId: 'v1', name: 'Størrelse', required: true, multiSelect: false, orderIndex: 0, options: [] }]
+  },
+  { productId: 'p2', name: '2. Kjøtt', categoryId: 'c1', categoryName: 'Pizza', takeaway: 25000, eatIn: 27000, delivery: 27000, variants: [] }
+]
+
+const categories = [
+  { categoryId: 'c1', name: 'Pizza', suggestedTax: 15, suggestedEatInTax: 25, suggestedDeliveryTax: 15, taxSuggestionAvailable: true }
+]
+
+const analysis = {
+  storeId: 7,
+  storeName: 'Jungel Torshov',
+  sources: [{ documentName: 'meny.pdf', columns: [], pages: [{ pageNumber: 1, rowCount: 2 }], warnings: [] }],
+  documents: [{ documentName: 'meny.pdf' }],
+  sourceMetadata: [],
+  sourceMetadataToken: 'meta-token',
+  warnings: [],
+  rows: [
+    {
+      rowKey: 'n:1',
+      menuNumber: '1',
+      name: 'Vegetar',
+      sizeLabel: 'Medium',
+      categoryName: 'Pizza',
+      description: 'Ost, tomat og basilikum',
+      suggestedAction: 'Update',
+      suggestedProductId: 'p1',
+      candidates: [],
+      warnings: [],
+      sourcePrices: [{ channel: 'Takeaway', amount: 24500 }]
+    },
+    {
+      rowKey: 'n:2',
+      name: 'Pistasjdessert',
+      categoryName: 'Dessert',
+      description: 'Pistasjkrem med knasende kjeks',
+      otherInformation: 'Nøtter, melk',
+      suggestedAction: 'Create',
+      suggestedProductId: null,
+      candidates: [],
+      warnings: [],
+      sourcePrices: [{ channel: 'Takeaway', amount: 10900 }]
+    }
+  ],
+  catalogue,
+  categories,
+  unmatchedCatalogueProductIds: ['p2']
+}
+
+const validation = (overrides = {}) => ({
+  operationId: 'op-1',
+  planToken: 'token-1',
+  expiresAt: '2026-09-09T12:00:00Z',
+  catalogueHash: 'hash-1',
+  normalizedPlan: { storeId: 7, rows: [{ rowKey: 'n:1' }, { rowKey: 'n:2' }] },
+  canApply: true,
+  rows: [
+    {
+      rowKey: 'n:1',
+      changed: true,
+      productName: '1. Vegetar',
+      blockers: [],
+      warnings: [],
+      metadataChanges: [],
+      takeaway: { currentAmount: 24000, newAmount: 24500, origin: 'Source', changed: true, deltaPercent: 2.1 },
+      eatIn: { currentAmount: 26000, newAmount: 26000, origin: 'Unchanged', changed: false },
+      delivery: { currentAmount: 26000, newAmount: 26000, origin: 'Unchanged', changed: false }
+    },
+    {
+      rowKey: 'n:2',
+      changed: true,
+      productName: 'Pistasjdessert',
+      blockers: [],
+      warnings: [],
+      metadataChanges: [],
+      takeaway: { currentAmount: null, newAmount: 10900, origin: 'Source', changed: true },
+      eatIn: { currentAmount: null, newAmount: 10900, origin: 'Rule', changed: true },
+      delivery: { currentAmount: null, newAmount: 10900, origin: 'Rule', changed: true }
+    }
+  ],
+  ...overrides
+})
+
+// A real receipt, not `{}`. The page reads its lists to say what happened, and a fixture that
+// omits them tests a shape the API never returns.
+const receipt = (overrides = {}) => ({
+  operationId: 'op-1',
+  replayed: false,
+  updatedProductIds: ['p1'],
+  createdProductIds: ['p9'],
+  metadataUpdatedProductIds: [],
+  createdCategoryIds: [],
+  removedProductIds: [],
+  prices: [
+    { productId: 'p1', productName: '1. Vegetar', created: false, channels: [{ channel: 'Takeaway', amount: 24500 }] },
+    { productId: 'p9', productName: 'Pistasjdessert', created: true, channels: [{ channel: 'Takeaway', amount: 10900 }] }
+  ],
+  ...overrides
+})
+
+function makeStorage () {
+  const contents = {}
+  return {
+    contents,
+    getItem: key => (key in contents ? contents[key] : null),
+    setItem: (key, value) => { contents[key] = String(value) },
+    removeItem: (key) => { delete contents[key] }
+  }
+}
+
+function build ({ service = {}, selectedAdminStore = 7, storage = makeStorage() } = {}) {
+  // The page reaches for the real localStorage, so the fake is installed there rather than
+  // stubbed on the component: that keeps the storage code path itself under test.
+  Object.defineProperty(window, 'localStorage', { value: storage, configurable: true, writable: true })
+
+  const stub = {
+    Analyze: jest.fn().mockResolvedValue(analysis),
+    Remap: jest.fn().mockResolvedValue(analysis),
+    Catalogue: jest.fn().mockResolvedValue({ storeId: 7, catalogue, categories }),
+    Validate: jest.fn().mockResolvedValue(validation()),
+    Apply: jest.fn().mockResolvedValue(receipt()),
+    GetStatus: jest.fn().mockResolvedValue({ applied: false }),
+    ...service
+  }
+
+  const store = new Vuex.Store({
+    state: { selectedAdminStore, currentUser: { id: 'u1' } },
+    getters: { userIsLoggedIn: () => true }
+  })
+
+  const wrapper = mount(MenuImportPage, {
+    localVue,
+    store,
+    mocks: {
+      $i: (key, params) => (params ? key + ':' + JSON.stringify(params) : key),
+      $router: { push: jest.fn(), replace: jest.fn() },
+      $route: { path: '/admin/import', query: {} }
+    },
+    computed: {
+      _menuUpdateService: () => stub
+    }
+  })
+
+  return { wrapper, stub, storage }
+}
+
+const flush = () => new Promise(resolve => setTimeout(resolve, 0))
+
+describe('one workspace, one plan', () => {
+  it('asks for a store before offering anything to import', () => {
+    const { wrapper } = build({ selectedAdminStore: 0 })
+    expect(wrapper.text()).toContain('menuImport_selectStoreTitle')
+    wrapper.destroy()
+  })
+
+  it('shows only the rows this import is about, never the rest of the catalogue', () => {
+    // p2 is in the store and absent from the menu. It is not being changed, so it is not listed.
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+
+    expect(wrapper.vm.rows).toHaveLength(2)
+    expect(wrapper.vm.rows.map(row => row.rowKey)).toEqual(['n:1', 'n:2'])
+    wrapper.destroy()
+  })
+
+  it('defaults a matched row to Update and an unmatched one to Create', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+
+    expect(wrapper.vm.rows.map(row => row.action)).toEqual(['Update', 'Create'])
+    wrapper.destroy()
+  })
+
+  it('lets a row be overridden to Create and back to a chosen product', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.linkProduct(row, null)
+    expect(row).toMatchObject({ action: 'Create', targetProductId: null })
+    expect(row.newProduct).toBeTruthy()
+
+    wrapper.vm.linkProduct(row, 'p2')
+    expect(row).toMatchObject({ action: 'Update', targetProductId: 'p2', matchConfirmed: true, newProduct: null })
+    wrapper.destroy()
+  })
+
+  it('saves through the one signed plan the server normalised, not a rebuilt one', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const ready = validation()
+    wrapper.vm.validation = ready
+    stub.Validate.mockResolvedValue(ready)
+
+    await wrapper.vm.approve()
+
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    expect(stub.Apply.mock.calls[0][0].plan).toBe(ready.normalizedPlan)
+    wrapper.destroy()
+  })
+
+  it('refuses to apply when the fresh prices differ from the ones on screen', async () => {
+    const changed = validation()
+    changed.rows[0].takeaway.newAmount = 29900
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(changed) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.validationError).toBe('menuImport_pricesRefreshed')
+    wrapper.destroy()
+  })
+
+  it('refuses to apply when a metadata change appears between the review and the approval', async () => {
+    // A different write is a different plan, whether the number that changed is a price or not.
+    const changed = validation()
+    changed.rows[0].metadataChanges = [{ field: 'name', from: '1. Vegetar', to: 'Vegetar deluxe' }]
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(changed) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.validationError).toBe('menuImport_pricesRefreshed')
+    wrapper.destroy()
+  })
+
+  it('will not approve before the current draft has been validated', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    wrapper.vm.setManual(wrapper.vm.rows[0], 'takeaway', '280')
+
+    expect(wrapper.vm.validation).toBeNull()
+    await wrapper.vm.approve()
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+})
+
+describe('existing metadata stays untouched until it is edited', () => {
+  it('sends no metadata for an analysed row whose description differs from the product', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls[0][0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.metadata).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('sends the patch once, and only once, the operator edits the field', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'Min egen tekst')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.metadata).toEqual({ description: 'Min egen tekst' })
+    wrapper.destroy()
+  })
+
+  it('does not patch anything just because a column was made visible', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.onColumnPreset('all')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.metadata).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('leaves an existing product\'s option groups alone unless they were edited', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls[0][0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.metadata).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('copies the current groups in before the first edit, so editing one cannot delete the rest', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.beginVariantEdit(row)
+
+    expect(row.variantGroups).toHaveLength(1)
+    expect(row.variantGroups[0].variantGroupId).toBe('v1')
+    wrapper.destroy()
+  })
+
+  it('records removing the last group as an explicit clear, never as an empty list', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.beginVariantEdit(row)
+    wrapper.vm.removeVariantOf(row, 0)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows.find(item => item.rowKey === 'n:1')
+    expect(sent.metadata).toEqual({ clearVariants: true })
+    wrapper.destroy()
+  })
+})
+
+describe('categories', () => {
+  it('proposes the source category for a new row, creating one only where none matches', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+
+    // "Dessert" is not in the store, so it is declared once and the row points at it.
+    expect(wrapper.vm.newCategories).toEqual([{ key: 'newcat-1', name: 'Dessert' }])
+    expect(wrapper.vm.rows[1].metadataEdits.newCategoryKey).toBe('newcat-1')
+    wrapper.destroy()
+  })
+
+  it('does not move an existing product into another category on its own', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+
+    expect(wrapper.vm.rows[0].metadataEdits.categoryId).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('reuses an existing category rather than creating a second one with the same name', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[1], 'Pizza')
+
+    expect(wrapper.vm.rows[1].metadataEdits.categoryId).toBe('c1')
+    expect(wrapper.vm.rows[1].metadataEdits.newCategoryKey).toBeUndefined()
+    wrapper.destroy()
+  })
+})
+
+describe('appending a second reading', () => {
+  it('rekeys colliding rows instead of letting one shadow the other', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.adoptAnalysis(analysis, { append: true })
+
+    const keys = wrapper.vm.rows.map(row => row.rowKey)
+    expect(keys).toHaveLength(4)
+    expect(new Set(keys).size).toBe(4)
+    wrapper.destroy()
+  })
+
+  it('folds the same new category from both readings into one', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.adoptAnalysis(analysis, { append: true })
+
+    expect(wrapper.vm.newCategories).toHaveLength(1)
+    wrapper.destroy()
+  })
+})
+
+describe('drafts', () => {
+  it('never takes the store from a file, and never its replaceAll flag', async () => {
+    const { wrapper } = build()
+    wrapper.vm.draftImportText = JSON.stringify({
+      storeId: 999,
+      replaceAll: true,
+      rows: [{ name: 'Gammel rad', priceAmount: 12000, tax: 15 }]
+    })
+    wrapper.vm.readDraft()
+
+    expect(wrapper.vm.pendingDraft.declaredStoreId).toBe(999)
+    expect(wrapper.vm.pendingDraft.declaredReplaceAll).toBe(true)
+
+    wrapper.vm.acceptDraft(true)
+    await flush()
+
+    expect(wrapper.vm.selectedStore).toBe(7)
+    expect(wrapper.vm.removalPreview).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('keeps the price rules with the draft, so it reopens showing the same money', async () => {
+    const { wrapper, storage } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.activeRules = { ...wrapper.vm.activeRules, rounding: 'NearestFiveKroner' }
+    wrapper.vm.saveDraft()
+
+    const saved = JSON.parse(storage.contents['menuImport.draft.u1.7'])
+    expect(saved.rules.rounding).toBe('NearestFiveKroner')
+
+    const { wrapper: reopened } = build({ storage })
+    await flush()
+    expect(reopened.vm.activeRules.rounding).toBe('NearestFiveKroner')
+    reopened.destroy()
+    wrapper.destroy()
+  })
+})
+
+describe('an apply whose result was never seen', () => {
+  it('freezes the plan and offers only status or the same operation again', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const { wrapper, stub } = build({ service: { Apply: jest.fn().mockRejectedValue(failure) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(wrapper.vm.canApprove).toBe(false)
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+
+  it('remembers the exact request before sending, so a reload cannot start a second one', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const storage = makeStorage()
+    const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    await wrapper.vm.approve()
+    wrapper.destroy()
+
+    // A fresh page, the same person, the same store: still frozen on that operation.
+    const { wrapper: reloaded } = build({ storage })
+    await flush()
+
+    expect(reloaded.vm.outcomeUnknown).toBe(true)
+    expect(reloaded.vm.pendingApplyRequest.operationId).toBe('op-1')
+    expect(reloaded.vm.canApprove).toBe(false)
+    reloaded.destroy()
+  })
+
+  it('retries the very same signed request rather than building a new one', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const Apply = jest.fn()
+      .mockRejectedValueOnce(failure)
+      .mockResolvedValueOnce(receipt({ replayed: true }))
+    const { wrapper } = build({ service: { Apply } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+    const sent = Apply.mock.calls[0][0]
+    await wrapper.vm.retryPendingApply()
+
+    expect(Apply).toHaveBeenCalledTimes(2)
+    expect(Apply.mock.calls[1][0]).toEqual(sent)
+    expect(wrapper.vm.receipt.replayed).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('stays frozen when the status says it has not been applied yet', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const { wrapper } = build({
+      service: { Apply: jest.fn().mockRejectedValue(failure), GetStatus: jest.fn().mockResolvedValue({ applied: false }) }
+    })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    await wrapper.vm.approve()
+
+    await wrapper.vm.checkStatus()
+
+    // "Not applied" is not a verdict: the ledger row only exists once the transaction commits.
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(wrapper.vm.applyError).toBe('menuImport_statusNotApplied')
+    wrapper.destroy()
+  })
+
+  it('is released, and its saved note cleared, once a receipt proves the outcome', async () => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const Apply = jest.fn().mockRejectedValueOnce(failure)
+    const storage = makeStorage()
+    const { wrapper } = build({
+      storage,
+      service: { Apply, GetStatus: jest.fn().mockResolvedValue({ applied: true, receipt: receipt() }) }
+    })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    await wrapper.vm.approve()
+
+    await wrapper.vm.checkStatus()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    expect(storage.contents['menuImport.draft.u1.7']).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('drops the note when the server refuses, because a refusal means nothing was written', async () => {
+    const refused = Object.assign(new Error('nope'), { status: 400 })
+    const storage = makeStorage()
+    const { wrapper } = build({ storage, service: { Apply: jest.fn().mockRejectedValue(refused) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    wrapper.destroy()
+  })
+})
+
+describe('replacing the whole store menu', () => {
+  it('is never requested by an ordinary save', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.validate()
+
+    expect(stub.Validate.mock.calls[0][0].catalogueReplacement).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('needs the typed word before it can be confirmed', async () => {
+    const withRemoval = validation({ removal: { requested: true, productIds: ['p2'], products: [{ productId: 'p2', name: '2. Kjøtt' }] } })
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(withRemoval) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.previewRemoval()
+
+    expect(wrapper.vm.removalPreview.productIds).toEqual(['p2'])
+    expect(wrapper.vm.canConfirmReplace).toBe(false)
+
+    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
+    expect(wrapper.vm.canConfirmReplace).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('sends back exactly the ids that were shown', async () => {
+    const withRemoval = validation({ removal: { requested: true, productIds: ['p2'], products: [{ productId: 'p2', name: '2. Kjøtt' }] } })
+    const Validate = jest.fn().mockResolvedValue(withRemoval)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.previewRemoval()
+    wrapper.vm.validation = withRemoval
+    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
+
+    await wrapper.vm.confirmReplace()
+
+    const sent = Validate.mock.calls.pop()[0]
+    expect(sent.catalogueReplacement).toEqual({ requested: true, expectedRemovedProductIds: ['p2'] })
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+
+  it('stops and re-shows the list when what would be removed has changed', async () => {
+    const shown = validation({ removal: { requested: true, productIds: ['p2'], products: [{ productId: 'p2', name: '2. Kjøtt' }] } })
+    const moved = validation({ removal: { requested: true, productIds: ['p2', 'p3'], products: [{ productId: 'p2', name: '2. Kjøtt' }, { productId: 'p3', name: '3. Ny rett' }] } })
+    const Validate = jest.fn().mockResolvedValueOnce(shown).mockResolvedValue(moved)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.previewRemoval()
+    wrapper.vm.validation = shown
+    wrapper.vm.replaceConfirmation = 'menuImport_replaceWord'
+
+    await wrapper.vm.confirmReplace()
+
+    // A product created between the preview and the confirmation must not be swept up silently.
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.validationError).toBe('menuImport_replaceChanged')
+    expect(wrapper.vm.removalPreview.productIds).toEqual(['p2', 'p3'])
+    wrapper.destroy()
+  })
+})
+
+describe('columns', () => {
+  it('opens compact for a price update and rich for an import that creates products', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({ ...analysis, rows: [analysis.rows[0]] })
+    expect(wrapper.vm.visibleColumns).toEqual(['identity', 'link', 'takeaway', 'eatIn', 'delivery'])
+
+    wrapper.vm.adoptAnalysis(analysis)
+    expect(wrapper.vm.visibleColumns).toEqual(expect.arrayContaining(['name', 'category', 'description']))
+    wrapper.destroy()
+  })
+
+  it('never rearranges a table the operator has arranged themselves', () => {
+    const { wrapper } = build()
+    wrapper.vm.onColumnToggle({ id: 'soldOut', visible: true })
+    const chosen = [...wrapper.vm.visibleColumns]
+
+    wrapper.vm.adoptAnalysis(analysis)
+
+    expect(wrapper.vm.visibleColumns).toEqual(chosen)
+    wrapper.destroy()
+  })
+
+  it('hands the decision back when the recommended view is asked for again', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.onColumnToggle({ id: 'soldOut', visible: true })
+    expect(wrapper.vm.columnChoiceMade).toBe(true)
+
+    wrapper.vm.onColumnPreset('recommended')
+
+    expect(wrapper.vm.columnChoiceMade).toBe(false)
+    expect(wrapper.vm.visibleColumns).not.toContain('soldOut')
+    wrapper.destroy()
+  })
+
+  it('keeps a hidden column\'s edit, because hiding is not undoing', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'otherInformation', 'Nøtter')
+    wrapper.vm.onColumnPreset('compact')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.metadata).toEqual({ otherInformation: 'Nøtter' })
+    wrapper.destroy()
+  })
+})
+
+describe('manual rows', () => {
+  it('starts a linked manual row from what the product charges today, not from zero', () => {
+    const { wrapper } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories }
+    wrapper.vm.addManualRow()
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.linkProduct(row, 'p1')
+
+    expect(wrapper.vm.priceValue(row, 'takeaway')).toBe(240)
+    wrapper.destroy()
+  })
+
+  it('does not send those prices back as if the menu had asked for them', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue, categories }
+    wrapper.vm.addManualRow()
+    wrapper.vm.linkProduct(wrapper.vm.rows[0], 'p1')
+    await wrapper.vm.validate()
+
+    expect(stub.Validate.mock.calls.pop()[0].rows[0].sourcePrices).toEqual([])
+    wrapper.destroy()
+  })
+
+  it('duplicates a row as its own new product rather than a second write to the same one', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.duplicateRow(wrapper.vm.rows[0])
+
+    const copy = wrapper.vm.rows[1]
+    expect(copy.action).toBe('Create')
+    expect(copy.targetProductId).toBeNull()
+    expect(copy.rowKey).not.toBe(wrapper.vm.rows[0].rowKey)
+    wrapper.destroy()
+  })
+
+  it('takes a removed row out of the draft only, and can put it back', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.removeRow(row)
+    expect(wrapper.vm.rows).toHaveLength(1)
+
+    wrapper.vm.undoRemove()
+    expect(wrapper.vm.rows[0]).toBe(row)
+    wrapper.destroy()
+  })
+})
+
+describe('shared category options', () => {
+  it('can be saved on their own, without inventing a product row to hang them on', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+    wrapper.vm.categoryVariants[0].variants = [{ name: 'Tilbehør', options: [{ name: 'Pommes', amount: 0 }] }]
+
+    expect(wrapper.vm.hasSaveableIntent).toBe(true)
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0]
+    expect(sent.rows).toEqual([])
+    expect(sent.categoryVariants[0]).toMatchObject({ categoryId: 'c1' })
+    wrapper.destroy()
+  })
+
+  it('leaves a genuinely empty draft unsaveable', () => {
+    const { wrapper } = build()
+    expect(wrapper.vm.hasSaveableIntent).toBe(false)
+    expect(wrapper.vm.canApprove).toBe(false)
+    wrapper.destroy()
+  })
+})
+
+describe('the receipt', () => {
+  it('reports what was written without assuming any list is present', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+    await wrapper.vm.approve()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('menuImport_receiptTitle')
+    wrapper.destroy()
+  })
+
+  it('renders a receipt that omits every optional list rather than crashing on it', async () => {
+    const { wrapper } = build({ service: { Apply: jest.fn().mockResolvedValue({ operationId: 'op-1' }) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.validation = validation()
+
+    await wrapper.vm.approve()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.receiptUpdatedIds).toEqual([])
+    expect(wrapper.text()).toContain('menuImport_receiptTitle')
+    wrapper.destroy()
+  })
+})

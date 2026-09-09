@@ -273,8 +273,9 @@ export default {
           items: [
             { label: this.$i("nav_products"), path: "/admin/products", icon: icons.products },
             { label: this.$i("nav_categories"), path: "/admin/categories", icon: icons.categories },
-            { label: this.$i("nav_import"), path: "/admin/import", icon: icons.import },
-            { label: this.$i("nav_menuUpdate"), path: "/admin/menu-update", icon: icons.menuUpdate, isNew: true },
+            // Import and Menu update are one workspace now. /admin/menu-update still resolves
+            // for old bookmarks, but only one entry belongs in the navigation.
+            { label: this.$i("nav_menuImport"), path: "/admin/import", icon: icons.menuUpdate, isNew: true },
           ],
         },
         {
