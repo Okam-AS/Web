@@ -128,14 +128,16 @@ const hasOwn = (object, key) => !!object && Object.prototype.hasOwnProperty.call
 /**
  * The kinds of file a menu can arrive as.
  *
- * The extension is the decision, not the MIME type. Browsers report nothing at all for a file
+ * The extension is the decision, and the only one. Browsers report nothing at all for a file
  * dragged from some applications, report `application/octet-stream` for others, and disagree
- * with each other about spreadsheets — so a MIME check alone silently refuses files that are
- * perfectly readable. MIME types are still listed because the picker uses them to filter, and a
- * recognised one is accepted even when the extension is missing.
+ * with each other about spreadsheets, so a supported extension is accepted whatever type comes
+ * with it — including no type at all.
  *
- * Nothing is listed here that the reader cannot actually read. Claiming a format and then
- * failing on it is worse than saying no up front.
+ * It does not work the other way round. The reader classifies by extension too, so a file
+ * admitted here on the strength of its MIME type alone would be taken, uploaded and then
+ * refused at the far end. Saying no up front is the honest version of that.
+ *
+ * Nothing is listed here that the reader cannot actually read.
  */
 export const ACCEPTED_FILES = [
   { extension: 'pdf', label: 'PDF', mime: ['application/pdf'] },
@@ -154,7 +156,12 @@ export const ACCEPTED_FILES = [
   { extension: 'xls', label: 'XLS', mime: ['application/vnd.ms-excel'] }
 ]
 
-/** What the file picker filters on: the extensions, plus the MIME types worth hinting at. */
+/**
+ * What the file picker filters on.
+ *
+ * The MIME types are here only so the native dialog offers sensible files; they never widen
+ * what is accepted, which `acceptedKind` decides on the extension alone.
+ */
 export const ACCEPT_ATTRIBUTE = [
   ...ACCEPTED_FILES.map(kind => '.' + kind.extension),
   ...[...new Set(ACCEPTED_FILES.flatMap(kind => kind.mime))]
@@ -171,20 +178,16 @@ export const fileExtension = (name) => {
 /**
  * Which of the accepted kinds a file is, or null.
  *
- * The extension decides. A file with no usable extension is matched on its reported MIME type
- * instead, which covers a paste or a drag that arrives named nothing in particular; a file whose
- * extension is not on the list is refused whatever it claims to be, so a `.docx` sent as
- * `application/octet-stream` cannot slip through as readable.
+ * The extension alone. A supported one is taken whatever the reported type says, or fails to
+ * say; an unsupported one, or none at all, is refused however the file describes itself. The
+ * reader classifies the same way, so anything admitted on a type alone would only be refused
+ * after it had been uploaded.
  */
 export function acceptedKind (file) {
   if (!file) { return null }
   const extension = fileExtension(file.name)
-  if (extension) {
-    return ACCEPTED_FILES.find(kind => kind.extension === extension) || null
-  }
-  const mime = String(file.type || '').toLowerCase()
-  if (!mime) { return null }
-  return ACCEPTED_FILES.find(kind => kind.mime.includes(mime)) || null
+  if (!extension) { return null }
+  return ACCEPTED_FILES.find(kind => kind.extension === extension) || null
 }
 
 export const isAcceptedFile = file => acceptedKind(file) !== null

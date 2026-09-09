@@ -1761,12 +1761,15 @@ describe('choosing menu files', () => {
   it('names the files it cannot read, and keeps the ones it can', () => {
     const { wrapper } = build()
 
-    wrapper.vm.addFiles([file('meny.pdf', 'application/pdf'), file('meny.docx'), file('bilde.heic')])
+    // The last one reports a readable type but has no extension to classify it by, and the
+    // reader would refuse it after the upload rather than before it.
+    wrapper.vm.addFiles([file('meny.pdf', 'application/pdf'), file('meny.docx'), file('bilde.heic'), file('skann', 'image/png')])
 
     expect(wrapper.vm.files.map(item => item.name)).toEqual(['meny.pdf'])
     // Listed by name: "2 files were not added" leaves someone working out which two.
     expect(wrapper.vm.analysisError).toContain('meny.docx')
     expect(wrapper.vm.analysisError).toContain('bilde.heic')
+    expect(wrapper.vm.analysisError).toContain('skann')
     wrapper.destroy()
   })
 

@@ -464,10 +464,14 @@ describe('which files a menu can arrive as', () => {
     expect(isAcceptedFile(file('meny.xlsx', ''))).toBe(true)
     expect(isAcceptedFile(file('meny.csv', 'application/octet-stream'))).toBe(true)
     expect(isAcceptedFile(file('MENY.PDF', ''))).toBe(true)
+    expect(isAcceptedFile(file('meny.png', 'text/plain'))).toBe(true)
   })
 
-  it('falls back to the MIME type only when there is no extension to read', () => {
-    expect(isAcceptedFile(file('scan', 'image/png'))).toBe(true)
+  it('refuses a file with no extension, whatever type it reports', () => {
+    // The reader classifies by extension too, so admitting one on its type alone would only
+    // send it off to be refused at the far end.
+    expect(isAcceptedFile(file('scan', 'image/png'))).toBe(false)
+    expect(isAcceptedFile(file('meny', 'application/pdf'))).toBe(false)
     expect(isAcceptedFile(file('noe', ''))).toBe(false)
   })
 
