@@ -3324,9 +3324,25 @@ export default {
 // for a question with six lines in it. Scoped through this dialog's own class: the same Modal is
 // used for the source, clear, category and replacement flows and is left alone there.
 .confirm-dialog {
+  // The wrapper is a full-screen white sheet that sits ABOVE the backdrop, which is what makes
+  // an ordinary modal a page. Making it transparent is what turns this back into a card: with it
+  // opaque, overriding the container and the mask underneath changes nothing you can see.
+  // It keeps its scrolling and centring, and gains the margin the card needs on a small screen.
+  ::v-deep .modal-wrapper {
+    background-color: transparent;
+    padding: 16px;
+
+    @media (max-width: 640px) { padding: 12px; }
+  }
+
   ::v-deep .modal-container {
-    width: min(560px, calc(100vw - 32px));
+    // Border-box, because the width below is a viewport calculation and the padding has to come
+    // out of it rather than be added to it — otherwise the card overflows the phone it is
+    // sized for.
+    box-sizing: border-box;
+    width: min(560px, 100%);
     max-width: none;
+    min-width: 0;
     max-height: min(80vh, 720px);
     overflow-y: auto;
     padding: 28px;
@@ -3335,7 +3351,7 @@ export default {
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
 
     @media (max-width: 640px) {
-      width: calc(100vw - 24px);
+      width: 100%;
       max-height: calc(100vh - 24px);
       padding: 20px;
       border-radius: 12px;
@@ -3344,7 +3360,14 @@ export default {
 
   // The work list stays visible behind it, dimmed: the numbers being confirmed are about that
   // table, and hiding it makes them harder to trust rather than easier.
-  ::v-deep .modal-mask { background: rgba(41, 44, 52, 0.45); }
+  ::v-deep .modal-mask { background-color: rgba(41, 44, 52, 0.45); }
+
+  // Legible against the dimmed table rather than against the white sheet it used to sit on.
+  ::v-deep .close-button {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  }
 }
 
 .confirm-modal {
