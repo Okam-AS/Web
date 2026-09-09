@@ -540,6 +540,57 @@ describe('reconciling the options of a group that already exists', () => {
     expect(merged[0].options.map(item => item.variantOptionId)).toEqual(['o1', 'o2'])
   })
 
+  it('prefers an exact group id over an earlier group that merely shares a name', () => {
+    // Asking "same id or same name" in one pass answers with whichever comes first, so the
+    // earlier same-named group would be rewritten and the one actually named by id left alone.
+    const existingGroups = [
+      { variantGroupId: 'g1', name: 'Tilbehør', options: [option('Pommes', 0, 'o1')], orderIndex: 0 },
+      { variantGroupId: 'g2', name: 'Tilbehør', options: [option('Salat', 1500, 'o2')], orderIndex: 1 }
+    ]
+    const merged = mergeVariantGroups(existingGroups, [{
+      variantGroupId: 'g2', name: 'Tilbehør', options: [option('Salat', 1900)]
+    }])
+
+    expect(merged).toHaveLength(2)
+    // g1 untouched.
+    expect(merged.find(group => group.variantGroupId === 'g1').options[0].amount).toBe(0)
+    // g2 updated, keeping the option identity.
+    const target = merged.find(group => group.variantGroupId === 'g2')
+    expect(target.options[0]).toMatchObject({ variantOptionId: 'o2', amount: 1900 })
+  })
+
+  it('does not guess between groups that share a name when the import gives no id', () => {
+    const existingGroups = [
+      { variantGroupId: 'g1', name: 'Tilbehør', options: [option('Pommes', 0, 'o1')], orderIndex: 0 },
+      { variantGroupId: 'g2', name: 'Tilbehør', options: [option('Salat', 1500, 'o2')], orderIndex: 1 }
+    ]
+    const merged = mergeVariantGroups(existingGroups, [normalizeVariantGroup({ name: 'Tilbehør', options: [{ name: 'Løk', amount: 500 }] })])
+
+    // Both survive untouched; the unplaceable group is added rather than overwriting one.
+    expect(merged.find(group => group.variantGroupId === 'g1').options[0].variantOptionId).toBe('o1')
+    expect(merged.find(group => group.variantGroupId === 'g2').options[0].variantOptionId).toBe('o2')
+    expect(merged.filter(group => group.variantGroupId === null)).toHaveLength(1)
+  })
+
+  it('drops a group id that names nothing here rather than writing against it', () => {
+    // An id belonging to some other product or category is not ours to write against.
+    const merged = mergeVariantGroups(
+      [{ variantGroupId: 'g1', name: 'Tilbehør', options: [option('Pommes', 0, 'o1')], orderIndex: 0 }],
+      [{ variantGroupId: 'foreign-group', name: 'Saus', options: [option('Aioli', 900, 'foreign-option')] }]
+    )
+
+    const added = merged.find(group => group.name === 'Saus')
+    expect(added.variantGroupId).toBeNull()
+    expect(added.options[0].variantOptionId).toBeNull()
+    expect(merged.find(group => group.variantGroupId === 'g1').options[0].variantOptionId).toBe('o1')
+  })
+
+  it('does not adopt an option id that matched nothing in the group', () => {
+    const merged = mergeVariantOptions([option('Salat', 1500)], [option('Salat', 1900, 'foreign-option')])
+
+    expect(merged[0]).toMatchObject({ name: 'Salat', amount: 1900, variantOptionId: null })
+  })
+
   it('leaves a group the import does not mention completely alone', () => {
     const existingGroups = [
       { variantGroupId: 'g1', name: 'Tilbehør', options: stored, orderIndex: 0 },

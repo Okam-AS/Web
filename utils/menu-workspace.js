@@ -422,27 +422,61 @@ export function stripVariantIds (groups) {
  */
 export function mergeVariantGroups (existing, incoming) {
   const result = (existing || []).map(group => ({ ...group }))
+  if (!incoming || !incoming.length) { return result }
 
-  ;(incoming || []).forEach((group) => {
-    const at = result.findIndex(item =>
-      (group.variantGroupId && item.variantGroupId === group.variantGroupId) ||
-      (item.name || '').trim().toLowerCase() === (group.name || '').trim().toLowerCase())
+  const existingByName = countNames(result, group => foldName(group.name))
+  const incomingByName = countNames(incoming, group => foldName(group.name))
 
-    if (at >= 0) {
+  incoming.forEach((group) => {
+    const name = foldName(group.name)
+
+    // An exact id wins outright, and is looked for across the whole list first. Asking
+    // "same id or same name" in one pass answers with whichever came first, so an earlier
+    // group that merely shares a name could be chosen over the one actually named by id.
+    const byId = group.variantGroupId
+      ? result.findIndex(item => item.variantGroupId === group.variantGroupId)
+      : -1
+
+    if (byId >= 0) {
+      result[byId] = {
+        ...group,
+        variantGroupId: result[byId].variantGroupId,
+        options: mergeVariantOptions(result[byId].options, group.options)
+      }
+      return
+    }
+
+    // A name only identifies a group where it means one thing on both sides.
+    if (existingByName[name] === 1 && incomingByName[name] === 1) {
+      const at = result.findIndex(item => foldName(item.name) === name)
       result[at] = {
         ...group,
-        variantGroupId: result[at].variantGroupId || group.variantGroupId,
+        variantGroupId: result[at].variantGroupId || null,
         // Reconciled, not replaced. Taking the incoming list wholesale threw away the id of
         // every option in a matched group, including ones nothing had changed about.
         options: mergeVariantOptions(result[at].options, group.options)
       }
-    } else {
-      result.push(group)
+      return
     }
+
+    // Nothing here is this group. An id that names no group of this thing is not ours to
+    // write against — it belongs to some other product or category — so it is dropped rather
+    // than sent, and the group is added as the new one it evidently is.
+    result.push({
+      ...group,
+      variantGroupId: null,
+      options: (group.options || []).map(option => ({ ...option, variantOptionId: null }))
+    })
   })
 
   return result.map((group, index) => ({ ...group, orderIndex: index }))
 }
+
+const countNames = (list, key) => list.reduce((counts, item) => {
+  const name = key(item)
+  counts[name] = (counts[name] || 0) + 1
+  return counts
+}, {})
 
 const foldName = value => String(value === null || value === undefined ? '' : value).trim().toLowerCase()
 
@@ -474,14 +508,8 @@ export function mergeVariantOptions (existing, incoming) {
   const result = (existing || []).map(option => ({ ...option }))
   if (!incoming || !incoming.length) { return result }
 
-  const countBy = (list, key) => list.reduce((counts, option) => {
-    const name = key(option)
-    counts[name] = (counts[name] || 0) + 1
-    return counts
-  }, {})
-
-  const existingByName = countBy(result, option => foldName(option.name))
-  const incomingByName = countBy(incoming, option => foldName(option.name))
+  const existingByName = countNames(result, option => foldName(option.name))
+  const incomingByName = countNames(incoming, option => foldName(option.name))
 
   incoming.forEach((option) => {
     const name = foldName(option.name)
@@ -499,7 +527,9 @@ export function mergeVariantOptions (existing, incoming) {
     if (unambiguous) {
       const at = result.findIndex(item => foldName(item.name) === name)
       // Keeps the identity, takes the new price. An unchanged option comes through untouched.
-      result[at] = { ...option, variantOptionId: result[at].variantOptionId || option.variantOptionId || null }
+      // Only the id this group already had: an incoming id that matched nothing belongs to
+      // something else, and adopting it here would write against another product's option.
+      result[at] = { ...option, variantOptionId: result[at].variantOptionId || null }
       return
     }
 
