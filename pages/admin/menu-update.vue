@@ -56,8 +56,15 @@
         </ul>
 
         <label class="field">
-          {{ $i('menuUpdate_pasteText') }}
-          <textarea v-model="pastedText" rows="6" :placeholder="$i('menuUpdate_pasteTextPlaceholder')" />
+          {{ $i(files.length ? 'menuUpdate_instructionsLabel' : 'menuUpdate_pasteText') }}
+          <textarea
+            v-model="pastedText"
+            rows="6"
+            :maxlength="files.length ? 2000 : 400000"
+            :placeholder="$i(files.length ? 'menuUpdate_instructionsPlaceholder' : 'menuUpdate_pasteTextPlaceholder')"
+          />
+          <small class="helper-text">{{ $i(files.length ? 'menuUpdate_instructionsHelp' : 'menuUpdate_menuTextHelp') }}</small>
+          <small v-if="instructionsTooLong" class="error-box" role="alert">{{ $i('menuUpdate_instructionsTooLong') }}</small>
         </label>
 
         <div v-if="analysisError" class="error-box" role="alert">
@@ -112,6 +119,20 @@
 
       <!-- ------------------------------------------------ step 2: review -->
       <template v-else-if="step === 2">
+        <section v-if="analysis && analysis.instructions" class="panel instruction-summary">
+          <h2>{{ $i('menuUpdate_instructionsReviewTitle') }}</h2>
+          <p>{{ analysis.instructions }}</p>
+          <p class="helper-text">{{ $i('menuUpdate_instructionsReviewHelp') }}</p>
+          <p>{{ $i('menuUpdate_existingNamesKept') }}</p>
+          <p v-if="analysis.operatorPreferences && analysis.operatorPreferences.createNewProducts === false">
+            {{ $i('menuUpdate_instructionsUpdateOnly') }}
+          </p>
+          <p>{{ $i('menuUpdate_ruleReferenceChannel') }}: {{ $i('menuUpdate_channel' + activeRules.referenceChannel) }}</p>
+          <p>{{ rulesSummary }}</p>
+          <button type="button" class="link-btn" @click="showInstructionRules">
+            {{ $i('menuUpdate_instructionsEditRules') }}
+          </button>
+        </section>
         <section v-if="analysis" class="panel sources-summary">
           <div class="panel-head">
             <h2>{{ $i('menuUpdate_comparedMenus') }}</h2>
@@ -999,8 +1020,9 @@ export default {
     analysisIsTakingLong () {
       return this.analysisPhase === 'reading' && this.analysisElapsedSeconds >= LONG_WAIT_SECONDS
     },
+    instructionsTooLong () { return this.files.length > 0 && this.pastedText.trim().length > 2000 },
     canAnalyze () {
-      return !this.isAnalyzing &&
+      return !this.isAnalyzing && !this.instructionsTooLong &&
         this.selectedStore > 0 &&
         !this.uploadTooLarge &&
         (this.files.length > 0 || !!this.pastedText.trim())
@@ -1157,6 +1179,15 @@ export default {
   },
   methods: {
     handleLoginSuccess () { this.startOver() },
+    showInstructionRules () {
+      this.rulesExpanded = true
+      this.$nextTick(() => {
+        const rules = this.$el.querySelector('#price-rules')
+        if (rules && typeof rules.scrollIntoView === 'function') {
+          rules.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      })
+    },
 
     // ------------------------------------------------------------ sources
     onFilesPicked (event) {
@@ -1288,7 +1319,8 @@ export default {
           sourceMappings: this.sourceMappings(),
           // Returned exactly as issued, so the coverage the server established survives.
           sourceMetadata: this.analysis.sourceMetadata,
-          sourceMetadataToken: this.analysis.sourceMetadataToken
+          sourceMetadataToken: this.analysis.sourceMetadataToken,
+          instructions: this.analysis.instructions || ''
         })
 
         if (generation !== this.requestGeneration) { return }
@@ -1313,6 +1345,23 @@ export default {
       const merged = preserveDecisions ? carryDecisions(previous, fresh) : { rows: fresh, carried: 0, dropped: [] }
 
       this.analysis = analysis
+      if (!preserveDecisions) {
+        const rules = DEFAULT_RULES()
+        const preferences = analysis.instructions && analysis.operatorPreferences
+        if (preferences) {
+          if (['Takeaway', 'EatIn', 'Delivery'].includes(preferences.referenceChannel)) {
+            rules.referenceChannel = preferences.referenceChannel
+          }
+          if (['KeepCurrent', 'SamePercent', 'KeepKroneDelta'].includes(preferences.missingChannelRule)) {
+            rules.missingChannelRule = preferences.missingChannelRule
+          }
+          if (['Keep', 'SuggestFromSimilar'].includes(preferences.absentProductRule)) {
+            rules.absentProductRule = preferences.absentProductRule
+          }
+        }
+        this.activeRules = rules
+        this.draftRules = { ...rules }
+      }
       this.rows = merged.rows
       this.initialRows = snapshot(this.rows)
       this.prepareNewProducts()
@@ -1350,7 +1399,8 @@ export default {
           this.selectedStore,
           {
             files: this.files,
-            text: this.pastedText,
+            text: this.files.length ? '' : this.pastedText,
+            instructions: this.files.length ? this.pastedText : '',
             textLabel: this.$i('menuUpdate_pastedTextLabel'),
             // The columns are mapped after the reading, against the labels it actually returns,
             // rather than guessed from the file name beforehand.

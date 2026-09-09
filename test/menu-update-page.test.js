@@ -1147,4 +1147,77 @@ describe('menu update page', () => {
     expect(firstRow.findAll('td').at(0).attributes('class')).toBe('col-select')
     expect(firstRow.findAll('td').at(1).attributes('class')).toBe('col-product')
   })
+  describe('instructions alongside PDFs', () => {
+    const guidance = 'Carne er kjøtt. Behold navnene og juster de andre prisene med samme prosent.'
+    const guided = {
+      ...analysis,
+      instructions: guidance,
+      operatorPreferences: {
+        referenceChannel: 'Takeaway',
+        missingChannelRule: 'SamePercent',
+        createNewProducts: false,
+        keepExistingNames: true
+      }
+    }
+
+    it('changes the field role without losing the typed text', async () => {
+      const { wrapper } = build()
+      await wrapper.find('textarea').setValue(guidance)
+      expect(wrapper.text()).toContain('menuUpdate_pasteText')
+      wrapper.vm.addFiles([pdf()])
+      await wrapper.vm.$nextTick()
+      expect(wrapper.text()).toContain('menuUpdate_instructionsLabel')
+      expect(wrapper.find('textarea').element.value).toBe(guidance)
+      wrapper.vm.removeFile(0)
+      await wrapper.vm.$nextTick()
+      expect(wrapper.text()).toContain('menuUpdate_pasteText')
+      expect(wrapper.find('textarea').element.value).toBe(guidance)
+      wrapper.destroy()
+    })
+
+    it('sends PDF guidance separately and validates the suggested price rules', async () => {
+      const { wrapper, stub } = build({ service: { Analyze: jest.fn(() => Promise.resolve(guided)) } })
+      wrapper.vm.addFiles([pdf()])
+      await wrapper.find('textarea').setValue(guidance)
+      await wrapper.vm.runAnalysis()
+      expect(stub.Analyze.mock.calls[0][1]).toMatchObject({ text: '', instructions: guidance })
+      expect(stub.Validate.mock.calls[0][0].rules).toMatchObject({ referenceChannel: 'Takeaway', missingChannelRule: 'SamePercent' })
+      expect(wrapper.find('.instruction-summary').text()).toContain(guidance)
+      expect(wrapper.find('.instruction-summary').text()).toContain('menuUpdate_instructionsUpdateOnly')
+      wrapper.destroy()
+    })
+
+    it('still sends a pasted menu as a source without a PDF', async () => {
+      const { wrapper, stub } = build()
+      await wrapper.find('textarea').setValue('1. Pizza 242 kr')
+      await wrapper.vm.runAnalysis()
+      expect(stub.Analyze.mock.calls[0][1]).toMatchObject({ text: '1. Pizza 242 kr', instructions: '' })
+      wrapper.destroy()
+    })
+
+    it('retains instructions and operator rule overrides when remapping columns', async () => {
+      const { wrapper, stub } = build({ service: { Remap: jest.fn(() => Promise.resolve(guided)) } })
+      wrapper.vm.adoptAnalysis(guided)
+      wrapper.vm.activeRules = { ...wrapper.vm.activeRules, missingChannelRule: 'KeepKroneDelta' }
+      wrapper.vm.draftRules = { ...wrapper.vm.activeRules }
+      await wrapper.vm.applyColumnMapping()
+      expect(stub.Remap.mock.calls[0][1].instructions).toBe(guidance)
+      expect(wrapper.vm.activeRules.missingChannelRule).toBe('KeepKroneDelta')
+      expect(wrapper.vm.draftRules.missingChannelRule).toBe('KeepKroneDelta')
+      wrapper.destroy()
+    })
+
+    it('ignores preferences without instructions and rejects overly long guidance', () => {
+      const { wrapper } = build()
+      wrapper.vm.adoptAnalysis({ ...guided, instructions: '' })
+      expect(wrapper.vm.activeRules.missingChannelRule).toBe('KeepCurrent')
+      wrapper.vm.addFiles([pdf()])
+      wrapper.vm.pastedText = 'a'.repeat(2001)
+      expect(wrapper.vm.canAnalyze).toBe(false)
+      wrapper.vm.removeFile(0)
+      expect(wrapper.vm.canAnalyze).toBe(true)
+      wrapper.destroy()
+    })
+  })
+
 })

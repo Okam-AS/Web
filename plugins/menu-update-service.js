@@ -53,10 +53,11 @@ export class MenuUpdateService {
    * Sends the uploaded PDFs and any pasted text for one store.
    * `options.signal` cancels the request, `options.onUploadProgress` reports bytes sent.
    */
-  Analyze (storeId, { files = [], text = '', textLabel = '', sourceMappings = [] } = {}, options = {}) {
+  Analyze (storeId, { files = [], text = '', instructions = '', textLabel = '', sourceMappings = [] } = {}, options = {}) {
     const form = new FormData()
     form.append('storeId', String(storeId))
     if (text) { form.append('text', text) }
+    if (instructions) { form.append('instructions', instructions) }
     if (textLabel) { form.append('textLabel', textLabel) }
     if (sourceMappings && sourceMappings.length) {
       form.append('sourceMappings', JSON.stringify(sourceMappings))
@@ -80,14 +81,15 @@ export class MenuUpdateService {
    * Re-merges documents that were already read against corrected column meanings. This calls no
    * AI provider, so correcting a column costs nothing.
    */
-  Remap (storeId, { documents = [], sourceMappings = [], sourceMetadata = [], sourceMetadataToken = '' } = {}, options = {}) {
+  Remap (storeId, { documents = [], sourceMappings = [], sourceMetadata = [], sourceMetadataToken = '', instructions = '' } = {}, options = {}) {
     return axios
       .post(this._baseUrl + '/ai/menu-update/remap', {
         storeId,
         documents,
         sourceMappings,
         sourceMetadata,
-        sourceMetadataToken
+        sourceMetadataToken,
+        instructions
       }, {
         headers: jsonHeaders(this._init),
         signal: options.signal
