@@ -135,6 +135,24 @@ export class MenuUpdateService {
   }
 
   /**
+   * Settles an operation whose result was never seen.
+   *
+   * Sent the very same signed envelope the apply was given, expired or not — expiry is the
+   * recovery case, so it cannot be what blocks recovery. The server answers Applied or
+   * Cancelled and nothing else: it writes a tombstone under the apply ledger's own primary key,
+   * so exactly one of the two can ever exist and a delayed original can no longer commit.
+   */
+  Cancel (request, options = {}) {
+    return axios
+      .post(this._baseUrl + '/products/menu-update/cancel', request, {
+        headers: jsonHeaders(this._init),
+        signal: options.signal
+      })
+      .then(response => response.data)
+      .catch((error) => { throw toError(error) })
+  }
+
+  /**
    * Asks whether an operation committed. Used after a timeout or an unknown network result so
    * the client never repeats an apply on a guess.
    */

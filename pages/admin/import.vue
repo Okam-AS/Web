@@ -467,12 +467,18 @@
 
           <div v-if="outcomeUnknown" class="error-box" role="alert">
             <p>{{ $i('menuImport_outcomeUnknown') }}</p>
-            <button class="btn-secondary" :disabled="isCheckingStatus" type="button" @click="checkStatus">
+            <button class="btn-secondary" :disabled="isCheckingStatus || isRecovering" type="button" @click="checkStatus">
               {{ $i('menuImport_checkStatus') }}
             </button>
-            <button class="btn-secondary" :disabled="isApplying" type="button" @click="retryPendingApply">
+            <button class="btn-secondary" :disabled="isApplying || isRecovering" type="button" @click="retryPendingApply">
               {{ $i('menuImport_retrySameOperation') }}
             </button>
+            <!-- The way out. Asking the server to settle it is the only thing that can release
+                 this, because only the server can know the operation can no longer commit. -->
+            <button class="btn-secondary" :disabled="isApplying || isRecovering" type="button" @click="settleOperation">
+              {{ isRecovering ? $i('menuImport_settling') : $i('menuImport_settleOperation') }}
+            </button>
+            <p class="helper-text">{{ $i('menuImport_settleHelp') }}</p>
           </div>
 
           <div class="savebar">
@@ -936,6 +942,7 @@ import {
   isAcceptedFile,
   makeRow,
   mergeForAppend,
+  nextAnalysisId,
   mergeVariantGroups,
   nextRowKey,
   normalizeVariantGroups,
@@ -1007,6 +1014,7 @@ export default {
       isApproving: false,
       isApplying: false,
       isCheckingStatus: false,
+      isRecovering: false,
       applyError: '',
       receipt: null,
       lastOperationId: '',
@@ -1562,6 +1570,10 @@ export default {
       const copy = makeRow({
         ...JSON.parse(JSON.stringify(row)),
         rowKey: nextRowKey('copy'),
+        // The copy is the operator's, not the reading's: re-reading the source it came from
+        // must not delete a row they made by hand.
+        origin: 'manual',
+        analysisId: null,
         action: ACTION.create,
         targetProductId: null,
         plannedProductId: null,
@@ -2266,13 +2278,40 @@ export default {
      * never rewrite a product's name or description.
      */
     adoptAnalysis (analysis, { preserveDecisions = false, append = false } = {}) {
-      const previous = preserveDecisions ? this.rows : []
+      // Which reading these rows belong to. A remap re-reads one particular set of documents,
+      // so it may only replace the rows that came from that reading: a dish typed by hand, or a
+      // second menu added through "append", has nothing to do with the columns being corrected
+      // and must still be there afterwards.
+      const analysisId = preserveDecisions && this.analysis && this.analysis.localAnalysisId
+        ? this.analysis.localAnalysisId
+        : nextAnalysisId()
+      // Only the rows of the reading being remapped are the ones to carry decisions from.
+      const previous = preserveDecisions ? this.rows.filter(row => row.analysisId === analysisId) : []
+
+      // Appending renames a row whose key already existed, so the key a reading hands out and
+      // the key its row ended up with can differ. Re-reading that source produces the original
+      // key again, and matching on it alone lost every decision made on a renamed row. The row
+      // keeps the key it has; the reading's own key is what identifies it.
+      const keyBySource = {}
+      previous.forEach((row) => {
+        if (row.sourceRowKey) { keyBySource[row.sourceRowKey] = row.rowKey }
+      })
+
       const fresh = buildDraft(analysis)
         .filter(row => row.inSource)
         .map(row => makeRow({
           ...row,
           origin: 'source',
-          action: row.targetProductId ? ACTION.update : ACTION.create,
+          analysisId,
+          rowKey: keyBySource[row.rowKey] || row.rowKey,
+          sourceRowKey: row.rowKey,
+          // A Skip the reading asked for is kept. When the operator's instructions say to touch
+          // existing products only, the API returns unmatched rows as Skip and says why;
+          // deriving the action from the link alone turned exactly those into new products —
+          // the one thing it had been told not to do.
+          action: row.action === ACTION.skip
+            ? ACTION.skip
+            : (row.targetProductId ? ACTION.update : ACTION.create),
           sourceMeta: {
             name: row.displayName,
             description: row.description || null,
@@ -2293,7 +2332,8 @@ export default {
         merged.rows = carryWorkspaceState(previous, fresh, merged.rows)
       }
 
-      this.analysis = analysis
+      // Stamped on the analysis itself so a later remap knows which rows it owns.
+      this.analysis = { ...analysis, localAnalysisId: analysisId }
       if (!preserveDecisions) {
         const rules = { ...DEFAULT_RULES(), missingChannelRule: 'SamePercent', newProductChannelRule: 'SameAsTakeaway' }
         const preferences = analysis.instructions && analysis.operatorPreferences
@@ -2325,10 +2365,23 @@ export default {
       }
 
       if (append || preserveDecisions) {
+        // Everything that is not being replaced. On a remap that is every manual row and every
+        // earlier source; on an append it is the whole list so far.
+        const kept = preserveDecisions ? this.rows.filter(row => row.analysisId !== analysisId) : this.rows
         // Row keys and new-category keys from two separate readings collide, so both are renamed
-        // and every reference to them moved before the lists are joined.
-        const rekeyed = mergeForAppend(append ? this.rows : [], this.newCategories, incoming)
-        this.rows = append ? [...this.rows, ...rekeyed.rows] : rekeyed.rows
+        // and every reference to them moved before the lists are joined. Rekeying is checked
+        // against the rows that are staying, so a fresh row cannot take a surviving row's key.
+        const rekeyed = mergeForAppend(kept, this.newCategories, incoming)
+
+        if (append) {
+          this.rows = [...kept, ...rekeyed.rows]
+        } else {
+          // Put the re-read rows back where the old ones were, so correcting a column does not
+          // also reorder the list.
+          const at = this.rows.findIndex(row => row.analysisId === analysisId)
+          const insertAt = at < 0 ? kept.length : at
+          this.rows = [...kept.slice(0, insertAt), ...rekeyed.rows, ...kept.slice(insertAt)]
+        }
         // Merged, not replaced. A re-read after a corrected column mapping must not throw away
         // the shared option groups the operator set up in between.
         this.mergeIncomingCategoryVariants(rekeyed.categoryVariants)
@@ -2666,6 +2719,11 @@ export default {
      */
     finishOperation (receipt) {
       this.receipt = receipt || {}
+      // The question it was asking has been answered, so the dialog stops asking it.
+      this.showConfirm = false
+      this.confirmStale = false
+      this.confirmSignature = ''
+      this.confirmReplacement = null
       this.pendingApplyRequest = null
       this.outcomeUnknown = false
       this.applyError = ''
@@ -2730,6 +2788,10 @@ export default {
         if (generation !== this.requestGeneration || operationId !== this.lastOperationId) { return }
         if (status.applied) {
           this.finishOperation(status.receipt)
+        } else if (status.cancelled) {
+          // Settled by a tombstone the server wrote. That is terminal, and unlike `applied:false`
+          // it is an answer rather than an absence of one.
+          this.releaseCancelledOperation()
         } else {
           this.applyError = this.$i('menuImport_statusNotApplied')
         }
@@ -2739,6 +2801,69 @@ export default {
       } finally {
         if (generation === this.requestGeneration) { this.isCheckingStatus = false }
       }
+    },
+    /**
+     * Asks the server to settle an operation whose result was never seen.
+     *
+     * This is the only thing that may release the freeze. A status of `applied:false` is the
+     * absence of an answer — the ledger row only appears on commit, so an apply still in flight
+     * looks exactly like one that never happened — and a 400 from a retry says that attempt was
+     * refused, not that the original cannot still land. Both were treated as verdicts once, and
+     * both left the workspace frozen with no way out.
+     *
+     * The server answers Applied or Cancelled and nothing else. It writes its tombstone under
+     * the apply ledger's own primary key, so exactly one of the two can exist and a delayed
+     * original is refused with nothing written.
+     */
+    async settleOperation () {
+      if (!this.pendingApplyRequest || this.isApplying || this.isRecovering) { return }
+
+      const generation = this.requestGeneration
+      this.isRecovering = true
+      this.applyError = ''
+
+      try {
+        const result = await this._menuUpdateService.Cancel(this.pendingApplyRequest)
+        if (generation !== this.requestGeneration) { return }
+
+        if (result && result.outcome === 'Applied') {
+          // It committed after all, so this is an ordinary success with an ordinary receipt.
+          this.finishOperation(result.receipt)
+        } else if (result && result.outcome === 'Cancelled') {
+          this.releaseCancelledOperation()
+        } else {
+          // An answer that is neither is not an answer. Nothing is released on it.
+          this.applyError = this.$i('menuImport_settleFailed')
+        }
+      } catch (error) {
+        if (generation !== this.requestGeneration || error.cancelled) { return }
+        // Including a 400: a refusal here says this request was rejected, not that the operation
+        // did not commit. The freeze survives every failure of this call.
+        this.applyError = error.message || this.$i('menuImport_settleFailed')
+      } finally {
+        if (generation === this.requestGeneration) { this.isRecovering = false }
+      }
+    },
+    /**
+     * Lets go of an operation the server has confirmed never committed.
+     *
+     * The draft is deliberately kept. Nothing was written, so the work is still wanted — it just
+     * needs a fresh plan, which is safe precisely because the old operation is now known to be
+     * dead rather than merely quiet.
+     */
+    releaseCancelledOperation () {
+      // Whatever the confirmation was showing described a plan that is now dead.
+      this.showConfirm = false
+      this.confirmStale = false
+      this.confirmSignature = ''
+      this.confirmReplacement = null
+      this.outcomeUnknown = false
+      this.pendingApplyRequest = null
+      this.lastOperationId = ''
+      this.applyError = ''
+      this.forgetPendingApply()
+      this.remapNotice = this.$i('menuImport_settledCancelled')
+      this.onPlanChanged()
     },
     /**
      * Sends the very same signed request again. The server keys the operation in its ledger, so
@@ -2857,6 +2982,7 @@ export default {
       this.pendingApplyRequest = null
       this.isApplying = false
       this.isCheckingStatus = false
+      this.isRecovering = false
       this.isAnalyzing = false
       this.isRemapping = false
       this.isValidating = false

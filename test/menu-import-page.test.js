@@ -201,7 +201,8 @@ function build ({ service = {}, selectedAdminStore = 7, storage = makeStorage() 
     Catalogue: jest.fn().mockResolvedValue({ storeId: 7, catalogue, categories }),
     Validate: jest.fn().mockResolvedValue(validation()),
     Apply: jest.fn().mockResolvedValue(receipt()),
-    GetStatus: jest.fn().mockResolvedValue({ applied: false }),
+    GetStatus: jest.fn().mockResolvedValue({ applied: false, cancelled: false }),
+    Cancel: jest.fn().mockResolvedValue({ operationId: 'op-1', storeId: 7, outcome: 'Cancelled', receipt: null, cancelledAt: '2026-09-10T12:00:00' }),
     ...service
   }
 
@@ -568,6 +569,205 @@ describe('appending a second reading', () => {
   })
 })
 
+describe('correcting a column after other work', () => {
+  // A remap re-reads one particular set of documents. Everything else in the list — a dish
+  // typed by hand, a second menu added through "append" — has nothing to do with the columns
+  // being corrected, and used to vanish when they were.
+  const sourceB = {
+    ...analysis,
+    documents: [{ documentName: 'b.pdf' }],
+    rows: [{ ...analysis.rows[0], rowKey: 'b:1', name: 'Fra meny B', suggestedProductId: 'p2' }]
+  }
+  const remappedB = {
+    ...sourceB,
+    rows: [{ ...sourceB.rows[0], name: 'Fra meny B, rettet' }]
+  }
+
+  const buildMixedDraft = () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.catalogueOnly = { catalogue, categories }
+    wrapper.vm.addManualRow()
+    const manual = wrapper.vm.rows[wrapper.vm.rows.length - 1]
+    wrapper.vm.editMetadata(manual, 'name', 'Håndskrevet rett')
+    wrapper.vm.adoptAnalysis(sourceB, { append: true })
+    return { wrapper, stub, manualKey: manual.rowKey }
+  }
+
+  it('keeps the manual row and the earlier source when a later one is re-read', () => {
+    const { wrapper, manualKey } = buildMixedDraft()
+    expect(wrapper.vm.rows).toHaveLength(4)
+
+    wrapper.vm.adoptAnalysis(remappedB, { preserveDecisions: true })
+
+    expect(wrapper.vm.rows).toHaveLength(4)
+    const manual = wrapper.vm.rows.find(row => row.rowKey === manualKey)
+    expect(manual).toBeTruthy()
+    // Its own edits survive too, not just the row.
+    expect(manual.metadataEdits.name).toBe('Håndskrevet rett')
+    // Source A is untouched.
+    expect(wrapper.vm.rows.some(row => row.rowKey === 'n:1')).toBe(true)
+    expect(wrapper.vm.rows.some(row => row.rowKey === 'n:2')).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('replaces only the re-read rows, with the corrected reading', () => {
+    const { wrapper } = buildMixedDraft()
+
+    wrapper.vm.adoptAnalysis(remappedB, { preserveDecisions: true })
+
+    const fromB = wrapper.vm.rows.filter(row => row.displayName && row.displayName.startsWith('Fra meny B'))
+    expect(fromB).toHaveLength(1)
+    expect(fromB[0].displayName).toBe('Fra meny B, rettet')
+    wrapper.destroy()
+  })
+
+  it('leaves the re-read rows where they were rather than moving them to the end', () => {
+    const { wrapper } = buildMixedDraft()
+    const before = wrapper.vm.rows.findIndex(row => row.analysisId === wrapper.vm.analysis.localAnalysisId)
+
+    wrapper.vm.adoptAnalysis(remappedB, { preserveDecisions: true })
+
+    expect(wrapper.vm.rows.findIndex(row => row.displayName === 'Fra meny B, rettet')).toBe(before)
+    wrapper.destroy()
+  })
+
+  it('carries decisions from the re-read source only', () => {
+    const { wrapper } = buildMixedDraft()
+    const bRow = wrapper.vm.rows.find(row => row.rowKey === 'b:1')
+    wrapper.vm.setManual(bRow, 'takeaway', '333')
+
+    wrapper.vm.adoptAnalysis(remappedB, { preserveDecisions: true })
+
+    const carried = wrapper.vm.rows.find(row => row.rowKey === 'b:1')
+    expect(wrapper.vm.priceValue(carried, 'takeaway')).toBe(333)
+    wrapper.destroy()
+  })
+
+  it('survives a reload before the second source is added', async () => {
+    // A counter restarts at zero on reload, so a restored reading and a later one would share
+    // an id — and remapping the later one would delete the restored rows.
+    const storage = makeStorage()
+    const first = build({ storage })
+    first.wrapper.vm.adoptAnalysis(analysis)
+    first.wrapper.vm.saveDraft()
+    first.wrapper.destroy()
+
+    const { wrapper } = build({ storage })
+    await flush()
+    expect(wrapper.vm.rows).toHaveLength(2)
+
+    wrapper.vm.adoptAnalysis(sourceB, { append: true })
+    expect(wrapper.vm.rows).toHaveLength(3)
+
+    wrapper.vm.adoptAnalysis(remappedB, { preserveDecisions: true })
+
+    // The restored reading is still here; only B was re-read.
+    expect(wrapper.vm.rows).toHaveLength(3)
+    expect(wrapper.vm.rows.some(row => row.rowKey === 'n:1')).toBe(true)
+    expect(wrapper.vm.rows.some(row => row.rowKey === 'n:2')).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('keeps decisions made on a row whose key was changed by appending', () => {
+    // Appending rekeys a colliding row, so the fresh reading's key and the stored one differ.
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.adoptAnalysis({ ...sourceB, rows: [{ ...sourceB.rows[0], rowKey: 'n:1' }] }, { append: true })
+
+    const appended = wrapper.vm.rows[2]
+    expect(appended.rowKey).not.toBe('n:1')
+    wrapper.vm.setManual(appended, 'takeaway', '444')
+    wrapper.vm.editMetadata(appended, 'description', 'min tekst')
+    wrapper.vm.linkProduct(appended, 'p2')
+
+    wrapper.vm.adoptAnalysis({ ...remappedB, rows: [{ ...remappedB.rows[0], rowKey: 'n:1' }] }, { preserveDecisions: true })
+
+    const after = wrapper.vm.rows.find(row => row.analysisId === wrapper.vm.analysis.localAnalysisId)
+    expect(wrapper.vm.priceValue(after, 'takeaway')).toBe(444)
+    expect(after.metadataEdits.description).toBe('min tekst')
+    expect(after.targetProductId).toBe('p2')
+    wrapper.destroy()
+  })
+
+  it('treats a duplicated source row as the operator\'s own', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    wrapper.vm.duplicateRow(wrapper.vm.rows[0])
+    const copy = wrapper.vm.rows[1]
+    expect(copy.analysisId).toBeNull()
+
+    wrapper.vm.adoptAnalysis(analysis, { preserveDecisions: true })
+
+    // Re-reading the source it was copied from must not delete a row made by hand.
+    expect(wrapper.vm.rows.some(row => row.rowKey === copy.rowKey)).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('does not let a re-read row take a surviving row\'s key', () => {
+    const { wrapper } = buildMixedDraft()
+
+    wrapper.vm.adoptAnalysis({ ...remappedB, rows: [{ ...remappedB.rows[0], rowKey: 'n:1' }] }, { preserveDecisions: true })
+
+    const keys = wrapper.vm.rows.map(row => row.rowKey)
+    expect(new Set(keys).size).toBe(keys.length)
+    wrapper.destroy()
+  })
+})
+
+describe('when the instructions say to touch existing products only', () => {
+  it('keeps a Skip the reading asked for instead of turning it into a new product', () => {
+    // The API returns unmatched rows as Skip and says why. Deriving the action from the link
+    // alone turned exactly those into creations — the one thing it had been told not to do.
+    const updateExistingOnly = {
+      ...analysis,
+      operatorPreferences: { updateExistingOnly: true },
+      rows: [
+        { ...analysis.rows[0], suggestedAction: 'Update', suggestedProductId: 'p1' },
+        {
+          ...analysis.rows[1],
+          suggestedAction: 'Skip',
+          suggestedProductId: null,
+          suggestedReason: 'Instruksjonene ber om bare eksisterende produkter.',
+          warnings: [{ code: 'documentNotice', message: 'Hoppet over: finnes ikke fra før.' }]
+        }
+      ]
+    }
+
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(updateExistingOnly)
+
+    expect(wrapper.vm.rows.map(row => row.action)).toEqual(['Update', 'Skip'])
+    // Nothing is being created, so nothing is proposed for creation either.
+    expect(wrapper.vm.rows[1].newProduct).toBeNull()
+    expect(wrapper.vm.countBy('Create')).toBe(0)
+    wrapper.destroy()
+  })
+
+  it('still lets the operator overrule that row', () => {
+    const skipped = {
+      ...analysis,
+      rows: [analysis.rows[0], { ...analysis.rows[1], suggestedAction: 'Skip', suggestedProductId: null }]
+    }
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(skipped)
+
+    wrapper.vm.restoreRow(wrapper.vm.rows[1])
+
+    expect(wrapper.vm.rows[1].action).toBe('Create')
+    expect(wrapper.vm.rows[1].newProduct).toBeTruthy()
+    wrapper.destroy()
+  })
+
+  it('still defaults an unmatched row to Create when nothing said otherwise', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+
+    expect(wrapper.vm.rows.map(row => row.action)).toEqual(['Update', 'Create'])
+    wrapper.destroy()
+  })
+})
+
 describe('an apply whose result was never seen', () => {
   it('freezes the plan and offers only status or the same operation again', async () => {
     const failure = Object.assign(new Error('network'), { status: 0 })
@@ -670,6 +870,138 @@ describe('an apply whose result was never seen', () => {
     expect(wrapper.vm.outcomeUnknown).toBe(false)
     expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
     wrapper.destroy()
+  })
+})
+
+describe('settling an apply that was never answered', () => {
+  const frozen = async (service = {}) => {
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const storage = makeStorage()
+    const built = build({ storage, service: { Apply: jest.fn().mockRejectedValue(failure), ...service } })
+    built.wrapper.vm.adoptAnalysis(analysis)
+    built.wrapper.vm.validation = validation()
+    await approveThroughDialog(built.wrapper)
+    expect(built.wrapper.vm.outcomeUnknown).toBe(true)
+    return built
+  }
+
+  it('stays frozen when the server says only that it has not been applied', async () => {
+    // The ledger row appears on commit, so an apply still in flight looks exactly like one that
+    // never happened. That is an absence of an answer, not an answer.
+    const { wrapper } = await frozen({ GetStatus: jest.fn().mockResolvedValue({ applied: false, cancelled: false }) })
+
+    await wrapper.vm.checkStatus()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(wrapper.vm.pendingApplyRequest).toBeTruthy()
+    wrapper.destroy()
+  })
+
+  it('stays frozen when retrying the request is refused as expired', async () => {
+    // A 400 says this attempt was rejected, not that the original cannot still land.
+    const expired = Object.assign(new Error('plan expired'), { status: 400 })
+    const { wrapper, storage } = await frozen()
+    wrapper.vm._menuUpdateService.Apply = jest.fn().mockRejectedValue(expired)
+
+    await wrapper.vm.retryPendingApply()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(storage.contents['menuImport.pending.u1.7']).toBeDefined()
+    wrapper.destroy()
+  })
+
+  it('releases and keeps the draft when the server confirms it never committed', async () => {
+    const { wrapper, stub, storage } = await frozen()
+    const rowsBefore = wrapper.vm.rows.length
+
+    await wrapper.vm.settleOperation()
+
+    // Sent back the very envelope that was persisted, so the server settles that operation.
+    expect(stub.Cancel).toHaveBeenCalledTimes(1)
+    expect(stub.Cancel.mock.calls[0][0].operationId).toBe('op-1')
+
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(wrapper.vm.isLocked).toBe(false)
+    expect(wrapper.vm.pendingApplyRequest).toBeNull()
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    // Nothing was written, so the work is still wanted.
+    expect(wrapper.vm.rows).toHaveLength(rowsBefore)
+    expect(wrapper.vm.receipt).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('lets a fresh plan be built after it has been settled', async () => {
+    const { wrapper, stub } = await frozen()
+    await wrapper.vm.settleOperation()
+
+    stub.Validate.mockClear()
+    await wrapper.vm.validate()
+
+    // Safe precisely because the old operation is now known to be dead rather than merely quiet.
+    expect(stub.Validate).toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('shows the receipt when it turns out to have committed after all', async () => {
+    const { wrapper, storage } = await frozen({
+      Cancel: jest.fn().mockResolvedValue({ operationId: 'op-1', storeId: 7, outcome: 'Applied', receipt: receipt(), cancelledAt: null })
+    })
+
+    await wrapper.vm.settleOperation()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(wrapper.vm.receipt.updatedProductIds).toEqual(['p1'])
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    wrapper.destroy()
+  })
+
+  it('stays frozen when settling it fails', async () => {
+    const refused = Object.assign(new Error('bad signature'), { status: 400 })
+    const { wrapper, storage } = await frozen({ Cancel: jest.fn().mockRejectedValue(refused) })
+
+    await wrapper.vm.settleOperation()
+
+    // A refusal here says this request was rejected, not that the operation did not commit.
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    expect(wrapper.vm.pendingApplyRequest).toBeTruthy()
+    expect(storage.contents['menuImport.pending.u1.7']).toBeDefined()
+    wrapper.destroy()
+  })
+
+  it('stays frozen on an answer that is neither outcome', async () => {
+    const { wrapper } = await frozen({ Cancel: jest.fn().mockResolvedValue({ operationId: 'op-1' }) })
+
+    await wrapper.vm.settleOperation()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('accepts a tombstone reported through an ordinary status check', async () => {
+    const { wrapper } = await frozen({
+      GetStatus: jest.fn().mockResolvedValue({ applied: false, cancelled: true, cancelledAt: '2026-09-10T12:00:00' })
+    })
+
+    await wrapper.vm.checkStatus()
+
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
+    expect(wrapper.vm.rows.length).toBeGreaterThan(0)
+    wrapper.destroy()
+  })
+
+  it('survives a reload and can be settled afterwards', async () => {
+    const { wrapper, storage } = await frozen()
+    wrapper.destroy()
+
+    const reloaded = build({ storage })
+    await flush()
+    expect(reloaded.wrapper.vm.outcomeUnknown).toBe(true)
+
+    await reloaded.wrapper.vm.settleOperation()
+
+    expect(reloaded.wrapper.vm.outcomeUnknown).toBe(false)
+    expect(storage.contents['menuImport.pending.u1.7']).toBeUndefined()
+    reloaded.wrapper.destroy()
   })
 })
 

@@ -274,6 +274,18 @@ export function nextRowKey (prefix) {
   return (prefix || 'manual') + '-' + Date.now().toString(36) + '-' + rowCounter
 }
 
+/**
+ * A durable id for one reading of one set of documents.
+ *
+ * Unique rather than sequential on purpose. A counter restarts at zero when the page reloads,
+ * so a draft restored from storage would carry ids a later reading then hands out again — and
+ * remapping that reading would delete the restored rows as if they were its own. There is
+ * nothing to advance past when the id cannot be reissued.
+ */
+export function nextAnalysisId () {
+  return 'read-' + nextRowKey('id')
+}
+
 /** The one row shape. Every entry point produces this. */
 export function makeRow (overrides = {}) {
   return {
@@ -306,6 +318,12 @@ export function makeRow (overrides = {}) {
     // Where the row came from. Only `source` rows treat their metadata as a suggestion; a row
     // the operator authored carries its fields as the write they asked for.
     origin: 'manual',
+    // Which reading produced this row, so a remap can replace its own rows and leave manual
+    // rows and earlier sources where they are. Null for anything not read from a document.
+    analysisId: null,
+    // The key the reading itself gave this row. Appending renames a colliding key, so this is
+    // the only stable way to recognise the same line when that reading is read again.
+    sourceRowKey: null,
     // What the catalogue holds today for the linked product. Display only.
     current: null,
     // What a document or a legacy file said. A suggestion for a linked row.
@@ -724,6 +742,8 @@ export function toDraftFile (storeId, rows, categoryVariants, newCategories, rul
       action: row.action,
       targetProductId: row.targetProductId,
       origin: row.origin,
+      analysisId: row.analysisId,
+      sourceRowKey: row.sourceRowKey,
       displayName: row.displayName,
       sizeLabel: row.sizeLabel,
       menuNumber: row.menuNumber,
@@ -813,6 +833,8 @@ export function mergeForAppend (existingRows, existingCategories, incoming) {
     let rowKey = row.rowKey
     while (usedRowKeys.has(rowKey)) { rowKey = nextRowKey('appended') }
     usedRowKeys.add(rowKey)
+    // Remember what the reading called it, so re-reading that source can still find this row.
+    const sourceRowKey = row.sourceRowKey || row.rowKey
 
     const metadataEdits = { ...(row.metadataEdits || {}) }
     if (metadataEdits.newCategoryKey) { metadataEdits.newCategoryKey = remapKey(metadataEdits.newCategoryKey) }
@@ -821,7 +843,7 @@ export function mergeForAppend (existingRows, existingCategories, incoming) {
       ? { ...row.newProduct, newCategoryKey: remapKey(row.newProduct.newCategoryKey) }
       : row.newProduct
 
-    return { ...row, rowKey, metadataEdits, newProduct }
+    return { ...row, rowKey, sourceRowKey, metadataEdits, newProduct }
   })
 
   const categoryVariants = (incoming.categoryVariants || []).map(group => ({
@@ -851,6 +873,8 @@ export function carryWorkspaceState (previousRows, nextRows, carried) {
     return {
       ...row,
       origin: before.origin || row.origin,
+      analysisId: row.analysisId,
+      sourceRowKey: row.sourceRowKey,
       metadataEdits: { ...(before.metadataEdits || {}) },
       // A fresh reading may propose different groups, but an operator who edited them has said
       // what they want; `null` here means they never touched them and the new proposal stands.
