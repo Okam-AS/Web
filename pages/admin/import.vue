@@ -3365,6 +3365,9 @@ export default {
   // Legible against the dimmed table rather than against the white sheet it used to sit on.
   ::v-deep .close-button {
     background: #fff;
+    // CloseButton draws a white glyph on a dark chip. Inverting the chip without inverting the
+    // glyph leaves a blank white square.
+    color: #292c34;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   }
