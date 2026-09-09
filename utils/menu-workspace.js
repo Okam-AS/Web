@@ -126,6 +126,76 @@ export function normalizeVisibleColumns (ids) {
 const hasOwn = (object, key) => !!object && Object.prototype.hasOwnProperty.call(object, key)
 
 /**
+ * The kinds of file a menu can arrive as.
+ *
+ * The extension is the decision, not the MIME type. Browsers report nothing at all for a file
+ * dragged from some applications, report `application/octet-stream` for others, and disagree
+ * with each other about spreadsheets — so a MIME check alone silently refuses files that are
+ * perfectly readable. MIME types are still listed because the picker uses them to filter, and a
+ * recognised one is accepted even when the extension is missing.
+ *
+ * Nothing is listed here that the reader cannot actually read. Claiming a format and then
+ * failing on it is worse than saying no up front.
+ */
+export const ACCEPTED_FILES = [
+  { extension: 'pdf', label: 'PDF', mime: ['application/pdf'] },
+  { extension: 'jpg', label: 'JPG', mime: ['image/jpeg'] },
+  { extension: 'jpeg', label: 'JPG', mime: ['image/jpeg'] },
+  { extension: 'png', label: 'PNG', mime: ['image/png'] },
+  { extension: 'webp', label: 'WEBP', mime: ['image/webp'] },
+  { extension: 'csv', label: 'CSV', mime: ['text/csv'] },
+  { extension: 'tsv', label: 'TSV', mime: ['text/tab-separated-values'] },
+  { extension: 'txt', label: 'TXT', mime: ['text/plain'] },
+  {
+    extension: 'xlsx',
+    label: 'XLSX',
+    mime: ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+  },
+  { extension: 'xls', label: 'XLS', mime: ['application/vnd.ms-excel'] }
+]
+
+/** What the file picker filters on: the extensions, plus the MIME types worth hinting at. */
+export const ACCEPT_ATTRIBUTE = [
+  ...ACCEPTED_FILES.map(kind => '.' + kind.extension),
+  ...[...new Set(ACCEPTED_FILES.flatMap(kind => kind.mime))]
+].join(',')
+
+/** The extensions, in order, for the sentence that lists what can be uploaded. */
+export const ACCEPTED_EXTENSIONS = ACCEPTED_FILES.map(kind => kind.extension)
+
+export const fileExtension = (name) => {
+  const match = /\.([a-z0-9]+)$/i.exec(String(name || '').trim())
+  return match ? match[1].toLowerCase() : ''
+}
+
+/**
+ * Which of the accepted kinds a file is, or null.
+ *
+ * The extension decides. A file with no usable extension is matched on its reported MIME type
+ * instead, which covers a paste or a drag that arrives named nothing in particular; a file whose
+ * extension is not on the list is refused whatever it claims to be, so a `.docx` sent as
+ * `application/octet-stream` cannot slip through as readable.
+ */
+export function acceptedKind (file) {
+  if (!file) { return null }
+  const extension = fileExtension(file.name)
+  if (extension) {
+    return ACCEPTED_FILES.find(kind => kind.extension === extension) || null
+  }
+  const mime = String(file.type || '').toLowerCase()
+  if (!mime) { return null }
+  return ACCEPTED_FILES.find(kind => kind.mime.includes(mime)) || null
+}
+
+export const isAcceptedFile = file => acceptedKind(file) !== null
+
+/** The short badge shown beside a chosen file, in place of a hardcoded "PDF". */
+export function fileBadge (file) {
+  const kind = acceptedKind(file)
+  return kind ? kind.label : (fileExtension(file && file.name) || '?').toUpperCase()
+}
+
+/**
  * Where a dropdown panel goes so that all of it is on screen.
  *
  * Anchoring a fixed-width panel to the right edge of its trigger only works while the trigger is

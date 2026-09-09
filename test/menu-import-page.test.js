@@ -1729,6 +1729,125 @@ describe('re-importing a menu that has not changed', () => {
   })
 })
 
+describe('choosing menu files', () => {
+  const file = (name, type = '', size = 1000) => ({ name, type, size })
+
+  it('takes a mixed pick of everything the reader can read', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.addFiles([
+      file('meny.pdf', 'application/pdf'),
+      file('tavle.jpg', 'image/jpeg'),
+      file('priser.xlsx', ''),
+      file('drikke.csv', 'application/octet-stream'),
+      file('notater.txt', 'text/plain')
+    ])
+
+    expect(wrapper.vm.files).toHaveLength(5)
+    expect(wrapper.vm.analysisError).toBe('')
+    expect(wrapper.vm.canAnalyze).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('accepts the same mixture dropped rather than picked', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.onDrop({ dataTransfer: { files: [file('meny.webp', 'image/webp'), file('meny.tsv', '')] } })
+
+    expect(wrapper.vm.files.map(item => item.name)).toEqual(['meny.webp', 'meny.tsv'])
+    wrapper.destroy()
+  })
+
+  it('names the files it cannot read, and keeps the ones it can', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.addFiles([file('meny.pdf', 'application/pdf'), file('meny.docx'), file('bilde.heic')])
+
+    expect(wrapper.vm.files.map(item => item.name)).toEqual(['meny.pdf'])
+    // Listed by name: "2 files were not added" leaves someone working out which two.
+    expect(wrapper.vm.analysisError).toContain('meny.docx')
+    expect(wrapper.vm.analysisError).toContain('bilde.heic')
+    wrapper.destroy()
+  })
+
+  it('does not add the same file twice, however it arrived', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.addFiles([file('meny.pdf', 'application/pdf')])
+    wrapper.vm.onDrop({ dataTransfer: { files: [file('meny.pdf', 'application/pdf')] } })
+
+    expect(wrapper.vm.files).toHaveLength(1)
+    wrapper.destroy()
+  })
+
+  it('applies the same limits whatever the format', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.addFiles([file('stor.xlsx', '', 20 * 1024 * 1024)])
+    expect(wrapper.vm.uploadTooLarge).toBe(true)
+    expect(wrapper.vm.analysisError).toContain('menuImport_tooLarge')
+
+    wrapper.vm.removeFile(0)
+    wrapper.vm.addFiles(Array.from({ length: 9 }, (_unused, index) => file('meny' + index + '.png', 'image/png')))
+    expect(wrapper.vm.uploadTooLarge).toBe(true)
+    expect(wrapper.vm.canAnalyze).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('keeps a refusal on screen when the size check afterwards is happy', () => {
+    const { wrapper } = build()
+
+    wrapper.vm.addFiles([file('meny.pdf', 'application/pdf'), file('meny.docx')])
+
+    // The size was fine, but a file really was refused and that is still true.
+    expect(wrapper.vm.uploadTooLarge).toBe(false)
+    expect(wrapper.vm.analysisError).toContain('meny.docx')
+    wrapper.destroy()
+  })
+
+  it('sends the typed text as instructions when there are files, and as the menu when there are none', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.pastedText = 'Behold navnene'
+    wrapper.vm.addFiles([file('meny.xlsx', '')])
+
+    await wrapper.vm.runAnalysis()
+
+    expect(stub.Analyze.mock.calls[0][1]).toMatchObject({ instructions: 'Behold navnene', text: '' })
+
+    const second = build()
+    second.wrapper.vm.pastedText = 'Pizza 200'
+    await second.wrapper.vm.runAnalysis()
+    expect(second.stub.Analyze.mock.calls[0][1]).toMatchObject({ text: 'Pizza 200', instructions: '' })
+
+    second.wrapper.destroy()
+    wrapper.destroy()
+  })
+
+  it('offers the picker the formats it accepts and nothing it does not', async () => {
+    const { wrapper } = build()
+    wrapper.vm.showSource = true
+    await wrapper.vm.$nextTick()
+    const accept = wrapper.find('input[type="file"]').attributes('accept')
+
+    expect(accept).toContain('.pdf')
+    expect(accept).toContain('.xlsx')
+    expect(accept).toContain('image/png')
+    expect(accept).not.toContain('.docx')
+    wrapper.destroy()
+  })
+
+  it('badges each chosen file with what it actually is', async () => {
+    const { wrapper } = build()
+    wrapper.vm.showSource = true
+    wrapper.vm.addFiles([file('priser.xlsx', ''), file('tavle.jpeg', 'image/jpeg')])
+    await wrapper.vm.$nextTick()
+
+    const badges = wrapper.findAll('.file-tag').wrappers.map(item => item.text())
+    expect(badges).toEqual(['XLSX', 'JPG'])
+    wrapper.destroy()
+  })
+})
+
 describe('while a menu is being read', () => {
   const reading = () => {
     let release

@@ -94,7 +94,7 @@
         <!-- ------------------------------------------------------------ source bar -->
         <div class="sourcebar">
           <div class="source-left">
-            <span class="file-icon">{{ files.length ? 'PDF' : $i('menuImport_sourceIconDraft') }}</span>
+            <span class="file-icon">{{ files.length ? fileBadge(files[0]) : $i('menuImport_sourceIconDraft') }}</span>
             <div>
               <strong>{{ sourceHeadline }}</strong>
               <small>{{ sourceDetail }}</small>
@@ -615,15 +615,16 @@
             @drop.prevent="onDrop"
           >
             <label class="upload-label">
-              <strong>{{ $i('menuImport_choosePdfs') }}</strong>
-              <input ref="fileInput" type="file" accept="application/pdf" multiple @change="onFilesPicked">
+              <strong>{{ $i('menuImport_chooseFiles') }}</strong>
+              <input ref="fileInput" type="file" :accept="acceptAttribute" multiple @change="onFilesPicked">
             </label>
+            <small>{{ $i('menuImport_supportedFormats', { formats: supportedFormats }) }}</small>
             <small>{{ $i('menuImport_uploadLimits', { files: limits.maxFiles, perFile: limits.maxFileMb, total: limits.maxTotalMb }) }}</small>
           </div>
 
           <ul v-if="files.length" class="source-list">
             <li v-for="(file, index) in files" :key="file.name + index">
-              <span class="pdf-tag">PDF</span>
+              <span class="file-tag">{{ fileBadge(file) }}</span>
               <div>
                 <strong>{{ file.name }}</strong>
                 <small>{{ formatBytes(file.size) }}</small>
@@ -908,6 +909,8 @@ import {
   setManualPrice
 } from '~/utils/menu-update'
 import {
+  ACCEPTED_EXTENSIONS,
+  ACCEPT_ATTRIBUTE,
   COLUMNS,
   COMPACT_COLUMNS,
   METADATA_FIELDS,
@@ -921,6 +924,7 @@ import {
   eatInAddition,
   IDENTITY_COLUMN,
   alreadyMigrated,
+  fileBadge,
   findLegacyDraft,
   forgetLegacyDraft,
   fromEditorVariant,
@@ -929,6 +933,7 @@ import {
   LEGACY_ROWS_KEY,
   legacyParts,
   hasMetadataPatch,
+  isAcceptedFile,
   makeRow,
   mergeForAppend,
   mergeVariantGroups,
@@ -1064,6 +1069,9 @@ export default {
       return this.categories.map(category => ({ value: category.categoryId, label: category.name }))
     },
     identityColumn () { return IDENTITY_COLUMN },
+    acceptAttribute () { return ACCEPT_ATTRIBUTE },
+    /** The readable formats, listed the way a sentence lists them. */
+    supportedFormats () { return ACCEPTED_EXTENSIONS.map(extension => extension.toUpperCase()).join(', ') },
     /**
      * What this store is called.
      *
@@ -2115,11 +2123,27 @@ export default {
       this.isDragging = false
       this.addFiles(Array.from((event.dataTransfer && event.dataTransfer.files) || []))
     },
+    /**
+     * Takes the files this reader can actually read, and names the ones it cannot.
+     *
+     * The refused ones are listed by name rather than counted: "3 files were not added" leaves
+     * someone looking at a list of eight trying to work out which three.
+     */
     addFiles (incoming) {
       if (!this.guardEdit()) { return }
-      const pdfs = incoming.filter(file => file.type === 'application/pdf' || /\.pdf$/i.test(file.name))
-      if (incoming.length - pdfs.length > 0) { this.analysisError = this.$i('menuImport_onlyPdf') }
-      pdfs.forEach((file) => {
+
+      const accepted = incoming.filter(isAcceptedFile)
+      const refused = incoming.filter(file => !isAcceptedFile(file))
+
+      this.analysisError = refused.length
+        ? this.$i('menuImport_unsupportedFiles', {
+          names: refused.map(file => file.name).join(', '),
+          formats: this.supportedFormats
+        })
+        : ''
+
+      accepted.forEach((file) => {
+        // The same file chosen twice is the same file, whether it was picked or dropped.
         if (!this.files.some(existing => existing.name === file.name && existing.size === file.size)) {
           this.files.push(file)
         }
@@ -2139,9 +2163,11 @@ export default {
       if (this.uploadTooLarge) {
         this.analysisError = tooLarge
       } else if (this.analysisError === tooLarge) {
+        // Only clears its own message: a note about a file that was refused is still true.
         this.analysisError = ''
       }
     },
+    fileBadge,
     formatBytes (bytes) {
       return this.$i('menuImport_megabytes', { value: (bytes / (1024 * 1024)).toFixed(1) })
     },
@@ -3569,7 +3595,7 @@ export default {
   small { color: #64748b; font-size: 0.82em; }
 }
 
-.pdf-tag {
+.file-tag {
   padding: 4px 8px; border-radius: 6px;
   background: #f1f5f9; color: #64748b; font-size: 0.72em; font-weight: 700;
 }

@@ -7,8 +7,13 @@ import {
   attachCurrent,
   buildNewProduct,
   carryWorkspaceState,
+  ACCEPTED_EXTENSIONS,
+  ACCEPT_ATTRIBUTE,
+  acceptedKind,
   displayValue,
   dropdownPosition,
+  fileBadge,
+  isAcceptedFile,
   eatInAddition,
   fromEditorVariant,
   fromLegacyDraft,
@@ -441,6 +446,51 @@ describe('columns', () => {
     const storage = { getItem: () => { throw new Error('blocked') }, setItem: () => { throw new Error('blocked') } }
     expect(() => writeColumnPreference(storage, 'u1', 7, { chosen: true, visible: [] })).not.toThrow()
     expect(readColumnPreference(storage, 'u1', 7)).toBeNull()
+  })
+})
+
+describe('which files a menu can arrive as', () => {
+  const file = (name, type = '') => ({ name, type, size: 1000 })
+
+  it('takes every format the reader can actually read', () => {
+    ACCEPTED_EXTENSIONS.forEach((extension) => {
+      expect(isAcceptedFile(file('meny.' + extension))).toBe(true)
+    })
+  })
+
+  it('decides on the extension, not on what the browser calls the file', () => {
+    // Browsers report nothing for some drags and application/octet-stream for others, and
+    // disagree about spreadsheets. A MIME check alone refuses files that are perfectly readable.
+    expect(isAcceptedFile(file('meny.xlsx', ''))).toBe(true)
+    expect(isAcceptedFile(file('meny.csv', 'application/octet-stream'))).toBe(true)
+    expect(isAcceptedFile(file('MENY.PDF', ''))).toBe(true)
+  })
+
+  it('falls back to the MIME type only when there is no extension to read', () => {
+    expect(isAcceptedFile(file('scan', 'image/png'))).toBe(true)
+    expect(isAcceptedFile(file('noe', ''))).toBe(false)
+  })
+
+  it('refuses a format the reader cannot read, whatever it claims to be', () => {
+    // Saying yes to these and then failing on them is worse than saying no here.
+    ;['meny.docx', 'meny.heic', 'meny.gif', 'meny.svg', 'meny.pages', 'meny.zip'].forEach((name) => {
+      expect(isAcceptedFile(file(name))).toBe(false)
+    })
+    // Not even when it lies about its type.
+    expect(isAcceptedFile(file('meny.docx', 'application/pdf'))).toBe(false)
+  })
+
+  it('offers the picker both the extensions and the types', () => {
+    expect(ACCEPT_ATTRIBUTE).toContain('.xlsx')
+    expect(ACCEPT_ATTRIBUTE).toContain('image/webp')
+    expect(ACCEPT_ATTRIBUTE).not.toContain('.docx')
+  })
+
+  it('badges each file with what it is, rather than assuming PDF', () => {
+    expect(fileBadge(file('meny.pdf'))).toBe('PDF')
+    expect(fileBadge(file('meny.jpeg'))).toBe('JPG')
+    expect(fileBadge(file('meny.xlsx'))).toBe('XLSX')
+    expect(acceptedKind(file('meny.tsv')).label).toBe('TSV')
   })
 })
 
