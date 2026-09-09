@@ -324,6 +324,10 @@ export function makeRow (overrides = {}) {
     // The key the reading itself gave this row. Appending renames a colliding key, so this is
     // the only stable way to recognise the same line when that reading is read again.
     sourceRowKey: null,
+    // True once the operator has picked this row's category themselves. A reading proposes a
+    // category from the words on the menu; that proposal must never be made again over a choice
+    // somebody has already made.
+    categoryChosen: false,
     // What the catalogue holds today for the linked product. Display only.
     current: null,
     // What a document or a legacy file said. A suggestion for a linked row.
@@ -340,6 +344,10 @@ export function makeRow (overrides = {}) {
 /** A metadata value as the table and drawer should show it: edit, else current, else source. */
 export function displayValue (row, field) {
   if (hasOwn(row.metadataEdits, field)) { return row.metadataEdits[field] }
+  // A created product's name is shown exactly as it will be stored, size and number included.
+  // Approving a list that shows one dish name twice and then creating two differently named
+  // products would be approving something other than what was read.
+  if (field === 'name' && row.action === ACTION.create) { return newProductName(row) }
   if (row.action !== ACTION.create && row.current && row.current[field] !== undefined && row.current[field] !== null) {
     return row.current[field]
   }
@@ -359,19 +367,30 @@ export function sourceDiffers (row, field) {
   return String(row.sourceMeta[field]) !== String(current === undefined || current === null ? '' : current)
 }
 
-/** Records an explicit edit. Setting a field back to its current value drops the patch again. */
+/**
+ * Records an explicit edit. Setting a field back to its current value drops the patch again.
+ *
+ * The object is replaced rather than added to. Vue 2 observes the properties an object had when
+ * it was made reactive and nothing after that, so adding a key to an empty `metadataEdits` — the
+ * state every row starts in — changed the draft without anything noticing. The row watcher never
+ * fired, the autosave was never scheduled, and a metadata-only edit was gone after a reload
+ * despite having validated successfully.
+ */
 export function setMetadata (row, field, value) {
   const current = row.action !== ACTION.create && row.current ? row.current[field] : undefined
   if (current !== undefined && current !== null && sameValue(current, value)) {
-    delete row.metadataEdits[field]
-  } else {
-    row.metadataEdits[field] = value
+    return clearMetadata(row, field)
   }
+  row.metadataEdits = { ...row.metadataEdits, [field]: value }
   return row
 }
 
+/** Takes an edit back off, and is seen doing it, for the same reason as above. */
 export function clearMetadata (row, field) {
-  delete row.metadataEdits[field]
+  if (!hasOwn(row.metadataEdits, field)) { return row }
+  const next = { ...row.metadataEdits }
+  delete next[field]
+  row.metadataEdits = next
   return row
 }
 
@@ -854,6 +873,7 @@ export function toDraftFile (storeId, rows, categoryVariants, newCategories, rul
       targetProductId: row.targetProductId,
       origin: row.origin,
       analysisId: row.analysisId,
+      categoryChosen: row.categoryChosen,
       sourceRowKey: row.sourceRowKey,
       displayName: row.displayName,
       sizeLabel: row.sizeLabel,
@@ -987,6 +1007,9 @@ export function carryWorkspaceState (previousRows, nextRows, carried) {
       analysisId: row.analysisId,
       sourceRowKey: row.sourceRowKey,
       metadataEdits: { ...(before.metadataEdits || {}) },
+      // Carried with the edits it belongs to: without it the re-read row looks untouched and
+      // the source's category is proposed straight over the operator's choice.
+      categoryChosen: !!before.categoryChosen,
       // A fresh reading may propose different groups, but an operator who edited them has said
       // what they want; `null` here means they never touched them and the new proposal stands.
       variantGroups: before.variantGroups !== null && before.variantGroups !== undefined
@@ -1295,6 +1318,28 @@ export function metadataFor (row) {
  * Fills the create payload from the same edits the table shows, so what is on screen is what is
  * created. Category suggestions come from the store's own rates, never a fixed number.
  */
+/**
+ * The name a created product is actually stored under.
+ *
+ * Two sizes of one dish are two products, and the size is the only thing telling them apart —
+ * it is review data, not something the product carries separately, so it has to be in the name
+ * or it is lost the moment the draft is saved. The same goes for the menu number, which is what
+ * the next import reads the dish back by.
+ *
+ * A name the operator typed is theirs and wins outright. Everything else is formatted from what
+ * the source said, which is why the bare extracted name must not stand in for it: one dish name
+ * repeated at two prices is not a menu. Nothing here knows any particular menu — the number and
+ * the size are whatever the reading found, and a dish carrying neither is formatted from its
+ * name alone.
+ */
+export function plannedProductName (row) {
+  if (hasOwn(row.metadataEdits, 'name')) {
+    const edited = row.metadataEdits.name
+    return edited === null || edited === undefined ? '' : String(edited)
+  }
+  return newProductName(row)
+}
+
 export function buildNewProduct (row, categories, previous) {
   const value = field => displayValue(row, field)
   const categoryId = value('categoryId')
@@ -1320,7 +1365,7 @@ export function buildNewProduct (row, categories, previous) {
   const deposit = value('depositAmount')
 
   return {
-    name: text('name') || newProductName(row),
+    name: plannedProductName(row),
     description: text('description', row.description),
     otherInformation: text('otherInformation', row.otherInformation),
     categoryId: categoryId || (category ? category.categoryId : null),

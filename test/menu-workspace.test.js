@@ -24,6 +24,7 @@ import {
   metadataFor,
   normalizeVariantGroup,
   normalizeVisibleColumns,
+  plannedProductName,
   priceFor,
   readColumnPreference,
   readDraftFile,
@@ -448,6 +449,46 @@ describe('columns', () => {
     const storage = { getItem: () => { throw new Error('blocked') }, setItem: () => { throw new Error('blocked') } }
     expect(() => writeColumnPreference(storage, 'u1', 7, { chosen: true, visible: [] })).not.toThrow()
     expect(readColumnPreference(storage, 'u1', 7)).toBeNull()
+  })
+})
+
+describe('naming a product the source asked to create', () => {
+  // Nothing here knows any particular menu: the number and the size are whatever the reading
+  // found, and a dish carrying neither is formatted from its name alone.
+  const sourceRow = extra => makeRow({ action: ACTION.create, origin: 'source', ...extra })
+
+  it('keeps both the number and the size that tell two rows apart', () => {
+    expect(plannedProductName(sourceRow({ menuNumber: '7', displayName: 'Dagens', sizeLabel: 'Liten' })))
+      .toBe('7. Dagens Liten')
+  })
+
+  it('formats a dish with no number from its name and size', () => {
+    expect(plannedProductName(sourceRow({ displayName: 'Husets salat', sizeLabel: 'Stor porsjon' })))
+      .toBe('Husets salat Stor porsjon')
+  })
+
+  it('leaves a dish with neither exactly as the menu wrote it', () => {
+    expect(plannedProductName(sourceRow({ displayName: 'Dagens suppe' }))).toBe('Dagens suppe')
+  })
+
+  it('does not number a name that already carries its number', () => {
+    expect(plannedProductName(sourceRow({ menuNumber: '12', displayName: '12 Kylling' }))).toBe('12 Kylling')
+  })
+
+  it('does not repeat a size the name already contains', () => {
+    expect(plannedProductName(sourceRow({ displayName: 'Kaffe stor', sizeLabel: 'stor' }))).toBe('Kaffe stor')
+  })
+
+  it('hands the whole name over to whatever the operator typed', () => {
+    const row = sourceRow({ menuNumber: '7', displayName: 'Dagens', sizeLabel: 'Liten' })
+    setMetadata(row, 'name', 'Noe helt annet')
+    expect(plannedProductName(row)).toBe('Noe helt annet')
+  })
+
+  it('lets a name be cleared rather than falling back to the formatted one', () => {
+    const row = sourceRow({ displayName: 'Dagens suppe' })
+    setMetadata(row, 'name', '')
+    expect(plannedProductName(row)).toBe('')
   })
 })
 

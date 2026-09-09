@@ -873,6 +873,313 @@ describe('an apply whose result was never seen', () => {
   })
 })
 
+describe('a metadata-only edit is saved like any other', () => {
+  // Vue 2 observes the properties an object had when it became reactive and nothing after.
+  // Adding a key to an empty metadataEdits — the state every row starts in — changed the draft
+  // without the row watcher noticing, so the autosave never ran and the edit was gone on reload.
+  const linkedDraft = async (storage) => {
+    const built = build({ storage })
+    built.wrapper.vm.adoptAnalysis(analysis)
+    await flush()
+    return built
+  }
+
+  it('schedules the autosave when only a metadata field changes', async () => {
+    const { wrapper } = await linkedDraft(makeStorage())
+    const scheduled = jest.spyOn(wrapper.vm, 'scheduleAutosave')
+
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'ny beskrivelse')
+    await wrapper.vm.$nextTick()
+
+    expect(scheduled).toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('schedules it again when the edit is taken back', async () => {
+    const { wrapper } = await linkedDraft(makeStorage())
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'ny beskrivelse')
+    await wrapper.vm.$nextTick()
+    const scheduled = jest.spyOn(wrapper.vm, 'scheduleAutosave')
+
+    wrapper.vm.resetMetadata(wrapper.vm.rows[0], 'description')
+    await wrapper.vm.$nextTick()
+
+    // Otherwise the older write intent stays in storage and comes back on reload.
+    expect(scheduled).toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('survives a reload with nothing but that edit', async () => {
+    const storage = makeStorage()
+    const { wrapper } = await linkedDraft(storage)
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'overlever omstart')
+    await wrapper.vm.$nextTick()
+    wrapper.vm.saveDraft()
+    wrapper.destroy()
+
+    const reopened = build({ storage })
+    await flush()
+
+    const restored = reopened.wrapper.vm.rows.find(row => row.rowKey === 'n:1')
+    expect(restored.metadataEdits.description).toBe('overlever omstart')
+    reopened.wrapper.destroy()
+  })
+
+  it('replaces the edits object rather than mutating it, so watchers can see it', async () => {
+    const { wrapper } = await linkedDraft(makeStorage())
+    const row = wrapper.vm.rows[0]
+    const before = row.metadataEdits
+
+    wrapper.vm.editMetadata(row, 'otherInformation', 'Nøtter')
+
+    expect(row.metadataEdits).not.toBe(before)
+    expect(row.metadataEdits.otherInformation).toBe('Nøtter')
+    wrapper.destroy()
+  })
+})
+
+describe('a category the operator chose', () => {
+  const newDish = {
+    ...analysis,
+    rows: [{ ...analysis.rows[1], rowKey: 'n:9', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null }]
+  }
+  const twoCategories = [
+    categories[0],
+    { categoryId: 'c2', name: 'Burger', suggestedTax: 15, suggestedEatInTax: 25, suggestedDeliveryTax: 15, taxSuggestionAvailable: true }
+  ]
+
+  it('is not overwritten when a column is corrected', () => {
+    // The menu still says Pizza however many times somebody has moved the dish to Burger.
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({ ...newDish, categories: twoCategories })
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'categoryId', 'c2')
+    expect(wrapper.vm.rows[0].metadataEdits.categoryId).toBe('c2')
+
+    wrapper.vm.adoptAnalysis({ ...newDish, categories: twoCategories }, { preserveDecisions: true })
+
+    expect(wrapper.vm.rows[0].metadataEdits.categoryId).toBe('c2')
+    wrapper.destroy()
+  })
+
+  it('keeps the product set up for the category actually chosen', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({ ...newDish, categories: twoCategories })
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'categoryId', 'c2')
+
+    wrapper.vm.adoptAnalysis({ ...newDish, categories: twoCategories }, { preserveDecisions: true })
+
+    expect(wrapper.vm.rows[0].newProduct.categoryId).toBe('c2')
+    wrapper.destroy()
+  })
+
+  it('keeps a category still waiting to be created, and keeps declaring it', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(newDish)
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[0], 'Helt ny kategori')
+    const key = wrapper.vm.rows[0].metadataEdits.newCategoryKey
+    expect(key).toBeTruthy()
+
+    wrapper.vm.adoptAnalysis(newDish, { preserveDecisions: true })
+
+    expect(wrapper.vm.rows[0].metadataEdits.newCategoryKey).toBe(key)
+    // A row pointing at a category the request no longer declares is refused by the server.
+    expect(wrapper.vm.newCategories.some(category => category.key === key)).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('still proposes one for a row nobody has decided about', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(newDish)
+
+    // The source names a category the store already has, so the row is pointed at it — and the
+    // row is still marked as undecided, so a later reading may propose again.
+    expect(wrapper.vm.rows[0].categoryChosen).toBe(false)
+    expect(wrapper.vm.rows[0].metadataEdits.categoryId).toBe('c1')
+    wrapper.destroy()
+  })
+
+  it('declares one the store does not have yet', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({ ...newDish, rows: [{ ...newDish.rows[0], categoryName: 'Ukjent seksjon' }] })
+
+    expect(wrapper.vm.newCategories.map(category => category.name)).toEqual(['Ukjent seksjon'])
+    wrapper.destroy()
+  })
+})
+
+describe('two sizes of one numbered dish', () => {
+  const sized = {
+    ...analysis,
+    rows: [
+      { rowKey: 's:1', menuNumber: '1', name: 'Margherita', sizeLabel: 'Medium', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null, candidates: [], warnings: [], sourcePrices: [{ channel: 'Takeaway', amount: 16900 }] },
+      { rowKey: 's:2', menuNumber: '1', name: 'Margherita', sizeLabel: 'Stor', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null, candidates: [], warnings: [], sourcePrices: [{ channel: 'Takeaway', amount: 21900 }] }
+    ]
+  }
+
+  it('creates two products a customer can tell apart', async () => {
+    // The size is review data, not something the product carries separately, so it has to be in
+    // the name or it is lost the moment the draft is saved.
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    await wrapper.vm.validate()
+
+    const names = stub.Validate.mock.calls.pop()[0].rows.map(row => row.newProduct.name)
+    expect(names).toEqual(['1. Margherita Medium', '1. Margherita Stor'])
+    wrapper.destroy()
+  })
+
+  it('shows for approval exactly the name it will store', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(sized)
+
+    expect(wrapper.vm.rows.map(row => wrapper.vm.metadataValue(row, 'name')))
+      .toEqual(['1. Margherita Medium', '1. Margherita Stor'])
+    wrapper.destroy()
+  })
+
+  it('lets a typed name win outright', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'name', 'Margherita liten')
+    await wrapper.vm.validate()
+
+    const names = stub.Validate.mock.calls.pop()[0].rows.map(row => row.newProduct.name)
+    expect(names).toEqual(['Margherita liten', '1. Margherita Stor'])
+    wrapper.destroy()
+  })
+
+  it('does not rename a product it merely matched', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.validate()
+
+    const updated = stub.Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
+    expect(updated.metadata).toBeUndefined()
+    wrapper.destroy()
+  })
+})
+
+describe('warnings the plan is waiting to have accepted', () => {
+  // The API promotes every unaccepted requiresAcceptance warning into a blocker, so an ordinary
+  // large price rise arrives looking like a validation failure. Treating it as one disabled the
+  // only button that could accept it, and correct menu updates could not be saved at all.
+  const promoted = (code, overrides = {}) => validation({
+    canApply: false,
+    blockers: [{ code, rowKey: 'n:1', requiresAcceptance: true, accepted: false }],
+    warnings: [{ code, rowKey: 'n:1', requiresAcceptance: true, accepted: false, message: 'Fra serveren' }],
+    ...overrides
+  })
+
+  it('lets the operator confirm a large price change instead of dead-ending', async () => {
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(promoted('largePriceChange')) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.confirmErrors).toHaveLength(0)
+    expect(wrapper.vm.canConfirmApply).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('does the same for a surcharge the change switches on', async () => {
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(promoted('enablesEatInSurcharge')) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.canConfirmApply).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('shows what confirming will accept, in the operator\'s language', async () => {
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(promoted('largePriceChange')) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.confirmAcceptances).toHaveLength(1)
+    expect(wrapper.vm.confirmAcceptances[0].message).toBe('T:menuImport_warning_largePriceChange')
+    const text = wrapper.text()
+    expect(text).toContain('menuImport_confirmAcceptTitle')
+    expect(text).toContain('menuImport_warning_largePriceChange')
+    wrapper.destroy()
+  })
+
+  it('records the acceptance and revalidates before applying', async () => {
+    const ready = validation({ canApply: true })
+    const Validate = jest.fn().mockResolvedValueOnce(promoted('largePriceChange')).mockResolvedValue(ready)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    // The code reaches the row, and the server is asked again with it before anything is written.
+    const sent = Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:1')
+    expect(sent.acceptedWarnings).toContain('largePriceChange')
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+
+  it('accepts a warning reported for the plan rather than for one row', async () => {
+    // A plan-wide warning carries a row key and has no row-level twin, and nothing could ever
+    // accept those.
+    const planWide = validation({
+      canApply: false,
+      blockers: [{ code: 'sizeAssumed', rowKey: 'n:2', requiresAcceptance: true, accepted: false }]
+    })
+    const ready = validation({ canApply: true })
+    const Validate = jest.fn().mockResolvedValueOnce(planWide).mockResolvedValue(ready)
+    const { wrapper } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    const sent = Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:2')
+    expect(sent.acceptedWarnings).toContain('sizeAssumed')
+    wrapper.destroy()
+  })
+
+  it('still refuses a hard blocker that carries no acceptance flag', async () => {
+    // The distinction is the server's own word, not the name of the code.
+    const hard = validation({
+      canApply: false,
+      blockers: [{ code: 'unsupportedNegativeSurcharge', rowKey: 'n:1', channel: 'EatIn' }]
+    })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(hard) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+    expect(wrapper.vm.confirmErrors).toHaveLength(1)
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('refuses a hard blocker even when an acceptable one is present too', async () => {
+    const mixed = validation({
+      canApply: false,
+      blockers: [
+        { code: 'largePriceChange', rowKey: 'n:1', requiresAcceptance: true, accepted: false },
+        { code: 'invalidAmount', rowKey: 'n:2' }
+      ]
+    })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(mixed) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.confirmErrors).toHaveLength(1)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+})
+
 describe('when the browser cannot record the save', () => {
   // An operation whose id was never written down cannot be asked about and cannot be settled.
   // A lost response would leave products that may already exist, a draft that still wants to

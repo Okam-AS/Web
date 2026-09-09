@@ -555,6 +555,22 @@
             {{ applyError }}
           </div>
 
+          <!-- Shown as what confirming will agree to, not as something in the way. These are
+               the reviewable warnings the server holds a plan on until somebody has read them. -->
+          <div v-if="confirmAcceptances.length && !confirmErrors.length" class="notice-box" role="status">
+            <strong>{{ $i('menuImport_confirmAcceptTitle') }}</strong>
+            <ul class="confirm-errors">
+              <li v-for="warning in confirmAcceptances" :key="warning.key">
+                <span>{{ warning.message }}</span>
+                <small v-if="warning.names.length">
+                  {{ $i('menuImport_confirmAffects', { names: warning.names.slice(0, 4).join(', ') }) }}
+                  <template v-if="warning.names.length > 4">{{ $i('menuImport_confirmAffectsMore', { count: warning.names.length - 4 }) }}</template>
+                </small>
+              </li>
+            </ul>
+            <small class="helper-text">{{ $i('menuImport_confirmAcceptHelp') }}</small>
+          </div>
+
           <div v-if="confirmErrors.length" class="warning-box" role="alert">
             <strong>{{ $i('menuImport_confirmBlockedTitle') }}</strong>
             <ul class="confirm-errors">
@@ -1153,6 +1169,46 @@ export default {
      */
     confirmableCodes () { return ['matchNotConfirmed', 'newProductSetupUnconfirmed'] },
     /**
+     * Warnings the server is waiting to be told about.
+     *
+     * It promotes every unaccepted `requiresAcceptance` warning into a blocker, so "this price
+     * rise is unusually large" and "this enables an eat-in surcharge" arrive looking exactly
+     * like a validation failure. Treating them as one disabled the only button that could accept
+     * them: the acceptance is recorded while approving, and approving was unreachable. Ordinary
+     * correct menu updates could not be saved at all.
+     *
+     * The promoted blocker says so itself — the planner copies `requiresAcceptance` onto it —
+     * so this reads the server's own word for it rather than matching codes against a list. A
+     * hard refusal never carries that flag and so can never be waved through here.
+     */
+    acceptableWarnings () {
+      return this.allBlockers.filter(blocker => blocker.requiresAcceptance && !blocker.accepted)
+    },
+    /**
+     * What the confirmation lists as being accepted by confirming it.
+     *
+     * Grouped and phrased the way the errors are, so a menu priced one way throughout says one
+     * thing rather than the same thing forty times.
+     */
+    confirmAcceptances () {
+      const groups = new Map()
+
+      this.acceptableWarnings.forEach((warning) => {
+        if (!groups.has(warning.code)) {
+          groups.set(warning.code, { code: warning.code, names: [], raw: warning.message || '' })
+        }
+        const row = this.rows.find(item => item.rowKey === warning.rowKey)
+        const name = row ? this.rowLabel(row) : ''
+        if (name && !groups.get(warning.code).names.includes(name)) { groups.get(warning.code).names.push(name) }
+      })
+
+      return [...groups.values()].map(group => ({
+        key: group.code,
+        message: this.warningText(group),
+        names: group.names
+      }))
+    },
+    /**
      * Every blocker the plan has, from the plan-wide list and from each row.
      *
      * Both are read because the two lists do not have to agree: a row can carry a blocker the
@@ -1178,9 +1234,16 @@ export default {
 
       return blockers
     },
-    /** What actually stops the save, as opposed to what the confirmation is there to settle. */
+    /**
+     * What actually stops the save, as opposed to what the confirmation is there to settle.
+     *
+     * A blocker only stops being one when it is the promoted form of a warning this plan is
+     * genuinely waiting to have accepted. A code is never waved through on its own account —
+     * that would be deciding a hard refusal is fine because of what it is called.
+     */
     blockingErrors () {
-      return this.allBlockers.filter(blocker => !this.confirmableCodes.includes(blocker.code))
+      return this.allBlockers.filter(blocker => !this.confirmableCodes.includes(blocker.code) &&
+        !(blocker.requiresAcceptance && !blocker.accepted))
     },
     /**
      * Why the plan cannot be saved, in the operator's language and said once each.
@@ -1658,7 +1721,8 @@ export default {
       setMetadata(row, field, value)
       if (field === 'categoryId' && value) {
         // Choosing a real category retires any pending new one for this row.
-        delete row.metadataEdits.newCategoryKey
+        clearMetadata(row, 'newCategoryKey')
+        row.categoryChosen = true
         this.applyCategoryRates(row)
       }
       if (row.action === ACTION.create) { this.ensureNewProduct(row) }
@@ -1697,8 +1761,9 @@ export default {
       const already = this.newCategories.find(category => category.name.toLowerCase() === name.toLowerCase())
       const key = already ? already.key : 'newcat-' + (this.newCategories.length + 1)
       if (!already) { this.newCategories.push({ key, name }) }
-      delete row.metadataEdits.categoryId
+      clearMetadata(row, 'categoryId')
       setMetadata(row, 'newCategoryKey', key)
+      row.categoryChosen = true
       row.categoryName = name
       if (row.action === ACTION.create) { this.ensureNewProduct(row) }
       this.onPlanChanged()
@@ -1726,6 +1791,9 @@ export default {
 
       rows.forEach((row) => {
         if (row.action !== ACTION.create) { return }
+        // A proposal, and only ever a first one. Correcting a column re-reads the menu, and the
+        // menu still says Pizza however many times somebody has moved the dish to Burger.
+        if (row.categoryChosen) { return }
         const name = String(row.categoryName || '').trim()
         if (!name) { return }
 
@@ -1776,6 +1844,18 @@ export default {
      */
     pendingFromRows (rows, categoryVariants) {
       const { declared, keyByName } = this.proposeCategories(rows)
+
+      // A row whose category is still waiting to be created keeps pointing at its key, so that
+      // declaration has to come through the re-read with it. Dropping it would leave the row
+      // referring to a category the request no longer asks for, which the server refuses.
+      rows.forEach((row) => {
+        const key = row.metadataEdits && row.metadataEdits.newCategoryKey
+        if (!key || declared.some(category => category.key === key)) { return }
+        const existing = this.newCategories.find(category => category.key === key)
+        if (!existing) { return }
+        declared.push({ key: existing.key, name: existing.name })
+        keyByName[existing.name.toLowerCase()] = existing.key
+      })
 
       ;(categoryVariants || []).forEach((group) => {
         if (group.categoryId || !group.categoryName) { return }
@@ -2628,13 +2708,19 @@ export default {
 
       // Approving the visible list confirms its chosen links and proposed new-product setup.
       // Hard price, catalogue and concurrency checks remain enforced by the API.
+      // Confirming the dialog is what accepts the warnings it listed. They are taken from the
+      // plan rather than from the row's own copy, because a warning reported plan-wide has a
+      // row key and no row-level twin, and those were the ones nothing could ever accept.
+      const accepted = this.acceptableWarnings
       this.rows.forEach((row) => {
         if (row.action === ACTION.skip) { return }
         row.matchConfirmed = !!row.targetProductId
         if (row.newProduct) { row.newProduct.setupConfirmed = true }
-        this.rowIssues(row).filter(issue => issue.requiresAcceptance).forEach((issue) => {
-          if (!row.acceptedWarnings.includes(issue.code)) { row.acceptedWarnings.push(issue.code) }
-        })
+        accepted
+          .filter(warning => !warning.rowKey || warning.rowKey === row.rowKey)
+          .forEach((warning) => {
+            if (!row.acceptedWarnings.includes(warning.code)) { row.acceptedWarnings.push(warning.code) }
+          })
       })
       this.planRevision++
 
@@ -3126,6 +3212,18 @@ export default {
      */
     countText (key, count) {
       return this.$i(key + (count === 1 ? 'One' : 'Many'), { count })
+    },
+    /**
+     * One warning, phrased for the person being asked to accept it.
+     *
+     * Same rule as the errors: a code this page knows is said in the operator's language, and
+     * only an unknown one falls back to the server's own sentence.
+     */
+    warningText (group) {
+      const key = 'menuImport_warning_' + group.code
+      const translated = this.$i(key)
+      if (translated === key) { return group.raw || this.$i('menuImport_warning_unknown') }
+      return translated
     },
     /** How a row is named when an error has to point at it. */
     rowLabel (row) {

@@ -273,7 +273,7 @@ const fold = value => (value || '')
  * Both the number and the size have to be in it, each exactly once. The size matters because
  * where a catalogue keeps one product per size, the size lives in the name and nowhere else:
  * that is what the planner reads back to group a product with the right rate, and what the
- * matcher uses to tell Medium from Stor on the next import. Without it two rows off the same
+ * matcher uses to tell one size from another on the next import. Without it two rows off the same
  * dish would create two products called the same thing and neither could be matched again.
  *
  * Neither part is added when the wording already carries it, so a name is never doubled up.
