@@ -95,6 +95,18 @@
           <button class="link-btn" type="button" :disabled="isLocked" @click="showSource = true">
             {{ $i('menuImport_changeSource') }}
           </button>
+
+          <!-- Compact by default and open on demand, but always present: this is the only place
+               something the reading dropped is ever mentioned. -->
+          <details v-if="sourceNotes.length" class="source-notes">
+            <summary>{{ $i('menuImport_sourceNotes', { count: sourceNotes.length }) }}</summary>
+            <ul>
+              <li v-for="note in sourceNotes" :key="note.key">
+                <strong v-if="note.document">{{ note.document }}</strong>
+                <span>{{ note.message }}</span>
+              </li>
+            </ul>
+          </details>
         </div>
 
         <div v-if="isAnalyzing" class="progress panel">
@@ -533,6 +545,16 @@
             <small class="helper-text">{{ $i(files.length ? 'menuImport_instructionsHelp' : 'menuImport_menuTextHelp') }}</small>
             <small v-if="instructionsTooLong" class="error-box" role="alert">{{ $i('menuImport_instructionsTooLong') }}</small>
           </label>
+
+          <div v-if="sourceNotes.length" class="notice-box" role="status">
+            <strong>{{ $i('menuImport_sourceNotesTitle') }}</strong>
+            <ul class="source-notes-list">
+              <li v-for="note in sourceNotes" :key="note.key">
+                <strong v-if="note.document">{{ note.document }}</strong>
+                <span>{{ note.message }}</span>
+              </li>
+            </ul>
+          </div>
 
           <details v-if="analysis && analysis.sources && analysis.sources.length" class="disclosure">
             <summary>{{ $i('menuImport_howPricesWereRead') }}</summary>
@@ -1023,6 +1045,34 @@ export default {
     },
     sourceDetail () {
       return this.$i('menuImport_sourceDetail', { count: this.rows.length })
+    },
+    /**
+     * What the reading could not use.
+     *
+     * These are the only record that something in the document did not make it into the work
+     * list — an option group whose price could not be read is dropped whole, and without this
+     * the import looks complete when it is not. The document's name and the reading's own
+     * wording are both kept: "the group Tilbehør was left out" is the entire content, and a
+     * generic heading in its place would turn three different notes into three identical lines.
+     */
+    sourceNotes () {
+      const notes = []
+
+      ;((this.analysis && this.analysis.warnings) || []).forEach((warning, index) => {
+        notes.push({ key: 'a' + index, document: '', message: this.issueText(warning) })
+      })
+
+      ;((this.analysis && this.analysis.sources) || []).forEach((source) => {
+        ;(source.warnings || []).forEach((warning, index) => {
+          notes.push({
+            key: source.documentName + index,
+            document: source.documentName || '',
+            message: this.issueText(warning)
+          })
+        })
+      })
+
+      return notes.filter(note => note.message)
     },
     instructionsTooLong () { return this.files.length > 0 && this.pastedText.trim().length > 2000 },
     uploadTooLarge () {
@@ -2625,6 +2675,33 @@ export default {
   .source-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
   strong { display: block; color: #292c34; overflow-wrap: anywhere; }
   small { display: block; color: #64748b; font-size: 0.85em; }
+}
+
+.source-notes {
+  flex-basis: 100%;
+  margin-top: 4px;
+
+  summary {
+    min-height: 44px; display: flex; align-items: center;
+    color: #92400e; font-size: 0.85em; font-weight: 600; cursor: pointer;
+  }
+
+  ul { margin: 4px 0 0; padding: 0 0 0 4px; list-style: none; }
+
+  li {
+    padding: 6px 0;
+    color: #292c34; font-size: 0.85em;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  strong { display: block; color: #64748b; font-size: 0.92em; font-weight: 600; }
+}
+
+.source-notes-list {
+  margin: 6px 0 0; padding: 0; list-style: none;
+
+  li { padding: 4px 0; font-size: 0.9em; }
+  strong { display: block; color: #64748b; font-size: 0.9em; }
 }
 
 .file-icon {

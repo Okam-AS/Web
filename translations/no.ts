@@ -819,6 +819,8 @@ export default {
   menuImport_sourceHelp: "PDF og tekst går inn i den samme produktlisten.",
   menuImport_sourceIconDraft: "UTKAST",
   menuImport_sourceNone: "Ingen meny lagt til",
+  menuImport_sourceNotes: "{count} ting fra menyen kom ikke med",
+  menuImport_sourceNotesTitle: "Dette kom ikke med fra menyen",
   menuImport_sourcePasted: "Innlimt menytekst",
   menuImport_sourceTitle: "Legg til meny",
   menuImport_startOver: "Start en ny import",

@@ -819,6 +819,8 @@ export default {
   menuImport_sourceHelp: "PDF und Text landen in derselben Produktliste.",
   menuImport_sourceIconDraft: "ENTWURF",
   menuImport_sourceNone: "Kein Menü hinzugefügt",
+  menuImport_sourceNotes: "{count} Dinge aus dem Menü sind nicht übernommen worden",
+  menuImport_sourceNotesTitle: "Das wurde aus dem Menü nicht übernommen",
   menuImport_sourcePasted: "Eingefügter Menütext",
   menuImport_sourceTitle: "Menü hinzufügen",
   menuImport_startOver: "Neuen Import starten",

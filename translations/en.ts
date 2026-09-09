@@ -819,6 +819,8 @@ export default {
   menuImport_sourceHelp: "PDFs and text go into the same product list.",
   menuImport_sourceIconDraft: "DRAFT",
   menuImport_sourceNone: "No menu added",
+  menuImport_sourceNotes: "{count} things from the menu did not come through",
+  menuImport_sourceNotesTitle: "This did not come through from the menu",
   menuImport_sourcePasted: "Pasted menu text",
   menuImport_sourceTitle: "Add a menu",
   menuImport_startOver: "Start a new import",

@@ -1176,6 +1176,86 @@ describe('what the analysis actually returns', () => {
   })
 })
 
+describe('what the reading could not use', () => {
+  // The API drops an option group whole when it cannot read one of its prices, and says so with
+  // a documentNotice. That note is the only record the group ever existed, so if the page does
+  // not show it the import looks complete when it is not.
+  const omitted = {
+    ...analysis,
+    warnings: [
+      { code: 'documentNotice', message: 'Valggruppen «Tilbehør» ble utelatt: prisen på ett av valgene kunne ikke leses.' }
+    ],
+    sources: [{
+      documentName: 'meny.pdf',
+      columns: [],
+      pages: [{ pageNumber: 1, rowCount: 2 }],
+      warnings: [
+        { code: 'documentNotice', message: 'Nr. 19 er trykket som 223 / 325 og kan være en kolonnefeil.' }
+      ]
+    }]
+  }
+
+  it('says an option group was left out, before anything can be approved', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(omitted)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('Valggruppen «Tilbehør» ble utelatt')
+    // Visible on the work list itself, not only after saving.
+    expect(wrapper.vm.receipt).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('keeps the document\'s name with the note that came from it', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(omitted)
+    await wrapper.vm.$nextTick()
+
+    const note = wrapper.vm.sourceNotes.find(item => item.document === 'meny.pdf')
+    expect(note.message).toContain('Nr. 19 er trykket som 223 / 325')
+    expect(wrapper.text()).toContain('meny.pdf')
+    wrapper.destroy()
+  })
+
+  it('keeps the reading\'s own wording rather than replacing it with a heading', () => {
+    // Three different notices must not collapse into three identical lines.
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(omitted)
+
+    const messages = wrapper.vm.sourceNotes.map(note => note.message)
+    expect(new Set(messages).size).toBe(2)
+    wrapper.destroy()
+  })
+
+  it('counts every note, from the analysis and from each document', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(omitted)
+
+    expect(wrapper.vm.sourceNotes).toHaveLength(2)
+    wrapper.destroy()
+  })
+
+  it('says nothing at all when the reading dropped nothing', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.sourceNotes).toHaveLength(0)
+    expect(wrapper.find('.source-notes').exists()).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('survives a re-read after a corrected column mapping', async () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(omitted)
+    wrapper.vm.adoptAnalysis(omitted, { preserveDecisions: true })
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.sourceNotes).toHaveLength(2)
+    wrapper.destroy()
+  })
+})
+
 describe('the receipt', () => {
   it('reports what was written without assuming any list is present', async () => {
     const { wrapper } = build()
