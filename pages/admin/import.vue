@@ -253,10 +253,12 @@
                             />
                             <small class="cell-after row-intent" :class="{ 'new-intent': row.action === 'Create', quiet: rowChanged(row) === false && row.action !== 'Create' }">
                               {{ $i(rowIntentKey(row)) }}
-                              <!-- Only meaningful for a product that already exists. On a row that
-                                 creates one, every field is part of creating it, so saying its
-                                 details "also change" would mark every new row for nothing. -->
-                              <span v-if="row.action === 'Update' && hasMetadataPatch(row)" class="modified">{{ $i('menuImport_alsoChangesDetails') }}</span>
+                              <!-- Only for a product that already exists, and only when the
+                                   server says a field really moves. On a row that creates one
+                                   every field is part of creating it, and an edit set back to
+                                   the value it already had writes nothing — this beside "Ingen
+                                   endringer" contradicted it. -->
+                              <span v-if="row.action === 'Update' && rowMetadataChanged(row)" class="modified">{{ $i('menuImport_alsoChangesDetails') }}</span>
                             </small>
                           </template>
                           <button v-else type="button" class="link-btn" @click="restoreRow(row)">
@@ -2329,9 +2331,11 @@ export default {
       }
     },
     async runAnalysis () {
-      // Not `guardEdit`: this is the one action the lock is closed *for*, so it checks only that
-      // no reading is already running. `canAnalyze` is false while one is.
-      if (!this.canAnalyze || this.isRemapping || this.outcomeUnknown || this.showConfirm) { return }
+      // `guardEdit` is safe here even though this is what closes the lock: at entry `isAnalyzing`
+      // is still false, so the gate is only asked about the other reasons to be busy — an apply
+      // in flight, a frozen plan, a confirmation being read. Spelling those out separately is
+      // how one of them gets forgotten.
+      if (!this.canAnalyze || !this.guardEdit()) { return }
 
       this.cancelInFlight()
       const generation = ++this.requestGeneration

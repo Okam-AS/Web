@@ -1646,6 +1646,38 @@ describe('re-importing a menu that has not changed', () => {
     wrapper.destroy()
   })
 
+  it('never renders the badge and "no changes" together', async () => {
+    // The rendered row, not just the computed: the binding is what regressed last time.
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(quiet()) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    // An explicit edit that the server resolves to nothing at all.
+    wrapper.vm.editMetadata(wrapper.vm.rows[0], 'description', 'noe annet')
+    await wrapper.vm.validate()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.hasMetadataPatch(wrapper.vm.rows[0])).toBe(true)
+    expect(wrapper.text()).toContain('menuImport_rowNoChanges')
+    expect(wrapper.text()).not.toContain('menuImport_alsoChangesDetails')
+    expect(wrapper.findAll('.row-intent .modified')).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('does render the badge when a field really moves', async () => {
+    const moved = quiet()
+    moved.rows[0].metadataChanges = [{ field: 'description', from: 'a', to: 'b' }]
+
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(moved) } })
+    wrapper.vm.adoptAnalysis(linkedOnly)
+    await wrapper.vm.validate()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.findAll('.row-intent .modified').length).toBeGreaterThan(0)
+    // That row says it updates; the other one is still quiet, which is the whole distinction.
+    expect(wrapper.vm.rowIntentKey(wrapper.vm.rows[0])).toBe('menuImport_willUpdate')
+    expect(wrapper.vm.rowIntentKey(wrapper.vm.rows[1])).toBe('menuImport_rowNoChanges')
+    wrapper.destroy()
+  })
+
   it('marks the price field that actually moves', async () => {
     const oneMoved = quiet()
     oneMoved.rows[0].changed = true
@@ -1742,6 +1774,28 @@ describe('while a menu is being read', () => {
     expect(stub.Analyze).toHaveBeenCalledTimes(1)
     release(analysis)
     await running
+    wrapper.destroy()
+  })
+
+  it('will not start a reading while a save is in flight', async () => {
+    // Independent of the confirmation being open: an apply on its own is reason enough.
+    let releaseApply
+    const held = new Promise((resolve) => { releaseApply = resolve })
+    const { wrapper, stub } = build({ service: { Apply: jest.fn().mockReturnValue(held) } })
+    wrapper.vm.adoptAnalysis(analysis)
+    await wrapper.vm.openApproval()
+    const saving = wrapper.vm.confirmApproval()
+    await flush()
+    // The confirmation is closed, so only the save itself is holding the lock.
+    wrapper.vm.showConfirm = false
+    expect(wrapper.vm.isApplying).toBe(true)
+
+    wrapper.vm.pastedText = 'en helt ny meny'
+    await wrapper.vm.runAnalysis()
+
+    expect(stub.Analyze).not.toHaveBeenCalled()
+    releaseApply(receipt())
+    await saving
     wrapper.destroy()
   })
 
