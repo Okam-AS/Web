@@ -757,6 +757,7 @@ export default {
   menuImport_error_emptyPlan: "Det er ingenting å lagre ennå.",
   menuImport_error_insufficientRateBasis: "Vi har ikke nok priser til å foreslå de andre kanalene. Skriv dem inn selv.",
   menuImport_error_invalidAmount: "En pris er ugyldig. Bruk et beløp på null eller mer.",
+  menuImport_error_invalidMetadata: "En av produktdetaljene kan ikke lagres slik den står. Produktnavnet kan ikke være tomt — åpne detaljene på raden og se over feltene.",
   menuImport_error_invalidNewCategory: "Den nye kategorien kan ikke opprettes. Sjekk navnet, eller velg en kategori som finnes.",
   menuImport_error_invalidRulePercent: "Prosenten som er satt for prisreglene er ugyldig.",
   menuImport_error_largePriceChange: "Prisendringen er uvanlig stor. Se over beløpet før du lagrer.",

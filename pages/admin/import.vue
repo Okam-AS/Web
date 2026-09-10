@@ -2331,19 +2331,35 @@ export default {
       entry.channel = channel
       this.$set(mapping.columns, column.label, entry)
     },
+    /**
+     * What every column of the current reading means, as it stands right now.
+     *
+     * Built from the reading itself rather than from the handful of columns somebody has
+     * touched. A remap re-merges the original documents, so anything left out of this payload
+     * goes back to whatever the first pass made of it — and the first pass is precisely what
+     * could not tell. Sending only the edited column therefore threw away every other column's
+     * resolution, and a size the screen had been showing as settled quietly stopped being a row
+     * at all.
+     *
+     * `columnKind` and `columnChannel` answer with the operator's edit where there is one and
+     * the reading's own resolution otherwise, so an explicit channel is never overwritten by a
+     * blanket default. The document default is sent only when someone actually chose one.
+     */
     sourceMappings () {
-      return Object.keys(this.columnMappings).map((documentName) => {
-        const mapping = this.columnMappings[documentName]
+      return ((this.analysis && this.analysis.sources) || []).map((source) => {
+        const mapping = this.columnMappings[source.documentName] || { defaultChannel: '', columns: {} }
+
         return {
-          documentName,
+          documentName: source.documentName,
           defaultChannel: mapping.defaultChannel || null,
-          columns: Object.keys(mapping.columns).map((label) => {
-            const entry = mapping.columns[label]
+          columns: (source.columns || []).map((column) => {
+            const kind = this.columnKind(source.documentName, column)
+            const channel = this.columnChannel(source.documentName, column)
             return {
-              label,
-              kind: entry.kind === 'Ignore' ? 'Unknown' : entry.kind,
-              channel: entry.channel || null,
-              ignore: entry.kind === 'Ignore'
+              label: column.label,
+              kind: kind === 'Ignore' ? 'Unknown' : kind,
+              channel: channel || null,
+              ignore: kind === 'Ignore'
             }
           })
         }
@@ -2448,6 +2464,13 @@ export default {
 
       // Stamped on the analysis itself so a later remap knows which rows it owns.
       this.analysis = { ...analysis, localAnalysisId: analysisId }
+
+      // A column decision belongs to the document it was made about. Keeping entries for
+      // documents this reading does not contain would send another menu's columns with it.
+      const documents = new Set(((analysis.sources || []).map(source => source.documentName)))
+      Object.keys(this.columnMappings)
+        .filter(documentName => !documents.has(documentName))
+        .forEach((documentName) => { this.$delete(this.columnMappings, documentName) })
       if (!preserveDecisions) {
         const rules = { ...DEFAULT_RULES(), missingChannelRule: 'SamePercent', newProductChannelRule: 'SameAsTakeaway' }
         const preferences = analysis.instructions && analysis.operatorPreferences

@@ -757,6 +757,7 @@ export default {
   menuImport_error_emptyPlan: "Es gibt noch nichts zu speichern.",
   menuImport_error_insufficientRateBasis: "Es gibt zu wenige Preise, um die anderen Verkaufsarten vorzuschlagen. Tragen Sie sie selbst ein.",
   menuImport_error_invalidAmount: "Ein Preis ist ungültig. Verwenden Sie einen Betrag ab null.",
+  menuImport_error_invalidMetadata: "Eines der Produktdetails kann so nicht gespeichert werden. Ein Produktname darf nicht leer sein — öffnen Sie die Details der Zeile und prüfen Sie die Felder.",
   menuImport_error_invalidNewCategory: "Die neue Kategorie kann nicht angelegt werden. Prüfen Sie den Namen, oder wählen Sie eine vorhandene.",
   menuImport_error_invalidRulePercent: "Der für die Preisregeln gesetzte Prozentsatz ist ungültig.",
   menuImport_error_largePriceChange: "Die Preisänderung ist ungewöhnlich groß. Prüfen Sie den Betrag vor dem Speichern.",

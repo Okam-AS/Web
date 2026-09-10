@@ -757,6 +757,7 @@ export default {
   menuImport_error_emptyPlan: "There is nothing to save yet.",
   menuImport_error_insufficientRateBasis: "There are not enough prices to suggest the other channels. Type them yourself.",
   menuImport_error_invalidAmount: "A price is not valid. Use an amount of zero or more.",
+  menuImport_error_invalidMetadata: "One of the product details cannot be saved as it stands. A product name cannot be empty — open the row\u2019s details and check the fields.",
   menuImport_error_invalidNewCategory: "The new category cannot be created. Check the name, or pick a category that exists.",
   menuImport_error_invalidRulePercent: "The percentage set for the price rules is not valid.",
   menuImport_error_largePriceChange: "The price change is unusually large. Check the amount before saving.",

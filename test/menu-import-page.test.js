@@ -569,6 +569,118 @@ describe('appending a second reading', () => {
   })
 })
 
+describe('correcting one column of a reading', () => {
+  // A remap re-merges the original documents, so a column left out of the payload goes back to
+  // whatever the first pass made of it — and the first pass is exactly what could not tell.
+  // Two ambiguous size columns, both resolved to Takeaway by the automatic pass.
+  const sized = {
+    ...analysis,
+    documents: [{ documentName: 'meny.pdf' }],
+    sources: [{
+      documentName: 'meny.pdf',
+      pages: [{ pageNumber: 1, rowCount: 1 }],
+      warnings: [],
+      columns: [
+        { label: 'Small', resolvedKind: 'Size', resolvedChannel: 'Takeaway', unresolved: false, ignored: false },
+        { label: 'Large', resolvedKind: 'Size', resolvedChannel: 'Takeaway', unresolved: false, ignored: false }
+      ]
+    }],
+    rows: [
+      { rowKey: 'c:1', name: 'Suppe', sizeLabel: 'Small', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null, candidates: [], warnings: [], sourcePrices: [{ channel: 'Takeaway', amount: 10000 }] },
+      { rowKey: 'c:2', name: 'Suppe', sizeLabel: 'Large', categoryName: 'Pizza', suggestedAction: 'Create', suggestedProductId: null, candidates: [], warnings: [], sourcePrices: [{ channel: 'Takeaway', amount: 14000 }] }
+    ]
+  }
+
+  const editedOne = (wrapper) => {
+    const column = sized.sources[0].columns[0]
+    wrapper.vm.setColumnChannel('meny.pdf', column, 'EatIn')
+  }
+
+  it('sends every column of the reading, not only the one that was touched', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    await wrapper.vm.applyColumnMapping()
+
+    const sent = stub.Remap.mock.calls.pop()[1].sourceMappings
+    expect(sent).toHaveLength(1)
+    expect(sent[0].columns.map(column => column.label)).toEqual(['Small', 'Large'])
+    wrapper.destroy()
+  })
+
+  it('keeps the untouched column on the channel the reading gave it', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    await wrapper.vm.applyColumnMapping()
+
+    const columns = stub.Remap.mock.calls.pop()[1].sourceMappings[0].columns
+    expect(columns.find(column => column.label === 'Small').channel).toBe('EatIn')
+    // Its automatic resolution was never written down anywhere, and used to be dropped here.
+    expect(columns.find(column => column.label === 'Large').channel).toBe('Takeaway')
+    // And its kind survives with it, so it stays a size rather than becoming unknown.
+    expect(columns.find(column => column.label === 'Large').kind).toBe('Size')
+    wrapper.destroy()
+  })
+
+  it('keeps both size rows after the remap', async () => {
+    const { wrapper } = build({ service: { Remap: jest.fn().mockResolvedValue(sized) } })
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    await wrapper.vm.applyColumnMapping()
+
+    expect(wrapper.vm.rows.map(row => row.sizeLabel)).toEqual(['Small', 'Large'])
+    wrapper.destroy()
+  })
+
+  it('does not send a document default nobody chose', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    await wrapper.vm.applyColumnMapping()
+
+    // A blanket default would override the channels the reading resolved for itself.
+    expect(stub.Remap.mock.calls.pop()[1].sourceMappings[0].defaultChannel).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('sends a document default only when one is actually set', async () => {
+    // There is no control for a whole-document default today, so this exercises the state the
+    // request builder reads rather than a button. It exists so that adding one later cannot
+    // quietly start overriding channels the reading resolved for itself.
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    wrapper.vm.mappingFor('meny.pdf').defaultChannel = 'Delivery'
+
+    await wrapper.vm.applyColumnMapping()
+
+    const sent = stub.Remap.mock.calls.pop()[1].sourceMappings[0]
+    expect(sent.defaultChannel).toBe('Delivery')
+    // The columns still carry their own channels, so the default cannot flatten them.
+    expect(sent.columns.find(column => column.label === 'Large').channel).toBe('Takeaway')
+    wrapper.destroy()
+  })
+
+  it('does not carry another menu\'s columns into a new reading', async () => {
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    // A different document entirely.
+    wrapper.vm.adoptAnalysis({ ...analysis, documents: [{ documentName: 'annen.pdf' }], sources: [{ documentName: 'annen.pdf', columns: [{ label: 'Pris', resolvedKind: 'Channel', resolvedChannel: 'Takeaway' }], pages: [], warnings: [] }] })
+    wrapper.vm.setColumnChannel('annen.pdf', { label: 'Pris' }, 'Delivery')
+    await wrapper.vm.applyColumnMapping()
+
+    const sent = stub.Remap.mock.calls.pop()[1].sourceMappings
+    expect(sent.map(mapping => mapping.documentName)).toEqual(['annen.pdf'])
+    wrapper.destroy()
+  })
+})
+
 describe('correcting a column after other work', () => {
   // A remap re-reads one particular set of documents. Everything else in the list — a dish
   // typed by hand, a second menu added through "append" — has nothing to do with the columns
@@ -1225,6 +1337,25 @@ describe('warnings the plan is waiting to have accepted', () => {
 
     const sent = Validate.mock.calls.pop()[0].rows.find(row => row.rowKey === 'n:2')
     expect(sent.acceptedWarnings).toContain('sizeAssumed')
+    wrapper.destroy()
+  })
+
+  it('phrases a refused product detail rather than showing the server\'s English', async () => {
+    // The API refuses a blank product name as invalidMetadata. Without a phrase of our own the
+    // operator was shown a sentence written for whoever reads a log.
+    const refused = validation({
+      canApply: false,
+      blockers: [{ code: 'invalidMetadata', rowKey: 'n:1', message: 'Name must not be empty.' }]
+    })
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(refused) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.confirmErrors).toHaveLength(1)
+    expect(wrapper.vm.confirmErrors[0].message).toBe('T:menuImport_error_invalidMetadata')
+    expect(wrapper.vm.confirmErrors[0].message).not.toContain('Name must not be empty')
+    expect(wrapper.vm.canConfirmApply).toBe(false)
     wrapper.destroy()
   })
 
