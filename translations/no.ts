@@ -843,6 +843,7 @@ export default {
   menuImport_required: "Må velges",
   menuImport_restoreRow: "Ta med igjen",
   menuImport_retrySameOperation: "Prøv den samme lagringen igjen",
+  menuImport_reviewFingerprintMissing: "Denne versjonen av menyimporten trenger en nyere versjon av tjenesten for å kunne lagre trygt. Last siden på nytt. Står det fortsatt her etterpå, si fra — vi kan ikke garantere at ingen andre har endret prisene mens du så på dem.",
   menuImport_rowActions: "Handlinger",
   menuImport_rowChecking: "Kontrollerer …",
   menuImport_rowNoChanges: "Ingen endringer",

@@ -571,6 +571,12 @@
             <small class="helper-text">{{ $i('menuImport_confirmAcceptHelp') }}</small>
           </div>
 
+          <!-- A version mismatch rather than a problem with the plan, so it is said separately
+               and in terms of what to do about it. -->
+          <div v-if="reviewFingerprintMissing && !isValidating" class="warning-box" role="alert">
+            {{ $i('menuImport_reviewFingerprintMissing') }}
+          </div>
+
           <div v-if="confirmErrors.length" class="warning-box" role="alert">
             <strong>{{ $i('menuImport_confirmBlockedTitle') }}</strong>
             <ul class="confirm-errors">
@@ -1302,10 +1308,27 @@ export default {
       return !this.confirmSummary.newCategories && !this.confirmSummary.categoryGroups &&
         !this.confirmSummary.removals
     },
+    /**
+     * Whether the plan came back without the fingerprint the freshness check depends on.
+     *
+     * An older API does not send it, and every plan would then compare equal to every other —
+     * which is exactly the hole this was added to close. Comparing null to null silently
+     * reports "nothing has changed" about a state nobody looked at, so a missing fingerprint
+     * stops the save rather than being treated as a fingerprint that happens to match.
+     *
+     * Only the approval path. An operation that is already outstanding still has to be settled,
+     * and refusing that would strand it.
+     */
+    reviewFingerprintMissing () {
+      if (!this.validation) { return false }
+      const fingerprint = this.validation.reviewFingerprint
+      return typeof fingerprint !== 'string' || fingerprint.length === 0
+    },
     canConfirmApply () {
       return !!this.validation && !!this.confirmSignature && !this.isValidating &&
         !this.isApproving && !this.isApplying && !this.outcomeUnknown &&
-        !this.confirmStale && !this.nothingToWrite && this.blockingErrors.length === 0
+        !this.confirmStale && !this.nothingToWrite && !this.reviewFingerprintMissing &&
+        this.blockingErrors.length === 0
     },
     shownColumns () { return COLUMNS.filter(column => this.visibleColumns.includes(column.id)) },
     /** How many rows would actually have something to show in each optional column. */
@@ -2861,6 +2884,14 @@ export default {
       try {
         const result = await this.validate({ catalogueReplacement: options.catalogueReplacement || null })
         if (!result) { return }
+
+        // Checked against the answer that would actually be applied, not only the one the dialog
+        // was opened on: without it the freshness comparison below is comparing nothing to
+        // nothing and would report agreement it never established.
+        if (typeof result.reviewFingerprint !== 'string' || !result.reviewFingerprint.length) {
+          this.validationError = this.$i('menuImport_reviewFingerprintMissing')
+          return
+        }
 
         // What was reviewed has to be what is saved. Anything else needs another look, and the
         // dialog stays open showing the new numbers so the second confirmation is an informed one.

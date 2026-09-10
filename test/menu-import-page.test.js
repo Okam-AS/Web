@@ -110,6 +110,9 @@ const validation = (overrides = {}) => ({
   planToken: 'token-1',
   expiresAt: '2026-09-09T12:00:00Z',
   catalogueHash: 'hash-1',
+  // Every validation carries this under the current contract. It summarises the catalogue the
+  // plan was resolved against and excludes anything allocated for the plan itself.
+  reviewFingerprint: 'inputs-v1',
   normalizedPlan: { storeId: 7, rows: [{ rowKey: 'n:1' }, { rowKey: 'n:2' }] },
   canApply: true,
   rows: [
@@ -1545,6 +1548,86 @@ describe('somebody else editing while the confirmation is open', () => {
 
     expect(stub.Apply).not.toHaveBeenCalled()
     expect(wrapper.vm.confirmStale).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('refuses to save when the service did not send a review fingerprint', async () => {
+    // An older service omits it, and then every plan compares equal to every other — which is
+    // the hole this exists to close. Comparing nothing to nothing must not read as agreement.
+    const older = validation({ canApply: true })
+    delete older.reviewFingerprint
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(older) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+
+    expect(wrapper.vm.reviewFingerprintMissing).toBe(true)
+    expect(wrapper.vm.canConfirmApply).toBe(false)
+
+    await wrapper.vm.confirmApproval()
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('treats an empty fingerprint the same as a missing one', async () => {
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(validation({ canApply: true, reviewFingerprint: '' })) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('says what to do about it rather than blaming the plan', async () => {
+    const older = validation({ canApply: true })
+    delete older.reviewFingerprint
+    const { wrapper } = build({ service: { Validate: jest.fn().mockResolvedValue(older) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain('menuImport_reviewFingerprintMissing')
+    // Not reported as something wrong with the menu.
+    expect(wrapper.vm.confirmErrors).toHaveLength(0)
+    wrapper.destroy()
+  })
+
+  it('refuses even if the fingerprint disappears between opening and confirming', async () => {
+    const older = validation({ canApply: true })
+    delete older.reviewFingerprint
+    const Validate = jest.fn().mockResolvedValueOnce(validation({ canApply: true })).mockResolvedValue(older)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    expect(wrapper.vm.canConfirmApply).toBe(true)
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.validationError).toBe('T:menuImport_reviewFingerprintMissing')
+    wrapper.destroy()
+  })
+
+  it('still lets an outstanding operation be settled without one', async () => {
+    // Refusing recovery would strand an apply whose result was never seen.
+    const failure = Object.assign(new Error('network'), { status: 0 })
+    const older = validation({ canApply: true })
+    delete older.reviewFingerprint
+    const { wrapper, stub } = build({
+      service: { Validate: jest.fn().mockResolvedValue(validation({ canApply: true })), Apply: jest.fn().mockRejectedValue(failure) }
+    })
+    wrapper.vm.adoptAnalysis(analysis)
+    await approveThroughDialog(wrapper)
+    expect(wrapper.vm.outcomeUnknown).toBe(true)
+
+    wrapper.vm._menuUpdateService.Validate = jest.fn().mockResolvedValue(older)
+    await wrapper.vm.settleOperation()
+
+    expect(stub.Cancel).toHaveBeenCalledTimes(1)
+    expect(wrapper.vm.outcomeUnknown).toBe(false)
     wrapper.destroy()
   })
 

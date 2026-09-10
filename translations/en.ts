@@ -843,6 +843,7 @@ export default {
   menuImport_required: "Must be chosen",
   menuImport_restoreRow: "Include again",
   menuImport_retrySameOperation: "Try the same save again",
+  menuImport_reviewFingerprintMissing: "This version of menu import needs a newer version of the service before it can save safely. Reload the page. If this is still here afterwards, let us know — we cannot be sure nobody else changed these prices while you were looking at them.",
   menuImport_rowActions: "Actions",
   menuImport_rowChecking: "Checking …",
   menuImport_rowNoChanges: "No changes",
