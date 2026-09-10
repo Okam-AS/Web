@@ -328,6 +328,10 @@ export function makeRow (overrides = {}) {
     // category from the words on the menu; that proposal must never be made again over a choice
     // somebody has already made.
     categoryChosen: false,
+    // True once the operator has edited this row's option groups themselves. Until then the
+    // groups on a row are the reading's proposal for a product that does not exist yet, and
+    // they are not an instruction to replace what an existing product already offers.
+    variantsChosen: false,
     // What the catalogue holds today for the linked product. Display only.
     current: null,
     // What a document or a legacy file said. A suggestion for a linked row.
@@ -874,6 +878,7 @@ export function toDraftFile (storeId, rows, categoryVariants, newCategories, rul
       origin: row.origin,
       analysisId: row.analysisId,
       categoryChosen: row.categoryChosen,
+      variantsChosen: row.variantsChosen,
       sourceRowKey: row.sourceRowKey,
       displayName: row.displayName,
       sizeLabel: row.sizeLabel,
@@ -1010,6 +1015,7 @@ export function carryWorkspaceState (previousRows, nextRows, carried) {
       // Carried with the edits it belongs to: without it the re-read row looks untouched and
       // the source's category is proposed straight over the operator's choice.
       categoryChosen: !!before.categoryChosen,
+      variantsChosen: !!before.variantsChosen,
       // A fresh reading may propose different groups, but an operator who edited them has said
       // what they want; `null` here means they never touched them and the new proposal stands.
       variantGroups: before.variantGroups !== null && before.variantGroups !== undefined

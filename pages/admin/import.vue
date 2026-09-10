@@ -1522,6 +1522,25 @@ export default {
       }
     },
 
+    /**
+     * Re-reads the store's catalogue and re-attaches it to the rows.
+     *
+     * Used when a plan turns out to have been built against a state somebody else has since
+     * changed: the current values a row shows, and the option groups behind it, have to come
+     * from the store as it is now before anyone is asked to agree to anything again.
+     */
+    async refreshCatalogue () {
+      const generation = this.requestGeneration
+      try {
+        const result = await this._menuUpdateService.Catalogue(this.selectedStore)
+        if (generation !== this.requestGeneration) { return }
+        this.catalogueOnly = result
+        this.rows.forEach(row => attachCurrent(row, this.catalogue))
+      } catch (error) {
+        // The stale marker stands on its own; a failed refresh must not clear it.
+      }
+    },
+
     // ---------------------------------------------------------------- columns
     loadColumnPreference () {
       const stored = readColumnPreference(this.storage(), this.userId, this.selectedStore)
@@ -1593,16 +1612,57 @@ export default {
      */
     linkProduct (row, productId) {
       if (!this.guardEdit()) { return }
+      const previousTarget = row.targetProductId
       row.targetProductId = productId
       row.matchConfirmed = productId !== null
       this.changeAction(row, productId === null ? ACTION.create : ACTION.update)
+
       if (productId) {
         adoptCurrentPrices(row, this.catalogue.find(product => product.productId === productId))
         attachCurrent(row, this.catalogue)
+        this.rebaseVariantsOnTarget(row, previousTarget)
+        // A category proposed for a product that did not exist is not an instruction to move a
+        // product that does. Only a category somebody picked survives becoming an update.
+        if (!row.categoryChosen) {
+          clearMetadata(row, 'categoryId')
+          clearMetadata(row, 'newCategoryKey')
+        }
       } else {
         row.current = null
+        // Back to creating something. Any identity on these groups belonged to the product this
+        // row was pointed at a moment ago, and writing against it would edit that product.
+        row.variantGroups = stripVariantIds(row.variantGroups)
       }
+
       this.onPlanChanged()
+    },
+    /**
+     * Settles what a row's option groups mean once it points at an existing product.
+     *
+     * A reading proposes groups for a product it thinks is new, and those carry no identity —
+     * nothing in a document does. Sent as they are, they become the complete replacement for
+     * whatever the chosen product already offers: every existing group removed, its options
+     * deleted, and the basket selections pointing at them deleted with them. Choosing the right
+     * product was enough to do that, even when the imported choice was identical.
+     *
+     * So an untouched proposal goes back to being a suggestion and the product keeps what it
+     * has. Groups the operator actually built are theirs and are kept, reconciled onto the new
+     * target by the same merge used everywhere else: identities matched where they can be,
+     * anything belonging to a different product dropped, and groups this row never mentioned
+     * left alone.
+     */
+    rebaseVariantsOnTarget (row, previousTarget) {
+      // Pointing at the product it was already pointing at changes nothing, so work in progress
+      // on that product's groups is left exactly as it is.
+      if (previousTarget && previousTarget === row.targetProductId) { return }
+
+      // Everything else starts from the product now chosen. An untouched proposal was for a
+      // product that does not exist; a working set built while a different product was selected
+      // describes that other product. Neither is an instruction about this one, and carrying
+      // either across would add or remove groups nobody asked to add or remove.
+      row.variantGroups = null
+      row.clearVariantGroups = false
+      row.variantsChosen = false
     },
     changeAction (row, action) {
       row.action = action
@@ -1918,6 +1978,7 @@ export default {
      */
     beginVariantEdit (row) {
       if (!this.guardEdit()) { return row.variantGroups || [] }
+      row.variantsChosen = true
       if (row.variantGroups === null) {
         row.variantGroups = JSON.parse(JSON.stringify((row.current && row.current.variants) || []))
       }
@@ -1963,6 +2024,7 @@ export default {
     },
     clearVariantsOf (row) {
       if (!this.guardEdit()) { return }
+      row.variantsChosen = true
       row.variantGroups = []
       row.clearVariantGroups = true
       this.onPlanChanged()
@@ -2681,17 +2743,29 @@ export default {
      * reviewed, it is a different plan and has to be looked at again.
      */
     priceSignature (validation) {
-      return JSON.stringify((validation.rows || []).map(row => [
-        row.rowKey,
-        row.productName,
-        ...this.channels.map((channel) => {
-          const price = row[channel] || {}
-          return [price.currentAmount, price.newAmount]
-        }),
-        // A metadata change that appeared between the review and the approval changes what is
-        // about to be written just as much as a price does.
-        (row.metadataChanges || []).map(change => [change.field, change.from, change.to])
-      ]))
+      return JSON.stringify([
+        (validation.rows || []).map(row => [
+          row.rowKey,
+          row.productName,
+          ...this.channels.map((channel) => {
+            const price = row[channel] || {}
+            return [price.currentAmount, price.newAmount]
+          }),
+          // A metadata change that appeared between the review and the approval changes what is
+          // about to be written just as much as a price does.
+          (row.metadataChanges || []).map(change => [change.field, change.from, change.to])
+        ]),
+        // Everything the plan says about categories. Enumerating product rows alone gave every
+        // category-only plan the same signature — an empty list — so a change to a shared option
+        // made while the dialog was open compared equal to no change at all, and the approval
+        // wrote over it.
+        (validation.plannedCategories || []).map(category => [category.key, category.name]),
+        ((validation.removal && validation.removal.productIds) || []).slice().sort(),
+        // The server's own summary of the catalogue this plan was built against, when it offers
+        // one. It is the only thing that can notice somebody else editing an option's price:
+        // nothing in the response above describes the state the plan was resolved from.
+        validation.reviewFingerprint === undefined ? null : validation.reviewFingerprint
+      ])
     },
 
     // ---------------------------------------------------------------- approval
@@ -2787,6 +2861,13 @@ export default {
           this.validationError = this.$i('menuImport_pricesRefreshed')
           this.confirmStale = true
           this.confirmSignature = this.priceSignature(result)
+          // If a deletion is part of this, the list that was read is part of what moved, so it
+          // is re-shown rather than left describing the previous answer.
+          if (options.catalogueReplacement) { this.adoptRemovalPreview(result) }
+          // Whatever moved, the screen behind the dialog is now describing something that is no
+          // longer true. Fetching the catalogue again is what makes the second look at it a
+          // look at the current state rather than at the state that was already rejected.
+          await this.refreshCatalogue()
           return
         }
 
@@ -3078,7 +3159,11 @@ export default {
         catalogueReplacement: { requested: true, expectedRemovedProductIds: [] }
       })
       if (!result) { return }
-      const removal = result.removal || { products: [], productIds: [] }
+      this.adoptRemovalPreview(result)
+    },
+    /** The concrete list of what a replacement would remove, exactly as the server reported it. */
+    adoptRemovalPreview (result) {
+      const removal = (result && result.removal) || { products: [], productIds: [] }
       this.removalPreview = {
         products: removal.products || [],
         productIds: removal.productIds || (removal.products || []).map(product => product.productId)

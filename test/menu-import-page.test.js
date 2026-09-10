@@ -1467,6 +1467,117 @@ describe('warnings the plan is waiting to have accepted', () => {
   })
 })
 
+describe('somebody else editing while the confirmation is open', () => {
+  // Enumerating product rows alone gave every category-only plan the same signature — an empty
+  // list — so a shared option's price changing under the dialog compared equal to no change.
+  const categoryOnly = (overrides = {}) => validation({
+    canApply: true,
+    rows: [],
+    summary: { updateCount: 0, createCount: 0 },
+    plannedCategories: [],
+    ...overrides
+  })
+
+  const withCategoryWork = (wrapper) => {
+    wrapper.vm.addCategoryVariantGroup()
+    wrapper.vm.setCategoryVariantCategory(0, 'c1')
+    wrapper.vm.categoryVariants[0].variants = [{ name: 'Tilbehør', options: [{ name: 'Pommes', amount: 900 }] }]
+  }
+
+  it('refuses to apply when the state the plan was built on has moved', async () => {
+    const reviewed = categoryOnly({ reviewFingerprint: 'catalogue-v1' })
+    const moved = categoryOnly({ reviewFingerprint: 'catalogue-v2' })
+    const Validate = jest.fn().mockResolvedValueOnce(reviewed).mockResolvedValue(moved)
+    const { wrapper, stub } = build({ service: { Validate } })
+    withCategoryWork(wrapper)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.confirmStale).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('fetches the current choices again before inviting a second look', async () => {
+    const Validate = jest.fn()
+      .mockResolvedValueOnce(categoryOnly({ reviewFingerprint: 'catalogue-v1' }))
+      .mockResolvedValue(categoryOnly({ reviewFingerprint: 'catalogue-v2' }))
+    const { wrapper, stub } = build({ service: { Validate } })
+    withCategoryWork(wrapper)
+    stub.Catalogue.mockClear()
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    // Otherwise the screen behind the dialog still shows the values that were just rejected.
+    expect(stub.Catalogue).toHaveBeenCalled()
+    wrapper.destroy()
+  })
+
+  it('notices a category being created that was not there when it was read', async () => {
+    const Validate = jest.fn()
+      .mockResolvedValueOnce(categoryOnly({ plannedCategories: [] }))
+      .mockResolvedValue(categoryOnly({ plannedCategories: [{ key: 'newcat-1', name: 'Ny' }] }))
+    const { wrapper, stub } = build({ service: { Validate } })
+    withCategoryWork(wrapper)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.confirmStale).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('notices a product option edit that leaves the group count unchanged', async () => {
+    // The count is the same on both sides; only the contents moved.
+    const reviewed = validation({ canApply: true })
+    reviewed.rows[0].metadataChanges = [{ field: 'variants', from: '1 gruppe', to: '1 gruppe' }]
+    const moved = validation({ canApply: true })
+    moved.rows[0].metadataChanges = [{ field: 'variants', from: '1 gruppe (900)', to: '1 gruppe (1200)' }]
+    const Validate = jest.fn().mockResolvedValueOnce(reviewed).mockResolvedValue(moved)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).not.toHaveBeenCalled()
+    expect(wrapper.vm.confirmStale).toBe(true)
+    wrapper.destroy()
+  })
+
+  it('does not cry stale over an ordinary creation approval', async () => {
+    // Newly allocated ids differ between two validations of the same plan, which is why the
+    // full catalogue hash is not what this compares.
+    const ready = validation({ canApply: true, catalogueHash: 'hash-1', plannedCategories: [{ key: 'newcat-1', name: 'Ny' }] })
+    const again = validation({ canApply: true, catalogueHash: 'hash-2-different-ids', plannedCategories: [{ key: 'newcat-1', name: 'Ny' }] })
+    const Validate = jest.fn().mockResolvedValueOnce(ready).mockResolvedValue(again)
+    const { wrapper, stub } = build({ service: { Validate } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(wrapper.vm.confirmStale).toBe(false)
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+
+  it('applies normally when a category-only plan really has not moved', async () => {
+    const steady = categoryOnly({ reviewFingerprint: 'catalogue-v1' })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(steady) } })
+    withCategoryWork(wrapper)
+
+    await wrapper.vm.openApproval()
+    await wrapper.vm.confirmApproval()
+
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+})
+
 describe('when the browser cannot record the save', () => {
   // An operation whose id was never written down cannot be asked about and cannot be settled.
   // A lost response would leave products that may already exist, a draft that still wants to
@@ -2290,6 +2401,140 @@ describe('shared options for a whole category', () => {
     wrapper.vm.adoptAnalysis(analysis, { preserveDecisions: true })
 
     expect(wrapper.vm.categoryVariants[0].variants.map(group => group.name)).toContain('Min egen gruppe')
+    wrapper.destroy()
+  })
+})
+
+describe('pointing a proposed row at a product that already exists', () => {
+  // A reading proposes groups for a product it thinks is new, and nothing in a document carries
+  // an identity. Sent as they are they replace whatever the chosen product already offers —
+  // every group removed, its options deleted, and the baskets pointing at them deleted too.
+  const withGroups = [{
+    ...catalogue[0],
+    productId: 'p5',
+    name: 'Eksisterende rett',
+    variants: [
+      {
+        variantGroupId: 'g1',
+        name: 'Saus',
+        required: false,
+        multiSelect: false,
+        orderIndex: 0,
+        options: [{ variantOptionId: 'o1', name: 'Tomat', amount: 500, negativeAmount: false, orderIndex: 0 }]
+      },
+      {
+        variantGroupId: 'g2',
+        name: 'Tilbehør',
+        required: false,
+        multiSelect: false,
+        orderIndex: 1,
+        options: [{ variantOptionId: 'o2', name: 'Ris', amount: 900, negativeAmount: false, orderIndex: 0 }]
+      }
+    ]
+  }]
+
+  const proposed = {
+    ...analysis,
+    catalogue: withGroups,
+    rows: [{
+      rowKey: 'p:1',
+      name: 'Ny rett',
+      categoryName: 'Pizza',
+      suggestedAction: 'Create',
+      suggestedProductId: null,
+      candidates: [],
+      warnings: [],
+      sourcePrices: [{ channel: 'Takeaway', amount: 12000 }],
+      variants: [{ name: 'Saus', options: [{ name: 'Tomat', amount: 500 }] }]
+    }]
+  }
+
+  const linked = () => {
+    const built = build()
+    built.wrapper.vm.catalogueOnly = { catalogue: withGroups, categories }
+    built.wrapper.vm.adoptAnalysis(proposed)
+    // The proposal is on the row while it is still a creation.
+    expect(built.wrapper.vm.rows[0].variantGroups).toHaveLength(1)
+    built.wrapper.vm.linkProduct(built.wrapper.vm.rows[0], 'p5')
+    return built
+  }
+
+  it('sends no option instruction at all for an untouched proposal', async () => {
+    const { wrapper, stub } = linked()
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows[0]
+    // Existing metadata is unchanged until it is edited, and this was never edited.
+    expect(sent.metadata).toBeUndefined()
+    expect(wrapper.vm.rows[0].variantGroups).toBeNull()
+    wrapper.destroy()
+  })
+
+  it('still shows the product\'s real groups after linking', () => {
+    const { wrapper } = linked()
+
+    expect(wrapper.vm.variantGroupsOf(wrapper.vm.rows[0]).map(group => group.variantGroupId))
+      .toEqual(['g1', 'g2'])
+    wrapper.destroy()
+  })
+
+  it('keeps identities and untouched groups when the operator has edited them', async () => {
+    const { wrapper, stub } = linked()
+    const row = wrapper.vm.rows[0]
+
+    // Editing takes a working copy of what the product actually has, and re-selecting the same
+    // product is not a change, so the work in progress survives.
+    wrapper.vm.beginVariantEdit(row)
+    wrapper.vm.linkProduct(row, 'p5')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows[0]
+    expect(sent.metadata.variants.map(group => group.variantGroupId)).toEqual(['g1', 'g2'])
+    expect(sent.metadata.variants[0].options[0].variantOptionId).toBe('o1')
+    // The group the row never mentioned is still there.
+    expect(sent.metadata.variants[1].options[0].variantOptionId).toBe('o2')
+    wrapper.destroy()
+  })
+
+  it('starts again from the product now chosen when the link is changed', async () => {
+    const other = [...withGroups, {
+      ...catalogue[1],
+      productId: 'p6',
+      name: 'En annen rett',
+      variants: [{ variantGroupId: 'g9', name: 'Saus', required: false, multiSelect: false, orderIndex: 0, options: [{ variantOptionId: 'o9', name: 'Tomat', amount: 700, negativeAmount: false, orderIndex: 0 }] }]
+    }]
+    const { wrapper, stub } = build()
+    wrapper.vm.catalogueOnly = { catalogue: other, categories }
+    wrapper.vm.adoptAnalysis({ ...proposed, catalogue: other })
+    const row = wrapper.vm.rows[0]
+
+    wrapper.vm.linkProduct(row, 'p5')
+    wrapper.vm.beginVariantEdit(row)
+    // Now pointed somewhere else entirely.
+    wrapper.vm.linkProduct(row, 'p6')
+    await wrapper.vm.validate()
+
+    const sent = stub.Validate.mock.calls.pop()[0].rows[0]
+    // A working set built against the first product describes that product, not this one, so
+    // nothing is carried across — and the first product's ids certainly are not.
+    expect(sent.metadata).toBeUndefined()
+    expect(row.variantGroups).toBeNull()
+    expect(row.variantsChosen).toBe(false)
+    // What the row shows is the new target's own groups.
+    expect(wrapper.vm.variantGroupsOf(row).map(group => group.variantGroupId)).toEqual(['g9'])
+    wrapper.destroy()
+  })
+
+  it('keeps identities out of a row that goes back to creating a product', () => {
+    const { wrapper } = linked()
+    const row = wrapper.vm.rows[0]
+    wrapper.vm.beginVariantEdit(row)
+    expect(row.variantGroups[0].variantGroupId).toBe('g1')
+
+    wrapper.vm.linkProduct(row, null)
+
+    expect(row.variantGroups.every(group => group.variantGroupId === null)).toBe(true)
+    expect(row.variantGroups.every(group => group.options.every(option => option.variantOptionId === null))).toBe(true)
     wrapper.destroy()
   })
 })
