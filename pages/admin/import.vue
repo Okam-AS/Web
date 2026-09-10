@@ -2465,12 +2465,14 @@ export default {
       // Stamped on the analysis itself so a later remap knows which rows it owns.
       this.analysis = { ...analysis, localAnalysisId: analysisId }
 
-      // A column decision belongs to the document it was made about. Keeping entries for
-      // documents this reading does not contain would send another menu's columns with it.
-      const documents = new Set(((analysis.sources || []).map(source => source.documentName)))
-      Object.keys(this.columnMappings)
-        .filter(documentName => !documents.has(documentName))
-        .forEach((documentName) => { this.$delete(this.columnMappings, documentName) })
+      // A column decision is about one reading of one document, and a remap is the only thing
+      // that continues that reading. Any other adoption is a different menu — including a
+      // re-upload of the same file, whose columns may now mean something else entirely — so the
+      // decisions are dropped rather than left to override what the new pass worked out.
+      //
+      // Done here rather than before the request, because this runs only once a reading has
+      // actually come back: an analysis that fails leaves the draft and its mappings alone.
+      if (!preserveDecisions) { this.columnMappings = {} }
       if (!preserveDecisions) {
         const rules = { ...DEFAULT_RULES(), missingChannelRule: 'SamePercent', newProductChannelRule: 'SameAsTakeaway' }
         const preferences = analysis.instructions && analysis.operatorPreferences

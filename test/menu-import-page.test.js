@@ -665,6 +665,67 @@ describe('correcting one column of a reading', () => {
     wrapper.destroy()
   })
 
+  it('does not carry a decision into a re-upload of the same file', async () => {
+    // The obvious case pruning by document name misses: the file is called the same thing and
+    // its columns now mean something else. The old edit would have overridden the new reading.
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+    expect(wrapper.vm.columnMappingChanged).toBe(true)
+
+    // Same file name, re-read, and this time the reading knows what the columns are.
+    const reread = {
+      ...sized,
+      sources: [{
+        ...sized.sources[0],
+        columns: [
+          { label: 'Small', resolvedKind: 'Channel', resolvedChannel: 'Delivery', unresolved: false, ignored: false },
+          { label: 'Large', resolvedKind: 'Channel', resolvedChannel: 'Delivery', unresolved: false, ignored: false }
+        ]
+      }]
+    }
+    wrapper.vm.adoptAnalysis(reread)
+
+    expect(wrapper.vm.columnMappingChanged).toBe(false)
+    await wrapper.vm.applyColumnMapping()
+
+    const columns = stub.Remap.mock.calls.pop()[1].sourceMappings[0].columns
+    expect(columns.find(column => column.label === 'Small').channel).toBe('Delivery')
+    expect(columns.find(column => column.label === 'Small').kind).toBe('Channel')
+    wrapper.destroy()
+  })
+
+  it('drops decisions when a second menu is appended, and keeps them through a remap', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+
+    // A remap continues this reading, so the edit is exactly what it is for.
+    wrapper.vm.adoptAnalysis(sized, { preserveDecisions: true })
+    expect(wrapper.vm.columnMappingChanged).toBe(true)
+
+    // Appending is a different menu, and its columns are not this one's.
+    wrapper.vm.adoptAnalysis(sized, { append: true })
+    expect(wrapper.vm.columnMappingChanged).toBe(false)
+    wrapper.destroy()
+  })
+
+  it('leaves the draft and its decisions alone when a reading fails', async () => {
+    const { wrapper } = build({ service: { Analyze: jest.fn().mockRejectedValue(new Error('nope')) } })
+    wrapper.vm.adoptAnalysis(sized)
+    editedOne(wrapper)
+    const rowsBefore = wrapper.vm.rows.length
+
+    wrapper.vm.pastedText = 'en ny meny'
+    await wrapper.vm.runAnalysis()
+
+    // Nothing came back, so nothing is replaced.
+    expect(wrapper.vm.analysisError).toBe('nope')
+    expect(wrapper.vm.rows).toHaveLength(rowsBefore)
+    expect(wrapper.vm.columnMappingChanged).toBe(true)
+    wrapper.destroy()
+  })
+
   it('does not carry another menu\'s columns into a new reading', async () => {
     const { wrapper, stub } = build()
     wrapper.vm.adoptAnalysis(sized)
@@ -1355,6 +1416,15 @@ describe('warnings the plan is waiting to have accepted', () => {
     expect(wrapper.vm.confirmErrors).toHaveLength(1)
     expect(wrapper.vm.confirmErrors[0].message).toBe('T:menuImport_error_invalidMetadata')
     expect(wrapper.vm.confirmErrors[0].message).not.toContain('Name must not be empty')
+
+    // The same code covers a name that is too long, so the phrase must fit that too rather
+    // than claiming the field is empty.
+    const tooLong = validation({
+      canApply: false,
+      blockers: [{ code: 'invalidMetadata', rowKey: 'n:1', message: 'A product name can be at most 150 characters.' }]
+    })
+    wrapper.vm.validation = tooLong
+    expect(wrapper.vm.confirmErrors[0].message).toBe('T:menuImport_error_invalidMetadata')
     expect(wrapper.vm.canConfirmApply).toBe(false)
     wrapper.destroy()
   })
