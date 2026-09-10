@@ -53,7 +53,6 @@ export const COLUMNS = [
   { id: 'category', labelKey: 'menuImport_colCategory', kind: 'category', field: 'categoryId' },
   { id: 'description', labelKey: 'menuImport_colDescription', kind: 'text', field: 'description', wide: true },
   { id: 'otherInformation', labelKey: 'menuImport_colAllergens', kind: 'text', field: 'otherInformation' },
-  { id: 'eatInAddition', labelKey: 'menuImport_colEatInAddition', kind: 'derived' },
   { id: 'tax', labelKey: 'menuImport_colTakeawayVat', kind: 'number', field: 'tax' },
   { id: 'eatInTax', labelKey: 'menuImport_colEatInVat', kind: 'number', field: 'eatInTax' },
   { id: 'deliveryTax', labelKey: 'menuImport_colDeliveryVat', kind: 'number', field: 'deliveryTax' },
@@ -352,6 +351,9 @@ export function displayValue (row, field) {
   // Approving a list that shows one dish name twice and then creating two differently named
   // products would be approving something other than what was read.
   if (field === 'name' && row.action === ACTION.create) { return newProductName(row) }
+  if (field === 'eatInTax' && row.action === ACTION.create) {
+    return row.newProduct && row.newProduct.eatInTax !== undefined ? row.newProduct.eatInTax : 25
+  }
   if (row.action !== ACTION.create && row.current && row.current[field] !== undefined && row.current[field] !== null) {
     return row.current[field]
   }
@@ -1322,7 +1324,7 @@ export function metadataFor (row) {
 
 /**
  * Fills the create payload from the same edits the table shows, so what is on screen is what is
- * created. Category suggestions come from the store's own rates, never a fixed number.
+ * created. Eat-in VAT defaults to 25%; other rates follow the store category.
  */
 /**
  * The name a created product is actually stored under.
@@ -1358,6 +1360,7 @@ export function buildNewProduct (row, categories, previous) {
     const edited = hasOwn(row.metadataEdits, field) ? row.metadataEdits[field] : null
     if (edited !== null && edited !== undefined) { return edited }
     if (previous && previous[field] !== undefined && previous.categoryId === categoryId) { return previous[field] }
+    if (field === 'eatInTax') { return 25 }
     return category ? category[fallback] : 0
   }
 

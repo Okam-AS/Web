@@ -146,6 +146,16 @@ describe('metadata is only written when it was edited', () => {
     expect(toValidateRequest(7, {}, [row]).rows[0].newProduct.variants).toHaveLength(2)
   })
 
+  it('defaults new eat-in VAT to 25 while preserving explicit rates and existing products', () => {
+    const row = makeRow({ action: ACTION.create, displayName: 'Ny rett' })
+    expect(buildNewProduct(row, [], null).eatInTax).toBe(25)
+    expect(displayValue(row, 'eatInTax')).toBe(25)
+    setMetadata(row, 'eatInTax', 0)
+    expect(buildNewProduct(row, categories, null).eatInTax).toBe(0)
+    const existing = makeRow({ action: ACTION.update, current: { eatInTax: 15 } })
+    expect(displayValue(existing, 'eatInTax')).toBe(15)
+  })
+
   it('lets a cleared description on a create row stay cleared', () => {
     // `||` would put the extracted text straight back and leave no way to empty the field.
     const row = makeRow({ action: ACTION.create, description: 'Fra menyen', sourceMeta: { description: 'Fra menyen' } })

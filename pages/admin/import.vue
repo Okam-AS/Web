@@ -384,13 +384,6 @@
                           <span class="cell-after" aria-hidden="true" />
                         </template>
 
-                        <!-- derived eat-in surcharge ------------------------------- -->
-                        <template v-else-if="column.id === 'eatInAddition'">
-                          <span class="cell-before" aria-hidden="true" />
-                          <span class="derived-value">{{ eatInAdditionText(row) }}</span>
-                          <span class="cell-after" aria-hidden="true" />
-                        </template>
-
                         <!-- variants ----------------------------------------------- -->
                         <template v-else-if="column.id === 'variants'">
                           <span class="cell-before" aria-hidden="true" />
@@ -955,7 +948,6 @@ import {
   clearMetadata,
   displayValue,
   draftStorageKey,
-  eatInAddition,
   IDENTITY_COLUMN,
   alreadyMigrated,
   fileBadge,
@@ -1339,7 +1331,6 @@ export default {
           if (row.action === ACTION.skip) { return false }
           if (column.kind === 'price') { return priceFor(row, column.channel) !== null }
           if (column.id === 'variants') { return this.variantCountOf(row) > 0 }
-          if (column.id === 'eatInAddition') { return eatInAddition(row) !== null }
           const value = displayValue(row, column.field)
           return value !== null && value !== undefined && value !== ''
         }).length
@@ -3378,10 +3369,6 @@ export default {
       const field = this.resolvedChannel(row, channel)
       if (!field || !field.changed || field.deltaPercent === null || field.deltaPercent === undefined) { return '' }
       return percent(field.deltaPercent)
-    },
-    eatInAdditionText (row) {
-      const addition = eatInAddition(row)
-      return addition === null ? '—' : money(addition)
     },
     isRowUnresolved (row) {
       return row.action !== ACTION.skip &&
