@@ -1249,6 +1249,60 @@ describe('a category the operator chose', () => {
     wrapper.destroy()
   })
 
+  it('never hands the same key to two pending categories', async () => {
+    // Astra's sequence: a reading declares newcat-1, a second reading replaces it and declares
+    // newcat-2, then a category created by hand is also told it is newcat-2 because the count
+    // says so. The server refuses a plan that declares one key twice.
+    const withSection = name => ({
+      ...analysis,
+      rows: [{ ...analysis.rows[1], rowKey: 'k:1', categoryName: name, suggestedAction: 'Create', suggestedProductId: null }]
+    })
+
+    const { wrapper, stub } = build()
+    wrapper.vm.adoptAnalysis(withSection('Første seksjon'))
+    expect(wrapper.vm.newCategories).toHaveLength(1)
+
+    // A different reading, replacing the first.
+    wrapper.vm.adoptAnalysis(withSection('Andre seksjon'))
+    wrapper.vm.addManualRow()
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[wrapper.vm.rows.length - 1], 'Håndlaget seksjon')
+
+    const keys = wrapper.vm.newCategories.map(category => category.key)
+    expect(new Set(keys).size).toBe(keys.length)
+
+    await wrapper.vm.validate()
+    const sent = stub.Validate.mock.calls.pop()[0]
+    const declared = (sent.newCategories || []).map(category => category.key)
+    expect(new Set(declared).size).toBe(declared.length)
+    // Each row still points at the category it was actually given.
+    const byKey = {}
+    ;(sent.newCategories || []).forEach((category) => { byKey[category.key] = category.name })
+    sent.rows.forEach((row) => {
+      const key = row.newProduct && row.newProduct.newCategoryKey
+      if (key) { expect(byKey[key]).toBeDefined() }
+    })
+    wrapper.destroy()
+  })
+
+  it('does not reuse a key a category group is holding', () => {
+    const { wrapper } = build()
+    wrapper.vm.adoptAnalysis({
+      ...analysis,
+      rows: [{ ...analysis.rows[1], rowKey: 'k:1', categoryName: 'Seksjon', suggestedAction: 'Create', suggestedProductId: null }],
+      sourceCategoryVariants: [{ categoryName: 'Annen seksjon', groups: [{ name: 'Tilbehør', options: [] }] }]
+    })
+    wrapper.vm.addManualRow()
+    wrapper.vm.createCategoryFor(wrapper.vm.rows[wrapper.vm.rows.length - 1], 'Tredje seksjon')
+
+    const keys = [
+      ...wrapper.vm.newCategories.map(category => category.key),
+      ...wrapper.vm.categoryVariants.map(group => group.newCategoryKey).filter(Boolean)
+    ]
+    expect(new Set(keys).size).toBe(new Set(wrapper.vm.newCategories.map(c => c.key)).size)
+    expect(new Set(wrapper.vm.newCategories.map(c => c.key)).size).toBe(wrapper.vm.newCategories.length)
+    wrapper.destroy()
+  })
+
   it('still proposes one for a row nobody has decided about', () => {
     const { wrapper } = build()
     wrapper.vm.adoptAnalysis(newDish)

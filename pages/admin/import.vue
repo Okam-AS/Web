@@ -1846,7 +1846,11 @@ export default {
         return
       }
       const already = this.newCategories.find(category => category.name.toLowerCase() === name.toLowerCase())
-      const key = already ? already.key : 'newcat-' + (this.newCategories.length + 1)
+      // Through the shared allocator, not the length of the list. Counting hands out a key that
+      // is already taken as soon as one has been dropped or renumbered — a category proposed by
+      // a reading and one typed here would both be told they are newcat-2, and the server
+      // refuses a plan that declares the same key twice.
+      const key = already ? already.key : this.nextCategoryKey(this.usedCategoryKeys())
       if (!already) { this.newCategories.push({ key, name }) }
       clearMetadata(row, 'categoryId')
       setMetadata(row, 'newCategoryKey', key)
@@ -1870,6 +1874,15 @@ export default {
      * `newcat-1` meaning one thing while a proposal made a moment later is handed `newcat-1`
      * meaning another — and the row then belongs to a category nobody put it in, silently.
      */
+    /** Every pending-category key anything in this draft currently refers to. */
+    usedCategoryKeys () {
+      const used = new Set()
+      const reserve = (key) => { if (key) { used.add(key) } }
+      this.newCategories.forEach(category => reserve(category.key))
+      this.rows.forEach(row => reserve(row.metadataEdits && row.metadataEdits.newCategoryKey))
+      this.categoryVariants.forEach(group => reserve(group.newCategoryKey))
+      return used
+    },
     nextCategoryKey (used) {
       let index = used.size + 1
       let key = 'newcat-' + index
@@ -1947,12 +1960,14 @@ export default {
       const declared = []
       const keyByName = {}
 
-      // Every key anything already refers to, reserved before a single new one is handed out.
-      const used = new Set()
-      const reserve = (key) => { if (key) { used.add(key) } }
-      this.newCategories.forEach(category => reserve(category.key))
-      rows.forEach(row => reserve(row.metadataEdits && row.metadataEdits.newCategoryKey))
-      ;(categoryVariants || []).forEach(group => reserve(group.newCategoryKey))
+      // Every key anything already refers to, reserved before a single new one is handed out —
+      // including the rows and groups of the reading being adopted, which are not on the page yet.
+      const used = this.usedCategoryKeys()
+      rows.forEach((row) => {
+        const key = row.metadataEdits && row.metadataEdits.newCategoryKey
+        if (key) { used.add(key) }
+      })
+      ;(categoryVariants || []).forEach((group) => { if (group.newCategoryKey) { used.add(group.newCategoryKey) } })
 
       // A row whose category is still waiting to be created keeps pointing at its key, so that
       // declaration comes through the re-read with it — and comes through FIRST. Declaring it
