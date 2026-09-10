@@ -298,28 +298,25 @@
                 </button>
               </div>
             </div>
-            <div class="form-group">
-              <label>{{ $i('common_name') }}</label>
+            <ProductFormField :label="$i('common_name')">
               <input
                 v-model="selectedProduct.name"
                 type="text"
               />
-            </div>
-            <div class="form-group">
-              <label>{{ $i('common_description') }}</label>
+            </ProductFormField>
+            <ProductFormField :label="$i('common_description')">
               <textarea
                 v-model="selectedProduct.description"
                 rows="3"
               />
-            </div>
-            <div class="form-group">
-              <label>{{ $i('products_allergens') }}</label>
+            </ProductFormField>
+            <ProductFormField :label="$i('products_allergens')">
               <textarea
                 v-model="selectedProduct.otherInformation"
                 rows="2"
                 :placeholder="$i('products_allergensPlaceholder')"
               />
-            </div>
+            </ProductFormField>
 
             <!-- Categories Section -->
             <div v-if="selectedProduct.id" class="form-group categories-section">
@@ -737,6 +734,7 @@ import CopyVariantToTargetsModal from "~/components/admin/CopyVariantToTargetsMo
 import CopyProductToStoresModal from "~/components/admin/CopyProductToStoresModal.vue";
 import LoadingSkeleton from "~/components/molecules/LoadingSkeleton.vue";
 import Loading from "~/components/atoms/Loading.vue";
+import ProductFormField from "~/components/admin/ProductFormField.vue";
 import axios from "axios";
 import $config from "~/core/helpers/configuration";
 import { mergeVariantByName } from "~/core/helpers/variant-copy";
@@ -748,7 +746,8 @@ export default {
     CopyVariantToTargetsModal,
     CopyProductToStoresModal,
     LoadingSkeleton,
-    Loading
+    Loading,
+    ProductFormField
   },
   data: () => ({
     products: [],
