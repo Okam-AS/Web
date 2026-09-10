@@ -888,6 +888,7 @@ export default {
   menuImport_variantsAndOptions: "Options and choices",
   menuImport_variantsFor: "Options for {name}",
   menuImport_variantsHelp: "For example size, extra topping or a choice of sides. A surcharge can be positive or negative.",
+  menuImport_variantsResetOnRelink: "The option groups you had started on for “{name}” were about a different product, so they were not carried over. Open the row\u2019s details if you want to change the options on the product you have now chosen.",
   menuImport_variantsUntouched: "The product keeps its existing option groups unchanged.",
   menuImport_vatDepositAvailability: "VAT, deposit and availability",
   menuImport_vatFor: "VAT · {channel}",

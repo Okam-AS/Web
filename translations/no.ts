@@ -888,6 +888,7 @@ export default {
   menuImport_variantsAndOptions: "Tillegg og valg",
   menuImport_variantsFor: "Varianter for {name}",
   menuImport_variantsHelp: "For eksempel størrelse, ekstra topping eller valg av tilbehør. Tilleggspris kan være positiv eller negativ.",
+  menuImport_variantsResetOnRelink: "Valggruppene du hadde begynt på for «{name}» gjaldt et annet produkt, og ble ikke tatt med. Åpne detaljene på raden hvis du vil endre valgene på produktet du nå har valgt.",
   menuImport_variantsUntouched: "Produktets eksisterende valggrupper beholdes uendret.",
   menuImport_vatDepositAvailability: "Mva, pant og tilgjengelighet",
   menuImport_vatFor: "Mva · {channel}",

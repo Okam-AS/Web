@@ -888,6 +888,7 @@ export default {
   menuImport_variantsAndOptions: "Optionen und Auswahl",
   menuImport_variantsFor: "Optionen für {name}",
   menuImport_variantsHelp: "Zum Beispiel Größe, Extra-Topping oder Beilagenauswahl. Ein Aufschlag kann positiv oder negativ sein.",
+  menuImport_variantsResetOnRelink: "Die Optionsgruppen, die Sie für „{name}“ begonnen hatten, betrafen ein anderes Produkt und wurden nicht übernommen. Öffnen Sie die Details der Zeile, wenn Sie die Optionen des jetzt gewählten Produkts ändern möchten.",
   menuImport_variantsUntouched: "Das Produkt behält seine vorhandenen Optionsgruppen unverändert.",
   menuImport_vatDepositAvailability: "MwSt., Pfand und Verfügbarkeit",
   menuImport_vatFor: "MwSt. · {channel}",

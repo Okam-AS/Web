@@ -1645,21 +1645,25 @@ export default {
      * deleted, and the basket selections pointing at them deleted with them. Choosing the right
      * product was enough to do that, even when the imported choice was identical.
      *
-     * So an untouched proposal goes back to being a suggestion and the product keeps what it
-     * has. Groups the operator actually built are theirs and are kept, reconciled onto the new
-     * target by the same merge used everywhere else: identities matched where they can be,
-     * anything belonging to a different product dropped, and groups this row never mentioned
-     * left alone.
+     * The rule is therefore simple and the same in every case: a row's groups describe the
+     * product it is pointed at, and pointing it somewhere else starts again from there.
+     *
+     * That includes groups the operator had edited by hand. Those were edited against a
+     * different product — the working set is seeded from whatever that product offered — so
+     * carrying them across would add and remove groups on the new target that nobody asked
+     * about. They are discarded rather than merged, and the operator is told so, because
+     * silently dropping work someone did is worse than making them redo it knowingly.
      */
     rebaseVariantsOnTarget (row, previousTarget) {
       // Pointing at the product it was already pointing at changes nothing, so work in progress
       // on that product's groups is left exactly as it is.
       if (previousTarget && previousTarget === row.targetProductId) { return }
 
-      // Everything else starts from the product now chosen. An untouched proposal was for a
-      // product that does not exist; a working set built while a different product was selected
-      // describes that other product. Neither is an instruction about this one, and carrying
-      // either across would add or remove groups nobody asked to add or remove.
+      // Said out loud, and only when there was something to lose.
+      if (row.variantsChosen && (row.variantGroups || []).length) {
+        this.remapNotice = this.$i('menuImport_variantsResetOnRelink', { name: this.rowLabel(row) })
+      }
+
       row.variantGroups = null
       row.clearVariantGroups = false
       row.variantsChosen = false
@@ -2761,10 +2765,13 @@ export default {
         // wrote over it.
         (validation.plannedCategories || []).map(category => [category.key, category.name]),
         ((validation.removal && validation.removal.productIds) || []).slice().sort(),
-        // The server's own summary of the catalogue this plan was built against, when it offers
-        // one. It is the only thing that can notice somebody else editing an option's price:
-        // nothing in the response above describes the state the plan was resolved from.
-        validation.reviewFingerprint === undefined ? null : validation.reviewFingerprint
+        // The server's summary of the catalogue this plan was resolved against. It is the only
+        // thing here that can notice somebody else editing an existing option's price: nothing
+        // else in the response describes the state the plan was built from. The companion API
+        // supplies it, and it deliberately excludes anything allocated for this plan — the full
+        // catalogue hash covers ids minted for new products, so comparing that would call every
+        // ordinary creation stale.
+        validation.reviewFingerprint
       ])
     },
 

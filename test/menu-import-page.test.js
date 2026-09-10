@@ -1548,6 +1548,21 @@ describe('somebody else editing while the confirmation is open', () => {
     wrapper.destroy()
   })
 
+  it('compares the review fingerprint the API supplies, not the catalogue hash', async () => {
+    // The two differ on purpose: the catalogue hash covers ids minted for products being
+    // created, so comparing it would call every ordinary creation stale.
+    const ready = validation({ canApply: true, reviewFingerprint: 'inputs-v1' })
+    const { wrapper, stub } = build({ service: { Validate: jest.fn().mockResolvedValue(ready) } })
+    wrapper.vm.adoptAnalysis(analysis)
+
+    await wrapper.vm.openApproval()
+    expect(wrapper.vm.confirmSignature).toContain('inputs-v1')
+
+    await wrapper.vm.confirmApproval()
+    expect(stub.Apply).toHaveBeenCalledTimes(1)
+    wrapper.destroy()
+  })
+
   it('does not cry stale over an ordinary creation approval', async () => {
     // Newly allocated ids differ between two validations of the same plan, which is why the
     // full catalogue hash is not what this compares.
@@ -2522,6 +2537,37 @@ describe('pointing a proposed row at a product that already exists', () => {
     expect(row.variantsChosen).toBe(false)
     // What the row shows is the new target's own groups.
     expect(wrapper.vm.variantGroupsOf(row).map(group => group.variantGroupId)).toEqual(['g9'])
+    wrapper.destroy()
+  })
+
+  it('tells the operator when a target change discards option work', async () => {
+    // Discarding is the safe behaviour, but doing it silently would lose work someone did.
+    const other = [...withGroups, {
+      ...catalogue[1],
+      productId: 'p6',
+      name: 'En annen rett',
+      variants: [{ variantGroupId: 'g9', name: 'Saus', required: false, multiSelect: false, orderIndex: 0, options: [] }]
+    }]
+    const { wrapper } = build()
+    wrapper.vm.catalogueOnly = { catalogue: other, categories }
+    wrapper.vm.adoptAnalysis({ ...proposed, catalogue: other })
+    const row = wrapper.vm.rows[0]
+    wrapper.vm.linkProduct(row, 'p5')
+    wrapper.vm.beginVariantEdit(row)
+
+    wrapper.vm.linkProduct(row, 'p6')
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.vm.remapNotice).toContain('menuImport_variantsResetOnRelink')
+    expect(wrapper.text()).toContain('menuImport_variantsResetOnRelink')
+    wrapper.destroy()
+  })
+
+  it('says nothing when there was no option work to discard', () => {
+    const { wrapper } = linked()
+
+    // An untouched proposal is not work the operator did, so there is nothing to report.
+    expect(wrapper.vm.remapNotice).toBe('')
     wrapper.destroy()
   })
 
