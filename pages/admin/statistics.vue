@@ -265,8 +265,11 @@
 
         <!-- Peak Performance Heatmap -->
         <PeakPerformanceHeatmap
-          v-if="heatmapData.length > 0"
           :data="heatmapData"
+          :time-basis="heatmapTimeBasis"
+          :error="heatmapError"
+          @time-basis-change="changeHeatmapTimeBasis"
+          @retry="loadStatistics"
           :date-range="getDateRangeLabel()"
         />
 
@@ -456,6 +459,7 @@ import LoadingSkeleton from '~/components/molecules/LoadingSkeleton.vue';
 import PeakPerformanceHeatmap from '~/components/molecules/PeakPerformanceHeatmap.vue';
 import AIQueryBox from '~/components/admin/statistics/AIQueryBox.vue';
 import { debounce } from '~/core/helpers/ts-debounce';
+import { heatmapResponseMatchesBasis } from '~/utils/statistics-heatmap';
 
 export default {
   components: {
@@ -484,6 +488,9 @@ export default {
       table: null,
     },
     heatmapRawData: [],
+    heatmapTimeBasis: 'Created',
+    heatmapError: '',
+    statisticsRequestId: 0,
     comparisonDateRange: {
       from: new Date(Date.now() - 86400000).toISOString().split('T')[0],
       to: new Date(Date.now() - 86400000).toISOString().split('T')[0],
@@ -577,14 +584,7 @@ export default {
       );
     },
     heatmapData() {
-      if (!this.heatmapRawData || this.heatmapRawData.length === 0) return [];
-
-      // Transform backend data to frontend format
-      return this.heatmapRawData.map((cell) => ({
-        timestamp: cell.sampleTimestamp,
-        orders: cell.orderCount,
-        revenue: cell.revenue / 100, // Convert from øre to kr
-      }));
+      return this.heatmapRawData;
     },
   },
   mounted() {
@@ -667,8 +667,17 @@ export default {
       this.openOrderSummaryIndices = [];
       this.debouncedLoadStatistics();
     },
+    changeHeatmapTimeBasis(basis) {
+      if (!['Created', 'RequestedCompletion', 'Completed'].includes(basis) || basis === this.heatmapTimeBasis) return;
+      this.heatmapTimeBasis = basis;
+      this.loadStatistics();
+    },
     loadStatistics() {
+      const requestId = ++this.statisticsRequestId;
+      const heatmapTimeBasis = this.heatmapTimeBasis;
       this.isLoading = true;
+      this.heatmapRawData = [];
+      this.heatmapError = '';
       this.ordersSummary = [];
       this.openOrderSummaryIndices = [];
 
@@ -700,8 +709,9 @@ export default {
         // Add heatmap data promise (always at index 4)
         this._statisticsService.GetHeatmapData({
           ...baseModel,
+          heatmapTimeBasis,
           deliveryTypes: this.selectedDeliveryTypes,
-        }),
+        }).catch(() => null),
       ];
 
       // Add comparison period promises if in comparison mode
@@ -734,8 +744,9 @@ export default {
         );
       }
 
-      Promise.all(promises)
+      return Promise.all(promises)
         .then((results) => {
+          if (requestId !== this.statisticsRequestId) return;
           const [generalStats, pickupStats, deliveryStats, tableStats, heatmapResponse] = results;
           this.statistics = generalStats;
           this.deliveryStats = {
@@ -745,8 +756,10 @@ export default {
           };
 
           // Process heatmap data
-          if (heatmapResponse && heatmapResponse.data) {
+          if (heatmapResponseMatchesBasis(heatmapResponse, heatmapTimeBasis)) {
             this.heatmapRawData = heatmapResponse.data;
+          } else {
+            this.heatmapError = this.$i('peakPerformanceHeatmap_loadError');
           }
 
           if (this.comparisonMode && results.length > 5) {
@@ -763,10 +776,12 @@ export default {
           }
         })
         .catch((error) => {
+          if (requestId !== this.statisticsRequestId) return;
+          this.heatmapError = this.$i('peakPerformanceHeatmap_loadError');
           console.error('Failed to load statistics:', error);
         })
         .finally(() => {
-          this.isLoading = false;
+          if (requestId === this.statisticsRequestId) this.isLoading = false;
         });
     },
     formatStatValue(stat) {
