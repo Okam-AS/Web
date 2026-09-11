@@ -5,13 +5,27 @@
         <span class="material-icons">assessment</span>
         {{ $i('peakPerformanceHeatmap_title') }}
       </h3>
+      <label class="time-basis-control">
+        <span>{{ $i('peakPerformanceHeatmap_timeBasis') }}</span>
+        <select :value="timeBasis" @change="$emit('time-basis-change', $event.target.value)">
+          <option value="Created">{{ $i('peakPerformanceHeatmap_timeCreated') }}</option>
+          <option value="RequestedCompletion">{{ $i('peakPerformanceHeatmap_timeRequestedCompletion') }}</option>
+          <option value="Completed">{{ $i('peakPerformanceHeatmap_timeCompleted') }}</option>
+        </select>
+      </label>
     </div>
 
     <div class="heatmap-description">
       <p>{{ $i('peakPerformanceHeatmap_description') }}</p>
+      <p class="time-basis-note">{{ $i('peakPerformanceHeatmap_missingTime') }}</p>
+      <div v-if="error" role="alert" class="heatmap-error">
+        <p>{{ error }}</p>
+        <button type="button" @click="$emit('retry')">{{ $i('peakPerformanceHeatmap_retry') }}</button>
+      </div>
+      <p v-else-if="getTotalOrders() === 0">{{ $i('peakPerformanceHeatmap_noOrders') }}</p>
     </div>
 
-    <div class="heatmap-container">
+    <div v-if="!error" class="heatmap-container">
       <div class="heatmap-grid">
         <!-- Y-axis labels (days) -->
         <div class="y-axis">
@@ -111,14 +125,17 @@
 </template>
 
 <script>
+import { createHeatmapGrid, heatmapIntensity } from "~/utils/statistics-heatmap";
 export default {
   name: 'PeakPerformanceHeatmap',
   props: {
     data: {
       type: Array,
       required: true,
-      // Expected: array of { timestamp, orders, revenue }
+      // API cells: { dayOfWeek, hour, orderCount, revenue }
     },
+    timeBasis: { type: String, default: 'Created' },
+    error: { type: String, default: '' },
     dateRange: {
       type: String,
       default: '',
@@ -158,33 +175,14 @@ export default {
     data: {
       immediate: true,
       handler() {
+        this.hideTooltip();
         this.processData();
       },
     },
   },
   methods: {
     processData() {
-      // Initialize heatmap data structure
-      const processed = {};
-      this.days.forEach((day) => {
-        processed[day.id] = {};
-        for (let hour = 0; hour < 24; hour++) {
-          processed[day.id][hour] = { orders: 0, revenue: 0 };
-        }
-      });
-
-      // Process input data - backend already aggregates by day/hour
-      this.data.forEach((item) => {
-        const date = new Date(item.timestamp || item.key || item.x);
-        const dayOfWeek = date.getDay();
-        const hour = date.getHours();
-
-        if (processed[dayOfWeek] && processed[dayOfWeek][hour]) {
-          // Backend sends pre-aggregated data, so just use the orders count directly
-          processed[dayOfWeek][hour].orders = item.orders || item.value || item.y || 0;
-          processed[dayOfWeek][hour].revenue = item.revenue || item.amount || 0;
-        }
-      });
+      const processed = createHeatmapGrid(this.data);
 
       this.heatmapData = processed;
 
@@ -209,9 +207,7 @@ export default {
       return cellData.orders;
     },
     getCellIntensity(dayId, hour) {
-      const value = this.getCellValue(dayId, hour);
-      if (value === 0 || this.maxValue === 0) return 0;
-      return (value - this.minValue) / (this.maxValue - this.minValue);
+      return heatmapIntensity(this.getCellValue(dayId, hour), this.maxValue);
     },
     getCellStyle(dayId, hour) {
       const intensity = this.getCellIntensity(dayId, hour);
@@ -289,6 +285,11 @@ export default {
 
 .heatmap-header {
   margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 
   .heatmap-title {
     display: flex;
@@ -306,8 +307,28 @@ export default {
   }
 }
 
+.time-basis-control {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #4a5568;
+  font-size: 0.9em;
+
+  select {
+    padding: 9px 12px;
+    border: 1px solid #cbd5e0;
+    border-radius: 6px;
+    background: white;
+    color: #292c34;
+    max-width: 100%;
+  }
+}
+
 .heatmap-description {
   margin-bottom: 20px;
+
+  .time-basis-note { margin-top: 8px; }
+  .heatmap-error { margin-top: 8px; color: #b42318; }
 
   p {
     color: #666;
