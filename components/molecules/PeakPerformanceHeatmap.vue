@@ -5,14 +5,14 @@
         <span class="material-icons">assessment</span>
         {{ $i('peakPerformanceHeatmap_title') }}
       </h3>
-      <label class="time-basis-control">
-        <span>{{ $i('peakPerformanceHeatmap_timeBasis') }}</span>
-        <select :value="timeBasis" @change="$emit('time-basis-change', $event.target.value)">
-          <option value="Created">{{ $i('peakPerformanceHeatmap_timeCreated') }}</option>
-          <option value="RequestedCompletion">{{ $i('peakPerformanceHeatmap_timeRequestedCompletion') }}</option>
-          <option value="Completed">{{ $i('peakPerformanceHeatmap_timeCompleted') }}</option>
-        </select>
-      </label>
+      <div class="time-basis-control">
+        <MenuSelect
+          :value="timeBasis"
+          :options="timeBasisOptions"
+          :aria-label="$i('peakPerformanceHeatmap_timeBasis')"
+          @change="$emit('time-basis-change', $event)"
+        />
+      </div>
     </div>
 
     <div class="heatmap-description">
@@ -125,9 +125,11 @@
 </template>
 
 <script>
+import MenuSelect from '~/components/admin/MenuSelect.vue';
 import { createHeatmapGrid, heatmapIntensity } from "~/utils/statistics-heatmap";
 export default {
   name: 'PeakPerformanceHeatmap',
+  components: { MenuSelect },
   props: {
     data: {
       type: Array,
@@ -159,6 +161,12 @@ export default {
     };
   },
   computed: {
+    timeBasisOptions () {
+      return [
+        { value: 'Created', label: this.$i('peakPerformanceHeatmap_timeCreated') },
+        { value: 'RequestedCompletion', label: this.$i('peakPerformanceHeatmap_timeRequestedCompletion') }
+      ];
+    },
     days() {
       return [
         { id: 1, name: this.$i('peakPerformanceHeatmap_monday'), short: this.$i('peakPerformanceHeatmap_mondayShort') },
@@ -313,15 +321,8 @@ export default {
   gap: 6px;
   color: #4a5568;
   font-size: 0.9em;
-
-  select {
-    padding: 9px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
-    background: white;
-    color: #292c34;
-    max-width: 100%;
-  }
+  min-width: 240px;
+  max-width: 100%;
 }
 
 .heatmap-description {
