@@ -688,6 +688,12 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
+
+    span {
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
 
     label {
       font-weight: 500;
