@@ -118,6 +118,22 @@
               <label>{{ $i('orderModal_address') }}</label>
               <span>{{ order.fullAddress }}, {{ order.zipCode }} {{ order.city }}</span>
             </div>
+            <div
+              v-if="hasCompanyInfo"
+              class="info-item full-width company-info"
+            >
+              <label>{{ $i('orderModal_company') }}</label>
+              <div class="company-grid">
+                <div
+                  v-for="field in companyFields"
+                  :key="field.key"
+                  class="company-field"
+                >
+                  <label>{{ $i(field.label) }}</label>
+                  <span>{{ field.value }}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -329,6 +345,22 @@ export default {
     },
     customerPhone() {
       return this.order?.user?.phoneNumber;
+    },
+    companyFields() {
+      const o = this.order || {};
+      const address = [o.companyAddress, [o.companyZipCode, o.companyCity].filter(Boolean).join(" ")]
+        .filter(x => x && x.trim())
+        .join(", ");
+      return [
+        { key: "name", label: "orderModal_companyName", value: o.companyName },
+        { key: "vat", label: "orderModal_companyVat", value: o.companyVat },
+        { key: "address", label: "orderModal_companyAddress", value: address },
+        { key: "email", label: "orderModal_companyEmail", value: o.companyEmail },
+        { key: "phone", label: "orderModal_companyPhone", value: o.companyPhone },
+      ].filter(f => f.value && String(f.value).trim());
+    },
+    hasCompanyInfo() {
+      return this.companyFields.length > 0;
     },
     isPowerUser() {
       return Boolean(this.$store.state.currentUser?.isPowerUser);
@@ -638,6 +670,30 @@ export default {
   span {
     color: #2d3748;
     font-size: 0.95rem;
+  }
+}
+
+.company-info {
+  .company-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+  }
+
+  .company-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    label {
+      font-weight: 500;
+      color: #6b7280;
+      font-size: 0.8rem;
+    }
   }
 }
 
