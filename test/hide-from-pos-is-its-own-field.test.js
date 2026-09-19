@@ -39,6 +39,18 @@ describe('the register checkbox writes hideFromPos', () => {
     expect(products).toContain('this.$set(this.selectedProduct, \'hideFromPos\', this.selectedProduct.hideFromPos === true)')
   })
 
+  // THE LOAD-BEARING LINE, not the checkbox: the body is built by spreading the edited product, so
+  // that spread is what actually carries the field to `POST /products`. A page that bound the box
+  // and then hand-picked its save fields would satisfy every assertion above and still drop it.
+  test('the save spreads the edited product, which is what carries the field to the wire', () => {
+    const save = products.slice(
+      products.indexOf('async saveProduct()'),
+      products.indexOf('async savePendingCategoryChanges()')
+    )
+    expect(save).toContain('...this.selectedProduct')
+    expect(save).not.toContain('hideFromPos:')
+  })
+
   test('the delivery-type builder is untouched — the register is not one of its members', () => {
     const builder = products.slice(
       products.indexOf('buildHideFromDeliveryTypes() {'),
