@@ -507,6 +507,12 @@
                   <input v-model="hideForDelivery" type="checkbox" />
                   {{ $i('products_hideForHomeDelivery') }}
                 </label>
+                <!-- Its OWN field, not a delivery type: the register is not one, and a fourth
+                     member in hideFromDeliveryTypes would be rebuilt away on the next save. -->
+                <label class="checkbox-label">
+                  <input v-model="selectedProduct.hideFromPos" type="checkbox" />
+                  {{ $i('products_hideForPos') }}
+                </label>
               </div>
             </div>
 
@@ -1412,6 +1418,9 @@ export default {
       if (!Array.isArray(this.selectedProduct.allergenIds)) {
         this.$set(this.selectedProduct, 'allergenIds', []);
       }
+
+      // `bool?` on the wire: a product that never said anything reads as shown in the register.
+      this.$set(this.selectedProduct, 'hideFromPos', this.selectedProduct.hideFromPos === true);
 
       // Store original category IDs for this product
       this.originalCategoryIds = this.categories

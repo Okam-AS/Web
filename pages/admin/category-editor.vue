@@ -258,6 +258,16 @@
                 />
                 <span>{{ $i('categoryEditor_deliveryHomeDelivery') }}</span>
               </label>
+              <!-- Its OWN field, not a delivery type: the register is not one, and a fourth
+                   member in hideFromDeliveryTypes would be rebuilt away on the next save. -->
+              <label class="checkbox-label">
+                <input
+                  v-model="category.hideFromPos"
+                  type="checkbox"
+                  @change="markAsChanged"
+                />
+                <span>{{ $i('categoryEditor_deliveryPos') }}</span>
+              </label>
             </div>
           </div>
         </div>
@@ -382,6 +392,7 @@ export default {
         categoryProductListItems: [],
         productVariants: [],
         hideFromDeliveryTypes: [],
+        hideFromPos: false,
         publishRules: [],
         handlePublishRules: true,
         startPublish: null,
@@ -540,6 +551,8 @@ export default {
           publishRules: category.publishRules || [],
           handlePublishRules: true,
           hideFromDeliveryTypes: category.hideFromDeliveryTypes || [],
+          // `bool?` on the wire: a section that never said anything reads as shown.
+          hideFromPos: category.hideFromPos === true,
           categoryProductListItems: items,
           productVariants: category.productVariants || [],
           // Format datetime values for datetime-local inputs
