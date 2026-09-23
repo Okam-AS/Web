@@ -1,3 +1,7 @@
+// The shared HTTP client base for typed API errors. It lived in utils/workforce/ until the October
+// strip and was never a Workforce concern — the market surface builds on it too. The exported names
+// keep their Workforce prefix because they are the wire's own error contract, not this file's home.
+
 // The one HTTP layer every Workforce client sits on.
 //
 // WHY IT EXISTS: the manager week grid (`utils/workforce/schedule-client.js`) and the worker's own

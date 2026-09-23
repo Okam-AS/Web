@@ -375,7 +375,6 @@ export default {
               // belongs to every other group is a heading that earns nothing. It sits directly
               // after Statistics because that is the screen it answers questions about, and because
               // the AI box on that page now hands its question to this one.
-              { label: this.$i('nav_assistant'), path: '/admin/assistant', icon: icons.assistant, isNew: true },
               // The switchboard, and the one link in this file that is NOT a module. It was last in
               // the single modules group while there was one; it is here now for the reason it was
               // last there — it governs every module link, so it cannot be filed inside any one of
@@ -387,7 +386,6 @@ export default {
               // Placed LAST in this group so it sits immediately above the six groups it governs,
               // and it keeps its NYHET badge like every module link below it. Store-admin gated like
               // its siblings — the API answers 403 to anyone else and the page says so.
-              { label: this.$i('nav_feature_flags'), path: '/admin/feature-flags', icon: icons.featureFlags, isNew: true }
             ]
           },
           // ── THE SIX RESTAURANT MODULES, ONE GROUP EACH ────────────────────────────────────────
@@ -426,126 +424,11 @@ export default {
           // new. It stays on the link rather than moving to the heading — a badge on a heading goes
           // stale the moment one link in that group stops being new, and it would stop telling him
           // anything about the other links beside it.
-          {
-            title: this.$i('nav_group_module_margin'),
-            items: [
-              { label: this.$i('nav_margin_recipes'), path: '/admin/margin-recipes', icon: icons.marginRecipes, isNew: true },
-              // The two surfaces that make the recipe page's plate cost possible at all: a plate
-              // cost is only ever built from supplier price data, and these are the only screens
-              // that can create any. Adjacent to the recipes link, in that order, because that is
-              // the order the backend requires — ingredient, supplier, article, price, cost.
-              { label: this.$i('nav_margin_suppliers'), path: '/admin/margin-suppliers', icon: icons.marginSuppliers, isNew: true },
-              { label: this.$i('nav_margin_price_imports'), path: '/admin/margin-price-imports', icon: icons.marginPriceImports, isNew: true },
-              { label: this.$i('nav_margin_statements'), path: '/admin/margin-statements', icon: icons.marginStatements, isNew: true }
-            ]
-          },
-          {
-            title: this.$i('nav_group_module_workforce'),
-            items: [
-              { label: this.$i('nav_workforce_schedule'), path: '/admin/workforce-schedule', icon: icons.workforceSchedule, isNew: true },
-              // Next to the schedule, not inside it. The inbox decides on a different aggregate under
-              // a different precondition, and its requests are not week-scoped — an October request is
-              // decided in July. It is store-admin gated like every sibling; the page still refuses
-              // itself when the backend withholds WorkforceManager.
-              { label: this.$i('nav_workforce_requests'), path: '/admin/workforce-requests', icon: icons.workforceRequests, isNew: true },
-              { label: this.$i('nav_workforce_roster'), path: '/admin/workforce-roster', icon: icons.workforceRoster, isNew: true },
-              // Between the roster and the rates, because that is the order the three are actually
-              // used in: who works here, what stations the place runs, what an hour on one costs.
-              // It is its own entry rather than a section of the roster for the reason the roster's
-              // own client records — a roster that created a role because somebody typed a name
-              // would make the catalogue unownable — and until this link existed the write behind it
-              // (`PUT /roles`, live on the wire since W1) had no caller in any browser at all, so a
-              // store nobody had curled had an empty role axis on all three pages around it.
-              { label: this.$i('nav_workforce_roles'), path: '/admin/workforce-roles', icon: icons.workforceRoles, isNew: true },
-              { label: this.$i('nav_workforce_rates'), path: '/admin/workforce-rates', icon: icons.workforceRates, isNew: true },
-              { label: this.$i('nav_workforce_personnel_list'), path: '/admin/workforce-personnel-list', icon: icons.workforcePersonnelList, isNew: true },
-              // The delivery report. Its own entry rather than a tab inside the schedule, because
-              // the outbox is STORE-scoped and outlives the week that filled it: a dead letter from
-              // last Tuesday's publication is still undelivered while the manager is planning next
-              // month, and a week-scoped surface would show it only to somebody who happened to
-              // navigate back to that week. Store-admin gated like every sibling; the page renders
-              // its own refusal when the backend withholds WorkforceManager.
-              { label: this.$i('nav_workforce_delivery'), path: '/admin/workforce-delivery', icon: icons.workforceDelivery, isNew: true },
-              // The publication receipts. Its own entry rather than a section inside the delivery
-              // report, because the two answer opposite questions: delivery lists what the OUTBOX
-              // could not get out, this lists what came BACK from the people it did reach. A store
-              // with an empty delivery report and nobody having confirmed anything is the case that
-              // makes them different, and folding one into the other would hide exactly that store.
-              // Store-admin gated like every sibling; the page renders its own refusal for the
-              // schedule grant, and a second one for the recipient roster, which the backend gates
-              // on WorkforceManager separately.
-              { label: this.$i('nav_workforce_publications'), path: '/admin/workforce-publications', icon: icons.workforcePublications, isNew: true },
-              // The payroll batch. Its own entry rather than a section on the rates page, even
-              // though both are `WorkforcePayrollApprover`: rates state what an hour is WORTH going
-              // forward and are an append-only timeline, while this freezes what was WORKED in a
-              // closed period and sends it. The two are read at different moments by the same person
-              // — a rate is set when somebody is hired, a period is approved every fortnight — and
-              // folding one into the other would bury the recurring act inside the rare one. Last of
-              // the Workforce links because it is the end of that module's sequence: everything above
-              // it produces the hours this one accounts for. Store-admin gated like every sibling;
-              // the page renders its own refusal when the backend withholds the payroll grant, which
-              // it does for the WHOLE surface — a timesheet line is the wage record and there is
-              // nothing left to partially withhold.
-              { label: this.$i('nav_workforce_timesheets'), path: '/admin/workforce-timesheets', icon: icons.workforceTimesheets, isNew: true }
-            ]
-          },
-          {
-            title: this.$i('nav_group_module_training'),
-            items: [
-              { label: this.$i('nav_training_courses'), path: '/admin/training-courses', icon: icons.training, isNew: true },
-              // The OTHER half of Training, and the only reason the half above it is worth filing:
-              // the courses page is where a venue works, this is where one named person's record is
-              // read out — by somebody from outside the venue. Same store-admin gate as its sibling
-              // (`RequireStoreAdminAsync` on the evidence read), so the audience the sidebar offers it
-              // to is the audience the API admits. Immediately after the courses link because it is
-              // the end of that page's sequence, not a separate subject.
-              { label: this.$i('nav_training_evidence'), path: '/admin/training-evidence', icon: icons.trainingEvidence, isNew: true }
-            ]
-          },
           // One link, and still a heading of its own rather than a lodger in the group above or
           // below it. A module with one surface is a fact about the module, not a reason to hide
           // which module the surface belongs to — and the heading is what stops `/admin/events-
           // pipeline` reading as a Training page or a Growth one, which is the whole point of this
           // split.
-          {
-            title: this.$i('nav_group_module_events'),
-            items: [
-              { label: this.$i('nav_events'), path: '/admin/events-pipeline', icon: icons.eventsPipeline, isNew: true }
-            ]
-          },
-          {
-            title: this.$i('nav_group_module_growth'),
-            items: [
-              { label: this.$i('nav_growth_newsletter'), path: '/admin/growth-newsletter', icon: icons.growthNewsletter, isNew: true },
-              // Immediately after the newsletter link, because it is the same module's other half and
-              // the one with a statutory clock on it. The guest is already told on screen that this
-              // venue answers a privacy request within a month (`gr_guest_request_deadline`); until
-              // this entry existed the two routes that let anybody answer had no caller at all, so the
-              // promise was made on a surface and kept on none. Same store-admin gate as its siblings
-              // — the API answers an opaque 404 to anyone else and the page says so, rather than the
-              // link being hidden, which would leave the page reachable only by typing a URL.
-              { label: this.$i('nav_growth_privacy'), path: '/admin/growth-privacy', icon: icons.growthPrivacy, isNew: true }
-            ]
-          },
-          {
-            title: this.$i('nav_group_module_meals'),
-            items: [
-              { label: this.$i('nav_meals'), path: '/admin/meals-agreements', icon: icons.mealsAgreements, isNew: true },
-              // Beside the venue's Meals page rather than in a group of its own: same module, and
-              // the two are read together (what this venue has, and setting the next one up). Same
-              // store-admin gate as every other link here — the concierge and company-admin
-              // authorities the page's own controls need are resolved by the backend and refused on
-              // screen, never by hiding the link, which would leave the pages that DO admit somebody
-              // reachable only by typing a URL.
-              { label: this.$i('nav_meals_companies'), path: '/admin/meals-companies', icon: icons.mealsCompanies, isNew: true },
-              // Third of the Meals links and the one that WRITES a bookkeeping document. Same
-              // store-admin gate as the two above it, and this time the gate matches the route: draft
-              // and finalize are `RequireStoreAdminAsync`, so the person offered this link is exactly
-              // the person the API admits. It is last of the three because it is the end of the
-              // month's sequence — agreement, people, then the bill.
-              { label: this.$i('nav_meals_statements'), path: '/admin/meals-statements', icon: icons.mealsStatements, isNew: true }
-            ]
-          },
           {
             title: this.$i('nav_group_menu'),
             items: [
@@ -607,7 +490,6 @@ export default {
       groups.push({
         title: this.$i('nav_group_me'),
         items: [
-          { label: this.$i('nav_workforce_me'), path: '/admin/workforce-me', icon: icons.workforceMe, isNew: true },
           // The account's own address, and the confirmation of it. IN THIS GROUP because it is about
           // the signed-in person and takes no store id — the page sets `allow-non-admin` for the same
           // reason its neighbour does, so a link here is never a dead end for a worker.
@@ -619,7 +501,6 @@ export default {
           // app, so an administrator who signed up by phone could be refused a test-send by an admin
           // screen and had nowhere in admin to go about it. A capability exists only when it is
           // reachable (C3), and a page nothing links to is the defect this link closes.
-          { label: this.$i('nav_account_email'), path: '/admin/account-email', icon: icons.accountEmail, isNew: true }
         ]
       });
 
@@ -646,7 +527,6 @@ export default {
             { label: this.$i('nav_reservations'), path: '/admin/reservations', icon: icons.reservations },
             { label: this.$i('nav_pos_settings'), path: '/admin/pos-settings', icon: icons.posSettings },
             { label: this.$i('nav_pos_reports'), path: '/admin/pos-reports', icon: icons.posReports },
-            { label: this.$i('nav_okam_growth'), path: '/admin/poweruser-growth', icon: icons.growth },
             { label: this.$i('nav_dintero'), path: '/admin/dintero', icon: icons.dintero },
             { label: this.$i('nav_surfboard'), path: '/admin/surfboard', icon: icons.surfboard },
             { label: this.$i('nav_tripletex'), path: '/admin/tripletex', icon: icons.invoice },

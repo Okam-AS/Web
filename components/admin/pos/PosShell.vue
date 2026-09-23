@@ -26,7 +26,6 @@
         <BoardView v-else-if="mode === 'board'" />
         <DayFlow v-else-if="mode === 'day'" />
         <ReceiptsView v-else-if="mode === 'receipts'" />
-        <ClockScreen v-else-if="mode === 'clock'" />
       </main>
 
       <!-- Blocking overlays (highest priority first) -->
@@ -155,7 +154,6 @@ import SellScreen from '~/components/admin/pos/SellScreen.vue';
 import BoardView from '~/components/admin/pos/BoardView.vue';
 import DayFlow from '~/components/admin/pos/DayFlow.vue';
 import ReceiptsView from '~/components/admin/pos/ReceiptsView.vue';
-import ClockScreen from '~/components/admin/pos/ClockScreen.vue';
 import CashPointPicker from '~/components/admin/pos/CashPointPicker.vue';
 import OperatorLoginScreen from '~/components/admin/pos/OperatorLoginScreen.vue';
 import BeginDayModal from '~/components/admin/pos/BeginDayModal.vue';
@@ -174,7 +172,6 @@ export default {
     BoardView,
     DayFlow,
     ReceiptsView,
-    ClockScreen,
     CashPointPicker,
     OperatorLoginScreen,
     BeginDayModal,

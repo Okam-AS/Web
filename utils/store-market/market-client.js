@@ -19,7 +19,7 @@
 // refusal returns the store's UNCHANGED state, which is what lets the card keep showing the truth
 // after a failed save instead of the values the operator typed.
 
-import { WorkforceClientBase, isWorkforceApiError } from '~/utils/workforce/api-client';
+import { WorkforceClientBase, isWorkforceApiError } from '~/utils/api/client-base';
 
 /**
  * A typed market refusal.
