@@ -51,9 +51,6 @@ import { newGuid } from '~/utils/guid'
 import ReturnBuilder from '~/components/admin/pos/ReturnBuilder.vue'
 import RefundModal from '~/components/admin/pos/RefundModal.vue'
 import DayFlow from '~/components/admin/pos/DayFlow.vue'
-import ClockScreen from '~/components/admin/pos/ClockScreen.vue'
-import WorkforceJoin from '~/pages/workforce/join.vue'
-import MealsJoin from '~/pages/meals/join.vue'
 
 // RFC 4122 v4: 8-4-4-4-12 lowercase hex, version nibble `4`, variant nibble one of 8/9/a/b.
 const V4 = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
@@ -235,17 +232,5 @@ describe('the components that could not be mounted', () => {
     const w = shallowMount(DayFlow, COMMON())
     w.vm.openTxn('PayIn')
     expect(w.vm.txnIdempotencyKey).toMatch(V4)
-  })
-
-  test('ClockScreen mounts', () => {
-    expect(shallowMount(ClockScreen, COMMON()).vm).toBeTruthy()
-  })
-
-  test('pages/workforce/join mounts', () => {
-    expect(shallowMount(WorkforceJoin, COMMON()).vm).toBeTruthy()
-  })
-
-  test('pages/meals/join mounts', () => {
-    expect(shallowMount(MealsJoin, COMMON()).vm).toBeTruthy()
   })
 })

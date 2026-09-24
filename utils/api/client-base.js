@@ -2,18 +2,6 @@
 // strip and was never a Workforce concern — the market surface builds on it too. The exported names
 // keep their Workforce prefix because they are the wire's own error contract, not this file's home.
 
-// The one HTTP layer every Workforce client sits on.
-//
-// WHY IT EXISTS: the manager week grid (`utils/workforce/schedule-client.js`) and the worker's own
-// page (`utils/workforce-me/me-client.js`) were built in parallel lanes and each grew its own copy
-// of the same three things — the problem+json error type, the `_request`/`_mutate` pair, and the
-// transpile-proof discriminator flag. Two copies of a discriminator is the dangerous kind of
-// duplication: the failure mode is silent (a conflict simply stops being recognised) and the two
-// copies drift apart one field at a time. There is now exactly one.
-//
-// Everything here is route-agnostic. Route knowledge stays in the two service classes, which are
-// deliberately route-for-route with the backend controllers.
-
 import getEnv from '~/env';
 import { newGuid } from '~/utils/guid';
 
@@ -86,12 +74,7 @@ const LOCAL_DATE = /^\d{4}-\d{2}-\d{2}$/;
  * conversion happens in — which is the browser's — and the whole reason these parameters are civil
  * dates is that the STORE's zone is the only one entitled to make them. A page therefore never holds
  * a `Date` for such a value at all, and this is the check that keeps it honest.
- *
- * It sits in the shared HTTP layer rather than in one route file because THREE surfaces now take a
- * venue date on the wire — the hours export (`from`/`to`), the rate statement
- * (`effectiveFromLocalDate`) and the personalliste (`businessDate`) — and the second copy of a wire
- * rule is where the two start drifting. `utils/workforce-rates/rates-client.js` re-exports it so its
- * own callers are unchanged.
+
  */
 export function assertBusinessDate (value, field) {
   if (typeof value !== 'string' || !LOCAL_DATE.test(value)) {

@@ -1,4 +1,4 @@
-import { WorkforceClientBase } from '~/utils/workforce/api-client'
+import { WorkforceClientBase } from '~/utils/api/client-base'
 import { StoreMarketService, StoreMarketApiError, isStoreMarketApiError } from '~/utils/store-market/market-client'
 
 // The store-market client. Three things are under test and they are different in kind:

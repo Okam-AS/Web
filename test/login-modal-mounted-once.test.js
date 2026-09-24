@@ -159,7 +159,7 @@ describe('a page has one sign-in modal, not two', () => {
     // Sanity first: if this scanner cannot see the one modal that is SUPPOSED to be there, every
     // count below is a zero that means nothing. Assert the shell before asserting the pages.
     expect(countMountSites(path.join(ROOT, 'components/organisms/AdminPage.vue'))).toBe(1)
-    expect(ADMIN_PAGES.length).toBeGreaterThan(60)
+    expect(ADMIN_PAGES.length).toBeGreaterThan(40)
 
     const counted = ADMIN_PAGES
       .filter(f => !ADMIN_PAGES_WITHOUT_THE_SHELL.includes(rel(f)))
@@ -194,12 +194,7 @@ describe('a page has one sign-in modal, not two', () => {
       // deleting a duplicate — but it is on the record now, which it was not before.
       'components/atoms/MyUserDropdown.vue',
       // The one modal every admin route gets, opened by `initAuth`.
-      'components/organisms/AdminPage.vue',
-      // Standalone claim pages: `layout: 'empty'`, no `<AdminPage>`, so each of these mounts the
-      // ONLY modal on its page. A guest arrives holding a claim token and must sign in without
-      // navigating away from it, which is the whole reason the modal is mounted in place here.
-      'pages/meals/join.vue',
-      'pages/workforce/join.vue'
+      'components/organisms/AdminPage.vue'
     ])
   })
 })

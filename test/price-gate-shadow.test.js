@@ -305,15 +305,15 @@ describe('the guard is actually looking at something', () => {
   })
 
   test('the walk opened the estate, not an empty directory', () => {
-    expect(components.length).toBeGreaterThanOrEqual(280)
+    expect(components.length).toBeGreaterThanOrEqual(200)
   })
 
   test('and it parsed real option blocks out of them', () => {
     // A floor on total keys, not on shadows: this stays honest when the shadow count is zero, which
     // is the state this guard is trying to reach.
     const totalKeys = components.reduce((sum, file) => sum + file.keys.length, 0)
-    expect(totalKeys).toBeGreaterThanOrEqual(3500)
-    expect(components.filter(file => file.keys.length > 0).length).toBeGreaterThanOrEqual(250)
+    expect(totalKeys).toBeGreaterThanOrEqual(2100)
+    expect(components.filter(file => file.keys.length > 0).length).toBeGreaterThanOrEqual(160)
   })
 })
 

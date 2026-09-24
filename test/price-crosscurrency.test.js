@@ -3,12 +3,6 @@ import path from 'path'
 import { crossCurrencyLabel } from '~/utils/cross-currency'
 import { UNKNOWN_AMOUNT } from '~/utils/price'
 import { wholeAmount, fractionAmount } from '~/core/helpers/tools'
-import WorkforceWeekGrid from '~/components/admin/workforce/WorkforceWeekGrid.vue'
-import WorkforceRateTimeline from '~/components/admin/workforce-rates/WorkforceRateTimeline.vue'
-import MealsFundedOrders from '~/components/admin/meals/MealsFundedOrders.vue'
-import MealsProgramPanel from '~/components/admin/meals/MealsProgramPanel.vue'
-import EventsJourney from '~/components/admin/events/EventsJourney.vue'
-import { marginMoney } from '~/utils/margin/money'
 
 // The cross-currency branch is the one money path on this admin that goes AROUND both formatters, so
 // it is the one place the gate in front of them cannot reach. `wholeAmount` and `fractionAmount` are
@@ -121,94 +115,7 @@ describe('crossCurrencyLabel: three worlds, not two', () => {
 // gate in a util nobody routed to is worth nothing (C3: a capability exists only where it is
 // reachable). Every context below forces the cross-currency branch: a wire currency that differs from
 // the market's.
-describe('every module mixin composes through the gate', () => {
-  it('WorkforceWeekGrid.amount', () => {
-    const ctx = Object.assign({ currency: 'NOK', priceLabel }, digits)
-    expect(WorkforceWeekGrid.methods.amount.call(ctx, null, 'SEK')).toBe(UNKNOWN_AMOUNT)
-    expect(WorkforceWeekGrid.methods.amount.call(ctx, undefined, 'SEK')).toBe(UNKNOWN_AMOUNT)
-    expect(WorkforceWeekGrid.methods.amount.call(ctx, 0, 'SEK')).toBe('0,00 SEK')
-    expect(WorkforceWeekGrid.methods.amount.call(ctx, 20680, 'SEK')).toBe('206,80 SEK')
-  })
 
-  it('WorkforceRateTimeline.amountLabel', () => {
-    const ctx = Object.assign({ currency: 'NOK', dash: '—', priceLabel }, digits)
-    const row = (hourlyRateMinor) => ({ hourlyRateMinor, currency: 'SEK' })
-    // Its own `=== null` guard answers first and answers the same way; `undefined` reaches the
-    // composition and is the case that used to print "0,00 SEK".
-    expect(WorkforceRateTimeline.methods.amountLabel.call(ctx, row(null))).toBe('—')
-    expect(WorkforceRateTimeline.methods.amountLabel.call(ctx, row(undefined))).toBe(UNKNOWN_AMOUNT)
-    expect(WorkforceRateTimeline.methods.amountLabel.call(ctx, row(0))).toBe('0,00 SEK')
-    expect(WorkforceRateTimeline.methods.amountLabel.call(ctx, row(23550))).toBe('235,50 SEK')
-  })
-
-  it('MealsFundedOrders.amount', () => {
-    const ctx = Object.assign({ currency: 'NOK', unknownMark: '—', priceLabel }, digits)
-    expect(MealsFundedOrders.methods.amount.call(ctx, null, 'SEK')).toBe(UNKNOWN_AMOUNT)
-    expect(MealsFundedOrders.methods.amount.call(ctx, 0, 'SEK')).toBe('0,00 SEK')
-    expect(MealsFundedOrders.methods.amount.call(ctx, 20680, 'SEK')).toBe('206,80 SEK')
-  })
-
-  it('EventsJourney.amount', () => {
-    const ctx = Object.assign({ currency: 'NOK', unknownMark: '—', priceLabel }, digits)
-    // `readMinor` refuses the absence before the composition sees it, so this site was already safe.
-    // It is pinned anyway: the assertion is about what an operator reads, and it must not change if
-    // somebody later relaxes `readMinor` for an unrelated reason.
-    expect(EventsJourney.methods.amount.call(ctx, null, 'SEK')).toBe('—')
-    expect(EventsJourney.methods.amount.call(ctx, 0, 'SEK')).toBe('0,00 SEK')
-    expect(EventsJourney.methods.amount.call(ctx, 20680, 'SEK')).toBe('206,80 SEK')
-  })
-
-  it('marginMoney.amount and signedAmount', () => {
-    const ctx = Object.assign({ currency: 'NOK', unknownMark: '—', priceLabel }, digits)
-    expect(marginMoney.methods.amount.call(ctx, null, 'SEK')).toBe(UNKNOWN_AMOUNT)
-    expect(marginMoney.methods.amount.call(ctx, 0, 'SEK')).toBe('0,00 SEK')
-    expect(marginMoney.methods.amount.call(ctx, -20680, 'SEK')).toBe('-206,80 SEK')
-    // `signedAmount` reached the gate UN-NEGATED, and the defect was real: before the gate, the loss
-    // column printed "0,00 SEK" for a plate cost nobody had computed.
-    //
-    // The mechanism is NOT a negation, and an earlier version of this comment said it was. The
-    // shipped body branches on `minor < 0`, and `null < 0` is `false` — as are `undefined < 0` and
-    // `NaN < 0` — so every absence takes the ELSE arm and delegates to `amount` exactly as an
-    // ordinary read does. `-null` really is `-0` and `-0` really is a stated value, but that door
-    // does not exist in this code and no `-0` case is pinned anywhere.
-    //
-    // The assertions below still earn their place, PROSPECTIVELY rather than retrospectively: a
-    // future rewrite that negates first — the obvious way to simplify this method — would hand the
-    // gate `-0`, which IS stated, and print "0,00 SEK" again. That rewrite reds here.
-    const signed = (minor) => marginMoney.methods.signedAmount.call(
-      Object.assign({}, ctx, { amount: marginMoney.methods.amount }), minor, 'SEK')
-    expect(signed(null)).toBe(UNKNOWN_AMOUNT)
-    expect(signed(0)).toBe('0,00 SEK')
-    expect(signed(-20680)).toBe('−206,80 SEK')
-  })
-
-  it('MealsProgramPanel.allowancePreview', () => {
-    const ctx = over => Object.assign({
-      currency: 'NOK',
-      selectedProgram: { currency: 'SEK' },
-      policy: { allowance: '206,80' },
-      priceLabel
-    }, digits, over)
-    const preview = over => MealsProgramPanel.computed.allowancePreview.call(ctx(over))
-    expect(preview()).toBe('206,80 SEK')
-    // A zero allowance is admitted by the parser (`allowZero`) and must still read as an amount.
-    expect(preview({ policy: { allowance: '0' } })).toBe('0,00 SEK')
-    // An unparseable allowance never reaches the composition: the computed answers null and the
-    // template's `v-if` hides the hint entirely, which is the honest rendering of "not typed yet".
-    expect(preview({ policy: { allowance: '' } })).toBeNull()
-    expect(preview({ policy: { allowance: 'abc' } })).toBeNull()
-  })
-})
-
-// The census, as an executable invariant rather than a paragraph in a document. `crossCurrencyLabel`
-// only protects the sites that route through it, so the thing worth pinning is that NO site composes
-// the digits by hand — including one added tomorrow by an author who never read any of this.
-//
-// SCOPE, STATED RATHER THAN IMPLIED. `ROOTS` is every directory in this repo that ships renderable
-// source; an earlier version listed four of them and silently ignored six that exist and are clean.
-// The patterns cover the two idioms a person would actually reach for — string concatenation and a
-// template literal. A third spelling (building the parts through intermediate variables, say) would
-// slip past, so this is a guard against the ordinary re-inlining, not a proof of impossibility.
 describe('no surface composes money digits by hand, in either of the two idioms policed here', () => {
   const ROOTS = [
     'components', 'pages', 'utils', 'plugins',
@@ -239,7 +146,7 @@ describe('no surface composes money digits by hand, in either of the two idioms 
     const root = path.resolve(__dirname, '..')
     // Otherwise a renamed directory silently shrinks the census to nothing while it still passes.
     ROOTS.forEach(r => expect(fs.existsSync(path.join(root, r))).toBe(true))
-    expect(ROOTS.flatMap(r => walk(path.join(root, r))).length).toBeGreaterThan(300)
+    expect(ROOTS.flatMap(r => walk(path.join(root, r))).length).toBeGreaterThan(240)
   })
 
   it('the composition exists in exactly one file, and it is the gated one', () => {
