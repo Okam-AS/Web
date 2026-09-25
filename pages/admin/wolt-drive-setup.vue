@@ -322,6 +322,7 @@ export default {
       this.saveError = "";
       this.saveSuccess = false;
       this.feesSaved = false;
+      this.dinteroConfig = null;
       try {
         this.store = await this._storeService.Get(this.storeIdInput);
       } catch (error) {
