@@ -678,9 +678,10 @@ export default {
         .catch(e => this.apiError(e, 'Kunne ikke hente butikker'))
         .finally(() => { this.isLoading = false; });
     },
-    // Fiken sends the browser back here with ?storeId= and
-    // ?fiken=connected|choose-company|no-companies|denied|error. Read it once, tell the user, and
-    // strip it so a refresh does not repeat the message. Answers whether it selected a store.
+    // Fiken sends the browser back here with ?storeId= and ?fiken=authorized&state=&code= or
+    // ?fiken=denied. An authorized consent is bound to the store only by this signed-in admin calling
+    // Complete. The query is stripped first so the one-time code never lingers in the URL or history.
+    // Answers whether it selected a store.
     applyConnectReturn () {
       const query = this.$route.query || {};
       if (!query.fiken) { return false; }
@@ -689,16 +690,40 @@ export default {
         this.selectedStoreId = storeId;
         this.onStoreChange();
       }
+      this.$router.replace({ path: this.$route.path, query: {} }).catch(() => {});
+      if (query.fiken === 'authorized') {
+        this.completeFiken(String(query.state || ''), String(query.code || ''));
+      } else {
+        this.showConnectOutcome(query.fiken);
+      }
+      return storeId > 0;
+    },
+    completeFiken (state, code) {
+      if (!state || !code) {
+        this.showConnectOutcome('error');
+        return;
+      }
+      this.busy.connect = true;
+      this._fikenConnectService.Complete(state, code)
+        .then((result) => {
+          this.showConnectOutcome(result && result.status);
+          if (result && result.storeId > 0) {
+            this.selectedStoreId = result.storeId;
+            this.onStoreChange();
+          }
+        })
+        .catch(e => this.apiError(e, 'Fiken-tilkoblingen feilet'))
+        .finally(() => { this.busy.connect = false; });
+    },
+    showConnectOutcome (result) {
       const outcome = {
         connected: ['Fiken er koblet til. Sett kontoene under.', 'success'],
         'choose-company': ['Fiken er koblet til. Kontoen har flere selskaper — velg hvilket under.', 'success'],
         'no-companies': ['Fiken-kontoen har ingen selskaper Okam kan bokføre i. API-tillegget må være aktivt på selskapet.', 'error'],
         denied: ['Tilgangen ble ikke godkjent i Fiken.', 'error'],
         error: ['Fiken-tilkoblingen feilet.', 'error']
-      }[query.fiken] || ['Ukjent svar fra Fiken-tilkoblingen.', 'error'];
+      }[result] || ['Ukjent svar fra Fiken-tilkoblingen.', 'error'];
       this.showNotification(outcome[0], outcome[1]);
-      this.$router.replace({ path: this.$route.path, query: {} }).catch(() => {});
-      return storeId > 0;
     },
     onStoreChange () {
       this.status = null;
