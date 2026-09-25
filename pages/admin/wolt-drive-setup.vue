@@ -341,10 +341,12 @@ export default {
         this.lookupError = this.$i("woltDriveSetup_feesReadFailed");
       }
       const existing = this.dinteroConfig || {};
+      // A store with a saved configuration shows its stored fees, including a deliberate 0.
+      const fee = key => (existing.id ? Number(existing[key]) || 0 : Number(existing[key]) || DEFAULT_FEES[key]);
       this.fees = {
-        woltDeliveryFeePercent: Number(existing.woltDeliveryFeePercent) || DEFAULT_FEES.woltDeliveryFeePercent,
-        woltCustomerDeliveryFeeAmount: Number(existing.woltCustomerDeliveryFeeAmount) || DEFAULT_FEES.woltCustomerDeliveryFeeAmount,
-        woltServiceFeeAmount: Number(existing.woltServiceFeeAmount) || DEFAULT_FEES.woltServiceFeeAmount,
+        woltDeliveryFeePercent: fee("woltDeliveryFeePercent"),
+        woltCustomerDeliveryFeeAmount: fee("woltCustomerDeliveryFeeAmount"),
+        woltServiceFeeAmount: fee("woltServiceFeeAmount"),
       };
       this.isFetching = false;
     },
