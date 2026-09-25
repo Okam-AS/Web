@@ -297,7 +297,7 @@
                 </span>
               </template>
               <template v-else-if="columnId === 'customer'">
-                {{ order.userFullName || order.userPhoneNumber || "-" }}
+                {{ order.companyName || order.userFullName || order.userPhoneNumber || "-" }}
               </template>
               <template v-else-if="columnId === 'created'">
                 {{ formatDate(order.created) }}
@@ -1004,7 +1004,7 @@ export default {
         case 'status':
           return this.orderStatusLabel(order.status) || '';
         case 'customer':
-          return order.userFullName || order.userPhoneNumber || '-';
+          return order.companyName || order.userFullName || order.userPhoneNumber || '-';
         case 'created':
           return this.formatDate(order.created) || '';
         case 'finalAmount':
