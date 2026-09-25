@@ -2004,6 +2004,7 @@ export default {
   woltDriveSetup_prefilledFromEnv: "Prefilled from local environment variables (WOLT_DRIVE_MERCHANT_ID / WOLT_DRIVE_MERCHANT_KEY).",
   woltDriveSetup_save: "Save Wolt Drive setup",
   woltDriveSetup_saveFees: "Save fees only",
+  woltDriveSetup_feesOnlySaveFailed: "Could not save the fees. Nothing was changed.",
   woltDriveSetup_feesSaved: "The fees were saved. The Wolt Drive keys and webhook were not changed.",
   woltDriveSetup_saveFailed: "Could not save the Wolt Drive setup.",
   woltDriveSetup_saved: "The Wolt Drive setup was saved.",

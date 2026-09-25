@@ -282,7 +282,7 @@ export default {
     },
     // Without the Dintero configuration read back, a fee-only save would overwrite it with blanks.
     canSaveFees() {
-      return !!this.store && !!this.dinteroConfig;
+      return !!this.store && !!this.dinteroConfig?.id;
     },
   },
   watch: {
@@ -396,7 +396,7 @@ export default {
         await this.saveFees();
         this.feesSaved = true;
       } catch (error) {
-        this.saveError = error?.message || this.$i("woltDriveSetup_feesSaveFailed");
+        this.saveError = this.$i("woltDriveSetup_feesOnlySaveFailed");
       } finally {
         this.isSaving = false;
       }

@@ -1996,6 +1996,7 @@ export default {
   woltDriveSetup_prefilledFromEnv: "Vorbefüllt aus lokalen Umgebungsvariablen (WOLT_DRIVE_MERCHANT_ID / WOLT_DRIVE_MERCHANT_KEY).",
   woltDriveSetup_save: "Wolt Drive-Einrichtung speichern",
   woltDriveSetup_saveFees: "Nur Gebühren speichern",
+  woltDriveSetup_feesOnlySaveFailed: "Die Gebühren konnten nicht gespeichert werden. Es wurde nichts geändert.",
   woltDriveSetup_feesSaved: "Die Gebühren wurden gespeichert. Wolt Drive-Schlüssel und Webhook wurden nicht geändert.",
   woltDriveSetup_saveFailed: "Die Wolt Drive-Einrichtung konnte nicht gespeichert werden.",
   woltDriveSetup_saved: "Die Wolt Drive-Einrichtung wurde gespeichert.",
