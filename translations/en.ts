@@ -2003,6 +2003,8 @@ export default {
   woltDriveSetup_pageDescription: "Enter the Wolt Drive values Wolt sends you for a new store.",
   woltDriveSetup_prefilledFromEnv: "Prefilled from local environment variables (WOLT_DRIVE_MERCHANT_ID / WOLT_DRIVE_MERCHANT_KEY).",
   woltDriveSetup_save: "Save Wolt Drive setup",
+  woltDriveSetup_saveFees: "Save fees only",
+  woltDriveSetup_feesSaved: "The fees were saved. The Wolt Drive keys and webhook were not changed.",
   woltDriveSetup_saveFailed: "Could not save the Wolt Drive setup.",
   woltDriveSetup_saved: "The Wolt Drive setup was saved.",
   woltDriveSetup_saving: "Saving ...",

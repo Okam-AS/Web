@@ -170,6 +170,23 @@
             <p class="field-hint">{{ $i('woltDriveSetup_oreHint', { kroner: formatKroner(fees.woltServiceFeeAmount) }) }}</p>
           </div>
 
+          <div class="form-actions">
+            <button
+              class="btn btn--outline"
+              type="button"
+              :disabled="!canSaveFees || isSaving"
+              @click="saveFeesOnly"
+            >
+              {{ $i('woltDriveSetup_saveFees') }}
+            </button>
+          </div>
+          <div
+            v-if="feesSaved"
+            class="notification notification--success"
+          >
+            {{ $i('woltDriveSetup_feesSaved') }}
+          </div>
+
           <div class="notification notification--warning">
             {{ $i('woltDriveSetup_webhookWarning') }}
           </div>
@@ -244,6 +261,7 @@ export default {
       isSaving: false,
       saveError: "",
       saveSuccess: false,
+      feesSaved: false,
     };
   },
   computed: {
@@ -261,6 +279,10 @@ export default {
     },
     canSave() {
       return !!this.store && !!this.form.venueId && !!this.form.merchantId && !!this.form.merchantKey;
+    },
+    // Without the Dintero configuration read back, a fee-only save would overwrite it with blanks.
+    canSaveFees() {
+      return !!this.store && !!this.dinteroConfig;
     },
   },
   watch: {
@@ -299,6 +321,7 @@ export default {
       this.lookupError = "";
       this.saveError = "";
       this.saveSuccess = false;
+      this.feesSaved = false;
       try {
         this.store = await this._storeService.Get(this.storeIdInput);
       } catch (error) {
@@ -355,6 +378,24 @@ export default {
         this.saveSuccess = true;
       } catch (error) {
         this.saveError = error?.message || this.$i("woltDriveSetup_saveFailed");
+      } finally {
+        this.isSaving = false;
+      }
+    },
+    // Changes only the fees; the Wolt Drive credentials and webhook are left as they are.
+    async saveFeesOnly() {
+      if (!this.canSaveFees) {
+        return;
+      }
+      this.isSaving = true;
+      this.saveError = "";
+      this.saveSuccess = false;
+      this.feesSaved = false;
+      try {
+        await this.saveFees();
+        this.feesSaved = true;
+      } catch (error) {
+        this.saveError = error?.message || this.$i("woltDriveSetup_feesSaveFailed");
       } finally {
         this.isSaving = false;
       }

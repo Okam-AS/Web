@@ -2003,6 +2003,8 @@ export default {
   woltDriveSetup_pageDescription: "Legg inn Wolt Drive-verdiene Wolt sender deg for en ny butikk.",
   woltDriveSetup_prefilledFromEnv: "Forhåndsutfylt fra lokale miljøvariabler (WOLT_DRIVE_MERCHANT_ID / WOLT_DRIVE_MERCHANT_KEY).",
   woltDriveSetup_save: "Lagre Wolt Drive-oppsett",
+  woltDriveSetup_saveFees: "Lagre bare gebyrer",
+  woltDriveSetup_feesSaved: "Gebyrene er lagret. Wolt Drive-nøklene og webhooken ble ikke endret.",
   woltDriveSetup_saveFailed: "Kunne ikke lagre Wolt Drive-oppsettet.",
   woltDriveSetup_saved: "Wolt Drive-oppsettet er lagret.",
   woltDriveSetup_saving: "Lagrer ...",
